@@ -6,7 +6,6 @@
   "secteurs_source": "https://www.opco-sante.fr/entreprises",
   "email_contact": "contact@opco-sante.fr",
   "url_finance_page": "https://www.opco-sante.fr/entreprises/financer-la-formation",
-
   "types_formations": [
     "Plan de developpement des competences",
     "Alternance",
@@ -15,10 +14,8 @@
     "Formations prioritaires de branche"
   ],
   "types_formations_source": "https://www.opco-sante.fr/entreprises/financer-la-formation",
-
   "note_generale": "OPCO Sante couvre les secteurs sanitaire, medico-social et social. Pour les entreprises de moins de 50 salaries (regle TPME 2026), la prise en charge couvre 100% des couts pedagogiques, la remuneration du salarie a hauteur d'un SMIC (12,31 euros/h) et les frais annexes, dans la limite d'un plafond annuel GLOBAL de 2 500 euros. Pour les 50+ salaries, les prises en charge relevent du plan conventionnel selon les accords de branche (fonds FMB : 14-18 euros/h selon niveau). Certaines branches (ex. SPSTI) ont des axes prioritaires avec abondements de 800 a 4 000 euros/stagiaire.",
   "note_generale_source": "https://www.opco-sante.fr/entreprises/financer-la-formation",
-
   "cout_horaire_inter": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -37,7 +34,6 @@
     "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
     "note": "Fonds conventionnels FMB : 14 euros/h (niveaux vises 3-5), 18 euros/h (niveaux 6-7) pour les formations certifiantes ; 30 euros/h en formation individuelle, 1 200 euros/jour en collectif (professionnalisation)."
   },
-
   "prise_en_charge_salaires": {
     "value": 12.31,
     "confidence": "exact",
@@ -45,7 +41,6 @@
     "note": "Depuis 2026, la remuneration du salarie en formation est prise en charge a hauteur d'un SMIC (12,31 euros/h brut au 01/06/2026 ; 12,02 euros de janvier a mai 2026), avec les couts pedagogiques et frais annexes, dans la limite du plafond annuel global de 2 500 euros (<50 sal.). Le mode 'inclus dans 30 euros/h' anterieur est obsolete."
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
-
   "frais_transport": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -70,7 +65,6 @@
     "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
     "note": "Pas de forfait pourcentage : frais annexes en valeurs (hebergement 150-170 euros/nuit, repas 22 euros), inclus dans le plafond annuel global 2 500 euros."
   },
-
   "budget_annuel_max": {
     "value": 2500,
     "confidence": "exact",
@@ -80,7 +74,6 @@
   "budget_annuel_description": "Plafond annuel global 2 500 euros/an pour entreprises <50 salaries (100% couts pedagogiques + remuneration SMIC + frais annexes inclus). 50+ salaries : plan conventionnel selon branche.",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
-
   "profils_candidats": [
     "Salaries secteur sanitaire, social et medico-social",
     "Apprentis"
@@ -88,11 +81,9 @@
   "tailles_cibles": "Entreprises du secteur sante, medico-social et social, priorite aux <50 salaries",
   "priorite_tpe_pme": true,
   "duree_min_formation": null,
-
   "processus_approbation": "Demande en ligne via l'espace entreprise opco-sante.fr",
   "delai_validation": "2-4 semaines",
   "mode_paiement": "Subrogation ou remboursement",
-
   "alternance_apprentissage": {
     "description": "Prise en charge selon les niveaux definis par France Competences (NPEC)",
     "source_url": "https://www.opco-sante.fr/entreprises/alternance"
@@ -101,22 +92,18 @@
     "description": "Prise en charge selon accord de branche",
     "source_url": "https://www.opco-sante.fr/entreprises/alternance"
   },
-
   "cpf_abondement": true,
   "cpf_details": {
     "description": "Abondement possible selon accord de branche",
     "source_url": "https://www.opco-sante.fr/entreprises/financer-la-formation"
   },
-
   "vae_possible": true,
   "vae_details": {
     "description": "Financement VAE possible dans le cadre du plan de developpement des competences",
     "source_url": "https://www.opco-sante.fr/entreprises/financer-la-formation"
   },
-
   "limite_dossiers_an": null,
   "limite_dossiers_note": "Selon regles de branche",
-
   "plafonds_par_taille": [
     {
       "taille": "less_11",
@@ -151,14 +138,32 @@
       "description": "300+ salaries : plan conventionnel selon accords de branche."
     }
   ],
-
   "specificites": "Regle TPME 2026 : plafond annuel global 2 500 euros (<50 sal.) couvrant couts pedagogiques + remuneration (SMIC) + frais annexes | Secteurs sante, medico-social, social | Plan conventionnel FMB (14-18 euros/h) pour 50+ salaries | Branche SPSTI : axes prioritaires avec abondements 800-4 000 euros/stagiaire",
   "points_cles_maximisation": "Plafond annuel global 2 500 euros tres vite atteint : prioriser les formations essentielles | La remuneration du salarie est financee (a hauteur du SMIC) : l'integrer au calcul | 50+ salaries : passer par les fonds conventionnels de branche (FMB) | Verifier les axes prioritaires de votre branche (abondements possibles)",
-
   "derniere_mise_a_jour": "2026-03-24",
   "sources_consultees": [
     "https://www.opco-sante.fr/entreprises",
     "https://www.opco-sante.fr/entreprises/financer-la-formation",
     "https://www.opco-sante.fr/entreprises/alternance"
+  ],
+  "dispositifs_complementaires": [
+    {
+      "id": "axes-prioritaires-spsti",
+      "nom": "Axes prioritaires SPSTI (abondements)",
+      "cumul": "additif",
+      "montant_max": 4000,
+      "unite": "par_stagiaire",
+      "pourcentage_couts": null,
+      "description": "Branche SPSTI (prevention et sante au travail) : 9 axes prioritaires avec abondements de 800 a 4 000 euros par stagiaire. Frais de salaires finançables sauf axe 3.",
+      "conditions": [
+        "Relever de la branche SPSTI",
+        "Formation entrant dans l'un des 9 axes prioritaires de la branche"
+      ],
+      "demarches": "Demande en ligne via l'espace entreprise opco-sante.fr en precisant l'axe prioritaire concerne.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0276_synthese-des-prise-en-charge-spsti_pdf_site.pdf"
+    }
   ]
 }

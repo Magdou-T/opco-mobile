@@ -5,7 +5,6 @@
   "secteurs_source": "https://www.opcomobilites.fr/entreprise",
   "email_contact": "contact@opcomobilites.fr",
   "url_finance_page": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
-
   "types_formations": [
     "Plan de developpement des competences",
     "Alternance (apprentissage, professionnalisation)",
@@ -14,7 +13,6 @@
     "Formations reglementaires transport"
   ],
   "types_formations_source": "https://www.opcomobilites.fr/entreprise/financer-mes-formations",
-
   "cout_horaire_inter": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -33,7 +31,6 @@
     "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
     "note": "Varie selon la branche de transport. Chaque branche a ses propres baremes."
   },
-
   "prise_en_charge_salaires": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -41,7 +38,6 @@
     "note": "Sur les fonds mutualises (plan de developpement des competences <50 sal.), la remuneration n'est PAS prise en charge. Le remboursement des salaires n'existe que pour les entreprises adherentes/partenaires au titre de leurs versements volontaires (sur declaratif ou forfaits). Le forfait 15 euros/h parfois cite est le cout PEDAGOGIQUE du contrat de professionnalisation pour publics prioritaires, pas le salaire (guides pratiques 2026)."
   },
   "prise_en_charge_salaires_mode": "selon_accord",
-
   "frais_transport": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -66,7 +62,6 @@
     "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
     "note": "Selon guide pratique de la branche concernee"
   },
-
   "budget_annuel_max": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -76,7 +71,6 @@
   "budget_annuel_description": "Variable selon branche de transport. Consulter le guide pratique de la branche sur opcomobilites.fr.",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
-
   "plafonds_par_taille": [
     {
       "taille": "less_11",
@@ -107,7 +101,6 @@
       "description": "300+ salaries : pas de fonds mutualises PDC. Versements volontaires / dispositifs de branche uniquement."
     }
   ],
-
   "profils_candidats": [
     "Salaries secteur transports et mobilite",
     "Apprentis",
@@ -116,22 +109,16 @@
   "tailles_cibles": "Toutes tailles, priorite TPE/PME <50 salaries pour fonds mutualises",
   "priorite_tpe_pme": true,
   "duree_min_formation": "1h minimum pour formations debutant a compter du 01/01/2026",
-
   "processus_approbation": "Demande via portail avant le debut de la formation",
   "delai_validation": "Reponse sous 20 jours calendaires (dossier complet) ; paiement sous 30 jours calendaires a reception",
   "mode_paiement": "Tiers-payant possible",
-
   "alternance_apprentissage": "Apprentissage NPEC",
   "alternance_professionnalisation": "Professionnalisation tarif branche",
-
   "cpf_abondement": true,
   "cpf_details": "Oui - selon accord branche",
-
   "vae_possible": true,
   "vae_details": "Oui - selon branche",
-
   "limite_dossiers_an": "Selon accord branche",
-
   "guides_pratiques": {
     "note": "Chaque branche dispose de son propre guide pratique 2026 telechargeable sur opcomobilites.fr",
     "branches": [
@@ -146,7 +133,25 @@
     ],
     "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres"
   },
-
   "specificites": "Secteur transports et mobilite hautement specialise. Chaque sous-branche (routier, maritime, fluvial, aerien, ferroviaire, services auto, logistique) a ses propres baremes et conditions de prise en charge. Consulter systematiquement le guide pratique de la branche concernee.",
-  "points_cles_maximisation": "Identifier la bonne branche de transport | Telecharger le guide pratique 2026 correspondant | Plan de dev. competences reserve aux entreprises <50 salaries (fonds mutualises) | Pour faire rembourser les salaires/frais annexes : passer par les versements volontaires (entreprises adherentes/partenaires)"
+  "points_cles_maximisation": "Identifier la bonne branche de transport | Telecharger le guide pratique 2026 correspondant | Plan de dev. competences reserve aux entreprises <50 salaries (fonds mutualises) | Pour faire rembourser les salaires/frais annexes : passer par les versements volontaires (entreprises adherentes/partenaires)",
+  "dispositifs_complementaires": [
+    {
+      "id": "versements-volontaires",
+      "nom": "Versements volontaires (adherents/partenaires)",
+      "cumul": "additif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Remboursement des remunerations et des frais annexes (repas, transport, hebergement) sur la base du declaratif ou de forfaits, au titre des versements volontaires.",
+      "conditions": [
+        "Etre entreprise adherente ou partenaire d'OPCO Mobilites (versements volontaires)"
+      ],
+      "demarches": "Souscrire un contrat de versement volontaire aupres d'OPCO Mobilites, puis deposer les demandes de remboursement via le portail.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres"
+    }
+  ]
 }

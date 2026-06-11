@@ -1,9 +1,9 @@
 {
-  "version": 1,
-  "generatedAt": "2026-06-11T10:36:56.226Z",
-  "sha256": "5873fc4d7339e86967b8d1ffcd5daeea3756cd75aa0cde17f0031a4df3d5ef2a",
+  "version": 2,
+  "generatedAt": "2026-06-11T13:11:15.655Z",
+  "sha256": "cadb4bf2c94d6910158fcbab192e774a3b75fdafc1344bf68b3b341310532fab",
   "opcoCount": 11,
   "changelog": [
-    "Dataset initial (seed) généré depuis les données embarquées"
+    "V2.1 : dispositifs complementaires cumulables (Boost Competences, Click&Form, FSE+, transition ecologique TP, abondements CPF/SPSTI...), conditions d'attribution et demarches"
   ]
 }

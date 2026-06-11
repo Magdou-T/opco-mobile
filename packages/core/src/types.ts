@@ -78,6 +78,9 @@ export interface OpcoData {
 
   // Taille entreprise -> plafonds spécifiques
   plafonds_par_taille?: PlafondTaille[];
+
+  // Dispositifs de financement complémentaires (cumuls d'enveloppes)
+  dispositifs_complementaires?: DispositifComplementaire[];
 }
 
 export interface PlafondTaille {
@@ -88,11 +91,44 @@ export interface PlafondTaille {
   description: string;
 }
 
+/**
+ * Dispositif de financement complémentaire au plan de développement des
+ * compétences (PDC) mutualisé : abondements CPF, dispositifs hors budget
+ * annuel, catalogues dédiés, versements volontaires…
+ */
+export interface DispositifComplementaire {
+  id: string;
+  nom: string;
+  /**
+   * Règle de cumul avec l'enveloppe PDC :
+   * - hors_budget : ne consomme PAS le budget annuel PDC (s'ajoute)
+   * - additif     : enveloppe distincte qui s'ajoute au PDC
+   * - alternatif  : remplace le PDC (catalogue/dispositif dédié, non cumulable)
+   */
+  cumul: 'hors_budget' | 'additif' | 'alternatif';
+  /** Plafond en euros si publié (null si non chiffré publiquement). */
+  montant_max: number | null;
+  unite: 'par_stagiaire' | 'par_dossier' | 'par_an' | 'par_jour' | 'par_heure' | null;
+  /** Pourcentage des coûts pédagogiques pris en charge, si applicable. */
+  pourcentage_couts: number | null;
+  description: string;
+  /** Conditions d'attribution, affichées telles quelles à l'utilisateur. */
+  conditions: string[];
+  /** Démarche concrète : où et comment faire la demande. */
+  demarches: string;
+  /** Tailles d'entreprise éligibles (null = toutes). */
+  tailles_eligibles: CompanySize[] | null;
+  /** Public visé si restreint (ex. « salariés de 50 ans et plus »). */
+  publics: string | null;
+  confidence: Confidence;
+  source_url: string;
+}
+
 // --- Wizard / User Input Types ---
 
 export type ContractType = 'cdi' | 'cdd' | 'interim' | 'alternance';
 export type CompanySize = 'less_11' | '11_49' | '50_299' | '300_plus';
-export type TrainingType = 'qualification' | 'certification' | 'vae' | 'reconversion' | 'cqp' | 'habilitation';
+export type TrainingType = 'non_certifiante' | 'qualification' | 'certification' | 'vae' | 'reconversion' | 'cqp' | 'habilitation';
 export type CertificationType = 'rncp' | 'cqp' | 'diplome' | 'habilitation' | 'autre';
 export type TrainingMode = 'presentiel' | 'distance' | 'hybride';
 export type TransportMode = 'train' | 'avion' | 'voiture' | 'autre';
@@ -114,6 +150,8 @@ export interface WizardState {
   isHandicap: boolean;
   isReconversion: boolean;
   isSortieChomage: boolean;
+  /** Budget formation deja consomme aupres de l'OPCO cette annee (euros). Deduit du plafond annuel. */
+  budgetDejaConsomme: number | null;
 
   // Step 3: Formation
   formationNom: string | null;
@@ -151,19 +189,48 @@ export interface FundingLine {
   details?: string[];
 }
 
+/** Dispositif complémentaire évalué pour la situation de l'utilisateur. */
+export interface DispositifEligible {
+  id: string;
+  nom: string;
+  cumul: 'hors_budget' | 'additif' | 'alternatif';
+  /** Montant estimé pour CETTE formation si calculable (forfait ou % des coûts), sinon null. */
+  montantEstime: number | null;
+  description: string;
+  conditions: string[];
+  demarches: string;
+  publics: string | null;
+  confidence: Confidence;
+  sourceUrl: string;
+}
+
 export interface FundingResult {
   opcoName: string;
   opcoSlug: string;
   opcoEmail: string;
   opcoUrl: string;
+  /** Dispositif au titre duquel l'estimation principale est calculée. */
+  dispositifPrincipal: string;
   lines: FundingLine[];
   totalRequested: number;
   totalFunded: number;
   totalRemainder: number;
   budgetCapApplied: boolean;
   budgetCapAmount: number | null;
+  /** Budget déjà consommé cette année, déduit du plafond annuel. */
+  budgetDejaConsomme: number;
+  /** Dispositifs complémentaires éligibles à la situation (cumuls possibles). */
+  dispositifsComplementaires: DispositifEligible[];
+  /**
+   * Enveloppe maximale potentielle = financement PDC estimé + dispositifs
+   * cumulables chiffrables (hors_budget et additif). Les dispositifs
+   * « alternatifs » ne sont pas additionnés.
+   */
+  enveloppeMaxPotentielle: number;
   warnings: string[];
   conditions: string[];
+  /** Démarches concrètes, dans l'ordre, pour obtenir le financement. */
+  demarches: string[];
   nextSteps: { label: string; url: string }[];
   delaiValidation: string;
   modePaiement: string;
@@ -227,6 +294,7 @@ export const CONTRACT_TYPE_LABELS: Record<ContractType, string> = {
 };
 
 export const TRAINING_TYPE_LABELS: Record<TrainingType, string> = {
+  non_certifiante: 'Formation courte / non certifiante (plan de développement des compétences)',
   qualification: 'Qualification professionnelle',
   certification: 'Certification',
   vae: 'VAE (Validation des Acquis de l\'Expérience)',
@@ -257,6 +325,7 @@ export function createInitialWizardState(): WizardState {
     isHandicap: false,
     isReconversion: false,
     isSortieChomage: false,
+    budgetDejaConsomme: null,
     formationNom: null,
     formationType: null,
     certificationLevel: null,

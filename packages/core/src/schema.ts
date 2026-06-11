@@ -36,6 +36,24 @@ export const PlafondTailleSchema = z.object({
   description: z.string(),
 });
 
+export const DispositifComplementaireSchema = z.object({
+  id: z.string().min(1),
+  nom: z.string().min(1),
+  cumul: z.enum(['hors_budget', 'additif', 'alternatif']),
+  montant_max: z.number().nullable(),
+  unite: z
+    .enum(['par_stagiaire', 'par_dossier', 'par_an', 'par_jour', 'par_heure'])
+    .nullable(),
+  pourcentage_couts: z.number().nullable(),
+  description: z.string().min(1),
+  conditions: z.array(z.string()),
+  demarches: z.string().min(1),
+  tailles_eligibles: z.array(CompanySizeSchema).nullable(),
+  publics: z.string().nullable(),
+  confidence: ConfidenceSchema,
+  source_url: z.string(),
+});
+
 export const OpcoDataSchema = z.object({
   slug: z.string().min(1),
   name: z.string().min(1),
@@ -93,6 +111,8 @@ export const OpcoDataSchema = z.object({
   points_cles_maximisation: z.string(),
 
   plafonds_par_taille: z.array(PlafondTailleSchema).optional(),
+
+  dispositifs_complementaires: z.array(DispositifComplementaireSchema).optional(),
 });
 
 /**
@@ -116,6 +136,11 @@ export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
   for (const p of o.plafonds_par_taille ?? []) {
     inRange(p.cout_horaire_max, 0, 200, `plafond[${p.taille}].cout_horaire_max`);
     inRange(p.budget_annuel_max, 0, 1_000_000, `plafond[${p.taille}].budget_annuel_max`);
+  }
+
+  for (const d of o.dispositifs_complementaires ?? []) {
+    inRange(d.montant_max, 0, 100_000, `dispositif[${d.id}].montant_max`);
+    inRange(d.pourcentage_couts, 0, 100, `dispositif[${d.id}].pourcentage_couts`);
   }
   return issues;
 }

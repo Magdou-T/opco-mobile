@@ -106,6 +106,103 @@ describe('calculateFunding — plafonds & caps', () => {
   });
 });
 
+describe('calculateFunding — V2.1 : PDC, budget consommé, cumuls', () => {
+  it('le type non_certifiante utilise le plafond inter (PDC)', () => {
+    const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });
+    const state = makeFormationState({ formationType: 'non_certifiante', durationHours: 20, pedagogyCostPerHour: 50 });
+    const r = calculateFunding(opco, state);
+    const peda = r.lines.find((l) => l.label === 'Coûts pédagogiques')!;
+    expect(peda.fundedAmount).toBe(800); // plafonné à 40€/h × 20h
+    expect(r.dispositifPrincipal).toContain('Plan de développement des compétences');
+  });
+
+  it('déduit le budget déjà consommé du plafond annuel', () => {
+    const opco = makeOpco({
+      cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
+      budget_annuel_max: { value: 2000, confidence: 'exact', source_url: 'x' },
+    });
+    const state = makeFormationState({ durationHours: 100, pedagogyCostPerHour: 30, budgetDejaConsomme: 1500 });
+    const r = calculateFunding(opco, state);
+    // 3000 € calculés, plafond restant 2000-1500=500 €
+    expect(r.totalFunded).toBe(500);
+    expect(r.budgetCapApplied).toBe(true);
+    expect(r.budgetDejaConsomme).toBe(1500);
+    expect(r.warnings.some((w) => w.includes('déjà consommé'))).toBe(true);
+  });
+
+  it('enveloppe épuisée → 0 financé + warning explicite', () => {
+    const opco = makeOpco({
+      cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
+      budget_annuel_max: { value: 2000, confidence: 'exact', source_url: 'x' },
+    });
+    const state = makeFormationState({ budgetDejaConsomme: 2500 });
+    const r = calculateFunding(opco, state);
+    expect(r.totalFunded).toBe(0);
+    expect(r.warnings.some((w) => w.includes('épuisée'))).toBe(true);
+  });
+
+  it('filtre les dispositifs par taille et calcule l’enveloppe max potentielle', () => {
+    const opco = makeOpco({
+      cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
+      dispositifs_complementaires: [
+        {
+          id: 'boost', nom: 'Boost', cumul: 'additif',
+          montant_max: 750, unite: 'par_dossier', pourcentage_couts: 50,
+          description: 'd', conditions: ['c'], demarches: 'm',
+          tailles_eligibles: ['less_11', '11_49'], publics: null,
+          confidence: 'exact', source_url: 'x',
+        },
+        {
+          id: 'grands-comptes', nom: 'GC', cumul: 'additif',
+          montant_max: 5000, unite: 'par_an', pourcentage_couts: null,
+          description: 'd', conditions: ['c'], demarches: 'm',
+          tailles_eligibles: ['300_plus'], publics: null,
+          confidence: 'exact', source_url: 'x',
+        },
+        {
+          id: 'catalogue', nom: 'Catalogue', cumul: 'alternatif',
+          montant_max: null, unite: null, pourcentage_couts: 100,
+          description: 'd', conditions: ['c'], demarches: 'm',
+          tailles_eligibles: null, publics: null,
+          confidence: 'exact', source_url: 'x',
+        },
+      ],
+    });
+    const state = makeFormationState({ companySize: 'less_11', durationHours: 100, pedagogyCostPerHour: 30 });
+    const r = calculateFunding(opco, state);
+
+    // grands-comptes (300_plus) exclu ; boost et catalogue retenus
+    expect(r.dispositifsComplementaires.map((d) => d.id).sort()).toEqual(['boost', 'catalogue']);
+    // boost : 50% de 3000 = 1500, plafonné à 750
+    expect(r.dispositifsComplementaires.find((d) => d.id === 'boost')!.montantEstime).toBe(750);
+    // alternatif non additionné : enveloppe = 3000 (PDC) + 750 (boost)
+    expect(r.enveloppeMaxPotentielle).toBe(3750);
+  });
+
+  it('forfait par_heure × durée pour les dispositifs hors budget', () => {
+    const opco = makeOpco({
+      dispositifs_complementaires: [{
+        id: 'transition', nom: 'Transition', cumul: 'hors_budget',
+        montant_max: 32, unite: 'par_heure', pourcentage_couts: null,
+        description: 'd', conditions: ['c'], demarches: 'm',
+        tailles_eligibles: null, publics: null,
+        confidence: 'exact', source_url: 'x',
+      }],
+    });
+    const state = makeFormationState({ durationHours: 50 });
+    const r = calculateFunding(opco, state);
+    expect(r.dispositifsComplementaires[0].montantEstime).toBe(1600); // 32 × 50h
+  });
+
+  it('génère des démarches concrètes ordonnées', () => {
+    const opco = makeOpco();
+    const r = calculateFunding(opco, makeFormationState());
+    expect(r.demarches.length).toBeGreaterThanOrEqual(4);
+    expect(r.demarches[0]).toContain('cotisations');
+    expect(r.demarches.some((d) => d.includes('AVANT'))).toBe(true);
+  });
+});
+
 describe('calculateFunding — déterminisme', () => {
   it('mêmes entrées → mêmes sorties', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });

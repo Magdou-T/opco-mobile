@@ -5,7 +5,6 @@
   "secteurs_source": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
   "email_contact": "contact@afdas.com",
   "url_finance_page": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
-
   "types_formations": [
     "Formations interprofessionnelles",
     "Formations metier",
@@ -13,7 +12,6 @@
     "CQP de branche"
   ],
   "types_formations_source": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
-
   "cout_horaire_inter": {
     "value": 40,
     "confidence": "exact",
@@ -32,7 +30,6 @@
     "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
     "note": "Pas de source officielle AFDAS pour un plafond metier unique, varie selon branche"
   },
-
   "prise_en_charge_salaires": {
     "value": null,
     "confidence": "exact",
@@ -40,7 +37,6 @@
     "note": "NON pris en charge au titre du plan de developpement des competences : la prise en charge 2026 est 'strictement limitee aux couts pedagogiques' (frais pedagogiques, materiel, location de salle, deplacement du formateur, inscription). Un eventuel relai via fonds conventionnels depend de la branche."
   },
   "prise_en_charge_salaires_mode": "selon_accord",
-
   "frais_transport": {
     "value": null,
     "confidence": "exact",
@@ -65,7 +61,6 @@
     "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
     "note": "Selon bareme branche"
   },
-
   "budget_annuel_max": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -105,7 +100,6 @@
   "budget_annuel_description": "Budget annuel HT selon effectif: 1 100 euros (<11 sal.), 1 800 euros (11-49 sal.) - criteres 2026",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
-
   "profils_candidats": [
     "Intermittents du spectacle",
     "Salaries en CDI/CDD",
@@ -114,22 +108,36 @@
   "tailles_cibles": "Toutes tailles (intermittents)",
   "priorite_tpe_pme": false,
   "duree_min_formation": null,
-
   "processus_approbation": "Demande via MyA (dematerialise)",
   "delai_validation": "Delai non publie officiellement. Demande via MyA, dans la limite des fonds disponibles.",
   "mode_paiement": "Tiers-payant ou remboursement",
-
   "alternance_apprentissage": "Apprentissage selon CQP branche",
   "alternance_professionnalisation": "Selon accord branche",
-
   "cpf_abondement": true,
   "cpf_details": "Abondement CPF intermittents (5000-12000 euros)",
-
   "vae_possible": true,
   "vae_details": "Oui - possible selon accord",
-
   "limite_dossiers_an": "Selon accord branche",
-
   "specificites": "Intermittents: abondement CPF 5-12k euros | Budget plan de dev. competences selon effectif",
-  "points_cles_maximisation": "Verifier plafond selon effectif | Intermittents: abondement CPF crucial | Formations transversales a 40 euros/h"
+  "points_cles_maximisation": "Verifier plafond selon effectif | Intermittents: abondement CPF crucial | Formations transversales a 40 euros/h",
+  "dispositifs_complementaires": [
+    {
+      "id": "cpf-abondement-intermittents",
+      "nom": "Abondement CPF intermittents",
+      "cumul": "additif",
+      "montant_max": 12000,
+      "unite": "par_an",
+      "pourcentage_couts": null,
+      "description": "Abondement du Compte Personnel de Formation de 5 000 a 12 000 euros pour les intermittents du spectacle, cumulable avec les droits CPF existants.",
+      "conditions": [
+        "Etre intermittent du spectacle",
+        "Mobiliser son CPF via Mon Compte Formation"
+      ],
+      "demarches": "Demande via Mon Compte Formation (moncompteformation.gouv.fr) ; l'abondement AFDAS s'applique selon le profil.",
+      "tailles_eligibles": null,
+      "publics": "Intermittents du spectacle",
+      "confidence": "estimated",
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html"
+    }
+  ]
 }

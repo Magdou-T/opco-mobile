@@ -2,14 +2,14 @@
   "expo": {
     "name": "Financement OPCO",
     "slug": "opco-funding",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "opcofunding",
     "userInterfaceStyle": "light",
     "android": {
       "package": "fr.opco.funding",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

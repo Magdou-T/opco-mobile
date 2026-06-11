@@ -5,13 +5,11 @@
   "secteurs_source": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
   "email_contact": "contact@lopcommerce.com",
   "url_finance_page": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
-
   "branches_professionnelles": {
     "count": 20,
     "note": "L'Opcommerce couvre 20 branches professionnelles, chacune avec ses propres criteres de prise en charge",
     "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/"
   },
-
   "types_formations": [
     "Plan de developpement des competences",
     "Click&Form (formations pre-negociees)",
@@ -19,13 +17,11 @@
     "Competences+"
   ],
   "types_formations_source": "https://www.lopcommerce.com/entreprise/",
-
   "click_and_form": {
     "description": "Formations pre-negociees par L'Opcommerce, prises en charge a 100% des couts pedagogiques (<50 sal.)",
     "limite": "Variable selon branche : 2/an (SPP, CDNA <11), 4/an (CDNA 11-49), 5/an (Bricolage)",
     "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf"
   },
-
   "cout_horaire_inter": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -44,7 +40,6 @@
     "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
     "note": "Varie selon la branche professionnelle et le type de formation"
   },
-
   "prise_en_charge_salaires": {
     "value": 13,
     "confidence": "depends_on_branche",
@@ -52,7 +47,6 @@
     "note": "L'Opcommerce prend en charge une partie du salaire, publie par branche : 13 euros/h (defaut, branches sans CCN) ; jusqu'a 14,50 euros/h (plafond decret n°2018-1342, ex. Bricolage, Habillement) ; certaines branches (ex. CDNA) ne financent aucun salaire. Integre dans le budget annuel Competences+ (<50 sal.)."
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
-
   "frais_transport": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -76,7 +70,6 @@
     "confidence": "depends_on_branche",
     "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/"
   },
-
   "budget_annuel_max": {
     "value": 1000,
     "confidence": "depends_on_branche",
@@ -116,7 +109,6 @@
   "budget_annuel_description": "1400 euros/an (<11 salaries) | 2100 euros/an (11-49 salaries)",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
-
   "profils_candidats": [
     "Tous salaries du commerce",
     "Apprentis",
@@ -125,22 +117,40 @@
   "tailles_cibles": "Toutes tailles (priorite TPE-PME <50 salaries)",
   "priorite_tpe_pme": true,
   "duree_min_formation": null,
-
   "processus_approbation": "Demande en ligne via espace entreprise. Reponse garantie avant le demarrage si le dossier est depose plus d'un mois avant le debut de la formation.",
   "delai_validation": "Reponse avant le demarrage si depot >= 1 mois avant (engagement officiel). Delai precis non publie.",
   "mode_paiement": "Tiers-payant ou remboursement",
-
   "alternance_apprentissage": "Apprentissage selon NPEC",
   "alternance_professionnalisation": "Professionnalisation selon accord de branche",
-
   "cpf_abondement": true,
   "cpf_details": "Abondement CPF possible",
-
   "vae_possible": true,
   "vae_details": "VAE accompagnee possible",
-
   "limite_dossiers_an": "2 inscriptions Click&Form par an maximum",
-
   "specificites": "20 branches professionnelles avec criteres specifiques. Click&Form : formations pre-negociees prises en charge a 100% des couts pedagogiques (<50 sal.).",
-  "points_cles_maximisation": "Utiliser Click&Form (100% couts pedagogiques pris en charge) | Verifier les criteres specifiques de sa branche | Budget annuel selon branche : 1 000-1 500 euros (defaut) jusqu'a 2 500 euros (Bricolage) | Salaire pris en charge 13-14,50 euros/h selon branche"
+  "points_cles_maximisation": "Utiliser Click&Form (100% couts pedagogiques pris en charge) | Verifier les criteres specifiques de sa branche | Budget annuel selon branche : 1 000-1 500 euros (defaut) jusqu'a 2 500 euros (Bricolage) | Salaire pris en charge 13-14,50 euros/h selon branche",
+  "dispositifs_complementaires": [
+    {
+      "id": "click-and-form",
+      "nom": "Click&Form",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": 100,
+      "description": "Formations pre-negociees par L'Opcommerce, prises en charge a 100 % des couts pedagogiques (hors enveloppe annuelle Competences+).",
+      "conditions": [
+        "Entreprise de moins de 50 salaries",
+        "Limite d'inscriptions par an selon la branche : 2 a 5",
+        "Dans la limite des fonds disponibles"
+      ],
+      "demarches": "Choisir la formation dans le catalogue Click&Form sur lopcommerce.com et s'inscrire en ligne.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf"
+    }
+  ]
 }

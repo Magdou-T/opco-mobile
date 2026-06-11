@@ -11,6 +11,7 @@ import type {
   Confidence,
   CompanySize,
   PlafondTaille,
+  DispositifEligible,
 } from './types';
 
 // ---------------------------------------------------------------------------
@@ -544,6 +545,101 @@ function generateNextSteps(opco: OpcoData): { label: string; url: string }[] {
 }
 
 // ---------------------------------------------------------------------------
+// Dispositifs complémentaires (cumuls d'enveloppes)
+// ---------------------------------------------------------------------------
+
+/**
+ * Évalue les dispositifs complémentaires de l'OPCO pour la situation donnée.
+ * Filtre par taille d'entreprise et estime le montant quand il est chiffrable :
+ * - pourcentage des coûts pédagogiques (plafonné si montant_max publié)
+ * - forfait par heure × durée / par jour × jours de formation
+ * - forfait simple (par stagiaire / dossier / an)
+ */
+function evaluateDispositifs(
+  opco: OpcoData,
+  state: WizardState,
+  pedagogyRequested: number,
+): DispositifEligible[] {
+  const results: DispositifEligible[] = [];
+
+  for (const d of opco.dispositifs_complementaires ?? []) {
+    // Filtre taille d'entreprise (null = toutes tailles éligibles)
+    if (
+      d.tailles_eligibles != null &&
+      state.companySize != null &&
+      !d.tailles_eligibles.includes(state.companySize)
+    ) {
+      continue;
+    }
+
+    let montantEstime: number | null = null;
+
+    if (d.pourcentage_couts != null && pedagogyRequested > 0) {
+      montantEstime = pedagogyRequested * (d.pourcentage_couts / 100);
+      if (d.montant_max != null) montantEstime = Math.min(montantEstime, d.montant_max);
+    } else if (d.montant_max != null) {
+      switch (d.unite) {
+        case 'par_heure':
+          montantEstime = state.durationHours != null ? d.montant_max * state.durationHours : null;
+          break;
+        case 'par_jour':
+          montantEstime = state.trainingDays != null ? d.montant_max * state.trainingDays : null;
+          break;
+        default:
+          montantEstime = d.montant_max;
+      }
+    }
+
+    results.push({
+      id: d.id,
+      nom: d.nom,
+      cumul: d.cumul,
+      montantEstime: montantEstime != null ? Math.round(montantEstime * 100) / 100 : null,
+      description: d.description,
+      conditions: d.conditions,
+      demarches: d.demarches,
+      publics: d.publics,
+      confidence: d.confidence,
+      sourceUrl: d.source_url,
+    });
+  }
+
+  return results;
+}
+
+/** Construit la liste ordonnée des démarches concrètes. */
+function generateDemarches(
+  opco: OpcoData,
+  dispositifs: DispositifEligible[],
+): string[] {
+  const steps: string[] = [];
+
+  steps.push(`Vérifier que votre entreprise est à jour de ses cotisations auprès de ${opco.name}.`);
+  steps.push(`Demander un devis et le programme détaillé à l'organisme de formation (certifié Qualiopi).`);
+
+  if (opco.processus_approbation) {
+    steps.push(opco.processus_approbation);
+  } else {
+    steps.push(`Déposer la demande de prise en charge sur l'espace entreprise ${opco.name}, AVANT le début de la formation.`);
+  }
+
+  if (typeof opco.delai_validation === 'string' && opco.delai_validation) {
+    steps.push(`Délai : ${opco.delai_validation}`);
+  }
+
+  steps.push(`Attendre l'accord de prise en charge AVANT de démarrer la formation (sous réserve de fonds disponibles).`);
+
+  const cumulables = dispositifs.filter((d) => d.cumul !== 'alternatif');
+  if (cumulables.length > 0) {
+    steps.push(
+      `Demander en parallèle les financements complémentaires éligibles : ${cumulables.map((d) => d.nom).join(', ')} (voir conditions de chaque dispositif).`,
+    );
+  }
+
+  return steps;
+}
+
+// ---------------------------------------------------------------------------
 // Main calculation function
 // ---------------------------------------------------------------------------
 
@@ -632,18 +728,25 @@ export function calculateFunding(
   let totalRequested = allLines.reduce((s, l) => s + l.requestedAmount, 0);
   let totalFunded = allLines.reduce((s, l) => s + l.fundedAmount, 0);
 
-  // ---- 6. Global annual budget cap ----
+  // ---- 6. Global annual budget cap (minus budget already consumed) ----
   let budgetCapApplied = false;
   let budgetCapAmount: number | null = null;
+  const budgetDejaConsomme = Math.max(0, state.budgetDejaConsomme ?? 0);
 
   // Size-specific cap takes priority over global cap
   const plafond = resolvePlafondForSize(opcoData, state.companySize);
-  const effectiveCap =
+  const annualCap =
     plafond?.budget_annuel_max ?? opcoData.budget_annuel_max.value;
 
-  if (effectiveCap != null && effectiveCap > 0 && totalFunded > effectiveCap) {
+  // L'enveloppe restante = plafond annuel - budget déjà consommé cette année.
+  const effectiveCap =
+    annualCap != null && annualCap > 0
+      ? Math.max(0, annualCap - budgetDejaConsomme)
+      : null;
+
+  if (effectiveCap != null && totalFunded > effectiveCap) {
     // Proportionally reduce all funded amounts to fit under the cap
-    const ratio = effectiveCap / totalFunded;
+    const ratio = effectiveCap > 0 ? effectiveCap / totalFunded : 0;
     for (const l of allLines) {
       l.fundedAmount = Math.round(l.fundedAmount * ratio * 100) / 100;
       l.remainder = Math.round((l.requestedAmount - l.fundedAmount) * 100) / 100;
@@ -655,14 +758,48 @@ export function calculateFunding(
 
   const totalRemainder = Math.round((totalRequested - totalFunded) * 100) / 100;
 
-  // ---- 7. Warnings ----
+  // ---- 7. Dispositifs complémentaires (cumuls d'enveloppes) ----
+  const dispositifsComplementaires = evaluateDispositifs(
+    opcoData,
+    state,
+    pedagogyLine.requestedAmount,
+  );
+  const cumulable = dispositifsComplementaires
+    .filter((d) => d.cumul !== 'alternatif')
+    .reduce((s, d) => s + (d.montantEstime ?? 0), 0);
+  const enveloppeMaxPotentielle =
+    Math.round((totalFunded + cumulable) * 100) / 100;
+
+  // ---- 8. Warnings ----
   const warnings = [
     ...earlyWarnings,
     ...generateWarnings(opcoData, state, allLines, budgetCapApplied),
   ];
 
-  // ---- 8. Conditions & next steps ----
+  if (budgetDejaConsomme > 0 && annualCap != null && annualCap > 0) {
+    warnings.push(
+      `Budget déjà consommé cette année (${budgetDejaConsomme.toFixed(0)} €) déduit du plafond annuel ` +
+        `(${annualCap.toFixed(0)} €) : enveloppe restante ${Math.max(0, annualCap - budgetDejaConsomme).toFixed(0)} €.`,
+    );
+    if (annualCap - budgetDejaConsomme <= 0) {
+      warnings.push(
+        `Votre enveloppe annuelle ${opcoData.name} est épuisée. Examinez les financements complémentaires ci-dessous ou attendez l'année suivante.`,
+      );
+    }
+  }
+
+  const hasUnquantifiedCumul = dispositifsComplementaires.some(
+    (d) => d.cumul !== 'alternatif' && d.montantEstime == null,
+  );
+  if (hasUnquantifiedCumul) {
+    warnings.push(
+      `Certains financements complémentaires ne sont pas chiffrables à l'avance : l'enveloppe maximale réelle peut être supérieure à l'estimation.`,
+    );
+  }
+
+  // ---- 9. Conditions, démarches & next steps ----
   const conditions = generateConditions(opcoData, state);
+  const demarches = generateDemarches(opcoData, dispositifsComplementaires);
   const nextSteps = generateNextSteps(opcoData);
 
   return {
@@ -670,14 +807,19 @@ export function calculateFunding(
     opcoSlug: opcoData.slug,
     opcoEmail: opcoData.email_contact,
     opcoUrl: opcoData.url_finance_page,
+    dispositifPrincipal: 'Plan de développement des compétences (fonds mutualisés OPCO)',
     lines: allLines,
     totalRequested: Math.round(totalRequested * 100) / 100,
     totalFunded: Math.round(totalFunded * 100) / 100,
     totalRemainder,
     budgetCapApplied,
     budgetCapAmount,
+    budgetDejaConsomme,
+    dispositifsComplementaires,
+    enveloppeMaxPotentielle,
     warnings,
     conditions,
+    demarches,
     nextSteps,
     delaiValidation: opcoData.delai_validation,
     modePaiement: opcoData.mode_paiement,

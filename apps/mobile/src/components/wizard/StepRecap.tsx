@@ -90,6 +90,12 @@ export function StepRecap({ state, onEdit, opcoList }: Props) {
           label="Ancienneté"
           value={state.anciennete_mois ? `${state.anciennete_mois} mois` : null}
         />
+        {state.budgetDejaConsomme != null && state.budgetDejaConsomme > 0 ? (
+          <Item
+            label="Budget déjà consommé"
+            value={`${state.budgetDejaConsomme} € (déduit du plafond annuel)`}
+          />
+        ) : null}
         {state.isHandicap ? <Item label="Handicap" value="Oui (RQTH)" /> : null}
         {state.isReconversion ? <Item label="Reconversion" value="Oui" /> : null}
         {state.isSortieChomage ? <Item label="Sortie chômage" value="Oui" /> : null}

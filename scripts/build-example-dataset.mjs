@@ -44,9 +44,19 @@ for (const filename of opcoFilenames) {
 // Generate ISO date
 const generatedAt = new Date().toISOString();
 
+// Auto-increment version from existing manifest (apps only download if newer)
+const manifestPath0 = path.join(datasetsDir, 'manifest.json');
+let version = 1;
+if (fs.existsSync(manifestPath0)) {
+  try {
+    const prev = JSON.parse(fs.readFileSync(manifestPath0, 'utf-8'));
+    if (Number.isInteger(prev.version)) version = prev.version + 1;
+  } catch { /* manifest illisible -> repart à 1 */ }
+}
+
 // Build dataset object
 const dataset = {
-  version: 1,
+  version: version,
   generatedAt: generatedAt,
   opcos: opcos
 };
@@ -54,8 +64,8 @@ const dataset = {
 // Convert to JSON string with 2-space indentation
 const datasetJsonString = JSON.stringify(dataset, null, 2);
 
-// Write v1.json
-const v1Path = path.join(datasetsDir, 'v1.json');
+// Write v<N>.json (archive immuable)
+const v1Path = path.join(datasetsDir, `v${version}.json`);
 fs.writeFileSync(v1Path, datasetJsonString, 'utf-8');
 console.log(`✓ Created ${v1Path}`);
 
@@ -74,12 +84,15 @@ const hash = crypto
 console.log(`✓ SHA-256 hash: ${hash}`);
 
 // Build manifest object
+const changelog = process.env.DATASET_CHANGELOG
+  ? [process.env.DATASET_CHANGELOG]
+  : [`Dataset v${version} généré depuis les données embarquées`];
 const manifest = {
-  version: 1,
+  version: version,
   generatedAt: generatedAt,
   sha256: hash,
   opcoCount: opcos.length,
-  changelog: ['Dataset initial (seed) généré depuis les données embarquées']
+  changelog: changelog
 };
 
 // Write manifest.json

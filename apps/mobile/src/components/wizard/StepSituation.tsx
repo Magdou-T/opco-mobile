@@ -94,6 +94,16 @@ export function StepSituation({ state, updateState }: Props) {
         placeholder="Ex: 24"
       />
 
+      {/* Budget déjà consommé */}
+      <NumberField
+        label="Budget formation déjà consommé cette année auprès de votre OPCO (€)"
+        decimal
+        value={state.budgetDejaConsomme}
+        onChangeNumber={(v) => updateState({ budgetDejaConsomme: v })}
+        placeholder="Ex: 1500"
+        helper="Laissez vide si aucune formation financée cette année — ce montant est déduit de votre plafond annuel"
+      />
+
       {/* Situations particulières */}
       <View className="gap-2">
         <Text className="text-sm font-medium text-gray-700">

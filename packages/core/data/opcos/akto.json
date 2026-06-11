@@ -5,7 +5,6 @@
   "secteurs_source": "https://www.akto.fr/branches-professionnelles/",
   "email_contact": "contact@akto.fr",
   "url_finance_page": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-
   "types_formations": [
     "Plan de dev. des competences",
     "Alternance (apprentissage, professionnalisation)",
@@ -16,7 +15,6 @@
     "AFEST"
   ],
   "types_formations_source": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-
   "cout_horaire_inter": {
     "value": 30,
     "confidence": "depends_on_branche",
@@ -35,7 +33,6 @@
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
     "note": "Aligne sur le plafond pedagogique general interprofession (30 euros/h metropole). Certaines branches financent davantage les CQP/formations metier."
   },
-
   "prise_en_charge_salaires": {
     "value": 13,
     "confidence": "depends_on_branche",
@@ -43,7 +40,6 @@
     "note": "Forfait remuneration du salarie en formation : 13 euros/h depuis le 1er janvier 2026 (interprofession metropole), 12 euros/h outre-mer. Varie selon branche (jusqu'a 15 euros/h). AKTO prend bien en charge une partie du salaire pendant la formation."
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
-
   "frais_transport": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -68,7 +64,6 @@
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
     "note": "Pas de forfait %, frais individuels selon branche"
   },
-
   "budget_annuel_max": {
     "value": 2500,
     "confidence": "depends_on_branche",
@@ -78,7 +73,6 @@
   "budget_annuel_description": "Defaut interprofession : 2 500 euros/an (<11 sal.), 4 000 euros/an (11-49 sal.) en metropole. Montants superieurs selon la branche (jusqu'a 6 000-12 000 euros).",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
-
   "profils_candidats": [
     "Salaries entreprises <50 salaries (priorite)",
     "Tous salaries (plan conventionnel 50+)",
@@ -88,25 +82,18 @@
   "tailles_cibles": "Priorite TPE/PME <50 salaries",
   "priorite_tpe_pme": true,
   "duree_min_formation": null,
-
   "processus_approbation": "Demande en ligne sur akto.fr avant debut de formation | Validation sous conditions de fonds disponibles",
   "delai_validation": "15-30 jours",
   "mode_paiement": "Tiers-payant ou remboursement",
-
   "alternance_apprentissage": "Selon referentiel France Competences (NPEC). Bonus handicap : 4 000 euros. Repas : 3 euros/repas, hebergement : 6 euros/nuit, equipement : 500 euros/apprenti.",
   "alternance_professionnalisation": "14-20 euros/h selon branche et type (standard 14 euros/h, prioritaire 15 euros/h, GEIQ 19 euros/h, CQP gestionnaire 20 euros/h)",
-
   "cpf_abondement": true,
   "cpf_details": "Selon accord de branche",
-
   "vae_possible": true,
   "vae_details": "VAE, CQP/TFP, CleA, certifications metier",
-
   "limite_dossiers_an": "Dans la limite du budget annuel par entreprise et des fonds disponibles",
-
   "specificites": "AKTO couvre 27 branches professionnelles avec des regles specifiques par branche. Les montants varient significativement selon la branche. Plateforme Click & Form pour formations pre-negociees.",
   "points_cles_maximisation": "Verifier les regles specifiques de votre branche sur akto.fr | AFEST possible (1 200-2 400 euros accompagnement) | Majoration tuteur : 230 euros/mois",
-
   "plafonds_par_taille": [
     {
       "taille": "less_11",
@@ -135,6 +122,29 @@
       "budget_annuel_max": null,
       "quota_horaire_max": null,
       "description": "300+ salaries - Pas de fonds mutualise interprofession. Financement via plan conventionnel de branche (sous reserve de fonds)."
+    }
+  ],
+  "dispositifs_complementaires": [
+    {
+      "id": "espace-formation",
+      "nom": "Espace Formation AKTO",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Catalogue de formations negociees par AKTO avec des conditions de prise en charge specifiques, distinctes des plafonds PDC classiques.",
+      "conditions": [
+        "Entreprise de moins de 50 salaries",
+        "Formation choisie dans le catalogue Espace Formation"
+      ],
+      "demarches": "Consulter le catalogue Espace Formation sur akto.fr et s'inscrire via l'espace entreprise.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "estimated",
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/"
     }
   ]
 }

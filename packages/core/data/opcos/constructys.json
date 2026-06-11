@@ -5,7 +5,6 @@
   "secteurs_source": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
   "email_contact": "contact@constructys.fr",
   "url_finance_page": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
-
   "types_formations": [
     "Formation continue",
     "Alternance",
@@ -14,7 +13,6 @@
     "FEEBAT"
   ],
   "types_formations_source": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
-
   "cout_horaire_inter": {
     "value": 24,
     "confidence": "exact",
@@ -39,7 +37,6 @@
     "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
     "note": "32 euros/h pour entreprises TP <11 salaries, formations transition ecologique/developpement durable/transition numerique, sans impact sur budget annuel"
   },
-
   "prise_en_charge_salaires": {
     "value": 15,
     "confidence": "exact",
@@ -47,7 +44,6 @@
     "note": "Constructys finance une partie du salaire : 15 euros HT/h/stagiaire pour Batiment et TP <11 salaries (toutes actions hors FEEBAT, qui est a 100 euros/jour). Pour le Batiment 11-49 salaries : 10 euros HT/h (actions qualifiantes et creation/reprise/gestion d'entreprise), 15 euros HT/h uniquement pour l'AFEST. Rien de publie pour les 50+."
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
-
   "frais_transport": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -72,7 +68,6 @@
     "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
     "note": "8% max des couts pedagogiques pris en charge, plafond 1500 euros HT par stagiaire. Batiment <50 salaries, actions qualifiantes uniquement"
   },
-
   "budget_annuel_max": {
     "value": 3500,
     "confidence": "depends_on_branche",
@@ -82,7 +77,6 @@
   "budget_annuel_description": "3 500 euros/an (<11 sal.) a 6 000 euros/an (11-49 sal.) selon branche",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
-
   "profils_candidats": [
     "Salaries",
     "Apprentis",
@@ -92,11 +86,9 @@
   "tailles_cibles": "Priorite <50 salaries (Batiment et TP)",
   "priorite_tpe_pme": true,
   "duree_min_formation": null,
-
   "processus_approbation": "Demande prealable obligatoire via eGestion, dossier complet 15 jours calendaires avant le debut de la formation",
   "delai_validation": "15 jours calendaires avant demarrage",
   "mode_paiement": "Tiers-payant ou remboursement",
-
   "alternance_apprentissage": "Apprentissage selon NPEC (niveaux de prise en charge France Competences)",
   "alternance_professionnalisation": {
     "value": 6,
@@ -104,7 +96,6 @@
     "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
     "note": "Complement de 6 euros/h de formation verse directement a l'entreprise pour contrats de professionnalisation Batiment <11 salaries (hors GEIQ et contrats tertiaires)"
   },
-
   "cpf_abondement": true,
   "cpf_details": {
     "value": "CPF co-construit avec remboursement dotation/abondement CDC",
@@ -112,15 +103,11 @@
     "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
     "note": "Pour entreprises TP <50 salaries: remboursement de la dotation ou abondement verse a la CDC dans le cadre de la co-construction CPF"
   },
-
   "vae_possible": true,
   "vae_details": "VAE possible - consulter Constructys pour modalites specifiques",
-
   "limite_dossiers_an": "Selon accord branche",
-
   "specificites": "FEEBAT (Formation aux Economies d'Energie dans le Batiment) pour renovation energetique | TP <11: 32 euros/h transition ecologique/numerique hors budget annuel | Professionnalisation Batiment <11: complement 6 euros/h",
   "points_cles_maximisation": "TP <11: formations transition ecologique a 32 euros/h sans impact budget annuel | CPF co-construit TP <50: remboursement dotation CDC | FEEBAT pour renovation energetique | Deposer dossier complet 15j avant sur eGestion",
-
   "plafonds_par_taille": [
     {
       "taille": "less_11",
@@ -191,6 +178,49 @@
       "quota_horaire_max": null,
       "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
       "description": "Entreprises 300+: selon accord branche, contacter Constructys"
+    }
+  ],
+  "dispositifs_complementaires": [
+    {
+      "id": "transition-ecologique-tp",
+      "nom": "Transition ecologique / numerique TP (hors budget annuel)",
+      "cumul": "hors_budget",
+      "montant_max": 32,
+      "unite": "par_heure",
+      "pourcentage_couts": null,
+      "description": "TP <11 salaries : formations transition ecologique, developpement durable ou transition numerique financees a 32 euros HT/h SANS impact sur le budget annuel.",
+      "conditions": [
+        "Entreprise de Travaux Publics de moins de 11 salaries",
+        "Formation liee a la transition ecologique, au developpement durable ou a la transition numerique"
+      ],
+      "demarches": "Demande via eGestion, dossier complet 15 jours calendaires avant le debut de la formation.",
+      "tailles_eligibles": [
+        "less_11"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/"
+    },
+    {
+      "id": "cpf-coconstruit-tp",
+      "nom": "CPF co-construit (TP <50 salaries)",
+      "cumul": "additif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Remboursement a l'entreprise de la dotation/abondement CPF verse a la Caisse des Depots dans le cadre d'un projet CPF co-construit avec le salarie.",
+      "conditions": [
+        "Entreprise de Travaux Publics de moins de 50 salaries",
+        "Dotation CPF versee a la CDC pour le projet du salarie"
+      ],
+      "demarches": "Demande de remboursement via eGestion apres versement de la dotation a la CDC.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/"
     }
   ]
 }
