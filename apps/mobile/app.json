@@ -36,7 +36,12 @@
       ]
     ],
     "extra": {
-      "datasetBaseUrl": "https://raw.githubusercontent.com/Magdou-T/opco-mobile/main/datasets"
-    }
+      "datasetBaseUrl": "https://raw.githubusercontent.com/Magdou-T/opco-mobile/main/datasets",
+      "router": {},
+      "eas": {
+        "projectId": "7667344a-3e8c-4c2b-94cc-b3cd0b0271f8"
+      }
+    },
+    "owner": "magdou_t"
   }
 }
