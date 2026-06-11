@@ -199,5 +199,91 @@
       "confidence": "exact",
       "source_url": "https://www.opcoep.fr/criteres-de-financement"
     }
+  ],
+  "variantes_branche": [
+    {
+      "id": "pharmacie-officine",
+      "branche_nom": "Pharmacie d'officine",
+      "idcc": [
+        "1996"
+      ],
+      "source_url": "https://www.opcoep.fr/criteres-de-financement",
+      "confidence": "exact",
+      "note": "Baremes 2026 de la page criteres de financement OPCO EP, branche Pharmacie d'officine (verifies le 11/06/2026).",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "25 euros HT/h pour les formations transversales ; 40 euros HT/h pour les formations metier."
+      },
+      "cout_horaire_metier": {
+        "value": 40,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "40 euros HT/h pour les formations metier."
+      },
+      "prise_en_charge_salaires": {
+        "value": 12,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Frais de salaire : 12 euros HT/h, pour les entreprises de MOINS DE 11 SALARIES exclusivement."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Transport : 0,32 euros HT/km (entreprises <11 salaries)."
+      },
+      "frais_hebergement": {
+        "value": 112,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Nuitee : 112 euros HT (metropoles/DROM), 96 euros HT (province). Entreprises <11 salaries."
+      },
+      "frais_restauration": {
+        "value": 19,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Repas : 19 euros HT (entreprises <11 salaries)."
+      },
+      "budget_annuel_max": {
+        "value": 7500,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Budget annuel 2026 : 7 500 euros HT (<11 sal.), 15 000 euros HT (11+ sal.). Demandes avant le 30 novembre."
+      },
+      "budget_annuel_description": "Pharmacie d'officine 2026 : 7 500 euros HT/an (<11 sal.), 15 000 euros HT/an (11+ sal.). Duree max par action : 28 h. Demande avant le 30/11.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 7500,
+          "quota_horaire_max": null,
+          "description": "Pharmacie <11 salaries : 7 500 euros HT/an, 40 euros/h (metier) ou 25 euros/h (transversal), salaire 12 euros/h, frais annexes couverts."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "Pharmacie 11-49 salaries : 15 000 euros HT/an. Salaire et frais annexes reserves aux <11 salaries."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "Pharmacie 50+ salaries : 15 000 euros HT/an (baremes 11+ sal.)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "Pharmacie 300+ salaries : 15 000 euros HT/an (baremes 11+ sal.)."
+        }
+      ]
+    }
   ]
 }

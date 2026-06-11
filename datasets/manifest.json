@@ -1,9 +1,9 @@
 {
-  "version": 2,
-  "generatedAt": "2026-06-11T13:11:15.655Z",
-  "sha256": "cadb4bf2c94d6910158fcbab192e774a3b75fdafc1344bf68b3b341310532fab",
+  "version": 3,
+  "generatedAt": "2026-06-11T16:15:32.425Z",
+  "sha256": "8008a4e500bdc124daf86ab31da6b334dabc0bf25deef02bbfd6f16d074ddf51",
   "opcoCount": 11,
   "changelog": [
-    "V2.1 : dispositifs complementaires cumulables (Boost Competences, Click&Form, FSE+, transition ecologique TP, abondements CPF/SPSTI...), conditions d'attribution et demarches"
+    "V2.2 : baremes par branche professionnelle (AKTO Organismes de formation 4500/5600 euros + Commerces de gros 6000/12000 euros, OPCO EP Pharmacie d'officine 7500/15000 euros), appliques automatiquement selon l'IDCC detecte ou le choix manuel"
   ]
 }

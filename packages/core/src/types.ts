@@ -81,6 +81,38 @@ export interface OpcoData {
 
   // Dispositifs de financement complémentaires (cumuls d'enveloppes)
   dispositifs_complementaires?: DispositifComplementaire[];
+
+  // Barèmes spécifiques par branche professionnelle (priment sur le défaut)
+  variantes_branche?: VarianteBranche[];
+}
+
+/**
+ * Barème spécifique d'une branche professionnelle au sein d'un OPCO.
+ * Chaque champ renseigné REMPLACE le champ correspondant du barème par
+ * défaut de l'OPCO ; les champs absents héritent du défaut.
+ * La variante est appliquée si l'IDCC détecté (recherche SIREN) figure dans
+ * `idcc`, ou si l'utilisateur sélectionne la branche manuellement.
+ */
+export interface VarianteBranche {
+  id: string;
+  branche_nom: string;
+  /** Codes IDCC couverts (4 chiffres, ex. "1516"). */
+  idcc: string[];
+  source_url: string;
+  confidence: Confidence;
+  note?: string;
+
+  // Overrides (optionnels — héritent du défaut OPCO si absents)
+  cout_horaire_inter?: SourcedValue<number | null>;
+  cout_horaire_metier?: SourcedValue<number | null>;
+  prise_en_charge_salaires?: SourcedValue<number | null>;
+  prise_en_charge_salaires_mode?: OpcoData['prise_en_charge_salaires_mode'];
+  frais_transport?: SourcedValue<number | null>;
+  frais_hebergement?: SourcedValue<number | null>;
+  frais_restauration?: SourcedValue<number | null>;
+  budget_annuel_max?: SourcedValue<number | null>;
+  budget_annuel_description?: string;
+  plafonds_par_taille?: PlafondTaille[];
 }
 
 export interface PlafondTaille {
@@ -142,6 +174,8 @@ export interface WizardState {
   detectedOpcoSlug: string | null;
   detectedIdcc: string | null;
   detectedCompanyName: string | null;
+  /** Branche choisie manuellement (id de VarianteBranche) — prime sur l'IDCC détecté. */
+  selectedBrancheId: string | null;
 
   // Step 2: Situation professionnelle
   contractType: ContractType | null;
@@ -211,6 +245,8 @@ export interface FundingResult {
   opcoUrl: string;
   /** Dispositif au titre duquel l'estimation principale est calculée. */
   dispositifPrincipal: string;
+  /** Nom de la branche dont le barème a été appliqué (null = barème général de l'OPCO). */
+  brancheAppliquee: string | null;
   lines: FundingLine[];
   totalRequested: number;
   totalFunded: number;
@@ -319,6 +355,7 @@ export function createInitialWizardState(): WizardState {
     detectedOpcoSlug: null,
     detectedIdcc: null,
     detectedCompanyName: null,
+    selectedBrancheId: null,
     contractType: null,
     companySize: null,
     anciennete_mois: null,

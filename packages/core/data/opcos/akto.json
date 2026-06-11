@@ -146,5 +146,133 @@
       "confidence": "estimated",
       "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/"
     }
+  ],
+  "variantes_branche": [
+    {
+      "id": "organismes-de-formation",
+      "branche_nom": "Organismes de formation",
+      "idcc": [
+        "1516"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+      "confidence": "exact",
+      "note": "Baremes 2026 verifies le 11/06/2026 sur la page officielle de la branche.",
+      "cout_horaire_inter": {
+        "value": 60,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "60 euros/h/stagiaire maximum (hors Espace Formation), entreprises <50 salaries. Intra : 1 200 euros/jour minimum 3 participants."
+      },
+      "prise_en_charge_salaires": {
+        "value": 15,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "Forfait remuneration 15 euros/h/stagiaire (plan conventionnel <50 salaries)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_hebergement": {
+        "value": 150,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "Jusqu'a 150 euros/nuit."
+      },
+      "frais_restauration": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "Jusqu'a 25 euros/repas (dejeuner et/ou diner)."
+      },
+      "budget_annuel_max": {
+        "value": 4500,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "Budget annuel 2026 : 4 500 euros (<11 sal.), 5 600 euros (11-49 sal.) — verifie le 11/06/2026 (citation : « vous disposez d'un budget annuel de 4 500 euros »)."
+      },
+      "budget_annuel_description": "Branche Organismes de formation 2026 : 4 500 euros/an (<11 sal.), 5 600 euros/an (11-49 sal.), couts pedagogiques hors Espace Formation.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 60,
+          "budget_annuel_max": 4500,
+          "quota_horaire_max": null,
+          "description": "Organismes de formation <11 salaries : budget 4 500 euros/an, plafond pedagogique 60 euros/h, salaire 15 euros/h."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 60,
+          "budget_annuel_max": 5600,
+          "quota_horaire_max": null,
+          "description": "Organismes de formation 11-49 salaries : budget 5 600 euros/an, plafond pedagogique 60 euros/h, salaire 15 euros/h."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50+ salaries : plan conventionnel (80 % de la contribution conventionnelle versee, moins frais de gestion)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries : plan conventionnel selon contribution versee."
+        }
+      ]
+    },
+    {
+      "id": "commerces-de-gros",
+      "branche_nom": "Commerces de gros",
+      "idcc": [
+        "0573"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
+      "confidence": "exact",
+      "note": "Baremes 2026 de la page officielle de la branche Commerces de gros.",
+      "prise_en_charge_salaires": {
+        "value": 13,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
+        "note": "Forfait 13 euros/h de formation/salarie forme pour toutes les actions realisees depuis le 1er janvier 2026."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "budget_annuel_max": {
+        "value": 6000,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
+        "note": "Budget annuel 2026 : 6 000 euros (<11 sal.), 12 000 euros (11-49 sal.). Couvre couts pedagogiques, remuneration et frais annexes."
+      },
+      "budget_annuel_description": "Branche Commerces de gros 2026 : 6 000 euros/an (<11 sal.), 12 000 euros/an (11-49 sal.) — couts pedagogiques + remuneration + frais annexes.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 6000,
+          "quota_horaire_max": null,
+          "description": "Commerces de gros <11 salaries : budget annuel 6 000 euros (pedagogie + remuneration 13 euros/h + frais)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 12000,
+          "quota_horaire_max": null,
+          "description": "Commerces de gros 11-49 salaries : budget annuel 12 000 euros (pedagogie + remuneration 13 euros/h + frais)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50+ salaries : pas de fonds mutualises PDC ; plan conventionnel selon contribution."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries : plan conventionnel selon contribution."
+        }
+      ]
+    }
   ]
 }

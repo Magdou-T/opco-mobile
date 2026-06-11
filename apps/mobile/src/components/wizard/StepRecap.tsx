@@ -8,6 +8,8 @@ import {
   COMPANY_SIZE_LABELS,
   TRAINING_TYPE_LABELS,
   TRAINING_MODE_LABELS,
+  resolveVarianteBranche,
+  type OpcoData,
   type WizardState,
   type WizardStep,
 } from '@opco/core';
@@ -16,6 +18,7 @@ interface Props {
   state: WizardState;
   onEdit: (step: WizardStep) => void;
   opcoList: { slug: string; name: string; secteurs: string }[];
+  getOpcoBySlug: (slug: string) => OpcoData | undefined;
 }
 
 function Section({
@@ -51,9 +54,14 @@ function Item({ label, value }: { label: string; value: string | null | undefine
   );
 }
 
-export function StepRecap({ state, onEdit, opcoList }: Props) {
+export function StepRecap({ state, onEdit, opcoList, getOpcoBySlug }: Props) {
   const opcoSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
   const opco = opcoSlug ? opcoList.find((o) => o.slug === opcoSlug) : null;
+
+  // Branche professionnelle applicable (choix manuel ou IDCC détecté).
+  const opcoData = opcoSlug ? getOpcoBySlug(opcoSlug) : undefined;
+  const hasVariantes = (opcoData?.variantes_branche?.length ?? 0) > 0;
+  const variante = opcoData ? resolveVarianteBranche(opcoData, state) : null;
 
   return (
     <View className="gap-6">
@@ -68,6 +76,9 @@ export function StepRecap({ state, onEdit, opcoList }: Props) {
       <Section title="OPCO" onEdit={() => onEdit('identification')}>
         <Item label="OPCO" value={opco?.name} />
         <Item label="Secteurs" value={opco?.secteurs} />
+        {hasVariantes ? (
+          <Item label="Branche" value={variante?.branche_nom ?? 'Barème général'} />
+        ) : null}
         {state.detectedCompanyName ? (
           <Item
             label="Entreprise"

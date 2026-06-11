@@ -107,7 +107,12 @@ export function WizardContainer() {
         {/* Step content */}
         <View className="rounded-xl border border-gray-200 bg-white p-5">
           {currentStep.key === 'identification' && (
-            <StepIdentification state={state} updateState={updateState} opcoList={opcoList} />
+            <StepIdentification
+              state={state}
+              updateState={updateState}
+              opcoList={opcoList}
+              getOpcoBySlug={getOpcoBySlug}
+            />
           )}
           {currentStep.key === 'situation' && (
             <StepSituation state={state} updateState={updateState} />
@@ -122,7 +127,12 @@ export function WizardContainer() {
           )}
           {currentStep.key === 'frais' && <StepFrais state={state} updateState={updateState} />}
           {currentStep.key === 'recap' && (
-            <StepRecap state={state} onEdit={goToStep} opcoList={opcoList} />
+            <StepRecap
+              state={state}
+              onEdit={goToStep}
+              opcoList={opcoList}
+              getOpcoBySlug={getOpcoBySlug}
+            />
           )}
         </View>
       </ScrollView>

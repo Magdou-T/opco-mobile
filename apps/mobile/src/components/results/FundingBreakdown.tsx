@@ -153,6 +153,19 @@ export function FundingBreakdown({ result }: Props) {
         </Text>
       </View>
 
+      {/* Barème appliqué (branche professionnelle ou barème général) */}
+      {result.brancheAppliquee ? (
+        <View className="-mt-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3">
+          <Text className="text-sm font-semibold text-green-800">
+            ✓ Barème appliqué : {result.brancheAppliquee}
+          </Text>
+        </View>
+      ) : (
+        <View className="-mt-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+          <Text className="text-sm text-gray-600">Barème général de l'OPCO appliqué</Text>
+        </View>
+      )}
+
       {/* Main result card */}
       <View className="rounded-xl bg-blue-600 p-6">
         <Text className="mb-1 text-sm font-medium text-blue-100">Financement estimé par</Text>

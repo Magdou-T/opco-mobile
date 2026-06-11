@@ -203,6 +203,92 @@ describe('calculateFunding — V2.1 : PDC, budget consommé, cumuls', () => {
   });
 });
 
+describe('calculateFunding — barèmes par branche (variantes)', () => {
+  const opcoAvecVariantes = () =>
+    makeOpco({
+      cout_horaire_inter: { value: 30, confidence: 'depends_on_branche', source_url: 'x' },
+      budget_annuel_max: { value: 2500, confidence: 'depends_on_branche', source_url: 'x' },
+      variantes_branche: [
+        {
+          id: 'organismes-de-formation',
+          branche_nom: 'Organismes de formation',
+          idcc: ['1516'],
+          source_url: 'https://example.test/of',
+          confidence: 'exact',
+          cout_horaire_inter: { value: 60, confidence: 'exact', source_url: 'x' },
+          prise_en_charge_salaires: { value: 15, confidence: 'exact', source_url: 'x' },
+          prise_en_charge_salaires_mode: 'euro_par_heure',
+          budget_annuel_max: { value: 4500, confidence: 'exact', source_url: 'x' },
+        },
+      ],
+    });
+
+  it('applique le barème de branche quand l’IDCC détecté correspond', () => {
+    const state = makeFormationState({ detectedIdcc: '1516', durationHours: 100, pedagogyCostPerHour: 50 });
+    const r = calculateFunding(opcoAvecVariantes(), state);
+    expect(r.brancheAppliquee).toBe('Organismes de formation');
+    // Pédagogie 50€/h sous plafond branche 60 → 5000 ; salaire 15€/h × 100h = 1500.
+    // Total 6500 > cap branche 4500 → réduit proportionnellement, total = 4500.
+    expect(r.totalFunded).toBe(4500);
+    expect(r.budgetCapApplied).toBe(true);
+    expect(r.budgetCapAmount).toBe(4500); // cap de la BRANCHE, pas le 2500 général
+    const sal = r.lines.find((l) => l.label === 'Prise en charge salaires')!;
+    expect(sal.requestedAmount).toBe(1500); // 15€/h × 100h (avant cap)
+  });
+
+  it('normalise l’IDCC court (padding 4 chiffres)', () => {
+    const state = makeFormationState({ detectedIdcc: '1516', durationHours: 10, pedagogyCostPerHour: 10 });
+    const r = calculateFunding(opcoAvecVariantes(), { ...state, detectedIdcc: '1516' });
+    expect(r.brancheAppliquee).toBe('Organismes de formation');
+  });
+
+  it('le choix manuel de branche prime sur l’IDCC détecté', () => {
+    const opco = opcoAvecVariantes();
+    opco.variantes_branche!.push({
+      id: 'autre-branche',
+      branche_nom: 'Autre branche',
+      idcc: ['9999'],
+      source_url: 'x',
+      confidence: 'exact',
+      budget_annuel_max: { value: 1000, confidence: 'exact', source_url: 'x' },
+    });
+    const state = makeFormationState({
+      detectedIdcc: '1516',
+      selectedBrancheId: 'autre-branche',
+      durationHours: 100,
+      pedagogyCostPerHour: 30,
+    });
+    const r = calculateFunding(opco, state);
+    expect(r.brancheAppliquee).toBe('Autre branche');
+    expect(r.totalFunded).toBe(1000); // cap de la branche choisie manuellement
+  });
+
+  it('sans correspondance : barème général + warning explicite', () => {
+    const state = makeFormationState({ detectedIdcc: '0042', durationHours: 100, pedagogyCostPerHour: 30 });
+    const r = calculateFunding(opcoAvecVariantes(), state);
+    expect(r.brancheAppliquee).toBeNull();
+    expect(r.totalFunded).toBe(2500); // cap général
+    expect(r.warnings.some((w) => w.includes('Barème général'))).toBe(true);
+  });
+
+  it('les champs non surchargés héritent du barème général', () => {
+    const opco = opcoAvecVariantes();
+    // La variante OF ne surcharge pas frais_restauration
+    opco.frais_restauration = { value: 19, confidence: 'exact', source_url: 'x' };
+    const state = makeFormationState({
+      detectedIdcc: '1516',
+      durationHours: 10,
+      pedagogyCostPerHour: 10,
+      needsMeals: true,
+      mealCostPerDay: 25,
+      trainingDays: 2,
+    });
+    const r = calculateFunding(opco, state);
+    const repas = r.lines.find((l) => l.label === 'Restauration')!;
+    expect(repas.fundedAmount).toBe(38); // 19€ hérité × 2 jours
+  });
+});
+
 describe('calculateFunding — déterminisme', () => {
   it('mêmes entrées → mêmes sorties', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });

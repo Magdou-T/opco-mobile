@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
 import {
   resolveIdccToOpco,
+  resolveVarianteBranche,
+  type OpcoData,
   type SirenSearchResult,
   type WizardState,
 } from '@opco/core';
@@ -16,9 +18,10 @@ interface Props {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
   opcoList: { slug: string; name: string; secteurs: string }[];
+  getOpcoBySlug: (slug: string) => OpcoData | undefined;
 }
 
-export function StepIdentification({ state, updateState, opcoList }: Props) {
+export function StepIdentification({ state, updateState, opcoList, getOpcoBySlug }: Props) {
   const [mode, setMode] = useState<'known' | 'search' | null>(
     state.opcoKnown === true ? 'known' : state.opcoKnown === false ? 'search' : null,
   );
@@ -31,6 +34,7 @@ export function StepIdentification({ state, updateState, opcoList }: Props) {
       opcoKnown: m === 'known',
       selectedOpcoSlug: m === 'search' ? null : state.selectedOpcoSlug,
       detectedOpcoSlug: m === 'known' ? null : state.detectedOpcoSlug,
+      selectedBrancheId: null,
     });
   };
 
@@ -48,6 +52,7 @@ export function StepIdentification({ state, updateState, opcoList }: Props) {
       detectedCompanyName: company.nom_complet,
       detectedOpcoSlug: null,
       detectedIdcc: null,
+      selectedBrancheId: null,
     };
 
     // Resolve IDCC to OPCO
@@ -72,6 +77,21 @@ export function StepIdentification({ state, updateState, opcoList }: Props) {
   const effectiveSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
   const detectedOpco = effectiveSlug
     ? opcoList.find((o) => o.slug === effectiveSlug)
+    : null;
+
+  // Variantes de branche de l'OPCO effectif (sélectionné OU détecté).
+  const effectiveOpcoData = effectiveSlug ? getOpcoBySlug(effectiveSlug) : undefined;
+  const variantes = effectiveOpcoData?.variantes_branche ?? [];
+  // Variante effectivement applicable (choix manuel > IDCC détecté).
+  const appliedVariante = effectiveOpcoData
+    ? resolveVarianteBranche(effectiveOpcoData, state)
+    : null;
+  // Variante détectée via la convention collective (IDCC), indépendamment du choix.
+  const idccVariante = effectiveOpcoData
+    ? resolveVarianteBranche(effectiveOpcoData, {
+        selectedBrancheId: null,
+        detectedIdcc: state.detectedIdcc,
+      })
     : null;
 
   return (
@@ -118,7 +138,9 @@ export function StepIdentification({ state, updateState, opcoList }: Props) {
           <OpcoPicker
             options={opcoList}
             selectedSlug={state.selectedOpcoSlug}
-            onSelect={(slug) => updateState({ selectedOpcoSlug: slug })}
+            onSelect={(slug) =>
+              updateState({ selectedOpcoSlug: slug, selectedBrancheId: null })
+            }
           />
         </View>
       )}
@@ -212,7 +234,9 @@ export function StepIdentification({ state, updateState, opcoList }: Props) {
               <OpcoPicker
                 options={opcoList}
                 selectedSlug={state.selectedOpcoSlug}
-                onSelect={(slug) => updateState({ selectedOpcoSlug: slug || null })}
+                onSelect={(slug) =>
+                  updateState({ selectedOpcoSlug: slug || null, selectedBrancheId: null })
+                }
               />
             </View>
           )}
@@ -233,6 +257,60 @@ export function StepIdentification({ state, updateState, opcoList }: Props) {
               Entreprise : {state.detectedCompanyName} (SIREN : {state.sirenNumber})
             </Text>
           ) : null}
+        </View>
+      )}
+
+      {/* Branche professionnelle (barèmes spécifiques par branche) */}
+      {variantes.length > 0 && (
+        <View className="gap-3">
+          <View>
+            <Text className="text-sm font-medium text-gray-700">
+              Votre branche professionnelle
+            </Text>
+            <Text className="mt-1 text-xs text-gray-500">
+              Le barème de votre branche peut être plus avantageux que le barème général.
+            </Text>
+          </View>
+          <View className="gap-2">
+            {variantes.map((v) => {
+              const selected = appliedVariante?.id === v.id;
+              const detectedViaIdcc = idccVariante?.id === v.id;
+              return (
+                <Pressable
+                  key={v.id}
+                  onPress={() => updateState({ selectedBrancheId: v.id })}
+                  className={`rounded-lg border-2 p-3 ${
+                    selected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white'
+                  }`}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected }}
+                >
+                  <View className="flex-row flex-wrap items-center gap-2">
+                    <Text
+                      className={`text-sm ${
+                        selected ? 'font-medium text-blue-900' : 'text-gray-700'
+                      }`}
+                    >
+                      {selected ? '✓ ' : ''}
+                      {v.branche_nom}
+                    </Text>
+                    {detectedViaIdcc ? (
+                      <View className="rounded-full border border-green-200 bg-green-50 px-2 py-0.5">
+                        <Text className="text-xs font-medium text-green-700">
+                          détectée via votre convention collective
+                        </Text>
+                      </View>
+                    ) : null}
+                  </View>
+                </Pressable>
+              );
+            })}
+            <ChoiceButton
+              label="Barème général / je ne sais pas"
+              selected={appliedVariante == null}
+              onPress={() => updateState({ selectedBrancheId: null })}
+            />
+          </View>
         </View>
       )}
     </View>

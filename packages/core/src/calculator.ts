@@ -12,7 +12,63 @@ import type {
   CompanySize,
   PlafondTaille,
   DispositifEligible,
+  VarianteBranche,
 } from './types';
+
+// ---------------------------------------------------------------------------
+// Variantes de branche (barèmes spécifiques par convention collective)
+// ---------------------------------------------------------------------------
+
+/**
+ * Résout la variante de branche applicable.
+ * Priorité : choix manuel de l'utilisateur > IDCC détecté (SIREN) > aucune.
+ */
+export function resolveVarianteBranche(
+  opco: OpcoData,
+  state: Pick<WizardState, 'selectedBrancheId' | 'detectedIdcc'>,
+): VarianteBranche | null {
+  const variantes = opco.variantes_branche ?? [];
+  if (variantes.length === 0) return null;
+
+  if (state.selectedBrancheId) {
+    const manual = variantes.find((v) => v.id === state.selectedBrancheId);
+    if (manual) return manual;
+  }
+
+  if (state.detectedIdcc) {
+    const idcc = state.detectedIdcc.padStart(4, '0');
+    const byIdcc = variantes.find((v) => v.idcc.includes(idcc));
+    if (byIdcc) return byIdcc;
+  }
+
+  return null;
+}
+
+/**
+ * Applique une variante de branche au barème par défaut de l'OPCO.
+ * Pure : retourne un nouvel OpcoData fusionné, sans muter les entrées.
+ */
+export function applyVarianteBranche(
+  opco: OpcoData,
+  variante: VarianteBranche,
+): OpcoData {
+  return {
+    ...opco,
+    cout_horaire_inter: variante.cout_horaire_inter ?? opco.cout_horaire_inter,
+    cout_horaire_metier: variante.cout_horaire_metier ?? opco.cout_horaire_metier,
+    prise_en_charge_salaires:
+      variante.prise_en_charge_salaires ?? opco.prise_en_charge_salaires,
+    prise_en_charge_salaires_mode:
+      variante.prise_en_charge_salaires_mode ?? opco.prise_en_charge_salaires_mode,
+    frais_transport: variante.frais_transport ?? opco.frais_transport,
+    frais_hebergement: variante.frais_hebergement ?? opco.frais_hebergement,
+    frais_restauration: variante.frais_restauration ?? opco.frais_restauration,
+    budget_annuel_max: variante.budget_annuel_max ?? opco.budget_annuel_max,
+    budget_annuel_description:
+      variante.budget_annuel_description ?? opco.budget_annuel_description,
+    plafonds_par_taille: variante.plafonds_par_taille ?? opco.plafonds_par_taille,
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -651,10 +707,25 @@ function generateDemarches(
  * exceptions (invalid inputs yield zero-funded lines with appropriate warnings).
  */
 export function calculateFunding(
-  opcoData: OpcoData,
+  rawOpcoData: OpcoData,
   state: WizardState,
 ): FundingResult {
   const earlyWarnings: string[] = [];
+
+  // ---- 0. Barème de branche (variante) ----
+  // Priorité : branche choisie manuellement > IDCC détecté > barème général.
+  const variante = resolveVarianteBranche(rawOpcoData, state);
+  const opcoData = variante
+    ? applyVarianteBranche(rawOpcoData, variante)
+    : rawOpcoData;
+  const brancheAppliquee = variante?.branche_nom ?? null;
+
+  if (!variante && (rawOpcoData.variantes_branche?.length ?? 0) > 0) {
+    earlyWarnings.push(
+      `Barème général ${rawOpcoData.name} appliqué : votre branche professionnelle peut prévoir des montants différents ` +
+        `(souvent supérieurs). Sélectionnez votre branche à l'étape 1 ou vérifiez les règles de votre branche sur ${rawOpcoData.url_finance_page}`,
+    );
+  }
 
   // ---- 1. Pedagogy ----
   const pedagogyLine = calcPedagogy(opcoData, state, earlyWarnings);
@@ -808,6 +879,7 @@ export function calculateFunding(
     opcoEmail: opcoData.email_contact,
     opcoUrl: opcoData.url_finance_page,
     dispositifPrincipal: 'Plan de développement des compétences (fonds mutualisés OPCO)',
+    brancheAppliquee,
     lines: allLines,
     totalRequested: Math.round(totalRequested * 100) / 100,
     totalFunded: Math.round(totalFunded * 100) / 100,
