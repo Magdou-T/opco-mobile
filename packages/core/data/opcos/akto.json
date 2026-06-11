@@ -1,0 +1,140 @@
+{
+  "slug": "akto",
+  "name": "AKTO",
+  "secteurs": "Travail temporaire, proprete, restauration, hotellerie, commerce de gros, securite, enseignement prive",
+  "secteurs_source": "https://www.akto.fr/branches-professionnelles/",
+  "email_contact": "contact@akto.fr",
+  "url_finance_page": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+
+  "types_formations": [
+    "Plan de dev. des competences",
+    "Alternance (apprentissage, professionnalisation)",
+    "Pro-A",
+    "VAE",
+    "CQP / TFP",
+    "CleA",
+    "AFEST"
+  ],
+  "types_formations_source": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+
+  "cout_horaire_inter": {
+    "value": 30,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "Defaut interprofession metropole 2026 : couts reels plafonnes a 30 euros/h/salarie. Outre-mer : 40 euros/h. Selon branche : jusqu'a 60 euros/h (ex. Organismes de formation). Verifiez votre branche sur akto.fr."
+  },
+  "cout_horaire_intra": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+    "note": "Intra : souvent un plafond au jour (ex. 1 200 euros/jour mini 3 participants, branche Organismes de formation). Pas de plafond intra interprofession unique."
+  },
+  "cout_horaire_metier": {
+    "value": 30,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "Aligne sur le plafond pedagogique general interprofession (30 euros/h metropole). Certaines branches financent davantage les CQP/formations metier."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": 13,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "Forfait remuneration du salarie en formation : 13 euros/h depuis le 1er janvier 2026 (interprofession metropole), 12 euros/h outre-mer. Varie selon branche (jusqu'a 15 euros/h). AKTO prend bien en charge une partie du salaire pendant la formation."
+  },
+  "prise_en_charge_salaires_mode": "euro_par_heure",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+    "note": "Prise en charge selon branche et accord. Outre-mer : jusqu'a 1 500 euros/salarie"
+  },
+  "frais_hebergement": {
+    "value": 150,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+    "note": "60-190 euros/nuit selon branche et localisation (150 euros/nuit branche OF, 60-70 euros/nuit Proprete)"
+  },
+  "frais_restauration": {
+    "value": 25,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+    "note": "15-33 euros/repas selon branche (25 euros branche OF, 15-20 euros Proprete)"
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+    "note": "Pas de forfait %, frais individuels selon branche"
+  },
+
+  "budget_annuel_max": {
+    "value": 2500,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "Defaut interprofession metropole 2026 : 2 500 euros/an (<11 sal.), 4 000 euros/an (11-49 sal.). Outre-mer : 5 000 / 7 000 euros. Selon branche, budgets plus eleves (ex. Commerces de gros 6 000 / 12 000 euros). Plan conventionnel 50+ sal. : enveloppe selon contribution."
+  },
+  "budget_annuel_description": "Defaut interprofession : 2 500 euros/an (<11 sal.), 4 000 euros/an (11-49 sal.) en metropole. Montants superieurs selon la branche (jusqu'a 6 000-12 000 euros).",
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Salaries entreprises <50 salaries (priorite)",
+    "Tous salaries (plan conventionnel 50+)",
+    "Alternants (apprentissage, professionnalisation)",
+    "Publics prioritaires (GEIQ, handicap)"
+  ],
+  "tailles_cibles": "Priorite TPE/PME <50 salaries",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande en ligne sur akto.fr avant debut de formation | Validation sous conditions de fonds disponibles",
+  "delai_validation": "15-30 jours",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Selon referentiel France Competences (NPEC). Bonus handicap : 4 000 euros. Repas : 3 euros/repas, hebergement : 6 euros/nuit, equipement : 500 euros/apprenti.",
+  "alternance_professionnalisation": "14-20 euros/h selon branche et type (standard 14 euros/h, prioritaire 15 euros/h, GEIQ 19 euros/h, CQP gestionnaire 20 euros/h)",
+
+  "cpf_abondement": true,
+  "cpf_details": "Selon accord de branche",
+
+  "vae_possible": true,
+  "vae_details": "VAE, CQP/TFP, CleA, certifications metier",
+
+  "limite_dossiers_an": "Dans la limite du budget annuel par entreprise et des fonds disponibles",
+
+  "specificites": "AKTO couvre 27 branches professionnelles avec des regles specifiques par branche. Les montants varient significativement selon la branche. Plateforme Click & Form pour formations pre-negociees.",
+  "points_cles_maximisation": "Verifier les regles specifiques de votre branche sur akto.fr | AFEST possible (1 200-2 400 euros accompagnement) | Majoration tuteur : 230 euros/mois",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 2500,
+      "quota_horaire_max": null,
+      "description": "TPE <11 salaries - Defaut interprofession metropole 2026 : 2 500 euros/an, plafond pedagogique 30 euros/h. Selon branche, montants superieurs (jusqu'a 6 000 euros)."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 4000,
+      "quota_horaire_max": null,
+      "description": "PME 11-49 salaries - Defaut interprofession metropole 2026 : 4 000 euros/an, plafond pedagogique 30 euros/h. Selon branche, montants superieurs (jusqu'a 12 000 euros)."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "50+ salaries - Pas de fonds mutualise interprofession. Financement via plan conventionnel de branche (selon contribution versee). Remuneration selon accord."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries - Pas de fonds mutualise interprofession. Financement via plan conventionnel de branche (sous reserve de fonds)."
+    }
+  ]
+}

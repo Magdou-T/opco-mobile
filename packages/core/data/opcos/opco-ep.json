@@ -1,0 +1,197 @@
+{
+  "slug": "opco-ep",
+  "name": "OPCO EP",
+  "nom_complet": "Opérateur de Compétences des Entreprises de Proximité",
+  "secteurs": "Entreprises de proximité (artisanat, commerce, professions libérales, services de proximité)",
+  "secteurs_source": "https://www.opcoep.fr/",
+  "nombre_branches": 54,
+  "email_contact": "contact@opcoep.fr",
+  "url_finance_page": "https://www.opcoep.fr/criteres-de-financement",
+  "url_former_salaries": "https://www.opcoep.fr/entreprise/former-mes-salaries",
+  "url_beneficier_financements": "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements",
+
+  "types_formations": [
+    "Plan de développement des compétences",
+    "Contrat d'apprentissage",
+    "Contrat de professionnalisation",
+    "Période de reconversion (remplace Pro-A à compter du 01/01/2026)",
+    "VAE",
+    "Bilan de compétences"
+  ],
+  "types_formations_source": "https://www.opcoep.fr/entreprise/former-mes-salaries",
+
+  "note_generale": "OPCO EP couvre 54 branches professionnelles. Les critères de financement (coûts horaires, plafonds annuels, frais annexes) sont définis par chaque branche ou par l'interprofession. Il n'existe pas de barème universel unique. Consultez la page critères de financement pour les barèmes de votre branche.",
+  "note_generale_source": "https://www.opcoep.fr/criteres-de-financement",
+
+  "cout_horaire_inter": {
+    "value": 25,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "25 euros/h pour formations metier (ex: coiffure, esthetique). 30 euros/h pour formations transversales (management, langues, RH). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+  },
+  "cout_horaire_intra": {
+    "value": 25,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "Meme plafond que formations inter, varie selon branche professionnelle."
+  },
+  "cout_horaire_metier": {
+    "value": 25,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "25 euros/h coiffure/esthetique, 30 euros/h transversal. Variable selon branche."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "La prise en charge de la remuneration depend strictement de la branche (confirme 2026). Exemples : pharmacie d'officine 12 euros HT/h (entreprises <11 salaries exclusivement) ; coiffure : aucune mention dans les baremes ; certaines branches l'ont supprimee pour 2026 (ex. froid/cuisines pro, contrainte budgetaire). Verifier les criteres de VOTRE branche sur opcoep.fr/criteres-de-financement."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "0.32 euros/km (ex: branche coiffure). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+  },
+  "frais_hebergement": {
+    "value": 112,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "112 euros/nuit (grandes villes/outre-mer), 96 euros/nuit (province). Ex: branche coiffure. Source: UNEC criteres 2025."
+  },
+  "frais_restauration": {
+    "value": 19,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "19 euros/repas (ex: branche coiffure). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "Pourcentage frais annexes variable selon branche."
+  },
+
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "Le budget annuel maximal au titre du plan de développement des compétences dépend de la branche professionnelle et de la taille de l'entreprise. Pas de plafond universel publié par OPCO EP."
+  },
+  "budget_annuel_description": "Variable selon branche professionnelle et taille d'entreprise. Consultez les critères de financement de votre branche sur opcoep.fr.",
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "fse_plus": {
+    "plafond_stagiaire_jour": 350,
+    "plafond_jour": 2500,
+    "plafond_entreprise": 150000,
+    "periode": "01/01/2025 - 31/12/2026",
+    "confidence": "exact",
+    "source_url": "https://www.opcoep.fr/fonds-social-europeen",
+    "note": "Cofinancement FSE+ : 350 euros/stagiaire/jour, limite 2500 euros/jour, 150 000 euros par entreprise."
+  },
+
+  "profils_candidats": [
+    "Salariés TPE/PME",
+    "Apprentis",
+    "Salariés en contrat de professionnalisation",
+    "Salariés en période de reconversion"
+  ],
+  "tailles_cibles": "Entreprises de moins de 50 salariés prioritaires, mais toutes tailles éligibles selon dispositif",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande en ligne via l'espace entreprise opcoep.fr",
+  "delai_validation": null,
+  "delai_validation_note": "Variable selon dispositif et branche",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": {
+    "description": "Prise en charge selon les niveaux définis par France Compétences (NPEC)",
+    "source_url": "https://www.opcoep.fr/actualites/apprentissage-evolution-des-niveaux-de-prise-en-charge-des-contrats",
+    "note": "Réforme du financement de l'apprentissage applicable au 1er juillet 2025."
+  },
+  "alternance_professionnalisation": {
+    "description": "Selon accord de branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement"
+  },
+
+  "periode_reconversion_2026": {
+    "description": "La période de reconversion remplace la Pro-A à compter du 01/01/2026. Les niveaux de prise en charge sont définis par les branches professionnelles.",
+    "source_url": "https://www.opcoep.fr/prestataire-de-formation/connaitre-la-reglementation/la-reforme-du-financement-de-l-apprentissage-2025",
+    "note": "Nouveau dispositif 2026 : critères d'attribution tenant compte de l'ancienneté, l'âge, la mutation d'activité et le risque d'obsolescence des compétences."
+  },
+
+  "cpf_abondement": true,
+  "cpf_details": {
+    "description": "Abondement possible selon accord de branche",
+    "plafond_cpf_standard": 5000,
+    "plafond_cpf_bas_niveau": 8000,
+    "note": "CPF alimenté de 500 euros/an (plafond 5000 euros) ou 800 euros/an (plafond 8000 euros) pour salariés sans qualification niveau CAP/BEP.",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement"
+  },
+
+  "vae_possible": true,
+  "vae_details": {
+    "description": "Financement VAE possible",
+    "source_url": "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements/comment-peut-financer-une-vae"
+  },
+
+  "limite_dossiers_an": null,
+  "limite_dossiers_note": "Variable selon branche professionnelle",
+
+  "specificites": "54 branches professionnelles avec barèmes de financement propres | Priorité TPE/PME (<50 salariés) | Cofinancement FSE+ disponible 2025-2026 | Période de reconversion remplace Pro-A dès 2026",
+  "points_cles_maximisation": "Consulter les barèmes spécifiques de votre branche | Vérifier éligibilité FSE+ pour cofinancement | Priorité aux entreprises <50 salariés | Demande en ligne sur opcoep.fr",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.opcoep.fr/criteres-de-financement",
+      "description": "Moins de 11 salariés : plafonds définis par la branche professionnelle. Priorité de financement."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.opcoep.fr/criteres-de-financement",
+      "description": "11-49 salariés : plafonds définis par la branche professionnelle."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.opcoep.fr/criteres-de-financement",
+      "description": "50-299 salariés : plafonds définis par la branche professionnelle."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.opcoep.fr/criteres-de-financement",
+      "description": "300+ salariés : plafonds définis par la branche professionnelle."
+    }
+  ],
+
+  "derniere_mise_a_jour": "2026-03-24",
+  "sources_consultees": [
+    "https://www.opcoep.fr/criteres-de-financement",
+    "https://www.opcoep.fr/entreprise/former-mes-salaries",
+    "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements",
+    "https://www.opcoep.fr/fonds-social-europeen",
+    "https://www.opcoep.fr/prestataire-de-formation/connaitre-la-reglementation/la-reforme-du-financement-de-l-apprentissage-2025"
+  ]
+}

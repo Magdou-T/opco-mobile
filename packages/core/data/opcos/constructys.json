@@ -1,0 +1,196 @@
+{
+  "slug": "constructys",
+  "name": "Constructys",
+  "secteurs": "Batiment, Travaux Publics et Negoce des materiaux de construction",
+  "secteurs_source": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+  "email_contact": "contact@constructys.fr",
+  "url_finance_page": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+
+  "types_formations": [
+    "Formation continue",
+    "Alternance",
+    "AFEST",
+    "VAE",
+    "FEEBAT"
+  ],
+  "types_formations_source": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+
+  "cout_horaire_inter": {
+    "value": 24,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "24 euros HT/h/stagiaire pour Batiment <11 salaries. IMPORTANT : pour le Batiment de 11 a moins de 300 salaries, le plafond horaire a ete reduit de 24 a 19 euros HT/h pour toute demande recue a partir du 1er juin 2026 (decision du CA). TP <11 : 32 euros HT/h (transition ecologique/numerique)."
+  },
+  "cout_horaire_intra": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Pas de distinction inter/intra publiee. Les plafonds horaires s'appliquent au cout pedagogique quel que soit le format"
+  },
+  "cout_horaire_metier": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Pas de plafond horaire metier specifique publie par Constructys. Le plafond pedagogique general (24 euros HT/h Batiment <50 sal.) s'applique. Champ ajoute pour coherence du schema (valeur non publiee)."
+  },
+  "cout_horaire_transition_ecologique_tp": {
+    "value": 32,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "32 euros/h pour entreprises TP <11 salaries, formations transition ecologique/developpement durable/transition numerique, sans impact sur budget annuel"
+  },
+
+  "prise_en_charge_salaires": {
+    "value": 15,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Constructys finance une partie du salaire : 15 euros HT/h/stagiaire pour Batiment et TP <11 salaries (toutes actions hors FEEBAT, qui est a 100 euros/jour). Pour le Batiment 11-49 salaries : 10 euros HT/h (actions qualifiantes et creation/reprise/gestion d'entreprise), 15 euros HT/h uniquement pour l'AFEST. Rien de publie pour les 50+."
+  },
+  "prise_en_charge_salaires_mode": "euro_par_heure",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Inclus dans frais annexes (8% max des couts pedagogiques, plafond 1500 euros HT/stagiaire) pour Batiment <50 salaries, actions qualifiantes uniquement"
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Inclus dans frais annexes (8% max des couts pedagogiques, plafond 1500 euros HT/stagiaire) pour Batiment <50 salaries, actions qualifiantes uniquement"
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Inclus dans frais annexes (8% max des couts pedagogiques, plafond 1500 euros HT/stagiaire) pour Batiment <50 salaries, actions qualifiantes uniquement"
+  },
+  "frais_annexes_pourcentage": {
+    "value": 8,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "8% max des couts pedagogiques pris en charge, plafond 1500 euros HT par stagiaire. Batiment <50 salaries, actions qualifiantes uniquement"
+  },
+
+  "budget_annuel_max": {
+    "value": 3500,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "3 500 euros/an pour micro-entreprises (<11 sal.), 4 000-6 000 euros/an pour 11-49 sal. Varie selon branche (Batiment/TP/Negoce). Source: editions-tissot.fr modalites Constructys 2026."
+  },
+  "budget_annuel_description": "3 500 euros/an (<11 sal.) a 6 000 euros/an (11-49 sal.) selon branche",
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Salaries",
+    "Apprentis",
+    "Contrats de professionnalisation",
+    "Demandeurs d'emploi"
+  ],
+  "tailles_cibles": "Priorite <50 salaries (Batiment et TP)",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande prealable obligatoire via eGestion, dossier complet 15 jours calendaires avant le debut de la formation",
+  "delai_validation": "15 jours calendaires avant demarrage",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Apprentissage selon NPEC (niveaux de prise en charge France Competences)",
+  "alternance_professionnalisation": {
+    "value": 6,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Complement de 6 euros/h de formation verse directement a l'entreprise pour contrats de professionnalisation Batiment <11 salaries (hors GEIQ et contrats tertiaires)"
+  },
+
+  "cpf_abondement": true,
+  "cpf_details": {
+    "value": "CPF co-construit avec remboursement dotation/abondement CDC",
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "note": "Pour entreprises TP <50 salaries: remboursement de la dotation ou abondement verse a la CDC dans le cadre de la co-construction CPF"
+  },
+
+  "vae_possible": true,
+  "vae_details": "VAE possible - consulter Constructys pour modalites specifiques",
+
+  "limite_dossiers_an": "Selon accord branche",
+
+  "specificites": "FEEBAT (Formation aux Economies d'Energie dans le Batiment) pour renovation energetique | TP <11: 32 euros/h transition ecologique/numerique hors budget annuel | Professionnalisation Batiment <11: complement 6 euros/h",
+  "points_cles_maximisation": "TP <11: formations transition ecologique a 32 euros/h sans impact budget annuel | CPF co-construit TP <50: remboursement dotation CDC | FEEBAT pour renovation energetique | Deposer dossier complet 15j avant sur eGestion",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "branche": "batiment",
+      "cout_horaire_max": 24,
+      "cout_pedagogique_max": 24,
+      "prise_en_charge_salaires": 15,
+      "budget_annuel_max": 3500,
+      "quota_horaire_max": null,
+      "frais_annexes": "8% max, plafond 1500 euros HT/stagiaire (actions qualifiantes)",
+      "professionnalisation_complement": 6,
+      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "description": "Batiment <11 salaries: cout pedagogique 24 euros HT/h, salaires 15 euros HT/h, budget 3 500 euros/an, complement pro 6 euros/h"
+    },
+    {
+      "taille": "less_11",
+      "branche": "travaux_publics",
+      "cout_horaire_max": 32,
+      "cout_pedagogique_max": 32,
+      "cout_transition_ecologique": 32,
+      "prise_en_charge_salaires": 15,
+      "budget_annuel_max": 4000,
+      "quota_horaire_max": null,
+      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "description": "TP <11 salaries: 32 euros/h transition ecologique/numerique (hors budget annuel), salaires 15 euros HT/h"
+    },
+    {
+      "taille": "11_49",
+      "branche": "batiment",
+      "cout_horaire_max": 19,
+      "cout_pedagogique_max": 19,
+      "cout_pedagogique_note": "19 euros HT/h depuis le 01/06/2026 (reduit de 24 a 19 euros par decision du CA) pour actions non-qualifiantes (max 300h) et qualifiantes (max 1200h)",
+      "prise_en_charge_salaires": 10,
+      "prise_en_charge_salaires_note": "10 euros HT/h pour actions qualifiantes et creation/reprise. 15 euros HT/h pour l'AFEST uniquement",
+      "budget_annuel_max": 6000,
+      "quota_horaire_max": null,
+      "frais_annexes": "8% max, plafond 1500 euros HT/stagiaire (actions qualifiantes)",
+      "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+      "description": "Batiment 11-49 salaries: cout pedagogique 19 euros HT/h (depuis 01/06/2026), salaires 10 euros HT/h (qualifiant/creation-reprise) ou 15 euros HT/h (AFEST), budget 6 000 euros/an"
+    },
+    {
+      "taille": "11_49",
+      "branche": "travaux_publics",
+      "cout_horaire_max": 32,
+      "cout_pedagogique_max": 32,
+      "budget_annuel_max": 4000,
+      "quota_horaire_max": null,
+      "cpf_coconstruit": true,
+      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "description": "TP 11-49 salaries: CPF co-construit avec remboursement dotation CDC"
+    },
+    {
+      "taille": "50_299",
+      "branche": "all",
+      "cout_horaire_max": null,
+      "cout_pedagogique_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "description": "Entreprises 50-299: selon accord branche, contacter Constructys"
+    },
+    {
+      "taille": "300_plus",
+      "branche": "all",
+      "cout_horaire_max": null,
+      "cout_pedagogique_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "description": "Entreprises 300+: selon accord branche, contacter Constructys"
+    }
+  ]
+}

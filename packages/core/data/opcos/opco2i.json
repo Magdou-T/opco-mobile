@@ -1,0 +1,152 @@
+{
+  "slug": "opco2i",
+  "name": "OPCO 2i",
+  "secteurs": "Industries chimiques, pharmaceutiques, papier-carton, metallurgie, inter-secteurs, industries electromecaniques et de transformation",
+  "secteurs_source": "https://www.opco2i.fr/",
+  "email_contact": "contact@opco2i.fr",
+  "url_finance_page": "https://www.opco2i.fr/entreprises/financer-la-formation/",
+
+  "types_formations": [
+    "Plan de developpement des competences",
+    "Alternance (apprentissage, professionnalisation)",
+    "Transitions Industrie"
+  ],
+  "types_formations_source": "https://www.opco2i.fr/entreprises/financer-la-formation/",
+  "types_formations_note": "Transitions Industrie: financement 50-70% selon taille entreprise",
+
+  "cout_horaire_inter": {
+    "value": 30,
+    "currency": "EUR_HT",
+    "unit": "par_heure",
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+    "note": "30 EUR HT/heure pour entreprises <50 salaries (PDC)"
+  },
+  "cout_horaire_intra": {
+    "value": 30,
+    "currency": "EUR_HT",
+    "unit": "par_heure",
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+    "note": "30 EUR HT/heure plafond identique inter/intra pour <50 salaries"
+  },
+  "cout_horaire_metier": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/",
+    "note": "Varie selon branche professionnelle et dispositif specifique"
+  },
+
+  "prise_en_charge_salaires": {
+    "value": 12.31,
+    "currency": "EUR",
+    "unit": "par_heure",
+    "confidence": "estimated",
+    "source_url": "https://www.opco2i.fr/nous-connaitre/les-actualites-et-evenements/plan-de-developpement-des-competences-la-prise-en-charge-evolue/",
+    "note": "OPCO 2i prend en charge la remuneration du salarie (entreprises <50 sal.) dans la limite du SMIC brut horaire en vigueur : 12,31 euros/h depuis le 01/06/2026 (12,02 euros de janvier a mai 2026). La valeur 11,88 euros etait le SMIC 2025. NB : OPCO 2i ne publie plus publiquement ses bareme 2026 (espace adherent moncompte.opco2i.fr) ; montant deduit de la regle 'limite du SMIC brut'."
+  },
+  "prise_en_charge_salaires_mode": "euro_par_heure",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+    "note": "Pris en compte pour entreprises <50 salaries, dans le budget global PDC"
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+    "note": "Pris en compte pour entreprises <50 salaries, dans le budget global PDC"
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+    "note": "Pris en compte pour entreprises <50 salaries, dans le budget global PDC"
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+    "note": "Frais annexes inclus dans le budget global annuel (6000 EUR), pas de pourcentage separe"
+  },
+
+  "budget_annuel_max": {
+    "value": 6000,
+    "currency": "EUR",
+    "per": "entreprise",
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+    "note": "6000 EUR par entreprise pour PDC <50 salaries. Plafond supprime temporairement pendant COVID puis reinstaure."
+  },
+  "budget_annuel_description": "6000 EUR/entreprise/an pour Plan de developpement des competences (<50 salaries)",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 6000,
+      "quota_horaire_max": null,
+      "description": "PDC <11 salaries: 30 euros HT/h, plafond 6000 euros/an"
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 6000,
+      "quota_horaire_max": null,
+      "description": "PDC 11-49 salaries: 30 euros HT/h, plafond 6000 euros/an"
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "Pas de PDC mutualise. Eligible Transitions Industrie: financement 50% des couts"
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "Acces limite. Transitions Industrie possible selon criteres."
+    }
+  ],
+
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Salaries entreprises industrielles",
+    "Apprentis",
+    "Publics en transition"
+  ],
+  "tailles_cibles": "Priorite TPE/PME <50 salaries",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande prealable via espace employeur OPCO 2i, accord de financement avant debut de formation",
+  "delai_validation": "2-4 semaines",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Apprentissage finance selon NPEC branche (5000-12000 EUR/an)",
+  "alternance_professionnalisation": "Contrat de professionnalisation selon baremes branche",
+
+  "cpf_abondement": true,
+  "cpf_details": "Abondement possible selon accord de branche",
+
+  "vae_possible": true,
+  "vae_details": "VAE et AFEST accompagnees selon branche",
+
+  "limite_dossiers_an": "Selon budget disponible et accord branche",
+
+  "specificites": "Focus industriel multi-branches | Transitions Industrie (reconversion 50-70%) | PDC mutualise <50 salaries a 30 EUR/h plafonne 6000 EUR/an",
+  "points_cles_maximisation": "PDC <50 salaries: exploiter le plafond 6000 EUR/an a 30 EUR/h | Transitions Industrie pour reconversions (50-70%) | Cumul possible PDC + alternance | NPEC branche apprentissage = levier majeur",
+
+  "derniere_mise_a_jour": "2026-03-24",
+  "sources_principales": [
+    "https://www.opco2i.fr/",
+    "https://www.opco2i.fr/entreprises/financer-la-formation/",
+    "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/"
+  ]
+}

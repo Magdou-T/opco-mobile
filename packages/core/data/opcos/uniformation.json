@@ -1,0 +1,173 @@
+{
+  "slug": "uniformation",
+  "name": "Uniformation",
+  "secteurs": "Economie sociale et solidaire, habitat social, protection sociale, cohesion sociale, mutualites",
+  "secteurs_source": "https://www.uniformation.fr/entreprise/financements",
+  "email_contact": "contact@uniformation.fr",
+  "url_finance_page": "https://www.uniformation.fr/entreprise/financements",
+
+  "types_formations": [
+    "Formation continue",
+    "Alternance",
+    "Bilan de competences",
+    "VAE",
+    "Formations transversales"
+  ],
+  "types_formations_source": "https://www.uniformation.fr/entreprise/financements",
+
+  "cout_horaire_inter": {
+    "value": 65,
+    "currency": "EUR_TTC",
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "65 euros TTC/h max (formations <=105h) | 15 euros TTC/h (formations >105h)"
+  },
+  "cout_horaire_intra": {
+    "value": 65,
+    "currency": "EUR_TTC",
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "65 euros TTC/h max (formations <=105h) | 15 euros TTC/h (formations >105h) — memes tarifs inter et intra"
+  },
+  "cout_horaire_metier": {
+    "value": 65,
+    "currency": "EUR_TTC",
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "65 euros TTC/h (formations <=105h)"
+  },
+
+  "prise_en_charge_salaires": {
+    "value": 13,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.uniformation.fr/particulier/salaries/formation-et-financements/autres-dispositifs-de-formation/le-plan-de-developpement-des-competences/financement",
+    "note": "Uniformation prend en charge la remuneration selon la branche : regle generale forfait 13 euros/h reserve aux entreprises de moins de 11 salaries et uniquement en cas de remplacement. Selon la branche : de 'pas de prise en charge' (ESH, Missions locales, OPH, Tourisme social) au cout reel (Aide a domicile, Eclat, Mutualite, avec ou sans justificatif de remplacement)."
+  },
+  "prise_en_charge_salaires_mode": "euro_par_heure",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "Bareme fiscal 6CV — plafond 1800 euros TTC/jour pour formations collectives",
+    "bareme": "6CV fiscal",
+    "plafond_collectif_jour": 1800,
+    "currency": "EUR_TTC"
+  },
+  "frais_hebergement": {
+    "value": 150,
+    "currency": "EUR_NET",
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "150 euros net/stagiaire province et outre-mer | 200 euros net/stagiaire Ile-de-France",
+    "value_idf": 200
+  },
+  "frais_restauration": {
+    "value": 30,
+    "currency": "EUR_TTC",
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "30 euros TTC par repas"
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "Uniformation utilise des forfaits fixes, pas de pourcentage"
+  },
+
+  "budget_annuel_max": {
+    "value": 5000,
+    "currency": "EUR_TTC",
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.uniformation.fr/particulier/salaries/formation-et-financements/autres-dispositifs-de-formation/le-plan-de-developpement-des-competences/financement",
+    "note": "Regle generale (<50 sal.) : 1 demande d'aide par an, plafond 5 000 euros. Tres variable selon branche : de 4 550 euros (Missions locales <50) a 40 000 euros (OPH 300+). Le plafond 10 000/15 000 euros n'est pas la regle generale (specifique a certaines branches, ex. Regies de quartier)."
+  },
+  "budget_annuel_description": "Regle generale 5 000 euros/an (<50 sal., 1 demande/an). Variable selon branche : 4 550 a 40 000 euros. Couts pedagogiques 65 euros TTC/h (<=105h) ou 15 euros/h (>105h).",
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": 65,
+      "budget_annuel_max": 5000,
+      "quota_horaire_max": null,
+      "description": "Moins de 11 salaries: regle generale 5 000 euros/an (1 demande), 65 euros/h (<=105h) ou 15 euros/h (>105h). Variable selon branche."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": 65,
+      "budget_annuel_max": 5000,
+      "quota_horaire_max": null,
+      "description": "11-49 salaries: regle generale 5 000 euros/an, 65 euros/h (<=105h) ou 15 euros/h (>105h). Variable selon branche."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": 65,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "50-299 salaries: plafond annuel tres variable selon branche (ex. 10 000-15 000 euros pour certaines, jusqu'a 40 000 euros OPH). 65 euros/h (<=105h) ou 15 euros/h (>105h)."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": 65,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries: plafond annuel selon branche (jusqu'a 40 000 euros, ex. OPH). 65 euros/h (<=105h) ou 15 euros/h (>105h)."
+    }
+  ],
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Tous salaries economie sociale et solidaire",
+    "Apprentis",
+    "Demandeurs d'emploi"
+  ],
+  "tailles_cibles": "Toutes tailles",
+  "priorite_tpe_pme": false,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande dematerialisee a saisir AVANT le demarrage de la formation (certaines branches exigent un depot >= 1 mois avant). Confirmation du demarrage obligatoire sous peine de cloture.",
+  "delai_validation": "Depot avant le demarrage (>= 1 mois avant selon branche). Delai de traitement non publie.",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Apprentissage NPEC",
+  "alternance_professionnalisation": "Selon accord branche",
+
+  "cpf_abondement": true,
+  "cpf_details": "Possible",
+
+  "vae_possible": true,
+  "vae_details": {
+    "vae_simple": {
+      "value": 3000,
+      "currency": "EUR_TTC",
+      "note": "3 000 euros TTC forfait VAE simple (accompagnement)"
+    },
+    "vae_mixte": {
+      "value": 5000,
+      "currency": "EUR_TTC",
+      "note": "VAE mixte : 3 000 euros coaching + 65 euros TTC/h formation complementaire"
+    },
+    "source_url": "https://www.uniformation.fr/entreprise/financements"
+  },
+
+  "bilan_competences": {
+    "cout_horaire": 65,
+    "currency": "EUR_TTC",
+    "max_heures": 24,
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "65 euros TTC/h, maximum 24 heures"
+  },
+
+  "limite_dossiers_an": null,
+
+  "specificites": "Large portefeuille economie sociale et solidaire | Tarifs degressifs selon duree (65 euros/h <=105h, 15 euros/h >105h) | Budget annuel et prise en charge salaire tres variables selon la branche",
+  "points_cles_maximisation": "Verifier le plafond de VOTRE branche (5 000 euros en regle generale, jusqu'a 40 000 euros) | Tarifs degressifs >105h | Salaire pris en charge 13 euros/h (<11 sal., remplacement) selon branche | VAE mixte jusqu'a 5 000 euros | Bilan competences 24h max",
+
+  "sources": [
+    "https://www.uniformation.fr/entreprise/financements",
+    "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques"
+  ],
+  "derniere_verification": "2026-03-24"
+}

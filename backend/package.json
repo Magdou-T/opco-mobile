@@ -1,0 +1,26 @@
+{
+  "name": "@opco/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pipeline auto-correctif des montants de financement OPCO : scrape -> extract (IA) -> verify -> correct -> validate -> publish",
+  "scripts": {
+    "build-sources": "node scripts/build-sources.mjs",
+    "dry-run": "node --import tsx src/run.ts --dry-run",
+    "live": "node --import tsx src/run.ts --live",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.1",
+    "@opco/core": "*",
+    "cheerio": "^1.0.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

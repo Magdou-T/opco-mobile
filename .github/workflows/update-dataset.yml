@@ -1,0 +1,100 @@
+# ============================================================
+# Mise à jour planifiée du dataset OPCO (pipeline auto-correctif).
+#
+# SÉCURITÉ — clé API :
+#   ANTHROPIC_API_KEY est un SECRET CI (Settings > Secrets and variables >
+#   Actions > New repository secret). Elle n'est JAMAIS embarquée dans
+#   l'app mobile ni commitée : l'app ne télécharge que les JSON publiés
+#   dans datasets/ et vérifie leur sha256 via manifest.json.
+#
+# Comportement :
+#   - hebdomadaire (cron) + déclenchement manuel (workflow_dispatch)
+#   - exécute le pipeline --live (scrape réel + extraction IA)
+#   - si AUCUN changement à revoir : commit direct de datasets/
+#   - si needsReview non vide : ouvre une PR pour revue humaine
+#     (les changements hors seuil ne sont de toute façon PAS publiés :
+#     le garde-fou de validate.ts les a déjà ramenés à l'ancienne valeur)
+# ============================================================
+name: Update OPCO dataset
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # tous les lundis 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck backend
+        run: npm run typecheck --workspace @opco/backend
+
+      - name: Tests backend
+        run: npm test --workspace @opco/backend
+
+      - name: Rebuild sources (depuis packages/core/data/opcos)
+        run: npm run build-sources --workspace @opco/backend
+
+      - name: Run pipeline (live)
+        env:
+          # Secret CI — jamais dans le code ni dans l'app.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Optionnel : surcharger les modèles / le seuil de variation.
+          # EXTRACT_MODEL: claude-haiku-4-5
+          # VERIFY_MODEL: claude-opus-4-8
+          # MAX_DELTA_PCT: '50'
+        run: npm run live --workspace @opco/backend
+
+      - name: Count needsReview
+        id: review
+        run: |
+          count=$(node -p "try { JSON.parse(require('fs').readFileSync('backend/out/report.json','utf8')).needsReview.length } catch (e) { 0 }")
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "needsReview = $count"
+
+      - name: Commit dataset (aucune revue requise)
+        if: steps.review.outputs.count == '0'
+        run: |
+          git config user.name "opco-funding-bot"
+          git config user.email "opco-funding-bot@users.noreply.github.com"
+          git add datasets/
+          if git diff --cached --quiet; then
+            echo "Aucun changement de dataset à committer."
+          else
+            git commit -m "chore(datasets): mise à jour automatique du dataset OPCO"
+            git push
+          fi
+
+      - name: Create PR (changements à revoir)
+        if: steps.review.outputs.count != '0'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bot/opco-dataset-update
+          title: 'Dataset OPCO : changements à revoir manuellement'
+          commit-message: 'chore(datasets): mise à jour automatique (needsReview non vide)'
+          body: |
+            Le pipeline hebdomadaire a détecté des variations dépassant `MAX_DELTA_PCT`
+            (ou des montants sans valeur de référence). Ces changements n'ont **pas**
+            été auto-publiés : `latest.json` conserve les anciennes valeurs.
+
+            Détail complet : `backend/out/report.json` (champ `needsReview`)
+            et le changelog du `datasets/manifest.json`.
+          add-paths: |
+            datasets/
+            backend/out/report.json

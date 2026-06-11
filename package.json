@@ -1,0 +1,14 @@
+{
+  "name": "opco-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "backend"
+  ],
+  "scripts": {
+    "test": "npm run test --workspace @opco/core",
+    "typecheck": "npm run typecheck --workspace @opco/core"
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "slug": "ocapiat",
+  "name": "OCAPIAT",
+  "secteurs": "Agriculture, agroalimentaire, peche, cooperation agricole, territoires",
+  "secteurs_source": "https://www.ocapiat.fr/entreprises",
+  "email_contact": "contact@ocapiat.fr",
+  "url_finance_page": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+
+  "types_formations": [
+    "Plan de developpement des competences",
+    "Alternance",
+    "VAE",
+    "CQP/TFP",
+    "Boost Competences",
+    "Soutien filieres"
+  ],
+  "types_formations_source": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+
+  "cout_horaire_inter": {
+    "value": 40,
+    "confidence": "exact",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "PDC <11 et 11-49 sal. (hors peche) : parcours certifiants plafonnes a 40 euros/h HT et 8 000 euros HT/stagiaire/dossier (regles 2026, CA du 12/05/2026). Offre regionale TPE/PME : 100% des couts pedagogiques. NB : les 1 200/600 euros HT/jour (max 3 jours) concernent l'ACCOMPAGNEMENT/ingenierie de projets certifiants, pas le cout pedagogique."
+  },
+  "cout_horaire_intra": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Varie selon categorie de formation et branche"
+  },
+  "cout_horaire_metier": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Soutien filieres: jusqu'a 70% des couts pedagogiques. Bilan de competences: 75 euros HT/h max 24h"
+  },
+
+  "accompagnement_ingenierie_certifiante": {
+    "parcours_complet_cqp_tfp_clea": {
+      "cout_jour_max": 1200,
+      "duree_max_jours": 3,
+      "note": "Accompagnement/ingenierie de projets certifiants (parcours complet CQP/TFP/CleA) : 1 200 euros HT/jour, max 3 jours. Ce n'est PAS le cout pedagogique de la formation."
+    },
+    "certifications_rs_blocs": {
+      "cout_jour_max": 600,
+      "duree_max_jours": 3,
+      "note": "Certifications RS et blocs de competences : 600 euros HT/jour, max 3 jours (accompagnement/ingenierie)."
+    },
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+
+  "boost_competences": {
+    "plafond_par_stagiaire_dossier": 750,
+    "note": "Boost Competences : 50% des couts pedagogiques demandes, plafonnes a 750 euros HT/stagiaire/dossier (cout horaire plafonne 40 euros/h). Dispositifs Competences d'avenir et Soutien filieres : 70% plafonnes a 1 050 euros HT/stagiaire/dossier. (L'ancienne valeur 1 500 euros ne figure pas dans les regles 2026.)",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+
+  "bilan_de_competences": {
+    "cout_horaire_max": 75,
+    "heures_max": 24,
+    "note": "75 euros HT/h max 24h",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+
+  "jury_cqp_alimentaire": {
+    "prise_en_charge": "100% des couts reels justifies",
+    "note": "Accord alimentaire du 19.09.25: 100% des couts reels justifies pour jurys CQP",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "OCAPIAT prend en charge le salaire a 12 euros/h HT, mais UNIQUEMENT pour les salaries de 50 ans et plus, sur l'ensemble des dispositifs PDC (remboursement plafonne au montant du cout pedagogique, regle au 01/05/2026). Pour les moins de 50 ans : pas de prise en charge du salaire par defaut. Secteur peche : regime distinct (5,59 euros/h ou bourses 1 500 euros/mois)."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Selon accord branche"
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Selon accord branche"
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Selon accord branche"
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Selon accord branche"
+  },
+
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Varie selon type de formation. Boost Competences: 1 500 euros/stagiaire/dossier"
+  },
+  "budget_annuel_description": "Pas de budget annuel general par entreprise : plafonds par stagiaire/dossier — 8 000 euros HT (parcours certifiant), 750 euros (Boost Competences), 1 050 euros (Soutien filieres / Competences d'avenir). Peche : 7 000-10 500 euros/stagiaire selon duree.",
+  "quota_horaire_min": 3.5,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Salaries secteur agricole et agroalimentaire",
+    "Apprentis",
+    "Saisonniers"
+  ],
+  "tailles_cibles": "Toutes tailles, priorite <50 salaries",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": "Min 3h30 (Soutien filieres)",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "TPE <11 salaries - Prioritaire. Plafonds selon branche et type de formation."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "PME 11-49 salaries - Prioritaire. Plafonds selon branche et type de formation."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "ETI 50-299 salaries - Eligible selon dispositif. Plafonds selon branche."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "Grandes entreprises 300+ salaries - Acces limite, principalement alternance et dispositifs specifiques."
+    }
+  ],
+
+  "processus_approbation": "Demande dematerialisee via portail OCAPIAT. Depot au plus tot 2 mois avant l'action, au plus tard le 1er jour de la formation (Soutien filieres : au plus tard 5 jours avant le demarrage ; peche : 1 mois avant, 2 mois si formation hors de France).",
+  "delai_validation": "Delai de reponse non publie. Regles de depot : au plus tot 2 mois avant, au plus tard le 1er jour de la formation (5 jours avant pour Soutien filieres).",
+  "mode_paiement": "Tiers-payant possible",
+
+  "alternance_apprentissage": "Apprentissage NPEC",
+  "alternance_professionnalisation": "Selon accord branche",
+
+  "cpf_abondement": true,
+  "cpf_details": "Possible selon accord branche",
+
+  "vae_possible": true,
+  "vae_details": "VAE accompagnee selon accord branche",
+
+  "limite_dossiers_an": "Selon accord branche",
+
+  "specificites": "Dispositif Soutien filieres agriculture (70% pedagogie + 12 euros/h salaires). Boost Competences: 1 500 euros/stagiaire. PDC: 1 200 euros HT/jour (non-certif) ou 600 euros HT/jour (certif RS/CQP-TFP). Bilan competences: 75 euros HT/h max 24h. Alimentaire: 100% couts reels jurys CQP.",
+  "points_cles_maximisation": "Soutien filieres = meilleure prise en charge (min 3h30) | Boost Competences 1 500 euros/stagiaire | Priorite TPE/PME <50 salaries | PDC 1 200 euros/jour non-certif vs 600 euros/jour certif"
+}

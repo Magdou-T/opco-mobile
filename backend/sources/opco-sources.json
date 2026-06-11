@@ -1,0 +1,123 @@
+{
+  "afdas": {
+    "slug": "afdas",
+    "name": "AFDAS",
+    "url_finance_page": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html"
+    ]
+  },
+  "akto": {
+    "slug": "akto",
+    "name": "AKTO",
+    "url_finance_page": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+    "field_urls": {
+      "cout_horaire_metier": "https://www.akto.fr/regles-de-prise-en-charge-proprete/"
+    },
+    "scrape_urls": [
+      "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+      "https://www.akto.fr/regles-de-prise-en-charge-proprete/"
+    ]
+  },
+  "atlas": {
+    "slug": "atlas",
+    "name": "ATLAS",
+    "url_finance_page": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.opco-atlas.fr/entreprise/financer-la-formation.html"
+    ]
+  },
+  "constructys": {
+    "slug": "constructys",
+    "name": "Constructys",
+    "url_finance_page": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/"
+    ]
+  },
+  "ocapiat": {
+    "slug": "ocapiat",
+    "name": "OCAPIAT",
+    "url_finance_page": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026-OCAPIAT.pdf",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026-OCAPIAT.pdf"
+    ]
+  },
+  "opco-ep": {
+    "slug": "opco-ep",
+    "name": "OPCO EP",
+    "url_finance_page": "https://www.opcoep.fr/criteres-de-financement",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.opcoep.fr/criteres-de-financement"
+    ]
+  },
+  "opco-mobilites": {
+    "slug": "opco-mobilites",
+    "name": "OPCO Mobilites",
+    "url_finance_page": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres"
+    ]
+  },
+  "opco-sante": {
+    "slug": "opco-sante",
+    "name": "OPCO Sante",
+    "url_finance_page": "https://www.opco-sante.fr/entreprises/financer-la-formation",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.opco-sante.fr/entreprises/financer-la-formation"
+    ]
+  },
+  "opco2i": {
+    "slug": "opco2i",
+    "name": "OPCO 2i",
+    "url_finance_page": "https://www.opco2i.fr/entreprises/financer-la-formation/",
+    "field_urls": {
+      "cout_horaire_inter": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+      "cout_horaire_intra": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+      "prise_en_charge_salaires": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+      "frais_transport": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+      "frais_hebergement": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+      "frais_restauration": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+      "frais_annexes_pourcentage": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+      "budget_annuel_max": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/"
+    },
+    "scrape_urls": [
+      "https://www.opco2i.fr/entreprises/financer-la-formation/",
+      "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/"
+    ]
+  },
+  "opcommerce": {
+    "slug": "opcommerce",
+    "name": "L'Opcommerce",
+    "url_finance_page": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+    "field_urls": {},
+    "scrape_urls": [
+      "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/"
+    ]
+  },
+  "uniformation": {
+    "slug": "uniformation",
+    "name": "Uniformation",
+    "url_finance_page": "https://www.uniformation.fr/entreprise/financements",
+    "field_urls": {
+      "cout_horaire_inter": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+      "cout_horaire_intra": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+      "cout_horaire_metier": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+      "frais_transport": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+      "frais_hebergement": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+      "frais_restauration": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+      "frais_annexes_pourcentage": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques"
+    },
+    "scrape_urls": [
+      "https://www.uniformation.fr/entreprise/financements",
+      "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques"
+    ]
+  }
+}

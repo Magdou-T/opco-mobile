@@ -1,0 +1,1635 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-11T10:36:56.226Z",
+  "opcos": [
+    {
+      "slug": "afdas",
+      "name": "AFDAS",
+      "secteurs": "Arts, audiovisuel, cinema, spectacle vivant, presse, communication, sport, tourisme, loisirs",
+      "secteurs_source": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+      "email_contact": "contact@afdas.com",
+      "url_finance_page": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+      "types_formations": [
+        "Formations interprofessionnelles",
+        "Formations metier",
+        "Certifications",
+        "CQP de branche"
+      ],
+      "types_formations_source": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+      "cout_horaire_inter": {
+        "value": 40,
+        "confidence": "exact",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/financement-de-la-formation-pour-les-structures-de-moins-de-50-salaries.html",
+        "note": "40 euros/h/stagiaire maximum, quel que soit le type de formation (y compris VAE, bilan de competences) - criteres AFDAS 2026 (confirmes janvier 2026)"
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+        "note": "Selon accord branche"
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+        "note": "Pas de source officielle AFDAS pour un plafond metier unique, varie selon branche"
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
+        "note": "NON pris en charge au titre du plan de developpement des competences : la prise en charge 2026 est 'strictement limitee aux couts pedagogiques' (frais pedagogiques, materiel, location de salle, deplacement du formateur, inscription). Un eventuel relai via fonds conventionnels depend de la branche."
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
+        "note": "Frais annexes NON pris en charge au PDC 2026, SAUF entreprises des DROM (bareme kilometrique 4CV, 0,606 euros/km, 1 A/R par module ou 30 jours) et contrats de professionnalisation."
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-frais-annexes-hebergement-repas-restauration-criteres-de-prise-en-charge.html",
+        "note": "NON pris en charge au PDC 2026, sauf DROM/contrat de professionnalisation : forfait combine repas+hebergement de 87 euros/jour (depuis le 01/06/2026)."
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-frais-annexes-hebergement-repas-restauration-criteres-de-prise-en-charge.html",
+        "note": "NON pris en charge au PDC 2026, sauf DROM/contrat de professionnalisation (forfait combine 87 euros/jour avec l'hebergement)."
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+        "note": "Selon bareme branche"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+        "note": "Plafond annuel HT varie selon effectif, voir plafonds_par_taille"
+      },
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 1100,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salaries: 1 100 euros HT/an, plafond 40 euros/h - criteres AFDAS 2026"
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 1800,
+          "quota_horaire_max": null,
+          "description": "11 a 49 salaries: 1 800 euros HT/an, plafond 40 euros/h - criteres AFDAS 2026"
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50+ salaries: pas de financement PDC mutualise. Fonds conventionnels selon branche."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries: pas de financement PDC mutualise. Fonds conventionnels selon branche."
+        }
+      ],
+      "budget_annuel_description": "Budget annuel HT selon effectif: 1 100 euros (<11 sal.), 1 800 euros (11-49 sal.) - criteres 2026",
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Intermittents du spectacle",
+        "Salaries en CDI/CDD",
+        "Demandeurs d'emploi"
+      ],
+      "tailles_cibles": "Toutes tailles (intermittents)",
+      "priorite_tpe_pme": false,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande via MyA (dematerialise)",
+      "delai_validation": "Delai non publie officiellement. Demande via MyA, dans la limite des fonds disponibles.",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": "Apprentissage selon CQP branche",
+      "alternance_professionnalisation": "Selon accord branche",
+      "cpf_abondement": true,
+      "cpf_details": "Abondement CPF intermittents (5000-12000 euros)",
+      "vae_possible": true,
+      "vae_details": "Oui - possible selon accord",
+      "limite_dossiers_an": "Selon accord branche",
+      "specificites": "Intermittents: abondement CPF 5-12k euros | Budget plan de dev. competences selon effectif",
+      "points_cles_maximisation": "Verifier plafond selon effectif | Intermittents: abondement CPF crucial | Formations transversales a 40 euros/h"
+    },
+    {
+      "slug": "akto",
+      "name": "AKTO",
+      "secteurs": "Travail temporaire, proprete, restauration, hotellerie, commerce de gros, securite, enseignement prive",
+      "secteurs_source": "https://www.akto.fr/branches-professionnelles/",
+      "email_contact": "contact@akto.fr",
+      "url_finance_page": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+      "types_formations": [
+        "Plan de dev. des competences",
+        "Alternance (apprentissage, professionnalisation)",
+        "Pro-A",
+        "VAE",
+        "CQP / TFP",
+        "CleA",
+        "AFEST"
+      ],
+      "types_formations_source": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+      "cout_horaire_inter": {
+        "value": 30,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+        "note": "Defaut interprofession metropole 2026 : couts reels plafonnes a 30 euros/h/salarie. Outre-mer : 40 euros/h. Selon branche : jusqu'a 60 euros/h (ex. Organismes de formation). Verifiez votre branche sur akto.fr."
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "Intra : souvent un plafond au jour (ex. 1 200 euros/jour mini 3 participants, branche Organismes de formation). Pas de plafond intra interprofession unique."
+      },
+      "cout_horaire_metier": {
+        "value": 30,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+        "note": "Aligne sur le plafond pedagogique general interprofession (30 euros/h metropole). Certaines branches financent davantage les CQP/formations metier."
+      },
+      "prise_en_charge_salaires": {
+        "value": 13,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+        "note": "Forfait remuneration du salarie en formation : 13 euros/h depuis le 1er janvier 2026 (interprofession metropole), 12 euros/h outre-mer. Varie selon branche (jusqu'a 15 euros/h). AKTO prend bien en charge une partie du salaire pendant la formation."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "Prise en charge selon branche et accord. Outre-mer : jusqu'a 1 500 euros/salarie"
+      },
+      "frais_hebergement": {
+        "value": 150,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "60-190 euros/nuit selon branche et localisation (150 euros/nuit branche OF, 60-70 euros/nuit Proprete)"
+      },
+      "frais_restauration": {
+        "value": 25,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "15-33 euros/repas selon branche (25 euros branche OF, 15-20 euros Proprete)"
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "Pas de forfait %, frais individuels selon branche"
+      },
+      "budget_annuel_max": {
+        "value": 2500,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+        "note": "Defaut interprofession metropole 2026 : 2 500 euros/an (<11 sal.), 4 000 euros/an (11-49 sal.). Outre-mer : 5 000 / 7 000 euros. Selon branche, budgets plus eleves (ex. Commerces de gros 6 000 / 12 000 euros). Plan conventionnel 50+ sal. : enveloppe selon contribution."
+      },
+      "budget_annuel_description": "Defaut interprofession : 2 500 euros/an (<11 sal.), 4 000 euros/an (11-49 sal.) en metropole. Montants superieurs selon la branche (jusqu'a 6 000-12 000 euros).",
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Salaries entreprises <50 salaries (priorite)",
+        "Tous salaries (plan conventionnel 50+)",
+        "Alternants (apprentissage, professionnalisation)",
+        "Publics prioritaires (GEIQ, handicap)"
+      ],
+      "tailles_cibles": "Priorite TPE/PME <50 salaries",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande en ligne sur akto.fr avant debut de formation | Validation sous conditions de fonds disponibles",
+      "delai_validation": "15-30 jours",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": "Selon referentiel France Competences (NPEC). Bonus handicap : 4 000 euros. Repas : 3 euros/repas, hebergement : 6 euros/nuit, equipement : 500 euros/apprenti.",
+      "alternance_professionnalisation": "14-20 euros/h selon branche et type (standard 14 euros/h, prioritaire 15 euros/h, GEIQ 19 euros/h, CQP gestionnaire 20 euros/h)",
+      "cpf_abondement": true,
+      "cpf_details": "Selon accord de branche",
+      "vae_possible": true,
+      "vae_details": "VAE, CQP/TFP, CleA, certifications metier",
+      "limite_dossiers_an": "Dans la limite du budget annuel par entreprise et des fonds disponibles",
+      "specificites": "AKTO couvre 27 branches professionnelles avec des regles specifiques par branche. Les montants varient significativement selon la branche. Plateforme Click & Form pour formations pre-negociees.",
+      "points_cles_maximisation": "Verifier les regles specifiques de votre branche sur akto.fr | AFEST possible (1 200-2 400 euros accompagnement) | Majoration tuteur : 230 euros/mois",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 30,
+          "budget_annuel_max": 2500,
+          "quota_horaire_max": null,
+          "description": "TPE <11 salaries - Defaut interprofession metropole 2026 : 2 500 euros/an, plafond pedagogique 30 euros/h. Selon branche, montants superieurs (jusqu'a 6 000 euros)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 30,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "description": "PME 11-49 salaries - Defaut interprofession metropole 2026 : 4 000 euros/an, plafond pedagogique 30 euros/h. Selon branche, montants superieurs (jusqu'a 12 000 euros)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50+ salaries - Pas de fonds mutualise interprofession. Financement via plan conventionnel de branche (selon contribution versee). Remuneration selon accord."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries - Pas de fonds mutualise interprofession. Financement via plan conventionnel de branche (sous reserve de fonds)."
+        }
+      ]
+    },
+    {
+      "slug": "atlas",
+      "name": "ATLAS",
+      "secteurs": "Services financiers, conseil, ingenierie, informatique, bureaux d'etudes techniques, assurances, societes d'assistance",
+      "secteurs_source": "https://www.opco-atlas.fr/",
+      "email_contact": "contact@opco-atlas.fr",
+      "url_finance_page": "https://www.opco-atlas.fr/criteres-financement",
+      "types_formations": [
+        "Actions de formation du plan de dev. des competences",
+        "Actions collectives nationales",
+        "AFEST (Action de Formation En Situation de Travail)"
+      ],
+      "types_formations_source": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+      "cout_horaire_inter": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+        "note": "Criteres 2026 : plus de taux horaire unique publie. Bureaux d'etudes : plafond annuel seul (couts reels). Agents generaux d'assurance : coat reel plafonne a 50 euros/h. Les anciennes valeurs 2025 (40 euros/h / 150h / 8 000 euros, 15-18 euros/h standard) ne figurent plus dans les criteres 2026. Consulter la page criteres de votre branche sur opco-atlas.fr."
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "Aucune grille intra distincte publiee dans les criteres 2026. Varie par branche."
+      },
+      "cout_horaire_afest": {
+        "value": 20,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement/societes-financieres",
+        "note": "AFEST : 20 euros HT/h limite a 150h (societes financieres, agents generaux). Bureaux d'etudes 2026 : 40 euros HT/h, 150h max (budget 8 000 euros HT, 12 000 euros avec referent AFEST forme)."
+      },
+      "cout_horaire_afest_heures_max": 150,
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "Pas de plafond metier unique publie dans les criteres 2026. Varie selon la branche."
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+        "note": "NON pris en charge : Atlas finance uniquement les frais pedagogiques des actions du plan de developpement des competences (perimetre explicite sur la page officielle). Aucune branche consultee (bureaux d'etudes, societes financieres, agents generaux) ne publie de forfait salaire PDC."
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+        "note": "PDC: null/depends_on_branche. Apprentissage uniquement: forfaits specifiques."
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+        "note": "PDC: null/depends_on_branche. Apprentissage: 6 euros/nuit."
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+        "note": "PDC: null/depends_on_branche. Apprentissage: 3 euros/repas."
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+        "note": "Non confirme a 8% pour le PDC. Valeur retiree."
+      },
+      "frais_apprentissage": {
+        "restauration_par_repas": 3,
+        "hebergement_par_nuit": 6,
+        "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+        "note": "Forfaits apprentissage uniquement"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "Criteres 2026 : plafonds annuels PAR TAILLE et PAR BRANCHE (fourchette observee 1 000 a 8 000 euros HT/an). Bureaux d'etudes : 2 500 (<11), 3 000 (11-49), 4 000 euros (50-299). Societes financieres : 1 000 (<11), 7 000 euros (11-49). Agents generaux : 3 000 (<5), 5 000 (5-11), 8 000 euros (>11). L'ancien plafond unique 8 000 euros (criteres 2025) est obsolete."
+      },
+      "budget_annuel_description": "Plafond annuel par taille et par branche (criteres 2026) : 1 000 a 8 000 euros HT/an. Exemple bureaux d'etudes : 2 500 / 3 000 / 4 000 euros selon taille. Sous reserve de fonds disponibles.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2500,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salaries : plafond annuel 2 500 euros HT/an (bureaux d'etudes 2026, valeur representative). Selon branche : 1 000 euros (societes financieres) a 3 000 euros (agents generaux <5 sal.). Couts reels, sans taux horaire publie."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3000,
+          "quota_horaire_max": null,
+          "description": "11-49 salaries : plafond annuel 3 000 euros HT/an (bureaux d'etudes 2026, valeur representative). Selon branche : jusqu'a 7 000-8 000 euros (societes financieres, agents generaux)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "description": "50-299 salaries : plafond annuel 4 000 euros HT/an (bureaux d'etudes 2026, valeur representative). Varie selon branche."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries : NON eligible au PDC mutualise (criteres 2026 reserves aux salaries des entreprises de moins de 300 salaries). Fonds conventionnels selon branche."
+        }
+      ],
+      "tutorat": {
+        "montant_mensuel": 230,
+        "montant_mensuel_prioritaire": 345,
+        "duree_max_mois": null,
+        "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+        "note": "230 euros/mois (345 euros/mois publics prioritaires) confirmes 2026 (bureaux d'etudes). Duree max non confirmee dans les criteres 2026. Formation du tuteur : 40h a 15 euros HT/h."
+      },
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Tous salaries entreprise relevante",
+        "TPE/PME prioritaires",
+        "BOETH (beneficiaires obligation emploi travailleurs handicapes)",
+        "Salaries 50 ans et plus"
+      ],
+      "tailles_cibles": "Priorite TPE/PME",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": null,
+      "processus_approbation": "Dossier a deposer AVANT le debut de la formation | Sous reserve de fonds disponibles | Criteres susceptibles d'evoluer en cours d'annee",
+      "delai_validation": "Delai non publie. Regle : depot du dossier avant le debut de la formation, sous reserve de fonds.",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": "Apprentissage selon NPEC branche",
+      "alternance_professionnalisation": "Professionnalisation selon accord",
+      "cpf_abondement": true,
+      "cpf_details": "Oui - selon accord branche",
+      "vae_possible": true,
+      "vae_details": "Oui - selon accord branche",
+      "limite_dossiers_an": "Sous reserve fonds disponibles",
+      "specificites": "Actions Collectives Nationales a 100% si cataloguees | campusAtlas | AFEST 20 euros/h max 150h",
+      "points_cles_maximisation": "ACN (Actions Collectives Nationales): financement 100% pedagogie | campusAtlas: forfaits interessants | BOETH/50+: taux majore 18 euros/h",
+      "sources": [
+        "https://www.opco-atlas.fr/",
+        "https://www.opco-atlas.fr/entreprise/financer-la-formation.html"
+      ]
+    },
+    {
+      "slug": "constructys",
+      "name": "Constructys",
+      "secteurs": "Batiment, Travaux Publics et Negoce des materiaux de construction",
+      "secteurs_source": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "email_contact": "contact@constructys.fr",
+      "url_finance_page": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "types_formations": [
+        "Formation continue",
+        "Alternance",
+        "AFEST",
+        "VAE",
+        "FEEBAT"
+      ],
+      "types_formations_source": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+      "cout_horaire_inter": {
+        "value": 24,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+        "note": "24 euros HT/h/stagiaire pour Batiment <11 salaries. IMPORTANT : pour le Batiment de 11 a moins de 300 salaries, le plafond horaire a ete reduit de 24 a 19 euros HT/h pour toute demande recue a partir du 1er juin 2026 (decision du CA). TP <11 : 32 euros HT/h (transition ecologique/numerique)."
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Pas de distinction inter/intra publiee. Les plafonds horaires s'appliquent au cout pedagogique quel que soit le format"
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Pas de plafond horaire metier specifique publie par Constructys. Le plafond pedagogique general (24 euros HT/h Batiment <50 sal.) s'applique. Champ ajoute pour coherence du schema (valeur non publiee)."
+      },
+      "cout_horaire_transition_ecologique_tp": {
+        "value": 32,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "32 euros/h pour entreprises TP <11 salaries, formations transition ecologique/developpement durable/transition numerique, sans impact sur budget annuel"
+      },
+      "prise_en_charge_salaires": {
+        "value": 15,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Constructys finance une partie du salaire : 15 euros HT/h/stagiaire pour Batiment et TP <11 salaries (toutes actions hors FEEBAT, qui est a 100 euros/jour). Pour le Batiment 11-49 salaries : 10 euros HT/h (actions qualifiantes et creation/reprise/gestion d'entreprise), 15 euros HT/h uniquement pour l'AFEST. Rien de publie pour les 50+."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Inclus dans frais annexes (8% max des couts pedagogiques, plafond 1500 euros HT/stagiaire) pour Batiment <50 salaries, actions qualifiantes uniquement"
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Inclus dans frais annexes (8% max des couts pedagogiques, plafond 1500 euros HT/stagiaire) pour Batiment <50 salaries, actions qualifiantes uniquement"
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Inclus dans frais annexes (8% max des couts pedagogiques, plafond 1500 euros HT/stagiaire) pour Batiment <50 salaries, actions qualifiantes uniquement"
+      },
+      "frais_annexes_pourcentage": {
+        "value": 8,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "8% max des couts pedagogiques pris en charge, plafond 1500 euros HT par stagiaire. Batiment <50 salaries, actions qualifiantes uniquement"
+      },
+      "budget_annuel_max": {
+        "value": 3500,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "3 500 euros/an pour micro-entreprises (<11 sal.), 4 000-6 000 euros/an pour 11-49 sal. Varie selon branche (Batiment/TP/Negoce). Source: editions-tissot.fr modalites Constructys 2026."
+      },
+      "budget_annuel_description": "3 500 euros/an (<11 sal.) a 6 000 euros/an (11-49 sal.) selon branche",
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Salaries",
+        "Apprentis",
+        "Contrats de professionnalisation",
+        "Demandeurs d'emploi"
+      ],
+      "tailles_cibles": "Priorite <50 salaries (Batiment et TP)",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande prealable obligatoire via eGestion, dossier complet 15 jours calendaires avant le debut de la formation",
+      "delai_validation": "15 jours calendaires avant demarrage",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": "Apprentissage selon NPEC (niveaux de prise en charge France Competences)",
+      "alternance_professionnalisation": {
+        "value": 6,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Complement de 6 euros/h de formation verse directement a l'entreprise pour contrats de professionnalisation Batiment <11 salaries (hors GEIQ et contrats tertiaires)"
+      },
+      "cpf_abondement": true,
+      "cpf_details": {
+        "value": "CPF co-construit avec remboursement dotation/abondement CDC",
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+        "note": "Pour entreprises TP <50 salaries: remboursement de la dotation ou abondement verse a la CDC dans le cadre de la co-construction CPF"
+      },
+      "vae_possible": true,
+      "vae_details": "VAE possible - consulter Constructys pour modalites specifiques",
+      "limite_dossiers_an": "Selon accord branche",
+      "specificites": "FEEBAT (Formation aux Economies d'Energie dans le Batiment) pour renovation energetique | TP <11: 32 euros/h transition ecologique/numerique hors budget annuel | Professionnalisation Batiment <11: complement 6 euros/h",
+      "points_cles_maximisation": "TP <11: formations transition ecologique a 32 euros/h sans impact budget annuel | CPF co-construit TP <50: remboursement dotation CDC | FEEBAT pour renovation energetique | Deposer dossier complet 15j avant sur eGestion",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "branche": "batiment",
+          "cout_horaire_max": 24,
+          "cout_pedagogique_max": 24,
+          "prise_en_charge_salaires": 15,
+          "budget_annuel_max": 3500,
+          "quota_horaire_max": null,
+          "frais_annexes": "8% max, plafond 1500 euros HT/stagiaire (actions qualifiantes)",
+          "professionnalisation_complement": 6,
+          "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+          "description": "Batiment <11 salaries: cout pedagogique 24 euros HT/h, salaires 15 euros HT/h, budget 3 500 euros/an, complement pro 6 euros/h"
+        },
+        {
+          "taille": "less_11",
+          "branche": "travaux_publics",
+          "cout_horaire_max": 32,
+          "cout_pedagogique_max": 32,
+          "cout_transition_ecologique": 32,
+          "prise_en_charge_salaires": 15,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+          "description": "TP <11 salaries: 32 euros/h transition ecologique/numerique (hors budget annuel), salaires 15 euros HT/h"
+        },
+        {
+          "taille": "11_49",
+          "branche": "batiment",
+          "cout_horaire_max": 19,
+          "cout_pedagogique_max": 19,
+          "cout_pedagogique_note": "19 euros HT/h depuis le 01/06/2026 (reduit de 24 a 19 euros par decision du CA) pour actions non-qualifiantes (max 300h) et qualifiantes (max 1200h)",
+          "prise_en_charge_salaires": 10,
+          "prise_en_charge_salaires_note": "10 euros HT/h pour actions qualifiantes et creation/reprise. 15 euros HT/h pour l'AFEST uniquement",
+          "budget_annuel_max": 6000,
+          "quota_horaire_max": null,
+          "frais_annexes": "8% max, plafond 1500 euros HT/stagiaire (actions qualifiantes)",
+          "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+          "description": "Batiment 11-49 salaries: cout pedagogique 19 euros HT/h (depuis 01/06/2026), salaires 10 euros HT/h (qualifiant/creation-reprise) ou 15 euros HT/h (AFEST), budget 6 000 euros/an"
+        },
+        {
+          "taille": "11_49",
+          "branche": "travaux_publics",
+          "cout_horaire_max": 32,
+          "cout_pedagogique_max": 32,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "cpf_coconstruit": true,
+          "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+          "description": "TP 11-49 salaries: CPF co-construit avec remboursement dotation CDC"
+        },
+        {
+          "taille": "50_299",
+          "branche": "all",
+          "cout_horaire_max": null,
+          "cout_pedagogique_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+          "description": "Entreprises 50-299: selon accord branche, contacter Constructys"
+        },
+        {
+          "taille": "300_plus",
+          "branche": "all",
+          "cout_horaire_max": null,
+          "cout_pedagogique_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
+          "description": "Entreprises 300+: selon accord branche, contacter Constructys"
+        }
+      ]
+    },
+    {
+      "slug": "ocapiat",
+      "name": "OCAPIAT",
+      "secteurs": "Agriculture, agroalimentaire, peche, cooperation agricole, territoires",
+      "secteurs_source": "https://www.ocapiat.fr/entreprises",
+      "email_contact": "contact@ocapiat.fr",
+      "url_finance_page": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+      "types_formations": [
+        "Plan de developpement des competences",
+        "Alternance",
+        "VAE",
+        "CQP/TFP",
+        "Boost Competences",
+        "Soutien filieres"
+      ],
+      "types_formations_source": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+      "cout_horaire_inter": {
+        "value": 40,
+        "confidence": "exact",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "PDC <11 et 11-49 sal. (hors peche) : parcours certifiants plafonnes a 40 euros/h HT et 8 000 euros HT/stagiaire/dossier (regles 2026, CA du 12/05/2026). Offre regionale TPE/PME : 100% des couts pedagogiques. NB : les 1 200/600 euros HT/jour (max 3 jours) concernent l'ACCOMPAGNEMENT/ingenierie de projets certifiants, pas le cout pedagogique."
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Varie selon categorie de formation et branche"
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Soutien filieres: jusqu'a 70% des couts pedagogiques. Bilan de competences: 75 euros HT/h max 24h"
+      },
+      "accompagnement_ingenierie_certifiante": {
+        "parcours_complet_cqp_tfp_clea": {
+          "cout_jour_max": 1200,
+          "duree_max_jours": 3,
+          "note": "Accompagnement/ingenierie de projets certifiants (parcours complet CQP/TFP/CleA) : 1 200 euros HT/jour, max 3 jours. Ce n'est PAS le cout pedagogique de la formation."
+        },
+        "certifications_rs_blocs": {
+          "cout_jour_max": 600,
+          "duree_max_jours": 3,
+          "note": "Certifications RS et blocs de competences : 600 euros HT/jour, max 3 jours (accompagnement/ingenierie)."
+        },
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+      },
+      "boost_competences": {
+        "plafond_par_stagiaire_dossier": 750,
+        "note": "Boost Competences : 50% des couts pedagogiques demandes, plafonnes a 750 euros HT/stagiaire/dossier (cout horaire plafonne 40 euros/h). Dispositifs Competences d'avenir et Soutien filieres : 70% plafonnes a 1 050 euros HT/stagiaire/dossier. (L'ancienne valeur 1 500 euros ne figure pas dans les regles 2026.)",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+      },
+      "bilan_de_competences": {
+        "cout_horaire_max": 75,
+        "heures_max": 24,
+        "note": "75 euros HT/h max 24h",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+      },
+      "jury_cqp_alimentaire": {
+        "prise_en_charge": "100% des couts reels justifies",
+        "note": "Accord alimentaire du 19.09.25: 100% des couts reels justifies pour jurys CQP",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "OCAPIAT prend en charge le salaire a 12 euros/h HT, mais UNIQUEMENT pour les salaries de 50 ans et plus, sur l'ensemble des dispositifs PDC (remboursement plafonne au montant du cout pedagogique, regle au 01/05/2026). Pour les moins de 50 ans : pas de prise en charge du salaire par defaut. Secteur peche : regime distinct (5,59 euros/h ou bourses 1 500 euros/mois)."
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Selon accord branche"
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Selon accord branche"
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Selon accord branche"
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Selon accord branche"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Varie selon type de formation. Boost Competences: 1 500 euros/stagiaire/dossier"
+      },
+      "budget_annuel_description": "Pas de budget annuel general par entreprise : plafonds par stagiaire/dossier — 8 000 euros HT (parcours certifiant), 750 euros (Boost Competences), 1 050 euros (Soutien filieres / Competences d'avenir). Peche : 7 000-10 500 euros/stagiaire selon duree.",
+      "quota_horaire_min": 3.5,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Salaries secteur agricole et agroalimentaire",
+        "Apprentis",
+        "Saisonniers"
+      ],
+      "tailles_cibles": "Toutes tailles, priorite <50 salaries",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": "Min 3h30 (Soutien filieres)",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "TPE <11 salaries - Prioritaire. Plafonds selon branche et type de formation."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "PME 11-49 salaries - Prioritaire. Plafonds selon branche et type de formation."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "ETI 50-299 salaries - Eligible selon dispositif. Plafonds selon branche."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Grandes entreprises 300+ salaries - Acces limite, principalement alternance et dispositifs specifiques."
+        }
+      ],
+      "processus_approbation": "Demande dematerialisee via portail OCAPIAT. Depot au plus tot 2 mois avant l'action, au plus tard le 1er jour de la formation (Soutien filieres : au plus tard 5 jours avant le demarrage ; peche : 1 mois avant, 2 mois si formation hors de France).",
+      "delai_validation": "Delai de reponse non publie. Regles de depot : au plus tot 2 mois avant, au plus tard le 1er jour de la formation (5 jours avant pour Soutien filieres).",
+      "mode_paiement": "Tiers-payant possible",
+      "alternance_apprentissage": "Apprentissage NPEC",
+      "alternance_professionnalisation": "Selon accord branche",
+      "cpf_abondement": true,
+      "cpf_details": "Possible selon accord branche",
+      "vae_possible": true,
+      "vae_details": "VAE accompagnee selon accord branche",
+      "limite_dossiers_an": "Selon accord branche",
+      "specificites": "Dispositif Soutien filieres agriculture (70% pedagogie + 12 euros/h salaires). Boost Competences: 1 500 euros/stagiaire. PDC: 1 200 euros HT/jour (non-certif) ou 600 euros HT/jour (certif RS/CQP-TFP). Bilan competences: 75 euros HT/h max 24h. Alimentaire: 100% couts reels jurys CQP.",
+      "points_cles_maximisation": "Soutien filieres = meilleure prise en charge (min 3h30) | Boost Competences 1 500 euros/stagiaire | Priorite TPE/PME <50 salaries | PDC 1 200 euros/jour non-certif vs 600 euros/jour certif"
+    },
+    {
+      "slug": "opco-ep",
+      "name": "OPCO EP",
+      "nom_complet": "Opérateur de Compétences des Entreprises de Proximité",
+      "secteurs": "Entreprises de proximité (artisanat, commerce, professions libérales, services de proximité)",
+      "secteurs_source": "https://www.opcoep.fr/",
+      "nombre_branches": 54,
+      "email_contact": "contact@opcoep.fr",
+      "url_finance_page": "https://www.opcoep.fr/criteres-de-financement",
+      "url_former_salaries": "https://www.opcoep.fr/entreprise/former-mes-salaries",
+      "url_beneficier_financements": "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements",
+      "types_formations": [
+        "Plan de développement des compétences",
+        "Contrat d'apprentissage",
+        "Contrat de professionnalisation",
+        "Période de reconversion (remplace Pro-A à compter du 01/01/2026)",
+        "VAE",
+        "Bilan de compétences"
+      ],
+      "types_formations_source": "https://www.opcoep.fr/entreprise/former-mes-salaries",
+      "note_generale": "OPCO EP couvre 54 branches professionnelles. Les critères de financement (coûts horaires, plafonds annuels, frais annexes) sont définis par chaque branche ou par l'interprofession. Il n'existe pas de barème universel unique. Consultez la page critères de financement pour les barèmes de votre branche.",
+      "note_generale_source": "https://www.opcoep.fr/criteres-de-financement",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "25 euros/h pour formations metier (ex: coiffure, esthetique). 30 euros/h pour formations transversales (management, langues, RH). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+      },
+      "cout_horaire_intra": {
+        "value": 25,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Meme plafond que formations inter, varie selon branche professionnelle."
+      },
+      "cout_horaire_metier": {
+        "value": 25,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "25 euros/h coiffure/esthetique, 30 euros/h transversal. Variable selon branche."
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "La prise en charge de la remuneration depend strictement de la branche (confirme 2026). Exemples : pharmacie d'officine 12 euros HT/h (entreprises <11 salaries exclusivement) ; coiffure : aucune mention dans les baremes ; certaines branches l'ont supprimee pour 2026 (ex. froid/cuisines pro, contrainte budgetaire). Verifier les criteres de VOTRE branche sur opcoep.fr/criteres-de-financement."
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "0.32 euros/km (ex: branche coiffure). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+      },
+      "frais_hebergement": {
+        "value": 112,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "112 euros/nuit (grandes villes/outre-mer), 96 euros/nuit (province). Ex: branche coiffure. Source: UNEC criteres 2025."
+      },
+      "frais_restauration": {
+        "value": 19,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "19 euros/repas (ex: branche coiffure). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Pourcentage frais annexes variable selon branche."
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement",
+        "note": "Le budget annuel maximal au titre du plan de développement des compétences dépend de la branche professionnelle et de la taille de l'entreprise. Pas de plafond universel publié par OPCO EP."
+      },
+      "budget_annuel_description": "Variable selon branche professionnelle et taille d'entreprise. Consultez les critères de financement de votre branche sur opcoep.fr.",
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "fse_plus": {
+        "plafond_stagiaire_jour": 350,
+        "plafond_jour": 2500,
+        "plafond_entreprise": 150000,
+        "periode": "01/01/2025 - 31/12/2026",
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/fonds-social-europeen",
+        "note": "Cofinancement FSE+ : 350 euros/stagiaire/jour, limite 2500 euros/jour, 150 000 euros par entreprise."
+      },
+      "profils_candidats": [
+        "Salariés TPE/PME",
+        "Apprentis",
+        "Salariés en contrat de professionnalisation",
+        "Salariés en période de reconversion"
+      ],
+      "tailles_cibles": "Entreprises de moins de 50 salariés prioritaires, mais toutes tailles éligibles selon dispositif",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande en ligne via l'espace entreprise opcoep.fr",
+      "delai_validation": null,
+      "delai_validation_note": "Variable selon dispositif et branche",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": {
+        "description": "Prise en charge selon les niveaux définis par France Compétences (NPEC)",
+        "source_url": "https://www.opcoep.fr/actualites/apprentissage-evolution-des-niveaux-de-prise-en-charge-des-contrats",
+        "note": "Réforme du financement de l'apprentissage applicable au 1er juillet 2025."
+      },
+      "alternance_professionnalisation": {
+        "description": "Selon accord de branche",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement"
+      },
+      "periode_reconversion_2026": {
+        "description": "La période de reconversion remplace la Pro-A à compter du 01/01/2026. Les niveaux de prise en charge sont définis par les branches professionnelles.",
+        "source_url": "https://www.opcoep.fr/prestataire-de-formation/connaitre-la-reglementation/la-reforme-du-financement-de-l-apprentissage-2025",
+        "note": "Nouveau dispositif 2026 : critères d'attribution tenant compte de l'ancienneté, l'âge, la mutation d'activité et le risque d'obsolescence des compétences."
+      },
+      "cpf_abondement": true,
+      "cpf_details": {
+        "description": "Abondement possible selon accord de branche",
+        "plafond_cpf_standard": 5000,
+        "plafond_cpf_bas_niveau": 8000,
+        "note": "CPF alimenté de 500 euros/an (plafond 5000 euros) ou 800 euros/an (plafond 8000 euros) pour salariés sans qualification niveau CAP/BEP.",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement"
+      },
+      "vae_possible": true,
+      "vae_details": {
+        "description": "Financement VAE possible",
+        "source_url": "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements/comment-peut-financer-une-vae"
+      },
+      "limite_dossiers_an": null,
+      "limite_dossiers_note": "Variable selon branche professionnelle",
+      "specificites": "54 branches professionnelles avec barèmes de financement propres | Priorité TPE/PME (<50 salariés) | Cofinancement FSE+ disponible 2025-2026 | Période de reconversion remplace Pro-A dès 2026",
+      "points_cles_maximisation": "Consulter les barèmes spécifiques de votre branche | Vérifier éligibilité FSE+ pour cofinancement | Priorité aux entreprises <50 salariés | Demande en ligne sur opcoep.fr",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "confidence": "depends_on_branche",
+          "source_url": "https://www.opcoep.fr/criteres-de-financement",
+          "description": "Moins de 11 salariés : plafonds définis par la branche professionnelle. Priorité de financement."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "confidence": "depends_on_branche",
+          "source_url": "https://www.opcoep.fr/criteres-de-financement",
+          "description": "11-49 salariés : plafonds définis par la branche professionnelle."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "confidence": "depends_on_branche",
+          "source_url": "https://www.opcoep.fr/criteres-de-financement",
+          "description": "50-299 salariés : plafonds définis par la branche professionnelle."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "confidence": "depends_on_branche",
+          "source_url": "https://www.opcoep.fr/criteres-de-financement",
+          "description": "300+ salariés : plafonds définis par la branche professionnelle."
+        }
+      ],
+      "derniere_mise_a_jour": "2026-03-24",
+      "sources_consultees": [
+        "https://www.opcoep.fr/criteres-de-financement",
+        "https://www.opcoep.fr/entreprise/former-mes-salaries",
+        "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements",
+        "https://www.opcoep.fr/fonds-social-europeen",
+        "https://www.opcoep.fr/prestataire-de-formation/connaitre-la-reglementation/la-reforme-du-financement-de-l-apprentissage-2025"
+      ]
+    },
+    {
+      "slug": "opco-mobilites",
+      "name": "OPCO Mobilites",
+      "secteurs": "Transports routiers, maritimes, fluviaux, aeriens, ferroviaires, services automobiles, logistique",
+      "secteurs_source": "https://www.opcomobilites.fr/entreprise",
+      "email_contact": "contact@opcomobilites.fr",
+      "url_finance_page": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+      "types_formations": [
+        "Plan de developpement des competences",
+        "Alternance (apprentissage, professionnalisation)",
+        "Pro-A",
+        "VAE",
+        "Formations reglementaires transport"
+      ],
+      "types_formations_source": "https://www.opcomobilites.fr/entreprise/financer-mes-formations",
+      "cout_horaire_inter": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Varie significativement selon la branche de transport (routier, maritime, aerien, ferroviaire, services auto, etc.). Chaque branche dispose de son propre guide pratique avec ses tarifs specifiques."
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Varie selon la branche de transport. Consulter le guide pratique de la branche concernee sur opcomobilites.fr."
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Varie selon la branche de transport. Chaque branche a ses propres baremes."
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Sur les fonds mutualises (plan de developpement des competences <50 sal.), la remuneration n'est PAS prise en charge. Le remboursement des salaires n'existe que pour les entreprises adherentes/partenaires au titre de leurs versements volontaires (sur declaratif ou forfaits). Le forfait 15 euros/h parfois cite est le cout PEDAGOGIQUE du contrat de professionnalisation pour publics prioritaires, pas le salaire (guides pratiques 2026)."
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Selon guide pratique de la branche concernee"
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Selon guide pratique de la branche concernee"
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Selon guide pratique de la branche concernee"
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Selon guide pratique de la branche concernee"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres",
+        "note": "Pas de plafond unique: chaque branche de transport definit ses propres plafonds annuels dans son guide pratique."
+      },
+      "budget_annuel_description": "Variable selon branche de transport. Consulter le guide pratique de la branche sur opcomobilites.fr.",
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 1500,
+          "quota_horaire_max": null,
+          "description": "PDC <50 sal. : plafond annuel 1 500 euros HT (<11 sal.). Couts pedagogiques au reel dans la limite de l'enveloppe. Identique sur les branches verifiees (transports routiers de voyageurs, services de l'automobile, guides 2026)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2700,
+          "quota_horaire_max": null,
+          "description": "PDC : plafond annuel progressif 1 800 euros (11-19 sal.), 2 100 euros (20-29), 2 400 euros (30-39), 2 700 euros (40-49). Valeur indiquee = haut de fourchette. Couts pedagogiques au reel."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50+ salaries : pas de fonds mutualises pour le plan de developpement des competences. Financement uniquement via versements volontaires / dispositifs specifiques de branche."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries : pas de fonds mutualises PDC. Versements volontaires / dispositifs de branche uniquement."
+        }
+      ],
+      "profils_candidats": [
+        "Salaries secteur transports et mobilite",
+        "Apprentis",
+        "Contrats de professionnalisation"
+      ],
+      "tailles_cibles": "Toutes tailles, priorite TPE/PME <50 salaries pour fonds mutualises",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": "1h minimum pour formations debutant a compter du 01/01/2026",
+      "processus_approbation": "Demande via portail avant le debut de la formation",
+      "delai_validation": "Reponse sous 20 jours calendaires (dossier complet) ; paiement sous 30 jours calendaires a reception",
+      "mode_paiement": "Tiers-payant possible",
+      "alternance_apprentissage": "Apprentissage NPEC",
+      "alternance_professionnalisation": "Professionnalisation tarif branche",
+      "cpf_abondement": true,
+      "cpf_details": "Oui - selon accord branche",
+      "vae_possible": true,
+      "vae_details": "Oui - selon branche",
+      "limite_dossiers_an": "Selon accord branche",
+      "guides_pratiques": {
+        "note": "Chaque branche dispose de son propre guide pratique 2026 telechargeable sur opcomobilites.fr",
+        "branches": [
+          "Transports routiers",
+          "Transports urbains",
+          "Services automobiles",
+          "Transports maritimes",
+          "Transports fluviaux",
+          "Transports aeriens",
+          "Transports ferroviaires",
+          "Logistique"
+        ],
+        "source_url": "https://www.opcomobilites.fr/entreprise/financer-mes-formations/connaitre-les-conditions-de-prise-en-charge-financieres/connaitre-les-conditions-de-prises-en-charge-financieres"
+      },
+      "specificites": "Secteur transports et mobilite hautement specialise. Chaque sous-branche (routier, maritime, fluvial, aerien, ferroviaire, services auto, logistique) a ses propres baremes et conditions de prise en charge. Consulter systematiquement le guide pratique de la branche concernee.",
+      "points_cles_maximisation": "Identifier la bonne branche de transport | Telecharger le guide pratique 2026 correspondant | Plan de dev. competences reserve aux entreprises <50 salaries (fonds mutualises) | Pour faire rembourser les salaires/frais annexes : passer par les versements volontaires (entreprises adherentes/partenaires)"
+    },
+    {
+      "slug": "opco-sante",
+      "name": "OPCO Sante",
+      "nom_complet": "Operateur de Competences des secteurs de la sante, du medico-social et du social",
+      "secteurs": "Sante, medico-social, social, services de sante au travail",
+      "secteurs_source": "https://www.opco-sante.fr/entreprises",
+      "email_contact": "contact@opco-sante.fr",
+      "url_finance_page": "https://www.opco-sante.fr/entreprises/financer-la-formation",
+      "types_formations": [
+        "Plan de developpement des competences",
+        "Alternance",
+        "VAE",
+        "Bilan de competences",
+        "Formations prioritaires de branche"
+      ],
+      "types_formations_source": "https://www.opco-sante.fr/entreprises/financer-la-formation",
+      "note_generale": "OPCO Sante couvre les secteurs sanitaire, medico-social et social. Pour les entreprises de moins de 50 salaries (regle TPME 2026), la prise en charge couvre 100% des couts pedagogiques, la remuneration du salarie a hauteur d'un SMIC (12,31 euros/h) et les frais annexes, dans la limite d'un plafond annuel GLOBAL de 2 500 euros. Pour les 50+ salaries, les prises en charge relevent du plan conventionnel selon les accords de branche (fonds FMB : 14-18 euros/h selon niveau). Certaines branches (ex. SPSTI) ont des axes prioritaires avec abondements de 800 a 4 000 euros/stagiaire.",
+      "note_generale_source": "https://www.opco-sante.fr/entreprises/financer-la-formation",
+      "cout_horaire_inter": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "Regle TPME 2026 : 100% des couts pedagogiques au reel (plus de plafond horaire de 30 euros/h), dans la limite du plafond annuel global de 2 500 euros (<50 sal.). Actions collectives catalogue : 1 200 euros/jour. Fonds conventionnels de branche FMB (SSSMS) : 14 euros/h (niveaux 3-5), 18 euros/h (niveaux 6-7) pour les certifiantes."
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "100% des couts pedagogiques au reel sous plafond annuel global 2 500 euros (<50 sal.). Pas de plafond horaire 2026."
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "Fonds conventionnels FMB : 14 euros/h (niveaux vises 3-5), 18 euros/h (niveaux 6-7) pour les formations certifiantes ; 30 euros/h en formation individuelle, 1 200 euros/jour en collectif (professionnalisation)."
+      },
+      "prise_en_charge_salaires": {
+        "value": 12.31,
+        "confidence": "exact",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "Depuis 2026, la remuneration du salarie en formation est prise en charge a hauteur d'un SMIC (12,31 euros/h brut au 01/06/2026 ; 12,02 euros de janvier a mai 2026), avec les couts pedagogiques et frais annexes, dans la limite du plafond annuel global de 2 500 euros (<50 sal.). Le mode 'inclus dans 30 euros/h' anterieur est obsolete."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "Remboursement des frais reels justifies, accord prealable requis, transports en commun prioritaires (voiture : bareme kilometrique conventionnel, limite 7 CV). Inclus dans le plafond annuel global 2 500 euros."
+      },
+      "frais_hebergement": {
+        "value": 150,
+        "confidence": "exact",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "150 euros/nuit (petit-dejeuner inclus) ; 170 euros/nuit a Paris (75), Hauts-de-Seine (92), Seine-Saint-Denis (93), Val-de-Marne (94). Inclus dans le plafond annuel global 2 500 euros."
+      },
+      "frais_restauration": {
+        "value": 22,
+        "confidence": "exact",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "22 euros/repas. Inclus dans le plafond annuel global 2 500 euros (<50 sal.)."
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "Pas de forfait pourcentage : frais annexes en valeurs (hebergement 150-170 euros/nuit, repas 22 euros), inclus dans le plafond annuel global 2 500 euros."
+      },
+      "budget_annuel_max": {
+        "value": 2500,
+        "confidence": "exact",
+        "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+        "note": "Plafond annuel GLOBAL de 2 500 euros par entreprise (<50 sal.), couvrant a 100% couts pedagogiques + remuneration (a hauteur du SMIC) + frais annexes. Regle TPME applicable au 01/01/2026 (synthese officielle mai 2026). L'ancien double plafond 6 000 euros/an + 30 euros/h est obsolete."
+      },
+      "budget_annuel_description": "Plafond annuel global 2 500 euros/an pour entreprises <50 salaries (100% couts pedagogiques + remuneration SMIC + frais annexes inclus). 50+ salaries : plan conventionnel selon branche.",
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Salaries secteur sanitaire, social et medico-social",
+        "Apprentis"
+      ],
+      "tailles_cibles": "Entreprises du secteur sante, medico-social et social, priorite aux <50 salaries",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande en ligne via l'espace entreprise opco-sante.fr",
+      "delai_validation": "2-4 semaines",
+      "mode_paiement": "Subrogation ou remboursement",
+      "alternance_apprentissage": {
+        "description": "Prise en charge selon les niveaux definis par France Competences (NPEC)",
+        "source_url": "https://www.opco-sante.fr/entreprises/alternance"
+      },
+      "alternance_professionnalisation": {
+        "description": "Prise en charge selon accord de branche",
+        "source_url": "https://www.opco-sante.fr/entreprises/alternance"
+      },
+      "cpf_abondement": true,
+      "cpf_details": {
+        "description": "Abondement possible selon accord de branche",
+        "source_url": "https://www.opco-sante.fr/entreprises/financer-la-formation"
+      },
+      "vae_possible": true,
+      "vae_details": {
+        "description": "Financement VAE possible dans le cadre du plan de developpement des competences",
+        "source_url": "https://www.opco-sante.fr/entreprises/financer-la-formation"
+      },
+      "limite_dossiers_an": null,
+      "limite_dossiers_note": "Selon regles de branche",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2500,
+          "quota_horaire_max": null,
+          "confidence": "exact",
+          "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+          "description": "Moins de 11 salaries : plafond annuel global 2 500 euros, 100% des couts pedagogiques + remuneration (SMIC) + frais annexes. Pas de plafond horaire en 2026."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2500,
+          "quota_horaire_max": null,
+          "confidence": "exact",
+          "source_url": "https://www.opco-sante.fr/app/uploads/2026/05/opco0274_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
+          "description": "11-49 salaries : plafond annuel global 2 500 euros, 100% des couts pedagogiques + remuneration (SMIC) + frais annexes. Pas de plafond horaire en 2026."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50-299 salaries : plan conventionnel selon accords de branche."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries : plan conventionnel selon accords de branche."
+        }
+      ],
+      "specificites": "Regle TPME 2026 : plafond annuel global 2 500 euros (<50 sal.) couvrant couts pedagogiques + remuneration (SMIC) + frais annexes | Secteurs sante, medico-social, social | Plan conventionnel FMB (14-18 euros/h) pour 50+ salaries | Branche SPSTI : axes prioritaires avec abondements 800-4 000 euros/stagiaire",
+      "points_cles_maximisation": "Plafond annuel global 2 500 euros tres vite atteint : prioriser les formations essentielles | La remuneration du salarie est financee (a hauteur du SMIC) : l'integrer au calcul | 50+ salaries : passer par les fonds conventionnels de branche (FMB) | Verifier les axes prioritaires de votre branche (abondements possibles)",
+      "derniere_mise_a_jour": "2026-03-24",
+      "sources_consultees": [
+        "https://www.opco-sante.fr/entreprises",
+        "https://www.opco-sante.fr/entreprises/financer-la-formation",
+        "https://www.opco-sante.fr/entreprises/alternance"
+      ]
+    },
+    {
+      "slug": "opco2i",
+      "name": "OPCO 2i",
+      "secteurs": "Industries chimiques, pharmaceutiques, papier-carton, metallurgie, inter-secteurs, industries electromecaniques et de transformation",
+      "secteurs_source": "https://www.opco2i.fr/",
+      "email_contact": "contact@opco2i.fr",
+      "url_finance_page": "https://www.opco2i.fr/entreprises/financer-la-formation/",
+      "types_formations": [
+        "Plan de developpement des competences",
+        "Alternance (apprentissage, professionnalisation)",
+        "Transitions Industrie"
+      ],
+      "types_formations_source": "https://www.opco2i.fr/entreprises/financer-la-formation/",
+      "types_formations_note": "Transitions Industrie: financement 50-70% selon taille entreprise",
+      "cout_horaire_inter": {
+        "value": 30,
+        "currency": "EUR_HT",
+        "unit": "par_heure",
+        "confidence": "exact",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+        "note": "30 EUR HT/heure pour entreprises <50 salaries (PDC)"
+      },
+      "cout_horaire_intra": {
+        "value": 30,
+        "currency": "EUR_HT",
+        "unit": "par_heure",
+        "confidence": "exact",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+        "note": "30 EUR HT/heure plafond identique inter/intra pour <50 salaries"
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/",
+        "note": "Varie selon branche professionnelle et dispositif specifique"
+      },
+      "prise_en_charge_salaires": {
+        "value": 12.31,
+        "currency": "EUR",
+        "unit": "par_heure",
+        "confidence": "estimated",
+        "source_url": "https://www.opco2i.fr/nous-connaitre/les-actualites-et-evenements/plan-de-developpement-des-competences-la-prise-en-charge-evolue/",
+        "note": "OPCO 2i prend en charge la remuneration du salarie (entreprises <50 sal.) dans la limite du SMIC brut horaire en vigueur : 12,31 euros/h depuis le 01/06/2026 (12,02 euros de janvier a mai 2026). La valeur 11,88 euros etait le SMIC 2025. NB : OPCO 2i ne publie plus publiquement ses bareme 2026 (espace adherent moncompte.opco2i.fr) ; montant deduit de la regle 'limite du SMIC brut'."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+        "note": "Pris en compte pour entreprises <50 salaries, dans le budget global PDC"
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+        "note": "Pris en compte pour entreprises <50 salaries, dans le budget global PDC"
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+        "note": "Pris en compte pour entreprises <50 salaries, dans le budget global PDC"
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+        "note": "Frais annexes inclus dans le budget global annuel (6000 EUR), pas de pourcentage separe"
+      },
+      "budget_annuel_max": {
+        "value": 6000,
+        "currency": "EUR",
+        "per": "entreprise",
+        "confidence": "exact",
+        "source_url": "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/",
+        "note": "6000 EUR par entreprise pour PDC <50 salaries. Plafond supprime temporairement pendant COVID puis reinstaure."
+      },
+      "budget_annuel_description": "6000 EUR/entreprise/an pour Plan de developpement des competences (<50 salaries)",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 30,
+          "budget_annuel_max": 6000,
+          "quota_horaire_max": null,
+          "description": "PDC <11 salaries: 30 euros HT/h, plafond 6000 euros/an"
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 30,
+          "budget_annuel_max": 6000,
+          "quota_horaire_max": null,
+          "description": "PDC 11-49 salaries: 30 euros HT/h, plafond 6000 euros/an"
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Pas de PDC mutualise. Eligible Transitions Industrie: financement 50% des couts"
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Acces limite. Transitions Industrie possible selon criteres."
+        }
+      ],
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Salaries entreprises industrielles",
+        "Apprentis",
+        "Publics en transition"
+      ],
+      "tailles_cibles": "Priorite TPE/PME <50 salaries",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande prealable via espace employeur OPCO 2i, accord de financement avant debut de formation",
+      "delai_validation": "2-4 semaines",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": "Apprentissage finance selon NPEC branche (5000-12000 EUR/an)",
+      "alternance_professionnalisation": "Contrat de professionnalisation selon baremes branche",
+      "cpf_abondement": true,
+      "cpf_details": "Abondement possible selon accord de branche",
+      "vae_possible": true,
+      "vae_details": "VAE et AFEST accompagnees selon branche",
+      "limite_dossiers_an": "Selon budget disponible et accord branche",
+      "specificites": "Focus industriel multi-branches | Transitions Industrie (reconversion 50-70%) | PDC mutualise <50 salaries a 30 EUR/h plafonne 6000 EUR/an",
+      "points_cles_maximisation": "PDC <50 salaries: exploiter le plafond 6000 EUR/an a 30 EUR/h | Transitions Industrie pour reconversions (50-70%) | Cumul possible PDC + alternance | NPEC branche apprentissage = levier majeur",
+      "derniere_mise_a_jour": "2026-03-24",
+      "sources_principales": [
+        "https://www.opco2i.fr/",
+        "https://www.opco2i.fr/entreprises/financer-la-formation/",
+        "https://www.opco2i.fr/entreprises/financer-la-formation/plan-de-developpement-des-competences/"
+      ]
+    },
+    {
+      "slug": "opcommerce",
+      "name": "L'Opcommerce",
+      "secteurs": "Commerce de detail, distribution, e-commerce, bricolage, commerce alimentaire, textile, jouet, horlogerie-bijouterie",
+      "secteurs_source": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+      "email_contact": "contact@lopcommerce.com",
+      "url_finance_page": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+      "branches_professionnelles": {
+        "count": 20,
+        "note": "L'Opcommerce couvre 20 branches professionnelles, chacune avec ses propres criteres de prise en charge",
+        "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/"
+      },
+      "types_formations": [
+        "Plan de developpement des competences",
+        "Click&Form (formations pre-negociees)",
+        "Alternance",
+        "Competences+"
+      ],
+      "types_formations_source": "https://www.lopcommerce.com/entreprise/",
+      "click_and_form": {
+        "description": "Formations pre-negociees par L'Opcommerce, prises en charge a 100% des couts pedagogiques (<50 sal.)",
+        "limite": "Variable selon branche : 2/an (SPP, CDNA <11), 4/an (CDNA 11-49), 5/an (Bricolage)",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf"
+      },
+      "cout_horaire_inter": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+        "note": "Varie selon la branche professionnelle (20 branches avec criteres specifiques)"
+      },
+      "cout_horaire_intra": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+        "note": "Varie selon la branche professionnelle (20 branches avec criteres specifiques)"
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+        "note": "Varie selon la branche professionnelle et le type de formation"
+      },
+      "prise_en_charge_salaires": {
+        "value": 13,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "L'Opcommerce prend en charge une partie du salaire, publie par branche : 13 euros/h (defaut, branches sans CCN) ; jusqu'a 14,50 euros/h (plafond decret n°2018-1342, ex. Bricolage, Habillement) ; certaines branches (ex. CDNA) ne financent aucun salaire. Integre dans le budget annuel Competences+ (<50 sal.)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "Quand la branche le couvre : tous modes aux frais reels dans la limite de 0,30 euros/km (parking et peage inclus). Certaines branches (ex. Bricolage) ne prennent pas en charge le transport."
+      },
+      "frais_hebergement": {
+        "value": 100,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "100 euros/nuit en region, 130 euros/nuit en Ile-de-France (petit-dejeuner compris), pour les branches qui couvrent l'hebergement."
+      },
+      "frais_restauration": {
+        "value": 18,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "18 euros/jour en region, 23 euros/jour en Ile-de-France, pour les branches qui couvrent la restauration."
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/"
+      },
+      "budget_annuel_max": {
+        "value": 1000,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "Budget annuel Competences+ (<50 sal.) variable selon branche : defaut sans CCN 1 000 euros (<11) / 1 500 euros (11-49) ; CDNA 1 350/1 900 ; Habillement 1 500/2 000 ; Bricolage 1 500/2 500. Les valeurs 1 400/2 100 anterieures ne figurent dans aucun bareme 2026."
+      },
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 1000,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salaries: budget annuel Competences+ defaut 1 000 euros (sans CCN). Selon branche : 1 350 (CDNA), 1 500 (Habillement, Bricolage)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 1500,
+          "quota_horaire_max": null,
+          "description": "11 a 49 salaries: budget annuel Competences+ defaut 1 500 euros (sans CCN). Selon branche : 1 900 (CDNA), 2 000 (Habillement), 2 500 (Bricolage)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50+ salaries: selon accord de branche et fonds conventionnels"
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries: selon accord de branche et fonds conventionnels"
+        }
+      ],
+      "budget_annuel_description": "1400 euros/an (<11 salaries) | 2100 euros/an (11-49 salaries)",
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Tous salaries du commerce",
+        "Apprentis",
+        "Contrats de professionnalisation"
+      ],
+      "tailles_cibles": "Toutes tailles (priorite TPE-PME <50 salaries)",
+      "priorite_tpe_pme": true,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande en ligne via espace entreprise. Reponse garantie avant le demarrage si le dossier est depose plus d'un mois avant le debut de la formation.",
+      "delai_validation": "Reponse avant le demarrage si depot >= 1 mois avant (engagement officiel). Delai precis non publie.",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": "Apprentissage selon NPEC",
+      "alternance_professionnalisation": "Professionnalisation selon accord de branche",
+      "cpf_abondement": true,
+      "cpf_details": "Abondement CPF possible",
+      "vae_possible": true,
+      "vae_details": "VAE accompagnee possible",
+      "limite_dossiers_an": "2 inscriptions Click&Form par an maximum",
+      "specificites": "20 branches professionnelles avec criteres specifiques. Click&Form : formations pre-negociees prises en charge a 100% des couts pedagogiques (<50 sal.).",
+      "points_cles_maximisation": "Utiliser Click&Form (100% couts pedagogiques pris en charge) | Verifier les criteres specifiques de sa branche | Budget annuel selon branche : 1 000-1 500 euros (defaut) jusqu'a 2 500 euros (Bricolage) | Salaire pris en charge 13-14,50 euros/h selon branche"
+    },
+    {
+      "slug": "uniformation",
+      "name": "Uniformation",
+      "secteurs": "Economie sociale et solidaire, habitat social, protection sociale, cohesion sociale, mutualites",
+      "secteurs_source": "https://www.uniformation.fr/entreprise/financements",
+      "email_contact": "contact@uniformation.fr",
+      "url_finance_page": "https://www.uniformation.fr/entreprise/financements",
+      "types_formations": [
+        "Formation continue",
+        "Alternance",
+        "Bilan de competences",
+        "VAE",
+        "Formations transversales"
+      ],
+      "types_formations_source": "https://www.uniformation.fr/entreprise/financements",
+      "cout_horaire_inter": {
+        "value": 65,
+        "currency": "EUR_TTC",
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "65 euros TTC/h max (formations <=105h) | 15 euros TTC/h (formations >105h)"
+      },
+      "cout_horaire_intra": {
+        "value": 65,
+        "currency": "EUR_TTC",
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "65 euros TTC/h max (formations <=105h) | 15 euros TTC/h (formations >105h) — memes tarifs inter et intra"
+      },
+      "cout_horaire_metier": {
+        "value": 65,
+        "currency": "EUR_TTC",
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "65 euros TTC/h (formations <=105h)"
+      },
+      "prise_en_charge_salaires": {
+        "value": 13,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/particulier/salaries/formation-et-financements/autres-dispositifs-de-formation/le-plan-de-developpement-des-competences/financement",
+        "note": "Uniformation prend en charge la remuneration selon la branche : regle generale forfait 13 euros/h reserve aux entreprises de moins de 11 salaries et uniquement en cas de remplacement. Selon la branche : de 'pas de prise en charge' (ESH, Missions locales, OPH, Tourisme social) au cout reel (Aide a domicile, Eclat, Mutualite, avec ou sans justificatif de remplacement)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "Bareme fiscal 6CV — plafond 1800 euros TTC/jour pour formations collectives",
+        "bareme": "6CV fiscal",
+        "plafond_collectif_jour": 1800,
+        "currency": "EUR_TTC"
+      },
+      "frais_hebergement": {
+        "value": 150,
+        "currency": "EUR_NET",
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "150 euros net/stagiaire province et outre-mer | 200 euros net/stagiaire Ile-de-France",
+        "value_idf": 200
+      },
+      "frais_restauration": {
+        "value": 30,
+        "currency": "EUR_TTC",
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "30 euros TTC par repas"
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "Uniformation utilise des forfaits fixes, pas de pourcentage"
+      },
+      "budget_annuel_max": {
+        "value": 5000,
+        "currency": "EUR_TTC",
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/particulier/salaries/formation-et-financements/autres-dispositifs-de-formation/le-plan-de-developpement-des-competences/financement",
+        "note": "Regle generale (<50 sal.) : 1 demande d'aide par an, plafond 5 000 euros. Tres variable selon branche : de 4 550 euros (Missions locales <50) a 40 000 euros (OPH 300+). Le plafond 10 000/15 000 euros n'est pas la regle generale (specifique a certaines branches, ex. Regies de quartier)."
+      },
+      "budget_annuel_description": "Regle generale 5 000 euros/an (<50 sal., 1 demande/an). Variable selon branche : 4 550 a 40 000 euros. Couts pedagogiques 65 euros TTC/h (<=105h) ou 15 euros/h (>105h).",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 65,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salaries: regle generale 5 000 euros/an (1 demande), 65 euros/h (<=105h) ou 15 euros/h (>105h). Variable selon branche."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 65,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "11-49 salaries: regle generale 5 000 euros/an, 65 euros/h (<=105h) ou 15 euros/h (>105h). Variable selon branche."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": 65,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50-299 salaries: plafond annuel tres variable selon branche (ex. 10 000-15 000 euros pour certaines, jusqu'a 40 000 euros OPH). 65 euros/h (<=105h) ou 15 euros/h (>105h)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": 65,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300+ salaries: plafond annuel selon branche (jusqu'a 40 000 euros, ex. OPH). 65 euros/h (<=105h) ou 15 euros/h (>105h)."
+        }
+      ],
+      "quota_horaire_min": null,
+      "quota_horaire_max": null,
+      "profils_candidats": [
+        "Tous salaries economie sociale et solidaire",
+        "Apprentis",
+        "Demandeurs d'emploi"
+      ],
+      "tailles_cibles": "Toutes tailles",
+      "priorite_tpe_pme": false,
+      "duree_min_formation": null,
+      "processus_approbation": "Demande dematerialisee a saisir AVANT le demarrage de la formation (certaines branches exigent un depot >= 1 mois avant). Confirmation du demarrage obligatoire sous peine de cloture.",
+      "delai_validation": "Depot avant le demarrage (>= 1 mois avant selon branche). Delai de traitement non publie.",
+      "mode_paiement": "Tiers-payant ou remboursement",
+      "alternance_apprentissage": "Apprentissage NPEC",
+      "alternance_professionnalisation": "Selon accord branche",
+      "cpf_abondement": true,
+      "cpf_details": "Possible",
+      "vae_possible": true,
+      "vae_details": {
+        "vae_simple": {
+          "value": 3000,
+          "currency": "EUR_TTC",
+          "note": "3 000 euros TTC forfait VAE simple (accompagnement)"
+        },
+        "vae_mixte": {
+          "value": 5000,
+          "currency": "EUR_TTC",
+          "note": "VAE mixte : 3 000 euros coaching + 65 euros TTC/h formation complementaire"
+        },
+        "source_url": "https://www.uniformation.fr/entreprise/financements"
+      },
+      "bilan_competences": {
+        "cout_horaire": 65,
+        "currency": "EUR_TTC",
+        "max_heures": 24,
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+        "note": "65 euros TTC/h, maximum 24 heures"
+      },
+      "limite_dossiers_an": null,
+      "specificites": "Large portefeuille economie sociale et solidaire | Tarifs degressifs selon duree (65 euros/h <=105h, 15 euros/h >105h) | Budget annuel et prise en charge salaire tres variables selon la branche",
+      "points_cles_maximisation": "Verifier le plafond de VOTRE branche (5 000 euros en regle generale, jusqu'a 40 000 euros) | Tarifs degressifs >105h | Salaire pris en charge 13 euros/h (<11 sal., remplacement) selon branche | VAE mixte jusqu'a 5 000 euros | Bilan competences 24h max",
+      "sources": [
+        "https://www.uniformation.fr/entreprise/financements",
+        "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques"
+      ],
+      "derniere_verification": "2026-03-24"
+    }
+  ]
+}

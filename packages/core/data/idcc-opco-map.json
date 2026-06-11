@@ -1,0 +1,3810 @@
+{
+  "0002": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0003": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "0004": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0005": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0007": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0011": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "0016": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Transports routiers et activités auxiliaires du transport"
+  },
+  "0018": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0023": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "0024": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0025": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0029": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Hospitalisation privée à but lucratif"
+  },
+  "0043": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0044": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries chimiques et connexes"
+  },
+  "0045": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie du caoutchouc"
+  },
+  "0050": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0052": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0054": {
+    "opco_slug": "opco2i",
+    "branche_name": "Métallurgie (accords nationaux)"
+  },
+  "0071": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0073": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0076": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0080": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0083": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0086": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0087": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries de carrières et de matériaux de construction"
+  },
+  "0112": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Industrie laitière"
+  },
+  "0132": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0134": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0135": {
+    "opco_slug": "opco2i",
+    "branche_name": "Verrerie mécanique"
+  },
+  "0137": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0140": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0142": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0146": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0149": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0152": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0157": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0158": {
+    "opco_slug": "akto",
+    "branche_name": "Travail et soins dans les établissements et services pour personnes inadaptées et handicapées"
+  },
+  "0161": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0162": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0171": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0172": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0176": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie pharmaceutique"
+  },
+  "0184": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Imprimeries de labeur et industries graphiques"
+  },
+  "0189": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0190": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0192": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0193": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "0200": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Exploitations forestières et scieries agricoles"
+  },
+  "0207": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries des produits alimentaires élaborés"
+  },
+  "0208": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0211": {
+    "opco_slug": "opco2i",
+    "branche_name": "Cadres des industries de carrières et matériaux"
+  },
+  "0212": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0214": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0218": {
+    "opco_slug": "uniformation",
+    "branche_name": "Organismes de sécurité sociale"
+  },
+  "0233": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0240": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0247": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries de l'habillement"
+  },
+  "0252": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0271": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0275": {
+    "opco_slug": "akto",
+    "branche_name": "Transport aérien - personnel au sol"
+  },
+  "0276": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0279": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0292": {
+    "opco_slug": "opco2i",
+    "branche_name": "Plasturgie - transformation des matières plastiques"
+  },
+  "0303": {
+    "opco_slug": "opco2i",
+    "branche_name": "Couveuses, abattoirs, conserveries de volailles"
+  },
+  "0306": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0351": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0357": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0362": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0363": {
+    "opco_slug": "opco2i",
+    "branche_name": "Institutions de retraite complémentaire"
+  },
+  "0365": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0372": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0379": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Presse d'information spécialisée"
+  },
+  "0390": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0394": {
+    "opco_slug": "afdas",
+    "branche_name": "Agences de voyages et de tourisme"
+  },
+  "0398": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0405": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Établissements privés d'hospitalisation, de soins, de cure et de garde à but non lucratif"
+  },
+  "0409": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0412": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "0413": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Établissements et services pour personnes handicapées"
+  },
+  "0416": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0418": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0435": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0436": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0438": {
+    "opco_slug": "atlas",
+    "branche_name": "Écoles d'enseignement privé hors contrat"
+  },
+  "0440": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "0454": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Industries textiles"
+  },
+  "0455": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0456": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0468": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Industries du bois pour questions sociétales"
+  },
+  "0478": {
+    "opco_slug": "atlas",
+    "branche_name": "Sociétés financières"
+  },
+  "0483": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0486": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0489": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries du cartonnage"
+  },
+  "0490": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0493": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "0500": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Industrie et commerce de la récupération"
+  },
+  "0504": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Industries de la salaison, charcuterie en gros et conserves de viandes"
+  },
+  "0508": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0509": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0510": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0528": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0530": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0533": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0538": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Manutention ferroviaire et travaux connexes"
+  },
+  "0547": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0564": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0567": {
+    "opco_slug": "opco2i",
+    "branche_name": "Bijouterie, joaillerie, orfèvrerie (commerce de détail)"
+  },
+  "0572": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0573": {
+    "opco_slug": "akto",
+    "branche_name": "Commerces de gros"
+  },
+  "0575": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0585": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0598": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0599": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0601": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0614": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Industries de la sérigraphie et des procédés d'impression numérique connexes"
+  },
+  "0625": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0627": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0635": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0637": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries et commerces de la récupération"
+  },
+  "0650": {
+    "opco_slug": "opco2i",
+    "branche_name": "Ingénieurs et cadres de la métallurgie"
+  },
+  "0652": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0653": {
+    "opco_slug": "atlas",
+    "branche_name": "Producteurs de graines de semences"
+  },
+  "0663": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0669": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries de fabrication mécanique du verre"
+  },
+  "0673": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0675": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Succursalistes de l'habillement"
+  },
+  "0688": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "0693": {
+    "opco_slug": "afdas",
+    "branche_name": "Ameublement fabrication"
+  },
+  "0698": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0700": {
+    "opco_slug": "opco2i",
+    "branche_name": "Plasturgie"
+  },
+  "0704": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0706": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Personnel de la reprographie"
+  },
+  "0707": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0711": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0714": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0715": {
+    "opco_slug": "opco2i",
+    "branche_name": "Instruments à écrire et industries connexes"
+  },
+  "0716": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0731": {
+    "opco_slug": "akto",
+    "branche_name": "Transport et manutention dans les ports"
+  },
+  "0733": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Détaillants en chaussures"
+  },
+  "0735": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0749": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0759": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Pompes funèbres"
+  },
+  "0771": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0779": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "0780": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0781": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0783": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Centres d'hébergement et de réadaptation sociale"
+  },
+  "0787": {
+    "opco_slug": "atlas",
+    "branche_name": "Personnel des cabinets d'experts-comptables et de commissaires aux comptes"
+  },
+  "0794": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0797": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "0800": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0802": {
+    "opco_slug": "opco2i",
+    "branche_name": "Papeterie, fournitures de bureau, bureautique et informatique (détail)"
+  },
+  "0814": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0822": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0827": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0828": {
+    "opco_slug": "opco2i",
+    "branche_name": "Navigation intérieure"
+  },
+  "0829": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0832": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0833": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0836": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0843": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Boulangerie-pâtisserie (entreprises artisanales)"
+  },
+  "0860": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0863": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0878": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0887": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0892": {
+    "opco_slug": "afdas",
+    "branche_name": "Industrie de la salaison, charcuterie et conserves de viande"
+  },
+  "0894": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "0897": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "0898": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0899": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0901": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0911": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0914": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0915": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Sociétés d'expertise et d'évaluation"
+  },
+  "0919": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "0920": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0923": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0925": {
+    "opco_slug": "opco2i",
+    "branche_name": "Distribution et commerce de gros des papiers et cartons"
+  },
+  "0930": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0931": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "0934": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0937": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0943": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0948": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0951": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "0953": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Charcuterie de détail"
+  },
+  "0959": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0965": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0972": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0979": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0984": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "0992": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "0993": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Prothésistes dentaires et personnels de laboratoires de prothèse dentaire"
+  },
+  "0998": {
+    "opco_slug": "opco2i",
+    "branche_name": "Optique-lunetterie de détail"
+  },
+  "1000": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1001": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Médecins généralistes"
+  },
+  "1007": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1016": {
+    "opco_slug": "afdas",
+    "branche_name": "Cadres et agents de maîtrise de l'édition de musique"
+  },
+  "1017": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1018": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1030": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1031": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "1042": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1043": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Gardiens, concierges et employés d'immeubles"
+  },
+  "1044": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1049": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1050": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Industrie des panneaux à base de bois"
+  },
+  "1057": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "1059": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries métallurgiques de l'Ain"
+  },
+  "1060": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1062": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1075": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1077": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Entreprises du médicament"
+  },
+  "1083": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1088": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1090": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Services de l'automobile (commerce et réparation)"
+  },
+  "1113": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1140": {
+    "opco_slug": "akto",
+    "branche_name": "Détaillants en confiserie, chocolaterie, biscuiterie"
+  },
+  "1147": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Personnel des cabinets médicaux"
+  },
+  "1159": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1164": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1170": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries des tuiles et briques"
+  },
+  "1182": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Ameublement, commerce"
+  },
+  "1194": {
+    "opco_slug": "afdas",
+    "branche_name": "Grands magasins et magasins populaires"
+  },
+  "1195": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1203": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1225": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1232": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1233": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1237": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "1240": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1247": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "1256": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1257": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1258": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "1260": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1261": {
+    "opco_slug": "uniformation",
+    "branche_name": "Acteurs du lien social et familial"
+  },
+  "1266": {
+    "opco_slug": "akto",
+    "branche_name": "Restauration de collectivités"
+  },
+  "1267": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Pâtisserie"
+  },
+  "1274": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1276": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1278": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "1281": {
+    "opco_slug": "afdas",
+    "branche_name": "Pharmacies d'officine"
+  },
+  "1284": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1285": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1286": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Cabinets ou entreprises de géomètres-experts, topographes, photogrammètres et experts-fonciers"
+  },
+  "1297": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1307": {
+    "opco_slug": "afdas",
+    "branche_name": "Exploitation cinématographique"
+  },
+  "1311": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1314": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1315": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1316": {
+    "opco_slug": "uniformation",
+    "branche_name": "Tourisme social et familial"
+  },
+  "1320": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1325": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1326": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1334": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1341": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1343": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1351": {
+    "opco_slug": "akto",
+    "branche_name": "Prévention et sécurité"
+  },
+  "1353": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1365": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1369": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1370": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1383": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1384": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1387": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1388": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie du pétrole"
+  },
+  "1391": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1394": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1396": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Industries de produits alimentaires élaborés"
+  },
+  "1402": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1404": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de la maintenance, distribution et location de matériels agricoles"
+  },
+  "1405": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Entreprises de désinfection, désinsectisation, dératisation"
+  },
+  "1406": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1408": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1411": {
+    "opco_slug": "opco2i",
+    "branche_name": "Ameublement – fabrication"
+  },
+  "1412": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises d'installation sans fabrication"
+  },
+  "1413": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1415": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1420": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "1423": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1424": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Réseaux de transports publics urbains de voyageurs"
+  },
+  "1431": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Optique-lunetterie de détail"
+  },
+  "1446": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1465": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1468": {
+    "opco_slug": "atlas",
+    "branche_name": "Crédit mutuel"
+  },
+  "1472": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1480": {
+    "opco_slug": "afdas",
+    "branche_name": "Presse quotidienne et hebdomadaire en régions"
+  },
+  "1483": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1486": {
+    "opco_slug": "atlas",
+    "branche_name": "Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils"
+  },
+  "1487": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1492": {
+    "opco_slug": "opco2i",
+    "branche_name": "Production des papiers-cartons et celluloses"
+  },
+  "1495": {
+    "opco_slug": "opco2i",
+    "branche_name": "Transformation des papiers-cartons"
+  },
+  "1499": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Miroiterie, transformation et négoce du verre"
+  },
+  "1501": {
+    "opco_slug": "akto",
+    "branche_name": "Restauration rapide"
+  },
+  "1504": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1505": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce de détail fruits et légumes, épicerie, produits laitiers"
+  },
+  "1512": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Promotion et construction immobilière"
+  },
+  "1513": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1516": {
+    "opco_slug": "akto",
+    "branche_name": "Organismes de formation"
+  },
+  "1517": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerces de détail non alimentaires"
+  },
+  "1518": {
+    "opco_slug": "uniformation",
+    "branche_name": "Animation"
+  },
+  "1525": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1527": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Immobilier (administrateurs de biens, sociétés immobilières, agents immobiliers)"
+  },
+  "1534": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Entreprises de l'industrie et des commerces en gros des viandes"
+  },
+  "1536": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Distributeurs conseils hors domicile (boissons)"
+  },
+  "1539": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerces de détail de papeterie, fournitures de bureau, de bureautique"
+  },
+  "1543": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1545": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1555": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1557": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce des articles de sports et d'équipements de loisirs"
+  },
+  "1558": {
+    "opco_slug": "opco2i",
+    "branche_name": "Cabinets dentaires"
+  },
+  "1560": {
+    "opco_slug": "opco2i",
+    "branche_name": "Fleuristes, vente et services des animaux familiers"
+  },
+  "1561": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1563": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1564": {
+    "opco_slug": "opco2i",
+    "branche_name": "Métallurgie du Rhône"
+  },
+  "1565": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "1572": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1576": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1577": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1578": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1580": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries charcutières"
+  },
+  "1586": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Industries frigorifiques"
+  },
+  "1588": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "1589": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1591": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1592": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1596": {
+    "opco_slug": "constructys",
+    "branche_name": "Bâtiment – ouvriers (entreprises de plus de 10 salariés)"
+  },
+  "1597": {
+    "opco_slug": "constructys",
+    "branche_name": "Bâtiment – ouvriers (entreprises de 10 salariés et moins)"
+  },
+  "1604": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1605": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1606": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Bijouterie, joaillerie, orfèvrerie et activités qui s'y rattachent"
+  },
+  "1607": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1611": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de logistique de communication écrite directe"
+  },
+  "1612": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1614": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1618": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Camping"
+  },
+  "1619": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Cabinets d'avocats"
+  },
+  "1621": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Répartition pharmaceutique"
+  },
+  "1624": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1626": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1627": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1628": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1631": {
+    "opco_slug": "afdas",
+    "branche_name": "Hôtellerie de plein air"
+  },
+  "1634": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1635": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1638": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1642": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1659": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1668": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1671": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1672": {
+    "opco_slug": "atlas",
+    "branche_name": "Sociétés d'assurances"
+  },
+  "1679": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "1686": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1700": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1702": {
+    "opco_slug": "constructys",
+    "branche_name": "Travaux publics – ouvriers"
+  },
+  "1710": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Agences générales d'assurances"
+  },
+  "1722": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1726": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "1732": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1734": {
+    "opco_slug": "afdas",
+    "branche_name": "Artistes interprètes engagés pour des émissions de télévision"
+  },
+  "1740": {
+    "opco_slug": "constructys",
+    "branche_name": "Bâtiment région parisienne"
+  },
+  "1747": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Activités de production des eaux embouteillées et boissons rafraîchissantes"
+  },
+  "1758": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1759": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1760": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Jardineries et graineteries"
+  },
+  "1761": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1779": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1780": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1785": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1790": {
+    "opco_slug": "afdas",
+    "branche_name": "Espaces de loisirs, d'attractions et culturels"
+  },
+  "1794": {
+    "opco_slug": "uniformation",
+    "branche_name": "Institutions de retraites complémentaires et de prévoyance"
+  },
+  "1800": {
+    "opco_slug": "opco2i",
+    "branche_name": "Concordance liées à la métallurgie"
+  },
+  "1801": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "1809": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1810": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1813": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1821": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1843": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1850": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Avocats – personnel salarié"
+  },
+  "1867": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1871": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1874": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1875": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Cabinets et cliniques vétérinaires"
+  },
+  "1876": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1880": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Négoce de l'ameublement"
+  },
+  "1885": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1886": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1888": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "1895": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1902": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1903": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1909": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1911": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1912": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1921": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1922": {
+    "opco_slug": "afdas",
+    "branche_name": "Radiodiffusion"
+  },
+  "1923": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "1930": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Métiers de la transformation des grains"
+  },
+  "1938": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Industries de la transformation des volailles"
+  },
+  "1942": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1944": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "1945": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1947": {
+    "opco_slug": "constructys",
+    "branche_name": "Négoce de bois d'œuvre et de produits dérivés"
+  },
+  "1951": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Cabinets ou entreprises d'arpentage, géomètres, experts fonciers"
+  },
+  "1960": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1961": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1966": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1967": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "1970": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "1972": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "1974": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "1978": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1979": {
+    "opco_slug": "akto",
+    "branche_name": "Hôtels, cafés, restaurants (HCR)"
+  },
+  "1980": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "1982": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "1987": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "1996": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Pharmacie d'officine"
+  },
+  "2002": {
+    "opco_slug": "akto",
+    "branche_name": "Blanchisserie, laverie, location de linge, nettoyage à sec, pressing"
+  },
+  "2003": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2014": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2018": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2021": {
+    "opco_slug": "afdas",
+    "branche_name": "Golf"
+  },
+  "2022": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2025": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2032": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2033": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2034": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2046": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Centres de contrôle technique automobile"
+  },
+  "2060": {
+    "opco_slug": "akto",
+    "branche_name": "Cafétérias et assimilés"
+  },
+  "2070": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "2075": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Centres équestres"
+  },
+  "2089": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2098": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Prestataires de services dans le domaine du secteur tertiaire"
+  },
+  "2101": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2104": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "2111": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Thermalisme"
+  },
+  "2120": {
+    "opco_slug": "atlas",
+    "branche_name": "Banque (personnel)"
+  },
+  "2121": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2126": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2128": {
+    "opco_slug": "uniformation",
+    "branche_name": "Mutualité"
+  },
+  "2145": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2147": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2148": {
+    "opco_slug": "afdas",
+    "branche_name": "Télécommunications"
+  },
+  "2149": {
+    "opco_slug": "akto",
+    "branche_name": "Activités du déchet"
+  },
+  "2150": {
+    "opco_slug": "uniformation",
+    "branche_name": "Associations intermédiaires"
+  },
+  "2152": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2156": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "2162": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "2174": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "2190": {
+    "opco_slug": "uniformation",
+    "branche_name": "Missions locales et PAIO"
+  },
+  "2194": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2195": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2198": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Entreprises de vente à distance"
+  },
+  "2205": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "2216": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce de détail et de gros à prédominance alimentaire"
+  },
+  "2219": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Taxis"
+  },
+  "2221": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2230": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "2247": {
+    "opco_slug": "atlas",
+    "branche_name": "Entreprises de courtage d'assurances et/ou de réassurances"
+  },
+  "2250": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "2257": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2264": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Hospitalisation privée à but non lucratif"
+  },
+  "2266": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2267": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2270": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2272": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Assainissement et maintenance industrielle"
+  },
+  "2294": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2306": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2310": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2328": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2329": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "2332": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "2335": {
+    "opco_slug": "atlas",
+    "branche_name": "Agences de mannequins"
+  },
+  "2336": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "2344": {
+    "opco_slug": "opco2i",
+    "branche_name": "Sidérurgie"
+  },
+  "2345": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "2354": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2357": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "2360": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "2372": {
+    "opco_slug": "afdas",
+    "branche_name": "Distribution directe (prospectus)"
+  },
+  "2378": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2389": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2395": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Assistants maternels du particulier employeur"
+  },
+  "2397": {
+    "opco_slug": "afdas",
+    "branche_name": "Mannequins dans les maisons de couture"
+  },
+  "2405": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "2408": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2409": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2410": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "2411": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2412": {
+    "opco_slug": "afdas",
+    "branche_name": "Production de films d'animation"
+  },
+  "2420": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2480": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "2489": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2494": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "2511": {
+    "opco_slug": "afdas",
+    "branche_name": "Sport"
+  },
+  "2519": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2526": {
+    "opco_slug": "uniformation",
+    "branche_name": "Organisations professionnelles de l'habitat social"
+  },
+  "2528": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2534": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "2535": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "2542": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2543": {
+    "opco_slug": "atlas",
+    "branche_name": "Industrie de la chaussure et articles chaussants"
+  },
+  "2564": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Vétérinaires - praticiens salariés"
+  },
+  "2579": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2582": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2583": {
+    "opco_slug": "akto",
+    "branche_name": "Sociétés concessionnaires ou exploitantes d'autoroutes ou d'ouvrages routiers"
+  },
+  "2584": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2585": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2594": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "2596": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Coiffure et professions connexes"
+  },
+  "2603": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "2609": {
+    "opco_slug": "constructys",
+    "branche_name": "Bâtiment – ETAM"
+  },
+  "2614": {
+    "opco_slug": "constructys",
+    "branche_name": "Travaux publics – ETAM"
+  },
+  "2615": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2625": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2630": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2631": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "2636": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2642": {
+    "opco_slug": "afdas",
+    "branche_name": "Production audiovisuelle"
+  },
+  "2658": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "2666": {
+    "opco_slug": "uniformation",
+    "branche_name": "Conseils d'architecture, d'urbanisme et de l'environnement"
+  },
+  "2667": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2683": {
+    "opco_slug": "afdas",
+    "branche_name": "Portage de presse"
+  },
+  "2691": {
+    "opco_slug": "akto",
+    "branche_name": "Enseignement privé indépendant"
+  },
+  "2697": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Personnel des administrateurs et des mandataires judiciaires"
+  },
+  "2700": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2701": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "2702": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "2704": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "2706": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Personnel des administrateurs et des mandataires judiciaires"
+  },
+  "2707": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2717": {
+    "opco_slug": "afdas",
+    "branche_name": "Entreprises techniques au service de la création et de l'événement"
+  },
+  "2727": {
+    "opco_slug": "uniformation",
+    "branche_name": "Entreprises de transport aérien (personnel au sol)"
+  },
+  "2728": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "2754": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "2755": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2768": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "2770": {
+    "opco_slug": "afdas",
+    "branche_name": "Édition phonographique"
+  },
+  "2785": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Commissaires de justice et sociétés de ventes volontaires"
+  },
+  "2793": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "2798": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "2847": {
+    "opco_slug": "uniformation",
+    "branche_name": "Pôle emploi"
+  },
+  "2870": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "2931": {
+    "opco_slug": "atlas",
+    "branche_name": "Activités de marchés financiers"
+  },
+  "2941": {
+    "opco_slug": "uniformation",
+    "branche_name": "Aide, accompagnement, soins et services à domicile"
+  },
+  "2964": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "2972": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "2978": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "2980": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "2992": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3013": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Librairie"
+  },
+  "3016": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "3017": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3028": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3032": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Esthétique-cosmétique et enseignement technique et professionnel lié aux métiers de l'esthétique"
+  },
+  "3035": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "3043": {
+    "opco_slug": "akto",
+    "branche_name": "Entreprises de propreté et services associés"
+  },
+  "3053": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3090": {
+    "opco_slug": "afdas",
+    "branche_name": "Entreprises du secteur privé du spectacle vivant"
+  },
+  "3097": {
+    "opco_slug": "afdas",
+    "branche_name": "Production cinématographique"
+  },
+  "3105": {
+    "opco_slug": "uniformation",
+    "branche_name": "Régies publicitaires de médias"
+  },
+  "3107": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "3109": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Métiers du numérique, de l'ingénierie, du conseil et de l'événement"
+  },
+  "3123": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3127": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de travail temporaire – salariés permanents et intérimaires"
+  },
+  "3128": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "3144": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "3151": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3160": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "3168": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Professions de la photographie"
+  },
+  "3201": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "3202": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "3203": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Pâtisserie – boulangerie artisanale"
+  },
+  "3204": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "3205": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Coopératives de consommateurs"
+  },
+  "3206": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "3207": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3209": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3210": {
+    "opco_slug": "atlas",
+    "branche_name": "Personnel intérimaire des entreprises de travail temporaire"
+  },
+  "3211": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "3212": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "3213": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "3216": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "3217": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3218": {
+    "opco_slug": "akto",
+    "branche_name": "Enseignement privé non lucratif (EPNL)"
+  },
+  "3219": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "3220": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "3221": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "3222": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3223": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3224": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3225": {
+    "opco_slug": "afdas",
+    "branche_name": "Salariés du particulier employeur"
+  },
+  "3227": {
+    "opco_slug": "opco2i",
+    "branche_name": "Sports et équipements de loisirs (commerce)"
+  },
+  "3228": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3229": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3230": {
+    "opco_slug": "afdas",
+    "branche_name": "Presse d'information"
+  },
+  "3231": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3232": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "3233": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3235": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "3236": {
+    "opco_slug": "opco2i",
+    "branche_name": "Organismes gestionnaires de foyers et services pour jeunes travailleurs"
+  },
+  "3237": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Commerce"
+  },
+  "3238": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3239": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Branches sanitaires, sociales et médico-sociales privées à but non lucratif"
+  },
+  "3241": {
+    "opco_slug": "afdas",
+    "branche_name": "Croix-Rouge française"
+  },
+  "3242": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "3243": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "3244": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "3245": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "3248": {
+    "opco_slug": "opco2i",
+    "branche_name": "Métallurgie"
+  },
+  "3249": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3250": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "3251": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "3252": {
+    "opco_slug": "afdas",
+    "branche_name": "Journalistes"
+  },
+  "3253": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "3254": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "3255": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5001": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industries et commerces en gros des vins, cidres, jus de fruits, spiritueux, sirops"
+  },
+  "5002": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5005": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5006": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5010": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "5011": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5014": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5017": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5018": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5019": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5020": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5023": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5024": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5025": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5100": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "5203": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5205": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5501": {
+    "opco_slug": "opcommerce",
+    "branche_name": "Industries de la transformation des volailles"
+  },
+  "5502": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Industries charcutières (salaisons, charcuteries, conserves de viandes)"
+  },
+  "5503": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5505": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "5506": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5507": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5509": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Industries alimentaires – activités de commerce de gros de fruits et légumes"
+  },
+  "5513": {
+    "opco_slug": "opco2i",
+    "branche_name": "Entreprises du négoce et de l'industrie des produits du sol"
+  },
+  "5516": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "5519": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5520": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5521": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5522": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "5524": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "5526": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5530": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5531": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5532": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "5533": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5537": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5538": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5539": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5541": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5542": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5545": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5546": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "5548": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5549": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "5550": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5552": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5553": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5554": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5555": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5558": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "5562": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "5564": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5565": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5566": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "5568": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5569": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5570": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5571": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "5572": {
+    "opco_slug": "opco-ep",
+    "branche_name": "Entreprises de proximité"
+  },
+  "5573": {
+    "opco_slug": "akto",
+    "branche_name": "Commerces de gros (accord agricole)"
+  },
+  "5574": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5577": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5578": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5579": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5580": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5583": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5584": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5589": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5593": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5595": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5598": {
+    "opco_slug": "opco-mobilites",
+    "branche_name": "Mobilités, transport, voyage"
+  },
+  "5600": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5601": {
+    "opco_slug": "opco-sante",
+    "branche_name": "Santé"
+  },
+  "5602": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5603": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "5604": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5606": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5610": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5612": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5613": {
+    "opco_slug": "afdas",
+    "branche_name": "Culture, médias, loisirs, sport"
+  },
+  "5614": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5616": {
+    "opco_slug": "opco2i",
+    "branche_name": "Industrie"
+  },
+  "5617": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "5618": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5619": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5621": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5623": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "5624": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5629": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5630": {
+    "opco_slug": "atlas",
+    "branche_name": "Services financiers, conseil, numérique"
+  },
+  "5631": {
+    "opco_slug": "uniformation",
+    "branche_name": "Cohésion sociale, emploi, formation"
+  },
+  "5633": {
+    "opco_slug": "constructys",
+    "branche_name": "Construction, bâtiment, travaux publics"
+  },
+  "5634": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "7001": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Bâtiment – cadres"
+  },
+  "7002": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Travaux publics – cadres"
+  },
+  "7003": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Coopératives agricoles – exploitations polyculture et élevage"
+  },
+  "7004": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7005": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Caves coopératives vinicoles"
+  },
+  "7006": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7007": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7008": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7009": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7010": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7012": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Centres équestres"
+  },
+  "7013": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7014": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7015": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7016": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7017": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7018": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Entreprises du paysage"
+  },
+  "7019": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Conchyliculture"
+  },
+  "7020": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Pêche de loisir et protection du milieu aquatique"
+  },
+  "7021": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7023": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Exploitations de polyculture et d'élevage, CUMA"
+  },
+  "7024": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Production agricole et CUMA"
+  },
+  "7025": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Entreprises d'accouvage et de sélection avicole"
+  },
+  "7026": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7027": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7501": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7502": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7503": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7505": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "7508": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7509": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "7510": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7511": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7513": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7514": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7515": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7517": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7519": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "7520": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8112": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8113": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8115": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8116": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8117": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8211": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8212": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8214": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8216": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8221": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8231": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8233": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8234": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8241": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8243": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8244": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8251": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8252": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8262": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8311": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8313": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8411": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8412": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8414": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8415": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8416": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8421": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8422": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8431": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8432": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8433": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8434": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8435": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8522": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8523": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8525": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8526": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8531": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8532": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8534": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8535": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8541": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8542": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8721": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8722": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8723": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8731": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8733": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8734": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8741": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8821": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8822": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8825": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8826": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8831": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "8832": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "8912": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9011": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9021": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9022": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9031": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9032": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9041": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9051": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Organismes d'aide ou de maintien à domicile"
+  },
+  "9061": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9062": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9071": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9081": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9091": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9101": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9102": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9103": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9111": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9112": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9121": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9131": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9132": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9141": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9142": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9151": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9161": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9171": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9172": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9181": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9182": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9191": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9201": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9202": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9211": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9221": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9222": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9231": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9232": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9241": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9261": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9272": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9273": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9281": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9282": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9283": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9291": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9292": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9301": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9302": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9311": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9321": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9331": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9341": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9351": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9352": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9361": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9362": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9371": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9372": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9374": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9381": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9382": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9383": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9401": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Ateliers et chantiers d'insertion"
+  },
+  "9411": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9412": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9413": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9421": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9422": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9441": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9442": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9444": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9451": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9452": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9453": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9454": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9455": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9456": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9461": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9471": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9472": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9491": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9492": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9493": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9494": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9497": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9501": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9502": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9521": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9531": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9532": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9541": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9542": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9551": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9552": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9553": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9561": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9562": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9571": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9573": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9581": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9591": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9592": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9601": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9602": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9603": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9612": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9613": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9621": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9622": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9631": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9641": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9651": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9661": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9691": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9702": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9711": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9712": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9721": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9722": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9723": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9725": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9731": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9741": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9761": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9762": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9771": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9791": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9801": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9802": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9811": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9821": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9831": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9841": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9851": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9852": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9853": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9871": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9881": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9882": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9891": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9892": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9901": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  },
+  "9971": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9972": {
+    "opco_slug": "ocapiat",
+    "branche_name": "Agriculture, pêche, agroalimentaire"
+  },
+  "9998": {
+    "opco_slug": "akto",
+    "branche_name": "Services à forte intensité de main-d'œuvre"
+  }
+}

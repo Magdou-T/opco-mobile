@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-11T10:36:56.226Z",
+  "sha256": "5873fc4d7339e86967b8d1ffcd5daeea3756cd75aa0cde17f0031a4df3d5ef2a",
+  "opcoCount": 11,
+  "changelog": [
+    "Dataset initial (seed) généré depuis les données embarquées"
+  ]
+}

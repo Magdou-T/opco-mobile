@@ -1,0 +1,163 @@
+{
+  "slug": "atlas",
+  "name": "ATLAS",
+  "secteurs": "Services financiers, conseil, ingenierie, informatique, bureaux d'etudes techniques, assurances, societes d'assistance",
+  "secteurs_source": "https://www.opco-atlas.fr/",
+  "email_contact": "contact@opco-atlas.fr",
+  "url_finance_page": "https://www.opco-atlas.fr/criteres-financement",
+
+  "types_formations": [
+    "Actions de formation du plan de dev. des competences",
+    "Actions collectives nationales",
+    "AFEST (Action de Formation En Situation de Travail)"
+  ],
+  "types_formations_source": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+
+  "cout_horaire_inter": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Criteres 2026 : plus de taux horaire unique publie. Bureaux d'etudes : plafond annuel seul (couts reels). Agents generaux d'assurance : coat reel plafonne a 50 euros/h. Les anciennes valeurs 2025 (40 euros/h / 150h / 8 000 euros, 15-18 euros/h standard) ne figurent plus dans les criteres 2026. Consulter la page criteres de votre branche sur opco-atlas.fr."
+  },
+  "cout_horaire_intra": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement",
+    "note": "Aucune grille intra distincte publiee dans les criteres 2026. Varie par branche."
+  },
+  "cout_horaire_afest": {
+    "value": 20,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/societes-financieres",
+    "note": "AFEST : 20 euros HT/h limite a 150h (societes financieres, agents generaux). Bureaux d'etudes 2026 : 40 euros HT/h, 150h max (budget 8 000 euros HT, 12 000 euros avec referent AFEST forme)."
+  },
+  "cout_horaire_afest_heures_max": 150,
+  "cout_horaire_metier": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement",
+    "note": "Pas de plafond metier unique publie dans les criteres 2026. Varie selon la branche."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "NON pris en charge : Atlas finance uniquement les frais pedagogiques des actions du plan de developpement des competences (perimetre explicite sur la page officielle). Aucune branche consultee (bureaux d'etudes, societes financieres, agents generaux) ne publie de forfait salaire PDC."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+    "note": "PDC: null/depends_on_branche. Apprentissage uniquement: forfaits specifiques."
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+    "note": "PDC: null/depends_on_branche. Apprentissage: 6 euros/nuit."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+    "note": "PDC: null/depends_on_branche. Apprentissage: 3 euros/repas."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+    "note": "Non confirme a 8% pour le PDC. Valeur retiree."
+  },
+  "frais_apprentissage": {
+    "restauration_par_repas": 3,
+    "hebergement_par_nuit": 6,
+    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+    "note": "Forfaits apprentissage uniquement"
+  },
+
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement",
+    "note": "Criteres 2026 : plafonds annuels PAR TAILLE et PAR BRANCHE (fourchette observee 1 000 a 8 000 euros HT/an). Bureaux d'etudes : 2 500 (<11), 3 000 (11-49), 4 000 euros (50-299). Societes financieres : 1 000 (<11), 7 000 euros (11-49). Agents generaux : 3 000 (<5), 5 000 (5-11), 8 000 euros (>11). L'ancien plafond unique 8 000 euros (criteres 2025) est obsolete."
+  },
+  "budget_annuel_description": "Plafond annuel par taille et par branche (criteres 2026) : 1 000 a 8 000 euros HT/an. Exemple bureaux d'etudes : 2 500 / 3 000 / 4 000 euros selon taille. Sous reserve de fonds disponibles.",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 2500,
+      "quota_horaire_max": null,
+      "description": "Moins de 11 salaries : plafond annuel 2 500 euros HT/an (bureaux d'etudes 2026, valeur representative). Selon branche : 1 000 euros (societes financieres) a 3 000 euros (agents generaux <5 sal.). Couts reels, sans taux horaire publie."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 3000,
+      "quota_horaire_max": null,
+      "description": "11-49 salaries : plafond annuel 3 000 euros HT/an (bureaux d'etudes 2026, valeur representative). Selon branche : jusqu'a 7 000-8 000 euros (societes financieres, agents generaux)."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 4000,
+      "quota_horaire_max": null,
+      "description": "50-299 salaries : plafond annuel 4 000 euros HT/an (bureaux d'etudes 2026, valeur representative). Varie selon branche."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries : NON eligible au PDC mutualise (criteres 2026 reserves aux salaries des entreprises de moins de 300 salaries). Fonds conventionnels selon branche."
+    }
+  ],
+
+  "tutorat": {
+    "montant_mensuel": 230,
+    "montant_mensuel_prioritaire": 345,
+    "duree_max_mois": null,
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "230 euros/mois (345 euros/mois publics prioritaires) confirmes 2026 (bureaux d'etudes). Duree max non confirmee dans les criteres 2026. Formation du tuteur : 40h a 15 euros HT/h."
+  },
+
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Tous salaries entreprise relevante",
+    "TPE/PME prioritaires",
+    "BOETH (beneficiaires obligation emploi travailleurs handicapes)",
+    "Salaries 50 ans et plus"
+  ],
+  "tailles_cibles": "Priorite TPE/PME",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Dossier a deposer AVANT le debut de la formation | Sous reserve de fonds disponibles | Criteres susceptibles d'evoluer en cours d'annee",
+  "delai_validation": "Delai non publie. Regle : depot du dossier avant le debut de la formation, sous reserve de fonds.",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Apprentissage selon NPEC branche",
+  "alternance_professionnalisation": "Professionnalisation selon accord",
+
+  "cpf_abondement": true,
+  "cpf_details": "Oui - selon accord branche",
+
+  "vae_possible": true,
+  "vae_details": "Oui - selon accord branche",
+
+  "limite_dossiers_an": "Sous reserve fonds disponibles",
+
+  "specificites": "Actions Collectives Nationales a 100% si cataloguees | campusAtlas | AFEST 20 euros/h max 150h",
+  "points_cles_maximisation": "ACN (Actions Collectives Nationales): financement 100% pedagogie | campusAtlas: forfaits interessants | BOETH/50+: taux majore 18 euros/h",
+
+  "sources": [
+    "https://www.opco-atlas.fr/",
+    "https://www.opco-atlas.fr/entreprise/financer-la-formation.html"
+  ]
+}
