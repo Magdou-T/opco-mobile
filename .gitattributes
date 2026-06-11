@@ -1,0 +1,4 @@
+# Les datasets sont verifies par hash SHA-256 cote app :
+# aucune conversion de fin de ligne ne doit alterer leurs octets.
+datasets/** -text
+packages/core/data/** -text

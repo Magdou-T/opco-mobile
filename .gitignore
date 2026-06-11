@@ -11,3 +11,4 @@ backend/.out/
 datasets/_drafts/
 *.log
 .DS_Store
+backend/out/
