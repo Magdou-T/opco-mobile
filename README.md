@@ -71,20 +71,27 @@ npm run live        # vrai scrape + IA (requiert ANTHROPIC_API_KEY) → publie d
 5. **publish** écrit `datasets/v<N>.json` + `latest.json` + `manifest.json` (avec SHA-256). Si des changements sont « à revoir », une **PR** est créée au lieu d'un commit direct.
 6. **L'app** lit `manifest.json` au démarrage ; si une version plus récente existe, télécharge `latest.json`, **vérifie le SHA-256**, **valide** via `@opco/core`, puis remplace le cache. En cas d'échec → garde le cache (jamais d'état cassé). Affiche « Données à jour au JJ/MM/AAAA ».
 
+## Fonctionnalités « dirigeant de PME » (V2.1 / V2.2)
+
+- **Enveloppe maximale potentielle** : financement PDC + dispositifs cumulables chiffrables, affichée en tête des résultats.
+- **Dispositifs complémentaires** (`dispositifs_complementaires` par OPCO) : Boost Compétences, Click&Form, FSE+, transition écologique TP hors budget, abondements CPF/SPSTI, versements volontaires… avec règle de cumul (`hors_budget` / `additif` / `alternatif`), **conditions d'attribution**, **démarches** et source. Tous sourcés.
+- **Barèmes par branche** (`variantes_branche`, V2.2) : les montants d'un OPCO varient selon la convention collective. Une variante (identifiée par codes **IDCC**) surcharge le barème général : budget annuel, coût horaire, **salaire**, frais. Application automatique selon l'IDCC détecté (recherche SIREN) ou le choix manuel à l'étape 1 ; priorité : choix manuel > IDCC détecté > barème général (+ avertissement). Branches couvertes : AKTO Organismes de formation (1516) et Commerces de gros (0573), OPCO EP Pharmacie d'officine (1996). Extensible par simple ajout de données.
+- **Budget déjà consommé** : saisi à l'étape Situation, déduit du plafond annuel.
+- **« Vos démarches, étape par étape »** : checklist concrète générée pour chaque résultat.
+
 ## Vérifications (état actuel)
 
 | Package | Typecheck | Tests |
 |---|---|---|
-| `@opco/core` | ✅ | ✅ 19/19 |
+| `@opco/core` | ✅ | ✅ 30/30 |
 | `apps/mobile` | ✅ (`tsc --noEmit`, `expo export` OK) | — |
 | `@opco/backend` | ✅ | ✅ 22/22 + dry-run OK |
 
 ## À configurer côté utilisateur (hors code)
 
-1. **Compte Expo / EAS** pour produire l'APK (`eas build`).
-2. **`ANTHROPIC_API_KEY`** comme **secret GitHub Actions** (jamais dans l'app) pour le mode `--live`.
-3. **Hébergement des datasets** : exposer `datasets/manifest.json` + `latest.json` sur une URL (raw GitHub / Pages / CDN), puis renseigner `expo.extra.datasetBaseUrl` dans `apps/mobile/app.json`.
-4. **OCAPIAT** : sa source de financement est un **PDF** (non géré par le scraper minimal) → ses champs passeront en `not_found` → rétrogradation de confiance (jamais d'invention). Ajouter un parseur PDF si besoin d'extraction automatique pour cet OPCO.
+1. **`ANTHROPIC_API_KEY`** comme **secret GitHub Actions** (jamais dans l'app) pour le mode `--live` du pipeline hebdo.
+2. **OCAPIAT** : sa source de financement est un **PDF** (non géré par le scraper minimal) → ses champs passeront en `not_found` → rétrogradation de confiance (jamais d'invention). Ajouter un parseur PDF si besoin d'extraction automatique pour cet OPCO.
+3. **Limite connue du pipeline** : la vérification hebdomadaire couvre les barèmes principaux des 11 OPCO, pas encore les `variantes_branche` (pages de branche) ni les `dispositifs_complementaires` — à étendre (voir issues).
 
 ## Principes non négociables
 
