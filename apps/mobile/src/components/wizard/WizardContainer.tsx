@@ -4,6 +4,7 @@
 // au dataset actif (cache validé ou données embarquées).
 
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { calculateFunding, type FundingResult, type WizardState } from '@opco/core';
 import { useWizard } from '@/hooks/useWizard';
 import { useActiveOpcos } from '@/hooks/useActiveOpcos';
@@ -35,6 +36,10 @@ export function WizardContainer() {
   } = useWizard();
 
   const { loading, opcoList, getOpcoBySlug, generatedAt } = useActiveOpcos();
+  const insets = useSafeAreaInsets();
+  // Remonte la barre de navigation du wizard d'environ 1 cm (~40 dp) au-dessus
+  // des boutons systeme Android pour eviter les faux contacts.
+  const navBottomPadding = insets.bottom + 40;
 
   if (!hydrated || loading) {
     return (
@@ -64,7 +69,8 @@ export function WizardContainer() {
     return (
       <ScrollView
         className="flex-1 bg-gray-100"
-        contentContainerClassName="p-4 pb-12 gap-6"
+        contentContainerClassName="p-4 gap-6"
+        contentContainerStyle={{ paddingBottom: insets.bottom + 56 }}
       >
         <FundingBreakdown result={fundingResult} />
         <View className="gap-3">
@@ -121,8 +127,11 @@ export function WizardContainer() {
         </View>
       </ScrollView>
 
-      {/* Navigation */}
-      <View className="flex-row justify-between gap-3 border-t border-gray-200 bg-white p-4">
+      {/* Navigation — surélevée au-dessus des boutons système du téléphone */}
+      <View
+        className="flex-row justify-between gap-3 border-t border-gray-200 bg-white p-4"
+        style={{ paddingBottom: navBottomPadding }}
+      >
         <Pressable
           onPress={goPrev}
           disabled={currentStepIndex === 0}
