@@ -13,6 +13,28 @@ export interface SourcedValue<T = string> {
   note?: string;
 }
 
+/** Tranche d'un barème dégressif selon la durée de la formation (ex. Uniformation). */
+export interface CoutHoraireSeuil {
+  /** Durée (heures) jusqu'à laquelle ce taux s'applique ; null = au-delà du dernier seuil. */
+  max_heures: number | null;
+  /** Plafond horaire de la tranche (€/h). */
+  valeur: number;
+}
+
+/**
+ * Lecture d'un barème dégressif :
+ * - 'par_tranche' (défaut) : chaque tranche d'heures est financée à son propre taux ;
+ * - 'selon_duree_totale' : un seul taux, choisi selon la durée totale de la formation.
+ */
+export type ModeSeuils = 'par_tranche' | 'selon_duree_totale';
+
+/**
+ * Portée du plafond annuel :
+ * - 'global' (défaut) : tous postes confondus ;
+ * - 'pedagogie' : coûts pédagogiques seuls (salaires et frais annexes financés en plus).
+ */
+export type PorteeBudget = 'global' | 'pedagogie';
+
 export interface OpcoData {
   slug: string;
   name: string;
@@ -29,6 +51,9 @@ export interface OpcoData {
   cout_horaire_inter: SourcedValue<number | null>;
   cout_horaire_intra: SourcedValue<number | null>;
   cout_horaire_metier: SourcedValue<number | null>;
+  /** Barème dégressif selon la durée (prioritaire sur les plafonds horaires ci-dessus). */
+  cout_horaire_seuils?: CoutHoraireSeuil[];
+  cout_horaire_seuils_mode?: ModeSeuils;
 
   // Prise en charge salaires
   prise_en_charge_salaires: SourcedValue<number | null>;
@@ -42,6 +67,7 @@ export interface OpcoData {
 
   // Budget et plafonds
   budget_annuel_max: SourcedValue<number | null>;
+  budget_annuel_portee?: PorteeBudget;
   budget_annuel_description: string;
   quota_horaire_min: number | null;
   quota_horaire_max: number | null;
@@ -84,6 +110,9 @@ export interface OpcoData {
 
   // Barèmes spécifiques par branche professionnelle (priment sur le défaut)
   variantes_branche?: VarianteBranche[];
+
+  /** Date de dernière vérification des barèmes auprès des sources officielles (AAAA-MM-JJ). */
+  derniere_verification?: string;
 }
 
 /**
@@ -105,12 +134,15 @@ export interface VarianteBranche {
   // Overrides (optionnels — héritent du défaut OPCO si absents)
   cout_horaire_inter?: SourcedValue<number | null>;
   cout_horaire_metier?: SourcedValue<number | null>;
+  cout_horaire_seuils?: CoutHoraireSeuil[];
+  cout_horaire_seuils_mode?: ModeSeuils;
   prise_en_charge_salaires?: SourcedValue<number | null>;
   prise_en_charge_salaires_mode?: OpcoData['prise_en_charge_salaires_mode'];
   frais_transport?: SourcedValue<number | null>;
   frais_hebergement?: SourcedValue<number | null>;
   frais_restauration?: SourcedValue<number | null>;
   budget_annuel_max?: SourcedValue<number | null>;
+  budget_annuel_portee?: PorteeBudget;
   budget_annuel_description?: string;
   plafonds_par_taille?: PlafondTaille[];
 }
@@ -161,43 +193,177 @@ export interface DispositifComplementaire {
 export type ContractType = 'cdi' | 'cdd' | 'interim' | 'alternance';
 export type CompanySize = 'less_11' | '11_49' | '50_299' | '300_plus';
 export type TrainingType = 'non_certifiante' | 'qualification' | 'certification' | 'vae' | 'reconversion' | 'cqp' | 'habilitation';
-export type CertificationType = 'rncp' | 'cqp' | 'diplome' | 'habilitation' | 'autre';
+export type CertificationType = 'rncp' | 'rs' | 'cqp' | 'diplome' | 'habilitation' | 'aucune' | 'autre';
 export type TrainingMode = 'presentiel' | 'distance' | 'hybride';
 export type TransportMode = 'train' | 'avion' | 'voiture' | 'autre';
 
+// --- Projet, bénéficiaire, géographie ---
+
+export type ProjetType =
+  | 'formation_salarie'
+  | 'reconversion_salarie'
+  | 'recrutement_demandeur_emploi'
+  | 'alternance'
+  | 'formation_dirigeant';
+
+/** Personne qui suit la formation ou qui est recrutée. */
+export type StatutBeneficiaire = 'salarie' | 'demandeur_emploi' | 'alternant' | 'dirigeant';
+export type NiveauDiplome = 'sans_diplome' | 'cap_bep' | 'bac' | 'bac_plus_2' | 'bac_plus_3_et_plus';
+/** Niveau du cadre national des certifications (3 = CAP … 8 = doctorat). */
+export type NiveauCertification = 3 | 4 | 5 | 6 | 7 | 8;
+export type StatutDirigeant =
+  | 'commercant'
+  | 'artisan'
+  | 'profession_liberale'
+  | 'exploitant_agricole'
+  | 'assimile_salarie';
+export type TypeStructure = 'ess' | 'siae' | 'association';
+export type TypeAlternance = 'apprentissage' | 'professionnalisation';
+/** Certitude de l'identification de l'OPCO ('confirme' : source officielle sous licence). */
+export type CertitudeOpco = 'confirme' | 'fiable' | 'a_confirmer' | 'inconnu';
+/** Code région INSEE (13 régions métropolitaines + 5 régions d'outre-mer). */
+export type CodeRegion =
+  | '84' | '27' | '53' | '24' | '94' | '44' | '32' | '11' | '28' | '75' | '76' | '52' | '93'
+  | '01' | '02' | '03' | '04' | '06';
+
+export const STATUT_PAR_PROJET: Record<ProjetType, StatutBeneficiaire> = {
+  formation_salarie: 'salarie',
+  reconversion_salarie: 'salarie',
+  recrutement_demandeur_emploi: 'demandeur_emploi',
+  alternance: 'alternant',
+  formation_dirigeant: 'dirigeant',
+};
+
+export const PROJET_LABELS: Record<ProjetType, { label: string; description: string }> = {
+  formation_salarie: {
+    label: 'Former un salarié',
+    description: "Développer les compétences d'un salarié de l'entreprise",
+  },
+  reconversion_salarie: {
+    label: "Reconversion d'un salarié",
+    description: "Changer de métier, dans l'entreprise ou en dehors",
+  },
+  recrutement_demandeur_emploi: {
+    label: "Recruter et former un demandeur d'emploi",
+    description: "Former une personne inscrite à France Travail avant ou à l'embauche",
+  },
+  alternance: {
+    label: 'Recruter en alternance',
+    description: "Contrat d'apprentissage ou de professionnalisation",
+  },
+  formation_dirigeant: {
+    label: 'Former le dirigeant',
+    description: "Chef d'entreprise, travailleur indépendant ou dirigeant non salarié",
+  },
+};
+
+export const NIVEAU_DIPLOME_LABELS: Record<NiveauDiplome, string> = {
+  sans_diplome: 'Sans diplôme',
+  cap_bep: 'CAP / BEP',
+  bac: 'Bac',
+  bac_plus_2: 'Bac +2',
+  bac_plus_3_et_plus: 'Bac +3 et plus',
+};
+
+export const NIVEAU_CERTIFICATION_LABELS: Record<NiveauCertification, string> = {
+  3: 'Niveau 3 (CAP, BEP)',
+  4: 'Niveau 4 (Bac)',
+  5: 'Niveau 5 (Bac +2)',
+  6: 'Niveau 6 (Bac +3 / +4)',
+  7: 'Niveau 7 (Bac +5)',
+  8: 'Niveau 8 (Doctorat)',
+};
+
+export const STATUT_DIRIGEANT_LABELS: Record<StatutDirigeant, string> = {
+  commercant: 'Commerçant (ou prestataire de services)',
+  artisan: 'Artisan',
+  profession_liberale: 'Profession libérale',
+  exploitant_agricole: 'Exploitant agricole',
+  assimile_salarie: 'Dirigeant assimilé salarié (président de SAS, gérant minoritaire…)',
+};
+
+export const TYPE_ALTERNANCE_LABELS: Record<TypeAlternance, string> = {
+  apprentissage: "Contrat d'apprentissage",
+  professionnalisation: 'Contrat de professionnalisation',
+};
+
+export const CERTIFICATION_LABELS: Record<CertificationType, string> = {
+  rncp: 'RNCP (titre ou diplôme enregistré)',
+  rs: 'Répertoire spécifique (RS)',
+  cqp: 'CQP (certificat de qualification professionnelle)',
+  diplome: "Diplôme d'État",
+  habilitation: 'Habilitation',
+  aucune: 'Aucune certification',
+  autre: 'Autre',
+};
+
 export interface WizardState {
-  // Step 1: OPCO Identification
+  // Étape 0 : projet
+  projetType: ProjetType | null;
+
+  // Étape 1 : entreprise et OPCO
   opcoKnown: boolean | null;
   selectedOpcoSlug: string | null;
   companyName: string | null;
   sirenNumber: string | null;
+  /** SIRET du siège (recherche entreprise). */
+  siret: string | null;
   detectedOpcoSlug: string | null;
   detectedIdcc: string | null;
   detectedCompanyName: string | null;
   /** Branche choisie manuellement (id de VarianteBranche) — prime sur l'IDCC détecté. */
   selectedBrancheId: string | null;
-
-  // Step 2: Situation professionnelle
-  contractType: ContractType | null;
+  /** Certitude de l'identification automatique de l'OPCO. */
+  opcoCertitude: CertitudeOpco | null;
+  /** Tous les IDCC déclarés par l'entreprise et ses établissements. */
+  idccEtablissements: string[];
+  /** IDCC déclarés par le siège (présélection en cas de pluralité). */
+  idccSiege: string[];
+  regionCode: CodeRegion | null;
+  departementCode: string | null;
+  codeNaf: string | null;
+  /** Code de tranche d'effectif INSEE (indicatif, année N-2). */
+  trancheEffectifInsee: string | null;
   companySize: CompanySize | null;
+  /** Effectif exact, si l'utilisateur le précise (affine les seuils des aides). */
+  effectif: number | null;
+  /** Statuts connus via la recherche entreprise (ESS, SIAE, association). */
+  structures: TypeStructure[];
+  /** Budget formation déjà consommé auprès de l'OPCO cette année (euros). Déduit du plafond annuel. */
+  budgetDejaConsomme: number | null;
+
+  // Étape 2 : bénéficiaire
+  contractType: ContractType | null;
   anciennete_mois: number | null;
   isHandicap: boolean;
   isReconversion: boolean;
   isSortieChomage: boolean;
-  /** Budget formation deja consomme aupres de l'OPCO cette annee (euros). Deduit du plafond annuel. */
-  budgetDejaConsomme: number | null;
+  ageBeneficiaire: number | null;
+  niveauDiplome: NiveauDiplome | null;
+  typeAlternance: TypeAlternance | null;
+  inscritFranceTravail: boolean | null;
+  statutDirigeant: StatutDirigeant | null;
+  microEntrepreneur: boolean | null;
+  soldeCpf: number | null;
+  /** Région de résidence du bénéficiaire, si différente de celle de l'entreprise. */
+  regionBeneficiaireCode: CodeRegion | null;
 
-  // Step 3: Formation
+  // Étape 3 : formation
   formationNom: string | null;
   formationType: TrainingType | null;
   certificationLevel: CertificationType | null;
+  niveauFormationVise: NiveauCertification | null;
+  eligibleCpf: boolean | null;
+  /** Mois de début prévu (AAAA-MM). */
+  dateDebutFormation: string | null;
+  organismeQualiopi: boolean | null;
   durationHours: number | null;
   pedagogyCostTotal: number | null;
   pedagogyCostPerHour: number | null;
   trainingMode: TrainingMode | null;
   organismeFormation: string | null;
 
-  // Step 4: Frais annexes
+  // Étape 4 : frais annexes
   needsTransport: boolean;
   transportMode: TransportMode | null;
   transportDistanceKm: number | null;
@@ -345,27 +511,49 @@ export const TRAINING_MODE_LABELS: Record<TrainingMode, string> = {
   hybride: 'Hybride (présentiel + distance)',
 };
 
-// Initial wizard state
 export function createInitialWizardState(): WizardState {
   return {
+    projetType: null,
     opcoKnown: null,
     selectedOpcoSlug: null,
     companyName: null,
     sirenNumber: null,
+    siret: null,
     detectedOpcoSlug: null,
     detectedIdcc: null,
     detectedCompanyName: null,
     selectedBrancheId: null,
-    contractType: null,
+    opcoCertitude: null,
+    idccEtablissements: [],
+    idccSiege: [],
+    regionCode: null,
+    departementCode: null,
+    codeNaf: null,
+    trancheEffectifInsee: null,
     companySize: null,
+    effectif: null,
+    structures: [],
+    budgetDejaConsomme: null,
+    contractType: null,
     anciennete_mois: null,
     isHandicap: false,
     isReconversion: false,
     isSortieChomage: false,
-    budgetDejaConsomme: null,
+    ageBeneficiaire: null,
+    niveauDiplome: null,
+    typeAlternance: null,
+    inscritFranceTravail: null,
+    statutDirigeant: null,
+    microEntrepreneur: null,
+    soldeCpf: null,
+    regionBeneficiaireCode: null,
     formationNom: null,
     formationType: null,
     certificationLevel: null,
+    niveauFormationVise: null,
+    eligibleCpf: null,
+    dateDebutFormation: null,
+    organismeQualiopi: null,
     durationHours: null,
     pedagogyCostTotal: null,
     pedagogyCostPerHour: null,

@@ -8,3 +8,4 @@ export * from './calculator';
 export * from './opco-resolver';
 export * from './schema';
 export * from './data';
+export * from './geo';
