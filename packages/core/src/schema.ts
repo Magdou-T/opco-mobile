@@ -393,6 +393,9 @@ export const IdccEntreeSchema = z.object({
   statut: z.enum(['actif', 'fusionne', 'echappatoire', 'partage']),
   idcc_cible: z.string().regex(/^\d{4}$/).optional(),
   opcos_possibles: z.array(z.string().min(1)).optional(),
+  // true : l'OPCO de cette convention n'est établi par aucune source officielle propre à cet IDCC (repris d'une
+  // ancienne table, ou déduit des conventions qu'elle remplace) ; la note en donne la raison.
+  a_confirmer: z.boolean().optional(),
   note: z.string().optional(),
   source: z.string().min(1),
 }).strict();

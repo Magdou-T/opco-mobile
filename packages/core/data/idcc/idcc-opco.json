@@ -44,6 +44,7 @@
     "titre": "Convention collective nationale du personnel sédentaire des entreprises de navigation du 20 février 1951. Etendue par arrêté du 9 décembre 1983 JONC 4 janvier 1984. (1)",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "Code absent de la table IDCC de la DSN (net-entreprises) ; intitulé repris de Légifrance KALI. À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635659"
   },
@@ -587,7 +588,7 @@
     "opco": "opco2i",
     "statut": "fusionne",
     "idcc_cible": "3233",
-    "note": "Code clos dans la table IDCC DSN (fin de validité le 01/10/2021). Confirmé par le site officiel de l'OPCO (https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx). Rattachement : Légifrance KALI : « Remplacée par la convention collective nationale de l’industrie de la fabrication des ciments du 2 octobre 2019 (IDCC 3233) » (source : https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635462).",
+    "note": "Code clos dans la table IDCC DSN (fin de validité le 01/10/2021). Confirmé par le site officiel de l'OPCO (https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx). Rattachement : Légifrance KALI : « Remplacée par la convention collective nationale de l'industrie de la fabrication des ciments du 2 octobre 2019 (IDCC 3233) » (source : https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635462).",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908323A/jo/texte"
   },
   "0365": {
@@ -623,7 +624,7 @@
   },
   "0392": {
     "idcc": "0392",
-    "titre": "Convention Collective Industrie textile de Roubaix-Tourcoing ...",
+    "titre": "Convention Collective Industrie textile de Roubaix-Tourcoing",
     "opco": "opco2i",
     "statut": "actif",
     "note": "Code absent de la table IDCC de la DSN (net-entreprises) ; intitulé repris de la source citée.",
@@ -1245,7 +1246,7 @@
     "opco": "opco2i",
     "statut": "fusionne",
     "idcc_cible": "3233",
-    "note": "Code clos dans la table IDCC DSN (fin de validité le 01/10/2021). Confirmé par le site officiel de l'OPCO (https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx). Rattachement : Légifrance KALI : « Remplacée par la convention collective nationale de l’industrie de la fabrication des ciments du 2 octobre 2019 (IDCC 3233) » (source : https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635684).",
+    "note": "Code clos dans la table IDCC DSN (fin de validité le 01/10/2021). Confirmé par le site officiel de l'OPCO (https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx). Rattachement : Légifrance KALI : « Remplacée par la convention collective nationale de l'industrie de la fabrication des ciments du 2 octobre 2019 (IDCC 3233) » (source : https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635684).",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908323A/jo/texte"
   },
   "0833": {
@@ -1254,7 +1255,7 @@
     "opco": "opco2i",
     "statut": "fusionne",
     "idcc_cible": "3233",
-    "note": "Code clos dans la table IDCC DSN (fin de validité le 01/10/2021). Confirmé par le site officiel de l'OPCO (https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx). Rattachement : Légifrance KALI : « Remplacée par la convention collective nationale de l’industrie de la fabrication des ciments du 2 octobre 2019 (IDCC 3233) » (source : https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635676).",
+    "note": "Code clos dans la table IDCC DSN (fin de validité le 01/10/2021). Confirmé par le site officiel de l'OPCO (https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx). Rattachement : Légifrance KALI : « Remplacée par la convention collective nationale de l'industrie de la fabrication des ciments du 2 octobre 2019 (IDCC 3233) » (source : https://www.legifrance.gouv.fr/conv_coll/id/KALICONT000005635676).",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908323A/jo/texte"
   },
   "0836": {
@@ -1383,6 +1384,7 @@
     "titre": "Convention collective du personnel des garages de la Martinique",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -1631,6 +1633,7 @@
     "titre": "Convention collective des consignataires de navire et manutentionnaires de la Martinique",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -1836,6 +1839,7 @@
     "titre": "Convention collective auto moto de La Réunion",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -3149,6 +3153,7 @@
     "titre": "Convention collective de la manutention portuaire de Guadeloupe",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -3283,6 +3288,7 @@
     "titre": "Convention collective des commissionnaires en douane et agents auxiliaires de la Martinique",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -3763,6 +3769,7 @@
     "titre": "Convention collective régionale du transport sanitaire en Martinique",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -3787,6 +3794,7 @@
     "titre": "Convention collective régionale des services de l'automobile de la Guyane",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -3893,6 +3901,7 @@
     "titre": "Convention collective de la manutention portuaire du port de Fort-de-France",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -4353,6 +4362,7 @@
     "titre": "Accord collectif relatif au transport de proximité public et privé de produits pétroliers et de liquides inflammables sur le territoire de la Martinique",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -4418,6 +4428,7 @@
     "titre": "Convention collective régionale des transports routiers et activités auxiliaires du transport de la Guadeloupe",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -4497,6 +4508,7 @@
     "titre": "Convention collective régionale des ouvriers, employés et techniciens des entreprises d'ambulances de la Guyane",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -4601,6 +4613,7 @@
     "titre": "Convention collective régionale des transports sanitaires de Guadeloupe",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -4747,6 +4760,7 @@
     "titre": "Convention collective nationale du personnel sédentaire des entreprises de transports de marchandises de la navigation intérieure",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "OPCO déduit des conventions remplacées par cet IDCC (1974, 2174), toutes rattachées à opco-mobilites par l'arrêté d'agrément ou le site de l'OPCO ; nouvel IDCC non encore listé nominativement — à confirmer. À confirmer auprès d'OPCO Mobilités : site opcomobilites.fr inaccessible le 06/10/2026, rattachement fondé uniquement sur l'arrêté d'agrément.",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908337A/jo/texte"
   },
@@ -4845,6 +4859,7 @@
     "titre": "Convention collective nationale des professions réglementées auprès des juridictions",
     "opco": "opco-ep",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "OPCO déduit des conventions remplacées par cet IDCC (2706, 0240, 2329), toutes rattachées à opco-ep par l'arrêté d'agrément ou le site de l'OPCO ; nouvel IDCC non encore listé nominativement — à confirmer.",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908314A/jo/texte"
   },
@@ -4853,6 +4868,7 @@
     "titre": "Convention collective nationale des opérateurs de voyages et des guides",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "OPCO déduit des conventions remplacées par cet IDCC (1710), toutes rattachées à opco-mobilites par l'arrêté d'agrément ou le site de l'OPCO ; nouvel IDCC non encore listé nominativement — à confirmer. À confirmer auprès d'OPCO Mobilités : site opcomobilites.fr inaccessible le 06/10/2026, rattachement fondé uniquement sur l'arrêté d'agrément.",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908337A/jo/texte"
   },
@@ -4875,6 +4891,7 @@
     "titre": "Convention collective nationale des commissaires de justice et sociétés de ventes",
     "opco": "opco-ep",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "OPCO déduit des conventions remplacées par cet IDCC (1921, 2785), toutes rattachées à opco-ep par l'arrêté d'agrément ou le site de l'OPCO ; nouvel IDCC non encore listé nominativement — à confirmer.",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908314A/jo/texte"
   },
@@ -4897,6 +4914,7 @@
     "titre": "Convention collective nationale des salariés des cabinets d'avocats",
     "opco": "opco-ep",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "OPCO déduit des conventions remplacées par cet IDCC (1000, 1850), toutes rattachées à opco-ep par l'arrêté d'agrément ou le site de l'OPCO ; nouvel IDCC non encore listé nominativement — à confirmer.",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908314A/jo/texte"
   },
@@ -4905,6 +4923,7 @@
     "titre": "Convention collective nationale de la boucherie, boucherie-charcuterie-traiteur, poissonnerie (détail et gros), écailler, traiteur de la mer",
     "opco": "opco-ep",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "OPCO déduit des conventions remplacées par cet IDCC (0992, 1504), toutes rattachées à opco-ep par l'arrêté d'agrément ou le site de l'OPCO ; nouvel IDCC non encore listé nominativement — à confirmer.",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908314A/jo/texte"
   },
@@ -4984,6 +5003,7 @@
     "titre": "Statut de la RATP",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -5063,7 +5083,7 @@
     "titre": "Statut divers ou non précisé",
     "opco": null,
     "statut": "echappatoire",
-    "note": "Code d'échappement DSN : statut divers ou non précisé (« statut divers ou inconnu » dans les notices des OPCO). L'OPCO est désigné par l'entreprise en rubrique DSN S21.G00.11.023 selon son activité principale. Sources : table IDCC DSN (net-entreprises.fr) et fiche net-entreprises « IDCC : comment faire la déclaration ? ».",
+    "note": "Code d'échappement DSN : statut divers ou non précisé (« statut divers ou inconnu » dans les notices des OPCO). L'OPCO est désigné par l'entreprise en rubrique DSN S21.G00.11.023 selon son activité principale. Sources : table IDCC DSN (net-entreprises.fr) et page AKTO « Comment connaître mon opérateur de compétences ».",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
   "5200": {
@@ -5111,7 +5131,7 @@
     "titre": "Convention d'entreprise indépendante ou texte assimilé non précisé",
     "opco": null,
     "statut": "echappatoire",
-    "note": "Code d'échappement DSN : convention d'entreprise indépendante ou texte assimilé non précisé. L'OPCO est désigné par l'entreprise en rubrique DSN S21.G00.11.023 selon son activité principale. Sources : table IDCC DSN (net-entreprises.fr) et fiche net-entreprises « IDCC : comment faire la déclaration ? ».",
+    "note": "Code d'échappement DSN : convention d'entreprise indépendante ou texte assimilé non précisé. L'OPCO est désigné par l'entreprise en rubrique DSN S21.G00.11.023 selon son activité principale. Sources : table IDCC DSN (net-entreprises.fr) et page AKTO « Comment connaître mon opérateur de compétences ».",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
   "5502": {
@@ -5195,6 +5215,7 @@
     "titre": "Convention collective nationale des officies du transport maritimes",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -5591,6 +5612,7 @@
     "titre": "Convention d'entreprise Voies navigables de France",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -5703,6 +5725,7 @@
     "titre": "Convention d'entreprise Eurotunnel",
     "opco": "opco-mobilites",
     "statut": "actif",
+    "a_confirmer": true,
     "note": "À confirmer : rattachement à OPCO Mobilités repris de l'ancienne table ; IDCC absent de l'arrêté d'agrément d'OPCO Mobilités et site opcomobilites.fr inaccessible le 06/10/2026 (aucune vérification possible).",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
@@ -6335,7 +6358,7 @@
   "8211": {
     "idcc": "8211",
     "titre": "Convention collective régionale des exploitations forestières Champagne Ardenne",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6379,7 +6402,7 @@
   "8231": {
     "idcc": "8231",
     "titre": "Convention collective régionale des exploitations forestières Haute Normandie",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6407,7 +6430,7 @@
   "8241": {
     "idcc": "8241",
     "titre": "Convention collective régionale des exploitations forestières scieries Centre",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6435,7 +6458,7 @@
   "8251": {
     "idcc": "8251",
     "titre": "Convention collective régionale des exploitations forestières scieries Calvados Manche Orne",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6463,7 +6486,7 @@
   "8311": {
     "idcc": "8311",
     "titre": "Convention collective régionale des exploitations forestières scieries Nord Pas de Calais",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6483,7 +6506,7 @@
   "8411": {
     "idcc": "8411",
     "titre": "Convention collective régionale des exploitations forestières Meurthe et Moselle Vosges",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6511,7 +6534,7 @@
   "8415": {
     "idcc": "8415",
     "titre": "Convention collective régionale des exploitations forestières Lorraine",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6531,7 +6554,7 @@
   "8421": {
     "idcc": "8421",
     "titre": "Convention collective régionale des exploitations forestières Alsace",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6551,7 +6574,7 @@
   "8431": {
     "idcc": "8431",
     "titre": "Convention collective régionale des exploitations forestières Doubs Jura Haute-Saône Territoire de Belfort",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6595,7 +6618,7 @@
   "8522": {
     "idcc": "8522",
     "titre": "Convention collective régionale des exploitations forestières scieries Pays de la Loire",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6631,7 +6654,7 @@
   "8531": {
     "idcc": "8531",
     "titre": "Convention collective régionale des exploitations forestières scieries Bretagne",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6667,7 +6690,7 @@
   "8541": {
     "idcc": "8541",
     "titre": "Convention collective régionale des exploitations forestières scieries Poitou Charentes",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6687,7 +6710,7 @@
   "8721": {
     "idcc": "8721",
     "titre": "Convention collective régionale des exploitations forestières scieries Massif Gascogne",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6715,7 +6738,7 @@
   "8731": {
     "idcc": "8731",
     "titre": "Convention collective régionale des exploitations forestières scieries Midi Pyrénées",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6743,7 +6766,7 @@
   "8741": {
     "idcc": "8741",
     "titre": "Convention collective régionale des exploitations forestières Limousin",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6763,7 +6786,7 @@
   "8822": {
     "idcc": "8822",
     "titre": "Convention collective régionale des exploitations forestières scieries Rhône Alpes",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6791,7 +6814,7 @@
   "8831": {
     "idcc": "8831",
     "titre": "Convention collective régionale des exploitations forestières scieries Auvergne",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6835,7 +6858,7 @@
   "9022": {
     "idcc": "9022",
     "titre": "Convention collective départementale des exploitations forestières Aisne",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -6887,7 +6910,7 @@
   "9062": {
     "idcc": "9062",
     "titre": "Convention collective départementale des exploitations forestières scieries Alpes Maritimes",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7051,7 +7074,7 @@
   "9211": {
     "idcc": "9211",
     "titre": "Convention collective départementale des exploitations forestières scieries Côte d'or",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7503,7 +7526,7 @@
   "9551": {
     "idcc": "9551",
     "titre": "Convention collective départementale des exploitations forestières Meuse",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7531,7 +7554,7 @@
   "9571": {
     "idcc": "9571",
     "titre": "Convention collective départementale des exploitations forestières Moselle",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7543,7 +7566,7 @@
   "9581": {
     "idcc": "9581",
     "titre": "Convention collective départementale des exploitations forestières Nièvre",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7579,7 +7602,7 @@
   "9602": {
     "idcc": "9602",
     "titre": "Convention collective départementale des exploitations forestières Oise",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7671,7 +7694,7 @@
   "9711": {
     "idcc": "9711",
     "titre": "Convention collective départementale des exploitations forestières Saône et Loire",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7747,7 +7770,7 @@
   "9801": {
     "idcc": "9801",
     "titre": "Convention collective départementale des exploitations forestières Somme",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7839,7 +7862,7 @@
   "9891": {
     "idcc": "9891",
     "titre": "Convention collective départementale des exploitations forestières Yonne",
-    "opco": "akto",
+    "opco": null,
     "statut": "partage",
     "opcos_possibles": [
       "akto",
@@ -7869,7 +7892,7 @@
     "titre": "Convention non encore en vigueur",
     "opco": null,
     "statut": "echappatoire",
-    "note": "Code d'échappement DSN « ___Convention non encore en vigueur___ ». L'OPCO est désigné par l'entreprise en rubrique DSN S21.G00.11.023 selon son activité principale. Sources : table IDCC DSN (net-entreprises.fr) et fiche net-entreprises « IDCC : comment faire la déclaration ? ».",
+    "note": "Code d'échappement DSN « ___Convention non encore en vigueur___ ». L'OPCO est désigné par l'entreprise en rubrique DSN S21.G00.11.023 selon son activité principale. Sources : table IDCC DSN (net-entreprises.fr) et page AKTO « Comment connaître mon opérateur de compétences ».",
     "source": "https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv"
   },
   "9999": {

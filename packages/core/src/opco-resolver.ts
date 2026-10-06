@@ -21,6 +21,11 @@ export interface IdccEntree {
   idcc_cible?: string;
   /** Statut 'partage' : OPCO possibles selon l'activité. */
   opcos_possibles?: string[];
+  /**
+   * true : l'OPCO de cette convention n'est établi par aucune source officielle propre à cet IDCC (repris d'une
+   * ancienne table, ou déduit des conventions qu'elle remplace) ; la note en donne la raison.
+   */
+  a_confirmer?: boolean;
   note?: string;
   source: string;
 }
@@ -50,14 +55,22 @@ export interface ResolutionOpco {
    * suggestion NAF qui désigne l'un d'eux. L'utilisateur choisit alors parmi `candidats`.
    */
   opcoSlug: string | null;
+  /**
+   * `fiable` : un seul OPCO possible, établi par au moins une convention ferme (en vigueur, avec OPCO, non marquée
+   * `a_confirmer`) et aucune convention non rattachée. `a_confirmer` : plusieurs OPCO possibles, convention non
+   * rattachée, rattachement sans convention ferme (conventions fusionnées ou closes, ou marquées `a_confirmer`)
+   * ou suggestion d'après le code NAF. `inconnu` : aucun OPCO identifié. `confirme` n'est jamais produit ici : il
+   * est réservé aux sources sous licence.
+   */
   certitude: CertitudeOpco;
   /** Explication de la résolution, destinée à l'utilisateur. */
   motif: string;
   /** OPCO possibles et conventions qui y mènent ; vide quand la certitude est `inconnu`. */
   candidats: CandidatOpco[];
   /**
-   * IDCC qui fonde `opcoSlug`. Vaut `null` dans les mêmes cas que `opcoSlug` (certitude `inconnu`, ou
-   * `a_confirmer` sans présélection fondée) et quand l'OPCO est seulement suggéré par le code NAF,
+   * IDCC qui fonde `opcoSlug`. Un seul OPCO possible : celui du siège s'il fait partie des conventions de cet OPCO,
+   * sinon la première convention ferme, sinon la première. Vaut `null` dans les mêmes cas que `opcoSlug` (certitude
+   * `inconnu`, ou `a_confirmer` sans présélection fondée) et quand l'OPCO est seulement suggéré par le code NAF,
    * faute de convention exploitable.
    */
   idccRetenu: string | null;
@@ -99,6 +112,32 @@ function phraseVerification(inconnues: string[]): string {
   return inconnues.length === 1
     ? `la convention IDCC ${inconnues[0]} n'a pas pu être rattachée à un OPCO : vérifiez qu'elle ne désigne pas un autre OPCO.`
     : `les conventions IDCC ${inconnues.join(', ')} n'ont pas pu être rattachées à un OPCO : vérifiez qu'elles ne désignent pas un autre OPCO.`;
+}
+
+/**
+ * Phrase du motif pour des conventions dont l'OPCO n'est établi par aucune source officielle propre à cet IDCC
+ * (drapeau `a_confirmer`). Sans point final : le motif y ajoute le sien, ou la phrase de vérification.
+ */
+function phraseAConfirmer(conventions: { idcc: string; titre: string }[]): string {
+  return conventions.length === 1
+    ? `Rattachement à confirmer : l'OPCO de la convention IDCC ${conventions[0].idcc} (${conventions[0].titre}) n'est établi par aucune source officielle propre à cette convention`
+    : `Rattachement à confirmer : l'OPCO des conventions IDCC ${conventions.map((i) => i.idcc).join(', ')} n'est établi par aucune source officielle propre à ces conventions`;
+}
+
+/**
+ * Phrase du motif pour des conventions fusionnées ou closes utilisées sans convention cible : l'OPCO vient de
+ * l'ancienne convention, qui peut avoir changé de champ. Sans point final.
+ */
+function phraseFusionnees(conventions: { idcc: string; titre: string }[]): string {
+  const liste = conventions.map((i) => `IDCC ${i.idcc} (${i.titre})`).join(', ');
+  return conventions.length === 1
+    ? `Rattachement d'après l'ancienne convention ${liste}, fusionnée ou close : à confirmer`
+    : `Rattachement d'après les anciennes conventions ${liste}, fusionnées ou closes : à confirmer`;
+}
+
+/** Note d'une entrée sans son point final (l'avertissement ajoute le sien), ou `parDefaut` si elle est absente. */
+function detailNote(note: string | undefined, parDefaut: string): string {
+  return note?.trim().replace(/\.\s*$/, '') || parDefaut;
 }
 
 export function normaliserIdcc(raw: string): string | null {
@@ -179,6 +218,7 @@ export function resoudreOpco(
   const absentes: string[] = []; // code absent de la table
   const sansOpco: string[] = []; // code présent dans la table, mais aucun OPCO utilisable (non confirmé par une source)
   const fusionnees = new Set<string>(); // conventions fusionnées ou closes utilisées telles quelles (pas de cible utilisable)
+  const marquees = new Set<string>(); // conventions dont l'OPCO n'est établi par aucune source officielle propre à l'IDCC
   for (const code of exploitables) {
     const e = table[code];
     if (!e) {
@@ -192,10 +232,16 @@ export function resoudreOpco(
     }
     if (e.statut === 'partage') {
       // La note complète reste dans l'avertissement (le motif reste court) ; son point final est retiré avant le nôtre.
-      const detail = e.note?.trim().replace(/\.\s*$/, '') || "convention répartie entre plusieurs OPCO selon l'activité";
+      const detail = detailNote(e.note, "convention répartie entre plusieurs OPCO selon l'activité");
       avertissements.push(`IDCC ${code} (${e.titre}) : ${detail}.`);
     }
     if (e.statut === 'fusionne') fusionnees.add(code);
+    if (e.a_confirmer) {
+      // La note donne la raison pour laquelle aucune source officielle n'établit l'OPCO de cette convention.
+      marquees.add(code);
+      const detail = detailNote(e.note, "OPCO non établi par une source officielle propre à cette convention");
+      avertissements.push(`IDCC ${code} (${e.titre}) : ${detail}.`);
+    }
     for (const opco of opcos) {
       const liste = parOpco.get(opco) ?? [];
       liste.push({ idcc: code, titre: e.titre });
@@ -219,16 +265,21 @@ export function resoudreOpco(
   if (candidats.length === 1) {
     const c = candidats[0];
     const conventions = c.idccs.map((i) => `IDCC ${i.idcc} (${i.titre})`).join(', ');
+    // Conventions fermes : en vigueur, avec OPCO, non marquées « à confirmer » (une convention fusionnée redirigée
+    // vers sa cible est jugée sur la cible). Sans aucune convention ferme, aucune source officielle propre à une
+    // convention en vigueur n'établit cet OPCO : la certitude ne peut pas être « fiable ».
+    const fermes = c.idccs.filter((i) => !fusionnees.has(i.idcc) && !marquees.has(i.idcc));
     let certitude: CertitudeOpco = 'fiable';
     let motif = `Identifié via la convention collective ${conventions}`;
-    if (c.idccs.every((i) => fusionnees.has(i.idcc))) {
-      // Le candidat ne repose que sur des conventions fusionnées ou closes, sans convention cible utilisable :
-      // l'OPCO vient de l'ancienne convention, qui peut avoir changé de champ.
+    if (fermes.length === 0) {
       certitude = 'a_confirmer';
-      motif =
-        c.idccs.length === 1
-          ? `Rattachement d'après l'ancienne convention ${conventions}, fusionnée ou close : à confirmer`
-          : `Rattachement d'après les anciennes conventions ${conventions}, fusionnées ou closes : à confirmer`;
+      // Les conventions marquées d'abord, puis les conventions fusionnées ou closes (sans convention cible utilisable).
+      const phrases: string[] = [];
+      const marqueesDuCandidat = c.idccs.filter((i) => marquees.has(i.idcc) && !fusionnees.has(i.idcc));
+      const closesDuCandidat = c.idccs.filter((i) => fusionnees.has(i.idcc));
+      if (marqueesDuCandidat.length > 0) phrases.push(phraseAConfirmer(marqueesDuCandidat));
+      if (closesDuCandidat.length > 0) phrases.push(phraseFusionnees(closesDuCandidat));
+      motif = phrases.join('. ');
     }
     if (verification) {
       // Une convention absente de la table ou sans OPCO confirmé peut désigner un autre OPCO : on ne conclut pas sans confirmation.
@@ -242,8 +293,9 @@ export function resoudreOpco(
       certitude,
       motif,
       candidats,
-      // IDCC du siège s'il fait partie des conventions du candidat, sinon la première
-      idccRetenu: (c.idccs.find((i) => siege.has(i.idcc)) ?? c.idccs[0]).idcc,
+      // IDCC du siège s'il fait partie des conventions du candidat, sinon la première convention ferme (ni close ni
+      // marquée « à confirmer » tant qu'une convention ferme fonde l'OPCO), sinon la première
+      idccRetenu: (c.idccs.find((i) => siege.has(i.idcc)) ?? fermes[0] ?? c.idccs[0]).idcc,
       avertissements,
       urlVerificationOfficielle,
     };
@@ -339,7 +391,8 @@ export function resolveIdccToOpco(idccCodes: string[]): { opcoSlug: string; bran
   for (const brut of idccCodes) {
     const idcc = normaliserIdcc(brut);
     const e = idcc ? EMBEDDED_IDCC[idcc] : undefined;
-    if (idcc && e?.opco && !resultats.some((r) => r.opcoSlug === e.opco)) {
+    // Une convention partagée entre plusieurs OPCO (selon l'activité) ne désigne jamais un OPCO seul.
+    if (idcc && e?.opco && e.statut !== 'partage' && !resultats.some((r) => r.opcoSlug === e.opco)) {
       resultats.push({ opcoSlug: e.opco, brancheName: e.titre, idcc });
     }
   }
