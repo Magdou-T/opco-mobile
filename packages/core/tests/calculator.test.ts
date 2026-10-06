@@ -1045,19 +1045,31 @@ describe('calculateFunding — dispositifs réservés à certaines conventions c
     expect(idsRetenus(opcoTp(), { detectedIdcc: '1596', idccEtablissements: ['1596', '1702'] })).toEqual(['transition-ecologique']);
   });
 
-  it('présent quand la branche appliquée (choix manuel, à un seul IDCC) couvre l\'IDCC, même sans IDCC détecté', () => {
+  it('présent quand la branche appliquée (choix manuel) couvre l\'IDCC, même sans IDCC détecté', () => {
     const opco = opcoAvecDispositif(dispositif({ idcc: ['1702'] }), {
-      variantes_branche: [{ id: 'travaux-publics', branche_nom: 'Travaux publics', idcc: ['1702'], source_url: 'x', confidence: 'exact' }],
+      variantes_branche: [{ id: 'travaux-publics', branche_nom: 'Travaux publics', idcc: ['1702', '2614'], source_url: 'x', confidence: 'exact' }],
     });
     expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null })).toEqual(['transition-ecologique']);
   });
 
-  it('une variante groupée n\'ajoute aucun IDCC : elle n\'ouvre pas les dispositifs des autres conventions du groupe', () => {
+  it('sans aucun IDCC connu, la branche choisie à la main ouvre les dispositifs réservés à chacune de ses conventions, et à elles seules', () => {
+    const opco = makeOpco({
+      dispositifs_complementaires: [
+        dispositif({ id: 'tp-1702', idcc: ['1702'] }),
+        dispositif({ id: 'tp-2614', idcc: ['2614'] }),
+        dispositif({ id: 'batiment-1596', idcc: ['1596'] }),
+      ],
+      variantes_branche: [{ id: 'travaux-publics', branche_nom: 'Travaux publics', idcc: ['1702', '2614'], source_url: 'x', confidence: 'exact' }],
+    });
+    expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null })).toEqual(['tp-1702', 'tp-2614']);
+  });
+
+  it('une variante groupée n\'ajoute aucun IDCC quand l\'entreprise en connaît déjà un : elle n\'ouvre pas les dispositifs des autres conventions du groupe', () => {
     const opco = opcoAvecDispositif(dispositif({ idcc: ['1702'] }), {
       variantes_branche: [{ id: 'travaux-publics', branche_nom: 'Travaux publics', idcc: ['1702', '2614'], source_url: 'x', confidence: 'exact' }],
     });
-    expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null })).toEqual([]); // convention inconnue parmi les deux
     expect(idsRetenus(opco, { detectedIdcc: '2614' })).toEqual([]); // la convention détectée est 2614, le dispositif vise 1702
+    expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null, idccEtablissements: ['2614'] })).toEqual([]); // idem, connue par un établissement
     expect(idsRetenus(opco, { detectedIdcc: '1702' })).toEqual(['transition-ecologique']);
   });
 
@@ -1199,11 +1211,27 @@ describe('calculateFunding — alertes publiées par l\'OPCO', () => {
       expect(avertissementsEpuisement(r.warnings)).toHaveLength(1);
     });
 
-    it('variante groupée choisie manuellement, sans IDCC détecté : aucune convention n\'est supposée, donc aucune alerte de branche', () => {
+    it('variante groupée choisie manuellement, sans aucun IDCC connu : les alertes de toutes les conventions du groupe sont retenues', () => {
+      // L'utilisateur a choisi lui-même la branche : sans IDCC détecté ni IDCC d'établissement, tout ce qu'elle couvre reste disponible.
       const r = calculateFunding(opcoAvecVariante(['0573', '2149']), makeFormationState({ selectedBrancheId: 'groupe', detectedIdcc: null }));
-      expect(r.brancheAppliquee).toBe('Branches groupées'); // le barème de la variante s'applique quand même
-      expect(r.alertes).toEqual([]);
-      expect(avertissementsEpuisement(r.warnings)).toEqual([]);
+      expect(r.brancheAppliquee).toBe('Branches groupées');
+      expect(r.alertes).toEqual([gros, dechet]);
+      expect(avertissementsEpuisement(r.warnings)).toHaveLength(2);
+    });
+
+    it('variante groupée choisie manuellement, avec seulement un IDCC d\'établissement connu : seule l\'alerte de cette convention est retenue', () => {
+      const r = calculateFunding(
+        opcoAvecVariante(['0573', '2149']),
+        makeFormationState({ selectedBrancheId: 'groupe', detectedIdcc: null, idccEtablissements: ['0573'] }),
+      );
+      expect(r.brancheAppliquee).toBe('Branches groupées');
+      expect(r.alertes).toEqual([gros]);
+      expect(avertissementsEpuisement(r.warnings)).toHaveLength(1);
+    });
+
+    it('variante à un seul IDCC : son IDCC est ajouté même quand l\'entreprise en connaît déjà un autre', () => {
+      const r = calculateFunding(opcoAvecVariante(['0573']), makeFormationState({ selectedBrancheId: 'groupe', detectedIdcc: '2149' }));
+      expect(r.alertes).toEqual([gros, dechet]); // 0573 par la branche choisie (un seul IDCC), 2149 par l'IDCC détecté
     });
 
     it('variante groupée : les IDCC des établissements restent pris en compte', () => {

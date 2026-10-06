@@ -653,15 +653,19 @@ function generateNextSteps(opco: OpcoData): { label: string; url: string }[] {
 // ---------------------------------------------------------------------------
 
 /**
- * IDCC de l'entreprise : celui détecté, ceux de ses établissements et, quand la branche appliquée (y compris par choix
- * manuel) n'en compte qu'un seul, celui de cette branche ; sur 4 chiffres et sans doublon.
- * Une variante groupée (plusieurs IDCC) n'ajoute rien : elle ne dit pas de laquelle de ces conventions l'entreprise relève,
- * et lui prêter toutes celles du groupe lui ferait recevoir les alertes et dispositifs des autres.
+ * IDCC de l'entreprise : celui détecté et ceux de ses établissements, auxquels s'ajoutent ceux de la branche appliquée
+ * (y compris par choix manuel) selon ce que l'on sait de l'entreprise ; sur 4 chiffres et sans doublon.
+ * - Aucun IDCC connu (ni détecté, ni d'établissement) : tous ceux de la branche. L'utilisateur l'a choisie lui-même, les
+ *   alertes et dispositifs réservés à ses conventions restent donc disponibles.
+ * - Au moins un IDCC connu : ceux de la branche seulement si elle n'en compte qu'un. Une variante groupée (plusieurs IDCC)
+ *   ne dit pas de laquelle de ces conventions l'entreprise relève : lui prêter toutes celles du groupe lui ferait recevoir
+ *   les alertes et dispositifs des autres.
  */
 function idccEntreprise(state: WizardState, variante: VarianteBranche | null): string[] {
-  const idccDeLaBranche = variante?.idcc.length === 1 ? variante.idcc : [];
-  const codes = [state.detectedIdcc, ...(state.idccEtablissements ?? []), ...idccDeLaBranche];
-  const normalises = codes.filter((c): c is string => !!c).map((c) => c.padStart(4, '0'));
+  const declares = [state.detectedIdcc, ...(state.idccEtablissements ?? [])];
+  const aucunIdccConnu = !declares.some((c) => !!c);
+  const idccDeLaBranche = variante && (aucunIdccConnu || variante.idcc.length === 1) ? variante.idcc : [];
+  const normalises = [...declares, ...idccDeLaBranche].filter((c): c is string => !!c).map((c) => c.padStart(4, '0'));
   return [...new Set(normalises)];
 }
 
