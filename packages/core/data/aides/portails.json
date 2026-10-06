@@ -1,6 +1,7 @@
 {
   "meta": {
-    "perimetre": "Portails officiels par région (Région, Carif-Oref, Transitions Pro, France Travail, Agefiph)"
+    "perimetre": "Portails officiels par région (Région, Carif-Oref, Transitions Pro, France Travail, Agefiph)",
+    "date_integration": null
   },
   "portails": []
 }

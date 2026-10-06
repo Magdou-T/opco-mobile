@@ -1,6 +1,10 @@
 // ============================================================
-// Dataset OPCO embarqué (fallback hors-ligne / source de secours)
-// Agrège les 11 fichiers JSON sourcés en structures prêtes à l'emploi.
+// Données embarquées (fallback hors-ligne / source de secours).
+// Agrège, en structures prêtes à l'emploi :
+//   - les barèmes des 11 OPCO (data/opcos) ;
+//   - la table IDCC → OPCO et les suggestions d'OPCO par code NAF (data/idcc) ;
+//   - le catalogue d'aides, nationales puis régionales, et les portails
+//     régionaux officiels (data/aides).
 // ============================================================
 
 import type { OpcoData } from './types';
