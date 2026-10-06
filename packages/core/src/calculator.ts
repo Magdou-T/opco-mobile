@@ -156,6 +156,9 @@ function enveloppe50Plus(opco: OpcoData, size: CompanySize | null): PlafondTaill
  * Priority: 1. size-specific ceiling, 2. training-type ceiling, 3. null.
  * Un plafond propre à la taille porte sa confiance et sa source quand elles sont renseignées (« exact » et la page de
  * critères de l'OPCO sinon) : il ne doit pas masquer la confiance de la valeur qu'il répète.
+ * Habilitation : `cout_horaire_metier` est le taux publié pour les CQP et certifications, pas celui des formations
+ * réglementaires (parfois plus bas : OPCO EP, immobilier). Le plafond est appliqué (résultat prudent) mais ne s'affiche
+ * jamais « exact » pour une habilitation ; le repli sur `cout_horaire_inter` et un plafond de taille gardent leur confiance.
  */
 function resolveHourlyCeiling(
   opco: OpcoData,
@@ -178,7 +181,11 @@ function resolveHourlyCeiling(
   const fallback = isMetier ? opco.cout_horaire_inter : opco.cout_horaire_metier;
   const chosen = sourcedCeiling.value != null ? sourcedCeiling : fallback;
 
-  return { ceiling: chosen.value, confidence: chosen.confidence, sourceUrl: chosen.source_url };
+  // Une habilitation qui prend le taux « métier » (et non le repli sur « inter ») n'est pas établie par ce taux : « exact » devient « estimated ».
+  const habilitationAuTauxMetier = state.formationType === 'habilitation' && opco.cout_horaire_metier.value != null;
+  const confidence: Confidence = habilitationAuTauxMetier && chosen.confidence === 'exact' ? 'estimated' : chosen.confidence;
+
+  return { ceiling: chosen.value, confidence, sourceUrl: chosen.source_url };
 }
 
 const CERTIFICATIONS_ENREGISTREES: readonly CertificationType[] = ['rncp', 'rs', 'cqp', 'diplome'];

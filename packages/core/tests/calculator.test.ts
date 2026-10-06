@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculateFunding, applyVarianteBranche } from '../src/calculator';
-import type { AlerteOpco, DispositifComplementaire, OpcoData, PlafondTaille, VarianteBranche, WizardState } from '../src/types';
+import type { AlerteOpco, Confidence, DispositifComplementaire, OpcoData, PlafondTaille, VarianteBranche, WizardState } from '../src/types';
 import { makeOpco, makeFormationState } from './fixtures';
 
 describe('calculateFunding — coûts pédagogiques', () => {
@@ -1272,6 +1272,87 @@ describe('calculateFunding — plafond horaire des formations certifiantes (CQP,
   });
 });
 
+describe('calculateFunding — habilitation au taux « métier » : jamais « exact »', () => {
+  // cout_horaire_metier est le taux publié pour les CQP et certifications ; les formations réglementaires (habilitations)
+  // ont parfois un taux distinct (OPCO EP, immobilier : 40 €/h en formation métier, 9,15 €/h appliqué). Le plafond reste
+  // appliqué (résultat prudent), mais il ne s'affiche pas « exact » pour une habilitation.
+  const SOURCE_INTER = 'https://exemple.fr/inter';
+  const SOURCE_METIER = 'https://exemple.fr/metier';
+  const SOURCE_BRANCHE = 'https://exemple.fr/branche/metier';
+  const opcoMetier = (metier: number | null, confidence: Confidence = 'exact', over: Partial<OpcoData> = {}): OpcoData =>
+    makeOpco({
+      cout_horaire_inter: { value: 40, confidence: 'exact', source_url: SOURCE_INTER },
+      cout_horaire_metier: { value: metier, confidence, source_url: SOURCE_METIER },
+      ...over,
+    });
+  const pedagogie = (opco: OpcoData, formationType: WizardState['formationType'], over: Partial<WizardState> = {}) =>
+    calculateFunding(opco, makeFormationState({ formationType, durationHours: 10, pedagogyCostPerHour: 40, ...over })).lines.find(
+      (l) => l.poste === 'pedagogie',
+    )!;
+
+  it('habilitation : le plafond « métier » exact s\'applique comme avant, mais la ligne pédagogie est « estimated »', () => {
+    const peda = pedagogie(opcoMetier(25), 'habilitation');
+    expect(peda.requestedAmount).toBe(400);
+    expect(peda.fundedAmount).toBe(250); // 10 h × 25 €/h : le montant ne change pas
+    expect(peda.note).toBe('Plafond horaire : 25 €/h');
+    expect(peda.confidence).toBe('estimated');
+    expect(peda.sourceUrl).toBe(SOURCE_METIER);
+  });
+
+  it.each(['cqp', 'certification'] as const)('%s : le plafond « métier » exact reste « exact » (taux des formations certifiantes)', (formationType) => {
+    const peda = pedagogie(opcoMetier(25), formationType);
+    expect(peda.fundedAmount).toBe(250);
+    expect(peda.confidence).toBe('exact');
+    expect(peda.sourceUrl).toBe(SOURCE_METIER);
+  });
+
+  it.each(['estimated', 'depends_on_branche'] as const)('habilitation : un plafond « métier » « %s » garde sa confiance', (confidence) => {
+    const peda = pedagogie(opcoMetier(25, confidence), 'habilitation');
+    expect(peda.fundedAmount).toBe(250);
+    expect(peda.confidence).toBe(confidence);
+  });
+
+  it('habilitation sans plafond « métier » (null) : repli sur cout_horaire_inter, avec sa confiance « exact »', () => {
+    const peda = pedagogie(opcoMetier(null), 'habilitation');
+    expect(peda.fundedAmount).toBe(400); // 10 h × 40 €/h du champ « inter »
+    expect(peda.confidence).toBe('exact');
+    expect(peda.sourceUrl).toBe(SOURCE_INTER);
+  });
+
+  it.each([
+    ['sans confiance ni source propres', {}],
+    ['avec sa propre confiance « exact » et sa source', { confidence: 'exact' as const, source_url: 'https://exemple.fr/branche/plafond' }],
+  ])('habilitation, plafond propre à la taille %s : reste « exact »', (_libelle, propre) => {
+    const opco = opcoMetier(25, 'exact', {
+      plafonds_par_taille: [
+        { taille: 'less_11', cout_horaire_max: 30, budget_annuel_max: null, quota_horaire_max: null, description: 'Moins de 11 salariés : 30 €/h', ...propre },
+      ],
+    });
+    const peda = pedagogie(opco, 'habilitation');
+    expect(peda.fundedAmount).toBe(300); // 10 h × 30 €/h : le plafond de la taille prime sur le plafond « métier »
+    expect(peda.confidence).toBe('exact');
+  });
+
+  it('habilitation avec une variante de branche : le plafond « métier » exact de la variante est « estimated » lui aussi', () => {
+    const opco = opcoMetier(25, 'exact', {
+      variantes_branche: [
+        {
+          id: 'branche',
+          branche_nom: 'Branche',
+          idcc: ['1234'],
+          source_url: 'https://exemple.fr/branche',
+          confidence: 'exact',
+          cout_horaire_metier: { value: 15, confidence: 'exact', source_url: SOURCE_BRANCHE },
+        },
+      ],
+    });
+    const peda = pedagogie(opco, 'habilitation', { detectedIdcc: '1234' });
+    expect(peda.fundedAmount).toBe(150); // 10 h × 15 €/h
+    expect(peda.confidence).toBe('estimated');
+    expect(peda.sourceUrl).toBe(SOURCE_BRANCHE);
+  });
+});
+
 describe('calculateFunding — plafond horaire par taille : confiance et source de la valeur', () => {
   const PAGE_CRITERES = 'https://exemple.fr/criteres';
   const SOURCE_PLAFOND = 'https://exemple.fr/branche/plafonds';
@@ -1490,6 +1571,51 @@ describe('calculateFunding — plafond annuel estimé : mention « à confirmer 
   it('le détail de la ligne pédagogie n\'est pas modifié par la mention', () => {
     const peda = calculateFunding(opcoPlafonne('estimated', 'pedagogie'), etat()).lines.find((l) => l.poste === 'pedagogie')!;
     expect(peda.details?.some((d) => d.includes('montant estimé'))).toBe(false);
+  });
+
+  // Données réelles (AFDAS, Atlas, ALISFA) : le budget annuel de l'OPCO n'a pas de valeur (null), le plafond est posé par taille.
+  describe('plafond annuel posé par taille (budget annuel de l\'OPCO sans valeur)', () => {
+    const plafondTpe: PlafondTaille = {
+      taille: 'less_11',
+      cout_horaire_max: null,
+      budget_annuel_max: 2000,
+      quota_horaire_max: null,
+      description: 'Moins de 11 salariés : 2 000 € par an',
+    };
+    const opcoPlafondParTaille = (confidence: 'exact' | 'estimated' | 'depends_on_branche', portee?: 'global' | 'pedagogie'): OpcoData =>
+      makeOpco({
+        cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
+        prise_en_charge_salaires: { value: 12, confidence: 'exact', source_url: 'x' },
+        prise_en_charge_salaires_mode: 'euro_par_heure',
+        budget_annuel_max: { value: null, confidence, source_url: 'x' },
+        budget_annuel_portee: portee,
+        plafonds_par_taille: [plafondTpe],
+      });
+
+    it.each([undefined, 'pedagogie'] as const)(
+      'budget annuel de l\'OPCO estimé (portée %s) : le plafond de la taille s\'applique et chaque message de plafond se termine par la mention',
+      (portee) => {
+        const r = calculateFunding(opcoPlafondParTaille('estimated', portee), etat());
+        expect(r.budgetCapApplied).toBe(true);
+        expect(r.budgetCapAmount).toBe(2000); // plafond de la taille, et non budget_annuel_max.value (null)
+        const messages = messagesDePlafond(r.warnings);
+        expect(messages).toHaveLength(portee === 'pedagogie' ? 2 : 1); // calcPedagogy (montant) puis generateWarnings (plafond appliqué)
+        for (const m of messages) expect(m.endsWith(MENTION), m).toBe(true);
+      },
+    );
+
+    it.each([undefined, 'pedagogie'] as const)(
+      'budget annuel de l\'OPCO « exact » (portée %s) : le plafond de la taille s\'applique, aucune mention d\'estimation',
+      (portee) => {
+        const r = calculateFunding(opcoPlafondParTaille('exact', portee), etat());
+        expect(r.budgetCapApplied).toBe(true);
+        expect(r.budgetCapAmount).toBe(2000);
+        const messages = messagesDePlafond(r.warnings);
+        expect(messages.length).toBeGreaterThan(0);
+        expect(r.warnings.some((w) => w.includes('montant estimé'))).toBe(false);
+        for (const m of messages) expect(m.endsWith('.'), m).toBe(true);
+      },
+    );
   });
 });
 

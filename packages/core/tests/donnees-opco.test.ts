@@ -115,6 +115,8 @@ function controlerIdcc(opcos: OpcoData[]): string[] {
 /**
  * Plafond horaire par taille : une valeur qui répète un plafond du même niveau (inter, intra, métier) doit rester à null,
  * sinon elle masque la confiance et la source du champ ; une valeur propre à la taille porte sa confiance et sa source.
+ * Le contrôle est inconditionnel : toute valeur non nulle sans confidence ou sans source_url https est signalée, qu'elle
+ * répète ou non un champ du même niveau (le moteur l'afficherait « exact », avec la page de critères de l'OPCO).
  * Le niveau est celui que voit le moteur (variante appliquée au barème par défaut).
  */
 function controlerPlafondsHoraires(opcos: OpcoData[]): string[] {
@@ -132,8 +134,12 @@ function controlerPlafondsHoraires(opcos: OpcoData[]): string[] {
         const repetes = (['cout_horaire_inter', 'cout_horaire_intra', 'cout_horaire_metier'] as const).filter(
           (champ) => bareme[champ].value === p.cout_horaire_max,
         );
-        if (!propre && repetes.length > 0) {
-          problemes.push(`${ou} : ${p.cout_horaire_max} répète ${repetes.join(' et ')} du même niveau sans confidence ni source_url propres (mettre null)`);
+        if (!propre) {
+          problemes.push(
+            repetes.length > 0
+              ? `${ou} : ${p.cout_horaire_max} répète ${repetes.join(' et ')} du même niveau sans confidence ni source_url propres (mettre null)`
+              : `${ou} : ${p.cout_horaire_max} sans confidence ni source_url https propres (le moteur afficherait « exact »)`,
+          );
         }
         if (p.confidence === 'exact' && !contientValeur(p.description, p.cout_horaire_max)) {
           problemes.push(`${ou} : « exact » mais la description ne cite pas ${p.cout_horaire_max}`);
@@ -414,6 +420,26 @@ describe('les contrôles détectent une copie mutée', () => {
       expect(controlerPlafondsHoraires(copie)).toHaveLength(1);
     });
 
+    it('un plafond propre à la taille privé de sa confiance est signalé, même s\'il ne répète aucun champ du même niveau', () => {
+      const copie = muter((opcos) => {
+        const p = varianteDans(opcos, 'akto', 'hcr').plafonds_par_taille!.find((x) => x.taille === '50_299')!;
+        delete p.confidence; // 35 €/h « estimated » : sans confidence, le moteur afficherait « exact »
+      });
+      expect(controlerPlafondsHoraires(copie)).toEqual([
+        'akto[hcr].plafonds_par_taille[50_299].cout_horaire_max : 35 sans confidence ni source_url https propres (le moteur afficherait « exact »)',
+      ]);
+    });
+
+    it('un plafond propre à la taille privé de sa source est signalé, même s\'il ne répète aucun champ du même niveau', () => {
+      const copie = muter((opcos) => {
+        const p = varianteDans(opcos, 'constructys', 'batiment').plafonds_par_taille!.find((x) => x.taille === 'less_11')!;
+        delete p.source_url; // 24 €/h « exact » : sans source_url, le moteur renverrait la page de critères de l'OPCO
+      });
+      expect(controlerPlafondsHoraires(copie)).toEqual([
+        'constructys[batiment].plafonds_par_taille[less_11].cout_horaire_max : 24 sans confidence ni source_url https propres (le moteur afficherait « exact »)',
+      ]);
+    });
+
     it('un plafond propre à la taille « exact » doit citer sa valeur dans sa description', () => {
       const copie = muter((opcos) => {
         const p = dans(opcos, 'constructys').plafonds_par_taille!.find((x) => x.taille === 'less_11')!;
@@ -619,7 +645,7 @@ describe('corrections des barèmes (tâche 8c)', () => {
   });
 
   it('les fichiers modifiés ont été revérifiés le 2026-10-06', () => {
-    for (const slug of ['ocapiat', 'opco-ep', 'opco-sante', 'uniformation']) {
+    for (const slug of ['akto', 'ocapiat', 'opco-ep', 'opco-sante', 'opcommerce', 'uniformation']) {
       expect(par(slug).derniere_verification, slug).toBe('2026-10-06');
     }
   });
