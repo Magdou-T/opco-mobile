@@ -42,6 +42,7 @@ export const PlafondTailleSchema = z.object({
   budget_annuel_max: z.number().nullable(),
   quota_horaire_max: z.number().nullable(),
   description: z.string(),
+  prise_en_charge_salaires_horaire: z.number().nonnegative().nullable().optional(),
 });
 
 /** Une seule entrée par taille : le calcul ne retiendrait que la première. */
@@ -75,11 +76,13 @@ export const VarianteBrancheSchema = z.object({
   cout_horaire_metier: SourcedNumberSchema.optional(),
   cout_horaire_seuils: z.array(CoutHoraireSeuilSchema).optional(),
   cout_horaire_seuils_mode: ModeSeuilsSchema.optional(),
+  cout_horaire_seuils_certifiant: z.boolean().optional(),
   prise_en_charge_salaires: SourcedNumberSchema.optional(),
   prise_en_charge_salaires_mode: ModeSalairesSchema.optional(),
   frais_transport: SourcedNumberSchema.optional(),
   frais_hebergement: SourcedNumberSchema.optional(),
   frais_restauration: SourcedNumberSchema.optional(),
+  frais_annexes_pourcentage: SourcedNumberSchema.optional(),
   budget_annuel_max: SourcedNumberSchema.optional(),
   budget_annuel_portee: PorteeBudgetSchema.optional(),
   budget_annuel_description: z.string().optional(),
@@ -98,8 +101,29 @@ export const DispositifComplementaireSchema = z.object({
   demarches: z.string().min(1),
   tailles_eligibles: z.array(CompanySizeSchema).nullable(),
   publics: z.string().nullable(),
+  idcc: z.array(z.string().regex(/^\d{4}$/)).optional(),
+  note: z.string().optional(),
   confidence: ConfidenceSchema,
   source_url: z.string(),
+});
+
+/** Alerte datée et sourcée publiée par un OPCO ; `idcc` vide = toutes les entreprises de l'OPCO. */
+export const AlerteOpcoSchema = z.object({
+  type: z.enum([
+    'fonds_epuises',
+    'changement_criteres',
+    'dispositif_termine',
+    'dispositif_non_confirme',
+    'changement_paiement',
+    'acces_restreint',
+    'evolution_en_cours_annee',
+    'echeance',
+  ]),
+  branche: z.string().min(1),
+  idcc: z.array(z.string().regex(/^\d{4}$/)),
+  source_url: HttpsUrlSchema,
+  extrait: z.string().min(1),
+  verifie_le: DateIsoSchema,
 });
 
 export const OpcoDataSchema = z.object({
@@ -118,6 +142,7 @@ export const OpcoDataSchema = z.object({
   cout_horaire_metier: SourcedNumberSchema,
   cout_horaire_seuils: z.array(CoutHoraireSeuilSchema).optional(),
   cout_horaire_seuils_mode: ModeSeuilsSchema.optional(),
+  cout_horaire_seuils_certifiant: z.boolean().optional(),
 
   prise_en_charge_salaires: SourcedNumberSchema,
   prise_en_charge_salaires_mode: ModeSalairesSchema,
@@ -160,6 +185,8 @@ export const OpcoDataSchema = z.object({
   dispositifs_complementaires: z.array(DispositifComplementaireSchema).optional(),
   variantes_branche: z.array(VarianteBrancheSchema).optional(),
   derniere_verification: DateIsoSchema.optional(),
+  alertes: z.array(AlerteOpcoSchema).optional(),
+  note_variantes: z.string().optional(),
 });
 
 /**
@@ -191,6 +218,7 @@ export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
   for (const p of o.plafonds_par_taille ?? []) {
     inRange(p.cout_horaire_max, 0, 200, `plafond[${p.taille}].cout_horaire_max`);
     inRange(p.budget_annuel_max, 0, 1_000_000, `plafond[${p.taille}].budget_annuel_max`);
+    inRange(p.prise_en_charge_salaires_horaire ?? null, 0, 200, `plafond[${p.taille}].prise_en_charge_salaires_horaire`);
   }
   for (const d of o.dispositifs_complementaires ?? []) {
     inRange(d.montant_max, 0, 100_000, `dispositif[${d.id}].montant_max`);
@@ -199,11 +227,18 @@ export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
   for (const v of o.variantes_branche ?? []) {
     inRange(v.cout_horaire_inter?.value ?? null, 0, 200, `variante[${v.id}].cout_horaire_inter`);
     inRange(v.cout_horaire_metier?.value ?? null, 0, 200, `variante[${v.id}].cout_horaire_metier`);
+    inRange(v.frais_annexes_pourcentage?.value ?? null, 0, 100, `variante[${v.id}].frais_annexes_pourcentage`);
     inRange(v.budget_annuel_max?.value ?? null, 0, 1_000_000, `variante[${v.id}].budget_annuel_max`);
     verifierBareme(v.cout_horaire_seuils, `variante[${v.id}].`);
     for (const p of v.plafonds_par_taille ?? []) {
       inRange(p.cout_horaire_max, 0, 200, `variante[${v.id}].plafond[${p.taille}].cout_horaire_max`);
       inRange(p.budget_annuel_max, 0, 1_000_000, `variante[${v.id}].plafond[${p.taille}].budget_annuel_max`);
+      inRange(
+        p.prise_en_charge_salaires_horaire ?? null,
+        0,
+        200,
+        `variante[${v.id}].plafond[${p.taille}].prise_en_charge_salaires_horaire`,
+      );
     }
   }
   return issues;

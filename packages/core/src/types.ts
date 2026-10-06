@@ -54,6 +54,8 @@ export interface OpcoData {
   /** Barème dégressif selon la durée (prioritaire sur les plafonds horaires ci-dessus). */
   cout_horaire_seuils?: CoutHoraireSeuil[];
   cout_horaire_seuils_mode?: ModeSeuils;
+  /** true : le barème dégressif ne s'applique qu'aux formations certifiantes ; sinon le plafond horaire habituel s'applique. */
+  cout_horaire_seuils_certifiant?: boolean;
 
   // Prise en charge salaires
   prise_en_charge_salaires: SourcedValue<number | null>;
@@ -113,6 +115,11 @@ export interface OpcoData {
 
   /** Date de dernière vérification des barèmes auprès des sources officielles (AAAA-MM-JJ). */
   derniere_verification?: string;
+
+  /** Alertes publiées par l'OPCO (fonds épuisés, changements en cours d'année…), datées et sourcées. */
+  alertes?: AlerteOpco[];
+  /** Précision sur les barèmes par branche (par exemple pourquoi il n'y a pas de variante). */
+  note_variantes?: string;
 }
 
 /**
@@ -136,11 +143,19 @@ export interface VarianteBranche {
   cout_horaire_metier?: SourcedValue<number | null>;
   cout_horaire_seuils?: CoutHoraireSeuil[];
   cout_horaire_seuils_mode?: ModeSeuils;
+  /**
+   * true : le barème dégressif ne s'applique qu'aux formations certifiantes ; sinon le plafond horaire habituel s'applique.
+   * Le drapeau suit le barème : absent, la variante reprend celui de l'OPCO avec ses seuils. Une variante qui publie ses
+   * propres seuils doit le préciser quand le barème de l'OPCO est réservé aux certifiantes (false : valable pour toutes les formations).
+   */
+  cout_horaire_seuils_certifiant?: boolean;
   prise_en_charge_salaires?: SourcedValue<number | null>;
   prise_en_charge_salaires_mode?: OpcoData['prise_en_charge_salaires_mode'];
   frais_transport?: SourcedValue<number | null>;
   frais_hebergement?: SourcedValue<number | null>;
   frais_restauration?: SourcedValue<number | null>;
+  /** Forfait de frais annexes en % des coûts pédagogiques financés ; value null : pas de forfait dans cette branche. */
+  frais_annexes_pourcentage?: SourcedValue<number | null>;
   budget_annuel_max?: SourcedValue<number | null>;
   budget_annuel_portee?: PorteeBudget;
   budget_annuel_description?: string;
@@ -153,6 +168,8 @@ export interface PlafondTaille {
   budget_annuel_max: number | null;
   quota_horaire_max: number | null;
   description: string;
+  /** Prise en charge des salaires en €/h propre à cette taille (mode euro_par_heure). Absent : taux de l'OPCO ; null : pas de prise en charge pour cette taille. */
+  prise_en_charge_salaires_horaire?: number | null;
 }
 
 /**
@@ -184,9 +201,50 @@ export interface DispositifComplementaire {
   tailles_eligibles: CompanySize[] | null;
   /** Public visé si restreint (ex. « salariés de 50 ans et plus »). */
   publics: string | null;
+  /** Réservé aux entreprises de ces conventions collectives (IDCC sur 4 chiffres) ; absent ou vide : toutes les entreprises. */
+  idcc?: string[];
+  /** Précision sur le dispositif (portée, plafond, particularité). */
+  note?: string;
   confidence: Confidence;
   source_url: string;
 }
+
+// --- Alertes publiées par les OPCO ---
+
+export type TypeAlerteOpco =
+  | 'fonds_epuises'
+  | 'changement_criteres'
+  | 'dispositif_termine'
+  | 'dispositif_non_confirme'
+  | 'changement_paiement'
+  | 'acces_restreint'
+  | 'evolution_en_cours_annee'
+  | 'echeance';
+
+/** Alerte datée et sourcée publiée par un OPCO (ex. enveloppe épuisée dans une branche). */
+export interface AlerteOpco {
+  type: TypeAlerteOpco;
+  /** Branche ou périmètre concerné, tel que publié. */
+  branche: string;
+  /** IDCC concernés ; vide = toutes les entreprises de l'OPCO. */
+  idcc: string[];
+  source_url: string;
+  /** Extrait mot pour mot de la source. */
+  extrait: string;
+  /** Date de vérification (AAAA-MM-JJ). */
+  verifie_le: string;
+}
+
+export const ALERTE_OPCO_LABELS: Record<TypeAlerteOpco, string> = {
+  fonds_epuises: 'Fonds épuisés',
+  changement_criteres: 'Critères modifiés',
+  dispositif_termine: 'Dispositif terminé',
+  dispositif_non_confirme: 'Dispositif non confirmé',
+  changement_paiement: 'Modalités de paiement modifiées',
+  acces_restreint: 'Accès restreint',
+  evolution_en_cours_annee: "Évolution en cours d'année",
+  echeance: 'Échéance',
+};
 
 // --- Wizard / User Input Types ---
 
@@ -440,6 +498,8 @@ export interface FundingResult {
    */
   enveloppeMaxPotentielle: number;
   warnings: string[];
+  /** Alertes publiées par l'OPCO qui concernent l'entreprise (sa convention collective, ou toutes les branches). */
+  alertes: AlerteOpco[];
   conditions: string[];
   /** Démarches concrètes, dans l'ordre, pour obtenir le financement. */
   demarches: string[];
