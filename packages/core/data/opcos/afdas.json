@@ -1,143 +1,510 @@
 {
   "slug": "afdas",
   "name": "AFDAS",
-  "secteurs": "Arts, audiovisuel, cinema, spectacle vivant, presse, communication, sport, tourisme, loisirs",
-  "secteurs_source": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
-  "email_contact": "contact@afdas.com",
-  "url_finance_page": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+  "secteurs": "Culture, industries créatives, médias, communication, télécommunications, sport, tourisme, loisirs et divertissement",
+  "secteurs_source": "https://www.afdas.com/lafdas/nos-branches-professionnelles.html",
+  "email_contact": "",
+  "url_finance_page": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/financement-de-la-formation-pour-les-structures-de-moins-de-50-salaries.html",
   "types_formations": [
-    "Formations interprofessionnelles",
-    "Formations metier",
-    "Certifications",
-    "CQP de branche"
+    "Plan de développement des compétences (structures de moins de 50 salariés)",
+    "Plans conventionnels de branche (toutes tailles, selon la branche)",
+    "VAE et bilan de compétences (dans le plafond PDC)",
+    "Contrat d'apprentissage",
+    "Contrat de professionnalisation",
+    "Période de reconversion",
+    "Formation des tuteurs et maîtres d'apprentissage"
   ],
-  "types_formations_source": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
+  "types_formations_source": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/en-savoir-plus-connaitre-les-financements-possibles.html",
   "cout_horaire_inter": {
     "value": 40,
     "confidence": "exact",
-    "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/financement-de-la-formation-pour-les-structures-de-moins-de-50-salaries.html",
-    "note": "40 euros/h/stagiaire maximum, quel que soit le type de formation (y compris VAE, bilan de competences) - criteres AFDAS 2026 (confirmes janvier 2026)"
+    "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
+    "note": "« À ces plafonds annuels s’ajoute un barème horaire maximum de 40€ par heure de formation et par stagiaire. » Barème unique du PDC des structures de moins de 50 salariés, dans la limite du plafond annuel. (vérifié le 2026-10-05)"
   },
   "cout_horaire_intra": {
-    "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
-    "note": "Selon accord branche"
+    "value": 40,
+    "confidence": "exact",
+    "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
+    "note": "« À ces plafonds annuels s’ajoute un barème horaire maximum de 40€ par heure de formation et par stagiaire. » ; « Cette prise en charge des coûts pédagogiques s’effectue à l’intérieur du plafond quel que soit le type de formation (y compris VAE, bilan de compétences » Aucun barème intra distinct : le plafond de 40 € HT/h/stagiaire s'applique quel que soit le format. (vérifié le 2026-10-05)"
   },
   "cout_horaire_metier": {
-    "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
-    "note": "Pas de source officielle AFDAS pour un plafond metier unique, varie selon branche"
+    "value": 40,
+    "confidence": "exact",
+    "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
+    "note": "« À ces plafonds annuels s’ajoute un barème horaire maximum de 40€ par heure de formation et par stagiaire. » ; « Cette prise en charge des coûts pédagogiques s’effectue à l’intérieur du plafond quel que soit le type de formation (y compris VAE, bilan de compétences » Pas de barème métier distinct pour le PDC légal ; certaines branches financent leurs certifications hors plafond (voir variantes). (vérifié le 2026-10-05)"
   },
   "prise_en_charge_salaires": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
-    "note": "NON pris en charge au titre du plan de developpement des competences : la prise en charge 2026 est 'strictement limitee aux couts pedagogiques' (frais pedagogiques, materiel, location de salle, deplacement du formateur, inscription). Un eventuel relai via fonds conventionnels depend de la branche."
+    "note": "« Désormais, la prise en charge au titre du plan de développement des compétences est strictement limitée aux coûts pédagogiques » Salaires non pris en charge sur le PDC des moins de 50 salariés. Seuls certains plans conventionnels en financent (ex. exploitation cinématographique : 13 €/h pour ses certifications de branche). (vérifié le 2026-10-05)"
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
     "confidence": "exact",
-    "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
-    "note": "Frais annexes NON pris en charge au PDC 2026, SAUF entreprises des DROM (bareme kilometrique 4CV, 0,606 euros/km, 1 A/R par module ou 30 jours) et contrats de professionnalisation."
+    "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-frais-annexes-hebergement-repas-restauration-criteres-de-prise-en-charge.html",
+    "note": "« Le Plan de développement des compétences pour les structures de moins de 50 salariés d’Outre-Mer uniquement (en dehors des plafonds de financement) » ; « Frais de transport : Barème kilométrique sur la base 4CV et moins » Non pris en charge en métropole. DROM uniquement (hors plafond) : formation à au moins 50 km, un aller-retour par module ou par période de 30 jours. (vérifié le 2026-10-05)"
   },
   "frais_hebergement": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-frais-annexes-hebergement-repas-restauration-criteres-de-prise-en-charge.html",
-    "note": "NON pris en charge au PDC 2026, sauf DROM/contrat de professionnalisation : forfait combine repas+hebergement de 87 euros/jour (depuis le 01/06/2026)."
+    "note": "« Le Plan de développement des compétences pour les structures de moins de 50 salariés d’Outre-Mer uniquement (en dehors des plafonds de financement) » ; « Frais de repas et d’hébergement : 87€ depuis le 1er juin 2026 » Non pris en charge en métropole ; DROM et contrat de professionnalisation : forfait repas + hébergement de 87 € par jour de formation. (vérifié le 2026-10-05)"
   },
   "frais_restauration": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-frais-annexes-hebergement-repas-restauration-criteres-de-prise-en-charge.html",
-    "note": "NON pris en charge au PDC 2026, sauf DROM/contrat de professionnalisation (forfait combine 87 euros/jour avec l'hebergement)."
+    "note": "« Frais de repas et d’hébergement : 87€ depuis le 1er juin 2026 » Non pris en charge en métropole ; forfait combiné repas + hébergement de 87 €/jour réservé aux DROM et au contrat de professionnalisation. (vérifié le 2026-10-05)"
   },
   "frais_annexes_pourcentage": {
     "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
-    "note": "Selon bareme branche"
+    "confidence": "exact",
+    "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
+    "note": "« Les frais annexes ne sont pas pris en charge, sauf pour les entreprises des DROM (La Réunion, Guadeloupe, Martinique, Guyane), pour lesquelles ces frais continuent d’être financés en dehors du plafond » Aucun forfait en pourcentage. (vérifié le 2026-10-05)"
   },
   "budget_annuel_max": {
     "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html",
-    "note": "Plafond annuel HT varie selon effectif, voir plafonds_par_taille"
+    "confidence": "exact",
+    "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
+    "note": "« ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » Plafond selon l'effectif (voir plafonds_par_taille) ; aucun fonds mutualisé à partir de 50 salariés. (vérifié le 2026-10-05)"
   },
+  "budget_annuel_portee": "pedagogie",
+  "budget_annuel_description": "Plafond annuel 2026 des coûts pédagogiques : 1 100 € HT (moins de 11 salariés) et 1 800 € HT (11 à 49 salariés), avec un barème de 40 € HT/h/stagiaire, dans la limite des fonds disponibles. VAE, bilan de compétences et formations santé-sécurité des membres du CSE sont imputés sur ce plafond. À partir de 50 salariés : pas de fonds mutualisés (plans conventionnels de branche ou versement volontaire).",
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+  "profils_candidats": [
+    "Salariés en CDI ou CDD, y compris apprentis et dirigeants salariés",
+    "Intermittents du spectacle et de l'audiovisuel (fonds dédiés)",
+    "Artistes-auteurs (fonds dédiés)",
+    "Journalistes pigistes (fonds dédiés)"
+  ],
+  "tailles_cibles": "PDC mutualisé réservé aux structures de moins de 50 salariés ; plans conventionnels de branche pour toutes les tailles",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+  "processus_approbation": "Déposer la demande de prise en charge sur l'espace adhérent MyA avant le début de la formation (au moins 2 semaines avant est recommandé, obligatoire pour les fonds conventionnels) ; organisme certifié Qualiopi ; financement dans la limite des fonds disponibles.",
+  "delai_validation": "Non publié pour le plan de développement des compétences (contrat de professionnalisation : décision sous 20 jours calendaires).",
+  "mode_paiement": "Depuis le 1er octobre 2026 (réforme de la TVA des OPCO) : paiement direct de l'organisme par l'Afdas (subrogation) maintenu pour les formations financées à 100 % sur le PDC des moins de 50 salariés et pour l'apprentissage ; pour les autres dossiers (cofinancements, fonds conventionnels, versement volontaire), nouveau circuit de facturation et de remboursement.",
+  "alternance_apprentissage": "Contrat financé selon les niveaux de prise en charge applicables. Aide à l'exercice de la fonction de maître d'apprentissage : 65 € HT par mois pendant 10 mois maximum (structures de moins de 11 salariés et GE/GEIQ, contrats déposés depuis le 1er janvier 2026). Formation du maître d'apprentissage : 15 € HT/h, 21 h maximum.",
+  "alternance_professionnalisation": "Coût pédagogique pris en charge de 9,15 € à 25 € par heure selon le niveau de certification et le public ; frais annexes selon barème (87 €/jour repas + hébergement depuis le 1er juin 2026) ; demande à déposer sur MyA dans les 5 jours suivant le début d'exécution du contrat, décision sous 20 jours calendaires. Aide tutorale : 65 € HT/mois, 10 mois maximum (moins de 11 salariés et GE/GEIQ).",
+  "cpf_abondement": true,
+  "cpf_details": "Dotation CPF possible pour co-construire un projet de formation avec un salarié. Certaines branches cofinancent (ex. presse en région : dotation alimentée pour moitié par les fonds conventionnels, dans la limite de 2 000 €).",
+  "vae_possible": true,
+  "vae_details": "VAE et bilan de compétences pris en charge dans le plafond annuel du PDC (1 100 € / 1 800 € HT, 40 €/h). Certaines branches financent la VAE hors plafond, jusqu'à 3 000 € par parcours (audiovisuel, hôtellerie de plein air, loisirs, organismes de tourisme).",
+  "limite_dossiers_an": "Dans la limite du plafond annuel (1 100 € ou 1 800 € HT) et des fonds disponibles",
+  "specificites": "Barème unique 40 € HT/h/stagiaire et plafonds 2026 abaissés (1 100 € / 1 800 € HT) | Coûts pédagogiques uniquement : salaires et frais annexes non financés (sauf DROM) | 13 branches ont un plan conventionnel qui prend le relais du plafond légal | Fonds dédiés aux intermittents, artistes-auteurs et journalistes pigistes | Réforme TVA au 1er octobre 2026 : subrogation limitée aux dossiers 100 % PDC moins de 50 salariés",
+  "points_cles_maximisation": "Mobiliser d'abord le plafond légal (1 100 € / 1 800 € HT) puis le plan conventionnel de votre branche | Déposer sur MyA avant le démarrage | Vérifier les actions que votre branche finance hors plafond (VHSS, transition écologique, certifications de branche, VAE) | DROM : frais annexes financés hors plafond",
   "plafonds_par_taille": [
     {
       "taille": "less_11",
       "cout_horaire_max": 40,
       "budget_annuel_max": 1100,
       "quota_horaire_max": null,
-      "description": "Moins de 11 salaries: 1 100 euros HT/an, plafond 40 euros/h - criteres AFDAS 2026"
+      "description": "Moins de 11 salariés : 1 100 € HT/an de coûts pédagogiques, 40 € HT/h/stagiaire (critères 2026, dans la limite des fonds disponibles)."
     },
     {
       "taille": "11_49",
       "cout_horaire_max": 40,
       "budget_annuel_max": 1800,
       "quota_horaire_max": null,
-      "description": "11 a 49 salaries: 1 800 euros HT/an, plafond 40 euros/h - criteres AFDAS 2026"
+      "description": "11 à 49 salariés : 1 800 € HT/an de coûts pédagogiques, 40 € HT/h/stagiaire (critères 2026, dans la limite des fonds disponibles)."
     },
     {
       "taille": "50_299",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "50+ salaries: pas de financement PDC mutualise. Fonds conventionnels selon branche."
+      "description": "50 salariés et plus : pas de fonds mutualisés PDC. Financement possible par le plan conventionnel de la branche (montant selon la branche) ou par versement volontaire."
     },
     {
       "taille": "300_plus",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "300+ salaries: pas de financement PDC mutualise. Fonds conventionnels selon branche."
+      "description": "300 salariés et plus : pas de fonds mutualisés PDC. Plan conventionnel de la branche (selon la branche) ou versement volontaire."
     }
   ],
-  "budget_annuel_description": "Budget annuel HT selon effectif: 1 100 euros (<11 sal.), 1 800 euros (11-49 sal.) - criteres 2026",
-  "quota_horaire_min": null,
-  "quota_horaire_max": null,
-  "profils_candidats": [
-    "Intermittents du spectacle",
-    "Salaries en CDI/CDD",
-    "Demandeurs d'emploi"
-  ],
-  "tailles_cibles": "Toutes tailles (intermittents)",
-  "priorite_tpe_pme": false,
-  "duree_min_formation": null,
-  "processus_approbation": "Demande via MyA (dematerialise)",
-  "delai_validation": "Delai non publie officiellement. Demande via MyA, dans la limite des fonds disponibles.",
-  "mode_paiement": "Tiers-payant ou remboursement",
-  "alternance_apprentissage": "Apprentissage selon CQP branche",
-  "alternance_professionnalisation": "Selon accord branche",
-  "cpf_abondement": true,
-  "cpf_details": "Abondement CPF intermittents (5000-12000 euros)",
-  "vae_possible": true,
-  "vae_details": "Oui - possible selon accord",
-  "limite_dossiers_an": "Selon accord branche",
-  "specificites": "Intermittents: abondement CPF 5-12k euros | Budget plan de dev. competences selon effectif",
-  "points_cles_maximisation": "Verifier plafond selon effectif | Intermittents: abondement CPF crucial | Formations transversales a 40 euros/h",
   "dispositifs_complementaires": [
     {
-      "id": "cpf-abondement-intermittents",
-      "nom": "Abondement CPF intermittents",
+      "id": "plans-conventionnels-branche",
+      "nom": "Plans conventionnels de branche",
       "cumul": "additif",
-      "montant_max": 12000,
+      "montant_max": null,
       "unite": "par_an",
       "pourcentage_couts": null,
-      "description": "Abondement du Compte Personnel de Formation de 5 000 a 12 000 euros pour les intermittents du spectacle, cumulable avec les droits CPF existants.",
+      "description": "13 branches (audiovisuel et production cinématographique, espaces de loisirs, exploitation cinématographique, golf, hôtellerie de plein air, organismes de tourisme, presse quotidienne nationale, presse en région, presse magazine, publicité, spectacle vivant, sport, télécommunications) disposent d'un plan conventionnel financé par une contribution supplémentaire : il prend le relais du plafond légal et finance certaines actions hors plafond selon la branche.",
       "conditions": [
-        "Etre intermittent du spectacle",
-        "Mobiliser son CPF via Mon Compte Formation"
+        "Relever d'une branche disposant d'un plan conventionnel et être à jour de la contribution conventionnelle",
+        "Déposer la demande sur MyA avant le début de la formation (obligatoire pour les fonds conventionnels)",
+        "Dans la limite des critères fixés par la branche et des fonds disponibles"
       ],
-      "demarches": "Demande via Mon Compte Formation (moncompteformation.gouv.fr) ; l'abondement AFDAS s'applique selon le profil.",
+      "demarches": "Consulter les critères de votre branche sur afdas.com, puis déposer la demande de prise en charge dans l'espace adhérent MyA avant le début de la formation.",
       "tailles_eligibles": null,
-      "publics": "Intermittents du spectacle",
+      "publics": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles.html",
+      "note": "« Grâce à cette contribution, les entreprises peuvent bénéficier d’un plafond de financement plus élevé pour les actions de formation. » (vérifié le 2026-10-05)"
+    },
+    {
+      "id": "intermittents-fonds-dedies",
+      "nom": "Formations des intermittents du spectacle et de l'audiovisuel (fonds dédiés)",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": "par_dossier",
+      "pourcentage_couts": null,
+      "description": "Financement demandé par l'intermittent lui-même (hors budget de l'entreprise) : 40 € à 80 € HT/h selon le type de formation, plafonné de 1 600 € à 5 000 € HT par formation ; CQP de branche : 54 €/h, plafond 15 000 €.",
+      "conditions": [
+        "Justifier d'au moins 48 jours/cachets (artistes interprètes, musiciens, metteurs en scène, réalisateurs), 88 (techniciens du spectacle vivant) ou 130 (techniciens du cinéma et de l'audiovisuel) en CDDU sur les 2 dernières années",
+        "Respecter le délai de carence entre deux formations : 12, 18 ou 24 mois selon la durée de la dernière formation",
+        "Dans la limite des fonds disponibles"
+      ],
+      "demarches": "L'intermittent dépose sa demande dans son espace MyA (profil particulier) avant le début de la formation.",
+      "tailles_eligibles": null,
+      "publics": "Intermittents du spectacle et de l'audiovisuel",
+      "confidence": "exact",
+      "source_url": "https://www.afdas.com/particulier/connaitre-les-dispositifs-et-les-modalites-dacces-a-la-formation/intermittents-du-spectacle-et-de-laudiovisuel/quels-financements.html",
+      "note": "« Technique matériel* Technique Spectacle Vivant, Audiovisuel, Coiffure, Maquillage, Costume, Décor. 80 € /h 5 000 € » ; « Transverses Gestion, communication, PAO 40 € 1 600 € » (vérifié le 2026-10-05)"
+    },
+    {
+      "id": "subventions-cofinancements",
+      "nom": "Subventions et cofinancements (FNE, FSE, régions)",
+      "cumul": "additif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Selon le projet, des subventions gérées par l'Afdas (FNE, FSE, subventions régionales) peuvent compléter le financement ; montants non publiés.",
+      "conditions": [
+        "Projet éligible à un partenariat régional, national ou européen en cours",
+        "Dans la limite des enveloppes disponibles"
+      ],
+      "demarches": "Contacter son conseiller Afdas (MyA, demande de contact « Un conseil, un accompagnement, un rendez-vous ») avant le début de la formation.",
+      "tailles_eligibles": null,
+      "publics": null,
       "confidence": "estimated",
-      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation.html"
+      "source_url": "https://www.afdas.com/faq/entreprise/financement-pour-les-entreprises-de-moins-de-50-salaries.html",
+      "note": "« Des subventions (FNE, FSE, subventions régionales…) mobilisables en fonction du projet. » (vérifié le 2026-10-05)"
     }
-  ]
+  ],
+  "variantes_branche": [
+    {
+      "id": "sport",
+      "branche_nom": "Sport (CCN du sport)",
+      "idcc": [
+        "2511"
+      ],
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/sport.html",
+      "confidence": "estimated",
+      "note": "« Salariés : dans la limite d’un plafond individuel par structure de 300% de la contribution sans être inférieur à 4 000 € ou 8 500 € si le parcours vise un titre inscrit au RNCP » ; « Formation inférieure ou égale à 70h : 32€HT/h » ; « 10€HT/h jusqu’au niveau 5 de qualification (nouvelle nomenclature) » ; « 12€HT/h à partir du niveau 6 de qualification (nouvelle nomenclature) » ; « Le financement sur l’enveloppe actions individuelles est mobilisable uniquement en complément de dispositif de droit commun » ; IDCC (liste Afdas) : « 2511 CCN du sport » ; PDC légal : « ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » ; « Des fonds conventionnels (selon votre branche professionnelle) ou des subventions peuvent venir financer en relai vos actions de formation. ». Budget cumulé estimé = plafond légal PDC (moins de 50 salariés) + plafond minimal du plan conventionnel de la branche, qui prend le relais du plafond légal ; l'articulation exacte des deux enveloppes est gérée par le conseiller Afdas. Barème horaire du plan conventionnel : 32 €/h jusqu'à 70 h, 10 €/h (niveau 5 max) ou 12 €/h (niveau 6+) au-delà. (vérifié le 2026-10-05)",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/sport.html",
+        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Salariés : dans la limite d’un plafond individuel par structure de 300% de la contribution sans être inférieur à 4 000 € ou 8 500 € si le parcours vise un titre inscrit au RNCP » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Sport : plafond légal PDC (1 100 € / 1 800 € HT, moins de 50 salariés) complété par l'enveloppe « actions individuelles » du plan conventionnel (300 % de la contribution, au moins 4 000 €, 8 500 € pour un titre RNCP), financée à 32 € HT/h jusqu'à 70 h puis 10 € HT/h (niveau 5 maximum) ou 12 € HT/h (niveau 6 et plus) ; frais annexes non financés. Catalogue sport et actions collectives financés hors plafond.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5100,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : 1 100 € HT (PDC légal, 40 €/h) + au moins 4 000 € (actions individuelles du plan conventionnel sport, 300 % de la contribution ; 8 500 € pour un titre RNCP) = 5 100 € estimés."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5800,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : 1 800 € HT (PDC légal) + au moins 4 000 € (plan conventionnel sport ; 8 500 € pour un titre RNCP) = 5 800 € estimés."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "description": "50 salariés et plus : plan conventionnel sport seul, 300 % de la contribution conventionnelle sans être inférieur à 4 000 € (8 500 € pour un titre RNCP) ; montant réel selon votre contribution."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : plan conventionnel sport, 300 % de la contribution sans être inférieur à 4 000 € (8 500 € pour un titre RNCP) ; montant réel selon votre contribution."
+        }
+      ],
+      "cout_horaire_inter": {
+        "value": 32,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/sport.html",
+        "note": "« Formation inférieure ou égale à 70h : 32€HT/h » Barème des actions individuelles du plan conventionnel (formations de 70 h maximum) ; le PDC légal finance jusqu'à 40 €/h dans la limite de 1 100 € / 1 800 €. (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 10,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/sport.html",
+        "note": "« 10€HT/h jusqu’au niveau 5 de qualification (nouvelle nomenclature) » ; « 12€HT/h à partir du niveau 6 de qualification (nouvelle nomenclature) » Formations de plus de 70 h (certifiantes en général) : 10 € HT/h jusqu'au niveau 5, 12 € HT/h à partir du niveau 6. (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_seuils": [
+        {
+          "max_heures": 70,
+          "valeur": 32
+        },
+        {
+          "max_heures": null,
+          "valeur": 10
+        }
+      ],
+      "cout_horaire_seuils_mode": "selon_duree_totale"
+    },
+    {
+      "id": "spectacle-vivant",
+      "branche_nom": "Spectacle vivant (secteur privé et entreprises artistiques et culturelles)",
+      "idcc": [
+        "3090",
+        "1285"
+      ],
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/spectacle-vivant.html",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 11 salariés : 1 200€ + 100% de la contribution nette N-1 sans être inférieur à 1 400 € » ; « Entreprises de 11 à 49 salariés : 1 200€ + 100% de la contribution nette N-1 sans être inférieur à 2 000 € » ; « Entreprises de 50 salariés et plus : 1 200€ + 100% de la contribution nette N-1 » ; IDCC (liste Afdas) : « 3090 CCN des entreprises du secteur privé du spectacle vivant » ; « 1285 CCN pour les entreprises artistiques et culturelles (CCNEAC) » ; PDC légal : « ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » ; « Des fonds conventionnels (selon votre branche professionnelle) ou des subventions peuvent venir financer en relai vos actions de formation. ». Budget cumulé estimé = plafond légal PDC (moins de 50 salariés) + plafond minimal du plan conventionnel de la branche, qui prend le relais du plafond légal ; l'articulation exacte des deux enveloppes est gérée par le conseiller Afdas. (vérifié le 2026-10-05)",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/spectacle-vivant.html",
+        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés : 1 200€ + 100% de la contribution nette N-1 sans être inférieur à 1 400 € » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Spectacle vivant : plafond légal PDC (moins de 50 salariés) + plan conventionnel (1 200 € + 100 % de la contribution nette N-1, au moins 1 400 € pour les moins de 11 salariés et 2 000 € pour les 11-49). Hors plafond : formation « gestion des risques sonores », VHSS et transition écologique (offres retenues), CCP « Inspection d'ensembles démontables ».",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 2500,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : 1 100 € HT (PDC légal, 40 €/h) + plan conventionnel 1 200 € + 100 % de la contribution nette N-1, au moins 1 400 € = 2 500 € minimum estimés."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 3800,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : 1 800 € HT (PDC légal, 40 €/h) + plan conventionnel au moins 2 000 € = 3 800 € minimum estimés."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 1200,
+          "quota_horaire_max": null,
+          "description": "50 salariés et plus : plan conventionnel seul, 1 200 € + 100 % de la contribution nette N-1 (montant réel supérieur à 1 200 €, selon votre contribution)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 1200,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : plan conventionnel, 1 200 € + 100 % de la contribution nette N-1 (montant réel selon votre contribution)."
+        }
+      ]
+    },
+    {
+      "id": "audiovisuel-production-cinema",
+      "branche_nom": "Audiovisuel et production cinématographique",
+      "idcc": [
+        "2642",
+        "3097",
+        "2412",
+        "2717",
+        "3252",
+        "1922",
+        "3241"
+      ],
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/audiovisuel-et-production-cinematographique.html",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 11 salariés 3 600 € HT » ; « Entreprises de 11 salariés à moins de 300 salariés 200 % de la contribution conventionnelle sans être inférieur à 5 000 € HT » ; « Les parcours de VAE (frais de jury + accompagnement) dans la limite de 3 000€ par parcours » ; IDCC (liste Afdas) : « 2642 CC de la production audiovisuelle » ; « 3097 CCN de la production cinématographique » ; « 2412 CC de la production de films d'animation » ; « 1922 CCN de la radiodiffusion » ; « 3241 CCN des chaînes thématiques » ; « 3252 CC des entreprises techniques au service de la création et de l'événement » ; PDC légal : « ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » ; « Des fonds conventionnels (selon votre branche professionnelle) ou des subventions peuvent venir financer en relai vos actions de formation. ». Budget cumulé estimé = plafond légal PDC (moins de 50 salariés) + plafond minimal du plan conventionnel de la branche, qui prend le relais du plafond légal ; l'articulation exacte des deux enveloppes est gérée par le conseiller Afdas. Champ de l'accord audiovisuel du 27 mars 2015 : production, diffusion et prestations techniques pour la radio, la télévision et le cinéma (distribution et exploitation de salles exclues) ; le rattachement de l'IDCC 2717/3252 (prestataires techniques) est à confirmer auprès de l'Afdas. (vérifié le 2026-10-05)",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/audiovisuel-et-production-cinematographique.html",
+        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 3 600 € HT » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Audiovisuel et production cinématographique : plafond légal PDC (moins de 50 salariés) + plan conventionnel (3 600 € HT pour les moins de 11 salariés ; 200 % de la contribution, au moins 5 000 € HT, de 11 à moins de 300 salariés). Hors plafond : certifications de branche (CQP, TFP), certifications interbranches, catalogues VHSS et transitions écologiques, VAE jusqu'à 3 000 € par parcours.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 4700,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : 1 100 € HT (PDC légal, 40 €/h) + 3 600 € HT (plan conventionnel audiovisuel) = 4 700 € estimés."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 6800,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : 1 800 € HT (PDC légal) + plan conventionnel de 200 % de la contribution, au moins 5 000 € HT = 6 800 € minimum estimés."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "50 à 299 salariés : plan conventionnel seul, 200 % de la contribution conventionnelle sans être inférieur à 5 000 € HT (montant réel selon votre contribution)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : pas de plafond publié dans le plan conventionnel audiovisuel ; contacter l'Afdas."
+        }
+      ]
+    },
+    {
+      "id": "publicite",
+      "branche_nom": "Publicité",
+      "idcc": [
+        "0086"
+      ],
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/publicite.html",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 11 salariés 2 500 € HT » ; « Entreprises de 11 à 49 salariés 130% de la contribution sans être inférieur à 3000 € » ; « Entreprises de plus de 50 salariés 130% de la contribution » ; IDCC (liste Afdas) : « 0086 CCN des entreprises de publicité et assimilées » ; PDC légal : « ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » ; « Des fonds conventionnels (selon votre branche professionnelle) ou des subventions peuvent venir financer en relai vos actions de formation. ». Budget cumulé estimé = plafond légal PDC (moins de 50 salariés) + plafond minimal du plan conventionnel de la branche, qui prend le relais du plafond légal ; l'articulation exacte des deux enveloppes est gérée par le conseiller Afdas. (vérifié le 2026-10-05)",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/publicite.html",
+        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 2 500 € HT » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Publicité : plafond légal PDC (moins de 50 salariés) + plan conventionnel (2 500 € HT pour les moins de 11 salariés ; 130 % de la contribution, au moins 3 000 €, pour les 11-49 ; 130 % au-delà). Le plan finance aussi le reste à charge des contrats de professionnalisation (5 € HT/h, 11 salariés et plus). Hors plafond : aide tutorale de 100 €/mois (10 mois, plus de 11 salariés), VAE, offres VHSS.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 3600,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : 1 100 € HT (PDC légal, 40 €/h) + 2 500 € HT (plan conventionnel publicité) = 3 600 € estimés."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 4800,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : 1 800 € HT (PDC légal) + 130 % de la contribution, au moins 3 000 € = 4 800 € minimum estimés."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Plus de 50 salariés : plan conventionnel égal à 130 % de la contribution (pas de minimum publié) ; montant selon votre contribution."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : 130 % de la contribution conventionnelle ; montant selon votre contribution."
+        }
+      ]
+    },
+    {
+      "id": "hotellerie-plein-air",
+      "branche_nom": "Hôtellerie de plein air",
+      "idcc": [
+        "1631"
+      ],
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/hotellerie-de-plein-air-hpa.html",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 11 salariés 1 500 € HT » ; « Entreprises de 11 à 49 salariés et plus 3 000 € HT » ; « Entreprises de 50 salariés et plus 100 % de la contribution conventionnelle N-1 sans être inférieur à 3000€ » ; IDCC (liste Afdas) : « 1631 CCN de l'hôtellerie de plein air » ; PDC légal : « ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » ; « Des fonds conventionnels (selon votre branche professionnelle) ou des subventions peuvent venir financer en relai vos actions de formation. ». Budget cumulé estimé = plafond légal PDC (moins de 50 salariés) + plafond minimal du plan conventionnel de la branche, qui prend le relais du plafond légal ; l'articulation exacte des deux enveloppes est gérée par le conseiller Afdas. (vérifié le 2026-10-05)",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/hotellerie-de-plein-air-hpa.html",
+        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 1 500 € HT » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Hôtellerie de plein air : plafond légal PDC (moins de 50 salariés) + plan conventionnel (1 500 € HT moins de 11 salariés, 3 000 € HT de 11 à 49, 100 % de la contribution N-1 avec un minimum de 3 000 € au-delà). Hors plafond : projets collectifs et actions camping qualité validés en commission, frais de jury CQP, VAE jusqu'à 3 000 €.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 2600,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : 1 100 € HT (PDC légal, 40 €/h) + 1 500 € HT (plan conventionnel HPA) = 2 600 € estimés."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 4800,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : 1 800 € HT (PDC légal) + 3 000 € HT (plan conventionnel HPA) = 4 800 € estimés."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3000,
+          "quota_horaire_max": null,
+          "description": "50 salariés et plus : plan conventionnel seul, 100 % de la contribution N-1 sans être inférieur à 3 000 € (montant réel selon votre contribution)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3000,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : 100 % de la contribution N-1, au moins 3 000 € (montant réel selon votre contribution)."
+        }
+      ]
+    },
+    {
+      "id": "espaces-loisirs",
+      "branche_nom": "Espaces de loisirs, d'attractions et culturels",
+      "idcc": [
+        "1790"
+      ],
+      "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/espaces-de-loisirs-dattraction-et-culturels.html",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 11 salariés 2 900 € HT » ; « Entreprises de 11 à 49 salariés 1 700 € HT + 200 % de la part plan de formation de la contribution conventionnelle » ; « Entreprises de 50 salariés et plus 200 % de la part plan de formation de la contribution conventionnelle » ; IDCC (liste Afdas) : « 1790 CCN des espaces de loisirs, d'attractions et culturels » ; PDC légal : « ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » ; « Des fonds conventionnels (selon votre branche professionnelle) ou des subventions peuvent venir financer en relai vos actions de formation. ». Budget cumulé estimé = plafond légal PDC (moins de 50 salariés) + plafond minimal du plan conventionnel de la branche, qui prend le relais du plafond légal ; l'articulation exacte des deux enveloppes est gérée par le conseiller Afdas. (vérifié le 2026-10-05)",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/espaces-de-loisirs-dattraction-et-culturels.html",
+        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 2 900 € HT » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Espaces de loisirs, d'attractions et culturels : plafond légal PDC (moins de 50 salariés) + plan conventionnel (2 900 € HT moins de 11 salariés ; 1 700 € HT + 200 % de la part plan de formation de la contribution de 11 à 49 ; 200 % au-delà). Hors plafond : actions collectives nationales, offres VHSS et transitions écologiques, VAE jusqu'à 3 000 €, aide tutorale de 3 000 € pour certains contrats de professionnalisation.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : 1 100 € HT (PDC légal, 40 €/h) + 2 900 € HT (plan conventionnel loisirs) = 4 000 € estimés."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": 3500,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : 1 800 € HT (PDC légal) + 1 700 € HT + 200 % de la part plan de formation de la contribution = 3 500 € minimum estimés."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50 salariés et plus : 200 % de la part plan de formation de la contribution conventionnelle (pas de minimum publié)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : 200 % de la part plan de formation de la contribution conventionnelle."
+        }
+      ]
+    }
+  ],
+  "derniere_verification": "2026-10-05"
 }

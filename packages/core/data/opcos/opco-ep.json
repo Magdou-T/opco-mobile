@@ -1,287 +1,768 @@
 {
   "slug": "opco-ep",
   "name": "OPCO EP",
-  "nom_complet": "Opérateur de Compétences des Entreprises de Proximité",
-  "secteurs": "Entreprises de proximité (artisanat, commerce, professions libérales, services de proximité)",
+  "nom_complet": "Opérateur de compétences des entreprises de proximité",
+  "secteurs": "Entreprises de proximité : artisanat, commerce de proximité, professions libérales, services (54 branches professionnelles)",
   "secteurs_source": "https://www.opcoep.fr/",
   "nombre_branches": 54,
-  "email_contact": "contact@opcoep.fr",
+  "email_contact": "",
   "url_finance_page": "https://www.opcoep.fr/criteres-de-financement",
   "url_former_salaries": "https://www.opcoep.fr/entreprise/former-mes-salaries",
   "url_beneficier_financements": "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements",
   "types_formations": [
-    "Plan de développement des compétences",
+    "Plan de développement des compétences (entreprises de moins de 50 salariés, barème de chaque branche)",
+    "Catalogue Sélexion (entreprises de moins de 50 salariés)",
     "Contrat d'apprentissage",
     "Contrat de professionnalisation",
-    "Période de reconversion (remplace Pro-A à compter du 01/01/2026)",
+    "Période de reconversion (remplace la Pro-A depuis le 01/01/2026)",
     "VAE",
-    "Bilan de compétences"
+    "Bilan de compétences",
+    "Actions collectives de branche"
   ],
   "types_formations_source": "https://www.opcoep.fr/entreprise/former-mes-salaries",
-  "note_generale": "OPCO EP couvre 54 branches professionnelles. Les critères de financement (coûts horaires, plafonds annuels, frais annexes) sont définis par chaque branche ou par l'interprofession. Il n'existe pas de barème universel unique. Consultez la page critères de financement pour les barèmes de votre branche.",
+  "note_generale": "Opco EP couvre 54 branches professionnelles. Les critères de financement (coûts horaires, plafonds annuels, frais annexes, salaires) sont fixés branche par branche par les sections paritaires professionnelles et mis à jour en cours d'année (dernières mises à jour des pages branches : 01/10/2026 et 05/10/2026). Il n'existe pas de barème commun : seule l'« Interprofession » publie un barème pour les entreprises sans branche rattachée. Dans plusieurs branches artisanales de l'alimentation, le budget PDC-50 est « contraint » et les critères peuvent évoluer entre la demande et l'approbation.",
   "note_generale_source": "https://www.opcoep.fr/criteres-de-financement",
   "cout_horaire_inter": {
-    "value": 25,
+    "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "25 euros/h pour formations metier (ex: coiffure, esthetique). 30 euros/h pour formations transversales (management, langues, RH). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+    "note": "Aucun barème interprofessionnel : chaque branche fixe ses coûts horaires (formations transverses le plus souvent 25 € HT/h, formations métier de 20 à 100 € HT/h selon la branche). Sélectionnez votre branche (variantes ci-dessous ou page critères de financement). Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
   },
   "cout_horaire_intra": {
-    "value": 25,
+    "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "Meme plafond que formations inter, varie selon branche professionnelle."
+    "note": "Défini par chaque branche ; certaines excluent les formations dans les locaux de l'entreprise (ex. pharmacie d'officine). Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
   },
   "cout_horaire_metier": {
-    "value": 25,
+    "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "25 euros/h coiffure/esthetique, 30 euros/h transversal. Variable selon branche."
+    "note": "Défini par chaque branche (ex. 25 € HT/h en coiffure, 40 € HT/h en pharmacie d'officine, 50 € HT/h pour la fabrication en boulangerie et le cœur de métier des cabinets médicaux). Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "La prise en charge de la remuneration depend strictement de la branche (confirme 2026). Exemples : pharmacie d'officine 12 euros HT/h (entreprises <11 salaries exclusivement) ; coiffure : aucune mention dans les baremes ; certaines branches l'ont supprimee pour 2026 (ex. froid/cuisines pro, contrainte budgetaire). Verifier les criteres de VOTRE branche sur opcoep.fr/criteres-de-financement."
+    "note": "Selon la branche : par exemple 12 € HT/h réservés aux moins de 11 salariés (pharmacie d'officine, cabinets dentaires), 12 € HT/h pour les moins de 50 salariés (cabinets médicaux), 13 € HT/h (interprofession), aucune prise en charge en boulangerie, en immobilier ou en coiffure. Extrait : « Frais de salaire : 12 € HT/h (pour les entreprises de moins de 11 salariés exclusivement) » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "0.32 euros/km (ex: branche coiffure). Varie selon branche professionnelle. Source: UNEC criteres 2025."
+    "note": "Selon la branche ; barème le plus répandu : 0,32 € HT/km (indemnité kilométrique, pas de forfait journalier), souvent réservé aux moins de 11 salariés ; certaines branches ne prennent pas en charge les frais annexes (boulangerie, coiffure, immobilier). Extrait : « Transport : 0,32 € HT/km » (vérifié le 2026-10-05)."
   },
   "frais_hebergement": {
-    "value": 112,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "112 euros/nuit (grandes villes/outre-mer), 96 euros/nuit (province). Ex: branche coiffure. Source: UNEC criteres 2025."
-  },
-  "frais_restauration": {
-    "value": 19,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "19 euros/repas (ex: branche coiffure). Varie selon branche professionnelle. Source: UNEC criteres 2025."
-  },
-  "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "Pourcentage frais annexes variable selon branche."
+    "note": "Selon la branche ; barème le plus répandu : 112 € HT (Paris, grandes métropoles, DROM) ou 96 € HT (province) par nuitée, souvent réservé aux moins de 11 salariés. Extrait : « Nuitée : 112 € HT pour Paris, grandes métropoles et DROM ou 96 € HT pour la Province » (vérifié le 2026-10-05)."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "Selon la branche ; barème le plus répandu : 19 € HT par repas. Extrait : « Repas : 19 € HT » (vérifié le 2026-10-05)."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement",
+    "note": "Aucune branche ne publie de forfait en pourcentage : les frais annexes sont remboursés au réel dans la limite de barèmes en euros (vérifié le 2026-10-05)."
   },
   "budget_annuel_max": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "Le budget annuel maximal au titre du plan de développement des compétences dépend de la branche professionnelle et de la taille de l'entreprise. Pas de plafond universel publié par OPCO EP."
+    "note": "Plafond annuel fixé par chaque branche et souvent par tranche d'effectif (ex. 2 100 à 10 500 € HT en coiffure sous 11 salariés, 3 500 € HT en boulangerie, 7 500 € HT en pharmacie d'officine sous 11 salariés, 10 000 € HT pour l'interprofession). Toutes les demandes sont financées dans la limite des fonds disponibles. Extrait : « Toutes les demandes de prise en charge se font dans la limite des fonds disponibles. En cas d'épuisement des fonds, les entreprises seront informées par un refus de financement. » (vérifié le 2026-10-05)."
   },
-  "budget_annuel_description": "Variable selon branche professionnelle et taille d'entreprise. Consultez les critères de financement de votre branche sur opcoep.fr.",
+  "budget_annuel_portee": "global",
+  "budget_annuel_description": "Plafond annuel par entreprise défini par chaque branche (souvent par tranche d'effectif) et couvrant les coûts pris en charge, sauf actions « hors plafond » (certifications, CQP, formations longues, transition écologique selon les branches). Dans la limite des fonds disponibles : en cas d'épuisement, la demande est refusée. Demande à déposer au plus tard le 30 novembre pour une action de l'année.",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
   "fse_plus": {
+    "statut": "Clos : dépôt des demandes jusqu'au 06/04/2026, actions terminées au 30/04/2026",
     "plafond_stagiaire_jour": 350,
     "plafond_jour": 2500,
     "plafond_entreprise": 150000,
-    "periode": "01/01/2025 - 31/12/2026",
+    "periode": "Projet FSE+ 2025-2026, actions à terminer au plus tard le 30/04/2026",
     "confidence": "exact",
     "source_url": "https://www.opcoep.fr/fonds-social-europeen",
-    "note": "Cofinancement FSE+ : 350 euros/stagiaire/jour, limite 2500 euros/jour, 150 000 euros par entreprise."
+    "note": "Cofinancement FSE+ national d'Opco EP clos pour de nouvelles demandes ; aucune nouvelle enveloppe annoncée sur le site au 05/10/2026 (les pages branches reprennent encore un paragraphe générique sur le FSE+). Extrait : « Les actions devront être terminées au 30/04/2026. » (vérifié le 2026-10-05)."
   },
   "profils_candidats": [
-    "Salariés TPE/PME",
+    "Salariés des entreprises de moins de 50 salariés des 54 branches d'Opco EP",
     "Apprentis",
     "Salariés en contrat de professionnalisation",
     "Salariés en période de reconversion"
   ],
-  "tailles_cibles": "Entreprises de moins de 50 salariés prioritaires, mais toutes tailles éligibles selon dispositif",
+  "tailles_cibles": "Fonds mutualisés du plan de développement des compétences réservés aux entreprises de moins de 50 salariés ; 50 salariés et plus : fonds conventionnels de branche et/ou versements volontaires",
   "priorite_tpe_pme": true,
-  "duree_min_formation": null,
-  "processus_approbation": "Demande en ligne via l'espace entreprise opcoep.fr",
-  "delai_validation": null,
-  "delai_validation_note": "Variable selon dispositif et branche",
-  "mode_paiement": "Tiers-payant ou remboursement",
-  "alternance_apprentissage": {
-    "description": "Prise en charge selon les niveaux définis par France Compétences (NPEC)",
-    "source_url": "https://www.opcoep.fr/actualites/apprentissage-evolution-des-niveaux-de-prise-en-charge-des-contrats",
-    "note": "Réforme du financement de l'apprentissage applicable au 1er juillet 2025."
-  },
-  "alternance_professionnalisation": {
-    "description": "Selon accord de branche",
-    "source_url": "https://www.opcoep.fr/criteres-de-financement"
-  },
-  "periode_reconversion_2026": {
-    "description": "La période de reconversion remplace la Pro-A à compter du 01/01/2026. Les niveaux de prise en charge sont définis par les branches professionnelles.",
-    "source_url": "https://www.opcoep.fr/prestataire-de-formation/connaitre-la-reglementation/la-reforme-du-financement-de-l-apprentissage-2025",
-    "note": "Nouveau dispositif 2026 : critères d'attribution tenant compte de l'ancienneté, l'âge, la mutation d'activité et le risque d'obsolescence des compétences."
-  },
-  "cpf_abondement": true,
-  "cpf_details": {
-    "description": "Abondement possible selon accord de branche",
-    "plafond_cpf_standard": 5000,
-    "plafond_cpf_bas_niveau": 8000,
-    "note": "CPF alimenté de 500 euros/an (plafond 5000 euros) ou 800 euros/an (plafond 8000 euros) pour salariés sans qualification niveau CAP/BEP.",
-    "source_url": "https://www.opcoep.fr/criteres-de-financement"
-  },
-  "vae_possible": true,
-  "vae_details": {
-    "description": "Financement VAE possible",
-    "source_url": "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements/comment-peut-financer-une-vae"
-  },
-  "limite_dossiers_an": null,
-  "limite_dossiers_note": "Variable selon branche professionnelle",
-  "specificites": "54 branches professionnelles avec barèmes de financement propres | Priorité TPE/PME (<50 salariés) | Cofinancement FSE+ disponible 2025-2026 | Période de reconversion remplace Pro-A dès 2026",
-  "points_cles_maximisation": "Consulter les barèmes spécifiques de votre branche | Vérifier éligibilité FSE+ pour cofinancement | Priorité aux entreprises <50 salariés | Demande en ligne sur opcoep.fr",
+  "duree_min_formation": "Selon la branche (le plus souvent 4 h ; 3 h 30 en charcuterie et notariat, 1 h en immobilier, pas de minimum pour l'interprofession)",
   "plafonds_par_taille": [
     {
       "taille": "less_11",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "confidence": "depends_on_branche",
-      "source_url": "https://www.opcoep.fr/criteres-de-financement",
-      "description": "Moins de 11 salariés : plafonds définis par la branche professionnelle. Priorité de financement."
+      "description": "Moins de 11 salariés : plafond annuel, coûts horaires, salaires et frais annexes fixés par la branche (souvent plus favorables qu'au-delà de 11 salariés : salaires et frais annexes parfois réservés aux moins de 11 salariés). Sélectionnez votre branche."
     },
     {
       "taille": "11_49",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "confidence": "depends_on_branche",
-      "source_url": "https://www.opcoep.fr/criteres-de-financement",
-      "description": "11-49 salariés : plafonds définis par la branche professionnelle."
+      "description": "11 à 49 salariés : plafonds fixés par la branche. Sélectionnez votre branche."
     },
     {
       "taille": "50_299",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "confidence": "depends_on_branche",
-      "source_url": "https://www.opcoep.fr/criteres-de-financement",
-      "description": "50-299 salariés : plafonds définis par la branche professionnelle."
+      "description": "50 salariés et plus : pas de fonds légaux mutualisés ; actions financées sur les fonds conventionnels de la branche et/ou les versements volontaires (certaines branches publient une enveloppe, voir variantes). Catalogue Sélexion fermé aux 50 salariés et plus depuis le 01/09/2026."
     },
     {
       "taille": "300_plus",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "confidence": "depends_on_branche",
-      "source_url": "https://www.opcoep.fr/criteres-de-financement",
-      "description": "300+ salariés : plafonds définis par la branche professionnelle."
+      "description": "300 salariés et plus : fonds conventionnels de branche et/ou versements volontaires uniquement. Catalogue Sélexion fermé aux 50 salariés et plus depuis le 01/09/2026."
     }
   ],
-  "derniere_mise_a_jour": "2026-03-24",
+  "processus_approbation": "Demande de financement sur Mes services en ligne, au moins 1 mois avant le début de la formation pour obtenir une réponse avant le départ, et au plus tard le 30 novembre de l'année de réalisation (une action de l'année N est refusée si elle est déposée en N+1). Organisme certifié Qualiopi. Financement dans la limite des fonds disponibles : en cas d'épuisement des fonds de la branche, la demande est refusée.",
+  "delai_validation": "Aucun délai de réponse publié ; dépôt au moins 1 mois avant le début de la formation pour bénéficier d'une garantie de réponse avant le départ (CGGC 2026).",
+  "delai_validation_note": "Dépôt au moins un mois avant pour garantie de réponse ; demande au plus tard le 30 novembre pour une action de l'année.",
+  "mode_paiement": "Depuis le 01/10/2026 (réforme de la TVA des OPCO), la modalité de paiement est indiquée dans l'accord : subrogation (Opco EP règle l'organisme) ou remboursement à l'entreprise, qui paie la facture TTC puis est remboursée des frais HT ; les demandes validées jusqu'au 30/09/2026 gardent les anciennes modalités. Depuis le 01/08/2026, la demande de remboursement se fait sans facture de l'entreprise (certificat de réalisation et facture de l'organisme).",
+  "alternance_apprentissage": {
+    "description": "Niveaux de prise en charge fixés par les branches ou la CPNE et validés par France compétences (référentiel NPEC actualisé le 31/08/2026). Participation de l'employeur de 750 € pour les diplômes de niveau 6 et plus (contrats conclus depuis le 01/07/2025). Aide au premier équipement : 500 € (niveaux 3 et 4), 300 € (niveau 5), supprimée pour les niveaux 6 et 7 depuis le 30/07/2026 (décret n° 2026-679).",
+    "source_url": "https://www.opcoep.fr/actualites/aide-au-premier-equipement-des-apprentis-un-nouveau-cadre-entre-en-vigueur-le-30-juillet-2026",
+    "note": "Réforme du financement de l'apprentissage applicable au 1er juillet 2025 ; aide au premier équipement modifiée au 30 juillet 2026."
+  },
+  "alternance_professionnalisation": {
+    "description": "Forfaits horaires fixés par chaque branche (ex. coiffure : 15 € HT/h pour les diplômes de la branche, 9,15 €/h pour les autres titres et CQP).",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement"
+  },
+  "periode_reconversion_2026": {
+    "description": "La période de reconversion remplace la Pro-A depuis le 01/01/2026 (formation de 150 à 450 h sur 12 mois maximum). Niveaux de prise en charge fixés par les branches (ex. coiffure : 9,15 € HT/h, 1 dossier par SIRET et par an pour les moins de 50 salariés).",
+    "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+    "note": "La Pro-A a pris fin le 31/12/2025."
+  },
+  "cpf_abondement": true,
+  "cpf_details": {
+    "description": "Abondement possible selon les décisions de branche ; l'employeur peut abonder le CPF de son salarié dans le cadre d'un projet coconstruit.",
+    "plafond_cpf_standard": 5000,
+    "plafond_cpf_bas_niveau": 8000,
+    "note": "Rappel des droits CPF : 500 €/an (plafond 5 000 €), 800 €/an (plafond 8 000 €) pour les salariés peu qualifiés.",
+    "source_url": "https://www.opcoep.fr/entreprise/former-mes-salaries"
+  },
+  "vae_possible": true,
+  "vae_details": {
+    "description": "Accompagnement VAE financé selon la branche (ex. 40 € HT/h en coiffure, 85 € HT/h dans la limite de 24 h en boulangerie, 50 € HT/h dans la limite de 48 h en immobilier).",
+    "source_url": "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements/comment-peut-financer-une-vae"
+  },
+  "limite_dossiers_an": null,
+  "limite_dossiers_note": "Variable selon la branche (ex. boucherie : 1 stagiaire par entreprise et par an pour certaines actions ; période de reconversion : 1 dossier par SIRET et par an sous 50 salariés en coiffure).",
+  "specificites": "54 branches avec barèmes propres, mis à jour en cours d'année (pages branches actualisées les 01/10/2026 et 05/10/2026) | Budget PDC-50 « contraint » en boulangerie, boucherie, charcuterie, pâtisserie, poissonnerie, confiserie et services funéraires : critères susceptibles d'évoluer avant approbation | Demandes au plus tard le 30 novembre | Sélexion réservé aux moins de 50 salariés depuis le 01/09/2026 | Réforme TVA au 01/10/2026 : remboursement à l'entreprise possible à la place de la subrogation | FSE+ national clos depuis avril 2026 | DROM : +15 % sur le coût pédagogique pour les moins de 50 salariés",
+  "points_cles_maximisation": "Consulter le barème 2026 de VOTRE branche sur opcoep.fr (sélecteur de branche) | Privilégier Sélexion (100 % des coûts pédagogiques, moins de 50 salariés) | Vérifier les actions « hors plafond » de la branche (CQP, certifications, formations longues) | Déposer au moins 1 mois avant et avant le 30 novembre | Dans les branches au budget contraint, déposer tôt dans l'année",
+  "derniere_mise_a_jour": "2026-10-05",
   "sources_consultees": [
     "https://www.opcoep.fr/criteres-de-financement",
+    "https://www.opcoep.fr/criteres-de-financement?branche=201",
+    "https://www.opcoep.fr/criteres-de-financement?branche=208",
+    "https://www.opcoep.fr/criteres-de-financement?branche=175",
+    "https://www.opcoep.fr/criteres-de-financement?branche=204",
+    "https://www.opcoep.fr/criteres-de-financement?branche=205",
+    "https://www.opcoep.fr/criteres-de-financement?branche=187",
+    "https://www.opcoep.fr/criteres-de-financement?branche=214",
     "https://www.opcoep.fr/entreprise/former-mes-salaries",
-    "https://www.opcoep.fr/question-formation/anticiper-les-evolutions-et-les-transitions-former-et-developper-les-competences-de-mes-salaries/beneficier-de-financements",
     "https://www.opcoep.fr/fonds-social-europeen",
-    "https://www.opcoep.fr/prestataire-de-formation/connaitre-la-reglementation/la-reforme-du-financement-de-l-apprentissage-2025"
+    "https://www.opcoep.fr/ressources/centre-ressources/juridique/conditions-generales-gestion-controle-opcoep.pdf",
+    "https://www.opcoep.fr/actualites/reforme-de-la-tva-ce-qui-change-pour-vos-demandes-de-prise-en-charge-de-formation-hors-contrat-d",
+    "https://www.opcoep.fr/actualites/remboursement-des-frais-de-formation-demarches-simplifiees-au-1er-aout-2026",
+    "https://www.opcoep.fr/entreprise/offre-de-services/selexion",
+    "https://www.opcoep.fr/actualites/catalogue-selexion-evolution-des-modalites-de-financement-pour-les-entreprises-de-50-salaries-et",
+    "https://www.opcoep.fr/nous-contacter"
   ],
+  "derniere_verification": "2026-10-05",
   "dispositifs_complementaires": [
     {
-      "id": "fse-plus",
-      "nom": "Cofinancement FSE+",
-      "cumul": "additif",
-      "montant_max": 350,
-      "unite": "par_jour",
-      "pourcentage_couts": null,
-      "description": "Cofinancement europeen FSE+ : plafond de 350 euros HT par jour et par stagiaire pour les entreprises de moins de 50 salaries.",
+      "id": "selexion",
+      "nom": "Catalogue Sélexion",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": 100,
+      "description": "Catalogue de formations sélectionnées par Opco EP (36 formations sur 6 thèmes : communication et vente, numérique, ressources humaines, management et gestion dont facturation électronique, transition écologique, tuteur et maître d'apprentissage), coûts pédagogiques financés à 100 % en 2026 pour les entreprises de moins de 50 salariés.",
       "conditions": [
-        "Entreprise de moins de 50 salaries",
-        "Projet de formation eligible au FSE+ (a verifier avec votre conseiller OPCO EP)"
+        "Entreprise de moins de 50 salariés relevant d'Opco EP",
+        "Formation choisie dans le catalogue Sélexion, en présentiel ou à distance",
+        "Fermé aux entreprises de 50 salariés et plus depuis le 01/09/2026"
       ],
-      "demarches": "Se rapprocher de son conseiller OPCO EP pour verifier l'eligibilite du projet au cofinancement FSE+.",
+      "demarches": "Créer un compte ou se connecter sur selexion.opcoep.fr, choisir la formation et la session dans son département, puis inscrire les salariés en ligne.",
       "tailles_eligibles": [
         "less_11",
         "11_49"
       ],
       "publics": null,
       "confidence": "exact",
+      "source_url": "https://www.opcoep.fr/entreprise/offre-de-services/selexion"
+    },
+    {
+      "id": "actions-collectives-branche",
+      "nom": "Actions collectives de branche (hors plafond)",
+      "cumul": "hors_budget",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Certaines branches financent des actions collectives clés en main hors du plafond annuel de l'entreprise (ex. librairie : coûts pédagogiques pris en charge à 100 % pour les moins de 50 salariés ; détaillants en chaussures : formation réseaux sociaux financée à 100 %).",
+      "conditions": [
+        "Action collective proposée par votre branche",
+        "Le plus souvent réservée aux entreprises de moins de 50 salariés",
+        "Dans la limite des fonds disponibles"
+      ],
+      "demarches": "Consulter la rubrique « Actions collectives » de la page critères de financement de votre branche ou demander au conseiller Opco EP, puis s'inscrire selon les modalités indiquées.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "depends_on_branche",
       "source_url": "https://www.opcoep.fr/criteres-de-financement"
+    },
+    {
+      "id": "complement-drom",
+      "nom": "Complément DROM (+15 % et frais de déplacement)",
+      "cumul": "additif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Pour les entreprises de moins de 50 salariés de Guadeloupe, Guyane, Martinique et La Réunion : financement complémentaire de +15 % appliqué aux critères de prise en charge de la branche (coût pédagogique uniquement, dans la limite du coût réel) ; si la formation n'existe pas localement, déplacement inter-DROM ou vers l'hexagone jusqu'à 1 300 € HT aller-retour par an et par salarié, nuitée 112 € HT et repas 19 € HT.",
+      "conditions": [
+        "Entreprise de moins de 50 salariés située en Guadeloupe, Guyane, Martinique ou à La Réunion",
+        "Fonds de la branche mobilisés sur l'action",
+        "Déplacement : formation indisponible sur le territoire, un salarié par an et par entreprise (sauf obligation d'habilitation ou d'examen)"
+      ],
+      "demarches": "Indiquer la demande de complément DROM lors de la saisie sur Mes services en ligne et contacter le conseiller Opco EP du territoire.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201"
     }
   ],
   "variantes_branche": [
+    {
+      "id": "coiffure",
+      "branche_nom": "Coiffure et professions connexes",
+      "idcc": [
+        "2596"
+      ],
+      "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+      "confidence": "exact",
+      "note": "Critères 2026 de la branche coiffure (mise à jour du 01/10/2026). Plafond annuel par tranche d'effectif sous 11 salariés ; de 11 à 49 salariés (et au-delà sur fonds conventionnels), limite de 35 h par an et par salarié. Aucune prise en charge des salaires ni des frais annexes n'est prévue pour le plan de développement (hors DROM). Extrait : « de 1 à 2 salariés : 2 100 € HT/an » (vérifié le 2026-10-05).",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+        "note": "Formations transverses (socle et autres) et formation transition écologique (hors plafond). Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "cout_horaire_metier": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+        "note": "Actions de formation métier (coupe, coloration, barbier, soins, onglerie, maquillage...). CQP Manager un salon et certification cheveux spécifiques : 15 € HT/h hors plafond. Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires": {
+        "value": 0,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+        "note": "Aucune prise en charge des salaires n'est mentionnée dans les critères 2026 du plan de développement de la branche (seul le coût pédagogique est indiqué pour chaque action). Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+        "note": "Aucun barème de frais annexes pour le plan de développement de la branche, hors entreprises des DROM (déplacement inter-DROM ou vers l'hexagone jusqu'à 1 300 € HT par an et par salarié) (vérifié le 2026-10-05)."
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+        "note": "Pas de barème d'hébergement pour la branche hors DROM (112 € HT ou 96 € HT par nuitée uniquement pour les déplacements inter-DROM ou vers l'hexagone). Extrait : « nuitée: 112 € HT pour Paris, grandes métropoles et DROM ou 96 € HT pour la province » (vérifié le 2026-10-05)."
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+        "note": "Pas de barème de repas pour la branche hors DROM (19 € HT uniquement dans le cadre des déplacements DROM). Extrait : « repas : 19 € HT. » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
+        "note": "Plafond fonction de l'effectif, porté par plafonds_par_taille : 2 100 € HT (1 à 2 salariés, valeur retenue pour les moins de 11 salariés), 6 300 € HT (3 à 6), 10 500 € HT (7 à 10) ; à partir de 11 salariés, limite de 35 h de formation par an et par salarié à 30 € HT/h au lieu d'un montant fixe. Extrait : « de 1 à 2 salariés : 2 100 € HT/an » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_description": "Coiffure 2026 : 2 100 € HT/an (1 à 2 salariés), 6 300 € HT/an (3 à 6), 10 500 € HT/an (7 à 10) ; à partir de 11 salariés, 35 h de formation par an et par salarié à 30 € HT/h (au-delà de 50 salariés sur fonds conventionnels). Présentiel 4 h minimum et 7 h maximum par jour.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2100,
+          "quota_horaire_max": null,
+          "description": "Coiffure, moins de 11 salariés : 2 100 € HT/an de 1 à 2 salariés (valeur retenue), 6 300 € HT/an de 3 à 6 salariés, 10 500 € HT/an de 7 à 10 salariés ; 25 € HT/h ; pas de salaires ni de frais annexes."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": 35,
+          "description": "Coiffure, 11 à 49 salariés : 35 heures de formation par an et par salarié à un coût horaire de 30 € HT/h ; actions financées à 25 € HT/h."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": 35,
+          "description": "Coiffure, 50 salariés et plus : 35 heures de formation par an et par salarié à 30 € HT/h, sur fonds conventionnels et/ou versements volontaires (pas d'enveloppe en euros publiée)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": 35,
+          "description": "Coiffure, 300 salariés et plus : 35 heures de formation par an et par salarié à 30 € HT/h, sur fonds conventionnels et/ou versements volontaires."
+        }
+      ]
+    },
+    {
+      "id": "boulangerie",
+      "branche_nom": "Boulangerie-pâtisserie (entreprises artisanales)",
+      "idcc": [
+        "0843"
+      ],
+      "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+      "confidence": "exact",
+      "note": "Critères 2026 de la branche boulangerie (mise à jour du 01/10/2026) : plafond de 3 500 € HT pour les moins de 50 salariés, 14 h maximum par action, pas de distanciel ni d'AFEST, pas de salaires ni de frais annexes. Budget PDC-50 contraint : critères susceptibles d'évoluer avant approbation. Extrait : « Compte tenu du budget PDC-50 contraint, les critères de financement peuvent évoluer entre la demande de financement et l’approbation du dossier par les services d’Opco EP . » (vérifié le 2026-10-05).",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+        "note": "Formations transverses socle (RH, management, comptabilité, bureautique, langues), 14 h maximum. Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "cout_horaire_metier": {
+        "value": 50,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+        "note": "Fabrication (techniques de fabrication, préparation, transformation), 14 h maximum ; vente et communication, gestion et transition écologique : 40 € HT/h ; hygiène et sécurité : 30 € HT/h ; CQP Tourier et BM Boulanger : 15 € HT/h hors plafond. Extrait : « Techniques de fabrication, préparation et de transformation Durée maximale de prise en charge : 14 h Coût pédagogique : 50 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires": {
+        "value": 0,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+        "note": "Pas de prise en charge des salaires. Extrait : « Frais annexes et frais de salaire : pas de prise en charge. » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+        "note": "Pas de prise en charge des frais annexes. Extrait : « Frais annexes et frais de salaire : pas de prise en charge. » (vérifié le 2026-10-05)."
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+        "note": "Pas de prise en charge des frais annexes. Extrait : « Frais annexes et frais de salaire : pas de prise en charge. » (vérifié le 2026-10-05)."
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+        "note": "Pas de prise en charge des frais annexes. Extrait : « Frais annexes et frais de salaire : pas de prise en charge. » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
+        "note": "Plafond annuel de 3 500 € HT par entreprise de moins de 50 salariés, porté par plafonds_par_taille ; aucun barème publié pour les 50 salariés et plus. Extrait : « Moins de 50 salariés : 3 500 € HT » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_description": "Boulangerie 2026 : 3 500 € HT par an pour les moins de 50 salariés, 14 h maximum par action, formation en présentiel uniquement (ni distanciel ni AFEST), actions de moins de 140 h étalées sur 3 mois maximum. Budget PDC-50 contraint.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3500,
+          "quota_horaire_max": 14,
+          "description": "Boulangerie, moins de 11 salariés : 3 500 € HT/an, 25 à 50 € HT/h selon le thème, 14 h maximum par action, pas de salaires ni de frais annexes."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3500,
+          "quota_horaire_max": 14,
+          "description": "Boulangerie, 11 à 49 salariés : 3 500 € HT/an, 25 à 50 € HT/h selon le thème, 14 h maximum par action."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Boulangerie, 50 salariés et plus : aucun barème publié pour le plan de développement (fonds conventionnels et/ou versements volontaires)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Boulangerie, 300 salariés et plus : aucun barème publié (fonds conventionnels et/ou versements volontaires)."
+        }
+      ]
+    },
     {
       "id": "pharmacie-officine",
       "branche_nom": "Pharmacie d'officine",
       "idcc": [
         "1996"
       ],
-      "source_url": "https://www.opcoep.fr/criteres-de-financement",
+      "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
       "confidence": "exact",
-      "note": "Baremes 2026 de la page criteres de financement OPCO EP, branche Pharmacie d'officine (verifies le 11/06/2026).",
+      "note": "Critères 2026 de la branche pharmacie d'officine (mise à jour du 01/10/2026). Salaires (12 € HT/h) et frais annexes réservés aux moins de 11 salariés ; 28 h maximum par action ; pas de formation après 19 h, le dimanche ou les jours fériés ni dans les locaux de l'entreprise (hors FOAD et classes virtuelles) ; demande avant le 30 novembre. Extrait : « 7 500 € HT pour les entreprises de moins de 11 salariés » (vérifié le 2026-10-05).",
       "cout_horaire_inter": {
         "value": 25,
         "confidence": "exact",
-        "source_url": "https://www.opcoep.fr/criteres-de-financement",
-        "note": "25 euros HT/h pour les formations transversales ; 40 euros HT/h pour les formations metier."
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
+        "note": "Formations transverses (socle et autres), 28 h maximum ; FOAD 100 % : 20 € HT/h dans la limite de 10 h. Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 40,
         "confidence": "exact",
-        "source_url": "https://www.opcoep.fr/criteres-de-financement",
-        "note": "40 euros HT/h pour les formations metier."
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
+        "note": "Actualisation des connaissances cœur de métier, 28 h maximum ; CQP et formations longues : 20 € HT/h hors plafond. Extrait : « Durée maximale de prise en charge : 28 h Coût pédagogique : 40 € HT/h » (vérifié le 2026-10-05)."
       },
       "prise_en_charge_salaires": {
         "value": 12,
-        "confidence": "exact",
-        "source_url": "https://www.opcoep.fr/criteres-de-financement",
-        "note": "Frais de salaire : 12 euros HT/h, pour les entreprises de MOINS DE 11 SALARIES exclusivement."
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
+        "note": "12 € HT/h uniquement pour les entreprises de moins de 11 salariés (taux nul à partir de 11 salariés : plafonds_par_taille). Extrait : « Frais de salaire : 12 € HT/h (pour les entreprises de moins de 11 salariés exclusivement) » (vérifié le 2026-10-05)."
       },
       "prise_en_charge_salaires_mode": "euro_par_heure",
       "frais_transport": {
         "value": null,
         "confidence": "exact",
-        "source_url": "https://www.opcoep.fr/criteres-de-financement",
-        "note": "Transport : 0,32 euros HT/km (entreprises <11 salaries)."
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
+        "note": "Indemnité kilométrique de 0,32 € HT/km (pas de forfait journalier), moins de 11 salariés uniquement. Extrait : « Transport : 0,32 € HT/km » (vérifié le 2026-10-05)."
       },
       "frais_hebergement": {
         "value": 112,
-        "confidence": "exact",
-        "source_url": "https://www.opcoep.fr/criteres-de-financement",
-        "note": "Nuitee : 112 euros HT (metropoles/DROM), 96 euros HT (province). Entreprises <11 salaries."
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
+        "note": "112 € HT dans les grandes métropoles et DROM, 96 € HT en province, moins de 11 salariés uniquement. Extrait : « Nuitée : 112 € HT petit déjeuner inclus pour les grandes métropoles et DROM » (vérifié le 2026-10-05)."
       },
       "frais_restauration": {
         "value": 19,
-        "confidence": "exact",
-        "source_url": "https://www.opcoep.fr/criteres-de-financement",
-        "note": "Repas : 19 euros HT (entreprises <11 salaries)."
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
+        "note": "19 € HT par repas, moins de 11 salariés uniquement. Extrait : « Repas : 19 € HT » (vérifié le 2026-10-05)."
       },
       "budget_annuel_max": {
         "value": 7500,
         "confidence": "exact",
-        "source_url": "https://www.opcoep.fr/criteres-de-financement",
-        "note": "Budget annuel 2026 : 7 500 euros HT (<11 sal.), 15 000 euros HT (11+ sal.). Demandes avant le 30 novembre."
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
+        "note": "7 500 € HT pour les moins de 11 salariés, 15 000 € HT au-delà de 11 salariés (fonds conventionnels et/ou versements volontaires à partir de 50 salariés). Extrait : « 7 500 € HT pour les entreprises de moins de 11 salariés » (vérifié le 2026-10-05)."
       },
-      "budget_annuel_description": "Pharmacie d'officine 2026 : 7 500 euros HT/an (<11 sal.), 15 000 euros HT/an (11+ sal.). Duree max par action : 28 h. Demande avant le 30/11.",
+      "budget_annuel_description": "Pharmacie d'officine 2026 : 7 500 € HT/an (moins de 11 salariés), 15 000 € HT/an (11 salariés et plus ; à partir de 50 salariés sur fonds conventionnels et/ou versements volontaires). Durée maximale 28 h par action. Demande avant le 30 novembre.",
       "plafonds_par_taille": [
         {
           "taille": "less_11",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
           "budget_annuel_max": 7500,
-          "quota_horaire_max": null,
-          "description": "Pharmacie <11 salaries : 7 500 euros HT/an, 40 euros/h (metier) ou 25 euros/h (transversal), salaire 12 euros/h, frais annexes couverts."
+          "quota_horaire_max": 28,
+          "description": "Pharmacie, moins de 11 salariés : 7 500 € HT/an ; 40 € HT/h (métier) ou 25 € HT/h (transverses) ; salaires 12 € HT/h et frais annexes (nuitée 112 ou 96 € HT, repas 19 € HT, 0,32 € HT/km) ; 28 h maximum par action."
         },
         {
           "taille": "11_49",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
           "budget_annuel_max": 15000,
-          "quota_horaire_max": null,
-          "description": "Pharmacie 11-49 salaries : 15 000 euros HT/an. Salaire et frais annexes reserves aux <11 salaries."
+          "quota_horaire_max": 28,
+          "description": "Pharmacie, 11 à 49 salariés : 15 000 € HT/an ; salaires et frais annexes non pris en charge (réservés aux moins de 11 salariés).",
+          "prise_en_charge_salaires_horaire": null
         },
         {
           "taille": "50_299",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
           "budget_annuel_max": 15000,
-          "quota_horaire_max": null,
-          "description": "Pharmacie 50+ salaries : 15 000 euros HT/an (baremes 11+ sal.)."
+          "quota_horaire_max": 28,
+          "description": "Pharmacie, 50 salariés et plus : enveloppe publiée de 15 000 € HT/an (plafond « plus de 11 salariés »), financée sur les fonds conventionnels et/ou versements volontaires.",
+          "prise_en_charge_salaires_horaire": null
         },
         {
           "taille": "300_plus",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": 28,
+          "description": "Pharmacie, 300 salariés et plus : 15 000 € HT/an sur fonds conventionnels et/ou versements volontaires.",
+          "prise_en_charge_salaires_horaire": null
+        }
+      ]
+    },
+    {
+      "id": "cabinets-medicaux",
+      "branche_nom": "Cabinets médicaux",
+      "idcc": [
+        "1147"
+      ],
+      "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+      "confidence": "exact",
+      "note": "Critères 2026 de la branche cabinets médicaux (mise à jour du 01/10/2026). Salaires 12 € HT/h pour les moins de 50 salariés (formation hors des locaux et sur le temps de travail) ; frais annexes pour les moins de 11 salariés ; pas de formation en soirée, le dimanche ou les jours fériés ; demande avant le 30 novembre. Extrait : « Moins de 11 salariés : 15 000 € HT » (vérifié le 2026-10-05).",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+        "note": "Formations transverses socle (comptabilité, management, RH, bureautique, anglais), 28 h maximum ; autres transverses 25 à 40 € HT/h ; FOAD 100 % : 10 € HT/h dans la limite de 14 h. Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "cout_horaire_metier": {
+        "value": 50,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+        "note": "Actualisation des connaissances cœur de métier, 35 h maximum (manipulateurs radio : 60 € HT/h ; CQP assistant médical : 20 € HT/h hors plafond). Extrait : « Durée maximale de prise en charge : 35 h Coût pédagogique : 50 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires": {
+        "value": 12,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+        "note": "12 € HT/h pour les entreprises de moins de 50 salariés, formations hors des locaux et sur le temps de travail. Extrait : « Remboursement des frais de salaires (entreprises de moins de 50 salariés exclusivement) : 12 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+        "note": "Indemnité kilométrique de 0,32 € HT/km, moins de 11 salariés uniquement. Extrait : « Transport : 0,32 € HT/km » (vérifié le 2026-10-05)."
+      },
+      "frais_hebergement": {
+        "value": 112,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+        "note": "112 € HT à Paris, dans les grandes métropoles et DROM, 96 € HT en province, moins de 11 salariés uniquement. Extrait : « Nuitée : 112 € HT pour Paris, grandes métropoles et DROM ou 96 € HT pour la Province » (vérifié le 2026-10-05)."
+      },
+      "frais_restauration": {
+        "value": 19,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+        "note": "19 € HT par repas, moins de 11 salariés uniquement. Extrait : « Repas : 19 € HT » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_max": {
+        "value": 15000,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
+        "note": "15 000 € HT sous 11 salariés, 30 000 € HT de 11 à 49 salariés, 50 000 € HT à partir de 50 salariés (fonds conventionnels et/ou versements volontaires). Extrait : « Moins de 11 salariés : 15 000 € HT » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_description": "Cabinets médicaux 2026 : 15 000 € HT/an (moins de 11 salariés), 30 000 € HT/an (11 à 49), 50 000 € HT/an (50 et plus, fonds conventionnels et/ou versements volontaires). Demande avant le 30 novembre.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
           "budget_annuel_max": 15000,
           "quota_horaire_max": null,
-          "description": "Pharmacie 300+ salaries : 15 000 euros HT/an (baremes 11+ sal.)."
+          "description": "Cabinets médicaux, moins de 11 salariés : 15 000 € HT/an ; salaires 12 € HT/h ; frais annexes (nuitée 112 ou 96 € HT, repas 19 € HT, 0,32 € HT/km)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 30000,
+          "quota_horaire_max": null,
+          "description": "Cabinets médicaux, 11 à 49 salariés : 30 000 € HT/an ; salaires 12 € HT/h ; pas de frais annexes."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 50000,
+          "quota_horaire_max": null,
+          "description": "Cabinets médicaux, 50 salariés et plus : enveloppe publiée de 50 000 € HT/an, financée sur les fonds conventionnels et/ou versements volontaires ; pas de salaires ni de frais annexes.",
+          "prise_en_charge_salaires_horaire": null
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 50000,
+          "quota_horaire_max": null,
+          "description": "Cabinets médicaux, 300 salariés et plus : 50 000 € HT/an sur fonds conventionnels et/ou versements volontaires.",
+          "prise_en_charge_salaires_horaire": null
+        }
+      ]
+    },
+    {
+      "id": "cabinets-dentaires",
+      "branche_nom": "Cabinets dentaires",
+      "idcc": [
+        "1619"
+      ],
+      "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+      "confidence": "exact",
+      "note": "Critères 2026 de la branche cabinets dentaires (mise à jour du 05/10/2026). Les actions listées sont indiquées « exclusivement pour les entreprises de moins de 11 salariés » ; salaires 12 € HT/h et frais annexes pour ces entreprises ; demande avant le 30 novembre. Extrait : « Exclusivement pour les entreprises de moins de 11 salariés » (vérifié le 2026-10-05).",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+        "note": "Formations transverses (socle et autres), 28 h maximum ; secourisme, AFGSU, SSIAP 21 h ; FOAD 100 % : 9,15 € HT/h dans la limite de 14 h. Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "cout_horaire_metier": {
+        "value": 30,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+        "note": "Actualisation des connaissances (28 h), gestion du risque infectieux, modules administratif, ODF et paro-implantologie (100 h). Extrait : « Durée maximale de prise en charge : 28 h Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires": {
+        "value": 12,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+        "note": "12 € HT/h uniquement pour les moins de 11 salariés, formations hors des locaux et sur le temps de travail (taux nul à partir de 11 salariés : plafonds_par_taille). Extrait : « 12 € HT/h pour les frais de salaire uniquement pour les entreprises de moins de 11 salariés, dans le cadre de formations hors des locaux de l’entreprise et sur le temps de travail. » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+        "note": "Indemnité kilométrique de 0,32 € HT/km (pas de forfait journalier). Extrait : « Transport : 0,32 € HT/km » (vérifié le 2026-10-05)."
+      },
+      "frais_hebergement": {
+        "value": 112,
+        "confidence": "estimated",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+        "note": "112 € HT à Paris, dans les grandes métropoles et DROM, 96 € HT en province. Extrait : « Nuitée : 112 € HT pour Paris, grandes métropoles et DROM ou 96 € HT pour la Province » (vérifié le 2026-10-05)."
+      },
+      "frais_restauration": {
+        "value": 19,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+        "note": "19 € HT par repas. Extrait : « Repas : 19 € HT » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_max": {
+        "value": 7500,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
+        "note": "7 500 € HT sous 11 salariés, 15 000 € HT au-delà. Extrait : « Moins de 11 salariés : 7 500 € HT » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_description": "Cabinets dentaires 2026 : 7 500 € HT/an (moins de 11 salariés), 15 000 € HT/an (plus de 11 salariés ; à partir de 50 salariés sur fonds conventionnels et/ou versements volontaires). Les actions publiées sont réservées aux moins de 11 salariés. Demande avant le 30 novembre.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 7500,
+          "quota_horaire_max": null,
+          "description": "Cabinets dentaires, moins de 11 salariés : 7 500 € HT/an ; 30 € HT/h (métier) ou 25 € HT/h (transverses) ; salaires 12 € HT/h ; frais annexes."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "Cabinets dentaires, 11 à 49 salariés : plafond publié de 15 000 € HT/an, mais les actions listées sont « exclusivement pour les entreprises de moins de 11 salariés » : vérifier l'éligibilité auprès d'Opco EP.",
+          "prise_en_charge_salaires_horaire": null
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "Cabinets dentaires, 50 salariés et plus : plafond publié de 15 000 € HT/an (plus de 11 salariés), sur fonds conventionnels et/ou versements volontaires ; à confirmer auprès d'Opco EP.",
+          "prise_en_charge_salaires_horaire": null
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "Cabinets dentaires, 300 salariés et plus : 15 000 € HT/an sur fonds conventionnels et/ou versements volontaires ; à confirmer auprès d'Opco EP.",
+          "prise_en_charge_salaires_horaire": null
+        }
+      ]
+    },
+    {
+      "id": "immobilier",
+      "branche_nom": "Immobilier",
+      "idcc": [
+        "1527"
+      ],
+      "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+      "confidence": "exact",
+      "note": "Critères 2026 de la branche immobilier (mise à jour du 05/10/2026). Pas de salaires ni de frais annexes ; durée minimale 1 h ; formations certifiantes de la liste hors plafond à 9,15 € HT/h. Extrait : « Les frais annexes et les frais de salaire ne sont pas pris en charge. » (vérifié le 2026-10-05).",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+        "note": "Formations transverses (socles et autres) et formations spécifiques aux résidences de tourisme. Extrait : « Coût pédagogique : 25 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "cout_horaire_metier": {
+        "value": 30,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+        "note": "Formations cœur de métier (gestion locative, copropriété, transaction, droit, numérique...) ; formations obligatoires et réglementaires (déontologie, TRACFIN, discrimination) : 40 € HT/h. Extrait : « Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires": {
+        "value": 0,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+        "note": "Pas de prise en charge des salaires. Extrait : « Les frais annexes et les frais de salaire ne sont pas pris en charge. » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+        "note": "Pas de prise en charge des frais annexes. Extrait : « Les frais annexes et les frais de salaire ne sont pas pris en charge. » (vérifié le 2026-10-05)."
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+        "note": "Pas de prise en charge des frais annexes. Extrait : « Les frais annexes et les frais de salaire ne sont pas pris en charge. » (vérifié le 2026-10-05)."
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+        "note": "Pas de prise en charge des frais annexes. Extrait : « Les frais annexes et les frais de salaire ne sont pas pris en charge. » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
+        "note": "Plafond fonction de l'effectif, porté par plafonds_par_taille : 2 500 € HT sous 11 salariés, 4 500 € HT de 11 à 50 salariés, 100 % de la cotisation conventionnelle au-delà de 50 salariés. Extrait : « Moins de 11 salariés : 2 500 € HT » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_description": "Immobilier 2026 : 2 500 € HT/an (moins de 11 salariés), 4 500 € HT/an (11 à 50 salariés), 100 % de la cotisation conventionnelle au-delà de 50 salariés. Pas de salaires ni de frais annexes.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2500,
+          "quota_horaire_max": null,
+          "description": "Immobilier, moins de 11 salariés : 2 500 € HT/an ; 25 à 40 € HT/h selon la formation ; pas de salaires ni de frais annexes."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 4500,
+          "quota_horaire_max": null,
+          "description": "Immobilier, 11 à 50 salariés : 4 500 € HT/an ; pas de salaires ni de frais annexes."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Immobilier, plus de 50 salariés : prise en charge dans la limite de 100 % de la cotisation conventionnelle (pas de montant en euros publié)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Immobilier, 300 salariés et plus : dans la limite de 100 % de la cotisation conventionnelle."
         }
       ]
     }

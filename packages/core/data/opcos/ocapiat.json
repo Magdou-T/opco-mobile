@@ -1,213 +1,340 @@
 {
   "slug": "ocapiat",
   "name": "OCAPIAT",
-  "secteurs": "Agriculture, agroalimentaire, peche, cooperation agricole, territoires",
-  "secteurs_source": "https://www.ocapiat.fr/entreprises",
-  "email_contact": "contact@ocapiat.fr",
+  "secteurs": "Coopération agricole, agriculture, pêche et cultures marines, industries agroalimentaires, territoires",
+  "secteurs_source": "https://www.ocapiat.fr/",
+  "email_contact": "",
   "url_finance_page": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
   "types_formations": [
-    "Plan de developpement des competences",
-    "Alternance",
+    "Plan de développement des compétences (entreprises de moins de 50 salariés)",
+    "Offre régionale TPE-PME (catalogue de formations)",
+    "Boost Compétences",
+    "Compétences d'avenir",
+    "Soutien aux filières",
+    "Parcours certifiants (CQP, TFP, CléA, certifications RS)",
+    "Formations internes et AFEST internes",
+    "DEFI Emploi, DEFI Pro, DEFI Maintien dans l'emploi (moins de 11 salariés)",
+    "Contrat de professionnalisation",
+    "Contrat d'apprentissage",
+    "Période de reconversion (demandes reçues depuis le 15/07/2026)",
     "VAE",
-    "CQP/TFP",
-    "Boost Competences",
-    "Soutien filieres"
+    "Bilan de compétences"
   ],
   "types_formations_source": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
   "cout_horaire_inter": {
     "value": 40,
     "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "PDC <11 et 11-49 sal. (hors peche) : parcours certifiants plafonnes a 40 euros/h HT et 8 000 euros HT/stagiaire/dossier (regles 2026, CA du 12/05/2026). Offre regionale TPE/PME : 100% des couts pedagogiques. NB : les 1 200/600 euros HT/jour (max 3 jours) concernent l'ACCOMPAGNEMENT/ingenierie de projets certifiants, pas le cout pedagogique."
+    "note": "Plafond horaire commun aux offres du plan de développement des compétences des moins de 50 salariés (Boost Compétences, Compétences d'avenir, Soutien aux filières), règles 2026 V6 du conseil d'administration du 03/09/2026. Le taux appliqué sous ce plafond dépend de l'offre : 50 % (Boost, 750 € HT par stagiaire et par dossier), 70 % (Compétences d'avenir, Soutien aux filières, 1 050 € HT), 100 % (offre régionale TPE-PME, parcours certifiants). Extrait : « Coût horaire de formation plafonné à 40 €/h stagiaire HT » (vérifié le 2026-10-05)."
   },
   "cout_horaire_intra": {
-    "value": null,
-    "confidence": "depends_on_branche",
+    "value": 40,
+    "confidence": "estimated",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Varie selon categorie de formation et branche"
+    "note": "Les règles ne distinguent pas inter et intra : le plafond de 40 €/h s'applique à toute formation externe dispensée par un organisme certifié Qualiopi (Boost Compétences). Les formations internes (formateur salarié de l'entreprise) relèvent d'un forfait distinct de 20 € HT/h/stagiaire financé à 50 %. Extrait : « Formation externe dispensée par un organisme de formation externe certifié Qualiopi ou équivalent » (vérifié le 2026-10-05)."
   },
   "cout_horaire_metier": {
-    "value": null,
-    "confidence": "depends_on_branche",
+    "value": 40,
+    "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Soutien filieres: jusqu'a 70% des couts pedagogiques. Bilan de competences: 75 euros HT/h max 24h"
-  },
-  "accompagnement_ingenierie_certifiante": {
-    "parcours_complet_cqp_tfp_clea": {
-      "cout_jour_max": 1200,
-      "duree_max_jours": 3,
-      "note": "Accompagnement/ingenierie de projets certifiants (parcours complet CQP/TFP/CleA) : 1 200 euros HT/jour, max 3 jours. Ce n'est PAS le cout pedagogique de la formation."
-    },
-    "certifications_rs_blocs": {
-      "cout_jour_max": 600,
-      "duree_max_jours": 3,
-      "note": "Certifications RS et blocs de competences : 600 euros HT/jour, max 3 jours (accompagnement/ingenierie)."
-    },
-    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
-  },
-  "boost_competences": {
-    "plafond_par_stagiaire_dossier": 750,
-    "note": "Boost Competences : 50% des couts pedagogiques demandes, plafonnes a 750 euros HT/stagiaire/dossier (cout horaire plafonne 40 euros/h). Dispositifs Competences d'avenir et Soutien filieres : 70% plafonnes a 1 050 euros HT/stagiaire/dossier. (L'ancienne valeur 1 500 euros ne figure pas dans les regles 2026.)",
-    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
-  },
-  "bilan_de_competences": {
-    "cout_horaire_max": 75,
-    "heures_max": 24,
-    "note": "75 euros HT/h max 24h",
-    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
-  },
-  "jury_cqp_alimentaire": {
-    "prise_en_charge": "100% des couts reels justifies",
-    "note": "Accord alimentaire du 19.09.25: 100% des couts reels justifies pour jurys CQP",
-    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+    "note": "Parcours certifiants (CQP, TFP, CléA, certifications RS relevant d'une branche OCAPIAT) des moins de 50 salariés, hors pêche : 40 €/h et 8 000 € HT par stagiaire et par dossier. Extrait : « Coût horaire de formation plafonné à 40 €/h stagiaire HT - Limite de prise en charge plafonnée à 8 000 € HT par stagiaire et par dossier » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires": {
-    "value": null,
-    "confidence": "depends_on_branche",
+    "value": 12,
+    "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "OCAPIAT prend en charge le salaire a 12 euros/h HT, mais UNIQUEMENT pour les salaries de 50 ans et plus, sur l'ensemble des dispositifs PDC (remboursement plafonne au montant du cout pedagogique, regle au 01/05/2026). Pour les moins de 50 ans : pas de prise en charge du salaire par defaut. Secteur peche : regime distinct (5,59 euros/h ou bourses 1 500 euros/mois)."
+    "note": "Uniquement pour les salariés de 50 ans et plus (Boost Compétences, Soutien aux filières, offre régionale TPE-PME, parcours certifiants), remboursement plafonné au montant du coût pédagogique pris en charge (demandes reçues depuis le 01/05/2026). Aucune prise en charge du salaire pour les moins de 50 ans ni pour Compétences d'avenir. Mode selon_accord retenu car l'âge du salarié n'est pas connu du calcul. Secteur pêche : régime distinct (voir variante). Extrait : « Prise en charge du salaire limitée à 12 €/h HT en faveur des salariés de 50 ans et plus - Remboursement du salaire plafonné au montant engagé pour le coût pédagogique » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
-    "confidence": "depends_on_branche",
+    "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Selon accord branche"
+    "note": "Pas de prise en charge des frais annexes dans le plan de développement des moins de 50 salariés, sauf pour les salariés des DROM (et Antilles-Guyane) suivant une formation de l'offre régionale hors de leur territoire (barème administrateurs OPCO). Secteur pêche : barème propre (voir variante). Extrait : « Frais annexes (déplacement, restauration, hébergement) des salariés des DROM suivant une formation de l’offre régionale TPE-PME en métropole par défaut de présence d’organisme sur ces territoires spécifiques » (vérifié le 2026-10-05)."
   },
   "frais_hebergement": {
     "value": null,
-    "confidence": "depends_on_branche",
+    "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Selon accord branche"
+    "note": "Non pris en charge hors cas des salariés des DROM suivant une formation de l'offre régionale hors de leur territoire (voir frais de transport). Extrait : « Frais annexes (déplacement, restauration, hébergement) des salariés des DROM suivant une formation de l’offre régionale TPE-PME en métropole par défaut de présence d’organisme sur ces territoires spécifiques » (vérifié le 2026-10-05)."
   },
   "frais_restauration": {
     "value": null,
-    "confidence": "depends_on_branche",
+    "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Selon accord branche"
+    "note": "Non pris en charge hors cas des salariés des DROM suivant une formation de l'offre régionale hors de leur territoire (voir frais de transport). Extrait : « Frais annexes (déplacement, restauration, hébergement) des salariés des DROM suivant une formation de l’offre régionale TPE-PME en métropole par défaut de présence d’organisme sur ces territoires spécifiques » (vérifié le 2026-10-05)."
   },
   "frais_annexes_pourcentage": {
     "value": null,
-    "confidence": "depends_on_branche",
+    "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Selon accord branche"
+    "note": "Pas de forfait en pourcentage pour les frais annexes (vérifié le 2026-10-05)."
   },
   "budget_annuel_max": {
     "value": null,
-    "confidence": "depends_on_branche",
+    "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Varie selon type de formation. Boost Competences: 1 500 euros/stagiaire/dossier"
+    "note": "Aucun plafond annuel par entreprise n'est publié : les demandes sont financées dans la limite de l'enveloppe annuelle d'OCAPIAT et de plafonds par stagiaire et par dossier (Boost Compétences 750 € HT, Compétences d'avenir et Soutien aux filières 1 050 € HT, parcours certifiants 8 000 € HT). Extrait : « 50 % des coûts pédagogiques demandés, plafonnés à 750 € HT par stagiaire par dossier » (vérifié le 2026-10-05)."
   },
-  "budget_annuel_description": "Pas de budget annuel general par entreprise : plafonds par stagiaire/dossier — 8 000 euros HT (parcours certifiant), 750 euros (Boost Competences), 1 050 euros (Soutien filieres / Competences d'avenir). Peche : 7 000-10 500 euros/stagiaire selon duree.",
+  "budget_annuel_portee": "pedagogie",
+  "budget_annuel_description": "Pas de plafond annuel par entreprise publié : prise en charge dans la limite de l'enveloppe annuelle d'OCAPIAT et de plafonds par stagiaire et par dossier. Boost Compétences : 50 % des coûts pédagogiques, 750 € HT maximum ; Compétences d'avenir et Soutien aux filières : 70 %, 1 050 € HT maximum ; parcours certifiants : 40 €/h et 8 000 € HT maximum ; offre régionale TPE-PME : 100 %. Coût horaire plafonné à 40 € HT/h. Salaire des salariés de 50 ans et plus : 12 € HT/h en plus, plafonné au coût pédagogique pris en charge.",
   "quota_horaire_min": 3.5,
   "quota_horaire_max": null,
   "profils_candidats": [
-    "Salaries secteur agricole et agroalimentaire",
-    "Apprentis",
-    "Saisonniers"
+    "Salariés des entreprises de moins de 50 salariés du champ OCAPIAT",
+    "Salariés de 50 ans et plus (prise en charge du salaire à 12 € HT/h)",
+    "Nouveaux embauchés en CDI ou CDD de plus de 6 mois (DEFI Emploi, moins de 11 salariés)",
+    "Apprentis et salariés en contrat de professionnalisation",
+    "Salariés et non-salariés de la pêche et des cultures marines (règles propres au secteur)"
   ],
-  "tailles_cibles": "Toutes tailles, priorite <50 salaries",
+  "tailles_cibles": "Fonds mutualisés du plan de développement des compétences réservés aux entreprises de moins de 50 salariés ; 50 salariés et plus : contributions conventionnelles de branche et versements volontaires",
   "priorite_tpe_pme": true,
-  "duree_min_formation": "Min 3h30 (Soutien filieres)",
+  "duree_min_formation": "3 h 30 minimum suivies en continu (une demi-journée)",
   "plafonds_par_taille": [
     {
       "taille": "less_11",
-      "cout_horaire_max": null,
+      "cout_horaire_max": 40,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "TPE <11 salaries - Prioritaire. Plafonds selon branche et type de formation."
+      "description": "Moins de 11 salariés (hors pêche) : offre régionale TPE-PME 100 % ; Boost Compétences 50 % (750 € HT par stagiaire et par dossier) ; Compétences d'avenir 70 % (1 050 € HT) ; parcours certifiants 40 €/h et 8 000 € HT par stagiaire et par dossier ; formations internes 50 % d'un forfait de 20 € HT/h/stagiaire ; DEFI Emploi, DEFI Pro et DEFI Maintien. Aucun plafond annuel par entreprise publié, attribution dans la limite de l'enveloppe annuelle d'OCAPIAT."
     },
     {
       "taille": "11_49",
-      "cout_horaire_max": null,
+      "cout_horaire_max": 40,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "PME 11-49 salaries - Prioritaire. Plafonds selon branche et type de formation."
+      "description": "11 à 49 salariés (hors pêche) : offre régionale TPE-PME 100 % ; Boost Compétences 50 % (750 € HT par stagiaire et par dossier) ; Compétences d'avenir 70 % (1 050 € HT) ; parcours certifiants 40 €/h et 8 000 € HT par stagiaire et par dossier ; formations internes 50 % d'un forfait de 20 € HT/h/stagiaire. Aucun plafond annuel par entreprise publié, attribution dans la limite de l'enveloppe annuelle d'OCAPIAT."
     },
     {
       "taille": "50_299",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "ETI 50-299 salaries - Eligible selon dispositif. Plafonds selon branche."
+      "description": "50 salariés et plus : pas de fonds légaux mutualisés pour le plan de développement des compétences. Financements possibles sur les contributions conventionnelles de branche (ex. secteur alimentaire, coopération et commerce agricole : catalogue OCAPIAT jusqu'à 100 % des coûts pédagogiques, limité à 5 stagiaires par an et par entreprise depuis le 13/05/2026) et sur versements volontaires (offre régionale accessible sur contribution volontaire). Aucune enveloppe annuelle chiffrée publiée."
     },
     {
       "taille": "300_plus",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "Grandes entreprises 300+ salaries - Acces limite, principalement alternance et dispositifs specifiques."
+      "description": "300 salariés et plus : pas de fonds légaux mutualisés pour le plan de développement des compétences ; contributions conventionnelles de branche (ex. Bétail et viande : 200 € par jour et par stagiaire au lieu de 300 €) et versements volontaires. Aucune enveloppe annuelle chiffrée publiée."
     }
   ],
-  "processus_approbation": "Demande dematerialisee via portail OCAPIAT. Depot au plus tot 2 mois avant l'action, au plus tard le 1er jour de la formation (Soutien filieres : au plus tard 5 jours avant le demarrage ; peche : 1 mois avant, 2 mois si formation hors de France).",
-  "delai_validation": "Delai de reponse non publie. Regles de depot : au plus tot 2 mois avant, au plus tard le 1er jour de la formation (5 jours avant pour Soutien filieres).",
-  "mode_paiement": "Tiers-payant possible",
-  "alternance_apprentissage": "Apprentissage NPEC",
-  "alternance_professionnalisation": "Selon accord branche",
+  "processus_approbation": "Demande préalable obligatoire sur le service en ligne Mon Compte OCAPIAT, au plus tôt 2 mois avant l'action et au plus tard le 1er jour de la formation (Boost Compétences, Compétences d'avenir, parcours certifiants, formations internes), au plus tard 5 jours avant le démarrage pour Soutien aux filières, 1 mois avant (2 mois si la formation a lieu hors de France) pour le secteur pêche. Organisme certifié Qualiopi. Justificatifs (facture, certificat de réalisation) à déposer au plus tard 3 mois après la fin de la formation, sinon l'accord devient caduc.",
+  "delai_validation": "Réponse dans un délai maximum de 2 mois (conditions générales de gestion et de financement de juin 2026) ; paiement dans un délai de 30 jours après réception de l'ensemble des pièces justificatives.",
+  "mode_paiement": "Remboursement à l'entreprise sur justificatifs, sur la base des montants HT et sans TVA depuis le 01/09/2026. Depuis le 01/10/2026, la subrogation (paiement direct de l'organisme par OCAPIAT) ne subsiste que pour les actions financées intégralement par les fonds légaux du plan de développement des moins de 50 salariés, les actions achetées par OCAPIAT (catalogue) et les conventions Magestic 2026 (jusqu'au 31/12/2026).",
+  "alternance_apprentissage": "Niveaux de prise en charge fixés par France compétences (NPEC). Frais annexes financés par le CFA : hébergement 6 €/nuitée, restauration 3 €/repas ; premier équipement pédagogique 500 € (certifications de niveau 3 ou 4) et 300 € (niveau 5) pour les contrats conclus à compter du 30/07/2026 ; majoration de 1 000 € du coût contrat dans les DROM (niveaux 3 à 5). Aide à l'exercice de maître d'apprentissage : 230 €/mois/apprenti pendant 6 mois (7 mois si le maître d'apprentissage a 50 ans ou plus), entreprises de moins de 50 salariés.",
+  "alternance_professionnalisation": "Forfait parcours pour la plupart des branches : contrat classique 5 000 € (+ 250 €/mois) de 6 à 12 mois, 6 500 € (+ 250 €/mois) de 12 à 18 mois, 8 000 € de 18 à 24 mois ; public prioritaire 6 000 € (+ 333 €/mois) à 10 000 € ; GEIQ 9 000 € (+ 500 €/mois) à 14 000 €. Commerce d'animaux vivants et entreprises sans convention collective : 9,15 €/h (15 €/h pour les publics prioritaires). Aide à la fonction tutorale : 230 €/mois pendant 3 mois (4 mois si le tuteur a 50 ans ou plus).",
   "cpf_abondement": true,
-  "cpf_details": "Possible selon accord branche",
+  "cpf_details": "Accord multi-branches du 19/09/2025 (industries alimentaires, coopération agricole, commerce agricole) : abondement conventionnel du CPF pour les certifications listées dans l'accord, 100 % dans la limite de 1 800 € (CQP), 1 600 € (titre ou diplôme) et 1 350 € (CléA et CléA numérique), toutes tailles d'entreprise, le salarié devant mobiliser au moins 1 € de ses droits CPF.",
   "vae_possible": true,
-  "vae_details": "VAE accompagnee selon accord branche",
-  "limite_dossiers_an": "Selon accord branche",
-  "specificites": "Dispositif Soutien filieres agriculture (70% pedagogie + 12 euros/h salaires). Boost Competences: 1 500 euros/stagiaire. PDC: 1 200 euros HT/jour (non-certif) ou 600 euros HT/jour (certif RS/CQP-TFP). Bilan competences: 75 euros HT/h max 24h. Alimentaire: 100% couts reels jurys CQP.",
-  "points_cles_maximisation": "Soutien filieres = meilleure prise en charge (min 3h30) | Boost Competences 1 500 euros/stagiaire | Priorite TPE/PME <50 salaries | PDC 1 200 euros/jour non-certif vs 600 euros/jour certif",
+  "vae_details": "VAE finançable par Boost Compétences (50 %, 750 € HT par stagiaire et par dossier, entreprises de moins de 50 salariés) ou par la période de reconversion. Secteur pêche : frais d'accompagnement pris en charge dans la limite de 800 € HT. Jurys de CQP des branches alimentaires relevant de l'accord du 19/09/2025 : 100 % des coûts réels justifiés.",
+  "limite_dossiers_an": "Pas de limite générale du nombre de dossiers (dans la limite des fonds disponibles). DEFI Emploi : 2 par an et par entreprise (10 par groupement d'employeurs), 1 DEFI tous les 5 ans pour un même salarié ; formations internes : 5 stagiaires maximum par dossier ; secteur alimentaire 50 salariés et plus : catalogue limité à 5 stagiaires par an et par entreprise.",
+  "specificites": "Règles 2026 V6 (conseil d'administration du 03/09/2026) | Coût horaire plafonné à 40 € HT/h pour les moins de 50 salariés | Boost Compétences 50 % (750 € HT), Compétences d'avenir et Soutien aux filières 70 % (1 050 € HT), offre régionale 100 %, parcours certifiants 8 000 € HT | Salaire pris en charge (12 € HT/h) uniquement pour les 50 ans et plus, plafonné au coût pédagogique | Pas de frais annexes hors DROM et pêche | Période de reconversion depuis le 15/07/2026 : 11 €/h (13 €/h pour les 50 ans et plus) dans les branches qui ont fixé un niveau, 9,15 €/h sinon, 150 à 450 h | Réforme TVA : remboursements HT depuis le 01/09/2026, subrogation limitée depuis le 01/10/2026 | FSE+ 2024-2025 clos (dépôts jusqu'au 13/03/2026), nouvelle demande de subvention déposée le 29/05/2026 pour un conventionnement fin 2026",
+  "points_cles_maximisation": "Chercher d'abord la formation dans l'offre régionale TPE-PME (plus de 3 500 formations, 100 % des coûts pédagogiques) | Pour une formation certifiante (CQP, TFP, CléA, RS), passer par les parcours certifiants (40 €/h, jusqu'à 8 000 €) plutôt que Boost (750 €) | Thèmes eau, climat, données, crise, changement : Compétences d'avenir à 70 % | Salariés de 50 ans et plus : demander le salaire à 12 €/h | Déposer la demande au plus tôt 2 mois avant et au plus tard le 1er jour de formation | Vérifier les fonds conventionnels de votre branche (accessibles aussi aux 50 salariés et plus)",
+  "accompagnement_ingenierie_certifiante": {
+    "parcours_complet_cqp_tfp_clea": {
+      "cout_jour_max": 1200,
+      "duree_max_jours": 3,
+      "note": "Accompagnement de l'entreprise à la réalisation de projets certifiants (ingénierie), distinct du coût pédagogique. Extrait : « 1200 € HT/ jour dans la limite de 3 jours par entreprise pour l’ensemble des actions éligibles » (vérifié le 2026-10-05)."
+    },
+    "certifications_rs_blocs": {
+      "cout_jour_max": 600,
+      "duree_max_jours": 3,
+      "note": "Certifications RS et blocs de compétences CQP/TFP. Extrait : « 600 € HT/ jour dans la limite de 3 jours par entreprise pour l’ensemble des actions éligibles » (vérifié le 2026-10-05)."
+    },
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+  "boost_competences": {
+    "taux_pourcentage": 50,
+    "plafond_par_stagiaire_dossier": 750,
+    "cout_horaire_max": 40,
+    "note": "Boost Compétences, entreprises de moins de 50 salariés hors pêche et chambres d'agriculture, formations externes de 3 h 30 minimum ; salaire 12 €/h HT pour les 50 ans et plus, plafonné au coût pédagogique pris en charge. La FAQ de la page mentionne encore un plafond de 1 500 € par salarié et par dossier : c'est l'assiette éligible avant application du taux de 50 % (soit 750 € de prise en charge). Extrait : « 50 % des coûts pédagogiques demandés plafonnés à 750 € par stagiaire » (vérifié le 2026-10-05).",
+    "source_url": "https://www.ocapiat.fr/financement-sur-mesure-par-lopco-simulateur-boost-competences/"
+  },
+  "bilan_de_competences": {
+    "cout_horaire_max": 75,
+    "heures_max": 24,
+    "note": "Plafond de 75 € HT/h sur 24 h publié pour le secteur pêche, cultures marines et coopération maritime (et pour les chambres d'agriculture et MFR sur leurs fonds de branche) ; pour les autres secteurs, le bilan de compétences relève de Boost Compétences (50 %, 750 € HT). Extrait : « Bilan de compétences prise en charge plafonnée à 75 € HT/h/stagiaire pour 24H max d'accompagnement » (vérifié le 2026-10-05).",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+  "jury_cqp_alimentaire": {
+    "prise_en_charge": "100 % des coûts réels justifiés",
+    "note": "Branches du secteur alimentaire relevant de l'accord du 19/09/2025. Extrait : « Branches du secteur alimentaire relevant de l’accord du 19.09.25 : prise en charge de 100 % des coûts réels justifiés pour les jurys de CQP » (vérifié le 2026-10-05).",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+  "derniere_verification": "2026-10-05",
   "dispositifs_complementaires": [
     {
-      "id": "boost-competences",
-      "nom": "Boost Competences",
-      "cumul": "additif",
-      "montant_max": 750,
-      "unite": "par_dossier",
-      "pourcentage_couts": 50,
-      "description": "50 % des couts pedagogiques pris en charge, plafonnes a 750 euros HT par stagiaire et par dossier (cout horaire plafonne a 40 euros HT/h).",
-      "conditions": [
-        "Entreprise de moins de 50 salaries",
-        "Cout horaire de formation plafonne a 40 euros HT/h",
-        "Dans la limite des fonds disponibles"
-      ],
-      "demarches": "Demande dematerialisee sur le portail OCAPIAT, au plus tot 2 mois avant l'action et au plus tard le 1er jour de la formation.",
-      "tailles_eligibles": [
-        "less_11",
-        "11_49"
-      ],
-      "publics": null,
-      "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
-    },
-    {
-      "id": "soutien-filieres",
-      "nom": "Soutien aux filieres / Competences d'avenir",
-      "cumul": "additif",
-      "montant_max": 1050,
-      "unite": "par_dossier",
-      "pourcentage_couts": 70,
-      "description": "70 % des couts pedagogiques pris en charge, plafonnes a 1 050 euros HT par stagiaire et par dossier, pour les formations relevant des dispositifs Soutien aux filieres et Competences d'avenir.",
-      "conditions": [
-        "Formation eligible aux dispositifs Soutien aux filieres ou Competences d'avenir",
-        "Depot au plus tard 5 jours avant le demarrage"
-      ],
-      "demarches": "Demande sur le portail OCAPIAT au plus tard 5 jours avant le debut de la formation.",
-      "tailles_eligibles": [
-        "less_11",
-        "11_49"
-      ],
-      "publics": null,
-      "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
-    },
-    {
       "id": "offre-regionale-tpe-pme",
-      "nom": "Offre regionale TPE/PME",
+      "nom": "Offre régionale TPE-PME (catalogue OCAPIAT)",
       "cumul": "alternatif",
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": 100,
-      "description": "Formations de l'offre regionale OCAPIAT prises en charge a 100 % des couts pedagogiques pour les TPE/PME.",
+      "description": "Plus de 3 500 formations courtes clés en main (présentiel, distanciel ou mixte) dont les coûts pédagogiques sont financés à 100 % sur les fonds mutualisés pour les entreprises de moins de 50 salariés, avec prise en charge du salaire à 12 € HT/h pour les salariés de 50 ans et plus (plafonnée au coût pédagogique).",
       "conditions": [
-        "Entreprise de moins de 50 salaries",
-        "Formation choisie dans l'offre regionale OCAPIAT"
+        "Entreprise du champ OCAPIAT de moins de 50 salariés",
+        "Formation choisie dans le catalogue de l'offre régionale",
+        "Dans la limite de l'enveloppe annuelle et des fonds disponibles",
+        "Entreprises de 50 salariés et plus : accès sur contribution volontaire (ou fonds conventionnels de certaines branches)"
       ],
-      "demarches": "Consulter l'offre regionale sur ocapiat.fr et s'inscrire en ligne.",
+      "demarches": "Rechercher la formation sur le portail de l'offre régionale (offredeformation.ocapiat.fr) ou les catalogues régionaux, puis inscrire le salarié en ligne via le portail et l'espace OCAPIAT.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/catalogue-de-formations-et-financement/"
+    },
+    {
+      "id": "boost-competences",
+      "nom": "Boost Compétences (formations externes au choix de l'entreprise)",
+      "cumul": "alternatif",
+      "montant_max": 750,
+      "unite": "par_stagiaire",
+      "pourcentage_couts": 50,
+      "description": "50 % des coûts pédagogiques d'une formation externe choisie librement (thème, organisme, lieu, calendrier), plafonnés à 750 € HT par stagiaire et par dossier, avec un coût horaire plafonné à 40 € HT/h. Salaire des 50 ans et plus : 12 € HT/h, plafonné au coût pédagogique pris en charge.",
+      "conditions": [
+        "Entreprise de moins de 50 salariés, hors secteur pêche (PCMCM) et chambres d'agriculture",
+        "Formation externe d'au moins 3 h 30 en continu, organisme certifié Qualiopi (formation, bilan de compétences ou VAE)",
+        "Le taux de 50 % s'applique après plafonnement à 40 €/h",
+        "Dans la limite des fonds disponibles"
+      ],
+      "demarches": "Déposer la demande préalable sur Mon Compte OCAPIAT au plus tôt 2 mois avant l'action et au plus tard le 1er jour de la formation, avec la convention de formation ; transmettre facture et certificat de réalisation au plus tard 3 mois après la fin.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/financement-sur-mesure-par-lopco-simulateur-boost-competences/"
+    },
+    {
+      "id": "competences-avenir",
+      "nom": "Compétences d'avenir",
+      "cumul": "alternatif",
+      "montant_max": 1050,
+      "unite": "par_stagiaire",
+      "pourcentage_couts": 70,
+      "description": "70 % des coûts pédagogiques demandés, plafonnés à 1 050 € HT par stagiaire et par dossier (coût horaire plafonné à 40 € HT/h), pour des formations externes sur 5 thèmes : sécurité des données, gestion de l'eau et stress hydrique, acculturation au changement climatique, gestion de crise, management du changement. Pas de prise en charge du salaire.",
+      "conditions": [
+        "Entreprise de moins de 50 salariés, hors filière pêche et chambres d'agriculture",
+        "Formation externe d'au moins 3 h 30 en continu sur l'un des 5 thèmes",
+        "Organisme certifié Qualiopi"
+      ],
+      "demarches": "Demande préalable sur Mon Compte OCAPIAT (Actions spécifiques) avec la convention de formation, au plus tôt 2 mois avant et au plus tard le 1er jour de la formation.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/competences-davenir/"
+    },
+    {
+      "id": "soutien-filieres",
+      "nom": "Soutien aux filières (filières en difficulté conjoncturelle)",
+      "cumul": "alternatif",
+      "montant_max": 1050,
+      "unite": "par_stagiaire",
+      "pourcentage_couts": 70,
+      "description": "70 % des coûts pédagogiques demandés, plafonnés à 1 050 € HT par stagiaire (coût horaire plafonné à 40 € HT/h), et salaire des 50 ans et plus à 12 € HT/h, pour les entreprises d'une filière reconnue en grande difficulté conjoncturelle.",
+      "conditions": [
+        "Entreprise de moins de 50 salariés",
+        "Filière ayant fait l'objet d'une saisine paritaire de la branche et d'un avis favorable de la commission sectorielle professionnelle (pas un guichet ouvert)",
+        "Formation externe d'au moins 3 h 30, organisme certifié Qualiopi"
+      ],
+      "demarches": "Vérifier l'éligibilité auprès du conseiller OCAPIAT, puis déposer la demande sur Mon Compte (Soutien aux filières) dans les 2 mois précédant l'action et au plus tard 5 jours avant le démarrage.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/soutien-aux-filieres/"
+    },
+    {
+      "id": "parcours-certifiants",
+      "nom": "Parcours certifiants (CQP, TFP, CléA, certifications RS)",
+      "cumul": "alternatif",
+      "montant_max": 8000,
+      "unite": "par_stagiaire",
+      "pourcentage_couts": 100,
+      "description": "Coûts pédagogiques des formations certifiantes relevant d'une branche OCAPIAT pris en charge dans la limite de 40 € HT/h et de 8 000 € HT par stagiaire et par dossier ; frais de positionnement, d'évaluation et de jury selon barème ; salaire des 50 ans et plus à 12 € HT/h.",
+      "conditions": [
+        "Entreprise de moins de 50 salariés, hors pêche",
+        "Certification dont une branche OCAPIAT est autorité certificatrice ou co-certificatrice (CQP, TFP, CléA, RS)",
+        "Coût horaire retenu plafonné à 40 € HT/h",
+        "Dans la limite de l'enveloppe annuelle"
+      ],
+      "demarches": "Construire le parcours avec le conseiller OCAPIAT, puis saisir la demande préalable sur Mon Compte > Saisir une nouvelle demande de financement > Parcours certifiants.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/parcours-certifiants/"
+    },
+    {
+      "id": "formations-internes",
+      "nom": "Formations internes et AFEST internes",
+      "cumul": "alternatif",
+      "montant_max": 10,
+      "unite": "par_heure",
+      "pourcentage_couts": null,
+      "description": "50 % d'un forfait de 20 € HT par heure et par stagiaire, soit 10 € HT par heure et par stagiaire, pour une formation dispensée par un salarié de l'entreprise (3 h 30 à 70 h), dans la limite de 5 stagiaires par dossier (3 500 € maximum par dossier).",
+      "conditions": [
+        "Entreprise de moins de 50 salariés, hors pêche et chambres d'agriculture",
+        "Formateur salarié de l'entreprise, formation de 3 h 30 minimum à 70 h maximum",
+        "Non cumulable pour un même salarié avec un parcours DEFI"
+      ],
+      "demarches": "Transmettre une fiche projet au conseiller OCAPIAT, puis déposer la demande sur Mon Compte au plus tôt 2 mois avant et au plus tard le 1er jour de la formation.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/formations-internes/"
+    },
+    {
+      "id": "defi-emploi",
+      "nom": "DEFI Emploi, DEFI Pro et DEFI Maintien dans l'emploi",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Appui à l'intégration d'un nouveau collaborateur (CDI ou CDD de plus de 6 mois) ou au maintien dans l'emploi en période de baisse d'activité : une journée d'ingénierie de 600 € HT réglée par OCAPIAT au prestataire référencé, et 50 % des coûts de la formation interne sur la base d'un forfait de 20 € HT/h par stagiaire (35 à 149 h ; DEFI Pro : contrat de professionnalisation au-delà).",
+      "conditions": [
+        "Entreprise de moins de 11 salariés, hors pêche",
+        "2 DEFI Emploi par an et par entreprise (10 par groupement d'employeurs), 1 DEFI tous les 5 ans pour un même salarié",
+        "Demande avant le début de l'action de formation"
+      ],
+      "demarches": "Contacter le conseiller OCAPIAT pour mobiliser le prestataire référencé, puis déposer la demande de prise en charge avant le début de la formation interne.",
+      "tailles_eligibles": [
+        "less_11"
+      ],
+      "publics": "Salariés nouvellement recrutés ou salariés de TPE en baisse d'activité",
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+    },
+    {
+      "id": "offres-accompagnees",
+      "nom": "Offres accompagnées (transfert des savoir-faire, prévention des risques, AFEST Time, diagnostic RH)",
+      "cumul": "hors_budget",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Prestations d'accompagnement réalisées par des prestataires référencés par OCAPIAT et réglées par l'OPCO : 1 200 € HT par jour de prestation dans la limite de 8 jours par accompagnement. Il s'agit d'un appui RH, pas du financement d'une formation.",
+      "conditions": [
+        "Entreprise de moins de 50 salariés",
+        "Prestataire référencé par OCAPIAT",
+        "Dans la limite de l'enveloppe annuelle"
+      ],
+      "demarches": "Solliciter le conseiller OCAPIAT, qui organise l'intervention du prestataire référencé.",
       "tailles_eligibles": [
         "less_11",
         "11_49"
@@ -215,6 +342,138 @@
       "publics": null,
       "confidence": "exact",
       "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+    },
+    {
+      "id": "catalogue-alimentaire-50-plus",
+      "nom": "Fonds conventionnel multi-branches (alimentaire, coopération et commerce agricole) : catalogue pour les 50 salariés et plus",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": 100,
+      "description": "Prise en charge jusqu'à 100 % des coûts pédagogiques des formations du catalogue de l'offre régionale OCAPIAT pour les entreprises de 50 salariés et plus des branches signataires de l'accord multi-branches, limitée à 5 stagiaires par an et par entreprise pour les demandes reçues depuis le 13/05/2026 (20 auparavant).",
+      "conditions": [
+        "Entreprise de 50 salariés et plus relevant des industries alimentaires (IDCC 0112, 1396, 1513, 1534, 1586, 1747, 1930, 1938, 1987, 2728, 3109, 3255), de la coopération agricole (IDCC 7001, 7002, 7003, 7004, 7005, 7006, 7007, 7020, 7023, 7027, 7503, 8435) ou du négoce agricole (IDCC 1077)",
+        "5 stagiaires maximum par an et par entreprise",
+        "Dans la limite des fonds disponibles du fonds conventionnel"
+      ],
+      "demarches": "Inscrire les salariés via le portail de l'offre régionale OCAPIAT ; se rapprocher du conseiller pour vérifier le solde du fonds.",
+      "tailles_eligibles": [
+        "50_299",
+        "300_plus"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.ocapiat.fr/formations-catalogue-secteur-alimentaire-entreprises-50-salaries-et-plus-le-financement-evolue/"
+    },
+    {
+      "id": "fonds-conventionnels-branches",
+      "nom": "Fonds conventionnels de branche (contributions spécifiques)",
+      "cumul": "additif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Certaines branches financent des actions prioritaires sur leur contribution conventionnelle, y compris pour les entreprises de 50 salariés et plus, dans la limite de l'enveloppe allouée : par exemple Bétail et viande 100 % jusqu'à 5 000 € HT par stagiaire et par action (300 € par jour et par stagiaire sous 300 salariés), négoce agricole 18 € HT/h stagiaire, coopération agricole 5 branches 60 € HT/h pour les salariés de 45 ans et plus, entreprises du paysage 25 €/h pour trois certifications de branche.",
+      "conditions": [
+        "Bétail et viande (IDCC 7001) : actions prioritaires (prévention TMS, carbone, FLE, management, biosécurité, bien-être animal), 100 % jusqu'à 5 000 € HT par stagiaire et par action, 300 € par jour et par stagiaire (200 € à partir de 300 salariés)",
+        "Négoce et industries des produits du sol (IDCC 1077) : actions prioritaires CPNE à 18 € HT/h stagiaire ; sans plafond par entreprise sous 11 salariés, 150 % de la contribution conventionnelle au-delà",
+        "Coopération agricole 5 branches (IDCC 7002) : salariés de 45 ans et plus, 100 % des coûts pédagogiques plafonnés à 60 € HT/h ; sans plafond annuel sous 11 salariés",
+        "Entreprises du paysage (IDCC 7018) : trois certifications de branche à 100 % dans la limite de 25 €/h (5 salariés maximum sous 50 salariés) ; CACES ou permis BE pour les 50 salariés et plus dans la limite de 700 € par stagiaire",
+        "Industrie et commerces en gros des viandes (IDCC 1534) : parcours individualisés cofinancés à 30, 20 ou 10 €/h après validation de la commission",
+        "Entreprise à jour de ses contributions légales et conventionnelles"
+      ],
+      "demarches": "Demander au conseiller OCAPIAT de mobiliser le fonds conventionnel de la branche ; selon les cas, attribution par délégation aux services ou décision de la commission paritaire.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+    }
+  ],
+  "variantes_branche": [
+    {
+      "id": "peche-cultures-marines",
+      "branche_nom": "Pêche professionnelle maritime, conchyliculture et coopération maritime",
+      "idcc": [
+        "5619",
+        "7019",
+        "2494"
+      ],
+      "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+      "confidence": "exact",
+      "note": "Barème propre au secteur pêche, cultures marines et coopération maritime (règles 2026 V6, pages 35 à 39) : coût horaire selon le type de formation, plafonds annuels par stagiaire pour les formations réglementaires, bourses de stage et frais annexes au kilomètre. Boost Compétences, Compétences d'avenir, parcours certifiants et formations internes ne s'appliquent pas à ce secteur. Extrait : « Pêche professionnelle maritime - IDCC n° 5619 / Conchyliculture - IDCC n° 7019 / Coopération maritime – IDCC n° 2494 » (vérifié le 2026-10-05).",
+      "cout_horaire_inter": {
+        "value": 40,
+        "confidence": "exact",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Plafond le plus élevé du barème pêche (administration, informatique, langues, techniques) ; prévention et hygiène 15 € HT/h, conduite (CACES, FIMO, permis C) 20 € HT/h. Extrait : « Administration (gestion, comptabilité, commerce, management, organisation) 40 € HT/h ; Informatique (bureautique, internet, logiciel professionnel) 40 € HT/h ; Langues 40 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "cout_horaire_metier": {
+        "value": 40,
+        "confidence": "exact",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Stages métier du secteur pêche et cultures marines. Extrait : « Stages métier (hydraulique, mécanique, électricité, maintenance, soudure, froid, permis d'exploitation, plongée) 40 € HT/h » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Uniquement pour les formations réglementaires diplômantes de plus de 150 h : bourse ou participation à la rémunération plafonnée à 5,59 €/h (moins de 11 salariés) ou 9,89 €/h (11 à 49 salariés) si la contribution conventionnelle est versée, 3,61 €/h sinon ; formations courtes : pas de prise en charge sous 11 salariés, salaire forfaitaire selon les fonds disponibles de 11 à 49 salariés. Extrait : « Bourse de stage/ou participation sur la rémunération plafonnée à 9,89 €/h selon l’intervention ou non d’un organisme tiers et si versement de la contribution conventionnelle » (vérifié le 2026-10-05)."
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Indemnité kilométrique (pas de forfait journalier) pour les formations réglementaires diplômantes : 0,30 € HT/km au-delà de 20 km, plafonnée à 150 € HT/mois sous 11 salariés et 300 € HT/mois de 11 à 49 salariés. Extrait : « Frais de transport : Contribution de 0,30 € HT/kilomètre versée au-delà d'une distance domicile-lieu de formation supérieure ou égale à 20 km. Frais plafonnés à 150 € HT/mois » (vérifié le 2026-10-05)."
+      },
+      "frais_hebergement": {
+        "value": 68,
+        "confidence": "estimated",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "68 € HT/jour en province et 83 € HT/jour à Paris pour les formations courtes de moins de 150 h des entreprises de 11 à 49 salariés ; sous 11 salariés, seul un forfait mensuel (150 € HT/mois) existe pour les formations réglementaires diplômantes. Valeur estimée car elle dépend de la taille et de la durée. Extrait : « Prise en charge de l'hébergement plafonnée à 68 € HT/jour (province) et 83 € HT/jour (Paris) » (vérifié le 2026-10-05)."
+      },
+      "frais_restauration": {
+        "value": 15,
+        "confidence": "estimated",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "15 € HT par repas pour les formations courtes de moins de 150 h des entreprises de 11 à 49 salariés ; non prévu sous 11 salariés. Extrait : « Prise en charge des repas (hors hébergement) plafonnée à 15 € HT/repas » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+        "note": "Plafonds annuels par stagiaire selon la formation : 7 000 € HT pour une formation réglementaire de 750 h maximum (2 000 € HT sans contribution conventionnelle, 2 500 € HT pour un CQP sous 11 salariés), 10 500 € HT au-delà de 750 h ; autres formations prioritaires sous 11 salariés : 1 000 € HT par entreprise (2 000 € HT pour les coopératives maritimes et comités). Extrait : « Pour les autres formations entrant dans les priorités (quel que soit le montant de la cotisation) : 1 000 € HT par entreprise » (vérifié le 2026-10-05)."
+      },
+      "budget_annuel_description": "Pêche et cultures marines : 7 000 € HT par stagiaire pour une formation réglementaire jusqu'à 750 h (si contribution conventionnelle versée, sinon 2 000 €), 10 500 € HT au-delà de 750 h ; autres formations prioritaires des moins de 11 salariés : 1 000 € HT par entreprise et par an. Demande 1 mois avant le stage (2 mois hors de France).",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Pêche, moins de 11 salariés : 15 à 40 € HT/h selon le type de formation ; 7 000 € HT par stagiaire (formation réglementaire jusqu'à 750 h, contribution conventionnelle versée), 10 500 € HT au-delà de 750 h ; autres formations prioritaires 1 000 € HT par entreprise ; ancienneté de 6 mois dans les 12 derniers mois (3 mois pour les formations d'accès au métier)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": 40,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Pêche, 11 à 49 salariés : 15 à 40 € HT/h selon le type de formation ; 7 000 € HT par stagiaire (formation réglementaire jusqu'à 750 h), 10 500 € HT au-delà ; hébergement 68 € HT/jour (83 € à Paris) et repas 15 € HT pour les formations de moins de 150 h."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Pêche et cultures marines, 50 salariés et plus : financement sur la contribution conventionnelle de branche dans la limite de l'enveloppe, ou sur versement volontaire, selon les mêmes critères que les 11 à 49 salariés. Aucune enveloppe chiffrée publiée."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Pêche et cultures marines, 300 salariés et plus : contribution conventionnelle de branche ou versement volontaire, mêmes critères que les 11 à 49 salariés. Aucune enveloppe chiffrée publiée."
+        }
+      ]
     }
   ]
 }
