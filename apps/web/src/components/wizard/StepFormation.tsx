@@ -1,7 +1,13 @@
 'use client';
 
-import { WizardState, TrainingType, TrainingMode, CertificationType, TRAINING_TYPE_LABELS, TRAINING_MODE_LABELS } from '@/lib/types';
-import { getOpcoBySlug } from '../../../data/opcos';
+import {
+  TRAINING_TYPE_LABELS,
+  TRAINING_MODE_LABELS,
+  applyVarianteBranche,
+  getEmbeddedOpcoBySlug,
+  resolveVarianteBranche,
+} from '@opco/core';
+import type { CertificationType, TrainingMode, TrainingType, WizardState } from '@opco/core';
 
 interface Props {
   state: WizardState;
@@ -11,7 +17,10 @@ interface Props {
 
 export function StepFormation({ state, updateState, updateFormationCosts }: Props) {
   const opcoSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const opco = opcoSlug ? getOpcoBySlug(opcoSlug) : null;
+  const opcoGeneral = opcoSlug ? getEmbeddedOpcoBySlug(opcoSlug) : null;
+  // Plafond de la branche appliquée (choix manuel ou IDCC détecté), comme le fera le moteur.
+  const variante = opcoGeneral ? resolveVarianteBranche(opcoGeneral, state) : null;
+  const opco = opcoGeneral && variante ? applyVarianteBranche(opcoGeneral, variante) : opcoGeneral;
 
   // Alert if cost/h exceeds OPCO ceiling
   const ceilingWarning = (() => {

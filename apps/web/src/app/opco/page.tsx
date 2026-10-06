@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ALL_OPCOS } from '../../../data/opcos';
+import { EMBEDDED_OPCOS } from '@opco/core';
 
 export const metadata: Metadata = {
   title: 'Les 11 OPCO : fiches, barèmes et dispositifs 2026',
@@ -22,7 +22,7 @@ export default function OpcoIndexPage() {
       </p>
 
       <div className="mt-10 grid gap-5 md:grid-cols-2">
-        {ALL_OPCOS.map((o) => (
+        {EMBEDDED_OPCOS.map((o) => (
           <Link
             key={o.slug}
             href={`/opco/${o.slug}`}

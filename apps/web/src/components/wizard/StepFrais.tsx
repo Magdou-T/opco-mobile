@@ -1,6 +1,6 @@
 'use client';
 
-import { WizardState, TransportMode } from '@/lib/types';
+import type { TransportMode, WizardState } from '@opco/core';
 
 interface Props {
   state: WizardState;

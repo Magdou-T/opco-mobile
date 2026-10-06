@@ -1,7 +1,12 @@
 'use client';
 
-import { WizardState, ContractType, CompanySize, CONTRACT_TYPE_LABELS, COMPANY_SIZE_LABELS } from '@/lib/types';
-import { getOpcoBySlug } from '../../../data/opcos';
+import {
+  CONTRACT_TYPE_LABELS,
+  COMPANY_SIZE_LABELS,
+  getEmbeddedOpcoBySlug,
+  resolveVarianteBranche,
+} from '@opco/core';
+import type { CompanySize, ContractType, WizardState } from '@opco/core';
 
 interface Props {
   state: WizardState;
@@ -10,9 +15,11 @@ interface Props {
 
 export function StepSituation({ state, updateState }: Props) {
   const opcoSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const opco = opcoSlug ? getOpcoBySlug(opcoSlug) : null;
-  const baremes = opco?.baremes_par_branche ?? [];
-  const selectedBareme = baremes.find((b) => b.id === state.selectedBranche);
+  const opco = opcoSlug ? getEmbeddedOpcoBySlug(opcoSlug) : null;
+  const variantes = opco?.variantes_branche ?? [];
+  // Barème de branche que le moteur appliquera : le choix manuel prime, sinon la variante qui couvre l'IDCC détecté.
+  const varianteAppliquee = opco ? resolveVarianteBranche(opco, state) : null;
+  const applicationAutomatique = varianteAppliquee != null && varianteAppliquee.id !== state.selectedBrancheId;
 
   return (
     <div className="space-y-6">
@@ -26,32 +33,42 @@ export function StepSituation({ state, updateState }: Props) {
       </div>
 
       {/* Accord de branche */}
-      {opco && baremes.length > 0 && (
+      {opco && variantes.length > 0 && (
         <div className="space-y-2">
           <label className="block text-sm font-medium text-ink-soft" htmlFor="branche-select">
             Votre accord de branche
           </label>
           <p className="text-xs text-ink-faint">
-            {opco.name} applique des barèmes différents selon la convention collective.
+            {opco.name}{' '}applique des barèmes différents selon la convention collective.
             Sélectionnez la vôtre pour affiner l&apos;estimation ; laissez « Je ne sais pas »
-            pour le barème générique.
+            pour le barème général.
           </p>
           <select
             id="branche-select"
-            value={state.selectedBranche || ''}
-            onChange={(e) => updateState({ selectedBranche: e.target.value || null })}
+            value={state.selectedBrancheId || ''}
+            onChange={(e) => updateState({ selectedBrancheId: e.target.value || null })}
             className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
           >
-            <option value="">Je ne sais pas / autre branche (barème générique)</option>
-            {baremes.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.nom}
+            <option value="">
+              {applicationAutomatique && varianteAppliquee
+                ? `Automatique : ${varianteAppliquee.branche_nom}`
+                : 'Je ne sais pas / autre branche (barème général)'}
+            </option>
+            {variantes.map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.branche_nom}
               </option>
             ))}
           </select>
-          {selectedBareme?.note && (
+          {applicationAutomatique && (
+            <p className="text-xs text-valid">
+              Barème appliqué automatiquement d&apos;après la convention collective de votre entreprise
+              (IDCC {state.detectedIdcc}). Choisissez une autre branche dans la liste pour le remplacer.
+            </p>
+          )}
+          {varianteAppliquee?.note && (
             <div className="rounded border border-marker bg-marker-soft px-3 py-2 text-xs leading-relaxed text-ink-soft">
-              {selectedBareme.note}
+              {varianteAppliquee.note}
             </div>
           )}
         </div>

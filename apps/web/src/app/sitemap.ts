@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { ALL_OPCOS } from '../../data/opcos';
+import { EMBEDDED_OPCOS } from '@opco/core';
 
 export const dynamic = 'force-static';
 
@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: path === '' ? 1 : 0.8,
   }));
 
-  const opcoPages = ALL_OPCOS.map((o) => ({
+  const opcoPages = EMBEDDED_OPCOS.map((o) => ({
     url: `${BASE}/opco/${o.slug}`,
     changeFrequency: 'monthly' as const,
     priority: 0.7,

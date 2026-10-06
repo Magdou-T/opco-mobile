@@ -1,14 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { WizardState } from '@/lib/types';
-import { OPCO_LIST } from '../../../data/opcos';
+import { EMBEDDED_OPCO_LIST, resolveIdccToOpco } from '@opco/core';
+import type { WizardState } from '@opco/core';
 import { useSirenLookup } from '@/hooks/useSirenLookup';
-import { resolveIdccToOpco } from '@/lib/opco-resolver';
 
 interface Props {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
+}
+
+/** Début du texte des secteurs pour les listes déroulantes (le texte complet peut dépasser 400 caractères). */
+function secteursCourts(secteurs: string, max = 90): string {
+  if (secteurs.length <= max) return secteurs;
+  const coupe = secteurs.slice(0, max);
+  const finMot = coupe.lastIndexOf(' ');
+  return `${(finMot > 0 ? coupe.slice(0, finMot) : coupe).replace(/[\s,;:]+$/, '')}…`;
 }
 
 export function StepIdentification({ state, updateState }: Props) {
@@ -24,11 +31,13 @@ export function StepIdentification({ state, updateState }: Props) {
       opcoKnown: m === 'known',
       selectedOpcoSlug: m === 'search' ? null : state.selectedOpcoSlug,
       detectedOpcoSlug: m === 'known' ? null : state.detectedOpcoSlug,
+      // L'IDCC détecté choisit automatiquement un barème de branche : il ne doit pas survivre à l'OPCO détecté.
+      detectedIdcc: m === 'known' ? null : state.detectedIdcc,
     });
   };
 
   const handleOpcoSelect = (slug: string) => {
-    updateState({ selectedOpcoSlug: slug, selectedBranche: null });
+    updateState({ selectedOpcoSlug: slug, selectedBrancheId: null });
   };
 
   const handleSearchInput = (value: string) => {
@@ -45,7 +54,7 @@ export function StepIdentification({ state, updateState }: Props) {
       detectedCompanyName: company.nom_complet,
       detectedOpcoSlug: null,
       detectedIdcc: null,
-      selectedBranche: null,
+      selectedBrancheId: null,
     };
 
     // Resolve IDCC to OPCO
@@ -69,7 +78,7 @@ export function StepIdentification({ state, updateState }: Props) {
     state.selectedOpcoSlug == null;
 
   const effectiveSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const detectedOpco = effectiveSlug ? OPCO_LIST.find(o => o.slug === effectiveSlug) : null;
+  const detectedOpco = effectiveSlug ? EMBEDDED_OPCO_LIST.find(o => o.slug === effectiveSlug) : null;
 
   return (
     <div className="space-y-6">
@@ -128,9 +137,9 @@ export function StepIdentification({ state, updateState }: Props) {
             className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
           >
             <option value="">-- Choisir un OPCO --</option>
-            {OPCO_LIST.map((o) => (
+            {EMBEDDED_OPCO_LIST.map((o) => (
               <option key={o.slug} value={o.slug}>
-                {o.name}, {o.secteurs}
+                {o.name}, {secteursCourts(o.secteurs)}
               </option>
             ))}
           </select>
@@ -219,13 +228,13 @@ export function StepIdentification({ state, updateState }: Props) {
               </label>
               <select
                 value={state.selectedOpcoSlug || ''}
-                onChange={(e) => updateState({ selectedOpcoSlug: e.target.value || null, selectedBranche: null })}
+                onChange={(e) => updateState({ selectedOpcoSlug: e.target.value || null, selectedBrancheId: null })}
                 className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
               >
                 <option value="">-- Choisir un OPCO --</option>
-                {OPCO_LIST.map((o) => (
+                {EMBEDDED_OPCO_LIST.map((o) => (
                   <option key={o.slug} value={o.slug}>
-                    {o.name}, {o.secteurs}
+                    {o.name}, {secteursCourts(o.secteurs)}
                   </option>
                 ))}
               </select>

@@ -8,8 +8,7 @@ import { StepFormation } from './StepFormation';
 import { StepFrais } from './StepFrais';
 import { StepRecap } from './StepRecap';
 import { FundingBreakdown } from '@/components/results/FundingBreakdown';
-import { calculateFunding } from '@/lib/calculator';
-import { getOpcoBySlug } from '../../../data/opcos';
+import { calculateFunding, getEmbeddedOpcoBySlug } from '@opco/core';
 
 export function WizardContainer() {
   const {
@@ -33,7 +32,7 @@ export function WizardContainer() {
     if (!showResults) return null;
     const slug = getEffectiveOpcoSlug();
     if (!slug) return null;
-    const opco = getOpcoBySlug(slug);
+    const opco = getEmbeddedOpcoBySlug(slug);
     if (!opco) return null;
 
     const effectiveState =

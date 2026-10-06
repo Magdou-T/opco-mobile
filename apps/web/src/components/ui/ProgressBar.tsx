@@ -1,6 +1,7 @@
 'use client';
 
-import { WIZARD_STEPS, WizardStep } from '@/lib/types';
+import { WIZARD_STEPS } from '@opco/core';
+import type { WizardStep } from '@opco/core';
 
 interface ProgressBarProps {
   currentStepIndex: number;

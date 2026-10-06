@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { ALL_OPCOS } from '../../data/opcos';
+import { EMBEDDED_OPCOS } from '@opco/core';
 
 export const metadata: Metadata = {
   title: 'financementOPCO : estimez le financement de votre formation par votre OPCO',
@@ -184,7 +184,7 @@ export default function Home() {
             </Link>
           </div>
           <ul className="mt-8 grid gap-px overflow-hidden rounded border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-3">
-            {ALL_OPCOS.map((o) => (
+            {EMBEDDED_OPCOS.map((o) => (
               <li key={o.slug} className="bg-white">
                 <Link
                   href={`/opco/${o.slug}`}

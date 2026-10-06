@@ -1,7 +1,15 @@
 'use client';
 
-import { WizardState, CONTRACT_TYPE_LABELS, COMPANY_SIZE_LABELS, TRAINING_TYPE_LABELS, TRAINING_MODE_LABELS, WizardStep } from '@/lib/types';
-import { OPCO_LIST, getOpcoBySlug } from '../../../data/opcos';
+import {
+  CONTRACT_TYPE_LABELS,
+  COMPANY_SIZE_LABELS,
+  TRAINING_TYPE_LABELS,
+  TRAINING_MODE_LABELS,
+  EMBEDDED_OPCO_LIST,
+  getEmbeddedOpcoBySlug,
+  resolveVarianteBranche,
+} from '@opco/core';
+import type { WizardState, WizardStep } from '@opco/core';
 
 interface Props {
   state: WizardState;
@@ -37,10 +45,14 @@ function Item({ label, value }: { label: string; value: string | null | undefine
 
 export function StepRecap({ state, onEdit }: Props) {
   const opcoSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const opco = opcoSlug ? OPCO_LIST.find(o => o.slug === opcoSlug) : null;
-  const fullOpco = opcoSlug ? getOpcoBySlug(opcoSlug) : null;
-  const brancheNom = state.selectedBranche
-    ? fullOpco?.baremes_par_branche?.find(b => b.id === state.selectedBranche)?.nom ?? null
+  const opco = opcoSlug ? EMBEDDED_OPCO_LIST.find(o => o.slug === opcoSlug) : null;
+  const fullOpco = opcoSlug ? getEmbeddedOpcoBySlug(opcoSlug) : null;
+  // Barème de branche appliqué par le moteur : choix manuel, sinon variante qui couvre l'IDCC détecté.
+  const variante = fullOpco ? resolveVarianteBranche(fullOpco, state) : null;
+  const brancheNom = variante
+    ? variante.id === state.selectedBrancheId
+      ? variante.branche_nom
+      : `${variante.branche_nom} (détecté d'après l'IDCC ${state.detectedIdcc})`
     : null;
 
   return (

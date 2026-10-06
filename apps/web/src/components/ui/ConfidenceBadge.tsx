@@ -1,6 +1,6 @@
 'use client';
 
-import { Confidence } from '@/lib/types';
+import type { Confidence } from '@opco/core';
 
 interface ConfidenceBadgeProps {
   confidence: Confidence;

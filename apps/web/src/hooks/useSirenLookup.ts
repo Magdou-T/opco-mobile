@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef } from 'react';
-import { SirenSearchResult } from '@/lib/types';
+import type { SirenSearchResult } from '@opco/core';
 
 // API publique de l'Etat (CORS ouvert) : appelee directement depuis le
 // navigateur pour rester compatible avec un hebergement 100 % statique.

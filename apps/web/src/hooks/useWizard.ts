@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { WizardState, WizardStep, WIZARD_STEPS, createInitialWizardState, TrainingMode } from '@/lib/types';
+import { WIZARD_STEPS, createInitialWizardState } from '@opco/core';
+import type { WizardState, WizardStep } from '@opco/core';
 
 export function useWizard() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
