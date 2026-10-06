@@ -518,7 +518,7 @@
       "nom": "Aide régionale pour le Diplôme d'accès aux études universitaires (DAEU)",
       "financeur": "region",
       "financeur_nom": "Région Île-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "reconversion_salarie",
         "recrutement_demandeur_emploi"
@@ -591,7 +591,7 @@
       "nom": "Aide régionale à l'apprentissage (ARA) – 1re année, niveaux 3 à 5",
       "financeur": "region",
       "financeur_nom": "Région Île-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -1215,7 +1215,7 @@
       "nom": "Carte Génération #HDF – aide au premier équipement des apprentis",
       "financeur": "region",
       "financeur_nom": "Région Hauts-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -1280,7 +1280,7 @@
       "nom": "Carte Génération #HDF – aide au transport des apprentis (aides THR)",
       "financeur": "region",
       "financeur_nom": "Région Hauts-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -1348,7 +1348,7 @@
       "nom": "Carte Génération #HDF – aide à la restauration des apprentis (aides THR)",
       "financeur": "region",
       "financeur_nom": "Région Hauts-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -1416,7 +1416,7 @@
       "nom": "Carte Génération #HDF – aide à l'hébergement des apprentis (aides THR)",
       "financeur": "region",
       "financeur_nom": "Région Hauts-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -1486,7 +1486,7 @@
       "nom": "Cars régionaux gratuits et abonnement TER « Mon Abo Étudiant et Apprenti » (Hauts-de-France mobilités)",
       "financeur": "region",
       "financeur_nom": "Région Hauts-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -1573,19 +1573,19 @@
         "Dossier déposé par l'apprenti dans les 4 mois suivant la rupture ; enveloppe annuelle limitée"
       ],
       "montant": {
-        "mode": "par_mois",
-        "valeur": 500,
+        "mode": "forfait",
+        "valeur": 1500,
         "pourcentage": null,
         "base": null,
         "plafond": null,
-        "duree_max_mois": 3,
+        "duree_max_mois": null,
         "libelle": "500 € par mois (200 € si moins de 18 ans au moment de la rupture), pendant 3 mois maximum renouvelables une fois (prolongation possible jusqu'à l'examen en dernière année)",
         "majorations": [
           {
             "criteres": {
               "age_max": 17
             },
-            "valeur": 200,
+            "valeur": 600,
             "libelle": "Apprenti de moins de 18 ans au moment de la rupture : 200 € par mois"
           }
         ]
@@ -1633,7 +1633,7 @@
       "nom": "Aide au permis de conduire (PERM26)",
       "financeur": "region",
       "financeur_nom": "Région Hauts-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance",
         "recrutement_demandeur_emploi"
@@ -1717,7 +1717,7 @@
       "nom": "Bourse de mobilité internationale Mermoz (apprentis du supérieur)",
       "financeur": "region",
       "financeur_nom": "Région Hauts-de-France",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -2109,7 +2109,7 @@
       "nom": "Aide à l'acquisition d'un équipement professionnel (stagiaires de la formation professionnelle)",
       "financeur": "region",
       "financeur_nom": "Région Normandie",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -2177,7 +2177,7 @@
       "nom": "Aide à l'accès au permis de conduire (stagiaires de la formation professionnelle)",
       "financeur": "region",
       "financeur_nom": "Région Normandie",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -2232,7 +2232,7 @@
       "nom": "Atouts Pass Monde (mobilité internationale des apprenants)",
       "financeur": "region",
       "financeur_nom": "Région Normandie",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance",
         "recrutement_demandeur_emploi"
@@ -3524,7 +3524,7 @@
       "nom": "Fonds social régional d'urgence (FSU)",
       "financeur": "region",
       "financeur_nom": "Région Pays de la Loire",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -4089,7 +4089,7 @@
       "nom": "Aide au permis de conduire 18-25 ans – Combo parfait",
       "financeur": "region",
       "financeur_nom": "Région Centre-Val de Loire",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -4161,7 +4161,7 @@
       "nom": "Aide au transport ou à l'hébergement des stagiaires (Région Centre-Val de Loire)",
       "financeur": "region",
       "financeur_nom": "Région Centre-Val de Loire",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -4470,7 +4470,7 @@
       "nom": "Aide au transport et à l'hébergement des stagiaires (Région Bourgogne-Franche-Comté)",
       "financeur": "region",
       "financeur_nom": "Région Bourgogne-Franche-Comté",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -4840,7 +4840,7 @@
       "nom": "Aide aux apprentis en difficulté sociale et financière (via les CFA)",
       "financeur": "region",
       "financeur_nom": "Région Bourgogne-Franche-Comté",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -5493,7 +5493,7 @@
       "nom": "Aide au passage du permis de conduire B",
       "financeur": "region",
       "financeur_nom": "Région Nouvelle-Aquitaine",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance",
         "recrutement_demandeur_emploi"
@@ -5596,7 +5596,7 @@
       "nom": "Stages à l'étranger infra bac (apprentis)",
       "financeur": "region",
       "financeur_nom": "Région Nouvelle-Aquitaine",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -5678,7 +5678,7 @@
       "nom": "Stages à l'étranger post bac (apprentis)",
       "financeur": "region",
       "financeur_nom": "Région Nouvelle-Aquitaine",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -6020,7 +6020,7 @@
       "nom": "Hébergement en centre AFPA Occitanie",
       "financeur": "region",
       "financeur_nom": "Région Occitanie",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi",
         "reconversion_salarie"
@@ -7142,7 +7142,7 @@
       "nom": "Aide au financement du permis de conduire B (jeunes de 17 ans)",
       "financeur": "region",
       "financeur_nom": "Région Auvergne-Rhône-Alpes",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -7212,7 +7212,7 @@
       "nom": "Bourse Région Mobilité Internationale (étudiants et apprentis du supérieur)",
       "financeur": "region",
       "financeur_nom": "Région Auvergne-Rhône-Alpes",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -7616,7 +7616,7 @@
       "nom": "PRAME – Aide régionale à la mobilité internationale des étudiants, y compris en alternance",
       "financeur": "region",
       "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -7731,7 +7731,7 @@
       "nom": "Pass ZOU! Études",
       "financeur": "region",
       "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance",
         "recrutement_demandeur_emploi"
@@ -7803,7 +7803,7 @@
       "nom": "Fonds d'aide régionale aux apprentis (FARA)",
       "financeur": "region",
       "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -8112,7 +8112,7 @@
       "nom": "Aide à la mobilité des apprentis (Aiutu à a mubilità di l'ampareti)",
       "financeur": "region",
       "financeur_nom": "Collectivité de Corse",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -8205,7 +8205,7 @@
       "nom": "Gratuité du train domicile – lieu de formation (carte Via Corsica étudiant, lycéen interne, apprenti)",
       "financeur": "region",
       "financeur_nom": "Collectivité de Corse",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -8498,7 +8498,7 @@
       "nom": "Réunipass – transport gratuit des stagiaires de la formation professionnelle",
       "financeur": "region",
       "financeur_nom": "Région Réunion",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -8552,7 +8552,7 @@
       "nom": "Passeport pour la mobilité de la formation professionnelle (PMFP)",
       "financeur": "etat",
       "financeur_nom": "LADOM (L’Agence de l’Outre-mer pour la mobilité)",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],

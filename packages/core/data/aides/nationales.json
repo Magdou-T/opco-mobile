@@ -2283,7 +2283,7 @@
       "nom": "Prise en charge par l'OPCO des frais annexes de l'apprenti (hébergement, restauration, premier équipement, mobilité internationale)",
       "financeur": "opco",
       "financeur_nom": "OPCO dont relève l'employeur (via le CFA)",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -2467,12 +2467,12 @@
         "Montant calculé sur le loyer charges comprises après déduction de l'APL ; pas d'aide si le reste à charge est inférieur à 10 €."
       ],
       "montant": {
-        "mode": "par_mois",
-        "valeur": 100,
+        "mode": "forfait",
+        "valeur": 1100,
         "pourcentage": null,
         "base": null,
-        "plafond": 1100,
-        "duree_max_mois": 11,
+        "plafond": null,
+        "duree_max_mois": null,
         "libelle": "De 10 € à 100 € par mois, dans la limite de 1 100 € par année de formation (11 mensualités) ; peut être sollicitée sur deux années de formation au maximum."
       },
       "cumul": {
@@ -2540,7 +2540,7 @@
       "nom": "Erasmus+ – mobilité européenne et internationale des apprentis et alternants",
       "financeur": "europe",
       "financeur_nom": "Union européenne – Agence Erasmus+ France / Éducation Formation",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "alternance"
       ],
@@ -3023,9 +3023,9 @@
             "criteres": {
               "rqth": true
             },
-            "valeur": 775.65,
+            "valeur": 2188.27,
             "pourcentage": null,
-            "plafond": 2188.27,
+            "plafond": null,
             "libelle": "Travailleur handicapé : de 775,65 € à 2 188,27 € par mois selon l'activité salariée antérieure"
           },
           {
@@ -3107,7 +3107,7 @@
       "nom": "Aide à la mobilité de France Travail (formation, entretien d'embauche, reprise d'emploi)",
       "financeur": "france_travail",
       "financeur_nom": "France Travail",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi"
       ],
@@ -3801,7 +3801,7 @@
       "nom": "Aide au parcours vers l'emploi des personnes en situation de handicap",
       "financeur": "agefiph",
       "financeur_nom": "Agefiph",
-      "categorie": "cout_formation",
+      "categorie": "remuneration_beneficiaire",
       "projets": [
         "recrutement_demandeur_emploi",
         "alternance"

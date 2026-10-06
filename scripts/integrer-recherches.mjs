@@ -7,7 +7,12 @@
 //   - un montant dont les champs ne correspondent pas à son mode (refusé par AideSchema) passe en « non_chiffre » ;
 //     le libellé est conservé, aucun montant n'est inventé ni complété ;
 //   - le lien Agefiph de chaque région (liens_par_region des aides nat-agefiph-*) est ajouté au portail de la région ;
-//   - les doublons connus entre fichiers (POEI nationale et POEI Pays de la Loire) sont liés par cumul.alternatives.
+//   - les doublons connus entre fichiers (POEI nationale et POEI Pays de la Loire) sont liés par cumul.alternatives ;
+//   - la table CORRECTIONS (revue du moteur d'aides, octobre 2026) recatégorise en « remuneration_beneficiaire » les aides
+//     qui paient une dépense de la personne et non la formation (permis, transport, hébergement, restauration, équipement,
+//     mobilité, fonds social, aides aux apprentis) et corrige trois montants (majoration RQTH du RFFT, deux aides versées
+//     sur une période qui n'est pas la durée de la formation). Chaque correction vérifie l'état attendu de l'aide avant de
+//     la modifier : si l'aide a disparu ou a changé, le script s'arrête (code 1) sans rien écrire.
 // Usage : node scripts/integrer-recherches.mjs <dossier-recherche>
 import fs from 'node:fs';
 import path from 'node:path';
@@ -251,6 +256,147 @@ for (const a of toutes) {
   }
 }
 
+// Corrections décidées à la revue du moteur d'aides (octobre 2026) : des défauts de données que le moteur ne peut pas
+// compenser. Chaque entrée est { id, motif, condition, appliquer } :
+//   - condition(aide) décrit l'état attendu de l'aide AVANT correction ; si l'identifiant est absent du catalogue ou si
+//     la condition est fausse, le script écrit l'erreur sur stderr et sort avec le code 1 sans rien écrire : une
+//     correction qui ne s'applique plus (recherche mise à jour, aide modifiée) ne doit jamais passer en silence ;
+//   - appliquer(aide) modifie l'aide normalisée, jamais les fichiers de recherche (la correction est donc reproductible) ;
+//   - motif tient en une ligne ; il est repris dans le rapport d'intégration.
+// Catégorie « cout_formation » : l'aide paie la formation elle-même (frais pédagogiques, prise en charge, abondement,
+// chèque ou bon de formation, financement du coût de la formation). Catégorie « remuneration_beneficiaire » : revenu ou
+// aide à la personne (rémunération, transport, hébergement, restauration, permis, équipement, mobilité, fonds social,
+// aides aux apprentis qui ne paient pas la formation). Une aide qui paie la formation et une dépense de la personne
+// (frais pédagogiques et indemnité, par exemple) reste « cout_formation ».
+const aideALaPersonne = (id, motif) => ({
+  id,
+  motif,
+  condition: (aide) => aide.categorie === 'cout_formation',
+  appliquer: (aide) => {
+    aide.categorie = 'remuneration_beneficiaire';
+  },
+});
+
+// Majoration dont les critères sont exactement `criteres` (ex. { rqth: true }).
+const trouverMajoration = (aide, criteres) =>
+  (aide.montant.majorations ?? []).find((m) => JSON.stringify(m.criteres) === JSON.stringify(criteres));
+
+const CORRECTIONS = [
+  // Permis de conduire
+  aideALaPersonne('r24-aide-permis-combo-parfait', 'paie un permis de conduire (code et cours de conduite), pas la formation'),
+  aideALaPersonne('r28-aide-permis', "paie un permis de conduire (50 % de la préparation à l'examen pratique du permis B), pas la formation"),
+  aideALaPersonne('r32-aide-permis', "paie un permis de conduire (contrat d'enseignement à la conduite), pas la formation"),
+  aideALaPersonne('r75-permis-b', 'paie un permis de conduire, pas la formation'),
+  aideALaPersonne('r84-permis-b', 'paie un permis de conduire, pas la formation'),
+  // Transport, hébergement, restauration
+  aideALaPersonne('nat-aide-mobilite-france-travail', "paie des frais de déplacement, de repas et d'hébergement du demandeur d'emploi, pas la formation"),
+  aideALaPersonne('r24-aide-transport-hebergement', "paie le transport ou l'hébergement du stagiaire, pas la formation"),
+  aideALaPersonne('r27-aide-transport-hebergement', "paie le transport ou l'hébergement du stagiaire, pas la formation"),
+  aideALaPersonne('r32-apprentis-transport', "paie le transport domicile-CFA de l'apprenti, pas la formation"),
+  aideALaPersonne('r32-apprentis-restauration', "compense des frais de restauration de l'apprenti, pas la formation"),
+  aideALaPersonne('r32-apprentis-hebergement', "compense des frais d'hébergement de l'apprenti, pas la formation"),
+  aideALaPersonne('r32-apprentis-transports-regionaux', "gratuité ou réduction des transports régionaux de l'apprenti, pas la formation"),
+  aideALaPersonne('r76-hebergement-afpa', "paie l'hébergement du stagiaire en centre AFPA, pas la formation"),
+  aideALaPersonne('r93-pass-zou-etudes', 'abonnement de transport (bus et trains régionaux), pas la formation'),
+  aideALaPersonne('r94-mobilite-apprentis', "rembourse les frais de déplacement de l'apprenti, pas la formation"),
+  aideALaPersonne('r94-train-gratuit-apprentis', 'gratuité du train entre le domicile et le lieu de formation, pas la formation'),
+  aideALaPersonne('r04-reunipass-stagiaires', 'gratuité des bus et cars pour les stagiaires, pas la formation'),
+  // Équipement
+  aideALaPersonne('r28-aide-equipement-professionnel', "paie l'achat d'un équipement professionnel du stagiaire, pas la formation"),
+  aideALaPersonne('r32-apprentis-equipement', "paie le premier équipement de l'apprenti (équipements professionnels, livres), pas la formation"),
+  // Mobilité internationale (bourses, billets, allocations)
+  aideALaPersonne('ue-erasmus-mobilite-alternants', 'bourse de mobilité européenne et internationale, pas la formation'),
+  aideALaPersonne('nat-ladom-passeport-mobilite-formation', "paie le billet aller-retour et des allocations de mobilité, d'installation et post-mobilité, pas la formation"),
+  aideALaPersonne('r28-pass-monde', "bourse de mobilité internationale (stage ou séjour à l'étranger), pas la formation"),
+  aideALaPersonne('r32-mermoz-apprentis', "bourse de mobilité internationale (stage à l'étranger), pas la formation"),
+  aideALaPersonne('r75-stages-etranger-infra-bac', "bourse de mobilité internationale (stage à l'étranger), pas la formation"),
+  aideALaPersonne('r75-stages-etranger-post-bac', "bourse de mobilité internationale (stage à l'étranger), pas la formation"),
+  aideALaPersonne('r84-mobilite-internationale-apprentis-superieur', "bourse de mobilité internationale (étude ou stage à l'étranger), pas la formation"),
+  aideALaPersonne('r93-prame-mobilite-internationale', "bourse de mobilité internationale (stage ou semestre à l'étranger), pas la formation"),
+  // Fonds social et aides aux apprentis qui ne paient pas la formation
+  aideALaPersonne('r52-fonds-social-urgence', "fonds social d'urgence du stagiaire (logement, restauration, transport), pas la formation"),
+  aideALaPersonne('nat-opco-frais-annexes-apprentis', "paie des frais annexes de l'apprenti (hébergement, restauration, premier équipement, mobilité internationale), pas la formation"),
+  aideALaPersonne('r11-aide-regionale-apprentissage', "aide de rentrée de l'apprenti (livres, équipement, transport, restauration, hébergement), pas la formation"),
+  aideALaPersonne('r27-aide-apprentis-difficulte', 'aide aux apprentis en difficulté sociale et financière (mobilité, hébergement, matériel), pas la formation'),
+  aideALaPersonne('r93-fonds-aide-apprentis', "fonds d'aide individuelle aux apprentis : aucune prise en charge de la formation n'est décrite"),
+  // Autres aides à la personne
+  aideALaPersonne('nat-agefiph-parcours-vers-emploi', 'aide à la personne handicapée en situation de précarité (déplacements, hébergement, restauration, vêtements), pas la formation'),
+  aideALaPersonne('r11-daeu', "prime incitative versée à la personne sous condition d'assiduité, qui n'avance pas les droits d'inscription : pas la formation"),
+
+  // Montants : le moteur calcule `par_mois` au prorata de la durée de la formation (valeur × min(duree_max_mois, durée en
+  // heures / 151,67)) et applique le plafond d'une majoration comme un total.
+  {
+    id: 'nat-rfft',
+    motif:
+      "la majoration RQTH « de 775,65 € à 2 188,27 € par mois » est un maximum mensuel (valeur 2 188,27 €, sans plafond), pas un total plafonné à 2 188,27 €",
+    condition: (aide) => {
+      const majoration = trouverMajoration(aide, { rqth: true });
+      return (
+        aide.montant.mode === 'par_mois' &&
+        aide.montant.valeur === 775.65 &&
+        majoration?.valeur === 775.65 &&
+        majoration?.plafond === 2188.27
+      );
+    },
+    appliquer: (aide) => {
+      const majoration = trouverMajoration(aide, { rqth: true });
+      majoration.valeur = 2188.27;
+      majoration.plafond = null;
+    },
+  },
+  {
+    id: 'r32-reprise-apprentis',
+    motif:
+      "500 € par mois pendant 3 mois maximum après une rupture de contrat, sans lien avec la durée de la formation : forfait de 1 500 € (500 € × 3 mois), 600 € avant 18 ans (200 € × 3 mois)",
+    condition: (aide) =>
+      aide.montant.mode === 'par_mois' &&
+      aide.montant.valeur === 500 &&
+      aide.montant.duree_max_mois === 3 &&
+      trouverMajoration(aide, { age_max: 17 })?.valeur === 200,
+    appliquer: (aide) => {
+      aide.montant.mode = 'forfait';
+      aide.montant.valeur = 1500;
+      aide.montant.duree_max_mois = null;
+      trouverMajoration(aide, { age_max: 17 }).valeur = 600;
+    },
+  },
+  {
+    id: 'nat-mobili-jeune',
+    motif:
+      "11 mensualités de 10 € à 100 € par année de formation, dans la limite de 1 100 €, sans lien avec la durée de la formation : forfait de 1 100 € (plafond annuel publié)",
+    condition: (aide) =>
+      aide.montant.mode === 'par_mois' &&
+      aide.montant.valeur === 100 &&
+      aide.montant.plafond === 1100 &&
+      aide.montant.duree_max_mois === 11,
+    appliquer: (aide) => {
+      aide.montant.mode = 'forfait';
+      aide.montant.valeur = 1100;
+      aide.montant.plafond = null;
+      aide.montant.duree_max_mois = null;
+    },
+  },
+];
+
+const correctionsAppliquees = [];
+const erreursCorrections = [];
+for (const correction of CORRECTIONS) {
+  const aide = parId.get(correction.id);
+  if (!aide) {
+    erreursCorrections.push(`${correction.id} : identifiant absent du catalogue (${correction.motif})`);
+  } else if (!correction.condition(aide)) {
+    erreursCorrections.push(`${correction.id} : l'aide n'est plus dans l'état attendu avant correction (${correction.motif})`);
+  } else {
+    correction.appliquer(aide);
+    correctionsAppliquees.push(`${correction.id} : ${correction.motif}`);
+  }
+}
+if (erreursCorrections.length > 0) {
+  console.error("Intégration refusée : une correction ne s'applique plus, aucun fichier écrit (table CORRECTIONS à revoir) :");
+  for (const erreur of erreursCorrections) console.error(`  - ${erreur}`);
+  process.exit(1);
+}
+
 const portails = fichiersReg
   .flatMap(({ nom, contenu }) => (contenu.portails ?? []).map((p) => normaliserPortail(p, nom)))
   .sort((x, y) => String(x.region).localeCompare(String(y.region)));
@@ -338,6 +484,7 @@ const rapport = [
   `- Portails régionaux : ${portails.length} (dont ${nbPortailsAgefiph} avec un lien Agefiph)`,
   `- Aides à confirmer : ${aConfirmer.length}`,
   `- Montants passés en non_chiffre (libellé conservé) : ${montantsNormalises.length}`,
+  `- Corrections appliquées après la revue du moteur : ${correctionsAppliquees.length}`,
   `- Alertes : ${alertes.length}`,
   '',
   '## Fichiers intégrés (versions vérifiées)',
@@ -352,6 +499,9 @@ const rapport = [
   '## Liens Agefiph ajoutés aux portails',
   ...puces(liensAgefiphAjoutes),
   '',
+  '## Corrections appliquées après la revue du moteur',
+  ...puces(correctionsAppliquees),
+  '',
   '## Dispositifs exclus (terminés, suspendus, sans financement)',
   ...puces(exclues.map((e) => `${e.nom} — ${e.raison} (${e.fichiers.join(' ; ')})`)),
   '',
@@ -365,5 +515,5 @@ const rapport = [
 fs.writeFileSync(path.join(dossier, 'rapport-integration.md'), rapport, 'utf-8');
 
 console.log(`Nationales : ${nationaux.aides.length} | Régionales : ${regionaux.aides.length} | Portails : ${portails.length} | Alertes : ${alertes.length}`);
-console.log(`À confirmer : ${aConfirmer.length} | Montants passés en non_chiffre : ${montantsNormalises.length} | Portails avec lien Agefiph : ${nbPortailsAgefiph}`);
+console.log(`À confirmer : ${aConfirmer.length} | Montants passés en non_chiffre : ${montantsNormalises.length} | Portails avec lien Agefiph : ${nbPortailsAgefiph} | Corrections appliquées : ${correctionsAppliquees.length}`);
 console.log(`Rapport : ${path.join(dossier, 'rapport-integration.md')}`);

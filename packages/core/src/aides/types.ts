@@ -34,9 +34,9 @@ export type Financeur =
 
 /** Ce que l'aide réduit ou apporte. */
 export type CategorieAide =
-  | 'cout_formation' // réduit le coût pédagogique et les frais annexes
+  | 'cout_formation' // paie la formation elle-même (frais pédagogiques, prise en charge, abondement) : réduit le reste à charge de la formation
   | 'aide_employeur' // versée à l'employeur (embauche, salaires…)
-  | 'remuneration_beneficiaire' // revenu du bénéficiaire pendant la formation
+  | 'remuneration_beneficiaire' // revenu ou aide à la personne (rémunération, transport, hébergement, restauration, permis, équipement, mobilité) : jamais déduite du coût de la formation
   | 'avantage_fiscal_social' // crédit d'impôt, exonérations
   | 'service_gratuit'; // conseil ou accompagnement gratuit (sans montant)
 
