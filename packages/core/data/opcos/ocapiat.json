@@ -186,7 +186,8 @@
       ],
       "publics": null,
       "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/catalogue-de-formations-et-financement/"
+      "source_url": "https://www.ocapiat.fr/catalogue-de-formations-et-financement/",
+      "note": "« Coûts pédagogiques financés à 100 % pour les entreprises de moins de 50 salariés. » (vérifié le 2026-10-06)"
     },
     {
       "id": "boost-competences",
@@ -209,7 +210,8 @@
       ],
       "publics": null,
       "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/financement-sur-mesure-par-lopco-simulateur-boost-competences/"
+      "source_url": "https://www.ocapiat.fr/financement-sur-mesure-par-lopco-simulateur-boost-competences/",
+      "note": "« Prise en charge des coûts pédagogiques : 50 % des coûts pédagogiques demandés plafonnés à 750 € par stagiaire » (vérifié le 2026-10-06)"
     },
     {
       "id": "competences-avenir",
@@ -231,7 +233,8 @@
       ],
       "publics": null,
       "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/competences-davenir/"
+      "source_url": "https://www.ocapiat.fr/competences-davenir/",
+      "note": "« Prise en charge des coûts pédagogiques : 70 % des coûts pédagogiques demandés plafonnés à 1050€ par stagiaire » (vérifié le 2026-10-06)"
     },
     {
       "id": "soutien-filieres",
@@ -253,7 +256,8 @@
       ],
       "publics": null,
       "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/soutien-aux-filieres/"
+      "source_url": "https://www.ocapiat.fr/soutien-aux-filieres/",
+      "note": "« Prise en charge des coûts pédagogiques : 70 % des coûts pédagogiques demandés plafonnés à 1050 € par stagiaire » (vérifié le 2026-10-06)"
     },
     {
       "id": "parcours-certifiants",
@@ -275,8 +279,9 @@
         "11_49"
       ],
       "publics": null,
-      "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/parcours-certifiants/"
+      "confidence": "estimated",
+      "source_url": "https://www.ocapiat.fr/parcours-certifiants/",
+      "note": "« Les coûts pédagogiques de l’action de formation : prise en charge dans la limite d’un plafond horaire de 40 €/heure et d’un plafond par stagiaire de 8 000 €. » Le texte fixe des plafonds sans préciser de pourcentage : le taux de 100 % (dans la limite de ces plafonds) est une hypothèse de calcul. (vérifié le 2026-10-06)"
     },
     {
       "id": "formations-internes",
@@ -298,7 +303,8 @@
       ],
       "publics": null,
       "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/formations-internes/"
+      "source_url": "https://www.ocapiat.fr/formations-internes/",
+      "note": "« 50 % de mes coûts pédagogiques/pédagogiques divers (coût du formateur) éligibles sur une base forfaitaire fixée à 20 € par heure par stagiaire Soit une prise en charge nette de 10 € / heure / stagiaire (exemple pour une formation de 7 heures : 7 x 10) dans la limite de 5 stagiaires par dossier » (vérifié le 2026-10-06)"
     },
     {
       "id": "defi-emploi",
@@ -363,7 +369,8 @@
       ],
       "publics": null,
       "confidence": "exact",
-      "source_url": "https://www.ocapiat.fr/formations-catalogue-secteur-alimentaire-entreprises-50-salaries-et-plus-le-financement-evolue/"
+      "source_url": "https://www.ocapiat.fr/formations-catalogue-secteur-alimentaire-entreprises-50-salaries-et-plus-le-financement-evolue/",
+      "note": "« la prise en charge jusqu’à 100 % des coûts pédagogiques au titre du catalogue OCAPIAT » ; « un nouveau plafond de 5 stagiaires par an et par entreprise s’applique (contre 20 salariés auparavant) » (vérifié le 2026-10-06)"
     },
     {
       "id": "fonds-conventionnels-branches",
