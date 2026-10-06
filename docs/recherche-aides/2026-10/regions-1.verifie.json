@@ -1,0 +1,3108 @@
+{
+  "meta": {
+    "perimetre": "Régions 11 Île-de-France, 32 Hauts-de-France, 28 Normandie, 44 Grand Est – aides des Conseils régionaux liées à la formation professionnelle",
+    "date_verification": "2026-10-05",
+    "auteur": "agent regions-1",
+    "nb_aides": 39
+  },
+  "aides": [
+    {
+      "id": "r11-programme-regional",
+      "nom": "Formations financées par la Région Île-de-France (programme régional de formation pour l'emploi)",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région finance à 100 % des formations pour les demandeurs d'emploi franciliens (notamment le Programme régional de formation pour l'emploi – PRFE et les Écoles de la 2e chance). Elles sont référencées sur oriane.info avec le filtre « Voir les offres 100% financées par la Région ».",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi (ou avoir 16 à 25 ans et être en recherche d'emploi pour les Écoles de la 2e chance)",
+        "La formation doit figurer parmi les offres financées à 100 % par la Région sur oriane.info",
+        "Être retenu par l'organisme de formation"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec la rémunération régionale des stagiaires (si non indemnisé par l'ARE) et, pour les 16-25 ans, avec l'Aide métiers en tension (Revenu jeunes actifs)."
+      },
+      "demarches": [
+        "Rechercher une formation sur oriane.info (rubrique « Se former de 12 à 60 ans et + ») avec le filtre « Voir les offres 100% financées par la Région »",
+        "Contacter directement l'organisme de formation pour candidater",
+        "Se faire conseiller si besoin par France Travail, la Mission locale ou Cap emploi"
+      ],
+      "url_demarche": "https://oriane.info/se-former/tout-au-long-de-la-vie/formations?financingOrganizations=Conseil%20r%C3%A9gional%20%C3%8Ele-de-France",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-faq/foire-aux-questions-et-contacts",
+          "titre": "Région Île-de-France – FAQ formation professionnelle",
+          "extrait": "Pour s’inscrire dans une formation financée par la Région référencée sur oriane.info/se-former/tout-au-long-de-la-vie, il faut : Soit être demandeur d'emploi, Soit avoir entre 16 et 25 ans et être en recherche d’emploi (pour les Écoles 2e chance)."
+        },
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-actualites/oriane-info-le-site-internet-pour-trouver-une-formation-financee-par-la-region",
+          "titre": "Région Île-de-France – Oriane Info, le site pour trouver une formation financée par la Région",
+          "extrait": "Toutes les formations gratuites financées à 100% par la Région pour les demandeurs d'emploi d'Île-de-France sont sur Oriane Info."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r11-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle par la Région Île-de-France",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle forfaitaire versée (via l'ASP) aux demandeurs d'emploi non indemnisés par l'assurance chômage qui suivent une formation financée par la Région et agréée à la rémunération ; la Région prend aussi en charge la protection sociale et rembourse certains frais de transport et d'hébergement.",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Être inscrit à France Travail en Île-de-France et ne pas percevoir l'ARE (sauf fin de droits en cours de formation)",
+        "Suivre une formation financée par la Région et agréée à la rémunération (PRFE dans les secteurs éligibles, formations sanitaires et sociales, E2C, etc.)",
+        "Constituer le dossier de rémunération avec l'organisme de formation"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 775.65,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Montant mensuel forfaitaire (barème national en vigueur, service-public.fr, vérifié le 01/04/2026) : 226,48 € (moins de 18 ans), 566,17 € (18 à 25 ans), 775,65 € (26 ans et plus, parent isolé, etc.) ; stagiaires RQTH : de 775,65 € à 2 188,27 € selon les revenus antérieurs. La FAQ régionale (mise à jour 03/09/2026) et son tableau annexe (« Barème en vigueur au 1 avril 2025 ») affichent encore l'ancien barème : 224,68 € / 561,68 € / 769,49 € (RQTH jusqu'à 2 170,90 €)",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 775.65,
+            "plafond": 2188.27,
+            "libelle": "Stagiaires RQTH : de 775,65 € à 2 188,27 € par mois selon les revenus antérieurs"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 226.48,
+            "libelle": "Jeunes de 16-17 ans : 226,48 € par mois"
+          },
+          {
+            "criteres": {
+              "age_min": 18,
+              "age_max": 25
+            },
+            "valeur": 566.17,
+            "libelle": "Jeunes de 18-25 ans : 566,17 € par mois (775,65 € notamment pour un parent isolé ou une personne handicapée)"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Non cumulable avec l'ARE (sauf fin de droits). Cumul possible avec le RSA (réduction possible), l'AAH et le CEJ (ajustement). Montants alignés sur le barème national publié sur service-public.fr (vérifié le 01/04/2026) ; la FAQ régionale du 03/09/2026 et son tableau annexe (barème en vigueur au 1er avril 2025) affichent encore les montants antérieurs (224,68 / 561,68 / 769,49 €)."
+      },
+      "demarches": [
+        "S'inscrire dans une formation financée par la Région et agréée à la rémunération",
+        "Constituer le dossier RS1 avec l'organisme de formation et fournir les justificatifs (dans les 3 mois après la fin de formation au plus tard)",
+        "L'organisme crée le dossier sur le site de l'ASP ; versement mensuel à terme échu"
+      ],
+      "url_demarche": "https://www.iledefrance.fr/toutes-les-faq/remuneration-des-stagiaires-par-la-region-ile-de-france-faqquestions-frequentes",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-faq/remuneration-des-stagiaires-par-la-region-ile-de-france-faqquestions-frequentes",
+          "titre": "Région Île-de-France – Rémunération des stagiaires (FAQ, mise à jour 03/09/2026)",
+          "extrait": "Inscrits à France Travail en Île-de-France, Âgé de plus de 16 ans, Non indemnisés par l’assurance chômage (ARE), Positionnés sur une formation financée par la Région Île-de-France et faisant l’objet d’un agrément de rémunération"
+        },
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-faq/remuneration-des-stagiaires-par-la-region-ile-de-france-faqquestions-frequentes",
+          "titre": "Région Île-de-France – Rémunération des stagiaires (FAQ, mise à jour 03/09/2026)",
+          "extrait": "Jeunes de 16–17 ans : 224,68€, Jeunes de 18–25 ans : 561,68€, Plus de 26 ans, parent isolé, handicapé, etc. : 769,49€, Stagiaires RQTH : 769,49€ à 2 170,90€ (en fonction des revenus antérieurs),"
+        },
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-faq/remuneration-des-stagiaires-par-la-region-ile-de-france-faqquestions-frequentes",
+          "titre": "Région Île-de-France – Rémunération des stagiaires (FAQ, mise à jour 03/09/2026)",
+          "extrait": "Vous avez 3 mois après la fin de formation pour compléter votre dossier."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Service-public.fr – Rémunération des formations de France Travail (page vérifiée le 01/04/2026, consultée le 06/10/2026)",
+          "extrait": "Moins de 18 ans Vous percevez 226,48 € par mois. 18 à 25 ans Vous percevez 566,17 € par mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Service-public.fr – Rémunération des formations de France Travail (page vérifiée le 01/04/2026, consultée le 06/10/2026)",
+          "extrait": "26 ans et plus Vous percevez 775,65 € par mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Service-public.fr – Rémunération des formations de France Travail (page vérifiée le 01/04/2026, consultée le 06/10/2026)",
+          "extrait": "votre rémunération mensuelle est comprise entre 775,65 € et 2 188,27 €"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2025-06/tableau_remuneration_stagiaires_idf_avril2025.pdf",
+          "titre": "Région Île-de-France – Tableau de la rémunération des stagiaires (annexe, barème de 2025)",
+          "extrait": "ANNEXE – Barème en vigueur au 1 avril 2025"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r11-aide-metiers-en-tension",
+      "nom": "Aide métiers en tension (Revenu jeunes actifs pour les 16-25 ans)",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Prime forfaitaire versée automatiquement par l'ASP avec la rémunération régionale aux stagiaires entrés sur une formation du PRFE (ou ambulancier/AES) financée par la Région ; pour les 16-25 ans elle forme, avec la rémunération, le « Revenu jeunes actifs ». Les formations de conducteur de transport en commun y donnent droit quel que soit l'âge.",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Demandeur d'emploi francilien inscrit à France Travail et non bénéficiaire de l'ARE (stagiaire rémunéré par la Région)",
+        "16-25 ans : formation du PRFE financée par la Région (PRFE 3, entrées à compter du 01/09/2026 : tous secteurs et tous lots ; PRFE 2, entrées antérieures : secteurs en tension) ou formation d'ambulancier / AES",
+        "Tout âge : formation de conducteur de transports en commun financée par la Région",
+        "Aide versée une seule fois ; second versement non dû en cas d'abandon ou d'absences injustifiées"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 2000,
+        "duree_max_mois": null,
+        "libelle": "De 300 € à 2 000 € selon le secteur, la durée de la formation et la situation : jusqu'à 1 000 € en général (300 € puis 700 € si plus de 600 h ou 4 mois) ; jusqu'à 1 500 € pour les bénéficiaires du RSA ou résidents QPV/ZRR/ZRE ; jusqu'à 2 000 € pour les stagiaires RQTH, l'industrie et la conduite de bus"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Versée en plus de la rémunération régionale des stagiaires."
+      },
+      "demarches": [
+        "S'inscrire sur une formation éligible (via France Travail, la Mission locale, Cap emploi ou oriane.info)",
+        "Aucune demande à faire : l'aide est versée automatiquement par l'ASP avec la rémunération"
+      ],
+      "url_demarche": "https://www.iledefrance.fr/toutes-les-actualites/aide-metiers-en-tension-et-revenu-jeunes-actifs-pour-se-former-en-etant-remunere",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-actualites/aide-metiers-en-tension-et-revenu-jeunes-actifs-pour-se-former-en-etant-remunere",
+          "titre": "Région Île-de-France – Aide métiers en tension et Revenu jeunes actifs (mise à jour 24/09/2026)",
+          "extrait": "▶ Les demandeurs d’emploi franciliens de 16 à 25 ans (inscrits à France Travail et non bénéficiaires de l’ARE) entrés sur une formation PRFE ou FSS (ambulancier ou AES) financée par la Région"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "A) Le montant de l'aide s'élève jusqu’à 1 000 €."
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "Pour les stagiaires éligibles dont la formation est d'une durée inférieure ou égale à 600h ou 4 mois (de date à date), une aide de 300 € est versée"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "un second versement d'un montant de 700 € versés à l'issue du dernier jour de la formation"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "B) Le montant de l’aide s’élève jusqu’à 1 500 € pour les stagiaires : - Bénéficiaires du Revenu de Solidarité Active (BRSA) ; - Résidents dans les Quartiers Prioritaires de la Ville (QPV) ;"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "D) Le montant de l’aide s’élève jusqu’à 2 000 € pour les stagiaires entrés dans une formation préparant au métier de « conducteur de transport en commun sur route »"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "E) Le montant de l’aide s’élève jusqu’à 2 000 € pour les stagiaires reconnus en qualité de travailleurs handicapés (RQTH)"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "F) Le montant de l’aide s’élève jusqu’à 2000 € pour les stagiaires entrés dans une formation du domaine « Industrie »"
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "l’ensemble des formations, quel que soit le secteur/lot, du “Programme Régional de Formations pour l’Emploi 3” (PRFE3)."
+        },
+        {
+          "url": "https://www.iledefrance.fr/sites/default/files/2026-09/aide_metiers_en_tension_sept_2026_rapcp2026-244.pdf",
+          "titre": "Région Île-de-France – Règlement d'intervention aide métiers en tension (CP 2026-244)",
+          "extrait": "PRFE 3 = entrées en formations, sur le programme régional de formations pour l’emploi, à compter du 1er septembre 2026."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r11-aide-metiers-tension-idfm",
+      "nom": "Aide à la formation vers les métiers en tension (opérateurs IDFM)",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide régionale versée aux stagiaires en contrat de professionnalisation « Conducteur de bus » ou « Mécanicien d'entretien des bus » chez un opérateur délégataire d'Île-de-France Mobilités (RATP, Transdev, Lacroix-Savac, Keolis), anciens demandeurs d'emploi.",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "entreprise",
+        "types_alternance": [
+          "professionnalisation"
+        ]
+      },
+      "conditions": [
+        "Contrat de professionnalisation dans une formation dispensée par un opérateur de transports en commun délégataire d'IDFM",
+        "Avoir été demandeur d'emploi le mois précédant la signature du contrat",
+        "Second versement : formation d'au moins 300 h et contrat de travail conclu dans les 3 mois suivant la fin de formation avec une société des opérateurs IDFM"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 2000,
+        "duree_max_mois": null,
+        "libelle": "600 € à l'entrée puis 1 400 € si la formation dure au moins 300 h et si un contrat de travail est conclu dans les 3 mois avec une société des opérateurs IDFM (2 000 € maximum)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "À l'entrée en formation, créer un compte sur mesdemarches.iledefrance.fr et déposer la demande (pièce d'identité, avis de situation France Travail, contrat de professionnalisation, attestation de présence, RIB)",
+        "Dans les 3 mois suivant la fin de formation, déposer le complément (attestation de formation, contrat de travail, attestation de présence en emploi)"
+      ],
+      "url_demarche": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-la-formation-vers-les-metiers-en-tension-operateurs-idfm",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-la-formation-vers-les-metiers-en-tension-operateurs-idfm",
+          "titre": "Région Île-de-France – Aide à la formation vers les métiers en tension (opérateurs IDFM)",
+          "extrait": "Les stagiaires en contrat de professionnalisation dans les formations dispensées par les opérateurs IDFM et ayant été demandeur d’emploi dans le mois précédent la signature de leur contrat de professionnalisation."
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-la-formation-vers-les-metiers-en-tension-operateurs-idfm",
+          "titre": "Région Île-de-France – Aide à la formation vers les métiers en tension (opérateurs IDFM)",
+          "extrait": "L’aide est d’un montant de 2.000€ maximum, versé en 2 fois : ► 1er versement : 600€après dépôt du dossier sur mesdemarches et vérification de l’éligibilité du demandeur. ►2d versement : 1.400€"
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-la-formation-vers-les-metiers-en-tension-operateurs-idfm",
+          "titre": "Région Île-de-France – Aide à la formation vers les métiers en tension (opérateurs IDFM)",
+          "extrait": "La formation est ≥ à 300h, Le stagiaire a conclu un contrat de travail à l’issue de sa formation (dans les 3 mois suivants la date de fin de formation) avec une société dépendant des opérateurs de transport publics IDFM."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r11-recrutup",
+      "nom": "Recrut'Up",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide individuelle régionale (versée par subrogation à l'organisme de formation) qui finance un parcours de formation sur mesure, co-construit avec une entreprise francilienne qui recrute dans un secteur en tension, avant l'embauche du demandeur d'emploi.",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true,
+        "duree_min_heures": 500,
+        "duree_max_heures": 900,
+        "qualiopi_requis": true,
+        "contrats": [
+          "cdi",
+          "cdd"
+        ]
+      },
+      "conditions": [
+        "Demandeur d'emploi résidant en Île-de-France, inscrit à France Travail depuis au moins 6 mois",
+        "Entreprise (TPE, PME ou ETI) implantée ou se développant en Île-de-France, qui s'engage à proposer un contrat de travail d'au moins 12 mois",
+        "Parcours de 500 à 900 h (immersion en entreprise incluse), sur 12 mois maximum, en Île-de-France, 40 % maximum à distance, dans les domaines listés par le règlement (BTP, industrie, numérique…)",
+        "Organisme de formation francilien certifié Qualiopi ayant au moins 2 ans d'existence",
+        "L'entreprise cofinance au moins 30 % sur fonds propres ; aucun reste à charge pour le demandeur d'emploi (CPF non mobilisable)"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 70,
+        "base": "cout_total",
+        "plafond": 12000,
+        "duree_max_mois": null,
+        "libelle": "70 % maximum du coût total de la formation, plafonné à 12 000 € TTC par demandeur d'emploi ; l'entreprise cofinance au moins 30 %"
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Les cofinancements de dispositifs France Travail (POEI, POEC…) ou OPCO ne sont pas éligibles comme part entreprise."
+      },
+      "demarches": [
+        "L'entreprise et l'organisme de formation construisent le parcours et sélectionnent le demandeur d'emploi",
+        "L'organisme de formation dépose la demande pour le compte du demandeur d'emploi sur mesdemarches.iledefrance.fr, avant le démarrage, avec les pièces requises",
+        "Dépôt possible jusqu'au 31 janvier 2027"
+      ],
+      "url_demarche": "https://www.iledefrance.fr/aides-et-appels-a-projets/recrutup",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/recrutup",
+          "titre": "Région Île-de-France – Recrut'Up",
+          "extrait": "Le demandeur d'emploi doit résider en Île-de-France et être inscrit à France Travail depuis au moins 6 mois."
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/recrutup",
+          "titre": "Région Île-de-France – Recrut'Up",
+          "extrait": "Le soutien régional prend la forme d'une aide aux demandeurs d'emploi, versée par subrogation à l'organisme de formation. Son montant est plafonné à 12.000€ par demandeur d'emploi, dans la limite de 70% du coût total de la formation."
+        },
+        {
+          "url": "https://mesdemarches.iledefrance.fr/document-collect/cridfprd/root/public?objectId=016d69bc-169f-43ca-b92b-2b3da246b393;1.0",
+          "titre": "Région Île-de-France – Règlement d'intervention Recrut'Up",
+          "extrait": "La Région prend en charge 70% maximum des dépenses éligibles, dans la limite de 12 000€ TTC par aide. L'entreprise recruteuse couvre les dépenses restantes en cofinançant la formation (à hauteur de 30% au minimum)"
+        },
+        {
+          "url": "https://mesdemarches.iledefrance.fr/document-collect/cridfprd/root/public?objectId=016d69bc-169f-43ca-b92b-2b3da246b393;1.0",
+          "titre": "Région Île-de-France – Règlement d'intervention Recrut'Up",
+          "extrait": "Durer entre 500 et 900 heures (incluant la période d’immersion en entreprise), sur une période maximale de 12 mois au total"
+        },
+        {
+          "url": "https://mesdemarches.iledefrance.fr/document-collect/cridfprd/root/public?objectId=016d69bc-169f-43ca-b92b-2b3da246b393;1.0",
+          "titre": "Région Île-de-France – Règlement d'intervention Recrut'Up",
+          "extrait": "Avoir lieu en présentiel ou en format hybride, dans la limite de 40% maximum en distanciel"
+        },
+        {
+          "url": "https://mesdemarches.iledefrance.fr/document-collect/cridfprd/root/public?objectId=016d69bc-169f-43ca-b92b-2b3da246b393;1.0",
+          "titre": "Région Île-de-France – Règlement d'intervention Recrut'Up",
+          "extrait": "un contrat de travail d’au moins 12 mois sur le territoire francilien."
+        },
+        {
+          "url": "https://mesdemarches.iledefrance.fr/document-collect/cridfprd/root/public?objectId=016d69bc-169f-43ca-b92b-2b3da246b393;1.0",
+          "titre": "Région Île-de-France – Règlement d'intervention Recrut'Up",
+          "extrait": "certifiés Qualiopi, ayant au moins 2 ans d’existence."
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/recrutup",
+          "titre": "Région Île-de-France – Recrut'Up (calendrier)",
+          "extrait": "Dépôt des demandes ouvert jusqu'au 31 janvier 2027"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": "2027-01-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r11-formations-sanitaires-sociales",
+      "nom": "Financement régional des formations sanitaires et sociales (Île-de-France)",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région prend en charge, via une subvention aux instituts, le coût des formations sanitaires et sociales (aide-soignant, auxiliaire de puériculture, ambulancier, AES, infirmier…) pour certains publics, dont les demandeurs d'emploi dont la formation n'est pas financée par France Travail.",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi à l'entrée en formation (hors passerelles) et ne pas avoir la formation prise en charge par France Travail, ou bénéficiaire du RSA ou d'un PEC, ou jeune de moins de 26 ans en poursuite d'études",
+        "Être admis dans un institut francilien financé par la Région ; l'institut détermine l'éligibilité",
+        "Aide-soignant / auxiliaire de puériculture (programme qualifiant) : 100 € maximum par année de formation peuvent rester à charge pour les frais d'inscription"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Coût de formation pris en charge par la Région via l'institut si le candidat relève des publics éligibles (selon son statut à l'entrée en formation)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se renseigner auprès de l'institut de formation, qui applique les critères régionaux",
+        "S'inscrire à la sélection de l'institut"
+      ],
+      "url_demarche": "https://www.iledefrance.fr/aides-et-appels-a-projets/financement-des-formations-sanitaires-et-sociales-informations-aux-elevesetudiants",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/financement-des-formations-sanitaires-et-sociales-informations-aux-elevesetudiants",
+          "titre": "Région Île-de-France – Financement des formations sanitaires et sociales",
+          "extrait": "Via la subvention de fonctionnement qu'elle verse directement aux organismes de formation, la Région prend en charge la formation sanitaire ou sociale de certains élèves/étudiants selon leur statut et parcours scolaire et/ou professionnel."
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/financement-des-formations-sanitaires-et-sociales-informations-aux-elevesetudiants",
+          "titre": "Région Île-de-France – Financement des formations sanitaires et sociales",
+          "extrait": "Demandeurs d'emploi à l'entrée en formation, hors passerelles, dont le coût de formation n'est pas pris en charge par France Travail, Bénéficiaires d'un PEC, Parcours Emploi Compétences Bénéficiaires du RSA,"
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/financement-des-formations-sanitaires-et-sociales-informations-aux-elevesetudiants",
+          "titre": "Région Île-de-France – Financement des formations sanitaires et sociales",
+          "extrait": "Moins de 26 ans en poursuite d'études sans interruption"
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/programme-regional-qualifiant-par-la-formation-continue",
+          "titre": "Région Île-de-France – Programme régional qualifiant par la formation continue",
+          "extrait": "Au-delà de la prise en charge de la Région, un maximum de 100 € par année de formation peut demeurer à la charge de l’élève en formation pour les frais d’inscription."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r11-daeu",
+      "nom": "Aide régionale pour le Diplôme d'accès aux études universitaires (DAEU)",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "reconversion_salarie",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi"
+      ],
+      "description": "Aide individuelle incitative versée aux Franciliens non bacheliers inscrits au DAEU dans une université d'Île-de-France ; elle ne constitue pas une avance pour régler les droits d'inscription.",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "beneficiaire",
+        "niveaux_diplome": [
+          "sans_diplome",
+          "cap_bep"
+        ]
+      },
+      "conditions": [
+        "Être domicilié en Île-de-France, sans limite d'âge",
+        "Ne pas être titulaire du baccalauréat",
+        "Être inscrit au DAEU dans une université francilienne (certificat de scolarité)",
+        "Versements conditionnés à l'assiduité et à la présence à tous les examens finaux"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 1000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 1000,
+        "duree_max_mois": null,
+        "libelle": "1 000 € maximum, versés en 2 fois (500 € puis 500 €) sous conditions d'assiduité et de présence aux examens"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "S'inscrire au DAEU dans une université francilienne et régler les droits",
+        "Déposer la demande sur mesdemarches.iledefrance.fr entre le 20 octobre 2026 et le 22 février 2027"
+      ],
+      "url_demarche": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-regionale-pour-le-diplome-dacces-aux-etudes-universitaires-daeu",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-regionale-pour-le-diplome-dacces-aux-etudes-universitaires-daeu",
+          "titre": "Région Île-de-France – Aide régionale DAEU",
+          "extrait": "Étudiants (sans limite d'âge) domiciliés en Île-de-France, non titulaires du baccalauréat et inscrits à la formation au DAEU dans une université francilienne."
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-regionale-pour-le-diplome-dacces-aux-etudes-universitaires-daeu",
+          "titre": "Région Île-de-France – Aide régionale DAEU",
+          "extrait": "Aide individuelle de 1.000€ maximum, versée en 2 fois: 500 € à partir de mars ou avril 2027, 500 € à l'été 2027."
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-regionale-pour-le-diplome-dacces-aux-etudes-universitaires-daeu",
+          "titre": "Région Île-de-France – Aide régionale DAEU (calendrier)",
+          "extrait": "Nouvelle session du 20 octobre 2026 au 22 février 2027"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-10-20",
+        "fin": "2027-02-22"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r11-aide-regionale-apprentissage",
+      "nom": "Aide régionale à l'apprentissage (ARA) – 1re année, niveaux 3 à 5",
+      "financeur": "region",
+      "financeur_nom": "Région Île-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide individuelle versée en une fois aux apprentis en première année d'apprentissage (CAP à Bac+2) dans un OFA francilien, pour les dépenses de livres, d'équipement, de transport, de restauration ou d'hébergement. La demande est faite par l'OFA.",
+      "criteres": {
+        "regions": [
+          "11"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "niveau_certification_min": 3,
+        "niveau_certification_max": 5
+      },
+      "conditions": [
+        "Premier contrat d'apprentissage, en cours d'exécution",
+        "Formation de niveau 3, 4 ou 5 dans un OFA ou une UFA situé en Île-de-France",
+        "Pas d'absentéisme injustifié supérieur à 20 % ; aide non perçue une année antérieure",
+        "Campagne 2025-2026 close le 28/09/2026 ; ouverture de la campagne 2026-2027 non publiée"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Montants de la campagne 2025-2026 (dépôt clos le 28/09/2026) : 200 € pour une 1re année de niveau 3 ou 4 (CAP, Bac), 115 € pour une 1re année de niveau 5 (Bac+2), versement unique ; montants de la campagne 2026-2027 non publiés"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se rapprocher de son OFA, qui dépose la demande pour ses apprentis sur mesdemarches.iledefrance.fr pendant la campagne",
+        "Fournir à l'OFA pièce d'identité et RIB ; versement par l'ASP"
+      ],
+      "url_demarche": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-regionale-apprentissage-ara-pour-les-apprentis-en-1re-annee-dapprentissage-niveaux-3-5",
+      "sources": [
+        {
+          "url": "https://mesdemarches.iledefrance.fr/document-collect/cridfprd/root/public?objectId=a214b11f-db40-4e3c-b89d-7b7d342e0c12;1.0",
+          "titre": "Région Île-de-France – Notice ARA 2025-2026",
+          "extrait": "L’aide régionale, versée en une seule fois, s’élève pour l’année 2025-2026 à 200 € pour les apprentis en première année d’une formation de niveau 3 et 4 (CAP, Bac) et 115 € en première année d’une formation de niveau 5 (Bac +2)."
+        },
+        {
+          "url": "https://mesdemarches.iledefrance.fr/document-collect/cridfprd/root/public?objectId=a214b11f-db40-4e3c-b89d-7b7d342e0c12;1.0",
+          "titre": "Région Île-de-France – Notice ARA 2025-2026",
+          "extrait": "Apprentis ayant fait preuve d’un absentéisme non justifié excessif (> 20%)."
+        },
+        {
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets/aide-regionale-apprentissage-ara-pour-les-apprentis-en-1re-annee-dapprentissage-niveaux-3-5",
+          "titre": "Région Île-de-France – Aide régionale à l'apprentissage (ARA)",
+          "extrait": "Dépôt des demandes fermé depuis le 28 septembre 2026"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-programme-regional",
+      "nom": "Programme régional de formation (PRF) Hauts-de-France",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations financées par la Région pour les demandeurs d'emploi : « S'engager vers l'emploi » (SIEG), « Se former pour un emploi en région » (SFER Découverte, Qualifiant, Perfectionnement)… La Région prend en charge le prix de la formation, la protection sociale et, sous conditions, la rémunération et les frais de transport et d'hébergement.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 18,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Être inscrit à France Travail et avoir plus de 18 ans",
+        "Ne pas avoir de diplôme ou avoir obtenu son diplôme il y a au moins 1 an",
+        "Être en recherche d'emploi, en contrat aidé, à temps partiel de moins de 24 h par semaine, bénéficiaire de la PreParE, militaire en reconversion ou sportif de haut niveau sans contrat",
+        "La formation doit figurer au programme régional ; les repas restent à la charge du stagiaire"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération régionale (RSFP) possible si le stagiaire ne perçoit pas d’allocation de France Travail."
+      },
+      "demarches": [
+        "Consulter l'offre de formation sur le site du C2RP",
+        "Contacter son conseiller France Travail, Mission locale ou Cap emploi, ou le numéro vert régional 0 800 026 080",
+        "Se présenter dans une antenne de la Région si besoin"
+      ],
+      "url_demarche": "https://www.c2rp.fr/former-orienter/formations",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1070",
+          "titre": "Région Hauts-de-France – PRF SFER « Qualifiant »",
+          "extrait": "J'ai plus de 18 ans Je suis inscrit chez France Travail Je n'ai pas de diplôme ou j'ai obtenu un diplôme il y a au moins 1 an"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1070",
+          "titre": "Région Hauts-de-France – PRF SFER « Qualifiant »",
+          "extrait": "Je travaille à temps partiel, moins de 24 heures par semaine"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1070",
+          "titre": "Région Hauts-de-France – PRF SFER « Qualifiant »",
+          "extrait": "La formation est gratuite pour moi. La Région prend en charge : Le prix total de ma formation Ma rémunération, sous conditions Mes frais de transport et d'hébergement, sous conditions Les cotisations de sécurité sociale"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-sfes",
+      "nom": "Se former dans l'enseignement supérieur (SFES) – aides individuelles du PRF",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide individuelle du programme régional qui finance, pour un demandeur d'emploi bachelier, une formation professionnelle courte de l'enseignement supérieur (licence professionnelle, BUT…) dans une université des Hauts-de-France, parmi une liste de formations éligibles (2026-2027).",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true,
+        "niveaux_diplome": [
+          "bac",
+          "bac_plus_2",
+          "bac_plus_3_et_plus"
+        ]
+      },
+      "conditions": [
+        "Être domicilié dans les Hauts-de-France, de nationalité française ou étranger en situation régulière",
+        "Avoir le bac ou un diplôme de niveau bac",
+        "La formation doit figurer dans la liste des formations éligibles 2026-2027",
+        "Projet validé par le conseiller France Travail"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure dans la liste des formations éligibles : prix de la formation et cotisations sociales pris en charge ; rémunération et frais de transport/hébergement sous conditions"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Consulter la liste des formations éligibles 2026-2027",
+        "Contacter son conseiller France Travail pour un rendez-vous d'étude du projet"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif1067",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1067",
+          "titre": "Région Hauts-de-France – SFES",
+          "extrait": "est une aide individuelle qui permet de suivre une formation afin d'obtenir un diplôme de l'enseignement supérieur."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1067",
+          "titre": "Région Hauts-de-France – SFES",
+          "extrait": "133 formations sont éligibles à cette aide. Il s'agit de formation courtes professionnelles."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1067",
+          "titre": "Région Hauts-de-France – SFES (document téléchargeable)",
+          "extrait": "SFES 2026-27 liste formations éligibles"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1067",
+          "titre": "Région Hauts-de-France – SFES",
+          "extrait": "La formation est gratuite pour moi. La Région prend en charge : Le prix total de ma formation"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1067",
+          "titre": "Région Hauts-de-France – SFES",
+          "extrait": "J'ai le bac ou un diplôme de niveau bac Je suis domicilié(e) dans les Hauts-de-France"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-prf-creation-reprise",
+      "nom": "PRF « Se former pour créer ou reprendre une entreprise » (CRE)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formation du programme régional pour créer, reprendre ou gérer une entreprise : action courte certifiante (environ 130 h en centre, 210 h maximum avec immersion) ou Titre professionnel « Responsable de petite ou moyenne structure ».",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 18
+      },
+      "conditions": [
+        "Être majeur, de nationalité française ou étranger en situation régulière",
+        "Ne pas avoir de diplôme ou avoir obtenu son diplôme il y a au moins 1 an",
+        "Être demandeur d'emploi inscrit à France Travail, en contrat aidé, à temps partiel de moins de 24 h par semaine, en CSP, bénéficiaire de la PreParE, militaire en reconversion ou sportif sans contrat"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Contacter son conseiller France Travail, Mission locale, Cap emploi ou APEC, ou le 0 800 026 080",
+        "Consulter l'offre sur le site du C2RP"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif1071",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1071",
+          "titre": "Région Hauts-de-France – PRF Créer ou reprendre une entreprise",
+          "extrait": "Une action de formation courte et certifiante (totale ou partielle) d'une durée d'environ 130 heures en centre, avec une période d'immersion en entreprise, sans dépasser 210 heures au total Une action de formation au « Titre professionnel Responsable de Petite ou Moyenne structure »"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1071",
+          "titre": "Région Hauts-de-France – PRF Créer ou reprendre une entreprise",
+          "extrait": "Je suis majeur Je suis de nationalité française ou je suis étranger en situation régulière"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1071",
+          "titre": "Région Hauts-de-France – PRF Créer ou reprendre une entreprise",
+          "extrait": "Je n'ai pas de diplôme ou j'ai obtenu un diplôme il y a au moins 1 an"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1071",
+          "titre": "Région Hauts-de-France – PRF Créer ou reprendre une entreprise",
+          "extrait": "Je travaille à temps partiel, moins de 24h par semaine"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif1071",
+          "titre": "Région Hauts-de-France – PRF Créer ou reprendre une entreprise",
+          "extrait": "La formation est gratuite pour moi. La Région prend en charge : Le prix total de ma formation"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (RSFP) – Hauts-de-France",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle versée par la Région, selon la situation du stagiaire, pendant une formation reconnue et financée par la Région, avec protection sociale et aide aux frais de transport et d'hébergement sous conditions.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être sans emploi, inscrit à France Travail et sans allocation de France Travail, ou travailleur handicapé, ou détenu, ou stagiaire en centre de réadaptation",
+        "Suivre une formation reconnue et financée par la Région Hauts-de-France",
+        "Exclus : formation financée par France Travail ou d'autres structures ; fonctionnaire en disponibilité ; congé parental ou sans solde"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Rémunération mensuelle selon la situation du stagiaire (barème réglementaire des stagiaires de la formation professionnelle) ; repas non pris en charge"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se rapprocher du centre de formation, qui constitue la demande avec les justificatifs (âge, situation, revenus antérieurs)",
+        "Numéro vert régional : 0 800 026 080"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif147",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif147",
+          "titre": "Région Hauts-de-France – RSFP",
+          "extrait": "C'est une aide financière de la Région pour les personnes en recherche d'emploi afin qu'elles puissent suivre une formation professionnelle sans difficulté financière."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif147",
+          "titre": "Région Hauts-de-France – RSFP",
+          "extrait": "Une rémunération versée tous les mois pendant la formation, selon la situation du stagiaire Une protection sociale (santé, maternité, accident…) Une aide aux frais de transport et d'hébergement, sous conditions."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-proch-emploi",
+      "nom": "Proch'Emploi (volets entreprises et demandeurs d'emploi)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "service_gratuit",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Service régional gratuit : 23 plateformes territoriales accompagnent les TPE-PME dans leurs recrutements (rendez-vous, présélection de candidats, financement de formations) et suivent les demandeurs d'emploi qui le sollicitent.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "Entreprise ayant une offre d'emploi à pourvoir dans les Hauts-de-France",
+        "Le financement d'une formation avant embauche est décidé au cas par cas par la plateforme"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Service gratuit ; financement de formations possible (montant non publié)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Appeler le numéro vert 0 800 026 080 ou le guichet unique des entreprises 03 74 27 00 27",
+        "La plateforme Proch'Emploi du territoire organise un rendez-vous et présente des candidats présélectionnés"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif888",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif888",
+          "titre": "Région Hauts-de-France – Proch'Emploi volet entreprises",
+          "extrait": "La Région Hauts-de-France a mis en place 23 plateformes en lien avec les entreprises dans les territoires (cf. cartographie jointe), qui accompagnent les TPE-PME dans leurs besoins RH (recrutements et formations)."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif888",
+          "titre": "Région Hauts-de-France – Proch'Emploi volet entreprises",
+          "extrait": "Les plateformes territoriales Proch'Emploi proposent aux entreprises : un rendez-vous personnalisé, la mise en relation avec des candidats pré-selectionnés, le financement de formations."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif457",
+          "titre": "Région Hauts-de-France – Proch'Emploi volet demandeurs d'emploi",
+          "extrait": "Proch'Emploi propose un accompagnement aux demandeurs d'emplois qui sollicitent le dispositif, ainsi que des offres disponibles dans la région ou une formation pour y accéder."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-dvrh",
+      "nom": "Appui au développement des ressources humaines des entreprises (DVRH)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "dirigeant"
+      ],
+      "description": "Subvention régionale aux actions de formation du plan de formation d'une entreprise ou association ayant des salariés en Hauts-de-France, pour des projets structurants (développement, implantation/reprise, difficultés). Le dirigeant peut aussi être formé.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "Entreprise ou association employant des salariés en Hauts-de-France, projet d'intérêt régional à caractère structurant et exceptionnel (priorité aux TPE-PME)",
+        "Actions internes ou externes du plan de formation, hors formations obligatoires de mise en conformité",
+        "Aide non automatique, décidée par la Commission permanente ; convention avec l'entreprise ou son OPCO"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Subvention proportionnelle aux dépenses de formation éligibles, dans la limite des taux d'aides publiques autorisés ; montant fixé par convention"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Contacter le guichet unique des entreprises de la Région",
+        "Déposer la demande sur la plateforme régionale des aides (dispositif DVRH)",
+        "Signer la convention, puis produire les justificatifs d'exécution du plan de formation"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif688",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif688",
+          "titre": "Région Hauts-de-France – DVRH",
+          "extrait": "Former les salariés pendant les périodes de difficulté afin de mieux préparer l'entreprise au rebond économique, et d'augmenter leur qualification"
+        },
+        {
+          "url": "https://entreprises.hautsdefrance.fr/Appui-au-developpement-des-Ressources-Humaines-des-entreprises-DVRH",
+          "titre": "Hauts-de-France Entreprises – DVRH",
+          "extrait": "Le calcul de l’aide est établi en proportion des dépenses éligibles, dans le respect du taux plafond d’intensité d’aides publiques autorisé par le régime cadre exempté de notification visé par le présent cadre d’intervention."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-pass-cyber-formation",
+      "nom": "Pass Cyber Formation",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "dirigeant"
+      ],
+      "description": "Formation de référents cybersécurité en entreprise (bonnes pratiques, hygiène informatique, organisation de la cybersécurité) proposée avec Formation CCI Hauts-de-France, cofinancée par la Région pour les PME.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_max": 249
+      },
+      "conditions": [
+        "Entreprise inscrite au RCS ou au RM, de moins de 250 salariés, à jour de ses obligations fiscales et sociales, non en difficulté",
+        "Professions réglementées et personnes physiques exclues"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 50,
+        "base": "cout_pedagogique",
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "50 % du coût estimé de la formation pour l'entreprise, dans la limite de 200 € HT par journée de formation"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se pré-inscrire auprès de Formation CCI Hauts-de-France",
+        "Contacter le guichet unique entreprises de la Région (03 74 27 00 27) pour toute question"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif924",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif924",
+          "titre": "Région Hauts-de-France – Pass Cyber Formation",
+          "extrait": "< 250 salariés (définition européenne de la PME),"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif924",
+          "titre": "Région Hauts-de-France – Pass Cyber Formation",
+          "extrait": "cette formation peut bénéficier d'un financement de la Région Hauts-de-France pour le PME à hauteur de 50% du coût estimé pour l'entreprise (dans la limite de 200€ HT par journée de formation)."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-formations-sanitaires-sociales",
+      "nom": "Gratuité des formations sanitaires et sociales (Hauts-de-France)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "salarie"
+      ],
+      "description": "La Région prend en charge le coût pédagogique des formations sanitaires et sociales dans les instituts autorisés et financés : gratuité pour les niveaux 3 et 4 (aide-soignant, auxiliaire de puériculture, ambulancier, AES, moniteur éducateur, TISF) et prise en charge totale ou partielle pour les formations post-bac.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi ou salarié précaire (sous conditions), ou jeune en poursuite d'études",
+        "Être inscrit dans un institut des Hauts-de-France autorisé/agréé et financé par la Région (dans la limite des places financées)",
+        "Restent à charge : frais de concours, droits d'inscription, hébergement, restauration (sauf cas), équipement ; reste à charge partiel dans les instituts sanitaires privés post-bac"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Coût pédagogique pris en charge par la Région via l'institut (gratuité en niveaux 3 et 4) si la formation et l'institut sont financés par la Région"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se rapprocher de l'institut de formation souhaité"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif656",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif656",
+          "titre": "Région Hauts-de-France – Formations sanitaires et sociales de niveau 3 et 4",
+          "extrait": "Offrir la gratuité d'accès aux formations professionnelles sanitaires et sociales de niveau 3 et 4 à toute personne cherchant à s'insérer sur le marché du travail."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif656",
+          "titre": "Région Hauts-de-France – Formations sanitaires et sociales de niveau 3 et 4",
+          "extrait": "Les demandeurs d'emploi et les salariés précaires (sous certaines conditions),"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif657",
+          "titre": "Région Hauts-de-France – Formations sanitaires et sociales post-bac",
+          "extrait": "Vous êtes inscrit dans un institut de formation sanitaire public : la Région prend en charge la totalité du coût pédagogique de votre formation (dans la limite des places autorisées et financées par la Région)."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r32-apprentis-equipement",
+      "nom": "Carte Génération #HDF – aide au premier équipement des apprentis",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide de rentrée de 200 € sur la carte Génération #HDF pour les apprentis qui débutent un cycle de formation, pour l'achat d'équipements professionnels et de sécurité ou de livres.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Apprenti primo-entrant (début de cycle) inscrit dans un CFA ou organisme de formation par apprentissage situé dans les Hauts-de-France",
+        "Les redoublants de début de cycle ne sont pas primo-entrants",
+        "Montant utilisable 4 mois à compter de la validation par le CFA"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 200,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "200 € pour les apprentis primo-entrants, sur la carte Génération #HDF"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "S'inscrire sur l'extranet ou l'application Génération #HDF",
+        "Le CFA valide la demande",
+        "Utiliser le montant auprès des partenaires dans les 4 mois"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif595",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif595",
+          "titre": "Région Hauts-de-France – Aide à l'équipement / Carte Génération #HDF",
+          "extrait": "Le montant de l'aide est fixé à 200 euros pour les apprentis primo-entrants"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif595",
+          "titre": "Région Hauts-de-France – Aide à l'équipement / Carte Génération #HDF",
+          "extrait": "Le montant est utilisable 4 mois à compter de la date de validation ou de revalidation par le CFA"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-apprentis-transport",
+      "nom": "Carte Génération #HDF – aide au transport des apprentis (aides THR)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide forfaitaire annuelle au transport domicile-CFA, versée sur le compte Génération #HDF, selon un barème kilométrique.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Apprenti inscrit dans un CFA des Hauts-de-France (ou hors région sous conditions : employeur en Hauts-de-France, formation inexistante en région, pas d'aide d'une autre Région)",
+        "Demande à partir de 45 jours après le début du contrat, renouvelable tous les 12 mois"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 200,
+        "duree_max_mois": null,
+        "libelle": "Par année de contrat, selon la distance domicile-CFA : 0 € (moins de 10 km), 100 € (10 à 40 km), 150 € (41 à 100 km), 200 € (plus de 100 km)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "S'inscrire sur la plateforme ou l'application Génération #HDF",
+        "Faire la demande dans l'année suivant le début du contrat ; le CFA valide le maintien en formation"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif858",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif858",
+          "titre": "Région Hauts-de-France – Aide au transport des apprentis (THR)",
+          "extrait": "Distance Domicile /CFA Barème appliqué Moins de 10 km 0€ 10 à 40km 100 € 41 à 100 km 150 € Plus de 100 km 200 €"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif858",
+          "titre": "Région Hauts-de-France – Aide au transport des apprentis (THR)",
+          "extrait": "L'aide peut être versée tout au long de l'année (après une période de 45 jours) et est reconductible tous les 12 mois."
+        },
+        {
+          "url": "https://generation.hautsdefrance.fr/rentree-2026-la-region-aux-avant-postes-pour-la-reussite-de-tous-les-jeunes-des-hauts-de-france/",
+          "titre": "Génération #HDF – Rentrée 2026 (31/08/2026)",
+          "extrait": "jusqu’à 200 euros par an pour les frais de transport entre le domicile et le CFA, 80 euros pour le logement et 100 euros pour la restauration."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-apprentis-restauration",
+      "nom": "Carte Génération #HDF – aide à la restauration des apprentis (aides THR)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide forfaitaire annuelle de 100 € pour compenser une partie des frais de restauration de l'apprenti, versée sur le compte Génération #HDF.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Apprenti inscrit dans un CFA des Hauts-de-France (ou hors région sous conditions)",
+        "Demande à partir de 45 jours après le début du contrat, renouvelable tous les 12 mois"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 100,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "100 € par apprenti et par année de contrat"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "S'inscrire sur la plateforme ou l'application Génération #HDF",
+        "Faire la demande ; versement après validation par le CFA"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif857",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif857",
+          "titre": "Région Hauts-de-France – Aide à la restauration des apprentis (THR)",
+          "extrait": "Le montant de l'aide est fixé à 100 euros par apprentis et par année de contrat"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif857",
+          "titre": "Région Hauts-de-France – Aide à la restauration des apprentis (THR)",
+          "extrait": "L'aide peut être versée tout au long de l'année (après une période de 45 jours) et est reconductible tous les 12 mois."
+        },
+        {
+          "url": "https://generation.hautsdefrance.fr/rentree-2026-la-region-aux-avant-postes-pour-la-reussite-de-tous-les-jeunes-des-hauts-de-france/",
+          "titre": "Génération #HDF – Rentrée 2026 (31/08/2026)",
+          "extrait": "jusqu’à 200 euros par an pour les frais de transport entre le domicile et le CFA, 80 euros pour le logement et 100 euros pour la restauration."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-apprentis-hebergement",
+      "nom": "Carte Génération #HDF – aide à l'hébergement des apprentis (aides THR)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide forfaitaire annuelle de 80 € pour les apprentis qui supportent des frais d'hébergement pendant leur formation, versée sur le compte Génération #HDF.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Apprenti inscrit dans un CFA des Hauts-de-France (ou hors région sous conditions)",
+        "Justifier d'un logement payant (bail ou facture couvrant la durée de la formation)",
+        "Demande à partir de 45 jours après le début du contrat, renouvelable tous les 12 mois"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 80,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "80 € par apprenti et par année de contrat"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les aides de droit commun et celles d’Action Logement."
+      },
+      "demarches": [
+        "S'inscrire sur la plateforme ou l'application Génération #HDF",
+        "Joindre le justificatif de logement ; versement après validation par le CFA"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif856",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif856",
+          "titre": "Région Hauts-de-France – Aide à l'hébergement des apprentis (THR)",
+          "extrait": "Le montant de l'aide est fixé à 80 euros par apprentis et par année de contrat"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif856",
+          "titre": "Région Hauts-de-France – Aide à l'hébergement des apprentis (THR)",
+          "extrait": "L'aide peut être versée tout au long de l'année (après une période de 45 jours) et est reconductible tous les 12 mois."
+        },
+        {
+          "url": "https://generation.hautsdefrance.fr/rentree-2026-la-region-aux-avant-postes-pour-la-reussite-de-tous-les-jeunes-des-hauts-de-france/",
+          "titre": "Génération #HDF – Rentrée 2026 (31/08/2026)",
+          "extrait": "jusqu’à 200 euros par an pour les frais de transport entre le domicile et le CFA, 80 euros pour le logement et 100 euros pour la restauration."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-apprentis-transports-regionaux",
+      "nom": "Cars régionaux gratuits et abonnement TER « Mon Abo Étudiant et Apprenti » (Hauts-de-France mobilités)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Les apprentis inscrits dans un CFA ou une école de production peuvent voyager gratuitement sur les cars régionaux (abonnement apprenti sur la carte Pass Pass) et bénéficier d'un abonnement TER domicile-CFA à tarif réduit.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Être inscrit dans un CFA ou une école de production",
+        "Cars : abonnement annuel nominatif, en période scolaire du lundi au samedi, dans la limite de l'offre existante",
+        "TER : trajet domicile - CFA / école de production"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Gratuité des cars régionaux ; jusqu'à 88 % de réduction sur le TER pour le trajet domicile-CFA"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "S'inscrire sur hautsdefrance-mobilites.fr (abonnement apprenti sur la carte Pass Pass)",
+        "Souscrire « Mon Abo Étudiant et Apprenti TER »"
+      ],
+      "url_demarche": "https://generation.hautsdefrance.fr/apprentis-des-hauts-de-france-profitez-des-offres-de-transport-de-la-region/",
+      "sources": [
+        {
+          "url": "https://generation.hautsdefrance.fr/apprentis-des-hauts-de-france-profitez-des-offres-de-transport-de-la-region/",
+          "titre": "Génération #HDF – Apprentis : offres de transport de la Région (21/07/2026)",
+          "extrait": "vous pouvez accéder gratuitement aux cars régionaux grâce à un abonnement nominatif apprenti chargé sur votre carte Pass Pass"
+        },
+        {
+          "url": "https://generation.hautsdefrance.fr/apprentis-des-hauts-de-france-profitez-des-offres-de-transport-de-la-region/",
+          "titre": "Génération #HDF – Apprentis : offres de transport de la Région (21/07/2026)",
+          "extrait": "vous pouvez voyager en illimité sur un trajet domicile CFA / école de production et bénéficier jusqu’à 88 % de réduction."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-reprise-apprentis",
+      "nom": "Reprise des apprentis (rupture de contrat)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Indemnité forfaitaire mensuelle pour l'apprenti dont le contrat a été rompu à l'initiative de l'entreprise après la période de 45 jours, en attendant un nouveau contrat ou l'examen.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Apprenti inscrit dans un CFA des Hauts-de-France, contrat rompu à l'initiative de l'employeur après 45 jours",
+        "Toujours inscrit au CFA, couverture sociale, aucune autre indemnisation ou rémunération",
+        "Dossier déposé par l'apprenti dans les 4 mois suivant la rupture ; enveloppe annuelle limitée"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 500,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": 3,
+        "libelle": "500 € par mois (200 € si moins de 18 ans au moment de la rupture), pendant 3 mois maximum renouvelables une fois (prolongation possible jusqu'à l'examen en dernière année)",
+        "majorations": [
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 200,
+            "libelle": "Apprenti de moins de 18 ans au moment de la rupture : 200 € par mois"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Obtenir l'attestation du CFA (inscription maintenue, couverture sociale)",
+        "Déposer le dossier sur la plateforme des aides de la Région (PAS) dans les 4 mois suivant la rupture"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif624",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif624",
+          "titre": "Région Hauts-de-France – Reprise des apprentis",
+          "extrait": "Grille des montants d'aides versées par la Région au 01/01/2026 : Situation du bénéficiaire Montant mensuel Apprenti de moins de 18 ans au moment de la rupture 200 € Apprenti de plus de 18 ans au moment de la rupture 500 €"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif624",
+          "titre": "Région Hauts-de-France – Reprise des apprentis",
+          "extrait": "pour une durée maximale de trois mois, renouvelable une fois"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif624",
+          "titre": "Région Hauts-de-France – Reprise des apprentis",
+          "extrait": "Le dossier doit être déposé dans les quatre mois maximum après la date de rupture du contrat."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif624",
+          "titre": "Région Hauts-de-France – Reprise des apprentis",
+          "extrait": "Tout apprenti dont le contrat a été rompu à l'initiative de l'entreprise, après une période règlementaire de 45 jours."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-aide-permis",
+      "nom": "Aide au permis de conduire (PERM26)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "alternant",
+        "demandeur_emploi"
+      ],
+      "description": "Aide régionale au permis B pour les jeunes en insertion (apprentis, demandeurs d'emploi inscrits depuis au moins 6 mois, CEJ, PACEA…), en complément des autres aides et du CPF.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être domicilié dans les Hauts-de-France et avoir 16 à 25 ans révolus (sans limite d'âge pour les familles monoparentales)",
+        "Être apprenti, demandeur d'emploi inscrit depuis au moins 6 mois, stagiaire inscrit à France Travail depuis 6 mois, en CEJ ou PACEA, lycéen de terminale Bac pro / dernière année de CAP ou élève d'école de production",
+        "Code obtenu depuis moins de 6 mois, contrat d'enseignement à la conduite de moins de 6 mois, auto-école agréée en Hauts-de-France ou EPCI limitrophe",
+        "Conditions de revenus (revenu fiscal de référence plafonné)"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 90,
+        "base": "cout_total",
+        "plafond": 1200,
+        "duree_max_mois": null,
+        "libelle": "Complète les autres aides publiques et le CPF jusqu'à 90 % du coût du contrat d'enseignement à la conduite ; total plafonné à 1 200 €"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Déposer la demande sur aides.hautsdefrance.fr avant le passage du permis",
+        "Avance de 30 % après notification, solde de 70 % sur présentation de la convocation à l'épreuve et du relevé élève (12 mois maximum)"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif931",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif931",
+          "titre": "Région Hauts-de-France – Aide au permis de conduire PERM26",
+          "extrait": "Avoir entre 16 et 25 ans révolus à la date de dépôt de la demande d'aide ou sans limite d'âge pour les familles monoparentales"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif931",
+          "titre": "Région Hauts-de-France – Aide au permis de conduire PERM26",
+          "extrait": "jusqu'à hauteur de 90% du coût présenté dans le contrat d'enseignement à la conduite. L'aide ne pourra excéder 1200€"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif931",
+          "titre": "Région Hauts-de-France – Aide au permis de conduire PERM26",
+          "extrait": "Le montant total cumulé des aides publiques et de l'utilisation du CPF ne pourra pas excéder 1200 €."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif931",
+          "titre": "Région Hauts-de-France – Aide au permis de conduire PERM26",
+          "extrait": "Demandeurs d'emploi inscrits à France Travail en catégorie 1, 2 ou 3 depuis au moins 6 mois et de manière continue"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif931",
+          "titre": "Région Hauts-de-France – Aide au permis de conduire PERM26",
+          "extrait": "Avoir un contrat d'enseignement à la conduite daté de moins de 6 mois à la date de la demande"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif931",
+          "titre": "Région Hauts-de-France – Aide au permis de conduire PERM26",
+          "extrait": "Une avance de 30 % du montant de l'aide attribuée, versée après la notification de la décision Un solde de 70 % restants, sur présentation de la convocation à l'épreuve de conduite et du relevé élève, au plus tard 12 mois après la notification de l'aide."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-mermoz-apprentis",
+      "nom": "Bourse de mobilité internationale Mermoz (apprentis du supérieur)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Bourse régionale pour un stage à l'étranger, ouverte notamment aux apprentis de l'enseignement supérieur inscrits dans un établissement partenaire des Hauts-de-France ; montant hebdomadaire selon le quotient familial.",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "niveau_certification_min": 5
+      },
+      "conditions": [
+        "Apprenti du supérieur inscrit dans un établissement partenaire situé en Hauts-de-France",
+        "Stage de 4 à 26 semaines",
+        "Quotient familial inférieur à 30 000 € par part",
+        "Ne pas avoir déjà perçu la bourse Mermoz ni la bourse de mobilité d'une autre Région"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 335 € par mois (77,40 € par semaine) selon le quotient familial, minimum 150 € ; + 300 € de frais de voyage pour les boursiers sur critères sociaux (400 € en situation de handicap) ; bonus de 25 % en situation de handicap"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Déposer la demande en ligne sur la plateforme des aides de la Région avant le départ"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif997",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif997",
+          "titre": "Région Hauts-de-France – Bourses Mermoz",
+          "extrait": "aux étudiants apprentis du supérieur"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif997",
+          "titre": "Région Hauts-de-France – Bourses Mermoz",
+          "extrait": "Le montant maximum de la bourse – hors frais de voyage - s'élève à 335 € par mois, soit 77,40 par semaine, pour un stage, un séjour d'études ou de recherche ; ce montant diminue progressivement selon le quotient familial jusqu'à 0 € par semaine."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif997",
+          "titre": "Région Hauts-de-France – Bourses Mermoz",
+          "extrait": "Toutefois, si le montant total attribué est inférieur à 150 € pour la durée totale de la mobilité, le montant est réajusté à 150 €."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif997",
+          "titre": "Région Hauts-de-France – Bourses Mermoz",
+          "extrait": "L'étudiant éligible et boursier sur critères sociaux, bénéficie d'une participation forfaitaire aux frais de voyage de 300 €, qui s'élève à 400 € pour les étudiants en situation de handicap."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif997",
+          "titre": "Région Hauts-de-France – Bourses Mermoz",
+          "extrait": "Pour les étudiants en situation de handicap, le montant de la bourse est bonifié de 25%."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif997",
+          "titre": "Région Hauts-de-France – Bourses Mermoz",
+          "extrait": "Au-delà du seuil de 30 000 € de QF par part fiscale, l'étudiant ne peut prétendre à la bourse d'aide à la mobilité internationale."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif997",
+          "titre": "Région Hauts-de-France – Bourses Mermoz",
+          "extrait": "4 à 26 semaines pour les apprentis du supérieur"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r32-daeu",
+      "nom": "Formation des non bacheliers – DAEU (Hauts-de-France)",
+      "financeur": "region",
+      "financeur_nom": "Région Hauts-de-France",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "salarie"
+      ],
+      "description": "Prise en charge par la Région des frais pédagogiques du DAEU dans les universités des Hauts-de-France, au titre du programme « Se former dans l'enseignement supérieur ».",
+      "criteres": {
+        "regions": [
+          "32"
+        ],
+        "perimetre_region": "beneficiaire",
+        "niveaux_diplome": [
+          "sans_diplome",
+          "cap_bep"
+        ]
+      },
+      "conditions": [
+        "Demandeur d'emploi ou salarié (hors temps de travail) non titulaire du baccalauréat, études interrompues depuis au moins 2 ans",
+        "Conditions d'accès au DAEU (au moins 20 ans et 2 ans d'activité, ou 24 ans)",
+        "Fiche régionale non mise à jour (mentionne Pôle emploi) et DAEU absent de la liste SFES 2026-2027 : vérifier l'ouverture auprès de l'université"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Frais pédagogiques pris en charge par la Région ; rémunération et couverture sociale pour les demandeurs d'emploi non indemnisés"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se renseigner auprès du service de formation continue de l'université (Artois, ULCO, Lille, UPJV, UPHF)"
+      ],
+      "url_demarche": "https://guide-aides.hautsdefrance.fr/dispositif115",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif115",
+          "titre": "Région Hauts-de-France – Formation des non bacheliers DAEU",
+          "extrait": "Prise en charge des frais pédagogiques de l'apprenant par la région et de la rémunération/couverture sociale pour les demandeurs d'emploi non indemnisés par Pôle emploi."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif115",
+          "titre": "Région Hauts-de-France – Formation des non bacheliers DAEU",
+          "extrait": "Demandeurs d'emploi ou salariés (hors temps de travail) non titulaire du Baccalauréat ayant interrompu sa scolarité depuis au moins deux ans."
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif115",
+          "titre": "Région Hauts-de-France – Formation des non bacheliers DAEU",
+          "extrait": "être âgé de 20 ans au moins au 1er octobre de l'année de l'examen et : avoir interrompu ses études depuis au moins deux ans, justifier de deux ans d'activité ayant donné lieu à cotisation à la Sécurité Sociale, être âgé de 24 ans ou plus sans autres conditions."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r28-programme-regional",
+      "nom": "Programme régional de formation Normandie (Qualif', #Savoirs…)",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région finance les coûts pédagogiques des formations de son offre régionale : Qualif' (formations qualifiantes ou diplômantes de 4 à 24 mois avec périodes en entreprise), #Savoirs (compétences de base, préparation au DAEU)… Rémunération régionale possible pour les stagiaires sans ARE.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Demandeur d'emploi inscrit à France Travail (Qualif'), sorti de formation initiale depuis plus de 9 mois",
+        "La formation doit figurer dans l'offre régionale ; pas d'enchaînement de 2 formations qualifiantes financées par la Région"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération régionale si non bénéficiaire de l’ARE ; aides au permis et à l’équipement possibles."
+      },
+      "demarches": [
+        "Rechercher une formation sur Parcours Métier ou trouvermaformation.fr",
+        "Contacter son conseiller (France Travail, Mission locale…) ou le numéro gratuit 0 800 05 00 00"
+      ],
+      "url_demarche": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-qualif-collectif",
+      "sources": [
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-qualif-collectif",
+          "titre": "Région Normandie – Parcours Métier, Qualif' Collectif (mise à jour 24/08/2026)",
+          "extrait": "A tous les Normands demandeurs d'emploi (inscription obligatoire à France Travail), sortis de formation initiale (statut scolaire et apprentissage) depuis plus de 9 mois."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-qualif-collectif",
+          "titre": "Région Normandie – Parcours Métier, Qualif' Collectif (mise à jour 24/08/2026)",
+          "extrait": "La Région prend en charge les coûts pédagogiques de la formation ainsi que la rémunération des stagiaires non bénéficiaires de l'allocation d'aide au retour à l'emploi (Aref) de France Travail."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-qualif-collectif",
+          "titre": "Région Normandie – Parcours Métier, Qualif' Collectif (mise à jour 24/08/2026)",
+          "extrait": "Le stagiaire bénéficie d’une formation qualifiante (validée par un diplôme ou titre professionnel) qui comprend une ou plusieurs périodes en entreprise sur une période allant de 4 à 24 mois."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-qualif-collectif",
+          "titre": "Région Normandie – Parcours Métier, Qualif' Collectif (mise à jour 24/08/2026)",
+          "extrait": "Un même candidat ne pourra pas enchainer 2 formations qualifiantes financées par la Région."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r28-une-formation-un-emploi",
+      "nom": "Une formation, un emploi",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région organise et finance la formation qualifiante (en centre avec stages ou 100 % en entreprise en AFEST) de demandeurs d'emploi qu'un employeur normand s'engage à recruter.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "entreprise",
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Employeur normand, privé ou public, ayant des difficultés de recrutement",
+        "Demandeur d'emploi inscrit à France Travail, sorti de formation initiale depuis plus de 9 mois",
+        "L'employeur s'engage à embaucher au moins 6 mois à l'issue de la formation, à désigner un tuteur et à s'inscrire sur destination-metier.fr",
+        "Dossier accepté par la Région"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Coût pédagogique de la formation pris en charge par la Région si le dossier est accepté ; rémunération des stagiaires non bénéficiaires de l'ARE"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "L'employeur sollicite la Région (dossier employeur) en précisant les postes et le projet",
+        "Pour une formation en AFEST, contacter le prestataire régional du département",
+        "Numéro gratuit Parcours Métier : 0 800 05 00 00"
+      ],
+      "url_demarche": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-une-formation-un-emploi",
+      "sources": [
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-une-formation-un-emploi",
+          "titre": "Région Normandie – Une formation, un emploi (mise à jour 29/09/2026)",
+          "extrait": "A tous les employeurs normands du secteur privé ou public ayant des difficultés de recrutement et à l’ensemble des demandeurs d'emploi, inscrits à France Travail , sortis de formation initiale (statut scolaire et apprentissage) depuis plus de 9 mois."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-une-formation-un-emploi",
+          "titre": "Région Normandie – Une formation, un emploi (mise à jour 29/09/2026)",
+          "extrait": "Embaucher la ou les personne(s) formée(s) durant au moins 6 mois à l’issue de la formation."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-une-formation-un-emploi",
+          "titre": "Région Normandie – Une formation, un emploi (mise à jour 29/09/2026)",
+          "extrait": "100% du temps en entreprise (Action de Formation En Situation de Travail - AFEST)."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-une-formation-un-emploi",
+          "titre": "Région Normandie – Une formation, un emploi (mise à jour 29/09/2026)",
+          "extrait": "La Région prend en charge le coût pédagogique de la formation ainsi que la rémunération des stagiaires non bénéficiaires de l'allocation d'aide au retour à l'emploi (Aref) de France Travail."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r28-remuneration-stagiaires",
+      "nom": "Rémunération et aide à la mobilité des stagiaires de la formation professionnelle (Normandie)",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération à l'heure de présence versée par la Région aux stagiaires d'une formation agréée par la Région et non pris en charge par France Travail, complétée d'une aide à la mobilité selon la distance (majorée pour les parents isolés) et d'une avance de 200 € à l'entrée.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Avoir au moins 16 ans à l'entrée en formation et être inscrit à France Travail",
+        "Suivre une formation agréée par la Région Normandie (offre régionale, ESRP, aide-soignant, AES, ambulancier) et ne pas percevoir l'ARE",
+        "Aucune condition de résidence en Normandie",
+        "Stagiaires sans droit à rémunération et sans ARE : aide à la mobilisation forfaitaire de 100 €"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 776.5,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "4,79 € par heure de présence (726,50 € pour 151,67 h), complétés d'une aide à la mobilité de 0,33 € à 1,65 € par heure selon la distance : au minimum 776,50 € par mois à temps plein ; avance de 200 € à l'entrée ; barèmes spécifiques pour les travailleurs handicapés"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Non cumulable avec l'ARE, l'ASP, l'AREF, la RFF, l'ASS (la Région verse au moins l'équivalent de l'ASS) ; cumulable notamment avec le RSA, la prime d'activité, le CEJ, l'AAH (dégressive)."
+      },
+      "demarches": [
+        "Transmettre les pièces à l'organisme de formation avant l'entrée en formation",
+        "La Région instruit le dossier et verse l'avance, puis la rémunération mensuelle selon les heures de présence"
+      ],
+      "url_demarche": "https://parcours-metier.normandie.fr/DE/formation/aides/remuneration-aide-la-mobilite-et-aux-parents-isoles",
+      "sources": [
+        {
+          "url": "https://parcours-metier.normandie.fr/DE/formation/aides/remuneration-aide-la-mobilite-et-aux-parents-isoles",
+          "titre": "Région Normandie – Rémunération, aide à la mobilité et aux parents isolés (mise à jour 15/07/2026)",
+          "extrait": "La Région Normandie peut verser une rémunération mensuelle aux stagiaires de la formation professionnelle, en fonction d’un barème horaire. Pour chaque heure réalisée en stage, s’ajoute un barème d’aide à la mobilité. Un soutien aux parents isolés est également possible."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "Une rémunération mensuelle composée d’une base de 4,79€ par heure de présence (soit 726,50€ pour tout stagiaire réalisant 151,67 heures dans le mois) complétée d’une « aide à la mobilité » portant la rémunération minimale à temps plein à 776,50€"
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "Les stagiaires doivent être âgés de 16 ans minimum à la date d’entrée en formation et inscrits à France Travail."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "Cette aide est fixée à un montant forfaitaire de 100€."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "une avance forfaitaire de 200€ sera versée après leur entrée en formation"
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "0 ≤ 5 km 0,33€ / heure de présence 50,00 € >5 et ≤ 20 km 0.66€ / heure de présence 100,00 € >20 et ≤ 50 km 0,99€ / heure de présence 150,00 € > 50 km 1,65 € / heure de présence 250,00 €"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r28-aide-equipement-professionnel",
+      "nom": "Aide à l'acquisition d'un équipement professionnel (stagiaires de la formation professionnelle)",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide de la Région à l'achat d'un équipement indispensable au métier, utilisé en formation puis en emploi salarié, pour les stagiaires des programmes Qualif' et Une formation, un emploi.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être stagiaire d'une formation Qualif' ou Une formation, un emploi financée par la Région",
+        "Matériel figurant dans la liste annexée au règlement (ou, pour Une formation, un emploi, nécessaire au poste et non fourni par l'employeur)",
+        "Achat d'au moins 50 € TTC validé par l'organisme de formation avant l'achat ; EPI et informatique exclus",
+        "Demande sur monespace-aides.normandie.fr avant la fin de la formation"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 50,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "50 % du coût d'acquisition (ou du reste à charge) d'un matériel d'au moins 50 € TTC, plafonné selon la liste des équipements (Qualif') ou à 600 € à défaut (Une formation, un emploi)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Faire valider le projet d'achat (devis) par l'organisme de formation",
+        "Déposer la demande sur monespace-aides.normandie.fr ; l'accusé de réception vaut autorisation d'acheter",
+        "Envoyer les factures acquittées et l'attestation d'entrée en formation (6 mois maximum après la sortie)"
+      ],
+      "url_demarche": "https://parcours-metier.normandie.fr/formation/aides/je-ne-percois-pas-lallocation-daide-au-retour-lemploi_qualif_forem",
+      "sources": [
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "L’aide s’élève à 50% du coût d’acquisition (ou du reste à charge, en cas d’intervention d’autres financeurs) d’un matériel d’un montant minimum de 50 euros TTC."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "Pour le dispositif « Une formation, un Emploi », l’aide est plafonnée aux mêmes montants si le matériel figure dans la liste, ou à défaut à 600 euros."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "Aucune demande de paiement ne pourra être déposée au-delà de 6 mois après la sortie de l’action de formation."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r28-aide-permis",
+      "nom": "Aide à l'accès au permis de conduire (stagiaires de la formation professionnelle)",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide de la Région au permis B pour les stagiaires dont la formation (Qualif', Une formation, un emploi, aide-soignant, AES) prépare à un métier pour lequel le permis est quasi indispensable.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Formation financée par la Région vers un métier de la liste annexée, ou formation d'aide-soignant ou d'accompagnant éducatif et social",
+        "Avoir réussi l'épreuve théorique du code de la route ; ne pas avoir déjà bénéficié de l'aide",
+        "Demande avant la fin de la formation sur monespace-aides.normandie.fr"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 50,
+        "base": null,
+        "plafond": 600,
+        "duree_max_mois": null,
+        "libelle": "50 % du coût de la préparation à l'examen pratique du permis B (hors code), dans la limite de 600 € ; sur le seul reste à charge en cas d'autres financeurs"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Déposer la demande sur monespace-aides.normandie.fr avec attestation d'entrée en formation, pièce d'identité, RIB et devis de l'auto-école"
+      ],
+      "url_demarche": "https://parcours-metier.normandie.fr/formation/aides/je-ne-percois-pas-lallocation-daide-au-retour-lemploi_qualif_forem",
+      "sources": [
+        {
+          "url": "https://parcours-metier.normandie.fr/sites/default/files/2026-07/dispositif_accompagnement_stagiaires_formation_professionnelle.pdf",
+          "titre": "Région Normandie – Règlement accompagnement des stagiaires (version au 1er avril 2026)",
+          "extrait": "L’aide à l’accès au permis de conduire s’élève à 50% du coût de la préparation à l’examen pratique du permis B (leçons de conduite et frais annexes, hors frais de préparation au code de la route), dans la limite d’une aide de 600€."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r28-pass-monde",
+      "nom": "Atouts Pass Monde (mobilité internationale des apprenants)",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "alternant",
+        "demandeur_emploi"
+      ],
+      "description": "Bourse régionale pour un stage ou un séjour d'études à l'étranger, ouverte aux alternants (apprentissage ou professionnalisation) et aux stagiaires de la formation professionnelle, calculée sur un forfait de destination et un montant par semaine.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Alternant ou stagiaire inscrit dans un établissement ou organisme de formation normand, préparant un diplôme d'État ou une certification RNCP",
+        "30 ans au plus (sans condition d'âge pour les stagiaires d'une formation financée par la Région et les personnes en situation de handicap, au titre des études secondaires)",
+        "Quotient familial ne dépassant pas 30 000 € ; durée minimale de 2 semaines (niveaux 3-4) ou 4 semaines (niveaux 5 à 7)",
+        "Dossier déposé avant le départ"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Forfait mobilité de 200 € (Europe) ou 400 € (autres destinations) + 40 € par semaine de mobilité (12 semaines maximum en niveaux 3-4, 26 en niveaux 5 à 7) + bonus de 100 € si trajet en bus ou en train"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Déposer la demande sur atouts.normandie.fr avant le départ, avec les pièces justificatives"
+      ],
+      "url_demarche": "https://www.normandie.fr/atouts-pass-monde",
+      "sources": [
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "Peuvent bénéficier du Pass Monde Etudes Secondaires : les lycéens, alternants (en contrat d’apprentissage ou contrat de professionnalisation), stagiaires de la formation professionnelle,"
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "inscrits dans un établissement d’enseignement ou de formation de la Région Normandie et suivant un cursus de niveau 3 (CAP, BEP) à 4 (Baccalauréat)."
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "domiciliés fiscalement en Normandie et suivant un cursus de niveau 5 (Bac + 1) à niveau 7 (Bac + 5)."
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "forfait mobilité de 200 € pour les mobilités en Europe ou de 400 € pour toutes les autres destinations"
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "une aide de 40 € par semaine de mobilité."
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "Être âgé de 30 ans au plus au moment du dépôt de la demande"
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "Avoir un quotient familial ne dépassant pas 30 000€, Avoir un projet de mobilité d’une durée minimale de 4 semaines (2 semaines pour les étudiants en BTS, dernière année de sage-femme, classe préparatoire et classe passerelle)."
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "La Région intervient à hauteur de 26 semaines maximum."
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "La Région intervient à hauteur maximale de 12 semaines."
+        },
+        {
+          "url": "https://www.normandie.fr/atouts-pass-monde",
+          "titre": "Région Normandie – Atouts Pass Monde (mise à jour 30/06/2026)",
+          "extrait": "Un bonus de 100€ de mobilité douce si tu utilises le bus ou le train pour te rendre sur ton lieu de mobilité."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r28-vae-demandeurs-emploi",
+      "nom": "Aide individuelle régionale à l'accompagnement VAE (demandeurs d'emploi)",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région prend en charge, dans le cadre d'une aide individuelle, les frais de l'accompagnement méthodologique à la VAE (constitution du dossier, préparation au jury) des demandeurs d'emploi.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi",
+        "Montant, plafond et conditions non publiés : se renseigner auprès de la Région (page sans date de mise à jour)"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Frais de prestation de l'accompagnement méthodologique pris en charge (montant non publié)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Adresser une demande par courriel au service régional indiqué sur la page Parcours Métier",
+        "Se renseigner au numéro gratuit Parcours Métier 0 800 05 00 00"
+      ],
+      "url_demarche": "https://parcours-metier.normandie.fr/vae/agence/financement-pour-les-demandeurs-demploi",
+      "sources": [
+        {
+          "url": "https://parcours-metier.normandie.fr/vae/agence/financement-pour-les-demandeurs-demploi",
+          "titre": "Région Normandie – VAE : financement pour les demandeurs d'emploi",
+          "extrait": "La Région Normandie prend en charge, dans le cadre d’une aide individuelle, les frais de prestation de l’accompagnement méthodologique qui consiste en une :"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r28-formation-salaries-insertion",
+      "nom": "Formation des salariés en insertion (Normandie)",
+      "financeur": "region",
+      "financeur_nom": "Région Normandie",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Contribution régionale aux coûts pédagogiques de la formation des salariés en insertion (PEC, IAE, entreprises à but d'emploi, adultes relais), pour l'adaptation au poste ou le projet professionnel de sortie.",
+      "criteres": {
+        "regions": [
+          "28"
+        ],
+        "perimetre_region": "entreprise",
+        "duree_min_heures": 35
+      },
+      "conditions": [
+        "Employeur installé en Normandie : éligible au PEC ou aux adultes relais, structure de l'IAE ou entreprise à but d'emploi (établissements publics d'enseignement exclus)",
+        "Formation d'au moins 35 h, hors compétences de base ; pas de formation certifiante financée par la Région pour le salarié dans les 12 derniers mois",
+        "Intervention en complément de l'OPCO (ou du CNFPT) ; dossier à transmettre avant la fin de la formation",
+        "Page mise à jour en juillet 2024 : ouverture 2026 à confirmer"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 70,
+        "base": "cout_pedagogique",
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 70 % des coûts pédagogiques pour les structures privées (IAE, associations, EBE) ; jusqu'à 90 % pour les employeurs publics"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Compléter le dossier régional (formulaires téléchargeables) avant la fin de la formation",
+        "L'adresser à la Région par courriel (contrat.aide@normandie.fr)"
+      ],
+      "url_demarche": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-formation-des-salaries-en-insertion",
+      "sources": [
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-formation-des-salaries-en-insertion",
+          "titre": "Région Normandie – Dispositif formation des salariés en insertion (mise à jour 17/07/2024)",
+          "extrait": "La Région Normandie pourra intervenir dans la limite de 70% des coûts pédagogiques."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-formation-des-salaries-en-insertion",
+          "titre": "Région Normandie – Dispositif formation des salariés en insertion (mise à jour 17/07/2024)",
+          "extrait": "b) Concernant les employeurs publics : La Région Normandie pourra intervenir dans la limite de 90% des coûts pédagogiques."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-formation-des-salaries-en-insertion",
+          "titre": "Région Normandie – Dispositif formation des salariés en insertion (mise à jour 17/07/2024)",
+          "extrait": "Elles doivent être d’une durée minimale de 35 heures."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-formation-des-salaries-en-insertion",
+          "titre": "Région Normandie – Dispositif formation des salariés en insertion (mise à jour 17/07/2024)",
+          "extrait": "Le salarié ne devra pas avoir bénéficié d’une formation certifiante financée par la Région dans les 12 derniers mois."
+        },
+        {
+          "url": "https://parcours-metier.normandie.fr/formation/dispositif/dispositif-formation-des-salaries-en-insertion",
+          "titre": "Région Normandie – Dispositif formation des salariés en insertion (mise à jour 17/07/2024)",
+          "extrait": "Mis à jour le 17 juillet 2024"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r44-programme-regional",
+      "nom": "Programme régional de formation (PRF) Grand Est",
+      "financeur": "region",
+      "financeur_nom": "Région Grand Est",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Offre de formation récurrente financée par la Région pour les demandeurs d'emploi, visant une qualification ou un diplôme vers les métiers en tension du territoire. Les formations financées sont recensées sur le site Formation Grand Est (Carif-Oref).",
+      "criteres": {
+        "regions": [
+          "44"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi",
+        "La formation doit figurer au programme régional (vérifier auprès du conseiller France Travail, Mission locale ou Cap emploi)"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Rechercher une formation financée sur le site Formation Grand Est (via Orient'Est)",
+        "Valider le projet avec son conseiller France Travail, Mission locale ou Cap emploi"
+      ],
+      "url_demarche": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/rechercher-une-formation-continue",
+      "sources": [
+        {
+          "url": "https://www.orientest.pro/images/contenusRGE/Territoires/2025_aides_embauche.pdf",
+          "titre": "Orient'Est (Carif-Oref Grand Est) – Les aides à l'embauche 2025",
+          "extrait": "Programme Régional de Formation (PRF) Offre de formation récurrente à destination des demandeurs d ’emploi visant une qualification et/ou un diplôme afin d’accéder à des métiers en tension sur le territoire."
+        },
+        {
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/rechercher-une-formation-continue",
+          "titre": "Orient'Est PRO – Rechercher une formation continue",
+          "extrait": "Consultez toutes les formations financées pour les demandeurs d’emploi, les formations certifiantes ou permettant de développer de nouvelles compétences"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r44-pace",
+      "nom": "Parcours d'acquisition des compétences en entreprise (PACE)",
+      "financeur": "region",
+      "financeur_nom": "Région Grand Est",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Stage en immersion de 4 à 6 mois dans une entreprise du Grand Est, accompagné par un organisme de formation : la Région finance la rémunération du stagiaire et verse à l'entreprise une aide mensuelle au tutorat.",
+      "criteres": {
+        "regions": [
+          "44"
+        ],
+        "perimetre_region": "entreprise",
+        "age_min": 18
+      },
+      "conditions": [
+        "Jeune de 18 à 29 ans en insertion ou en décrochage, demandeur d'emploi majeur actif dans sa recherche, ou bénéficiaire du RSA",
+        "Stage de 4 à 6 mois dans une entreprise située en Grand Est (priorité industrie, BTP, agriculture, aide à la personne, santé) ou dans une structure proposant certains postes du soin et du social",
+        "Montant de l'aide au tutorat lu sur une copie archivée (septembre 2025) de la page régionale, la page en ligne n'étant pas accessible aux outils automatiques"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Rémunération mensuelle du stagiaire financée par la Région ; aide mensuelle au tutorat de 300 € pour l'entreprise (montant publié en 2025)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se rapprocher de son conseiller (France Travail, Mission locale) ou d'un organisme de formation partenaire",
+        "Contacter la Région Grand Est (page « PACE » du site régional)"
+      ],
+      "url_demarche": "https://www.grandest.fr/vos-aides-regionales/parcours-acquisition-competences-entreprise-pace/",
+      "sources": [
+        {
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/consulter-les-aides-regionales-formation",
+          "titre": "Orient'Est PRO – Les aides régionales pour la formation",
+          "extrait": "Les jeunes âgés de 18 à 29 ans en insertion professionnelle, en décrochage scolaire ou universitaire. Les demandeurs d’emplois majeurs, actifs dans leur recherche d’emploi. Les bénéficiaires du RSA. Objectif : acquérir des compétences en entreprise en étant rémunéré."
+        },
+        {
+          "url": "https://www.orientest.pro/images/contenusRGE/Territoires/2025_aides_embauche.pdf",
+          "titre": "Orient'Est (Carif-Oref Grand Est) – Les aides à l'embauche 2025",
+          "extrait": "Permettre à un jeune et/ou demandeur d’emploi d’acquérir des compétences et une expérience professionnelle tutorée au sein d’une entreprise (de 4 à 6 mois, selon le profil du stagiaire)"
+        },
+        {
+          "url": "https://www.orientest.pro/images/contenusRGE/Territoires/2025_aides_embauche.pdf",
+          "titre": "Orient'Est (Carif-Oref Grand Est) – Les aides à l'embauche 2025",
+          "extrait": "La Région Grand Est verse une aide au tutorat et finance la rémunération du stagiaire que l’entreprise accueille."
+        },
+        {
+          "url": "https://web.archive.org/web/20250914173838/https://www.grandest.fr/vos-aides-regionales/parcours-acquisition-competences-entreprise-pace/",
+          "titre": "Région Grand Est – PACE (copie Web Archive du 14/09/2025 de grandest.fr)",
+          "extrait": "les entreprises bénéficient d’une aide mensuelle au tutorat de 300 €."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r44-forma-crea",
+      "nom": "Forma CRÉA – Formation à la création d’entreprise",
+      "financeur": "region",
+      "financeur_nom": "Région Grand Est",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Parcours de formation individualisé financé par la Région (gestion d'entreprise, numérique, ESS…) pour consolider un projet de création ou de reprise d'entreprise.",
+      "criteres": {
+        "regions": [
+          "44"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Demandeur d'emploi futur créateur ou jeune créateur depuis moins d'un an, licencié économique, artiste-auteur ou intermittent non ayant droit auprès de son OPCO, ou démissionnaire avec projet validé par Transitions Pro",
+        "Durée du parcours (90 à 207 h) lue sur une copie archivée (septembre 2025) de la page régionale"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation de 90 h à 207 h (tronc commun de 90 h + modules optionnels) prise en charge par la Région"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Demandeur d'emploi : contacter son conseiller France Travail",
+        "Autres publics : déposer la demande en ligne sur le site de la Région Grand Est"
+      ],
+      "url_demarche": "https://www.grandest.fr/vos-aides-regionales/formation-crea-entreprise/",
+      "sources": [
+        {
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/consulter-les-aides-regionales-formation",
+          "titre": "Orient'Est PRO – Les aides régionales pour la formation",
+          "extrait": "Les demandeurs d’emploi : futurs créateurs ou jeunes créateurs depuis moins d’un an."
+        },
+        {
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/consulter-les-aides-regionales-formation",
+          "titre": "Orient'Est PRO – Les aides régionales pour la formation",
+          "extrait": "Objectif : accéder à une formation (gestion d’entreprise et connaissances numériques) pour aider un projet de création / de reprise d’entreprise."
+        },
+        {
+          "url": "https://web.archive.org/web/20250921215619/https://www.grandest.fr/vos-aides-regionales/formation-crea-entreprise/",
+          "titre": "Région Grand Est – Forma CRÉA (copie Web Archive du 21/09/2025 de grandest.fr)",
+          "extrait": "Le créateur bénéficiera d’un parcours de formation individualisé d’une durée comprise entre 90 heures et 207 heures"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r44-indemnite-stage-aides-soignants",
+      "nom": "Indemnité de stage des élèves aides-soignants (Grand Est)",
+      "financeur": "region",
+      "financeur_nom": "Région Grand Est",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Indemnité régionale versée aux élèves aides-soignants dont la formation est prise en charge par la Région Grand Est, pendant la formation clinique (stages).",
+      "criteres": {
+        "regions": [
+          "44"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être élève aide-soignant dans un institut agréé par la Région Grand Est",
+        "Frais de formation pris en charge par la Région Grand Est"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "35 € par semaine de formation clinique (stage)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se renseigner auprès de l'institut de formation d'aides-soignants ou de la Région Grand Est"
+      ],
+      "url_demarche": "https://www.grandest.fr/vos-aides-regionales/indemnite-stage-eleves-aides-soignants/",
+      "sources": [
+        {
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/consulter-les-aides-regionales-formation",
+          "titre": "Orient'Est PRO – Les aides régionales pour la formation",
+          "extrait": "Les élèves aides-soignants dont les frais de formation sont pris en charge par la Région Grand Est. Objectif : une indemnité de stage de 35 € par semaine pour la réalisation de la formation clinique."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r44-abondement-cpf-55-ans",
+      "nom": "Abondement CPF de la Région Grand Est pour les demandeurs d’emploi de 55 ans et plus",
+      "financeur": "region",
+      "financeur_nom": "Région Grand Est",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Co-financement régional automatique sur Mon Compte Formation : la Région complète les droits CPF des demandeurs d'emploi de 55 ans et plus résidant en Grand Est pour une formation éligible au CPF.",
+      "criteres": {
+        "regions": [
+          "44"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 55,
+        "inscrit_france_travail": true,
+        "eligible_cpf": true
+      },
+      "conditions": [
+        "Être demandeur d'emploi inscrit à France Travail, domicilié en Grand Est, âgé de 55 ans ou plus",
+        "Disposer d'au moins 1 € de droits CPF, à mobiliser intégralement ; formations 100 % à distance exclues",
+        "Enveloppe annuelle de 500 000 € (dispositif lancé en avril 2025) : disponibilité en 2026 à vérifier sur Mon Compte Formation (logo Région Grand Est)"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 90,
+        "base": null,
+        "plafond": 4500,
+        "duree_max_mois": null,
+        "libelle": "90 % du reste à charge après mobilisation du CPF, dans la limite de 4 500 € par dossier"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Rechercher la formation sur Mon Compte Formation : si elle est concernée, le logo de la Région Grand Est s'affiche",
+        "Sélectionner le co-financement de la Région lors de la confirmation de l'inscription"
+      ],
+      "url_demarche": "https://www.moncompteformation.gouv.fr/",
+      "sources": [
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/travailleurs-experimentes-la-region-grand-est-finance-votre-formation",
+          "titre": "Mon Compte Formation – Travailleurs expérimentés : la Région Grand Est finance votre formation (26/06/2025)",
+          "extrait": "Si vous êtes concerné, cette opportunité vous permet de financer jusqu’à 90 % du reste à charge de votre formation éligible au Compte personnel de formation (CPF) hors formations 100 % à distance, dans la limite de 4 500 € par dossier."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/travailleurs-experimentes-la-region-grand-est-finance-votre-formation",
+          "titre": "Mon Compte Formation – Travailleurs expérimentés : la Région Grand Est finance votre formation (26/06/2025)",
+          "extrait": "Être demandeur d’emploi inscrit à France Travail, Être domicilié dans la région Grand Est, Être âgé de 55 ans et plus, Disposer d’un montant minimum de 1€ de droits CPF, à mobiliser intégralement."
+        },
+        {
+          "url": "https://politiques-sociales.caissedesdepots.fr/sites/default/files/2025%2007%2024%20CP%20CPF%20Abondement%20Grand%20Est.pdf",
+          "titre": "Caisse des Dépôts – Communiqué Région Grand Est (24/06/2025)",
+          "extrait": "dans la limite de 4 500€ par dossier de formation et dans le respect d’une enveloppe budgétaire annuelle de 500 000 €."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/travailleurs-experimentes-la-region-grand-est-finance-votre-formation",
+          "titre": "Mon Compte Formation – Travailleurs expérimentés : la Région Grand Est finance votre formation (26/06/2025)",
+          "extrait": "La Caisse des Dépôts et la Région Grand Est ont signé une convention de partenariat en avril 2025"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r44-action-sur-mesure-fife",
+      "nom": "Action sur mesure – Fonds d'intervention pour la formation et l'emploi (FIFE)",
+      "financeur": "region",
+      "financeur_nom": "Région Grand Est",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Dispositif cofinancé par la Région pour construire des parcours de formation sur mesure répondant au besoin spécifique de compétences d'une ou plusieurs entreprises qui recrutent des demandeurs d'emploi.",
+      "criteres": {
+        "regions": [
+          "44"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "Besoin de recrutement identifié par une ou plusieurs entreprises du Grand Est",
+        "Source : document territorial 2025 ; maintien en 2026 non confirmé (page régionale inaccessible)"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Parcours de formation sur mesure cofinancé par la Région (montant non publié)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Contacter la Maison de la Région de son territoire ou France Travail pour monter l'action"
+      ],
+      "url_demarche": null,
+      "sources": [
+        {
+          "url": "https://www.orientest.pro/images/contenusRGE/Territoires/2025_aides_embauche.pdf",
+          "titre": "Orient'Est (Carif-Oref Grand Est) – Les aides à l'embauche 2025",
+          "extrait": "Dispositif co-financé par la Région Grand -Est visant à construire des parcours de formations dites sur mesure, destinées à répondre à un besoin spécifique d’adaptation des compétences de demandeurs d’emploi pour une ou plusieurs entreprises."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    }
+  ],
+  "portails": [
+    {
+      "region": "11",
+      "nom_region": "Île-de-France",
+      "liens": [
+        {
+          "titre": "Région Île-de-France – Espace demandeur d'emploi",
+          "url": "https://www.iledefrance.fr/morienter-etudier-me-former/demandeur-demploi",
+          "type": "region"
+        },
+        {
+          "titre": "Région Île-de-France – Aides et appels à projets",
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets",
+          "type": "region"
+        },
+        {
+          "titre": "Oriane.info – Formations 100 % financées par la Région",
+          "url": "https://oriane.info/se-former/tout-au-long-de-la-vie/formations?financingOrganizations=Conseil%20r%C3%A9gional%20%C3%8Ele-de-France",
+          "type": "region"
+        },
+        {
+          "titre": "Transitions Pro Île-de-France",
+          "url": "https://www.transitionspro-idf.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Île-de-France",
+          "url": "https://www.francetravail.org/regions/ile-de-france/",
+          "type": "france_travail"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "32",
+      "nom_region": "Hauts-de-France",
+      "liens": [
+        {
+          "titre": "Région Hauts-de-France – Guide des aides",
+          "url": "https://guide-aides.hautsdefrance.fr/",
+          "type": "region"
+        },
+        {
+          "titre": "C2RP (Carif-Oref Hauts-de-France) – Rechercher une formation",
+          "url": "https://www.c2rp.fr/former-orienter/formations",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Hauts-de-France",
+          "url": "https://www.transitionspro-hdf.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Hauts-de-France",
+          "url": "https://www.francetravail.org/regions/hauts-de-france/",
+          "type": "france_travail"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "28",
+      "nom_region": "Normandie",
+      "liens": [
+        {
+          "titre": "Région Normandie – Formation tout au long de la vie",
+          "url": "https://www.normandie.fr/formation-tout-au-long-de-la-vie",
+          "type": "region"
+        },
+        {
+          "titre": "Parcours Métier (Région Normandie) – orientation, formation, aides",
+          "url": "https://parcours-metier.normandie.fr/",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref de Normandie – Trouver ma formation",
+          "url": "https://www.trouvermaformation.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Normandie",
+          "url": "https://www.transitionspro-normandie.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Normandie",
+          "url": "https://www.francetravail.org/regions/normandie/",
+          "type": "france_travail"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "44",
+      "nom_region": "Grand Est",
+      "liens": [
+        {
+          "titre": "Orient'Est PRO (Carif Grand Est) – Les aides régionales pour la formation",
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/consulter-les-aides-regionales-formation",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Orient'Est PRO – Rechercher une formation continue (Formation Grand Est)",
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/rechercher-une-formation-continue",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Grand Est",
+          "url": "https://www.transitionspro-grandest.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Grand Est",
+          "url": "https://www.francetravail.org/regions/grand-est/",
+          "type": "france_travail"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    }
+  ],
+  "exclues": [
+    {
+      "nom": "AIRE – Aide individuelle régionale vers l'emploi (Île-de-France)",
+      "raison": "Dispositif définitivement clôturé à la suite du budget régional 2025 ; plus aucune demande possible.",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-faq/foire-aux-questions-et-contacts",
+          "titre": "Région Île-de-France – FAQ formation professionnelle",
+          "extrait": "Non, l'Aide individuelle régionale vers l’emploi (AIRE) de la Région est définitivement clôturée. La fin du dispositif AIRE fait suite au vote du budget régional 2025 le 19 décembre 2024."
+        }
+      ]
+    },
+    {
+      "nom": "Chèque permis de conduire 18-25 ans en insertion (Île-de-France)",
+      "raison": "Clos depuis le 22 mai 2026 ; une réouverture sous une nouvelle forme est annoncée pour l'automne 2026 (non publiée au 05/10/2026).",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-actualites/cheque-permis-de-conduire-pour-les-18-25-ans-en-insertion-professionnelle",
+          "titre": "Région Île-de-France – Chèque permis de conduire (mise à jour 18/05/2026)",
+          "extrait": "L’aide «Chèque permis de conduire» est close depuis le 22 mai 2026 Aucune nouvelle demande du «Chèque permis de conduire» n’est possible depuis le 22 mai 2026 à 12h."
+        },
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-actualites/cheque-permis-de-conduire-pour-les-18-25-ans-en-insertion-professionnelle",
+          "titre": "Région Île-de-France – Chèque permis de conduire (mise à jour 18/05/2026)",
+          "extrait": "L’aide «Chèque permis de conduire» sera à nouveau disponible à l'automne 2026."
+        }
+      ]
+    },
+    {
+      "nom": "Financement régional de la VAE (Île-de-France)",
+      "raison": "La Région ne finance plus la VAE depuis 2024 (relais pris par l'État / France VAE).",
+      "sources": [
+        {
+          "url": "https://www.iledefrance.fr/toutes-les-faq/foire-aux-questions-et-contacts",
+          "titre": "Région Île-de-France – FAQ formation professionnelle",
+          "extrait": "Précision : la Région Île-de-France ne finance plus la VAE depuis 2024"
+        }
+      ]
+    },
+    {
+      "nom": "Chèque Pass VAE (Hauts-de-France)",
+      "raison": "Supprimé au 1er janvier 2026 (aides VAE 2025 non renouvelées).",
+      "sources": [
+        {
+          "url": "https://www.c2rp.fr/dispositif/prf---chque-pass-vae",
+          "titre": "C2RP – PRF 2025 Chèque Pass VAE",
+          "extrait": "Ce dispositif était valable à compter du 01er juillet 2025; il est supprimé à compter du 01er janvier 2026"
+        },
+        {
+          "url": "https://www.c2rp.fr/article/aides-et-dispositifs-emploi-formation-ce-quil-faut-retenir-des-dernieres-actualisations",
+          "titre": "C2RP – Aides et dispositifs : dernières actualisations (16/02/2026)",
+          "extrait": "Les aides financières spécifiques à la VAE mises en œuvre en région Hauts-de-France en 2025 ne sont pas renouvelées en 2026."
+        }
+      ]
+    },
+    {
+      "nom": "Chèque Pass Formation – CHPF (Hauts-de-France)",
+      "raison": "Fiche retirée du guide officiel des aides (erreur 404) et absente du guide 2026 ; la fiche du C2RP n'est plus accessible ; le réseau Information Jeunesse (source non officielle) indique « Juillet 2025 : temporairement suspendu ».",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif469",
+          "titre": "Région Hauts-de-France – Guide des aides, ancienne fiche CHPF",
+          "extrait": "Erreur 404"
+        },
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/spip.php?page=fichier_dispositif&fichier_dispositif=2604",
+          "titre": "Région Hauts-de-France – Cadre d'intervention 2024 CHPF / VAE",
+          "extrait": "Le CHèque Pass Formation (CHPF) qui permet d’accompagner les projets individuels de formation."
+        }
+      ]
+    },
+    {
+      "nom": "Mobinov – Erasmus+ (Hauts-de-France)",
+      "raison": "La contractualisation affichée avec l'agence Erasmus+ a pris fin le 31 août 2023 (fiche non actualisée).",
+      "sources": [
+        {
+          "url": "https://guide-aides.hautsdefrance.fr/dispositif728",
+          "titre": "Région Hauts-de-France – Mobinov Erasmus+",
+          "extrait": "La nouvelle contractualisation entre la Région et l'agence Erasmus+ s'étend du 1 er juin 2022 au 31 août 2023."
+        }
+      ]
+    },
+    {
+      "nom": "ARIF – Aide régionale individuelle à la formation (Grand Est)",
+      "raison": "Suspendue « jusqu'à nouvel ordre » pour raisons budgétaires (page régionale, copie archivée de juin 2025) ; absente de la liste des aides régionales formation publiée par Orient'Est au 05/10/2026.",
+      "sources": [
+        {
+          "url": "https://web.archive.org/web/20250622084230/https://www.grandest.fr/vos-aides-regionales/aide-regionale-individuelle-a-formation-arif/",
+          "titre": "Région Grand Est – ARIF (copie Web Archive du 22/06/2025 de grandest.fr)",
+          "extrait": "En raison des incertitudes budgétaires nationales, la Région se voit contrainte de suspendre le dispositif ARIF jusqu’à nouvel ordre."
+        }
+      ]
+    },
+    {
+      "nom": "Prime d'entrée en formation aide-soignant (Grand Est)",
+      "raison": "Plus en vigueur depuis la rentrée de septembre 2024.",
+      "sources": [
+        {
+          "url": "https://web.archive.org/web/20250914174211/https://www.grandest.fr/vos-aides-regionales/prime-dentree-en-formation-aide-soignant/",
+          "titre": "Région Grand Est – Prime d'entrée en formation aide-soignant (copie Web Archive du 14/09/2025 de grandest.fr)",
+          "extrait": "Ce dispositif n’est plus en vigueur pour la rentrée de septembre 2024"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Île-de-France – rémunération des stagiaires : la FAQ régionale (mise à jour 03/09/2026) affiche 224,68 € / 561,68 € / 769,49 €. Service-public.fr (F760, vérifié le 01/04/2026) publie pour les stagiaires rémunérés par France Travail un barème revalorisé : « Moins de 18 ans Vous percevez 226,48 € par mois. 18 à 25 ans Vous percevez 566,17 € par mois. ». Le barème régional publié est probablement antérieur à la revalorisation du 1er avril 2026 ; confidence 'estimated'.",
+    "Île-de-France – non retenus : Pass 1 / Pass 3 Entrepreneur#Leader (accompagnement-conseil de créateurs, pas de formation) ; Bourse d'études des formations sanitaires et sociales (page indiquant « dépôt fermé depuis le 31 décembre 2025 » avec un calendrier 2024-2025 non actualisé) ; tarif Imagine R des apprentis (Île-de-France Mobilités, hors Conseil régional) ; AAP « Une chance pour tous » et Programme qualifiant (réservés aux structures).",
+    "Île-de-France – ARA (aide régionale à l'apprentissage) : campagne 2025-2026 close le 28/09/2026 ; la campagne 2026-2027 n'est pas encore publiée → statut a_confirmer.",
+    "Hauts-de-France – non retenus : Fonds de solidarité des apprentis (aide d'urgence, frais réels plafonnés), Aide à la garde d'enfants AGE 2026-2027, En route pour l'emploi (véhicule à 1 €/jour), Aide au transport aux particuliers, APREC et appels à projets CFA (réservés aux structures), START'UP (investissement). L'article « Pass Emploi / Pass Formation » de 2016 est obsolète.",
+    "Hauts-de-France – DVRH et Proch'Emploi : aucun taux ni montant publié ; Pass Cyber Formation : fiche sans date, opérée avec Formation CCI → a_confirmer. DAEU : fiche régionale ancienne (mentionne Pôle emploi) et DAEU absent de la liste SFES 2026-2027 → a_confirmer.",
+    "Normandie – l'Aide individuelle à la formation (AIF) cofinancée par la Région et France Travail n'est pas reprise (dispositif national instruit par France Travail ; page régionale du 23/05/2024 sans montant). Non retenus : Ici je monte ma boîte (accompagnement-conseil gratuit, pas de formation), Atouts Livres et équipements professionnels (lycéens uniquement), avantage Nomad Car, AD Normandie (aides Impulsion sans volet formation). Aucune aide régionale spécifique aux apprentis trouvée (la page Parcours Métier renvoie vers le CFA, Action Logement et l'aide nationale au permis).",
+    "Normandie – les pages normandie.fr et parcours-metier.normandie.fr refusent les requêtes directes (protection Akamai) ; leur contenu a été lu via le service de rendu r.jina.ai (texte des pages officielles). Le règlement des stagiaires (PDF, version au 1er avril 2026) a été lu de la même façon.",
+    "Grand Est – www.grandest.fr est protégé par une vérification anti-robot Cloudflare et n'a pas pu être consulté en direct (aucun contournement tenté). Les fiches ont été établies à partir d'Orient'Est (Carif-Oref Grand Est), de Mon Compte Formation, de la Caisse des Dépôts et, pour certains montants ou exclusions, de copies Web Archive de pages officielles (dates indiquées). Le site formation.grandest.fr (catalogue) ne répondait pas.",
+    "Grand Est – faute de page officielle accessible, aucune fiche « rémunération des stagiaires » n'a été créée (la rémunération est seulement mentionnée pour le PACE) ; à compléter quand grandest.fr sera consultable. Aucune aide régionale aux apprentis ni aux formations de salariés n'a pu être confirmée (la liste Jeun'Est 2026-2027 ne comporte pas d'aide spécifique aux apprentis ; ESCALE = mobilité européenne réservée aux CFA du consortium). Non retenus : FRIF garde d'enfants, Un véhicule vers l'emploi, bourses du sanitaire et social, mobilité internationale des étudiants, Expérience de jeunesse.",
+    "Portails : le site agefiph.fr était en maintenance (HTTP 503) le 05/10/2026, les liens Agefiph régionaux n'ont donc pas pu être vérifiés et ne sont pas listés ; le site de Défi métiers (Carif-Oref Île-de-France) ne répondait pas (délai dépassé) ; www.grandest.fr non vérifiable automatiquement (Cloudflare).",
+    "Le quota de recherches web de la session a été épuisé pendant la recherche ; les pages ont ensuite été trouvées par navigation directe dans les sites officiels.",
+    "Vérification indépendante du 06/10/2026 (voir verification-regions-1.md) : sur 39 aides, 28 confirmées, 2 corrigées (r11-remuneration-stagiaires, r11-aide-metiers-en-tension), 9 à confirmer (r11-aide-regionale-apprentissage, r32-pass-cyber-formation, r32-daeu, r28-vae-demandeurs-emploi, r28-formation-salaries-insertion, r44-pace, r44-forma-crea, r44-abondement-cpf-55-ans, r44-action-sur-mesure-fife) ; aucune aide déplacée vers exclues.",
+    "Barème de la rémunération des stagiaires (Île-de-France) tranché le 06/10/2026 : barème de service-public.fr F760 (vérifié le 01/04/2026) : 226,48 / 566,17 / 775,65 € (RQTH 775,65 à 2 188,27 €) ; la FAQ régionale (03/09/2026) affiche encore 224,68 / 561,68 / 769,49 € (RQTH 2 170,90 €), soit le « Barème en vigueur au 1 avril 2025 » de son tableau annexe (écart exact de 0,8 %). Le barème normand (4,79 €/h, 776,50 € minimum) est un barème régional propre ; la fiche Hauts-de-France ne publie aucun montant.",
+    "Accès du 06/10/2026 : www.grandest.fr (Cloudflare, HTTP 403) et web.archive.org (HTTP 429) non consultables, aucun contournement tenté ; certaines pages iledefrance.fr, normandie.fr et parcours-metier.normandie.fr répondent 403 aux requêtes directes (Akamai) et ont été relues via WebFetch (directement ou via r.jina.ai) ; la page iledefrance.fr « Programme régional qualifiant » est restée inaccessible (copie du 05/10 utilisée pour l'extrait des 100 € d'inscription).",
+    "Points transversaux : aucune aide POEI (nationale ou régionale) dans ce fichier, donc aucun doublon à signaler (Recrut'Up exclut les cofinancements POEI/POEC). Aucune aide VAE de France Travail ni complément CPF du PLF 2027 dans ce fichier ; l'abondement CPF du Grand Est (55 ans et plus) est un dispositif régional distinct, reconduction 2026 à confirmer ; Mon Compte Formation indique le 02/10/2026 que le PLF 2027 (présenté le 01/10/2026, non voté) prévoit une évolution des règles du CPF : ne pas la présenter comme acquise."
+  ]
+}

@@ -13,7 +13,10 @@
 //     mobilité, fonds social, aides aux apprentis) et corrige trois montants (majoration RQTH du RFFT, deux aides versées
 //     sur une période qui n'est pas la durée de la formation). Chaque correction vérifie l'état attendu de l'aide avant de
 //     la modifier : si l'aide a disparu ou a changé, le script s'arrête (code 1) sans rien écrire.
-// Usage : node scripts/integrer-recherches.mjs <dossier-recherche>
+// Usage : node scripts/integrer-recherches.mjs docs/recherche-aides/2026-10 (depuis la racine du dépôt)
+// Le script réécrit les trois fichiers du catalogue : pour une mise à jour ponctuelle d'une aide, modifier directement
+// `packages/core/data/aides/*.json` (puis lancer les tests) sans relancer le script ; une nouvelle campagne de recherche
+// produit un nouveau dossier `docs/recherche-aides/<AAAA-MM>/` et la table `CORRECTIONS` doit alors être revue.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

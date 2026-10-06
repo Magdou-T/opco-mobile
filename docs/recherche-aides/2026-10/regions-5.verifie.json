@@ -1,0 +1,1541 @@
+{
+  "meta": {
+    "perimetre": "Régions d’outre-mer : Guadeloupe (01), Martinique (02), Guyane (03), Mayotte (06) + Passeport mobilité formation professionnelle LADOM",
+    "date_verification": "2026-10-06",
+    "auteur": "agent regions-5",
+    "nb_aides": 17
+  },
+  "aides": [
+    {
+      "id": "nat-ladom-passeport-mobilite-formation",
+      "nom": "Passeport pour la mobilité de la formation professionnelle (PMFP)",
+      "financeur": "etat",
+      "financeur_nom": "LADOM (L’Agence de l’Outre-mer pour la mobilité)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Dispositif de l’État géré par LADOM pour les demandeurs d’emploi résidant outre-mer qui suivent une formation indisponible ou saturée sur leur territoire : billet aller-retour pris en charge, allocations (mobilité, installation, post-mobilité) et appui à la recherche d’hébergement.",
+      "criteres": {
+        "regions": [
+          "01",
+          "02",
+          "03",
+          "04",
+          "06"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Résider dans un territoire d’outre-mer et être inscrit comme demandeur d’emploi",
+        "Avoir 18 ans ou plus (16 ans pour les alternants)",
+        "Quotient familial inférieur ou égal à 26 631 € (revenu fiscal de référence / nombre de parts)",
+        "Formation visée inexistante ou saturée sur le territoire de résidence",
+        "Projet professionnel défini avec le service public de l’emploi (France Travail, Mission locale…)",
+        "Formation en mobilité dans l’Hexagone, un DROM-COM, l’UE/EEE (programme européen) ou le bassin géographique du territoire",
+        "Le loyer et les frais d’hébergement restent à la charge du bénéficiaire",
+        "Billets émis en tarif non modifiable : une annulation à l’initiative du bénéficiaire fait perdre l’aide au transport"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Billet aller-retour pris en charge à 100 % jusqu’au lieu de formation (mobilité en UE/EEE : uniquement le trajet du lieu de résidence jusqu’à Paris) ; allocation complémentaire à la mobilité (cumul avec les autres revenus limité à 700 €/mois) ; allocation d’installation jusqu’à 800 € ; aide post-mobilité jusqu’à 1 400 € (selon éligibilité)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "L’allocation complémentaire à la mobilité s’ajoute aux indemnités ou rémunérations perçues, dans la limite de 700 € par mois au total."
+      },
+      "demarches": [
+        "Contacter le bureau LADOM de son territoire ou son conseiller France Travail / Mission locale pour valider le projet",
+        "Consulter l’offre de formations référencées par LADOM (ofr.ladom.fr)",
+        "Déposer la demande en ligne sur ladom.fr (délai moyen de traitement : 4 semaines après dossier complet)"
+      ],
+      "url_demarche": "https://ladom.fr/vie-active/formation-professionnelle/",
+      "sources": [
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "Le dispositif « Passeport pour la Mobilité de la Formation Professionnelle » (PMFP), s’adresse aux résidents ultramarins, demandeurs d’emploi âgés de 18 ans et plus (16 ans pour les alternants),"
+        },
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "Prise en charge à 100 % du transport aérien et terrestre A/R jusqu’au lieu de formation."
+        },
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "Il s’agit d’une allocation mensuelle versée par LADOM, qui vient s’ajouter aux éventuelles indemnités/rémunérations que vous percevez par ailleurs. Le cumul ne peut excéder la somme de 700 euros/mois."
+        },
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "Il s’agit d’une aide forfaitaire unique versée par LADOM d’un montant maximum est de 800 euros."
+        },
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "Il s’agit d’un appui financier à l’insertion dans l’emploi d’un montant maximum de 1 400 euros."
+        },
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "conditions de ressources (quotient familial inférieur ou égal à 26 631 euros)"
+        },
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "Depuis le 1er décembre 2025, les billets d’avion financés par LADOM sont émis en tarif strictement non modifiable"
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/formations---actualites-evenemen/ladom.html",
+          "titre": "Demandeur d’emploi d’outre-mer, optez pour une formation en mobilité (France Travail)",
+          "extrait": "être inscrit en tant que demandeur d’emploi dans l’une des collectivités d’outre-mer. avoir un quotient familial inférieur ou égal à 26 631 euros."
+        },
+        {
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "titre": "Passeport mobilité formation professionnelle – LADOM",
+          "extrait": "Attention pour les mobilités dans un État membre de l’UE ou de l’EEE, la prise en charge de LADOM porte uniquement sur le déplacement du lieu de résidence jusqu’à Paris."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r01-afmc",
+      "nom": "Aide à la Formation pour la Montée en Compétences (AFMC)",
+      "financeur": "region",
+      "financeur_nom": "Région Guadeloupe",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide individuelle de la Région Guadeloupe (remplace l’aide individuelle à la formation) qui finance une formation certifiante, qualifiante ou diplômante jusqu’au niveau 4 pour un demandeur d’emploi, lorsqu’elle n’est prise en charge par aucun autre dispositif régional.",
+      "criteres": {
+        "regions": [
+          "01"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16,
+        "inscrit_france_travail": true,
+        "niveau_certification_max": 4
+      },
+      "conditions": [
+        "Demandeur d’emploi de catégorie A à D inscrit auprès d’un prescripteur du dispositif en Guadeloupe",
+        "Ne bénéficier d’aucune autre aide régionale ; pas de formation qualifiante financée par la Région dans les 3 années précédentes (sauf suite du même parcours)",
+        "Formation certifiante, qualifiante ou diplômante jusqu’au niveau 4 inclus, dispensée par un organisme certifié Qualiopi",
+        "Exclus : formations initiales universitaires, permis A et B, baccalauréats, actions du programme collectif régional et formations de Guadeloupe Formation",
+        "Fournir trois devis de trois centres de formation différents",
+        "Dépôt au moins 3 mois avant l’entrée en formation ; aucune formation commencée avant la notification de la Région n’est financée",
+        "Campagne en cours : du 1er juin au 31 octobre 2026 pour les entrées en formation de septembre 2026 à mars 2027"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 100,
+        "base": "cout_pedagogique",
+        "plafond": 7495,
+        "duree_max_mois": null,
+        "libelle": "Prise en charge dans la limite d’un barème forfaitaire maximal : 7 495 € (niveau 4), 8 108 € (niveau 3), 5 080 € (formation non certifiante) ; la rémunération du stagiaire peut être prise en charge dans la limite de 9 053 €",
+        "majorations": [
+          {
+            "criteres": {
+              "niveau_certification_max": 3
+            },
+            "pourcentage": 100,
+            "plafond": 8108,
+            "libelle": "Formation de niveau 3 (CAP/BEP) : plafond de 8 108 €"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "r01-programme-regional-formation"
+        ],
+        "note": "Non cumulable avec une autre aide régionale ; les formations du programme collectif de la Région ne sont pas éligibles. Le barème publié mentionne aussi des plafonds pour les niveaux 5 et 6, alors que le dispositif est limité au niveau 4."
+      },
+      "demarches": [
+        "Valider le projet avec son conseiller (France Travail, Mission locale, Cap emploi)",
+        "Réunir les pièces, dont la convention AFMC signée par le centre de formation et trois devis",
+        "Déposer le dossier sur le portail des aides régionales au moins 3 mois avant l’entrée en formation, pendant une campagne de dépôt"
+      ],
+      "url_demarche": "https://aides.regionguadeloupe.fr/afmc",
+      "sources": [
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "L’AFMC est une aide individuelle destinée aux demandeurs d’emploi de catégorie A à D, qui souhaitent s’insérer dans la vie active grâce à une action de formation adaptée à leurs besoins, non prise en charge par un autre dispositif sur le territoire."
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "Est éligible à ce dispositif tout individu de plus de 16 ans ressortissant français, européen ou étranger en situation régulière, répondant aux critères suivants :"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "DE souhaitant s’inscrire dans un parcours de formation professionnelle allant jusqu’au niveau 4 inclus ;"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "Catégorie C (Niveau 4 / CITE 3/4 : Enseignement post secondaire non supérieur) 7 495 € Catégorie D (Niveau 3 / CITE 3 : Enseignement secondaire du 2nd cycle) 8 108 € Catégorie E (formation non certifiante/non diplômante) 5 080 € Catégorie F (rémunération des stagiaires) 9 053 €"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "du 1er juin au 31 octobre 2026 pour les entrées en formation de septembre à mars 2027"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "Le dépôt de dossier doit se faire au minimum trois mois avant la date prévisionnelle d’entrée en formation."
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "DE n’ayant pas bénéficié d’une formation qualifiante financée par la Région Guadeloupe dans les trois années qui précèdent la demande"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-06-01",
+        "fin": "2026-10-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r01-programme-regional-formation",
+      "nom": "Programme collectif de formation professionnelle de la Région Guadeloupe",
+      "financeur": "region",
+      "financeur_nom": "Région Guadeloupe",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations achetées par la Région Guadeloupe (programme collectif, dont l’offre de l’établissement Guadeloupe Formation) et ouvertes gratuitement aux demandeurs d’emploi orientés par un prescripteur.",
+      "criteres": {
+        "regions": [
+          "01"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "La formation doit figurer au programme collectif régional",
+        "Entrée sur prescription (France Travail, Mission locale, Cap emploi) selon les places disponibles",
+        "Le site du Carif-Oref Guadeloupe Formation était injoignable lors de la vérification : catalogue à consulter auprès du prescripteur"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "r01-afmc"
+        ],
+        "note": "Une action du programme collectif n’est pas éligible à l’AFMC."
+      },
+      "demarches": [
+        "Rechercher une formation du programme régional avec son conseiller France Travail, Mission locale ou Cap emploi",
+        "Se positionner sur une session (information collective, tests ou entretien selon l’organisme)"
+      ],
+      "url_demarche": null,
+      "sources": [
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "les actions inscrites au programme collectif de formation professionnelle de la Région Guadeloupe ou ayant fait l’objet d’un financement total ou partiel de la Région Guadeloupe ;"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "titre": "Aide à la Formation pour la Montée en Compétences (AFMC) – Région Guadeloupe (mis à jour le 20 août 2026)",
+          "extrait": "toutes les formations proposées par l’Etablissement « GUADELOUPE FORMATION »."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r01-aide-emploi-formation-marins",
+      "nom": "Aide à l’emploi et à la formation des marins",
+      "financeur": "region",
+      "financeur_nom": "Région Guadeloupe",
+      "categorie": "aide_employeur",
+      "projets": [
+        "formation_salarie",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi"
+      ],
+      "description": "Aide forfaitaire de la Région Guadeloupe aux armateurs et entreprises de travail maritime qui emploient des marins accomplissant leurs services en mer pour obtenir leurs brevets professionnels.",
+      "criteres": {
+        "regions": [
+          "01"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "Être armateur ou entreprise de travail maritime, avec siège social en Guadeloupe et statuts à jour",
+        "Employer des marins accomplissant ou devant accomplir leurs services en mer pour l’obtention de leurs brevets professionnels",
+        "Déposer la demande avant la date de mise en œuvre du projet",
+        "Décision après avis de la commission en charge de l’économie bleue"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 3000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "3 000 € par période réglementaire de validation du diplôme et par marin"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumul possible dans la limite des plafonds des règlements européens de référence."
+      },
+      "demarches": [
+        "Constituer le dossier (courrier au président du conseil régional, formulaire-type, plan de financement, copie des titres professionnels…)",
+        "Envoyer le dossier à la Direction de la Croissance bleue par courrier ou à dcb@regionguadeloupe.fr avant le démarrage du projet (dépôt toute l’année)"
+      ],
+      "url_demarche": "https://aides.regionguadeloupe.fr/Aide-a-l-emploi-et-a-la-formation-des-marins",
+      "sources": [
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-emploi-et-a-la-formation-des-marins",
+          "titre": "Aide à l’emploi et à la formation des marins – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "Montant : 3 000 € par période réglementaire de validation du diplôme et par marin"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-emploi-et-a-la-formation-des-marins",
+          "titre": "Aide à l’emploi et à la formation des marins – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "Armateurs, Entreprises de travail maritime employant des marins accomplissant ou devant accomplir leurs services en mer pour l’obtention de leurs brevets professionnels, ayant un siège social en Guadeloupe et des statuts à jour."
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-emploi-et-a-la-formation-des-marins",
+          "titre": "Aide à l’emploi et à la formation des marins – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "Période de soumission des dossiers : toute l’année"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-emploi-et-a-la-formation-des-marins",
+          "titre": "Aide à l’emploi et à la formation des marins – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "Le dossier de demande d’aide doit être adressé avant la date de mise en œuvre du projet"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r01-iae-formation-salaries-insertion",
+      "nom": "Aide à l’Insertion par l’Activité Économique (IAE) – volet fonctionnement (formation des salariés en insertion)",
+      "financeur": "region",
+      "financeur_nom": "Région Guadeloupe",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Subvention de la Région Guadeloupe aux ateliers et chantiers d’insertion et entreprises d’insertion agréés : le volet fonctionnement soutient notamment la formation des salariés en insertion pendant leur parcours.",
+      "criteres": {
+        "regions": [
+          "01"
+        ],
+        "perimetre_region": "entreprise",
+        "structures": [
+          "siae"
+        ]
+      },
+      "conditions": [
+        "Structure agréée SIAE par la DEETS (ateliers et chantiers d’insertion, entreprises d’insertion)",
+        "Priorité aux formations certifiantes, qualifiantes ou diplômantes et aux secteurs prioritaires ; bonus pour les zones enclavées",
+        "Dépôt du 1er janvier au 31 août de chaque année : la campagne 2026 est close, prochaine fenêtre attendue en janvier 2027",
+        "Dépôt au plus tard 6 mois avant le démarrage de l’opération ; non cumulable avec le programme IEJ"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Subvention de fonctionnement plafonnée à 50 000 €, calculée selon une grille de points (30 000 €, 40 000 € ou 50 000 € selon le score)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumul possible avec l’aide régionale aux structures de l’ESS (ARSESS) sous conditions ; non cumulable avec l’IEJ. Statut à confirmer : fenêtre de dépôt 2026 fermée depuis le 31 août 2026."
+      },
+      "demarches": [
+        "Préparer le dossier unique de demande IAE et le dossier de demande de subvention",
+        "L’envoyer à dessis@regionguadeloupe.fr entre le 1er janvier et le 31 août, au moins 6 mois avant le démarrage de l’opération"
+      ],
+      "url_demarche": "https://aides.regionguadeloupe.fr/Aide-a-l-Insertion-par-l-Activite-Economique-IAE",
+      "sources": [
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-Insertion-par-l-Activite-Economique-IAE",
+          "titre": "Aide à l’Insertion par l’Activité Économique (IAE) – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "du fonctionnement : soutien à la formation des salariés en insertion durant leur parcours, et appui aux projets relevant des secteurs prioritaires et/ou situés dans des zones enclavées."
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-Insertion-par-l-Activite-Economique-IAE",
+          "titre": "Aide à l’Insertion par l’Activité Économique (IAE) – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "Aide au fonctionnement Soutien à la formation des salariés en insertion et aux projets relevant des secteurs prioritaires Prise en compte du rééquilibrage territorial (zones enclavées) Plafond : 50 000 €"
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-Insertion-par-l-Activite-Economique-IAE",
+          "titre": "Aide à l’Insertion par l’Activité Économique (IAE) – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "Les structures doivent être agréées par la DEETS en tant que SIAE."
+        },
+        {
+          "url": "https://aides.regionguadeloupe.fr/Aide-a-l-Insertion-par-l-Activite-Economique-IAE",
+          "titre": "Aide à l’Insertion par l’Activité Économique (IAE) – Région Guadeloupe (mis à jour le 17 septembre 2026)",
+          "extrait": "Période de soumission des dossiers : du 1 janvier au 31 Août de chaque année"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "exact"
+    },
+    {
+      "id": "r02-programme-formation-professionnelle",
+      "nom": "Programme de Formation Professionnelle (PFP) de la CTM",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations diplômantes, qualifiantes ou certifiantes (niveaux 3 à 8) achetées par la CTM par appels d’offres et ouvertes aux demandeurs d’emploi orientés par France Travail, la Mission locale, Cap emploi ou les autres acteurs de l’insertion.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "La formation doit figurer au programme de formation professionnelle de la CTM",
+        "Être demandeur d’emploi suivi par France Travail, une Mission locale, Cap emploi ou un acteur de l’insertion (CCAS, PLI, E2C…)",
+        "Entrée sur prescription, selon les places disponibles"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "r02-aide-individuelle-formation"
+        ],
+        "note": "L’aide individuelle à la formation de la CTM n’intervient que si la formation n’est pas disponible dans le programme."
+      },
+      "demarches": [
+        "Rechercher une formation sur le catalogue régional Martinique Formation (seformerenmartinique.mq)",
+        "Faire valider la candidature par son conseiller (France Travail, Mission locale, Cap emploi)"
+      ],
+      "url_demarche": "https://www.seformerenmartinique.mq/",
+      "sources": [
+        {
+          "url": "https://www.agefma.mq/formation/professionnelle/ctm-aides-formations/",
+          "titre": "Formations et aides proposées par la CTM – AGEFMA (Carif-Oref Martinique)",
+          "extrait": "Le Programme de Formation Professionnelle (PFP) se décline sous forme d’achat de formations diplômantes, qualifiantes ou certifiantes du niveau 3 au niveau 8 dans le cadre de procédures d’appel d’offres."
+        },
+        {
+          "url": "https://www.agefma.mq/formation/professionnelle/ctm-aides-formations/",
+          "titre": "Formations et aides proposées par la CTM – AGEFMA (Carif-Oref Martinique)",
+          "extrait": "L’offre de formation professionnelle s’adresse au publics demandeurs d’emploi inscrits à Pôle emploi, en Mission Locale, à Cap emploi, au public sous-main de justice et auprès de l’ensemble des acteurs CCAS, ALI, PLI, E2C."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (CTM)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération versée par la CTM à certains stagiaires demandeurs d’emploi en formation (convention CTM – France Travail) ; en mobilité, une allocation de base peut être versée par LADOM pour le compte de la CTM.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Être stagiaire demandeur d’emploi dans une formation financée ou agréée par la CTM",
+        "Conditions et barème non publiés en ligne à jour : à vérifier auprès de la CTM ou de France Travail",
+        "En mobilité : allocation de base sous conditions de ressources (convention CTM-LADOM)"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Rémunération selon la situation du stagiaire (barème non publié en ligne, à confirmer)"
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Règles de cumul non publiées en ligne : à confirmer auprès de la CTM ou de France Travail. Source principale : guide CTM édition 2023."
+      },
+      "demarches": [
+        "Se renseigner auprès de son conseiller France Travail lors de l’inscription en formation",
+        "Contacter le service Formation professionnelle de la CTM (0596 59 63 00)"
+      ],
+      "url_demarche": "https://www.collectivitedemartinique.mq/dispositifs-daides/",
+      "sources": [
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Rémunération : la formation est rémunérée par la CTM dans le cadre de la convention CTM – Pôle Emploi"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Rémunération : Dans le cadre de la convention CTM-LADOM, une allocation de base, versée par LADOM pour le compte de la CTM, peut être attribuée, sous conditions de Ressources"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Guide des formations - Édition 2023"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-aide-individuelle-formation",
+      "nom": "Aide individuelle à la formation professionnelle des demandeurs d’emploi (CTM)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide de la CTM qui finance tout ou partie des frais pédagogiques d’une formation validée dans le projet personnalisé d’accès à l’emploi, lorsqu’elle n’est pas disponible dans le programme de la CTM ni financée entièrement par ailleurs.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Être inscrit à France Travail depuis au moins 6 mois (sauf dérogation du président du Conseil exécutif)",
+        "Formation validée dans le projet personnalisé d’accès à l’emploi (PPAE) et non disponible dans le programme de formation de la CTM",
+        "Aide attribuée sous conditions de ressources",
+        "Dossier déposé à l’agence France Travail, qui le transmet à la CTM pour décision",
+        "Montant publié dans le guide CTM édition 2023 : à confirmer pour 2026"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Prise en charge du coût pédagogique plafonnée à 3 000 € par an et par demandeur selon le guide CTM 2023 (montant à confirmer)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "r02-programme-formation-professionnelle"
+        ],
+        "note": "Intervient en complément d’autres financements ou seule ; versée au centre de formation à l’issue de la formation."
+      },
+      "demarches": [
+        "Faire valider le projet de formation par son conseiller France Travail (fiche de prescription)",
+        "Déposer le dossier complet (lettre au président du Conseil exécutif, devis, avis d’imposition…) à son agence France Travail avant l’entrée en formation"
+      ],
+      "url_demarche": "https://www.collectivitedemartinique.mq/dispositifs-daides/",
+      "sources": [
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Plafond : 3 000 € par an et par demandeur."
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Cette aide est attribuée sous conditions de ressources du demandeur et porte sur le coût pédagogique de l’action de formation."
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Les demandeurs d’emploi inscrits depuis au moins 6 mois au Pôle Emploi sauf dérogation décidée par le Président du Conseil exécutif de la CTM"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "La formation ne doit pas être disponible dans le programme de formation professionnelle de la CTM"
+        },
+        {
+          "url": "https://www.agefma.mq/formation/professionnelle/ctm-aides-formations/",
+          "titre": "Formations et aides proposées par la CTM – AGEFMA (Carif-Oref Martinique)",
+          "extrait": "Les Aides individuelles de la CTM peuvent contribuer en totalité ou partie (avec d’autres participations) au financement d’un projet individuel de formation en vue d’obtenir une qualification reconnue."
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Guide des formations - Édition 2023"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-aide-vae",
+      "nom": "Aide individuelle à la validation des acquis de l’expérience (VAE) de la CTM",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La CTM finance l’accompagnement à la VAE de demandeurs d’emploi (aide méthodologique, dossier de validation, préparation du jury) réalisé par un organisme accompagnateur habilité.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true,
+        "certifications": [
+          "rncp"
+        ]
+      },
+      "conditions": [
+        "Être inscrit à France Travail (historique d’au moins 6 mois demandé)",
+        "Certification visée inscrite au RNCP ; fournir la lettre de recevabilité",
+        "Accompagnement réalisé par un organisme habilité (certifié Qualiopi)",
+        "Conseil gratuit auprès du point relais conseil VAE de l’AGEFMA",
+        "Aide à confirmer auprès de la CTM (0596 59 63 00) : la fiche publiée (mise à jour du 16/04/2026) reprend le guide CTM 2023 et date d’avant la suppression de l’aide VAE de France Travail, en vigueur le 8 mai 2026 ; le dossier est déposé dans une agence France Travail"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Prise en charge de la prestation d’accompagnement VAE plafonnée à 1 200 € selon la fiche France Travail du 16/04/2026 et le guide CTM 2023 (maintien de l’aide à confirmer auprès de la CTM)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "L’aide est versée directement à l’organisme accompagnateur. Aide propre à la CTM, distincte de l’aide VAE de France Travail supprimée le 8 mai 2026."
+      },
+      "demarches": [
+        "S’informer auprès du point relais conseil VAE de l’AGEFMA (vae.martinique@agefma.fr)",
+        "Déposer le dossier complet à son agence France Travail, qui le transmet à la CTM pour décision"
+      ],
+      "url_demarche": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/validation-des-acquis-de-l-experiencevaemartinique",
+      "sources": [
+        {
+          "url": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/validation-des-acquis-de-l-experiencevaemartinique",
+          "titre": "Validation des Acquis de l’Expérience (VAE) | Martinique – Mes aides France Travail (mis à jour le 16/04/2026)",
+          "extrait": "L’aide publique est plafonnée à 1200 €. Elle porte sur la prestation d’accompagnement à la VAE. Elle est versée à un organisme accompagnateur habilité."
+        },
+        {
+          "url": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/validation-des-acquis-de-l-experiencevaemartinique",
+          "titre": "Validation des Acquis de l’Expérience (VAE) | Martinique – Mes aides France Travail (mis à jour le 16/04/2026)",
+          "extrait": "Le dossier complet doit être déposé à l’Agence France Travail où est inscrit le demandeur pour instruction. Il sera ensuite transmis à la CTM pour instruction et décision au Président du Conseil Exécutif."
+        },
+        {
+          "url": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/validation-des-acquis-de-l-experiencevaemartinique",
+          "titre": "Validation des Acquis de l’Expérience (VAE) | Martinique – Mes aides France Travail (mis à jour le 16/04/2026)",
+          "extrait": "Mise à jour le 16/04/2026"
+        },
+        {
+          "url": "https://www.agefma.mq/formation/professionnelle/ctm-aides-formations/",
+          "titre": "Formations et aides proposées par la CTM – AGEFMA (Carif-Oref Martinique)",
+          "extrait": "la CTM finance dans le cadre d’une démarche de Validation des acquis l’accompagnement individuel de certains candidats réalisée par des organismes accompagnateurs VAE (référencé QUALIOPI )"
+        },
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2026-18-du-30-avril-2026-bo-n-2026-27.html?type=dossiers%2F2026%2Fbo-n-2026-27-du-5-mai-2026",
+          "titre": "Délibération n° 2026-18 du 30 avril 2026 – Suppression de l’aide à la validation des acquis de l’expérience (VAE) de France Travail (aide nationale, distincte de l’aide de la CTM) – Bulletin officiel de France Travail",
+          "extrait": "La délibération entre en vigueur le 8 mai 2026. Aucune demande d’aide effectuée à compter de cette date ne sera prise en compte."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-aide-formation-actifs",
+      "nom": "Aide à la formation des actifs salariés et non-salariés (CTM)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "dirigeant"
+      ],
+      "description": "Aide de la CTM au coût pédagogique d’une formation pour les salariés, chefs d’entreprise et indépendants ayant un projet professionnel, ainsi qu’aux entreprises et organismes mettant en place un plan de formation ou un projet emploi-formation.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Cofinancement obligatoire : réponse de l’employeur, de l’OPCO, du CPF ou du fonds d’assurance formation (non-salariés), ou autofinancement",
+        "Formation répondant aux besoins du territoire",
+        "Demande déposée au plus tard trois mois calendaires avant le début de la formation",
+        "Montants publiés dans le guide CTM édition 2023 : à confirmer pour 2026"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Selon le guide CTM 2023 : 50 % du coût pédagogique restant à la charge du salarié, plafonné à 2 000 € ; 50 % du reste à charge pour une entreprise ou un organisme (montants à confirmer)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les aides de l’État et de l’Union européenne."
+      },
+      "demarches": [
+        "Obtenir la réponse de l’employeur, de l’OPCO ou du FAF sur le cofinancement",
+        "Adresser la demande au président du Conseil exécutif de la CTM (service Formation professionnelle) au moins 3 mois avant le début de la formation"
+      ],
+      "url_demarche": "https://www.collectivitedemartinique.mq/dispositifs-daides/",
+      "sources": [
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Actifs salariés et non-salariés : 50% du coût pédagogique restant à la charge du salarié, plafonnée à 2 000€"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Entreprises, association, collectivité, établissement public, syndicats professionnels, organismes paritaires collecteurs agréés, chambres consulaires : 50% du coût pédagogique restant à la charge du porteur de projet"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "La demande d’aide doit être déposée, à l’attention de Monsieur le président du Conseil exécutif de la Collectivité Territoriale de Martinique, au plus tard trois mois calendaires avant le début de la formation"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Cette aide peut être cumulée avec les aides de l’Etat et de l’Union Européenne"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Guide des formations - Édition 2023"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-aide-recrutement-apprenti-atr",
+      "nom": "Prime d’incitation au recrutement d’apprentis – aide territoriale au recrutement (ATR)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Prime unique de la CTM versée à l’employeur (privé ou public) implanté en Martinique qui recrute un apprenti, après validation de la période d’essai.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "entreprise",
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "age_min": 16,
+        "age_max": 29
+      },
+      "conditions": [
+        "Apprenti âgé de 16 à moins de 30 ans (sauf dérogations), inscrit dans un centre de formation de Martinique",
+        "Contrat signé par toutes les parties et enregistré par l’OPCO",
+        "Demande dans les 6 mois suivant l’enregistrement du contrat",
+        "Versement après confirmation de la période d’essai de 2 mois ; annulé en cas de rupture pendant ces 2 mois"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 915,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "915 € versés en une fois après la période d’essai de 2 mois"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec l’aide territoriale à l’effort de formation (r02-aide-effort-formation-apprenti-atef) et avec les aides de l’État à l’apprentissage."
+      },
+      "demarches": [
+        "Déposer la demande en ligne sur demarche.numerique.gouv.fr (démarche « Demande de prime incitative au recrutement d’apprentis mise en place par la CTM ») dans les 6 mois suivant l’enregistrement du contrat",
+        "Signer la convention de versement avec la CTM après décision du Conseil exécutif"
+      ],
+      "url_demarche": "https://www.demarches-simplifiees.fr/commencer/ctm-demande-prime-apprentissage",
+      "sources": [
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Aide Territoriale au Recrutement : 915 € (après validation de la période d’essai de 2 mois) - versement unique"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "L’attribution des primes sera effectuée sur demande explicite de l’employeur à la Collectivité Territoriale de Martinique dans un délai de 6 mois à compter de la date d’enregistrement du contrat."
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Jeune âgé de 16 à moins de 30 ans"
+        },
+        {
+          "url": "https://www.demarches-simplifiees.fr/commencer/ctm-demande-prime-apprentissage",
+          "titre": "Demande de prime incitative au recrutement d’apprentis mise en place par la CTM – demarche.numerique.gouv.fr",
+          "extrait": "Aussi, la CTM met en place un nouveau dispositif relatif aux primes d’incitation au recrutement d’apprentis. Cette prime est cumulable avec les différentes aides accordées par l’État aux entreprises dans le cadre de l’apprentissage."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-aide-effort-formation-apprenti-atef",
+      "nom": "Prime d’incitation au recrutement d’apprentis – aide territoriale à l’effort de formation (ATEF)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Prime annuelle de la CTM versée à l’employeur d’un apprenti à la fin de chaque année de formation, au prorata de la présence de l’apprenti.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "entreprise",
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "age_min": 16,
+        "age_max": 29
+      },
+      "conditions": [
+        "Apprenti âgé de 16 à moins de 30 ans (sauf dérogations), inscrit dans un centre de formation de Martinique",
+        "Demande dans les 6 mois suivant l’enregistrement du contrat (même démarche que l’ATR)",
+        "Versée à la fin de chaque année de formation, au prorata de la présence ; non versée au-delà de 140 heures d’absence injustifiée"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 2800,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "2 800 € par année de formation pour un apprenti majeur, 2 500 € pour un apprenti mineur (au prorata de la présence)",
+        "majorations": [
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 2500,
+            "libelle": "Apprenti mineur : 2 500 € par année de formation"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec l’aide territoriale au recrutement (r02-aide-recrutement-apprenti-atr) et avec les aides de l’État."
+      },
+      "demarches": [
+        "Déposer la demande en ligne sur demarche.numerique.gouv.fr dans les 6 mois suivant l’enregistrement du contrat",
+        "Transmettre l’attestation d’assiduité du centre de formation dans les 3 mois suivant la fin de chaque cycle de formation"
+      ],
+      "url_demarche": "https://www.demarches-simplifiees.fr/commencer/ctm-demande-prime-apprentissage",
+      "sources": [
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Aide Territoriale à l’effort de formation – A la fin de chaque année de formation - 2 500 € par an pour un apprenti mineur, - 2 800 € par an pour un apprenti majeur"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Ces aides sont versées au prorata de la présence de l’apprenti ; dans la limite de 140 heures d’absence injustifiées. A défaut, la prime n’est pas versée."
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Elles sont cumulables entre elles et aussi avec les dispositifs d’aides de l’État."
+        },
+        {
+          "url": "https://www.demarches-simplifiees.fr/commencer/ctm-demande-prime-apprentissage",
+          "titre": "Demande de prime incitative au recrutement d’apprentis mise en place par la CTM – demarche.numerique.gouv.fr",
+          "extrait": "Encourager le recours à l’apprentissage pour les entreprises par le versement d’une prime aux employeurs en compensation de l’effort financier consenti;"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-prime-contrat-professionnalisation",
+      "nom": "Prime incitative au développement des contrats de professionnalisation (CTM)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Prime de la CTM aux entreprises du secteur marchand et entreprises de travail temporaire qui embauchent en contrat de professionnalisation un jeune de 16 à 25 ans, un demandeur d’emploi de 26 ans et plus ou un bénéficiaire du RSA, de l’ASS ou de l’AAH.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "entreprise",
+        "types_alternance": [
+          "professionnalisation"
+        ]
+      },
+      "conditions": [
+        "Entreprise du secteur marchand assujettie au financement de la formation professionnelle, ou entreprise de travail temporaire",
+        "Salarié âgé de 16 à 25 ans, ou demandeur d’emploi de 26 ans et plus, ou bénéficiaire du RSA, de l’ASS ou de l’AAH",
+        "Pour les 16-25 ans : formation n’existant pas par la voie de l’apprentissage sur le territoire",
+        "Montant publié dans le guide CTM édition 2023 : à confirmer pour 2026"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "2 500 € par année de formation (24 mois maximum) selon le guide CTM 2023 (montant à confirmer)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les aides existantes (État, OPCO, France Travail, Agefiph)."
+      },
+      "demarches": [
+        "Adresser la demande de versement au président du Conseil exécutif de la CTM (service apprentissage) avec le contrat (CERFA), la pièce d’identité du salarié, le RIB, le Kbis et les attestations sociale et fiscale"
+      ],
+      "url_demarche": "https://www.collectivitedemartinique.mq/dispositifs-daides/",
+      "sources": [
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "2 500 € par année de formation (24 mois maximum)"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Elle est cumulable avec les dispositifs d’aide existants (DIECCTE, OPCO, Pôle emploi, AGEFIPH)"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Les entreprises du secteur marchand assujetties au financement de la formation professionnelle Les entreprises de travail temporaire"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Guide des formations - Édition 2023"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-aide-formation-mobilite-france",
+      "nom": "Aide à la formation en mobilité (France, Guadeloupe et Guyane) de la CTM",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Prise en charge par la CTM, avec LADOM, du coût pédagogique et des frais annexes d’une formation qualifiante (niveaux 3 à 8) suivie dans l’Hexagone, en Guadeloupe ou en Guyane lorsqu’elle n’existe pas ou est saturée en Martinique.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Demandeur d’emploi inscrit depuis plus de 6 mois à France Travail Martinique",
+        "Formation inexistante ou saturée en Martinique, projet défini avec le service public de l’emploi",
+        "Conditions de ressources (référence fiscale inférieure à 26 791 € selon le guide 2023)",
+        "Dossier instruit avec LADOM ; montant publié dans le guide CTM édition 2023 : à confirmer pour 2026"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Coût pédagogique et frais annexes pris en charge dans la limite de 10 000 € selon le guide CTM 2023 (montant à confirmer)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Complémentaire du Passeport mobilité formation professionnelle de LADOM (nat-ladom-passeport-mobilite-formation) pour le transport et les allocations."
+      },
+      "demarches": [
+        "Construire le projet avec son conseiller France Travail ou Mission locale",
+        "Contacter le bureau LADOM de Fort-de-France pour constituer le dossier"
+      ],
+      "url_demarche": "https://ladom.fr/vie-active/formation-professionnelle/",
+      "sources": [
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Les formations en mobilité vers la France, la Guadeloupe et la Guyane sont traitées avec L’Agence De l’Outre-mer pour la Mobilité (LADOM)."
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "L’aide est plafonnée à 10 000 euros et porte sur le coût pédagogique de l’action de formation et les frais annexes."
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Demandeurs d’emploi inscrits depuis plus de 6 mois au Pôle Emploi Martinique pour lesquels l’offre de formation n’est pas disponible en Martinique"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "(conditions de ressources éligibles à la convention : référence fiscale inférieur à 26 791 €)"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "Guide des formations - Édition 2023"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r02-aide-formation-mobilite-reste-du-monde",
+      "nom": "Aide à la formation en mobilité « vers le reste du monde » (CTM)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Martinique (CTM)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide de la CTM aux demandeurs d’emploi qui suivent hors de France une formation diplômante ou professionnalisante inexistante en Martinique : prise en charge du coût pédagogique et des frais annexes.",
+      "criteres": {
+        "regions": [
+          "02"
+        ],
+        "perimetre_region": "beneficiaire",
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Demandeur d’emploi (historique France Travail d’au moins 6 mois demandé)",
+        "Formation dispensée hors de France, inexistante en Martinique et présentant un intérêt pour le territoire",
+        "Aide attribuée sous conditions de ressources",
+        "Dossier complet déposé à la CTM (service Formation professionnelle)"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 100,
+        "base": "cout_total",
+        "plafond": 15000,
+        "duree_max_mois": null,
+        "libelle": "Coût pédagogique et frais annexes pris en charge, partiellement ou totalement selon les ressources, jusqu’à 15 000 €"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Joindre les réponses des autres financeurs sollicités (France Travail, Agefiph, CCAS…)."
+      },
+      "demarches": [
+        "Faire établir la fiche de prescription et de demande de financement par France Travail",
+        "Déposer le dossier complet (lettre au président du Conseil exécutif, devis, certificat d’inscription, avis d’imposition…) à la CTM"
+      ],
+      "url_demarche": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/aide-a-la-formation-en-mobilite-vers-le-reste-du-monde-martinique",
+      "sources": [
+        {
+          "url": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/aide-a-la-formation-en-mobilite-vers-le-reste-du-monde-martinique",
+          "titre": "Aide à la formation en mobilité « vers le reste du monde » | Martinique – Mes aides France Travail",
+          "extrait": "Les formations en mobilité sur tous les territoires, hors France, visent l’acquisition de qualification pour les demandeurs d’emploi. Elles sont traitées directement par la Collectivité."
+        },
+        {
+          "url": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/aide-a-la-formation-en-mobilite-vers-le-reste-du-monde-martinique",
+          "titre": "Aide à la formation en mobilité « vers le reste du monde » | Martinique – Mes aides France Travail",
+          "extrait": "Aide financière - jusqu'à 15000€"
+        },
+        {
+          "url": "https://www.collectivitedemartinique.mq/wp-content/uploads/2024/03/AIDES-A-LA-FORMATION-PROFESSIONNELLE_compressed.pdf",
+          "titre": "Formation professionnelle – Guide des formations, édition 2023 – Collectivité Territoriale de Martinique (PDF)",
+          "extrait": "L’aide est plafonnée à 15 000 euros. Elle porte sur le coût pédagogique de l’action de formation et les frais annexes. Elle est attribuée sous conditions de ressources."
+        },
+        {
+          "url": "https://mes-aides.francetravail.fr/formation-et-orientation/financer-une-formation/collectivite-territoriale-martinique/aide-a-la-formation-en-mobilite-vers-le-reste-du-monde-martinique",
+          "titre": "Aide à la formation en mobilité « vers le reste du monde » | Martinique – Mes aides France Travail",
+          "extrait": "Aide financière - jusqu'à 15000€ Prise en charge partielle ou totale Selon ressources"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r03-programme-territorial-formations",
+      "nom": "Programme territorial des formations 2026-2028 de la CTG",
+      "financeur": "region",
+      "financeur_nom": "Collectivité Territoriale de Guyane (CTG)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Une cinquantaine d’actions de formation financées par la CTG en 2026 pour les demandeurs d’emploi et les bénéficiaires du RSA, accessibles sur prescription ; offre publiée sur le portail régional Formanoo.",
+      "criteres": {
+        "regions": [
+          "03"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "La formation doit figurer au programme territorial des formations de la CTG",
+        "Demandeur d’emploi ou bénéficiaire du RSA orienté par un prescripteur (Divisions de développement local de la CTG, France Travail, Cap emploi, Missions locales)",
+        "Participation préalable à une réunion d’information collective"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Salariés : s’adresser à son OPCO ; reconversion : Transitions Pro Guyane."
+      },
+      "demarches": [
+        "Consulter l’offre sur guyane-formation.formanoo.org",
+        "Se rapprocher de son prescripteur (France Travail, Mission locale, Cap emploi, Division de développement local de la CTG) pour être orienté vers une réunion d’information collective"
+      ],
+      "url_demarche": "https://guyane-formation.formanoo.org/",
+      "sources": [
+        {
+          "url": "https://www.ctguyane.fr/une-offre-pour-construire-votre-avenir-plus-de-10-me-au-service-de-la-formation/",
+          "titre": "Une offre pour construire votre avenir : 10 M€ au service de la formation – CTG (27/02/2026)",
+          "extrait": "Dans ce cadre, la CTG déploie son Programme territorial des formations 2026-2028, avec le lancement d’une cinquantaine d’actions de formation, mises en œuvre sur l’ensemble du territoire dès ce mois de février et tout au long de l’année 2026."
+        },
+        {
+          "url": "https://www.ctguyane.fr/une-offre-pour-construire-votre-avenir-plus-de-10-me-au-service-de-la-formation/",
+          "titre": "Une offre pour construire votre avenir : 10 M€ au service de la formation – CTG (27/02/2026)",
+          "extrait": "Plus de 10 M€ seront investis au cours des deux prochaines années afin de financer les parcours de formation des demandeurs d’emploi et des bénéficiaires du RSA."
+        },
+        {
+          "url": "https://www.ctguyane.fr/formanoo-le-portail-regional-de-la-formation-en-guyane/",
+          "titre": "FORMANOO : le portail régional de la formation en Guyane – CTG (18/12/2025)",
+          "extrait": "La Collectivité Territoriale de Guyane a lancé FORMANOO, la plateforme régionale de référence dédiée à l’offre de formation en Guyane."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-01-01",
+        "fin": "2028-12-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r06-programme-formation-professionnelle",
+      "nom": "Plan de développement de la formation professionnelle du Département de Mayotte (formations financées pour les demandeurs d’emploi)",
+      "financeur": "region",
+      "financeur_nom": "Département de Mayotte (Département-Région de Mayotte)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Le Département de Mayotte, qui exerce les compétences régionales, élabore le plan de développement de la formation professionnelle, dont un volet adultes de formations pour l’accès, le maintien et le retour à l’emploi ; l’offre est référencée sur le portail Mayotte Formation.",
+      "criteres": {
+        "regions": [
+          "06"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "La formation doit figurer au programme financé par le Département",
+        "Entrée sur prescription (France Travail, Mission locale, Cap emploi)",
+        "Aucun programme 2026 détaillé n’a pu être consulté sur le site du Département : modalités à confirmer"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Statut à confirmer : pas de document 2026 du Département accessible en ligne."
+      },
+      "demarches": [
+        "Rechercher une formation sur mayotte-formation.yt (Carif-Oref Mayotte)",
+        "Faire valider la candidature par son conseiller France Travail, Mission locale ou Cap emploi"
+      ],
+      "url_demarche": "https://www.mayotte-formation.yt/",
+      "sources": [
+        {
+          "url": "https://www.mayotte.fr/le-departement/fonctionnement-institutionnel/competences",
+          "titre": "Nos domaines de compétence – Département de Mayotte",
+          "extrait": "L’Assemblée de Mayotte assure un rôle clé dans le domaine de l’éducation et de la formation professionnelle, en accompagnant le développement des infrastructures et des dispositifs d’apprentissage :"
+        },
+        {
+          "url": "https://www.mayotte.fr/le-departement/fonctionnement-institutionnel/competences",
+          "titre": "Nos domaines de compétence – Département de Mayotte",
+          "extrait": "Un volet consacré aux adultes, comprenant les actions de formation visant à favoriser l’accès, le maintien et le retour à l’emploi."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    }
+  ],
+  "portails": [
+    {
+      "region": "01",
+      "nom_region": "Guadeloupe",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Guadeloupe – Guide des aides : formation, insertion, apprentissage",
+          "url": "https://aides.regionguadeloupe.fr/-Toutes-les-aides-?id_mot=44",
+          "type": "region"
+        },
+        {
+          "titre": "Région Guadeloupe – Aide à la Formation pour la Montée en Compétences (AFMC)",
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "type": "region"
+        },
+        {
+          "titre": "Transitions Pro Guadeloupe",
+          "url": "https://www.transitionspro-guadeloupe.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Guadeloupe",
+          "url": "https://www.francetravail.fr/region/guadeloupe/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        }
+      ]
+    },
+    {
+      "region": "02",
+      "nom_region": "Martinique",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Collectivité Territoriale de Martinique – Dispositifs et aides",
+          "url": "https://www.collectivitedemartinique.mq/dispositifs-daides/",
+          "type": "region"
+        },
+        {
+          "titre": "AGEFMA (Carif-Oref Martinique) – Formations et aides proposées par la CTM",
+          "url": "https://www.agefma.mq/formation/professionnelle/ctm-aides-formations/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Martinique Formation – catalogue régional des formations (AGEFMA)",
+          "url": "https://www.seformerenmartinique.mq/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Martinique",
+          "url": "https://www.transitionspro-martinique.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Martinique",
+          "url": "https://www.francetravail.fr/region/martinique/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        }
+      ]
+    },
+    {
+      "region": "03",
+      "nom_region": "Guyane",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Collectivité Territoriale de Guyane – Programme territorial des formations 2026-2028",
+          "url": "https://www.ctguyane.fr/une-offre-pour-construire-votre-avenir-plus-de-10-me-au-service-de-la-formation/",
+          "type": "region"
+        },
+        {
+          "titre": "Guyane Formation (Formanoo) – portail régional de la formation, Carif-Oref Guyane",
+          "url": "https://guyane-formation.formanoo.org/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Guyane",
+          "url": "https://www.transitionspro-guyane.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Guyane",
+          "url": "https://www.francetravail.fr/region/guyane/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        }
+      ]
+    },
+    {
+      "region": "06",
+      "nom_region": "Mayotte",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Département de Mayotte – Domaines de compétence (formation professionnelle)",
+          "url": "https://www.mayotte.fr/le-departement/fonctionnement-institutionnel/competences",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref Mayotte – Financer sa formation",
+          "url": "https://www.cariforef-mayotte.yt/financer-sa-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Mayotte Formation – catalogue régional des formations (Carif-Oref Mayotte)",
+          "url": "https://www.mayotte-formation.yt/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Mayotte",
+          "url": "https://www.transitionspro-mayotte.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Mayotte",
+          "url": "https://www.francetravail.fr/region/mayotte/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        }
+      ]
+    }
+  ],
+  "exclues": [
+    {
+      "nom": "Aide à la formation professionnelle en mobilité nationale et internationale (PRFPDOM) – Région Guadeloupe",
+      "raison": "Dispositif suspendu : la page officielle (mise à jour le 20 juillet 2026) indique qu’il n’est pas accessible actuellement et renvoie vers l’AFMC. La fiche Mes aides France Travail (mise à jour le 16/04/2026) le présente encore, avec une prise en charge jusqu’à 8 000 €.",
+      "sources": [
+        {
+          "url": "https://aides.regionguadeloupe.fr/prfpdom",
+          "titre": "Aide à la formation professionnelle en mobilité nationale et internationale (PRFPDOM) – Région Guadeloupe (mis à jour le 20 juillet 2026)",
+          "extrait": "Le dispositif PRFPDOM n’est pas accessible actuellement. Merci de vous orienter vers l’ AFMC (Aide à la Formation pour la Montée en Compétences) sous réserve que votre demande soit éligible"
+        },
+        {
+          "url": "https://mes-aides.francetravail.fr/formation-et-orientation/partir-a-l-etranger/region-guadeloupe/aide-a-la-formation-professionnelle-en-mobilite-nationale-et-internationale-guadeloupe",
+          "titre": "Aide à la formation professionnelle en mobilité nationale et internationale | Guadeloupe – Mes aides France Travail",
+          "extrait": "Mise à jour le 16/04/2026"
+        }
+      ]
+    },
+    {
+      "nom": "Abondement du CPF par la Région Guadeloupe (80 % du reste à charge pour les salariés, 70 % pour les demandeurs d’emploi, plafond 4 000 €)",
+      "raison": "Dispositif terminé : date limite fixée au 31 décembre 2024 ; aucune reconduction trouvée pour 2025-2026.",
+      "sources": [
+        {
+          "url": "https://aides.regionguadeloupe.fr/La-conseil-regional-de-la-Guadeloupe-et-la",
+          "titre": "Abondement CPF – Région Guadeloupe et Caisse des Dépôts (mis à jour le 12 mars 2025)",
+          "extrait": "Date limite pour en bénéficier ? Jusqu’au 31 décembre 2024"
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/la-region-guadeloupe-finance-votre-formation",
+          "titre": "La région Guadeloupe finance votre formation ! – Mon Compte Formation (publié le 22 mai 2024)",
+          "extrait": "La date limite pour l’obtention de l’abondement est fixée au 31 décembre 2024."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Agefiph : le site agefiph.fr a renvoyé une erreur HTTP 503 sur toutes les pages testées (y compris l’accueil) les 5 et 6 octobre 2026 ; aucun lien régional Agefiph (délégations Antilles-Guyane et La Réunion-Mayotte) n’a donc pu être vérifié ni ajouté aux portails.",
+    "Guadeloupe : le site de Guadeloupe Formation (guadeloupeformation.com), qui porte le Carif-Oref et le catalogue régional, était injoignable (connexion refusée) les 5 et 6 octobre 2026 : pas de lien Carif-Oref ni de catalogue vérifié pour la Guadeloupe ; url_demarche du programme régional laissée à null.",
+    "Guadeloupe : aucune page dédiée à la rémunération des stagiaires n’a été trouvée sur le nouveau site régional ; le barème AFMC prévoit une catégorie « rémunération des stagiaires » plafonnée à 9 053 €.",
+    "Guadeloupe : le barème AFMC publié contient aussi des plafonds pour les niveaux 6 (3 716 €) et 5 (8 635 €) alors que le texte limite le dispositif au niveau 4 ; seuls les plafonds des niveaux 3, 4 et non certifiant ont été repris.",
+    "Guadeloupe : l’aide régionale au permis de conduire des apprentis (ancienne page regionguadeloupe.fr) renvoie une erreur 404 et n’apparaît plus dans le guide des aides 2026 ; non retenue faute de source 2026. L’aide au permis des jeunes en Service civique, l’aide au stage extrarégional (4 000 €), la bourse Québec (3 500 €/an), le SRJE et le prêt étudiant à taux zéro concernent des étudiants ou volontaires : hors champ.",
+    "Guadeloupe : l’aide IAE aux SIAE est mise en a_confirmer car la fenêtre de dépôt 2026 (1er janvier – 31 août) est close ; elle est annoncée « de chaque année ».",
+    "Martinique : le site de la CTM est un « site provisoire » ; sa page « Dispositifs et aides » renvoie, pour la formation professionnelle, au guide « Édition 2023 » (PDF mis en ligne en mars 2024). Les anciennes fiches de 2016 citées par l’AGEFMA sont en 404 et le portail SPOT (spot.mq) était en maintenance (503). Les aides seulement documentées par ce guide sont en a_confirmer avec montant non chiffré ; à vérifier auprès de la CTM (0596 59 63 00).",
+    "Martinique : la démarche en ligne de prime à l’apprentissage de la CTM est ouverte et ses statistiques publiques montrent des dossiers acceptés en septembre 2026 ; les montants (915 € ; 2 500 €/2 800 € par an) proviennent du guide de la démarche (délibération n° 20-142-2 applicable au 17/08/2020) et du guide 2023, d’où la confiance « estimated ».",
+    "Martinique : les aides aux étudiants de la CTM (campagne du 28 juillet au 15 octobre 2026) et les secours exceptionnels de l’action sociale sont hors champ.",
+    "Guyane : seul le Programme territorial des formations 2026-2028 a pu être confirmé sur une source officielle 2026. Aucune page officielle n’a été trouvée pour une aide individuelle à la formation, la rémunération des stagiaires, des aides aux apprentis ou à la VAE de la CTG ; la plateforme des aides territoriales (subventions.ctguyane.fr) n’est pas consultable sans JavaScript. L’« aide régionale au permis de conduire » listée sur Mes aides France Travail est en réalité le Fonds d’aide aux jeunes (16-25 ans) : hors champ. L’ancien site cariforef.oprf.fr n’affiche plus qu’une page serveur par défaut.",
+    "Guyane : une « Campagne 2026 de demande de subvention pour les Structures d’Insertion par l’Activité Économique » existe sur ctguyane.fr mais n’a pas été analysée (temps limité).",
+    "Mayotte : le site du Département (désormais signé « Département-Région de Mayotte ») a été refondu et ne comporte plus de rubrique formation ; l’ancienne page « Éducation & Formation » est en 404 et le portail d’aides lecd976soutientmonprojet.fr est une application JavaScript dont l’API exige une authentification. L’entrée programme est donc en a_confirmer. Le cofinancement de formations en mobilité avec LADOM par le Département, mentionné dans des résultats de recherche, n’a pas pu être vérifié.",
+    "LADOM : le Passeport pour la mobilité de la formation professionnelle est intégré une seule fois (nat-ladom-passeport-mobilite-formation) avec criteria.regions = 01, 02, 03, 04, 06.",
+    "Vérification indépendante du 06/10/2026 (rapport : verification-regions-5.md) : 74 extraits sur 74 retrouvés mot pour mot sur les pages rouvertes ce jour. Aides corrigées : nat-ladom-passeport-mobilite-formation (précision UE/EEE), r02-aide-vae (statut a_confirmer, montant non chiffré), r02-aide-formation-mobilite-reste-du-monde (précision « partielle ou totale »).",
+    "Convention de montant : pour les aides « dans la limite de X € » dont la source ne publie aucun taux (r01-afmc, r02-aide-formation-mobilite-reste-du-monde), pourcentage = 100 signifie « jusqu’au plafond », pas un taux officiel.",
+    "État des sites au 06/10/2026 : agefiph.fr répond (HTTP 200) alors que la note ci-dessus mentionnait un 503 : les liens régionaux Agefiph restent à ajouter aux portails ; guadeloupeformation.com reste injoignable ; mes-aides.francetravail.fr a renvoyé 502 vers 10 h 40 après avoir répondu à 8 h 07 (pages lues à 8 h 07)."
+  ]
+}

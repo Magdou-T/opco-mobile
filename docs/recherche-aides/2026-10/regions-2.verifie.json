@@ -1,0 +1,2357 @@
+{
+  "meta": {
+    "perimetre": "Aides des Conseils régionaux liées à la formation professionnelle – Bretagne (53), Pays de la Loire (52), Centre-Val de Loire (24), Bourgogne-Franche-Comté (27)",
+    "date_verification": "2026-10-06",
+    "auteur": "agent regions-2 ; vérifié le 2026-10-06 par un vérificateur indépendant",
+    "nb_aides": 25
+  },
+  "aides": [
+    {
+      "id": "r53-programme-regional",
+      "nom": "Programme régional de formation Bretagne (QUALIF Emploi programme, PRÉPA, QUALIF Sanitaire et Social)",
+      "financeur": "region",
+      "financeur_nom": "Région Bretagne",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région Bretagne finance des formations collectives pour les personnes en recherche d'emploi : formations qualifiantes QUALIF Emploi (près de 300 parcours dans 15 secteurs qui recrutent), formations préparatoires PRÉPA et formations aux diplômes d'État du sanitaire et du social (QUALIF Sanitaire et Social). Les frais de formation sont versés directement à l'organisme de formation.",
+      "criteres": {
+        "regions": [
+          "53"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "QUALIF Emploi programme : avoir moins de 26 ans et être en recherche d'emploi, ou avoir 26 ans et plus et être inscrit à France Travail.",
+        "La formation doit figurer au programme régional (QUALIF Emploi programme, PRÉPA Avenir, PRÉPA Projet, PRÉPA Clés) : vérifier sur le catalogue du GREF Bretagne.",
+        "QUALIF Sanitaire et Social : demandeur d'emploi inscrit à France Travail, sans condition d'âge, inscrit dans un établissement agréé par la Région préparant un diplôme d'État du sanitaire ou du social.",
+        "Admission selon les modalités de sélection de l'organisme de formation.",
+        "À confirmer : la fiche de la Région Bretagne (bretagne.bzh, protégé par Cloudflare) n'a pas pu être relue le 06/10/2026 et aucune copie locale exploitable n'existe ; informations relevées le 05/10/2026, à vérifier auprès de la Région avant toute décision."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "r53-qualif-emploi-individuel"
+        ],
+        "note": "Pendant la formation, l'aide financière régionale (r53-aide-financiere) peut être demandée par les stagiaires non indemnisés par l'assurance chômage."
+      },
+      "demarches": [
+        "Rechercher la formation sur le catalogue du GREF Bretagne (filtre « Dispositif de financement »).",
+        "S'inscrire directement auprès de l'organisme de formation qui met en œuvre la formation.",
+        "Pendant la formation, déposer si besoin la demande d'aide financière sur le portail des aides de la Région."
+      ],
+      "url_demarche": "https://www.formation.gref-bretagne.com/liste-des-offres",
+      "sources": [
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi/",
+          "titre": "QUALIF Emploi Programme · Région Bretagne",
+          "extrait": "QUALIF Emploi programme Aide Régionale Aide disponible"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi/",
+          "titre": "QUALIF Emploi Programme · Région Bretagne",
+          "extrait": "Les coûts de la formation sont intégralement pris en charge par la Région Bretagne et versés directement à l’organisme de formation."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi/",
+          "titre": "QUALIF Emploi Programme · Région Bretagne",
+          "extrait": "Les personnes de moins de 26 ans en recherche d’emploi Les personnes de 26 ans et plus, inscrites à France Travail"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi/",
+          "titre": "QUALIF Emploi Programme · Région Bretagne",
+          "extrait": "Près de 300 formations qualifiantes sont identifiées et concernent 15 secteurs d’activité qui recrutent en Bretagne :"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-sanitaire-et-social/",
+          "titre": "QUALIF Sanitaire et Social · Région Bretagne",
+          "extrait": "Demandeurs d’emploi (quelle que soit la catégorie et sans conditions d’âge) inscrits à France Travail"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-sanitaire-et-social/",
+          "titre": "QUALIF Sanitaire et Social · Région Bretagne",
+          "extrait": "Le financement des frais pédagogiques des formations initiales dispensées par certains organismes de formation publics et privés."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r53-qualif-emploi-individuel",
+      "nom": "QUALIF Emploi individuel",
+      "financeur": "region",
+      "financeur_nom": "Région Bretagne",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide individuelle de la Région Bretagne qui prend en charge une partie des frais pédagogiques d'une formation qualifiante enregistrée au RNCP (niveaux 3 à 6) non incluse dans le programme QUALIF Emploi, en complément du CPF mobilisé en priorité. L'aide est versée à l'organisme de formation selon l'assiduité.",
+      "criteres": {
+        "regions": [
+          "53"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 18,
+        "inscrit_france_travail": true,
+        "niveau_certification_min": 3,
+        "niveau_certification_max": 6,
+        "certifications": [
+          "rncp"
+        ]
+      },
+      "conditions": [
+        "Être inscrit à France Travail Bretagne et suivi par un conseiller en évolution professionnelle : 18-26 ans sorti du système scolaire depuis plus d'un an (6 mois pour les formations de niveau 3 et 4) ou plus de 26 ans ; ou être en contrat de sécurisation professionnelle.",
+        "Résider en Bretagne depuis plus de 6 mois avant l'entrée en formation.",
+        "Formation diplômante enregistrée au RNCP, du niveau 3 (CAP) au niveau 6 ; au-delà du niveau 4 (bac), justifier d'au moins 8 trimestres cotisés d'activité professionnelle.",
+        "Formation se déroulant en Bretagne (sauf niveaux 3 et 4 non proposés en Bretagne), dispensée par un organisme certifié Qualiopi ou une université accréditée, avec au moins 20 % de présentiel pour les formations à distance.",
+        "Mobiliser d'abord son CPF ; un demandeur d'emploi également auto-entrepreneur sollicite d'abord son Fonds d'assurance formation.",
+        "Exclus : formations déjà financées par la Région (QUALIF Emploi programme, QUALIF Sanitaire et Social), apprentissage, coaching ou bien-être, formations hors RNCP et formations de niveau 7.",
+        "Priorité possible aux personnes en situation de handicap, sans certification ou avec des contraintes familiales particulières.",
+        "À confirmer : la fiche de la Région Bretagne (bretagne.bzh, protégé par Cloudflare) n'a pas pu être relue le 06/10/2026 et aucune copie locale exploitable n'existe ; informations relevées le 05/10/2026, à vérifier auprès de la Région avant toute décision."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Prise en charge par la Région d'une partie des frais pédagogiques, en complément du CPF ; plafond à confirmer (3 000 € relevé le 05/10/2026, non revérifié le 06/10/2026)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "r53-programme-regional"
+        ],
+        "note": "Le CPF doit être mobilisé en priorité, l'aide régionale intervient en complément. L'aide financière régionale (r53-aide-financiere) peut être demandée pendant la formation."
+      },
+      "demarches": [
+        "Retirer la fiche de validation du projet de formation auprès de la Région Bretagne (info.formationpro@bretagne.bzh, 02 23 20 60 00).",
+        "Faire valider le projet par la Mission locale, France Travail, Cap emploi ou la structure d'accompagnement RSA.",
+        "Choisir l'organisme de formation et lui demander de saisir la demande sur le portail des aides de la Région, puis compléter ses données et pièces justificatives.",
+        "Le dossier complet doit être transmis à la Région avant l'entrée en formation (instruction de 15 jours en moyenne)."
+      ],
+      "url_demarche": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+      "sources": [
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "QUALIF Emploi individuel Aide Régionale Aide disponible"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "Cette aide consiste à la prise en charge par la Région des frais pédagogiques, à hauteur de 3 000 euros maximum."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "Âgées de 18 à 26 ans, sorties du système scolaire depuis plus d’un an (6 mois pour les formations de niveau 3 et 4) et suivies par un.e conseiller.ère en évolution professionnelle ;"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "Les formations professionnelles diplômantes, du niveau 3 (CAP) au niveau 6 (licence, master 1). Pour les formations supérieures au niveau 4 (bac), il faut justifier d’au moins 8 trimestres cotisés d’activité professionnelle."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "Les candidats doivent justifier d’une résidence en Bretagne de plus de 6 mois avant la date d’entrée en formation."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "Avoir un minimum de 20 % en présentiel pour les formations à distance."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "A noter : vous devez mobiliser votre CPF (Compte Personnel de Formation) en priorité pour financer votre formation. L’aide de la Région interviendra en complément."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi-individuel/",
+          "titre": "QUALIF Emploi individuel · Région Bretagne",
+          "extrait": "Si la demande est complète, le délai d’instruction est de 15 jours en moyenne."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r53-aide-financiere",
+      "nom": "Aide financière à la formation professionnelle (stagiaires des formations régionales)",
+      "financeur": "region",
+      "financeur_nom": "Région Bretagne",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide mensuelle de la Région Bretagne pour les stagiaires non indemnisés par l'assurance chômage qui suivent une formation financée par la Région. Elle comprend un montant selon le quotient familial, un forfait restauration et un forfait mobilité, avec un complément pour la garde d'enfant(s) des parents isolés ; la couverture sociale est assurée.",
+      "criteres": {
+        "regions": [
+          "53"
+        ],
+        "perimetre_region": "beneficiaire",
+        "duree_min_heures": 70
+      },
+      "conditions": [
+        "Suivre une formation financée par la Région Bretagne : QUALIF Emploi (programme, individuel, action territoriale), PRÉPA Avenir, PRÉPA Projet, accompagnement à la qualification, langue bretonne ou certaines formations QUALIF Sanitaire et Social (aide-soignant, auxiliaire de puériculture, ambulancier, AES, TISF, moniteur-éducateur).",
+        "Formation d'au moins 70 heures.",
+        "Être inscrit à France Travail et ne pas percevoir d'allocation chômage (inscription non obligatoire avant 26 ans).",
+        "Non éligibles : demandeurs d'emploi indemnisés au titre de l'allocation chômage, personnes en contrat de sécurisation professionnelle, stagiaires de PRÉPA Clés.",
+        "Montant selon le quotient familial (avis d'imposition) ; à défaut d'avis d'imposition, tranche socle.",
+        "Complément garde d'enfant(s) : parent seul élevant au moins un enfant de moins de 12 ans à l'entrée en formation."
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 411,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "De 411 € à 987 € par mois pour une formation à temps plein, selon le quotient familial et la distance domicile-formation (forfaits restauration et mobilité inclus) ; complément de 80 € à 120 € pour la garde d'enfant(s) des parents isolés"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec le RSA et les aides sociales (APL, allocations familiales) ; non cumulable avec les bourses sanitaires et sociales ni avec une allocation chômage."
+      },
+      "demarches": [
+        "QUALIF Emploi programme, actions territoriales, PRÉPA Avenir/Projet et langue bretonne : la demande est pré-créée, valider le courriel reçu puis compléter le dossier sur le portail des aides.",
+        "QUALIF Emploi individuel, accompagnement à la qualification et QUALIF Sanitaire et Social : créer son compte et saisir la demande sur le portail des aides de la Région.",
+        "Déposer la demande à partir du jour d'entrée en formation et au plus tard le dernier jour de formation."
+      ],
+      "url_demarche": "https://www.bretagne.bzh/aides/fiches/aide-financiere/",
+      "sources": [
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/aide-financiere/",
+          "titre": "Aide financière à la formation professionnelle · Région Bretagne",
+          "extrait": "Le montant de l’aide varie de 411 € à 987 € par versement, en fonction de la durée de la formation et du quotient familial (calculé à partir de l’impôt sur le revenu)."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/aide-financiere/",
+          "titre": "Aide financière à la formation professionnelle · Région Bretagne",
+          "extrait": "L’aide financière peut être complétée par une aide à la garde d’enfant(s) pour les personnes seules élevant 1 ou plusieurs enfants de moins de 12 ans à l’entrée en formation. Le montant de ce complément varie de 80 € à 120 € par versement."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/aide-financiere/",
+          "titre": "Aide financière à la formation professionnelle · Région Bretagne",
+          "extrait": "Suivre une formation d’au moins 70 heures. Etre inscrit auprès de France Travail et ne pas recevoir d’indemnisation au titre du chômage. Les jeunes de moins de 26 ans n’ont pas l’obligation d’être inscrits auprès de France Travail."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/aide-financiere/",
+          "titre": "Aide financière à la formation professionnelle · Région Bretagne",
+          "extrait": "Le stagiaire reçoit l’aide chaque mois, par virement bancaire, pendant toute la durée de la formation."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/aide-financiere/",
+          "titre": "Aide financière à la formation professionnelle · Région Bretagne",
+          "extrait": "L’aide financière n’est pas cumulable avec les bourses sanitaires et sociales."
+        },
+        {
+          "url": "https://data.megalis.bretagne.bzh/OpenData/233500016/Deliberation/2026/1068904/b60d2d401f8707f16725cf66b961bc71711364d28fb69cd657e553fab45df8af.pdf",
+          "titre": "Région Bretagne – Commission permanente du 30 mars 2026, délibération 26_0206_02 (Aide aux apprenants)",
+          "extrait": "d’ADOPTER le règlement de l’aide financière et de fixer la durée de validité jusque 31 décembre 2028"
+        },
+        {
+          "url": "https://data.megalis.bretagne.bzh/OpenData/233500016/Deliberation/2026/1068904/b60d2d401f8707f16725cf66b961bc71711364d28fb69cd657e553fab45df8af.pdf",
+          "titre": "Région Bretagne – Commission permanente du 30 mars 2026, délibération 26_0206_02 (Aide aux apprenants)",
+          "extrait": "L’aide est composée d’un montant socle de 315 €"
+        },
+        {
+          "url": "https://data.megalis.bretagne.bzh/OpenData/233500016/Deliberation/2026/1068904/b60d2d401f8707f16725cf66b961bc71711364d28fb69cd657e553fab45df8af.pdf",
+          "titre": "Région Bretagne – Commission permanente du 30 mars 2026, délibération 26_0206_02 (Aide aux apprenants)",
+          "extrait": "Le montant de l’aide varie de 411 € à 987 € par versement, en fonction de la durée de la formation et du quotient familial (calculé à partir de l’impôt sur le revenu)."
+        },
+        {
+          "url": "https://data.megalis.bretagne.bzh/OpenData/233500016/Deliberation/2026/1068904/b60d2d401f8707f16725cf66b961bc71711364d28fb69cd657e553fab45df8af.pdf",
+          "titre": "Région Bretagne – Commission permanente du 30 mars 2026, délibération 26_0206_02 (Aide aux apprenants)",
+          "extrait": "Le montant de ce complément varie de 80 € à 120 € par versement."
+        },
+        {
+          "url": "https://data.megalis.bretagne.bzh/OpenData/233500016/Deliberation/2026/1068904/b60d2d401f8707f16725cf66b961bc71711364d28fb69cd657e553fab45df8af.pdf",
+          "titre": "Région Bretagne – Commission permanente du 30 mars 2026, délibération 26_0206_02 (Aide aux apprenants)",
+          "extrait": "1 enfant 80 € 2 enfants 100 € 3 enfants et + 120 €"
+        },
+        {
+          "url": "https://data.megalis.bretagne.bzh/OpenData/233500016/Deliberation/2026/1068904/b60d2d401f8707f16725cf66b961bc71711364d28fb69cd657e553fab45df8af.pdf",
+          "titre": "Région Bretagne – Commission permanente du 30 mars 2026, délibération 26_0206_02 (Aide aux apprenants)",
+          "extrait": "Suivre une formation d’au moins 70 heures."
+        },
+        {
+          "url": "https://data.megalis.bretagne.bzh/OpenData/233500016/Deliberation/2026/1068904/b60d2d401f8707f16725cf66b961bc71711364d28fb69cd657e553fab45df8af.pdf",
+          "titre": "Région Bretagne – Commission permanente du 30 mars 2026, délibération 26_0206_02 (Aide aux apprenants)",
+          "extrait": "Ce règlement concerne les formations démarrant à compter du 1 er mai 2026. Il a une durée de validité jusqu’au 31 décembre 2028."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-05-01",
+        "fin": "2028-12-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r53-pass-transitions",
+      "nom": "PASS Transitions (volet Conseil)",
+      "financeur": "region",
+      "financeur_nom": "Région Bretagne",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "dirigeant"
+      ],
+      "description": "Subvention de la Région Bretagne aux entreprises jusqu'à 50 salariés pour accélérer leurs transitions (environnementale, économique, sociétale, numérique). Le volet Conseil finance des prestations d'étude, d'audit ou de diagnostic relevant des transitions, y compris des dépenses de formation.",
+      "criteres": {
+        "regions": [
+          "53"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_max": 50
+      },
+      "conditions": [
+        "Entreprise jusqu'à 50 salariés, chiffre d'affaires ou bilan n'excédant pas 10 millions d'euros, activité majoritairement tournée vers une clientèle professionnelle.",
+        "Secteurs éligibles : production ou services aux entreprises de production, prestataires de la filière cinéma et audiovisuel, hôtels et campings classés et indépendants.",
+        "Volet Conseil : au moins 6 000 € de dépenses (prestations, dépenses de formation pour la réalisation d'une étude, d'un audit ou d'un diagnostic relevant des transitions).",
+        "Pas plus de 2 aides PASS Transitions en cours simultanément.",
+        "Montants sous réserve du vote du budget 2027.",
+        "À confirmer : la fiche de la Région Bretagne (bretagne.bzh, protégé par Cloudflare) n'a pas pu être relue le 06/10/2026 et aucune copie locale exploitable n'existe ; informations relevées le 05/10/2026, à vérifier auprès de la Région avant toute décision."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Subvention de la Région sur les dépenses éligibles du volet Conseil ; taux et montants à confirmer (50 % des dépenses, aide de 3 000 € à 10 000 € relevés le 05/10/2026, non revérifiés le 06/10/2026)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Les autres volets du PASS Transitions (Investissements, Ressources humaines) ne financent pas de formation."
+      },
+      "demarches": [
+        "Contacter la Direction du développement économique de la Région Bretagne (projets.entreprises@bretagne.bzh, 02 99 27 12 56).",
+        "Déposer la demande d'aide régionale en ligne depuis la fiche du dispositif.",
+        "Versement en 2 tranches : 50 % de l'aide quand 50 % des dépenses sont réalisées, solde quand 100 % des dépenses sont réalisées."
+      ],
+      "url_demarche": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+      "sources": [
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Aide Régionale Date limite : 31/12/2027"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Le PASS Transitions cible les entreprises employant jusqu’à 50 salariés, pour lesquelles il est parfois plus compliqué d’engager ces démarches."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Sous réserve du vote du budget 2027. Taux de l’aide : 50 % des dépenses éligibles"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Volet 2. Conseil (min. 6 000 € de dépenses) : aide comprise entre 3 000 € et 10 000 €"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Volet 2. Conseil : prestations, dépenses de formation pour la réalisation d’une étude, audit, diagnostic, relevant des transitions."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Avoir un chiffre d’affaires ou un bilan n’excédant pas 10 millions d’euros."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Mais, elle ne peut pas avoir plus de 2 aides en cours (durées de programmes non échues et/ou aide non soldée)."
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/pass-transitions/",
+          "titre": "PASS Transitions · Région Bretagne",
+          "extrait": "Un acompte de 50 % de l’aide, dès que 50 % des dépenses sont réalisées. Le solde dès que 100 % des dépenses sont réalisées."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": "2027-12-31"
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r52-programme-regional",
+      "nom": "Programme régional de formation des Pays de la Loire (1 emploi = 1 formation, PRÉPA)",
+      "financeur": "region",
+      "financeur_nom": "Région Pays de la Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région des Pays de la Loire organise et finance l'offre de formation des demandeurs d'emploi : formations « 1 emploi = 1 formation » construites avec des employeurs qui s'engagent à recruter, et parcours PRÉPA (PRÉPA Clés Avenir, PRÉPA Avenir Sup) pour préparer un projet professionnel. Les formations sont dispensées par des organismes titulaires des marchés de la Région.",
+      "criteres": {
+        "regions": [
+          "52"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être en recherche d'emploi (PRÉPA Clés Avenir : plus de 16 ans et niveau 4 maximum, ou public prioritaire).",
+        "La formation doit figurer au programme régional (organisme prestataire de la Région) ; les formations « 1 emploi = 1 formation » correspondent à des intentions d'embauche d'employeurs.",
+        "Signature de la charte des droits et devoirs du stagiaire : la rémunération perçue est à rembourser en cas d'abandon sans motif légitime."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération régionale possible pour les stagiaires non indemnisés par l'assurance chômage (r52-remuneration-stagiaires) et fonds social d'urgence (r52-fonds-social-urgence)."
+      },
+      "demarches": [
+        "Rechercher une formation sur « Mon emploi en Pays de la Loire » (rubrique Je me forme) ou auprès de son conseiller France Travail, Mission locale ou Cap emploi.",
+        "Se positionner auprès de l'organisme de formation prestataire de la Région.",
+        "Constituer le dossier de rémunération avec l'organisme de formation dès le premier jour de formation."
+      ],
+      "url_demarche": "https://monemploi-paysdelaloire.francetravail.fr/je-me-forme",
+      "sources": [
+        {
+          "url": "https://www.paysdelaloire.fr/formation-et-emploi/formation-professionnelle/je-trouve-une-formation",
+          "titre": "Formation professionnelle : Trouver une formation | Région Pays de la Loire",
+          "extrait": "La Région organise l’offre régionale de formation professionnelle des demandeurs d’emploi"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/formation-et-emploi/formation-professionnelle/je-trouve-une-formation",
+          "titre": "Formation professionnelle : Trouver une formation | Région Pays de la Loire",
+          "extrait": "Désormais, chaque formation proposée correspond à un besoin réel d'entreprises qui s'engagent à recruter."
+        },
+        {
+          "url": "https://monemploi-paysdelaloire.francetravail.fr/je-me-forme",
+          "titre": "Se former sur les métiers en Pays de la Loire - Mon emploi en Pays de la Loire",
+          "extrait": "Accédez à une offre de formation adaptée et financée"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prepa-cles-avenir",
+          "titre": "PRÉPA Clés Avenir | Région Pays de la Loire",
+          "extrait": "personnes en recherche d’emploi de plus de 16 ans de niveau 4 (bac) maximum ;"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prepa-cles-avenir",
+          "titre": "PRÉPA Clés Avenir | Région Pays de la Loire",
+          "extrait": "Suivre sa formation dans un Centre de Formation prestataire de la Région des Pays de la Loire dans le cadre de marché public."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r52-1-emploi-1-formation",
+      "nom": "Dispositif 1 emploi = 1 formation",
+      "financeur": "region",
+      "financeur_nom": "Région Pays de la Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations financées par la Région des Pays de la Loire et le FSE+, construites avec des employeurs qui s'engagent à recruter les stagiaires à l'issue de la formation. L'employeur participe à la sélection, accueille les stagiaires en immersion et les recrute en CDI, en CDD d'au moins six mois ou en contrat en alternance.",
+      "criteres": {
+        "regions": [
+          "52"
+        ],
+        "perimetre_region": "entreprise",
+        "contrats": [
+          "cdi",
+          "cdd",
+          "alternance"
+        ]
+      },
+      "conditions": [
+        "L'employeur exprime au préalable une intention d'embauche : la session n'est commandée à l'organisme de formation titulaire du marché régional qu'à cette condition.",
+        "Contrat proposé à l'issue d'au moins 24 heures hebdomadaires : CDI, CDD d'au moins six mois ou contrat en alternance.",
+        "L'employeur accueille les stagiaires en immersion et peut participer à la sélection des candidats et au jury de fin de formation.",
+        "Candidats : personnes en recherche d'emploi, en priorité demandeurs d'emploi de longue durée ou non qualifiés, bénéficiaires du RSA, travailleurs handicapés, résidents des quartiers prioritaires et seniors."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation des candidats financée par la Région et le FSE+ lorsque la session est organisée dans le cadre du dispositif"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Les stagiaires non indemnisés peuvent percevoir la rémunération régionale (r52-remuneration-stagiaires)."
+      },
+      "demarches": [
+        "Déposer son offre d'emploi et son besoin de recrutement sur « Mon emploi en Pays de la Loire » ou auprès de France Travail (accueil entreprises).",
+        "Construire la session avec l'organisme de formation titulaire du marché régional (sélection, immersion, jury).",
+        "Recruter les stagiaires à l'issue de la formation."
+      ],
+      "url_demarche": "https://monemploi-paysdelaloire.francetravail.fr/",
+      "sources": [
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/dispositif-1-emploi-1-formation",
+          "titre": "Dispositif 1 emploi = 1 formation | Région Pays de la Loire",
+          "extrait": "Les sessions de formation ne sont désormais commandées aux organismes de formation titulaires des marchés Région que sous condition d’intentions d’embauche préalables des employeurs."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/dispositif-1-emploi-1-formation",
+          "titre": "Dispositif 1 emploi = 1 formation | Région Pays de la Loire",
+          "extrait": "Les formations devront conduire à un contrat d’au moins 24 heures hebdomadaires, sous forme de CDI, de CDD d’au moins six mois ou de contrats en alternance."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/dispositif-1-emploi-1-formation",
+          "titre": "Dispositif 1 emploi = 1 formation | Région Pays de la Loire",
+          "extrait": "La formation est cofinancée par la Région et le Fonds social européen plus (FSE+)."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/economie-et-innovation/former-recruter",
+          "titre": "Former, Recruter | Région Pays de la Loire",
+          "extrait": "chaque formation financée corresponde à une intention d’embauche formulée par un employeur de la région"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r52-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle continue (Région Pays de la Loire)",
+      "financeur": "region",
+      "financeur_nom": "Région Pays de la Loire",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle versée par la Région des Pays de la Loire aux demandeurs d'emploi non indemnisés par l'assurance chômage qui suivent une formation agréée relevant de ses programmes collectifs ou individuels, avec couverture sociale et indemnité de transport.",
+      "criteres": {
+        "regions": [
+          "52"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16
+      },
+      "conditions": [
+        "Être demandeur d'emploi non indemnisé par l'assurance chômage à l'entrée en formation.",
+        "Suivre une formation agréée par la Région au titre de la rémunération des stagiaires.",
+        "Montant de 1 002,02 € pour certaines situations (personne divorcée, veuve ou séparée depuis moins de 3 ans, parent assumant seul la charge d'un enfant, femme seule enceinte) ; calcul sur les salaires antérieurs pour une personne reconnue travailleur handicapé justifiant de 6 mois d'activité salariée sur 12 mois.",
+        "Indemnité de transport : 35 € par mois de 15 à 250 km entre domicile et lieu de stage, 55 € au-delà de 250 km.",
+        "Remboursement de la rémunération en cas d'abandon sans motif légitime ou de renvoi pour faute lourde."
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 566.17,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Barème mensuel au 1er avril 2026 : 226,48 € (16/18 ans), 566,17 € (18/25 ans), 775,65 € (26 ans et plus) ; 1 002,02 € pour certaines situations familiales",
+        "majorations": [
+          {
+            "criteres": {
+              "age_min": 26
+            },
+            "valeur": 775.65,
+            "libelle": "775,65 € par mois à partir de 26 ans"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 226.48,
+            "libelle": "226,48 € par mois avant 18 ans"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Réservée aux demandeurs d'emploi non indemnisés par l'assurance chômage. Le fonds social régional d'urgence (r52-fonds-social-urgence) peut s'y ajouter."
+      },
+      "demarches": [
+        "L'organisme de formation remet le dossier de demande de rémunération dès le premier jour du stage et accompagne sa constitution.",
+        "La demande est faite en ligne sur la plateforme de rémunération de la Région (gestion assurée par Docaposte pour le compte de la Région).",
+        "Le dossier est instruit sur la base de la situation du stagiaire au premier jour de formation."
+      ],
+      "url_demarche": "https://www.paysdelaloire.fr/les-aides/remuneration-des-stagiaires-de-la-formation-professionnelle-continue",
+      "sources": [
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/remuneration-des-stagiaires-de-la-formation-professionnelle-continue",
+          "titre": "Rémunération des stagiaires de la formation professionnelle continue | Région Pays de la Loire",
+          "extrait": "la Région attribue, au titre du Code du travail, une rémunération publique de stage pour les demandeurs d'emploi en formation professionnelle relevant de ses programmes collectifs ou individuels, lorsque ces stagiaires ne sont pas indemnisés par l’assurance chômage."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/sites/default/files/aides/eb1d4c5c-312f-11ea-9e5e-c38826e5d50c/subvention_baremes-2026-et-transport-2026_eb1d4c5c_annexe-26.pdf",
+          "titre": "Région Pays de la Loire – Barèmes 2026 et transport 2026 (rémunération des stagiaires)",
+          "extrait": "continue barèmes mensuels au 1er avril 2026"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/sites/default/files/aides/eb1d4c5c-312f-11ea-9e5e-c38826e5d50c/subvention_baremes-2026-et-transport-2026_eb1d4c5c_annexe-26.pdf",
+          "titre": "Région Pays de la Loire – Barèmes 2026 et transport 2026 (rémunération des stagiaires)",
+          "extrait": "Demandeur d'emploi 16/18 ans 226,48 € Demandeur d'emploi 18/25 ans 566,17 € Demandeur d'emploi 26 ans et + 775,65 €"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/sites/default/files/aides/eb1d4c5c-312f-11ea-9e5e-c38826e5d50c/subvention_baremes-2026-et-transport-2026_eb1d4c5c_annexe-26.pdf",
+          "titre": "Région Pays de la Loire – Barèmes 2026 et transport 2026 (rémunération des stagiaires)",
+          "extrait": "Personne assurant seule la charge d'au moins un enfant - Femme seule en état de grossesse 1 002,02 €"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/sites/default/files/aides/eb1d4c5c-312f-11ea-9e5e-c38826e5d50c/subvention_baremes-2026-et-transport-2026_eb1d4c5c_annexe-26.pdf",
+          "titre": "Région Pays de la Loire – Barèmes 2026 et transport 2026 (rémunération des stagiaires)",
+          "extrait": "Personne reconnue travailleur handicapé et justifiant d'au moins 6 mois d'activité salariée sur une période de 12 mois"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/sites/default/files/aides/eb1d4c5c-312f-11ea-9e5e-c38826e5d50c/subvention_baremes-2026-et-transport-2026_eb1d4c5c_annexe-26.pdf",
+          "titre": "Région Pays de la Loire – Barèmes 2026 et transport 2026 (rémunération des stagiaires)",
+          "extrait": "15 ≤ Distance < 250 km 35 € Distance ≥ 250 km 55 €"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/remuneration-des-stagiaires-de-la-formation-professionnelle-continue",
+          "titre": "Rémunération des stagiaires de la formation professionnelle continue | Région Pays de la Loire",
+          "extrait": "L’organisme de formation remet au stagiaire demandeur d’emploi un dossier de demande de rémunération dès le 1er jour du stage."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "Vérifié le 01 avril 2026 - Service Public / Direction de l'information légale et administrative (Premier ministre)"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "Moins de 18 ans Vous percevez 226,48 € par mois. 18 à 25 ans Vous percevez 566,17 € par mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "26 ans et plus Vous percevez 775,65 € par mois."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r52-fonds-social-urgence",
+      "nom": "Fonds social régional d'urgence (FSU)",
+      "financeur": "region",
+      "financeur_nom": "Région Pays de la Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Allocation ponctuelle de la Région des Pays de la Loire pour les stagiaires demandeurs d'emploi en grande difficulté financière, afin d'éviter l'abandon de la formation : elle couvre un besoin précis lié à la formation (logement, restauration, transport...).",
+      "criteres": {
+        "regions": [
+          "52"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi en formation financée par la Région et agréée à la rémunération, ou indemnisé par l'assurance chômage en formation sanitaire et sociale post-bac, ou stagiaire d'un établissement de réadaptation professionnelle agréé.",
+        "Besoin obligatoirement lié à la formation, pour des frais d'au moins 250 €.",
+        "Aide renouvelable une fois, dans la limite de l'enveloppe votée par la Région.",
+        "Dossier obligatoirement transmis par l'organisme de formation via le portail des aides."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Allocation ponctuelle versée en une fois pour des frais liés à la formation d'au moins 250 € ; montant fixé après instruction"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Complète la rémunération des stagiaires ; renouvelable une fois."
+      },
+      "demarches": [
+        "S'adresser au référent fonds social d'urgence de son organisme de formation.",
+        "L'organisme dépose le dossier sur le portail des aides de la Région.",
+        "Après décision, l'aide est versée en une fois sur le compte bancaire du stagiaire."
+      ],
+      "url_demarche": "https://www.paysdelaloire.fr/les-aides/fonds-social-regional-durgence-fsu",
+      "sources": [
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/fonds-social-regional-durgence-fsu",
+          "titre": "Fonds social régional d'urgence (FSU) | Région Pays de la Loire",
+          "extrait": "Le Fonds social d’urgence est une allocation ponctuelle, versée en une seule fois."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/fonds-social-regional-durgence-fsu",
+          "titre": "Fonds social régional d'urgence (FSU) | Région Pays de la Loire",
+          "extrait": "Cette allocation doit répondre à un besoin précis obligatoirement lié à la formation (logement, restauration, transport…) et couvrir des frais d’un montant supérieur ou égal à 250 €."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/fonds-social-regional-durgence-fsu",
+          "titre": "Fonds social régional d'urgence (FSU) | Région Pays de la Loire",
+          "extrait": "Elle est renouvelable une fois, sous réserve de remplir à nouveau les conditions."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/fonds-social-regional-durgence-fsu",
+          "titre": "Fonds social régional d'urgence (FSU) | Région Pays de la Loire",
+          "extrait": "à l’ensemble des apprenants demandeurs d’emploi en formation financée par la Région et agréée à la rémunération de stagiaires de la formation professionnelle continue,"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/fonds-social-regional-durgence-fsu",
+          "titre": "Fonds social régional d'urgence (FSU) | Région Pays de la Loire",
+          "extrait": "Dans la limite de l'enveloppe votée par la Région sur ce dispositif."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r52-poei-region",
+      "nom": "Préparation opérationnelle à l'emploi individuelle (POEI) financée par la Région Pays de la Loire",
+      "financeur": "region",
+      "financeur_nom": "Région Pays de la Loire (mise en œuvre France Travail)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "En Pays de la Loire, la Région finance la POEI mise en œuvre par France Travail : formation d'adaptation d'un demandeur d'emploi avant son embauche, en tutorat dans l'entreprise et/ou en organisme de formation, pour un contrat d'au moins 6 mois (4 mois pour un contrat saisonnier).",
+      "criteres": {
+        "regions": [
+          "52"
+        ],
+        "perimetre_region": "entreprise",
+        "inscrit_france_travail": true,
+        "contrats": [
+          "cdi",
+          "cdd",
+          "interim",
+          "alternance"
+        ]
+      },
+      "conditions": [
+        "Demandeur d'emploi inscrit à France Travail.",
+        "Employeur à jour de ses cotisations sociales, sans licenciement économique dans les 12 derniers mois, ayant déposé une offre auprès de France Travail et s'engageant à embaucher.",
+        "Embauche à l'issue : CDI, CDD d'au moins 6 mois, contrat de professionnalisation ou d'apprentissage de plus de 6 mois, contrat saisonnier d'au moins 4 mois, CDI intérimaire ou missions d'au moins 6 mois au total.",
+        "Durée maximale financée : 300 h (100 % en tutorat ou contrat saisonnier), 450 h (organisme de formation, 50 % maximum en entreprise), 600 h pour les publics prioritaires du Pacte régional d'investissement dans les compétences (PRIC).",
+        "Plan de formation construit avec le conseiller France Travail et partagé avec le demandeur d'emploi."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation préalable à l'embauche financée dans le cadre de la POEI, dans la limite de 300, 450 ou 600 heures selon le cas ; montant selon les règles de la POEI de France Travail"
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Déclinaison régionale de la POEI nationale de France Travail : à ne pas cumuler avec l'entrée POEI nationale (à fusionner ou à privilégier pour un employeur des Pays de la Loire)."
+      },
+      "demarches": [
+        "Déposer une offre d'emploi mentionnant « POEI » sur le site de France Travail ou contacter son agence (3995).",
+        "Construire le parcours de formation avec le conseiller France Travail.",
+        "Déposer la demande dématérialisée sur le site de France Travail."
+      ],
+      "url_demarche": "https://www.paysdelaloire.fr/les-aides/preparation-operationnelle-lemploi-individuelle-poei",
+      "sources": [
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/preparation-operationnelle-lemploi-individuelle-poei",
+          "titre": "PRÉPARATION OPÉRATIONNELLE À L'EMPLOI INDIVIDUELLE (POEI) | Région Pays de la Loire",
+          "extrait": "La Région des Pays de la Loire soutient les employeurs qui recrutent en les formant les demandeurs d’emploi. Aussi, elle finance le dispositif Préparation Opérationnelle à l'Emploi Individuelle (POEI) mis en œuvre par France Travail."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/preparation-operationnelle-lemploi-individuelle-poei",
+          "titre": "PRÉPARATION OPÉRATIONNELLE À L'EMPLOI INDIVIDUELLE (POEI) | Région Pays de la Loire",
+          "extrait": "300 heures de formation pour une formation 100% en tutorat ou dans le cadre d’un contrat saisonnier, 450 heures de formation délivrée par un organisme de formation totalement ou partiellement (Max 50% de temps en entreprise),"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/preparation-operationnelle-lemploi-individuelle-poei",
+          "titre": "PRÉPARATION OPÉRATIONNELLE À L'EMPLOI INDIVIDUELLE (POEI) | Région Pays de la Loire",
+          "extrait": "600 heures de formation pour l’embauche et la formation de publics prioritaires visés par le Pacte régional d’investissement dans les compétences (PRIC)."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/preparation-operationnelle-lemploi-individuelle-poei",
+          "titre": "PRÉPARATION OPÉRATIONNELLE À L'EMPLOI INDIVIDUELLE (POEI) | Région Pays de la Loire",
+          "extrait": "qui n’ont pas licencié dans les 12 derniers mois pour motif économique,"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/preparation-operationnelle-lemploi-individuelle-poei",
+          "titre": "PRÉPARATION OPÉRATIONNELLE À L'EMPLOI INDIVIDUELLE (POEI) | Région Pays de la Loire",
+          "extrait": "ou un Contrat à durée déterminée (CDD) d'au moins 6 mois,"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/preparation-operationnelle-lemploi-individuelle-poei",
+          "titre": "PRÉPARATION OPÉRATIONNELLE À L'EMPLOI INDIVIDUELLE (POEI) | Région Pays de la Loire",
+          "extrait": "ou un Contrat saisonnier à durée déterminée d'une durée minimale de 4 mois,"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r52-pcrh",
+      "nom": "Prestation de conseil en ressources humaines (PCRH) – part Région Pays de la Loire",
+      "financeur": "region",
+      "financeur_nom": "Région Pays de la Loire (cofinancement État)",
+      "categorie": "service_gratuit",
+      "projets": [
+        "formation_salarie",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "dirigeant",
+        "salarie"
+      ],
+      "description": "Accompagnement RH réalisé par un prestataire extérieur (recrutement et intégration, GPEC, organisation du travail, dialogue social, professionnalisation de la fonction RH, mutations liées aux transitions), cofinancé par l'État et la Région des Pays de la Loire. La Région prend en charge jusqu'à 40 % du coût pour les entreprises de moins de 11 salariés, en plus des 50 % de l'État.",
+      "criteres": {
+        "regions": [
+          "52"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_max": 10
+      },
+      "conditions": [
+        "Entreprise ou association de moins de 11 salariés n'appartenant pas à un groupe de 250 salariés et plus (les entreprises de 11 à 249 salariés relèvent de la seule part État).",
+        "Prestation de conseil réalisée par un prestataire extérieur : accompagnement court (1 à 10 jours), approfondi (10 à 30 jours) ou PCRH+ (1 à 2 jours) pour le recrutement et la fidélisation.",
+        "Actions débutées entre le 1er janvier 2026 et le 31 décembre 2026.",
+        "Entreprises relevant d'Uniformation : pas de demande de financement régional."
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 40,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "La Région finance jusqu'à 40 % des coûts de conseil (HT) pour les entreprises de moins de 11 salariés ; avec la part de l'État (50 %), le financement public atteint 90 % au maximum"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec la part État de la PCRH (50 %, plafonnée à 15 000 €) ; l'OPCO peut compléter. Prestation cofinancée et non entièrement gratuite : un reste à charge est possible."
+      },
+      "demarches": [
+        "Contacter son OPCO de rattachement, interlocuteur privilégié pour mobiliser la PCRH (ou la DDETS de son département).",
+        "Choisir un prestataire dans la liste publiée.",
+        "Pour la PCRH+ (recrutement et fidélisation) : remplir le formulaire de demande en ligne ; le prestataire prend contact dans les 5 jours."
+      ],
+      "url_demarche": "https://www.paysdelaloire.fr/les-aides/prestation-de-conseil-en-ressources-humaines-pcrh",
+      "sources": [
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prestation-de-conseil-en-ressources-humaines-pcrh",
+          "titre": "Prestation de conseil en ressources humaines (PCRH) | Région Pays de la Loire",
+          "extrait": "Ce dispositif s'adresse aux entreprises de moins de 11 salariés n’appartenant pas à un groupe de de 250 salariés et plus, sur la base d’un taux maximal d’intervention régionale de 40 % des coûts de services de conseil (HT)."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prestation-de-conseil-en-ressources-humaines-pcrh",
+          "titre": "Prestation de conseil en ressources humaines (PCRH) | Région Pays de la Loire",
+          "extrait": "Les dépenses éligibles sont celles relatives aux actions débutées entre le 1er janvier 2026 et le 31 décembre 2026."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prestation-de-conseil-en-ressources-humaines-pcrh",
+          "titre": "Prestation de conseil en ressources humaines (PCRH) | Région Pays de la Loire",
+          "extrait": "Dans l’accompagnement court (de 1 à 10 jours), le conseiller externe aidera à la réalisation d’un plan d’action directement mobilisable."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prestation-de-conseil-en-ressources-humaines-pcrh",
+          "titre": "Prestation de conseil en ressources humaines (PCRH) | Région Pays de la Loire",
+          "extrait": "L’accompagnement approfondi (de 10 à 30 jours) intervient, lui, à l’issue du premier accompagnement"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prestation-de-conseil-en-ressources-humaines-pcrh",
+          "titre": "Prestation de conseil en ressources humaines (PCRH) | Région Pays de la Loire",
+          "extrait": "La prestation PCRH + (1 à 2 jours) vise spécifiquement l’accompagnement au recrutement et à la fidélisation des salariés."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/prestation-de-conseil-en-ressources-humaines-pcrh",
+          "titre": "Prestation de conseil en ressources humaines (PCRH) | Région Pays de la Loire",
+          "extrait": "(contact avec le prestataire dans les 5 jours suivant la demande – cf. « Déposer un dossier »)"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/sites/default/files/aides/3004caa4-e0a2-11eb-81b1-13a71e5d94b7/subvention_pcrh-criteres-de-financement-2026_3004caa4_annexe-6.pdf",
+          "titre": "PCRH – critères de financement 2026 (État – Région Pays de la Loire)",
+          "extrait": "Entreprises dont associations de moins 11 salariés et pouvant appartenir le cas échéant à un groupe de moins de 250 salariés 90% 50% État + 40% Région"
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/sites/default/files/aides/3004caa4-e0a2-11eb-81b1-13a71e5d94b7/subvention_pcrh-criteres-de-financement-2026_3004caa4_annexe-6.pdf",
+          "titre": "PCRH – critères de financement 2026 (État – Région Pays de la Loire)",
+          "extrait": "Le montant de la subvention, part l'État, est au maximum de 15 000 € pour un accompagnement individuel comme pour l'accompagnement d’un collectif d’entreprises"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-01-01",
+        "fin": "2026-12-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r52-pass-entreprendre-formation",
+      "nom": "PASS Entreprendre en Pays de la Loire – Formation",
+      "financeur": "region",
+      "financeur_nom": "Région Pays de la Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formation collective intensive de 6 à 8 semaines pour les demandeurs d'emploi qui créent ou reprennent une entreprise : compétences du métier de chef d'entreprise, structuration du projet et business plan complet. Elle s'insère dans l'accompagnement PASS Entreprendre de la Région.",
+      "criteres": {
+        "regions": [
+          "52"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi avec un projet de création ou de reprise d'entreprise.",
+        "Maîtriser les compétences générales et professionnelles et posséder la qualification professionnelle nécessaire à la future activité.",
+        "Accès après un PASS Diagnostic, porte d'entrée du PASS Entreprendre.",
+        "Stagiaire soumis à la charte des droits et devoirs du stagiaire de la formation professionnelle des Pays de la Loire."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation collective proposée par la Région dans le cadre du PASS Entreprendre ; accès après un PASS Diagnostic"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "S'articule avec les autres volets du PASS Entreprendre (Diagnostic, Construction, Financement, Primo développement, Test d'activité)."
+      },
+      "demarches": [
+        "Faire une demande de PASS Diagnostic auprès de la Région.",
+        "Demander, lors du diagnostic, l'orientation vers le volet Formation du PASS Entreprendre."
+      ],
+      "url_demarche": "https://www.paysdelaloire.fr/les-aides/pass-entreprendre-en-pays-de-la-loire-formation",
+      "sources": [
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/pass-entreprendre-en-pays-de-la-loire-formation",
+          "titre": "PASS Entreprendre en Pays de la Loire - Formation | Région Pays de la Loire",
+          "extrait": "Formation collective intensive, d’une durée de 6 à 8 semaines permettant une montée en compétence des demandeurs d’emploi sur la création/reprise d’entreprise."
+        },
+        {
+          "url": "https://www.paysdelaloire.fr/les-aides/pass-entreprendre-en-pays-de-la-loire-formation",
+          "titre": "PASS Entreprendre en Pays de la Loire - Formation | Région Pays de la Loire",
+          "extrait": "Pour bénéficier du volet formation collective du PASS Entreprendre en Pays de la Loire, il faut faire une demande de PASS Diagnostic"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r24-programme-regional",
+      "nom": "Programme régional de formation Centre-Val de Loire (PRF 2025-2028)",
+      "financeur": "region",
+      "financeur_nom": "Région Centre-Val de Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Offre de formations financée par la Région Centre-Val de Loire (avec l'État et le FSE+), accessible gratuitement aux demandeurs d'emploi : formations linguistiques, Visas Libres Savoirs, formations pour l'insertion professionnelle, Parcours Métiers (Prépa-métier, Se former à un métier, Créer ou reprendre une entreprise) et formations DEFI.",
+      "criteres": {
+        "regions": [
+          "24"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16
+      },
+      "conditions": [
+        "Être en recherche d'emploi, inscrit ou non à France Travail, dès 16 ans ; les salariés des structures d'insertion par l'activité économique sont aussi éligibles.",
+        "La formation doit figurer au Programme régional de formation (catalogue du site Formation Centre-Val de Loire).",
+        "Formations sanitaires et sociales : la Région prend en charge les coûts de 19 formations menant à un diplôme d'État (dispositif distinct)."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération régionale possible pour les stagiaires non indemnisés (r24-remuneration-stagiaires), aide au transport ou à l'hébergement (r24-aide-transport-hebergement) et aide au permis Combo parfait (r24-aide-permis-combo-parfait)."
+      },
+      "demarches": [
+        "Rechercher la formation sur le site Formation Centre-Val de Loire (rubrique Formations financées Région).",
+        "Se faire accompagner par France Travail, la Mission locale ou Cap emploi et contacter l'organisme de formation.",
+        "Constituer le dossier de rémunération avec l'organisme de formation à l'entrée en formation."
+      ],
+      "url_demarche": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+      "sources": [
+        {
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+          "titre": "Les formations financées par la Région Centre-Val de Loire | Formation Centre-Val de Loire",
+          "extrait": "Publié le 07/01/2026"
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+          "titre": "Les formations financées par la Région Centre-Val de Loire | Formation Centre-Val de Loire",
+          "extrait": "Cet engagement du Conseil régional du Centre-Val de Loire se traduit par la création du Programme Régional de Formation (PRF) : une offre de formations destinée à favoriser l’insertion professionnelle. Elle est accessible gratuitement aux demandeurs d’emploi."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/financements-par-public/les-aides-pour-les-demandeurs-demploi",
+          "titre": "Les aides pour les demandeurs d'emploi | Formation Centre-Val de Loire",
+          "extrait": "Toute personne « en recherche d’emploi », inscrite ou non à France Travail"
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/financements-par-public/les-aides-pour-les-demandeurs-demploi",
+          "titre": "Les aides pour les demandeurs d'emploi | Formation Centre-Val de Loire",
+          "extrait": "Les jeunes dès 16 ans"
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/financements-par-public/les-aides-pour-les-demandeurs-demploi",
+          "titre": "Les aides pour les demandeurs d'emploi | Formation Centre-Val de Loire",
+          "extrait": "La Région prend en charge les coûts de 19 formations permettant d’obtenir un diplôme d’État et de devenir infirmier, préparateur en pharmacie, aide-soignant, éducateur spécialisé, assistant de service social…"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r24-defi",
+      "nom": "DEFI – Développement de l'emploi par des formations inclusives",
+      "financeur": "region",
+      "financeur_nom": "Région Centre-Val de Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations du programme régional de la Région Centre-Val de Loire qui préparent des demandeurs d'emploi aux compétences recherchées par les entreprises de la région, avec l'objectif d'un recrutement durable à l'issue : CDD d'au moins 6 mois, CDI ou contrat de professionnalisation.",
+      "criteres": {
+        "regions": [
+          "24"
+        ],
+        "perimetre_region": "entreprise",
+        "contrats": [
+          "cdi",
+          "cdd",
+          "alternance"
+        ]
+      },
+      "conditions": [
+        "Session DEFI ouverte au programme régional de formation pour le métier visé.",
+        "Objectif de recrutement à l'issue de la formation : CDD de 6 mois minimum, CDI ou contrat de professionnalisation."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite pour le demandeur d'emploi si une session DEFI figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Fait partie du programme régional de formation (r24-programme-regional) ; rémunération régionale possible pour les stagiaires non indemnisés."
+      },
+      "demarches": [
+        "Consulter les sessions DEFI sur le site Formation Centre-Val de Loire.",
+        "Se rapprocher de son conseiller France Travail, Mission locale ou Cap emploi pour intégrer une session."
+      ],
+      "url_demarche": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+      "sources": [
+        {
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+          "titre": "Les formations financées par la Région Centre-Val de Loire | Formation Centre-Val de Loire",
+          "extrait": "Les formations Développement de l’emploi par des formations inclusives (DEFI) sont des formations destinées à aider les demandeurs d’emploi à développer des compétences recherchées par les entreprises de la région."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+          "titre": "Les formations financées par la Région Centre-Val de Loire | Formation Centre-Val de Loire",
+          "extrait": "Une formation DEFI a pour objectif de déboucher sur un recrutement pérenne à l’issue de la formation : un CDD de 6 mois minimum, un CDI ou un contrat de professionnalisation."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r24-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (Région Centre-Val de Loire)",
+      "financeur": "region",
+      "financeur_nom": "Région Centre-Val de Loire",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle versée par la Région Centre-Val de Loire aux personnes en recherche d'emploi qui ne perçoivent pas l'ARE et suivent une formation régionale (formations linguistiques, insertion professionnelle, Parcours Métiers, formations des personnes placées sous main de justice).",
+      "criteres": {
+        "regions": [
+          "24"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16
+      },
+      "conditions": [
+        "Avoir au moins 16 ans et être en recherche d'emploi.",
+        "Ne pas percevoir l'allocation d'aide au retour à l'emploi (ARE) de France Travail.",
+        "Suivre une formation régionale éligible : dispositif de formations linguistiques, Visa + Parcours vers l'emploi, élaboration de projet professionnel, Parcours Métiers (Prépa-métier, Se former à un métier, Créer ou reprendre une entreprise), formations des personnes placées sous main de justice.",
+        "Formation à temps partiel (moins de 30 heures par semaine) : rémunération calculée selon le taux horaire et les heures suivies.",
+        "Bénéficiaires de l'obligation d'emploi des travailleurs handicapés : montant à vérifier auprès de Cap emploi.",
+        "Montants du barème national au 1er avril 2026 (service-public.fr) ; la page de la Région Centre-Val de Loire (publiée le 13/05/2026) affiche encore l'ancien barème (224,68 € / 561,68 € / 769,49 €)."
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 566.17,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation à temps complet : 226,48 € (moins de 18 ans), 566,17 € (18-25 ans), 775,65 € (26 ans et plus) par mois (barème national en vigueur depuis le 1er avril 2026)",
+        "majorations": [
+          {
+            "criteres": {
+              "age_min": 26
+            },
+            "valeur": 775.65,
+            "libelle": "775,65 € par mois à partir de 26 ans"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 226.48,
+            "libelle": "226,48 € par mois avant 18 ans"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Non cumulable avec l'ARE. L'aide au transport ou à l'hébergement et l'aide au permis Combo parfait peuvent s'ajouter."
+      },
+      "demarches": [
+        "Constituer le dossier de rémunération avec l'organisme de formation à l'entrée en formation.",
+        "En cas de question : organisme de formation ou gestionnaire pour la Région (Docaposte, assistance.rcvl@docaposte.fr, 03 87 18 36 13)."
+      ],
+      "url_demarche": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+      "sources": [
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+          "titre": "Rémunération et aides régionales pour les stagiaires de la formation professionnelle | Formation Centre-Val de Loire",
+          "extrait": "Publié le 13/05/2026"
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+          "titre": "Rémunération et aides régionales pour les stagiaires de la formation professionnelle | Formation Centre-Val de Loire",
+          "extrait": "Il existe quatre conditions pour bénéficier de la rémunération de la formation professionnelle : Avoir 16 ans minimum. Être « en recherche d’emploi »."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+          "titre": "Rémunération et aides régionales pour les stagiaires de la formation professionnelle | Formation Centre-Val de Loire",
+          "extrait": "c’est-à-dire qu’elle dure moins de 30 heures par semaine"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "Vérifié le 01 avril 2026 - Service Public / Direction de l'information légale et administrative (Premier ministre)"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "Moins de 18 ans Vous percevez 226,48 € par mois. 18 à 25 ans Vous percevez 566,17 € par mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "26 ans et plus Vous percevez 775,65 € par mois."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r24-aide-permis-combo-parfait",
+      "nom": "Aide au permis de conduire 18-25 ans – Combo parfait",
+      "financeur": "region",
+      "financeur_nom": "Région Centre-Val de Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide régionale de 1 500 €, versée directement au jeune, pour financer le permis de conduire (code et cours de conduite) des 18-25 ans inscrits sur une formation pré-qualifiante ou qualifiante du Programme régional de formation et accompagnés par une Mission locale.",
+      "criteres": {
+        "regions": [
+          "24"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 18,
+        "age_max": 25
+      },
+      "conditions": [
+        "Avoir entre 18 et 25 ans et être accompagné par une Mission locale.",
+        "Être inscrit sur une formation pré-qualifiante ou qualifiante du Programme régional de formation : Prépa Métiers, Se former au métier de..., Se préparer à créer ou reprendre une entreprise."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 1500,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "1 500 € pour le code et les cours de conduite"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec la rémunération des stagiaires de la Région."
+      },
+      "demarches": [
+        "Demander l'aide auprès de son conseiller Mission locale pendant la formation."
+      ],
+      "url_demarche": "https://formation.centre-valdeloire.fr/faciliter-ma-formation/aides-la-mobilite/les-aides-pour-le-permis-de-conduire",
+      "sources": [
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+          "titre": "Rémunération et aides régionales pour les stagiaires de la formation professionnelle | Formation Centre-Val de Loire",
+          "extrait": "Cette aide de 1 500 € est destinée au financement du permis de conduire (code et cours de conduite) des jeunes de 18 à 25 ans en formation accompagnés par une Mission Locale."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/faciliter-ma-formation/aides-la-mobilite/les-aides-pour-le-permis-de-conduire",
+          "titre": "Les aides pour le permis de conduire | Formation Centre-Val de Loire",
+          "extrait": "Elle s'adresse aux jeunes de 18 à 25 ans inscrits sur une formation du Programme Régional de Formation *."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/faciliter-ma-formation/aides-la-mobilite/les-aides-pour-le-permis-de-conduire",
+          "titre": "Les aides pour le permis de conduire | Formation Centre-Val de Loire",
+          "extrait": "Uniquement les formations pré-qualifiantes ou qualifiantes du Programme Régional de Formation Prépa Métiers ; Se former au métier de … ou formation Se préparer à créer ou reprendre une entreprise."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/faciliter-ma-formation/aides-la-mobilite/les-aides-pour-le-permis-de-conduire",
+          "titre": "Les aides pour le permis de conduire | Formation Centre-Val de Loire",
+          "extrait": "Rapprochez-vous de votre conseiller Mission Locale pour faire la demande de l'aide au permis de conduire Combo Parfait."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r24-aide-transport-hebergement",
+      "nom": "Aide au transport ou à l'hébergement des stagiaires (Région Centre-Val de Loire)",
+      "financeur": "region",
+      "financeur_nom": "Région Centre-Val de Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "En plus de la rémunération, la Région Centre-Val de Loire propose aux stagiaires des formations régionales une aide au transport ou une aide à l'hébergement, non cumulables, dont le montant varie selon la distance domicile-lieu de formation et l'âge.",
+      "criteres": {
+        "regions": [
+          "24"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être stagiaire d'une formation financée par la Région Centre-Val de Loire.",
+        "L'aide au transport et l'aide à l'hébergement ne sont pas cumulables."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Montant variable selon la distance entre le domicile et le lieu de formation et selon l'âge"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "S'ajoute à la rémunération des stagiaires ; aide au transport et aide à l'hébergement non cumulables entre elles."
+      },
+      "demarches": [
+        "Se renseigner auprès de l'organisme de formation lors de la constitution du dossier de rémunération."
+      ],
+      "url_demarche": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+      "sources": [
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+          "titre": "Rémunération et aides régionales pour les stagiaires de la formation professionnelle | Formation Centre-Val de Loire",
+          "extrait": "Non cumulables, ces aides financières varient en fonction de la distance entre votre lieu de résidence et le lieu de formation, ainsi que de votre âge."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/financements-par-public/les-aides-pour-les-demandeurs-demploi",
+          "titre": "Les aides pour les demandeurs d'emploi | Formation Centre-Val de Loire",
+          "extrait": "Des aides financières accessibles : aide au permis de conduire et au transport ou à l’hébergement."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r24-abondement-cpf-vae",
+      "nom": "Abondement régional du CPF pour l'accompagnement VAE (Centre-Val de Loire)",
+      "financeur": "region",
+      "financeur_nom": "Région Centre-Val de Loire",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région Centre-Val de Loire peut abonder le compte personnel de formation pour réduire le reste à charge d'un accompagnement VAE financé par le CPF. Les Espaces VAE de la région informent et accompagnent gratuitement les candidats.",
+      "criteres": {
+        "regions": [
+          "24"
+        ],
+        "perimetre_region": "beneficiaire",
+        "eligible_cpf": true
+      },
+      "conditions": [
+        "Parcours VAE et organisme accompagnateur éligibles au CPF (décret n° 2025-663 du 18 juillet 2025).",
+        "Public, montant et modalités de l'abondement régional à confirmer : la page d'annonce de la Région n'a pas pu être consultée."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Abondement du CPF pour réduire le reste à charge de l'accompagnement VAE ; montant à confirmer"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Intervient en complément du CPF ; France Travail peut aussi abonder le CPF des demandeurs d'emploi."
+      },
+      "demarches": [
+        "Contacter l'Espace VAE de son département (accompagnement gratuit).",
+        "Mobiliser son CPF pour l'accompagnement VAE et vérifier auprès de l'Espace VAE les conditions de l'abondement régional."
+      ],
+      "url_demarche": "https://formation.centre-valdeloire.fr/trouver-ma-formation/valoriser-mes-experiences/la-validation-des-acquis-de-lexperience-vae",
+      "sources": [
+        {
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/valoriser-mes-experiences/la-validation-des-acquis-de-lexperience-vae",
+          "titre": "La validation des acquis de l'expérience (VAE) : valoriser son expérience | Formation Centre-Val de Loire",
+          "extrait": "Le Compte Personnel de Formation (CPF) peut vous permettre de financer votre accompagnement VAE. La Région et France travail peuvent abonder votre financement pour réduire le reste à charge."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/valoriser-mes-experiences/la-validation-des-acquis-de-lexperience-vae",
+          "titre": "La validation des acquis de l'expérience (VAE) : valoriser son expérience | Formation Centre-Val de Loire",
+          "extrait": "à condition que votre parcours et l’organisme accompagnateur choisi respectent les règles définies par le décret n° 2025-663 du 18 juillet 2025 relatif à l’éligibilité des actions de VAE au CPF."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r27-programme-regional",
+      "nom": "Programme régional de formation Bourgogne-Franche-Comté (programme qualifiant, DAQ, DFL, E2C)",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région Bourgogne-Franche-Comté finance des formations pour les personnes en recherche d'emploi : programme qualifiant, Dispositif amont de la qualification (DAQ 2026-2030), Dispositif de formation linguistique (DFL), écoles de la 2e chance, formations à la création-reprise d'entreprise et certaines formations sanitaires et sociales.",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16
+      },
+      "conditions": [
+        "Avoir plus de 16 ans, être sorti du système scolaire et en recherche d'emploi, inscrit ou non à France Travail.",
+        "La formation doit figurer au programme régional (portail « J'ai ma place »).",
+        "Orientation par France Travail, la Mission locale, Cap emploi ou une structure d'accompagnement, ou contact direct avec l'organisme de formation.",
+        "Les étudiants et les personnes en congé parental n'ont pas accès aux formations financées par la Région."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération régionale possible (r27-remuneration-stagiaires), aide de 200 € à l'entrée en formation (r27-aide-entree-formation) et aide au transport ou à l'hébergement (r27-aide-transport-hebergement)."
+      },
+      "demarches": [
+        "Rechercher la formation sur le portail « J'ai ma place » (Emfor Bourgogne-Franche-Comté).",
+        "Se faire orienter par son conseiller ou contacter directement l'organisme de formation.",
+        "Remettre à l'organisme les pièces du dossier de rémunération dès le premier jour de formation."
+      ],
+      "url_demarche": "https://www.emfor-bfc.org/formation/zoom-sur/j-ai-ma-place",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-formations",
+          "titre": "Quelles formations ? | Région Bourgogne-Franche-Comté",
+          "extrait": "La Région Bourgogne-Franche-Comté propose un programme de formation adapté aux besoins de chacun."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-formations",
+          "titre": "Quelles formations ? | Région Bourgogne-Franche-Comté",
+          "extrait": "Toute personne de plus de 16 ans, sortie du système scolaire, en recherche d’emploi, inscrite ou non à Pôle emploi, avec ou sans projet professionnel défini."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "La Région Bourgogne-Franche-Comté finance votre formation et peut vous accorder une rémunération durant cette période."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "Les étudiants et les personnes en congé parental n’ont pas accès aux formations financées par la Région."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/daq-2026-2030-le-dispositif-qui-redonne-confiance-et-ouvre-la-voie-lemploi",
+          "titre": "DAQ 2026-2030 : le dispositif qui redonne confiance et ouvre la voie à l’emploi | Région Bourgogne-Franche-Comté",
+          "extrait": "Fort d’un budget annuel de 27 millions d’euros hors rémunération (cofinancé par l’État dans le cadre du Plan régional d’investissement dans les compétences), le nouveau DAQ 2026-2030 repose sur un fonctionnement souple où des entrées et sorties sont possibles toute l’année,"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r27-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (Région Bourgogne-Franche-Comté)",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle versée par la Région aux demandeurs d'emploi non indemnisés par l'ARE inscrits sur une formation agréée par la Région à la rémunération, avec protection sociale. Barème régional applicable aux entrants à compter du 1er janvier 2026 pour les moins de 26 ans ; barème national du 1er avril 2026 pour les 26 ans et plus.",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16
+      },
+      "conditions": [
+        "Être inscrit sur une formation agréée par la Région à la rémunération des stagiaires (programme qualifiant, DAQ, E2C, création-reprise d'entreprise, DFL, certaines formations sanitaires et sociales...).",
+        "Ne pas être indemnisé au titre de l'ARE par France Travail.",
+        "Exclus : bénéficiaires d'une rémunération conventionnelle ou d'une allocation du secteur public, personnes en contrat de sécurisation professionnelle, actifs occupés à temps plein, retraités non inscrits à France Travail.",
+        "Démission d'un CDI à temps plein : délai de carence de 60 jours calendaires avant la rémunération Région.",
+        "Montant majoré (jusqu'à 863 €) pour les moins de 26 ans dans certaines situations familiales ou professionnelles ; temps partiel rémunéré au taux horaire.",
+        "26 ans et plus : 775,65 € = barème national en vigueur depuis le 1er avril 2026 (service-public.fr) ; le document régional de janvier 2026 indique encore 769,49 € (ancien barème national). Barème régional de janvier 2026 pour les moins de 26 ans (350 € / 590 € / 863 €)."
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 590,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation à temps plein : 350 € (moins de 18 ans), 590 € (18-25 ans), 775,65 € (26 ans et plus) par mois ; jusqu'à 863 € dans certaines situations",
+        "majorations": [
+          {
+            "criteres": {
+              "age_min": 26
+            },
+            "valeur": 775.65,
+            "libelle": "775,65 € par mois à partir de 26 ans"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 350,
+            "libelle": "350 € par mois avant 18 ans"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Non cumulable avec l'ARE ; l'ASS est suspendue pendant la formation. S'ajoutent l'aide de 200 € à l'entrée en formation et l'aide au transport ou à l'hébergement."
+      },
+      "demarches": [
+        "Transmettre à l'organisme de formation tous les documents demandés dès le premier jour et avant la fin de la formation (un dossier incomplet à la sortie n'est pas instruit).",
+        "Simuler sa rémunération sur le site de la Région.",
+        "Suivre le paiement sur le portail stagiaire de la Région ; virement à terme échu entre le 10 et le 20 du mois suivant."
+      ],
+      "url_demarche": "https://www.bourgognefranchecomte.fr/node/467",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/467",
+          "titre": "Rémunération des stagiaires de la formation professionnelle et aides annexes | Région Bourgogne-Franche-Comté",
+          "extrait": "ne doit pas être indemnisé au titre de l’ARE (allocation de retour à l’emploi) par France Travail."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/467",
+          "titre": "Rémunération des stagiaires de la formation professionnelle et aides annexes | Région Bourgogne-Franche-Comté",
+          "extrait": "doit être inscrit sur une formation agréée par la Région à la rémunération des stagiaires,"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "(Barèmes applicables pour les entrants à compter du 01 janvier 2026)"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "J’ai moins de 18 ans 350,00 € 2,31 € À partir de 16 km : 98,79 € par mois J’ai entre 18 et 25 ans 590,00 € 3,90 €"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-formations",
+          "titre": "Quelles formations ? | Région Bourgogne-Franche-Comté",
+          "extrait": "Une rémunération comprise entre 350 € et 863 € par mois est mobilisable pour ce dispositif"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "Les démissionnaires d’un emploi à temps plein en contrat à durée indéterminée pourront percevoir une rémunération Région après un délai de carence de 60 jours calendaires"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "Le virement de la rémunération inter-vient sur votre compte à terme échu entre le 10 et le 20 du mois suivant."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+          "titre": "A quelles autres aides puis-je prétendre ? | Région Bourgogne-Franche-Comté",
+          "extrait": "La rémunération Région n’est pas cumulable avec l’ARE,"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "Vérifié le 01 avril 2026 - Service Public / Direction de l'information légale et administrative (Premier ministre)"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d’emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? | Service Public",
+          "extrait": "26 ans et plus Vous percevez 775,65 € par mois."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r27-aide-transport-hebergement",
+      "nom": "Aide au transport et à l'hébergement des stagiaires (Région Bourgogne-Franche-Comté)",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Les stagiaires rémunérés par la Région peuvent percevoir une aide au transport de 98,79 € par mois lorsque le centre de formation est à plus de 15 km du domicile, ou une aide à l'hébergement sur justificatif (37,20 € pour les 16-17 ans résidant à moins de 16 km ; 101,84 € au-delà de 250 km pour certaines rémunérations).",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Percevoir une rémunération de la Région.",
+        "Aide au transport : distance domicile-centre de formation de plus de 15 km (calcul de ville à ville) ; limitée à un aller-retour sur la durée du stage pour les travailleurs non-salariés et les personnes RQTH, sauf cas particuliers.",
+        "Aide à l'hébergement sur justificatif : 37,20 € pour les 16-17 ans résidant à moins de 16 km ; 101,84 € si la rémunération est de 863 € ou 769,49 € (montant des 26 ans et plus cité par la Région, 775,65 € depuis le 1er avril 2026) et la résidence à plus de 250 km (non cumulable avec l'aide au transport)."
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 98.79,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Aide au transport de 98,79 € par mois (plus de 15 km) ; aide à l'hébergement de 37,20 € ou 101,84 € selon la situation"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Aide au transport et aide à l'hébergement de 101,84 € non cumulables entre elles."
+      },
+      "demarches": [
+        "Demander l'aide avec le dossier de rémunération constitué auprès de l'organisme de formation (justificatif pour l'hébergement)."
+      ],
+      "url_demarche": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+          "titre": "A quelles autres aides puis-je prétendre ? | Région Bourgogne-Franche-Comté",
+          "extrait": "Pour une distance domicile-centre de formation de plus de 15 km (calcul de ville à ville), vous pouvez bénéficier d’une aide au transport de 98,79 € par mois."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+          "titre": "A quelles autres aides puis-je prétendre ? | Région Bourgogne-Franche-Comté",
+          "extrait": "Si vous avez entre 16 et 17 ans et que vous résidez à moins de 16 km du lieu de formation, vous ne pouvez pas bénéficier de l’aide au transport, mais une aide à l’hébergement de 37,20 € peut vous être versée."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+          "titre": "A quelles autres aides puis-je prétendre ? | Région Bourgogne-Franche-Comté",
+          "extrait": "Si vous percevez une rémunération de 863 € ou de 769,49 € et que vous résidez à plus de 250 km du centre de formation, vous pouvez bénéficier de l’aide à l’hébergement de 101,84 €, non cumulable avec l’aide au transport."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r27-aide-entree-formation",
+      "nom": "Aide complémentaire de 200 € à l'entrée en formation (Région Bourgogne-Franche-Comté)",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide forfaitaire de 200 € versée par la Région aux stagiaires qui débutent une formation financée par la Région, pour couvrir les premiers frais (garde d'enfant, mobilité, matériel) avant la première rémunération ; elle concerne aussi les stagiaires indemnisés par l'ARE.",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Entrer pour la première fois sur une action de formation financée par la Région (certains dispositifs spécifiques sont exclus : se renseigner auprès de l'organisme de formation).",
+        "Faire la demande avant la fin de la formation, avec les justificatifs.",
+        "Aide imposable, à déclarer comme un revenu (et dans la déclaration trimestrielle RSA le cas échéant)."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 200,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "200 € versés à l'entrée en formation"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec la rémunération régionale ou avec l'ARE."
+      },
+      "demarches": [
+        "Demander l'aide via l'organisme de formation avec le dossier de rémunération, avant la fin de la formation."
+      ],
+      "url_demarche": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "Dès votre entrée en formation, la Région peut vous verser une aide complémentaire de 200 € * afin de vous aider à couvrir les premiers frais liés à l’entrée en formation."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/file-download?fid=17933",
+          "titre": "La rémunération du stagiaire de la formation professionnelle – janvier 2026 (Région Bourgogne-Franche-Comté)",
+          "extrait": "Vous devez en faire la demande avant la fin de la formation."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+          "titre": "A quelles autres aides puis-je prétendre ? | Région Bourgogne-Franche-Comté",
+          "extrait": "Cette aide est versée à l’entrée en formation, elle concerne également les stagiaires indemnisés par Pôle emploi (ARE)."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/quelles-autres-aides-puis-je-pretendre",
+          "titre": "A quelles autres aides puis-je prétendre ? | Région Bourgogne-Franche-Comté",
+          "extrait": "Cette aide de 200 € est versée aux stagiaires entrés sur une action de formations financée par la Région."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/daq-2026-2030-le-dispositif-qui-redonne-confiance-et-ouvre-la-voie-lemploi",
+          "titre": "DAQ 2026-2030 : le dispositif qui redonne confiance et ouvre la voie à l’emploi | Région Bourgogne-Franche-Comté",
+          "extrait": "Une rémunération est également versée par la Région, avec une aide forfaitaire de 200 € à l’entrée, ainsi qu’une aide au transport pour lever les freins à la mobilité."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r27-pass-vae-accompagnement",
+      "nom": "PASS'VAE Accompagnement",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide régionale individuelle qui finance l'accompagnement méthodologique à la VAE (rédaction du dossier, préparation du jury) pour les personnes résidant en Bourgogne-Franche-Comté ; elle est versée directement à l'organisme accompagnateur.",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "beneficiaire",
+        "certifications": [
+          "rncp"
+        ],
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "Résider en Bourgogne-Franche-Comté : demandeurs d'emploi inscrits à France Travail, personnes placées sous main de justice ; à défaut d'autres financements, bénévoles, aidants familiaux, salariés en congé parental, personnes en situation d'illettrisme, bénéficiaires du RSA, salariés en contrat aidé.",
+        "Prescription par un Point Relais Conseil et avis de recevabilité de l'organisme certificateur.",
+        "Certification visée inscrite au RNCP ; organisme d'accompagnement certifié Qualiopi.",
+        "Frais annexes non pris en charge (inscription, faisabilité, jury, déplacement, équipement)."
+      ],
+      "montant": {
+        "mode": "par_heure",
+        "valeur": 80,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 1600,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 80 € par heure d'accompagnement : 20 h et 1 600 € maximum (accompagnement classique), 30 h et 2 400 € maximum (accompagnement renforcé)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Peut être complété par un PASS'VAE Hybride (r27-pass-vae-hybride) pour une formation complémentaire."
+      },
+      "demarches": [
+        "Contacter le Point Relais Conseil le plus proche pour un entretien gratuit.",
+        "Obtenir l'avis de recevabilité de l'organisme certificateur et choisir un organisme d'accompagnement certifié Qualiopi.",
+        "L'organisme dépose la demande auprès de la Région avant le début de l'accompagnement ; l'aide lui est versée au prorata des heures réalisées."
+      ],
+      "url_demarche": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "Le PASS’VAE Accompagnement est une aide régionale individuelle destinée à financer l’accompagnement méthodologique à la Validation des Acquis de l’Expérience (VAE) pour les personnes résidant en Bourgogne-Franche-Comté."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "aux demandeurs d’emploi inscrits à France Travail ;"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "20 heures maximum pour un accompagnement classique ; 30 heures maximum pour un accompagnement renforcé."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "La prise en charge peut aller jusqu’à 80 € maximum par heure d’accompagnement et dans la limite de : 1 600 € maximum pour un accompagnement classique ; 2 400 € maximum pour un accompagnement renforcé."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "La demande doit être déposée par l’organisme accompagnateur avant le début de l’accompagnement."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r27-pass-vae-hybride",
+      "nom": "PASS'VAE Hybride",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide régionale qui finance une formation complémentaire liée au parcours VAE, avant le passage devant le jury (pour renforcer le dossier) ou après une validation partielle (pour acquérir les blocs de compétences manquants).",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Demandeur d'emploi ayant une activité salariée inférieure à 10 heures par semaine, ou personne placée sous main de justice ; à défaut d'autres financements, bénévoles, aidants familiaux, personnes en congé parental ou en situation d'illettrisme, salariés en contrat aidé, bénéficiaires du RSA.",
+        "Avant le jury : demande constituée avec le Point Relais Conseil ou l'accompagnateur et déposée avant le début de la formation.",
+        "Après le jury : validation partielle ; formation réalisée dans les 6 mois suivant la validation partielle, demande accompagnée du procès-verbal du jury."
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 100,
+        "base": "cout_pedagogique",
+        "plafond": 1800,
+        "duree_max_mois": null,
+        "libelle": "100 % des frais pédagogiques dans la limite de 1 800 € par parcours"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Complète le PASS'VAE Accompagnement (r27-pass-vae-accompagnement)."
+      },
+      "demarches": [
+        "Avant le jury : envoyer la demande à accompagnementvae@bourgognefranchecomte.fr avant le début de la formation.",
+        "Après une validation partielle : déposer la demande avec le procès-verbal du jury, le descriptif de la formation et les éléments justifiant le lien avec les compétences manquantes."
+      ],
+      "url_demarche": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "aux demandeurs d’emploi ayant une activité salariée inférieure à 10 heures par semaine ;"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "La Région prend en charge 100% des frais pédagogiques, dans la limite de 1 800 € par parcours."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/validation-des-acquis-de-lexperience-vae-tout-est-possible-quand-lexperience",
+          "titre": "Validation des acquis de l’expérience (VAE) : tout est possible quand on a l’expérience | Région Bourgogne-Franche-Comté",
+          "extrait": "La prise en charge peut aller jusqu’à 1 800 €, avec un versement au prorata des heures réalisées. La formation doit être réalisée dans les 6 mois suivant la validation partielle."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r27-arefe",
+      "nom": "Action régionale pour la formation dans les entreprises (AREFE)",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "La Région Bourgogne-Franche-Comté subventionne des programmes de développement des compétences de salariés d'entreprises implantées dans la région (prioritairement des PME), portés par des OPCO, branches, chambres consulaires, pôles de compétitivité, groupements d'entreprises ou associations : coûts pédagogiques, conseil, diagnostic et ingénierie de formation.",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "Projet porté par un OPCO, une branche professionnelle, une chambre consulaire, une structure de pôle de compétitivité, un groupement d'entreprises ou une association : l'entreprise ne dépose pas la demande seule.",
+        "Salariés visés : sans qualification ou de niveau 3 maximum, qualifications inadaptées, nouvellement embauchés, en fragilité (deuxième partie de carrière, handicap, contrats précaires) ou chargés du management et des RH.",
+        "Exclues : formations obligatoires (sécurité, habilitations, sauvetage secourisme...).",
+        "Ouverture des demandes et enveloppe 2026 à confirmer auprès de la Région."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Subvention régionale au porteur de projet sur les coûts pédagogiques et l'ingénierie ; montant fixé au cas par cas"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Financement dans les limites du régime européen des aides à la formation ; souvent articulé avec le financement de l'OPCO."
+      },
+      "demarches": [
+        "Se rapprocher de son OPCO, de sa branche ou de sa chambre consulaire pour intégrer un programme AREFE.",
+        "Contact Région : Service développement et sécurisation des parcours professionnels (securisation@bourgognefranchecomte.fr)."
+      ],
+      "url_demarche": "https://www.bourgognefranchecomte.fr/node/3599",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/3599",
+          "titre": "Action REgionale pour la Formation dans les Entreprises (AREFE) | Région Bourgogne-Franche-Comté",
+          "extrait": "La Région soutient les programmes de développement des compétences des actifs en emploi des entreprises installées en Bourgogne-Franche-Comté, visant la sécurisation de leurs parcours professionnels et l’adaptation de leurs qualifications,"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/3599",
+          "titre": "Action REgionale pour la Formation dans les Entreprises (AREFE) | Région Bourgogne-Franche-Comté",
+          "extrait": "Opérateurs de compétences (OPCO) ; Branches professionnelles ; Chambres consulaires ;"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/3599",
+          "titre": "Action REgionale pour la Formation dans les Entreprises (AREFE) | Région Bourgogne-Franche-Comté",
+          "extrait": "Entreprises implantées en Bourgogne-Franche-Comté, prioritairement les PME/ définition communautaire."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/3599",
+          "titre": "Action REgionale pour la Formation dans les Entreprises (AREFE) | Région Bourgogne-Franche-Comté",
+          "extrait": "sans qualification ou avec un niveau de qualification inférieur ou égal au niveau 3 ;"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/3599",
+          "titre": "Action REgionale pour la Formation dans les Entreprises (AREFE) | Région Bourgogne-Franche-Comté",
+          "extrait": "Coûts pédagogiques des actions de formation ;"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r27-aide-apprentis-difficulte",
+      "nom": "Aide aux apprentis en difficulté sociale et financière (via les CFA)",
+      "financeur": "region",
+      "financeur_nom": "Région Bourgogne-Franche-Comté",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Dans sa stratégie apprentissage 2026, la Région Bourgogne-Franche-Comté prévoit une aide directe pouvant atteindre 1 200 € par apprenti en difficulté sociale et financière, pour couvrir des frais de mobilité, d'hébergement ou de matériel et limiter les ruptures de contrat ; le soutien régional est attribué aux CFA certifiés Qualiopi de la région.",
+      "criteres": {
+        "regions": [
+          "27"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Être apprenti dans un CFA de Bourgogne-Franche-Comté certifié Qualiopi bénéficiant du soutien régional.",
+        "Être en difficulté sociale et financière ; dépenses de mobilité, d'hébergement ou de matériel.",
+        "Critères précis et modalités de demande à confirmer auprès du CFA (mesure annoncée en avril 2026)."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 1 200 € par apprenti pour des frais de mobilité, d'hébergement ou de matériel ; montant et modalités à confirmer auprès du CFA"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "S'ajoute aux prises en charge de frais annexes par l'OPCO via le CFA."
+      },
+      "demarches": [
+        "Se renseigner auprès de son CFA sur l'aide régionale aux apprentis en difficulté."
+      ],
+      "url_demarche": null,
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/sites/default/files/2026-04/DP-AP%2029-30-04-2026.pdf",
+          "titre": "Région Bourgogne-Franche-Comté – Dossier de presse de l'Assemblée plénière des 29 et 30 avril 2026",
+          "extrait": "une aide directe allant jusqu'à 1 200 € par apprenti peut être accordée pour couvrir les frais de mobilité, d'hébergement ou de matériel."
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/sites/default/files/2026-04/DP-AP%2029-30-04-2026.pdf",
+          "titre": "Région Bourgogne-Franche-Comté – Dossier de presse de l'Assemblée plénière des 29 et 30 avril 2026",
+          "extrait": "Bénéficiaires : CFA publics et privés certifiés Qualiopi"
+        },
+        {
+          "url": "https://www.bourgognefranchecomte.fr/sites/default/files/2026-04/DP-AP%2029-30-04-2026.pdf",
+          "titre": "Région Bourgogne-Franche-Comté – Dossier de presse de l'Assemblée plénière des 29 et 30 avril 2026",
+          "extrait": "la Région s'appuie sur des critères d'éligibilité précis valables jusqu'à fin 2027"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": "2027-12-31"
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    }
+  ],
+  "portails": [
+    {
+      "region": "53",
+      "nom_region": "Bretagne",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Bretagne – Toutes les aides (filtre Formation & Emploi)",
+          "url": "https://www.bretagne.bzh/aides/",
+          "type": "region"
+        },
+        {
+          "titre": "Région Bretagne – QUALIF Emploi programme",
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi/",
+          "type": "region"
+        },
+        {
+          "titre": "GREF Bretagne – Trouver une formation (catalogue régional)",
+          "url": "https://www.formation.gref-bretagne.com/liste-des-offres",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "GREF Bretagne – Carif-Oref",
+          "url": "https://www.gref-bretagne.com/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Bretagne",
+          "url": "https://www.transitionspro-bretagne.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Bretagne",
+          "url": "https://www.francetravail.org/regions/bretagne/",
+          "type": "france_travail"
+        }
+      ]
+    },
+    {
+      "region": "52",
+      "nom_region": "Pays de la Loire",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Pays de la Loire – Financer son parcours de formation professionnelle",
+          "url": "https://www.paysdelaloire.fr/formation-et-emploi/formation-professionnelle/financer-son-parcours-de-formation-professionnelle",
+          "type": "region"
+        },
+        {
+          "titre": "Région Pays de la Loire – Toutes les aides régionales",
+          "url": "https://www.paysdelaloire.fr/les-aides",
+          "type": "region"
+        },
+        {
+          "titre": "Cariforef des Pays de la Loire – Rechercher une formation",
+          "url": "https://pro.choisirmonmetier-paysdelaloire.fr/rechercher-une-formation-2/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Cariforef des Pays de la Loire – Rechercher un dispositif de financement",
+          "url": "https://pro.choisirmonmetier-paysdelaloire.fr/rechercher-un-dispositif/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Mon emploi en Pays de la Loire – Je me forme (formations financées)",
+          "url": "https://monemploi-paysdelaloire.francetravail.fr/je-me-forme",
+          "type": "autre"
+        },
+        {
+          "titre": "Transitions Pro Pays de la Loire",
+          "url": "https://www.transitionspro-pdl.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Pays de la Loire",
+          "url": "https://www.francetravail.org/regions/pays-de-la-loire/",
+          "type": "france_travail"
+        }
+      ]
+    },
+    {
+      "region": "24",
+      "nom_region": "Centre-Val de Loire",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Les formations financées par la Région Centre-Val de Loire (PRF 2025-2028)",
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+          "type": "region"
+        },
+        {
+          "titre": "Rémunération et aides régionales pour les stagiaires de la formation professionnelle",
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+          "type": "region"
+        },
+        {
+          "titre": "Formation Centre-Val de Loire (GIP Alfa Centre, Carif-Oref)",
+          "url": "https://formation.centre-valdeloire.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Les aides pour les demandeurs d'emploi (Formation Centre-Val de Loire)",
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/financements-par-public/les-aides-pour-les-demandeurs-demploi",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Centre-Val de Loire",
+          "url": "https://www.transitionspro-cvl.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Centre-Val de Loire",
+          "url": "https://www.francetravail.org/regions/centre-val-de-loire/",
+          "type": "france_travail"
+        }
+      ]
+    },
+    {
+      "region": "27",
+      "nom_region": "Bourgogne-Franche-Comté",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Bourgogne-Franche-Comté – La formation professionnelle des demandeurs d'emploi",
+          "url": "https://www.bourgognefranchecomte.fr/la-formation-professionnelle-des-demandeurs-demploi",
+          "type": "region"
+        },
+        {
+          "titre": "Région Bourgogne-Franche-Comté – Rémunération des stagiaires et aides annexes",
+          "url": "https://www.bourgognefranchecomte.fr/node/467",
+          "type": "region"
+        },
+        {
+          "titre": "Emfor BFC – J'ai ma place (formations financées par la Région)",
+          "url": "https://www.emfor-bfc.org/formation/zoom-sur/j-ai-ma-place",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Emfor BFC – Rechercher une formation",
+          "url": "https://www.emfor-bfc.org/formation/recherche",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Bourgogne-Franche-Comté",
+          "url": "https://www.transitionspro-bfc.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Bourgogne-Franche-Comté",
+          "url": "https://www.francetravail.org/regions/bourgogne-franche-comte/",
+          "type": "france_travail"
+        }
+      ]
+    }
+  ],
+  "exclues": [
+    {
+      "nom": "Prime régionale aux employeurs d'apprentis (PREA) – Bourgogne-Franche-Comté",
+      "raison": "Supprimée par la loi du 5 septembre 2018 pour les contrats conclus après le 31 décembre 2018 (remplacée par l'aide unique de l'État).",
+      "sources": [
+        {
+          "url": "https://www.bourgognefranchecomte.fr/node/449",
+          "titre": "Prime régionale aux employeurs d’apprentis (PREA) | Région Bourgogne-Franche-Comté",
+          "extrait": "La prime régionale aux employeurs d’apprentis (PREA) destinée à favoriser l’accueil d’apprentis dans les TPE de Bourgogne-Franche-Comté n’existe plus."
+        }
+      ]
+    },
+    {
+      "nom": "Mobilité européenne et alternance (appel à projets FSE+ relayé sur le site de la Région Bretagne)",
+      "raison": "Appel à projets (référents mobilité dans les CFA) clos le 31 mars 2024 ; fiche marquée « Aide indisponible ».",
+      "sources": [
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/mobilite-europeenne-et-alternance/",
+          "titre": "Mobilité européenne et alternance · Région Bretagne",
+          "extrait": "Aide européenne Aide indisponible"
+        },
+        {
+          "url": "https://www.bretagne.bzh/aides/fiches/mobilite-europeenne-et-alternance/",
+          "titre": "Mobilité européenne et alternance · Région Bretagne",
+          "extrait": "Cet appel à projets était ouvert jusqu'au 31 mars 2024."
+        }
+      ]
+    },
+    {
+      "nom": "Aide de l'État de 500 € au permis de conduire des apprentis (dispositif national, signalé pour information)",
+      "raison": "Supprimée par la loi de finances pour 2026, entrée en vigueur le 21 février 2026.",
+      "sources": [
+        {
+          "url": "https://formation.centre-valdeloire.fr/focus-sur/lalternance/les-aides-destinees-aux-alternants",
+          "titre": "Les aides destinées aux alternants | Formation Centre-Val de Loire",
+          "extrait": "L’aide forfaitaire de 500 € permettant aux apprentis de passer le permis B n’est plus disponible."
+        },
+        {
+          "url": "https://formation.centre-valdeloire.fr/focus-sur/lalternance/les-aides-destinees-aux-alternants",
+          "titre": "Les aides destinées aux alternants | Formation Centre-Val de Loire",
+          "extrait": "publiée au Journal officiel le 20 février 2026. La mesure est entrée en vigueur le 21 février 2026."
+        }
+      ]
+    },
+    {
+      "nom": "Aide de France Travail au financement de la VAE (dispositif national, signalé pour information)",
+      "raison": "Supprimée depuis le 8 mai 2026 ; France Travail n'intervient plus qu'en abondement du CPF.",
+      "sources": [
+        {
+          "url": "https://www.gref-bretagne.com/ressources/vae-quel-nouveau-cadre-de-financement-apres-la-fin-de-laide-de-france-travail/",
+          "titre": "VAE : quel nouveau cadre de financement après la fin de l’aide de France Travail ? | GREF Bretagne",
+          "extrait": "Depuis le 8 mai 2026, cette aide n’est plus mobilisable"
+        },
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2026-18-du-30-avril-2026-bo-n-2026-27.html?type=dossiers/2026/bo-n-2026-27-du-5-mai-2026",
+          "titre": "Délibération n° 2026-18 du 30 avril 2026 (BO n° 2026-27) | Bulletin officiel de France Travail",
+          "extrait": "L’aide à la validation des acquis de l’expérience est supprimée."
+        },
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2026-18-du-30-avril-2026-bo-n-2026-27.html?type=dossiers/2026/bo-n-2026-27-du-5-mai-2026",
+          "titre": "Délibération n° 2026-18 du 30 avril 2026 (BO n° 2026-27) | Bulletin officiel de France Travail",
+          "extrait": "La délibération entre en vigueur le 8 mai 2026. Aucune demande d’aide effectuée à compter de cette date ne sera prise en compte."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Bretagne : bretagne.bzh est protégé par Cloudflare (blocage des requêtes automatisées) ; les fiches ont été lues dans un navigateur le 05/10/2026 et les extraits recopiés depuis le texte affiché (une nouvelle vérification automatique le 06/10/2026 a été bloquée par la page de contrôle Cloudflare). ideo.bretagne.bzh est resté inaccessible (blocage Cloudflare). Les PDF hébergés sur bretagne.bzh (guide QUALIF Emploi 2026-2027, liste des dépenses PASS Transitions) n'ont pas pu être téléchargés ; le règlement de l'aide financière a été vérifié via la délibération publiée sur data.megalis.bretagne.bzh.",
+    "Bretagne : aucune aide régionale individuelle aux apprentis n'apparaît dans le catalogue des aides de la Région (consulté le 05/10/2026, aides ouvertes et clôturées) ; l'ancienne aide ARGOAT (transport, hébergement, restauration) n'y figure plus. QUALIF VAE (aide individuelle VAE) n'apparaît plus dans le catalogue : statut non confirmé, non retenu.",
+    "Bretagne : non retenus car hors cible ou très spécifiques : Erasmus+ B-Mouve (mobilité en Europe des apprenants et personnels des établissements sanitaires et sociaux partenaires, date limite 11/06/2027), B-Monde Mobilité individuelle (élèves, étudiants et stagiaires en formation diplômante de certains établissements), Langue bretonne – formation des demandeurs d'emploi (subvention aux centres agréés, rattachée au programme régional), Gestion inclusive des ressources humaines (appel à projets pour des structures d'accompagnement).",
+    "Pays de la Loire : aucune aide régionale individuelle aux apprentis ou à leurs employeurs trouvée dans le catalogue « Toutes les aides » (thématique Apprentissage = aides aux CFA uniquement). « Pays de la Loire Emploi Transitions » (aide au recrutement d'un chef de projet industrie du futur, transition écologique ou numérique) non retenu car il ne finance pas de formation.",
+    "Pays de la Loire : le site grand public « Choisir mon métier Pays de la Loire » est définitivement fermé ; la recherche de formations du Cariforef est sur pro.choisirmonmetier-paysdelaloire.fr et l'offre régionale pour le public sur monemploi-paysdelaloire.francetravail.fr.",
+    "Pays de la Loire : r52-poei-region est la déclinaison régionale de la POEI nationale (financement Région, plafonds horaires spécifiques) ; l'intégrateur doit éviter le double affichage avec l'entrée POEI nationale. Le plafond de 600 h est lié au PRIC ; le GREF Bretagne (25/08/2026, d'après l'AEF du 28/07/2026) indique que le ministère a annoncé le non-renouvellement des PRIC en 2027.",
+    "Pays de la Loire : PCRH classée « service_gratuit » faute de catégorie plus adaptée ; il s'agit d'une prestation de conseil RH cofinancée (40 % Région + 50 % État pour les moins de 11 salariés), avec un reste à charge possible.",
+    "Centre-Val de Loire : centre-valdeloire.fr renvoie une erreur 403 (Incapsula) aux requêtes automatisées et au navigateur utilisé ; toutes les vérifications ont été faites sur formation.centre-valdeloire.fr (GIP Alfa Centre, Carif-Oref, site public de référence pour la Région). Non vérifiés faute d'accès : l'article « CPF : une nouvelle aide pour favoriser l'employabilité via la VAE » (abondement régional annoncé à partir du 12/02/2026, d'où r24-abondement-cpf-vae en a_confirmer) et la fiche « Euro Métiers Centre-Val de Loire – Apprenti·e·s » (mobilité internationale des apprentis), non retenue.",
+    "Centre-Val de Loire : aucune aide régionale de financement direct de la formation des salariés d'entreprise n'a été identifiée sur formation.centre-valdeloire.fr (renvoi vers les OPCO) ; pour les alternants, la page régionale renvoie aux OPCO (frais annexes), à Action Logement et à Erasmus+.",
+    "Bourgogne-Franche-Comté : non retenus : BénéFiCes Créa' (accompagnement gratuit à la création-reprise, sans financement de formation, peut être ajouté en service_gratuit), Aide au recrutement de cadres (recrutement sans formation). Le dossier de presse de l'Assemblée plénière des 29-30 avril 2026 annonce aussi l'abrogation du règlement d'aide à l'investissement des CFA pour les nouveaux projets dès 2026 et un abondement aux CFA (jusqu'à 30 % du coût contrat, plafonné à 4 000 €) pour les filières prioritaires : aides aux CFA, non retenues.",
+    "Agefiph : www.agefiph.fr était en maintenance (HTTP 503) les 05 et 06/10/2026 ; les pages régionales (www.agefiph.fr/bretagne, /pays-de-la-loire, /centre-val-de-loire, /bourgogne-franche-comte) n'ont pas pu être vérifiées et ne figurent donc pas dans les portails : à ajouter après contrôle.",
+    "Tranches d'âge : « 16/18 ans » ou « entre 16 et 18 ans » ont été interprétées comme moins de 18 ans (age_max 17) dans les majorations de rémunération, les barèmes prévoyant une tranche distincte 18-25 ans.",
+    "Projets : les aides destinées aux demandeurs d'emploi sont rattachées au type « recrutement_demandeur_emploi », faute de type de projet dédié à la formation d'un demandeur d'emploi à sa propre initiative.",
+    "Vérification du 06/10/2026 : bretagne.bzh et europe.bzh (Cloudflare, HTTP 403) n'ont pas été contournés. r53-programme-regional, r53-qualif-emploi-individuel et r53-pass-transitions passent en a_confirmer (extraits non retrouvables dans une copie locale) ; r53-aide-financiere est confirmée par la délibération 26_0206_02 du 30/03/2026 (data.megalis.bretagne.bzh), qui reprend le texte de la fiche.",
+    "Vérification du 06/10/2026 : barème de rémunération des stagiaires = barème national au 1er avril 2026 (service-public.fr F760, vérifié le 01/04/2026) : 226,48 € / 566,17 € / 775,65 €. r52 était déjà conforme ; r24 corrigé (la page régionale du 13/05/2026 affiche encore 224,68 € / 561,68 € / 769,49 €) ; r27 corrigé pour les 26 ans et plus (le document régional de janvier 2026 indique 769,49 €), les montants des moins de 26 ans (350 € / 590 € / 863 €) restant ceux de la Région.",
+    "Vérification du 06/10/2026 : doublon potentiel r52-poei-region / nat-poei (nat-2-recrutement-alternance.json) ; r52-1-emploi-1-formation est une composante de r52-programme-regional (risque de double affichage)."
+  ]
+}
