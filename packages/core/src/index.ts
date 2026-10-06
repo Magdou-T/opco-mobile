@@ -13,3 +13,4 @@ export * from './entreprise';
 export * from './aides/types';
 export * from './aides/criteres';
 export * from './aides/evaluer';
+export * from './aides/profil';
