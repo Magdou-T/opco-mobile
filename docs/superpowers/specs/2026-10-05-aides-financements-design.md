@@ -243,8 +243,9 @@ Types existants étendus : `CertificationType` reçoit `'rs'` et `'aucune'` ; `W
   - sinon `a_verifier` si un critère est `inconnu` ou si `statut = 'a_confirmer'` ;
   - sinon `eligible` (les `conditions` non vérifiables restent affichées).
 - Montant estimé (arrondi au centime, jamais négatif) :
-  - `forfait` → `valeur` ; `pourcentage` → `pourcentage × base` ; `par_heure` → `valeur × durée` ; `par_mois` → `valeur × duree_max_mois` (« jusqu'à ») ; `solde_cpf` → solde CPF saisi, sinon `null` (« jusqu'au montant de vos droits ») ; `non_chiffre` → `null`.
-  - Le `plafond` s'applique ; la première `majoration` dont les critères sont tous `ok` remplace valeur/pourcentage/plafond.
+  - `forfait` → `valeur` ; `pourcentage` → `pourcentage × base` ; `par_heure` → `valeur × durée` ; `par_mois` → `valeur × min(duree_max_mois, durée de la formation en mois à temps plein)` (« jusqu'à » ; 1 mois = 151,67 h = 35 h × 52 / 12, au prorata sans arrondi supérieur ; `null` si la durée du profil, `valeur` ou `duree_max_mois` est inconnu) ; `solde_cpf` → solde CPF saisi, sinon `null` (« jusqu'au montant de vos droits ») ; `non_chiffre` → `null`. Une aide versée sur une période indépendante de la formation (par exemple 500 € par mois pendant 3 mois après une rupture de contrat) est un `forfait` du total maximal, pas un `par_mois`.
+  - Le `plafond` s'applique ; la première `majoration` dont les critères sont tous `ok` remplace valeur/pourcentage/plafond (un `plafond: null` explicite lève le plafond de base).
+  - Une aide de catégorie `cout_formation` est limitée au coût connu de la formation (coût pédagogique + frais annexes) ; le montant estimé est aussi renseigné pour une aide `non_eligible` (ce qu'elle verserait si le profil y avait droit) : il n'est jamais affiché ni additionné.
 - Tri : éligibles, puis à vérifier, puis non éligibles ; à l'intérieur, par montant décroissant.
 
 ### 5.4 Plan de financement
@@ -252,7 +253,7 @@ Types existants étendus : `CertificationType` reçoit `'rs'` et `'aucune'` ; `W
 `construirePlan(opco: FundingResult | null, aides: AideEvaluee[], profil: ProfilAides): PlanFinancement`
 
 - `coutFormation` = coût pédagogique + frais annexes demandés.
-- **Financements de la formation** (catégorie `cout_formation`, éligibles, chiffrés, cumulables), empilés dans l'ordre `ordre_empilement` (défaut : OPCO 10, branche 15, Région 20, Agefiph 30, Europe 40, État / France Travail / Transitions Pro 50, FAF 60, CPF 90). Chaque ligne est **plafonnée au reste à charge courant** : le total ne dépasse jamais le coût. Le CPF passe en dernier (droits du bénéficiaire, mobilisés avec son accord).
+- **Financements de la formation** (catégorie `cout_formation` : l'aide paie la formation elle-même ; éligibles, chiffrés, cumulables ; les aides à la personne — rémunération, transport, hébergement, restauration, permis, équipement, mobilité — sont de catégorie `remuneration_beneficiaire`, jamais déduites du coût de la formation et présentées à part sous « Revenus et aides à la personne »), empilés dans l'ordre `ordre_empilement` (défaut : OPCO 10, branche 15, Région 20, Agefiph 30, Europe 40, État / France Travail / Transitions Pro 50, FAF 60, CPF 90). Chaque ligne est **plafonnée au reste à charge courant** : le total ne dépasse jamais le coût. Le CPF passe en dernier (droits du bénéficiaire, mobilisés avec son accord).
 - La ligne OPCO reprend `calculateFunding()` (projet « Former un salarié ») : pédagogie + frais annexes financés → financements de la formation ; « Prise en charge salaires » → aides à l'employeur. Les dispositifs complémentaires OPCO sont intégrés selon leur règle de cumul (`hors_budget`/`additif` → empilés ; `alternatif` → options).
 - **Alternatives** : si deux aides éligibles sont alternatives l'une de l'autre, la mieux chiffrée entre dans le plan, l'autre est présentée en option « au choix ».
 - Sorties séparées : `financements`, `totalFinance`, `resteACharge` (≥ 0), `aidesEmployeur`, `remunerations`, `avantagesFiscauxSociaux`, `options`, `nonChiffrees`.
