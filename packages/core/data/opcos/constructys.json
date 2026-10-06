@@ -123,18 +123,6 @@
       "description": "Batiment <11 salaries: cout pedagogique 24 euros HT/h, salaires 15 euros HT/h, budget 3 500 euros/an, complement pro 6 euros/h"
     },
     {
-      "taille": "less_11",
-      "branche": "travaux_publics",
-      "cout_horaire_max": 32,
-      "cout_pedagogique_max": 32,
-      "cout_transition_ecologique": 32,
-      "prise_en_charge_salaires": 15,
-      "budget_annuel_max": 4000,
-      "quota_horaire_max": null,
-      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
-      "description": "TP <11 salaries: 32 euros/h transition ecologique/numerique (hors budget annuel), salaires 15 euros HT/h"
-    },
-    {
       "taille": "11_49",
       "branche": "batiment",
       "cout_horaire_max": 19,
@@ -147,17 +135,6 @@
       "frais_annexes": "8% max, plafond 1500 euros HT/stagiaire (actions qualifiantes)",
       "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
       "description": "Batiment 11-49 salaries: cout pedagogique 19 euros HT/h (depuis 01/06/2026), salaires 10 euros HT/h (qualifiant/creation-reprise) ou 15 euros HT/h (AFEST), budget 6 000 euros/an"
-    },
-    {
-      "taille": "11_49",
-      "branche": "travaux_publics",
-      "cout_horaire_max": 32,
-      "cout_pedagogique_max": 32,
-      "budget_annuel_max": 4000,
-      "quota_horaire_max": null,
-      "cpf_coconstruit": true,
-      "source_url": "https://www.constructys.fr/decouvrez-les-modalites-de-participation-financiere-2026/",
-      "description": "TP 11-49 salaries: CPF co-construit avec remboursement dotation CDC"
     },
     {
       "taille": "50_299",
