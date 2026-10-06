@@ -1,0 +1,236 @@
+{
+  "slug": "opcommerce",
+  "name": "L'Opcommerce",
+  "nom_complet": "Opérateur de compétences du commerce",
+  "secteurs": "Commerce de detail, distribution, e-commerce, bricolage, commerce alimentaire, textile, jouet, horlogerie-bijouterie",
+  "secteurs_source": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+  "email_contact": "",
+  "url_finance_page": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+
+  "branches_professionnelles": {
+    "count": 20,
+    "note": "L'Opcommerce couvre 20 branches professionnelles, chacune avec ses propres criteres. Les entreprises sans convention collective relevent de la SPP Commerce.",
+    "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/"
+  },
+
+  "types_formations": [
+    "Plan de developpement des competences (Competences+)",
+    "Click&Form (actions collectives)",
+    "Alternance",
+    "Periode de reconversion"
+  ],
+  "types_formations_source": "https://www.lopcommerce.com/entreprise/",
+
+  "click_and_form": {
+    "description": "Catalogue d'environ 400 formations selectionnees et negociees par L'Opcommerce (~40 % sous les prix du marche). Pour les <50 salaries : 100 % des couts pedagogiques pris en charge, financement distinct du plafond Competences+.",
+    "reduction": "Couts pedagogiques inferieurs d'environ 40 % aux prix du marche",
+    "limite": "Quota d'inscriptions par an selon branche : 2/an (SPP Commerce) a 5/an (Bricolage)",
+    "source_url": "https://clickandform.lopcommerce.com/"
+  },
+
+  "cout_horaire_inter": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+    "note": "Pas de forfait horaire : le PDC (Competences+) fonctionne par plafond annuel global (1 500 ou 2 500 euros selon taille), incluant salaires et frais annexes le cas echeant."
+  },
+  "cout_horaire_intra": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+    "note": "Meme fonctionnement par plafond annuel global. Criteres propres a chacune des 20 branches."
+  },
+  "cout_horaire_metier": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+    "note": "Varie selon la branche professionnelle et le type de formation."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+    "note": "Publie par branche, imputee sur le plafond annuel : ex. 13 euros/h (SPP Commerce 2026), 14,50 euros/h (Bricolage 2026)."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+    "note": "SPP Commerce 2026 : frais reels dans la limite de 0,30 euros/km (parking et peages inclus), dans le plafond annuel. Bricolage : pas de prise en charge. Varie fortement par branche."
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+    "note": "SPP Commerce 2026 : 100 euros/nuit (region) / 130 euros/nuit (Ile-de-France), petit-dejeuner compris, dans le plafond annuel. Bricolage : pas de prise en charge."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+    "note": "SPP Commerce 2026 : 18 euros/jour (region) / 23 euros/jour (Ile-de-France), dans le plafond annuel. Bricolage : pas de prise en charge."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+    "note": "Pas de forfait pourcentage."
+  },
+
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+    "note": "Competences+ 2026 : 1 500 euros/an (<11 salaries) et 2 500 euros/an (11-49 salaries). Plafond GLOBAL : couts pedagogiques + salaires + frais annexes le cas echeant. Verifie sur les criteres SPP Commerce (10/07/2026) et Bricolage (01/06/2026)."
+  },
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 1500,
+      "quota_horaire_max": null,
+      "description": "Moins de 11 salaries : plafond global Competences+ 1 500 euros/an (pedagogie + salaires + frais annexes selon branche)."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 2500,
+      "quota_horaire_max": null,
+      "description": "11 a 49 salaries : plafond global Competences+ 2 500 euros/an."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "50+ salaries : pas de fonds mutualises PDC, fonds conventionnels et Projets Groupe selon branche."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries : fonds conventionnels et Projets Groupe selon branche."
+    }
+  ],
+  "budget_annuel_portee": "global",
+  "budget_annuel_description": "Competences+ 2026 : 1 500 euros/an (<11 sal.) | 2 500 euros/an (11-49 sal.), plafond global incluant salaires et frais annexes.",
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Tous salaries du commerce",
+    "Apprentis",
+    "Contrats de professionnalisation"
+  ],
+  "tailles_cibles": "Fonds mutualises reserves aux <50 salaries",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande via le portail Web Services Entreprises (entreprise.lopcommerce.com) | Demande recue plus d'un mois avant le debut : reponse garantie avant le demarrage",
+  "delai_validation": "Reponse avant le demarrage si demande deposee plus d'un mois avant la formation",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Apprentissage selon NPEC",
+  "alternance_professionnalisation": "SPP Commerce 2026 : 9,15 euros/h (tous publics), 15 euros/h (publics specifiques). Tutorat : 180 euros/mois (345 euros/mois publics specifiques). Formation tuteur : 15 euros/h, 24 h max.",
+
+  "cpf_abondement": true,
+  "cpf_details": "Abondement CPF possible selon branche",
+
+  "vae_possible": true,
+  "vae_details": "VAE accompagnee possible selon branche",
+
+  "limite_dossiers_an": "Click&Form : 2 a 5 inscriptions/an selon branche | Competences+ : dans la limite du plafond annuel",
+
+  "specificites": "20 branches avec criteres propres (dates d'entree en vigueur variables) | Click&Form : ~400 formations negociees, 100 % prises en charge pour les <50 sal. | Regles prudentielles 2026 : demandes a deposer avant le 30 novembre 2026 pour un demarrage en 2026 | Criteres revisables en cours d'annee dans la limite des fonds",
+  "points_cles_maximisation": "Utiliser Click&Form en priorite (100 % pris en charge, hors plafond Competences+, quota 2-5/an) | Deposer plus d'un mois avant le debut pour garantir la reponse | Verifier les criteres exacts de sa branche | Acces a ~20 000 ressources pedagogiques gratuites via Click&Form",
+
+  "dispositifs_sans_budget": [
+    {
+      "nom": "Click&Form",
+      "description": "Catalogue d'environ 400 formations negociees par L'Opcommerce. Pour les entreprises de moins de 50 salaries : 100 % des couts pedagogiques pris en charge, dans la limite du quota d'inscriptions de la branche (2 a 5 par an), financement distinct du plafond Competences+. Toutes les tailles beneficient des tarifs negocies (~-40 %).",
+      "url": "https://clickandform.lopcommerce.com/"
+    },
+    {
+      "nom": "Fonds Reserves Groupes",
+      "description": "Enveloppes conventionnelles negociees pour les reseaux d'enseignes, beneficiant aux entreprises de moins de 50 salaries du reseau.",
+      "url": "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/"
+    }
+  ],
+
+  "baremes_par_branche": [
+    {
+      "id": "spp-commerce",
+      "nom": "SPP Commerce (entreprises sans convention collective dédiée)",
+      "note": "Criteres SPP Commerce (mise a jour 10/07/2026) : plafond global Competences+ inchange (1 500/2 500 euros), remuneration 13 euros/h, frais annexes plafonnes, transport 0,30 euros/km, Click&Form limite a 2 inscriptions/an.",
+      "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+      "prise_en_charge_salaires": {
+        "value": 13,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "13 euros/h, imputee sur le plafond annuel global."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "Frais reels dans la limite de 0,30 euros/km (parking et peages inclus), dans le plafond annuel."
+      },
+      "frais_hebergement": {
+        "value": 100,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "100 euros/nuit en region, 130 euros/nuit en Ile-de-France (petit-dejeuner compris), dans le plafond annuel."
+      },
+      "frais_restauration": {
+        "value": 18,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+        "note": "18 euros/jour en region, 23 euros/jour en Ile-de-France, dans le plafond annuel."
+      }
+    },
+    {
+      "id": "bricolage",
+      "nom": "Bricolage",
+      "note": "Criteres Bricolage (en vigueur 01/06/2026) : plafonds Competences+ 1 500/2 500 euros, remuneration 14,50 euros/h, PAS de prise en charge des frais annexes, Click&Form limite a 5 inscriptions/an (1 action intra = 1 droit).",
+      "source_url": "https://www.lopcommerce.com/media/wq3kl50t/cpc_bricolage.pdf",
+      "prise_en_charge_salaires": {
+        "value": 14.5,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/wq3kl50t/cpc_bricolage.pdf",
+        "note": "14,50 euros/h, imputee sur le plafond annuel global."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/wq3kl50t/cpc_bricolage.pdf",
+        "note": "Pas de prise en charge des frais annexes dans la branche Bricolage."
+      },
+      "frais_hebergement": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/wq3kl50t/cpc_bricolage.pdf",
+        "note": "Pas de prise en charge."
+      },
+      "frais_restauration": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.lopcommerce.com/media/wq3kl50t/cpc_bricolage.pdf",
+        "note": "Pas de prise en charge."
+      }
+    }
+  ],
+
+  "sources": [
+    "https://www.lopcommerce.com/entreprise/criteres-de-prise-en-charge-par-branche-professionnelle/",
+    "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
+    "https://www.lopcommerce.com/media/wq3kl50t/cpc_bricolage.pdf",
+    "https://www.lopcommerce.com/entreprise/former-mes-salaries/plan-de-developpement-des-competences/"
+  ],
+  "derniere_verification": "2026-07-13"
+}

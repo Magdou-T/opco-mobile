@@ -1,0 +1,165 @@
+{
+  "slug": "opco2i",
+  "name": "OPCO 2i",
+  "nom_complet": "Opérateur de compétences interindustriel",
+  "secteurs": "Industries chimiques, pharmaceutiques, papier-carton, metallurgie, textile, ameublement, energie, industries electromecaniques et de transformation (32 branches industrielles)",
+  "secteurs_source": "https://www.opco2i.fr/",
+  "email_contact": "",
+  "url_finance_page": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+
+  "types_formations": [
+    "Plan de developpement des competences (<50 salaries)",
+    "Alternance (apprentissage, professionnalisation)",
+    "Periode de reconversion",
+    "2i Actions cles en main"
+  ],
+  "types_formations_source": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+
+  "cout_horaire_inter": {
+    "value": 30,
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/",
+    "note": "Cout reel plafonne a 30 euros HT/h, toutes formations (coeur de metier et autres), entreprises <50 salaries. Regle rapportee inchangee en 2026."
+  },
+  "cout_horaire_intra": {
+    "value": 30,
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/",
+    "note": "Meme plafond de 30 euros HT/h inter et intra (<50 salaries)."
+  },
+  "cout_horaire_metier": {
+    "value": 30,
+    "confidence": "exact",
+    "source_url": "https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/",
+    "note": "30 euros HT/h, formations coeur de metier incluses."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+    "note": "Le maintien du remboursement de la remuneration dans les regles 2026 n'est pas publie publiquement (historique : dans la limite du SMIC horaire brut, 12,02 euros au 01/01/2026, 12,31 euros au 01/06/2026). A confirmer via Mon Compte 2i."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+    "note": "Regles 2026 sur les frais annexes non publiees publiquement, le plafond annuel 2026 rapporte vise les couts pedagogiques. A confirmer via Mon Compte 2i."
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+    "note": "Non publie publiquement pour 2026."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+    "note": "Non publie publiquement pour 2026."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+    "note": "Pas de forfait pourcentage publie."
+  },
+
+  "budget_annuel_max": {
+    "value": 4800,
+    "confidence": "estimated",
+    "source_url": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+    "note": "4 800 euros/an/entreprise de couts pedagogiques (CA OPCO 2i du 18/12/2025, applicable au 01/01/2026, dans la limite des fonds disponibles), rapporte par des sources secondaires concordantes ; OPCO 2i ne publie plus ses baremes en acces public (portail adherent Mon Compte 2i). Plafond 2021-2025 : 6 000 euros."
+  },
+  "budget_annuel_portee": "pedagogie",
+  "budget_annuel_description": "4 800 euros/an/entreprise (couts pedagogiques, <50 salaries) depuis le 01/01/2026, a confirmer via Mon Compte 2i ; 6 000 euros jusqu'en 2025.",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 4800,
+      "quota_horaire_max": null,
+      "description": "PDC <11 salaries : 30 euros HT/h, plafond 4 800 euros/an (2026, a confirmer via Mon Compte 2i)."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 4800,
+      "quota_horaire_max": null,
+      "description": "PDC 11-49 salaries : 30 euros HT/h, plafond 4 800 euros/an (2026)."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "50-299 salaries : pas de PDC mutualise depuis 2019, versements volontaires et dispositifs specifiques."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries : pas de PDC mutualise, versements volontaires, alternance, cofinancements externes."
+    }
+  ],
+
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Salaries entreprises industrielles",
+    "Apprentis",
+    "Publics en reconversion"
+  ],
+  "tailles_cibles": "Fonds mutualises PDC reserves aux <50 salaries",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande obligatoirement AVANT le debut de la formation via Mon Compte 2i (portail.opco2i.fr) | Entreprise a jour de ses cotisations | Organisme certifie Qualiopi | Dans la limite des fonds disponibles (premier arrive, premier servi)",
+  "delai_validation": "Non publie, deposer avant le demarrage de la formation",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Selon NPEC fixes par certification (France competences). Reforme au 01/07/2025 : participation employeur de 750 euros pour les diplomes de niveau 6+ ; minoration de 20 % du NPEC si >=80 % de la formation a distance (plancher 4 000 euros, 33 certifications exemptees) ; paiement CFA en echeancier 40/30/20/solde.",
+  "alternance_professionnalisation": "Baremes par branche/SPP, non publies en acces public",
+
+  "cpf_abondement": true,
+  "cpf_details": "Abondement possible selon accord de branche",
+
+  "vae_possible": true,
+  "vae_details": "VAE et AFEST accompagnees selon branche",
+
+  "limite_dossiers_an": "Dans la limite du plafond annuel et des fonds disponibles",
+
+  "specificites": "32 branches industrielles | Baremes detailles reserves au portail adherent Mon Compte 2i (non publics) | Plafond PDC abaisse de 6 000 a 4 800 euros au 01/01/2026 (sources secondaires concordantes) | Transitions Industrie : campagne close (candidatures jusqu'au 31/12/2024, paiements jusqu'au 30/06/2026), taux 70 % (<50 sal.), 60 % (50-250), 50 % (>250) ; aucune reconduction annoncee",
+  "points_cles_maximisation": "Deposer tot dans l'annee (fonds limites, premier arrive premier servi) | 2i Actions cles en main : ~3 700 formations a tarifs negocies, gestion administrative assuree par l'OPCO (<50 sal.) | Formation des membres du CSE prise en charge (<50 sal.) | 2i Solutions financieres : aide a la recherche de cofinancements externes",
+
+  "dispositifs_sans_budget": [
+    {
+      "nom": "2i Actions clés en main",
+      "description": "Catalogue d'environ 3 700 formations a tarifs negocies : inscription en ligne, gestion administrative integrale par la delegation regionale, paiement direct des organismes (service gratuit <50 salaries) ; couts pedagogiques, transport, hebergement et repas pris en charge pour les <50 salaries. Attention : l'imputation sur le plafond PDC annuel est probable, a confirmer avec votre conseiller.",
+      "url": "https://www.opco2i.fr/services-solutions/2i-actions-cles-en-main/"
+    },
+    {
+      "nom": "Formation des membres du CSE (<50 salariés)",
+      "description": "Prise en charge de la formation des membres du CSE annoncee comme nouveaute pour les entreprises de moins de 50 salaries.",
+      "url": "https://www.opco2i.fr/nous-connaitre/les-actualites-et-evenements/nouveau-pour-les-entreprises-de-moins-de-50-salaries-la-formation-des-membres-du-cse-prise-en-charge-par-opco-2i/"
+    },
+    {
+      "nom": "2i Solutions financières",
+      "description": "Accompagnement a la recherche de cofinancements externes (FSE+, Region, Etat) qui ne consomment pas le budget OPCO de l'entreprise.",
+      "url": "https://www.opco2i.fr/"
+    }
+  ],
+
+  "sources_principales": [
+    "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
+    "https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/",
+    "https://www.opco2i.fr/reforme-du-financement-de-lapprentissage/",
+    "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000051808289"
+  ],
+  "derniere_verification": "2026-07-13"
+}

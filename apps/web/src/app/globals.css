@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/* ============================================================
+   financementOPCO, un service SFG Developpement. Design tokens.
+   Concept : dossier administratif annote.
+   Charte SFG : orange #E84E1B, vert clair #A3D1C8,
+   turquoise #5E9F92, rouge #BC1723, or #F9B233.
+   Typographie : Montserrat (titres), Inter (texte).
+   ============================================================ */
+
+:root {
+  --paper: #faf9f6;
+  --paper-deep: #f1efe9;
+  --ink: #1d1a17;
+  --ink-soft: #55504a;
+  --ink-faint: #948e86;
+  /* Orange primaire SFG (anciennement cobalt) */
+  --cobalt: #e84e1b;
+  --cobalt-soft: #fce9e2;
+  /* Surface sombre chaude (anciennement navy, le bleu est proscrit) */
+  --navy: #2b211b;
+  /* Vert clair SFG : le surligneur */
+  --marker: #a3d1c8;
+  --marker-soft: #e6f2ef;
+  /* Turquoise SFG fonce pour les confirmations */
+  --valid: #44786c;
+  --valid-soft: #e6f1ee;
+  /* Rouge SFG pour les alertes */
+  --alert: #bc1723;
+  --alert-soft: #f9e7e8;
+  --rule: #ddd9cf;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-cobalt: var(--cobalt);
+  --color-cobalt-soft: var(--cobalt-soft);
+  --color-navy: var(--navy);
+  --color-marker: var(--marker);
+  --color-marker-soft: var(--marker-soft);
+  --color-valid: var(--valid);
+  --color-valid-soft: var(--valid-soft);
+  --color-alert: var(--alert);
+  --color-alert-soft: var(--alert-soft);
+  --color-rule: var(--rule);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-inter), sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* Montants : mono tabulaire, toujours */
+.amount {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Signature : trait de surligneur derriere les chiffres cles */
+.mark {
+  position: relative;
+  white-space: nowrap;
+}
+.mark::before {
+  content: "";
+  position: absolute;
+  inset: 0.08em -0.18em -0.02em -0.18em;
+  background: var(--marker);
+  transform: skew(-8deg) rotate(-0.6deg);
+  z-index: -1;
+  border-radius: 0.08em;
+}
+
+/* Signature : tampon de fiabilite */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  transform: rotate(-1.2deg);
+  white-space: nowrap;
+}
+
+/* Libelle de marge (eyebrow administratif) */
+.marginalia {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Filet double facon bulletin officiel */
+.rule-double {
+  border-top: 1px solid var(--ink);
+  position: relative;
+}
+.rule-double::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--rule);
+}
+
+/* Focus visible propre partout */
+:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+  .mark::before {
+    background: #eee;
+  }
+}

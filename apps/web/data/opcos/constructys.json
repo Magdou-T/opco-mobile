@@ -1,0 +1,250 @@
+{
+  "slug": "constructys",
+  "name": "Constructys",
+  "nom_complet": "Opérateur de compétences de la construction",
+  "secteurs": "Batiment, Travaux Publics et Negoce des materiaux de construction",
+  "secteurs_source": "https://www.constructys.fr/",
+  "email_contact": "",
+  "url_finance_page": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+
+  "types_formations": [
+    "Plan de developpement des competences",
+    "Alternance",
+    "AFEST",
+    "VAE",
+    "Bilan de competences",
+    "FEEBAT",
+    "Periode de reconversion"
+  ],
+  "types_formations_source": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+
+  "cout_horaire_inter": {
+    "value": 19,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "Batiment : 24 euros HT/h/stagiaire en debut 2026, ABAISSE a 19 euros HT/h pour toute demande recue depuis le 01/06/2026 (entreprises 11 a <300 sal.). Les <11 sal. restent a 24 euros HT/h. TP : 32 euros HT/h (<50 sal., budget annuel 4 000 euros). Intra : limite 840 euros HT/jour/groupe."
+  },
+  "cout_horaire_intra": {
+    "value": null,
+    "confidence": "estimated",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "Memes plafonds horaires que l'inter, avec limite complementaire de 840 euros HT/jour/groupe en intra (Batiment)."
+  },
+  "cout_horaire_transition_ecologique_tp": {
+    "value": 32,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "TP <11 salaries : formations transition ecologique / developpement durable / numerique a 32 euros HT/h HORS budget annuel (meme taux que le standard TP, mais sans consommer les 4 000 euros)."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": 15,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "Batiment <11 sal. : 15 euros HT/h/stagiaire (FEEBAT : 100 euros HT/jour/stagiaire). Batiment 11-49 : 10 euros HT/h (actions qualifiantes) ou 15 euros HT/h (creation/reprise/transmission, AFEST). TP <50 : 15 euros HT/h hors budget annuel (fonds conventionnels)."
+  },
+  "prise_en_charge_salaires_mode": "euro_par_heure",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "Inclus dans le forfait frais annexes : 8 % max des couts pedagogiques finances, plafond 1 500 euros HT/stagiaire, actions qualifiantes uniquement (Batiment <50 sal.)."
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "Inclus dans le forfait frais annexes 8 % (voir transport)."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "Inclus dans le forfait frais annexes 8 % (voir transport)."
+  },
+  "frais_annexes_pourcentage": {
+    "value": 8,
+    "confidence": "exact",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "8 % max des couts pedagogiques pris en charge, plafond 1 500 euros HT/stagiaire. Batiment <50 salaries, actions qualifiantes uniquement."
+  },
+
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "note": "Batiment : pas de budget annuel en euros publie, plafonds en HEURES : 300 h/stagiaire (non qualifiant), 1 200 h/stagiaire et 3 stagiaires/an/entreprise (qualifiant). TP : 4 000 euros HT/an de couts pedagogiques pour toutes les entreprises <50 salaries (double a 8 000 euros avec accord APLD-Rebond valide)."
+  },
+  "budget_annuel_portee": "pedagogie",
+  "budget_annuel_description": "Batiment : plafonds en heures (300 h non qualifiant / 1 200 h qualifiant, 3 stagiaires/an). TP : 4 000 euros HT/an (<50 sal.), 8 000 euros avec accord APLD-Rebond.",
+  "quota_horaire_min": null,
+  "quota_horaire_max": 1200,
+
+  "profils_candidats": [
+    "Salaries",
+    "Apprentis",
+    "Contrats de professionnalisation",
+    "Demandeurs d'emploi"
+  ],
+  "tailles_cibles": "Fonds mutualises PDC reserves aux <50 salaries",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande prealable obligatoire via eGestion : dossier complet 15 jours calendaires avant le debut de la formation | Formation non demarree avant reception de la demande | Demandes hors delai non financees",
+  "delai_validation": "Dossier complet a deposer 15 jours calendaires avant le demarrage",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Apprentissage selon NPEC (niveaux de prise en charge France competences)",
+  "alternance_professionnalisation": "Selon forfaits de branche (FNTP : 7 a 22 euros/h selon public pour les TP)",
+
+  "cpf_abondement": true,
+  "cpf_details": "CPF co-construit TP <50 salaries : remboursement de la dotation/abondement verse a la Caisse des depots (accord du 11 mai 2023) + remuneration 15 euros HT/h sur temps de travail",
+
+  "vae_possible": true,
+  "vae_details": "Accompagnement VAE plafonne a 2 000 euros HT. Bilan de competences : plafond 2 000 euros HT. Evaluations CleA : 500/250 euros HT.",
+
+  "limite_dossiers_an": "Batiment qualifiant : 3 stagiaires/an/entreprise (1 200 h max/stagiaire)",
+
+  "specificites": "Baisse du plafond Batiment de 24 a 19 euros HT/h pour les demandes recues depuis le 01/06/2026 (11 a <300 sal.), signe de tension budgetaire, deposer tot | FEEBAT : renovation energetique cofinancee CEE | Ingenierie AFEST : 900 euros HT/jour, 4 jours max | Lean Management <300 sal. : 1 000 euros HT/jour (2 j diagnostic + 6 j accompagnement) | Coaching 50-299 sal. : 125 euros HT/h/groupe, max 5 000 euros HT/an",
+  "points_cles_maximisation": "Deposer le dossier complet au moins 15 jours avant le demarrage (imperativement avant le debut) | TP <11 : formations transition ecologique/numerique hors budget annuel | FEEBAT : reste a charge quasi nul via cofinancement CEE | APLD-Rebond : budget TP double a 8 000 euros | Deposer tot dans l'annee (les enveloppes s'epuisent)",
+
+  "dispositifs_sans_budget": [
+    {
+      "nom": "Actions collectives territoriales",
+      "description": "Formations cles en main negociees par Constructys avec des organismes locaux sur des themes prioritaires, entierement financees et organisees pres des entreprises. Voir les actualites regionales de votre region sur constructys.fr.",
+      "url": "https://www.constructys.fr/"
+    },
+    {
+      "nom": "FEEBAT (renovation energetique)",
+      "description": "Formations aux economies d'energie dans le batiment, cofinancees Constructys + certificats d'economie d'energie (CEE) : reste a charge nul ou quasi nul pour la plupart des entreprises. Salaires <11 sal. : 100 euros HT/jour/stagiaire.",
+      "url": "https://feebat.org/"
+    },
+    {
+      "nom": "Transition ecologique / numerique TP (<11 salaries)",
+      "description": "Formations transition ecologique, developpement durable et numerique financees a 32 euros HT/h HORS budget annuel : elles ne consomment pas les 4 000 euros de l'enveloppe TP.",
+      "url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/"
+    },
+    {
+      "nom": "CPF co-construit TP (<50 salaries)",
+      "description": "Remboursement par Constructys de la dotation CPF versee a la Caisse des depots + prise en charge de la remuneration (15 euros HT/h) : financement specifique hors budget annuel.",
+      "url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/"
+    }
+  ],
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": 24,
+      "budget_annuel_max": null,
+      "quota_horaire_max": 1200,
+      "description": "Batiment <11 sal. : 24 euros HT/h, salaires 15 euros HT/h, plafonds en heures (300 h non qualifiant / 1 200 h qualifiant). TP <11 : 32 euros HT/h, budget 4 000 euros HT/an, transition ecologique hors budget."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": 19,
+      "budget_annuel_max": null,
+      "quota_horaire_max": 1200,
+      "description": "Batiment 11-49 : 19 euros HT/h (depuis le 01/06/2026 ; 24 euros avant), salaires 10 euros HT/h (qualifiant). TP 11-49 : 32 euros HT/h, budget 4 000 euros HT/an."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": 19,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "50-299 sal. : Batiment 19 euros HT/h (couts pedagogiques), budget non publie (« contactez vos interlocuteurs en region »). Pas de fonds mutualises PDC (reserves <50)."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries : pas de fonds mutualises PDC, versements volontaires et fonds conventionnels selon branche."
+    }
+  ],
+
+  "baremes_par_branche": [
+    {
+      "id": "batiment",
+      "nom": "Bâtiment",
+      "note": "Fiche Batiment PDC 2026 : 24 euros HT/h (<11 sal.) ; 19 euros HT/h pour les 11 a moins de 300 salaries (demandes recues depuis le 01/06/2026). Plafonds en heures : 300 h (non qualifiant) / 1 200 h et 3 stagiaires/an (qualifiant). Intra : 840 euros HT/jour/groupe max.",
+      "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+      "frais_annexes_pourcentage": {
+        "value": 8,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+        "note": "8 % max des couts pedagogiques finances, plafond 1 500 euros HT/stagiaire, actions qualifiantes uniquement (<50 sal.)."
+      },
+      "prise_en_charge_salaires": {
+        "value": 15,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+        "note": "<11 sal. : 15 euros HT/h (FEEBAT : 100 euros HT/jour). 11-49 sal. : 10 euros HT/h (qualifiant) ou 15 euros HT/h (creation/reprise, AFEST)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "plafonds_par_taille": [
+        { "taille": "less_11", "cout_horaire_max": 24, "budget_annuel_max": null, "quota_horaire_max": 1200, "description": "Batiment <11 sal. : 24 euros HT/h, salaires 15 euros HT/h, plafonds en heures (300 h non qualifiant / 1 200 h qualifiant)." },
+        { "taille": "11_49", "cout_horaire_max": 19, "budget_annuel_max": null, "quota_horaire_max": 1200, "description": "Batiment 11-49 sal. : 19 euros HT/h (depuis le 01/06/2026), salaires 10 euros HT/h (qualifiant)." },
+        { "taille": "50_299", "cout_horaire_max": 19, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Batiment 50-299 sal. : 19 euros HT/h, budget non publie (contactez vos interlocuteurs en region)." },
+        { "taille": "300_plus", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "300+ salaries : pas de fonds mutualises PDC." }
+      ]
+    },
+    {
+      "id": "travaux-publics",
+      "nom": "Travaux Publics",
+      "note": "Fiche TP PDC 2026 : 32 euros HT/h/stagiaire, budget annuel de 4 000 euros HT de couts pedagogiques pour toutes les entreprises <50 salaries (double a 8 000 euros avec accord APLD-Rebond valide). Remuneration 15 euros HT/h HORS budget annuel (fonds conventionnels). Transition ecologique/numerique <11 sal. : hors budget annuel.",
+      "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+      "cout_horaire_inter": {
+        "value": 32,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+        "note": "32 euros HT/h/stagiaire, plafond standard TP (<50 sal.)."
+      },
+      "frais_annexes_pourcentage": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+        "note": "Le forfait frais annexes de 8 % est propre au Batiment."
+      },
+      "prise_en_charge_salaires": {
+        "value": 15,
+        "confidence": "exact",
+        "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+        "note": "15 euros HT/h, hors budget annuel (fonds conventionnels TP, <50 sal.)."
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "plafonds_par_taille": [
+        { "taille": "less_11", "cout_horaire_max": 32, "budget_annuel_max": 4000, "quota_horaire_max": null, "description": "TP <11 sal. : 32 euros HT/h, budget 4 000 euros HT/an ; transition ecologique/numerique hors budget." },
+        { "taille": "11_49", "cout_horaire_max": 32, "budget_annuel_max": 4000, "quota_horaire_max": null, "description": "TP 11-49 sal. : 32 euros HT/h, budget 4 000 euros HT/an (8 000 euros avec APLD-Rebond)." },
+        { "taille": "50_299", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "TP 50+ sal. : pas de fonds mutualises PDC." },
+        { "taille": "300_plus", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "TP 300+ sal. : pas de fonds mutualises PDC." }
+      ]
+    },
+    {
+      "id": "negoce-materiaux",
+      "nom": "Négoce des matériaux de construction",
+      "note": "Modalites detaillees 2026 non publiques. Elements confirmes : reconversion CQP a 19 euros HT/h a compter du 01/07/2026 ; AEFMA portee de 500 a 750 euros. Contactez votre conseiller Constructys.",
+      "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+      "cout_horaire_inter": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+        "note": "Bareme Negoce 2026 non publie en acces public."
+      },
+      "plafonds_par_taille": [
+        { "taille": "less_11", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Bareme Negoce non publie : contactez Constructys." },
+        { "taille": "11_49", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Bareme Negoce non publie : contactez Constructys." },
+        { "taille": "50_299", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Pas de fonds mutualises PDC." },
+        { "taille": "300_plus", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Pas de fonds mutualises PDC." }
+      ]
+    }
+  ],
+
+  "sources": [
+    "https://www.constructys.fr/financer-vos-projets-de-formation/modalites-demandes-de-prise-charge/conditions-de-prise-en-charge-2/",
+    "https://www.capeb.fr/www/capeb/media//pays-de-la-loire/document/CONSTRUCTYS-Modalites_Batiment_PDC_2026.pdf",
+    "https://www.capeb.fr/www/capeb/media//pays-de-la-loire/document/CONSTRUCTYS-Modalites_TP_PDC_2026.pdf",
+    "https://www.fntp.fr/quelles-modalites-de-prise-en-charge-de-vos-formations-pour-2026/"
+  ],
+  "derniere_verification": "2026-07-13"
+}

@@ -1,0 +1,217 @@
+{
+  "slug": "atlas",
+  "name": "ATLAS",
+  "nom_complet": "Opérateur de compétences des services financiers et du conseil",
+  "secteurs": "Services financiers, conseil, ingenierie, informatique, bureaux d'etudes techniques, assurances, societes d'assistance",
+  "secteurs_source": "https://www.opco-atlas.fr/",
+  "email_contact": "",
+  "url_finance_page": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+
+  "types_formations": [
+    "Actions de formation du plan de dev. des competences",
+    "Actions collectives nationales (campusAtlas)",
+    "AFEST (Action de Formation En Situation de Travail)",
+    "VAE",
+    "Tutorat",
+    "Periode de reconversion"
+  ],
+  "types_formations_source": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+
+  "cout_horaire_inter": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Le PDC 2026 de la branche bureaux d'etudes (BETIC) ne fonctionne pas au forfait horaire mais par budget annuel fixe (2 500 a 4 000 euros HT/an selon taille, couts pedagogiques uniquement). Chaque branche Atlas publie sa propre grille."
+  },
+  "cout_horaire_intra": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Meme fonctionnement que l'inter : budget annuel fixe par taille, pas de forfait horaire publie pour le PDC BETIC 2026."
+  },
+  "cout_horaire_afest": {
+    "value": 40,
+    "confidence": "exact",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Soutien AFEST 2026 : 40 euros HT/h, plafonne a 150 h par formation. Budget annuel AFEST : 8 000 euros HT (<300 sal.), 12 000 (300-999), 18 000 (1000+), majore avec referent AFEST."
+  },
+  "cout_horaire_afest_heures_max": 150,
+  "cout_horaire_metier": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement.html",
+    "note": "Grilles distinctes publiees par branche sur opco-atlas.fr (rubrique criteres de financement)."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Pas de prise en charge des salaires publiee pour le PDC BETIC 2026 (couts pedagogiques uniquement)."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Non pris en charge sur le PDC BETIC 2026. Apprentissage uniquement : forfaits specifiques."
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Non pris en charge sur le PDC. Apprentissage : 6 euros net de taxe/nuit."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Non pris en charge sur le PDC. Apprentissage : 3 euros net de taxe/repas."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Pas de forfait pourcentage frais annexes pour le PDC."
+  },
+  "frais_apprentissage": {
+    "restauration_par_repas": 3,
+    "hebergement_par_nuit": 6,
+    "premier_equipement_max": 500,
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Forfaits apprentissage uniquement (net de taxe). Mobilite ultra-marine : 1 000 euros max."
+  },
+
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "Branche BETIC 2026 : 2 500 euros HT/an (<11 sal.), 3 000 euros HT/an (11-49), 4 000 euros HT/an (50-299), couts pedagogiques uniquement, reserve aux <300 salaries. Autres branches : grilles propres."
+  },
+  "budget_annuel_portee": "pedagogie",
+  "budget_annuel_description": "BETIC 2026 : 2 500 / 3 000 / 4 000 euros HT/an selon taille (<300 sal., couts pedagogiques uniquement). Varie par branche. Bonus Transition Ecologique en plus : 2 000 a 4 500 euros/an.",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 2500,
+      "quota_horaire_max": null,
+      "description": "Moins de 11 salaries (BETIC) : budget PDC 2 500 euros HT/an (couts pedagogiques). campusAtlas : 3 credits actions collectives/an."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 3000,
+      "quota_horaire_max": null,
+      "description": "11-49 salaries (BETIC) : budget PDC 3 000 euros HT/an. campusAtlas : 5 credits actions collectives/an."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": 4000,
+      "quota_horaire_max": null,
+      "description": "50-299 salaries (BETIC) : budget PDC 4 000 euros HT/an. campusAtlas : 7 credits actions collectives/an."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries : pas de PDC finance sur fonds mutualises (hors bonus). campusAtlas : credits pour 3 % de l'effectif."
+    }
+  ],
+
+  "tutorat": {
+    "montant_mensuel": 230,
+    "montant_mensuel_prioritaire": 345,
+    "duree_max_mois": 4,
+    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "note": "230 euros/mois (345 euros/mois pour 45 ans et plus ou publics prioritaires), net de taxe, 4 mois maximum. Formation de tuteur : 40 h a 15 euros HT/h."
+  },
+
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Tous salaries entreprise relevante",
+    "TPE/PME prioritaires",
+    "BOETH (beneficiaires obligation emploi travailleurs handicapes)",
+    "Salaries 45 ans et plus (tutorat majore)"
+  ],
+  "tailles_cibles": "PDC reserve aux entreprises de moins de 300 salaries (BETIC)",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande via myAtlas Entreprise, a deposer avant le debut de la formation | Contribution conventionnelle a jour | Sous reserve de fonds disponibles",
+  "delai_validation": "Non publie, seul imperatif : dossier depose avant le debut de la formation",
+  "mode_paiement": "Tiers-payant ou remboursement",
+
+  "alternance_apprentissage": "Apprentissage selon NPEC de branche. Frais annexes apprentissage : 3 euros/repas, 6 euros/nuit, 1er equipement 500 euros max.",
+  "alternance_professionnalisation": "Professionnalisation selon accord de branche",
+
+  "cpf_abondement": true,
+  "cpf_details": "Selon accord de branche",
+
+  "vae_possible": true,
+  "vae_details": "Couts reels plafonnes a 3 000 euros HT (3 500 euros HT pour les certifications de branche)",
+
+  "limite_dossiers_an": "Sous reserve de fonds disponibles",
+
+  "specificites": "Grilles de financement distinctes par branche (BETIC, assurance, banque...) | campusAtlas : actions collectives 100 % prises en charge via credits annuels | Soutien AFEST 40 euros HT/h (150 h max) | Bonus Transition Ecologique 2026 : 2 000 a 4 500 euros/an en plus du PDC",
+  "points_cles_maximisation": "Utiliser d'abord les credits campusAtlas (100 % pris en charge, hors budget PDC) | Formations en acces libre illimite : tutorat, transmission des competences, climat, harcelement sexuel, salaries BOETH | Plan IA-tlas : modules IA finances a 100 % (dossiers du 01/07 au 15/12/2026) | Bonus Transition Ecologique en plus du budget annuel",
+
+  "dispositifs_sans_budget": [
+    {
+      "nom": "campusAtlas, actions collectives",
+      "description": "Catalogue de formations cles en main selectionnees par les branches, 100 % des couts pedagogiques pris en charge dans la limite des credits annuels (3 credits <11 sal., 5 pour 11-49, 7 pour 50-299, 3 % de l'effectif au-dela). Hors budget PDC de l'entreprise.",
+      "url": "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html"
+    },
+    {
+      "nom": "campusAtlas, acces libre (sans credit)",
+      "description": "Certaines thematiques sont financees a 100 % au-dela des credits : fondamentaux tuteurs et maitres d'apprentissage, transmission des competences, climat et developpement durable, harcelement sexuel et agissements sexistes, et toute formation suivie par un salarie BOETH.",
+      "url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils"
+    },
+    {
+      "nom": "Plan IA-tlas",
+      "description": "Modules dedies a l'intelligence artificielle finances a 100 % du cout pedagogique. Dossiers du 1er juillet au 15 decembre 2026, formation demarree avant le 31 decembre 2026.",
+      "url": "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html"
+    },
+    {
+      "nom": "Bonus Transition Ecologique (2026)",
+      "description": "Budget supplementaire s'ajoutant au PDC pour les formations liees a la transition ecologique : 2 000 euros HT/an (1-49 sal.), 3 000 euros (50-299), 4 500 euros (300+).",
+      "url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils"
+    }
+  ],
+
+  "baremes_par_branche": [
+    {
+      "id": "betic",
+      "nom": "Bureaux d'études techniques, ingénierie, conseil (BETIC)",
+      "note": "Grille BETIC 2026 verifiee : budgets PDC de 2 500 / 3 000 / 4 000 euros HT/an selon la taille (couts pedagogiques uniquement, <300 salaries). C'est le bareme applique par defaut dans ce simulateur.",
+      "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils"
+    },
+    {
+      "id": "autre-branche-atlas",
+      "nom": "Autre branche Atlas (assurance, banque, assistance...)",
+      "note": "Chaque branche Atlas publie sa propre grille : les budgets BETIC ne s'appliquent pas. Consultez la grille de votre branche sur opco-atlas.fr (rubrique criteres de financement).",
+      "source_url": "https://www.opco-atlas.fr/criteres-financement.html",
+      "budget_annuel_portee": "pedagogie",
+  "budget_annuel_description": "Selon la grille publiee par votre branche sur opco-atlas.fr.",
+      "plafonds_par_taille": [
+        { "taille": "less_11", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Selon la grille de votre branche (opco-atlas.fr)." },
+        { "taille": "11_49", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Selon la grille de votre branche (opco-atlas.fr)." },
+        { "taille": "50_299", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Selon la grille de votre branche (opco-atlas.fr)." },
+        { "taille": "300_plus", "cout_horaire_max": null, "budget_annuel_max": null, "quota_horaire_max": null, "description": "Pas de PDC sur fonds mutualises." }
+      ]
+    }
+  ],
+
+  "sources": [
+    "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html",
+    "https://www.opco-atlas.fr/criteres-financement.html"
+  ],
+  "derniere_verification": "2026-07-13"
+}

@@ -1,0 +1,198 @@
+{
+  "slug": "ocapiat",
+  "name": "OCAPIAT",
+  "nom_complet": "Opérateur de compétences pour la coopération agricole, l'agriculture, la pêche, l'industrie agroalimentaire et les territoires",
+  "secteurs": "Agriculture, agroalimentaire, peche, cooperation agricole, territoires",
+  "secteurs_source": "https://www.ocapiat.fr/",
+  "email_contact": "",
+  "url_finance_page": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+
+  "types_formations": [
+    "Plan de developpement des competences",
+    "Alternance",
+    "VAE",
+    "CQP/TFP",
+    "Boost Competences",
+    "Soutien aux filieres",
+    "Offre regionale TPE-PME",
+    "DEFI Emploi"
+  ],
+  "types_formations_source": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+
+  "cout_horaire_inter": {
+    "value": 40,
+    "confidence": "exact",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Cout horaire plafonne a 40 euros HT/h/stagiaire, commun aux dispositifs Boost Competences, Soutien aux filieres et actions certifiantes (regle en vigueur au 01/05/2026, CA du 12/05/2026 V4)."
+  },
+  "cout_horaire_intra": {
+    "value": 40,
+    "confidence": "estimated",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Meme plafond horaire de 40 euros HT/h applique aux dispositifs OCAPIAT."
+  },
+  "cout_horaire_metier": {
+    "value": 40,
+    "confidence": "exact",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Actions certifiantes CQP/TFP/RS : 40 euros HT/h max, prise en charge plafonnee a 8 000 euros HT/stagiaire/dossier."
+  },
+
+  "boost_competences": {
+    "taux": "50 % des couts pedagogiques demandes",
+    "plafond_par_stagiaire_dossier": 750,
+    "cout_horaire_max": 40,
+    "note": "Boost Competences 2026 : 50 % des couts pedagogiques, plafonnes a 750 euros HT/stagiaire/dossier, cout horaire max 40 euros HT/h (au 01/05/2026). Salaire : 12 euros/h HT uniquement pour les salaries de 50 ans et plus, plafonne au cout pedagogique engage. Applicable <11 et 11-49 salaries. Depot entre 2 mois avant et le 1er jour de la formation. Exclusions : Peche/PCMCM, Chambres d'agriculture.",
+    "source_url": "https://www.ocapiat.fr/financement-sur-mesure-par-lopco-simulateur-boost-competences/"
+  },
+
+  "soutien_filieres": {
+    "taux": "70 % des couts pedagogiques demandes",
+    "plafond_par_stagiaire_dossier": 1050,
+    "cout_horaire_max": 40,
+    "note": "Soutien aux filieres 2026 : 70 % des couts pedagogiques, plafonnes a 1 050 euros HT/stagiaire/dossier, cout horaire max 40 euros/h. Salaire : 12 euros/h HT pour les 50 ans et plus uniquement. Reserve aux <50 salaries en grandes difficultes conjoncturelles, sur saisine paritaire de la branche + avis favorable de la Commission Sectorielle Professionnelle (pas un guichet libre). Depot entre 2 mois et 5 jours avant le demarrage.",
+    "source_url": "https://www.ocapiat.fr/soutien-aux-filieres/"
+  },
+
+  "accompagnement_projets_certifiants": {
+    "parcours_complet": "1 200 euros HT/jour, max 3 jours (parcours complet CQP/TFP/CleA)",
+    "certifications_rs_blocs": "600 euros HT/jour, max 3 jours (certifications RS et blocs CQP/TFP)",
+    "note": "Accompagnement/ingenierie des entreprises pour la realisation de projets certifiants (etudes d'opportunite, accompagnement tuteurs), distinct du financement des formations elles-memes.",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+
+  "bilan_de_competences": {
+    "cout_horaire_max": 75,
+    "heures_max": 24,
+    "note": "75 euros HT/h/stagiaire, 24 h max d'accompagnement",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "12 euros/h HT UNIQUEMENT pour les salaries de 50 ans et plus (Boost, Soutien filieres, Offre regionale, actions certifiantes), remboursement plafonne au montant du cout pedagogique engage (regle au 01/05/2026). Pas de prise en charge generale des salaires."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Prevu uniquement dans des cas cibles (salaries DROM/Antilles-Guyane pour l'offre regionale, jurys de certaines branches)."
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Cas cibles uniquement (voir transport)."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Cas cibles uniquement (voir transport)."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Pas de forfait general."
+  },
+
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "note": "Par dispositif et par dossier plutot que par an : Boost 750 euros HT/stagiaire/dossier (50 %), Soutien filieres 1 050 euros HT/stagiaire/dossier (70 %), actions certifiantes 8 000 euros HT/stagiaire/dossier."
+  },
+  "budget_annuel_description": "Plafonds par stagiaire et par dossier : Boost 750 euros HT (50 % des couts), Soutien filieres 1 050 euros HT (70 %), actions certifiantes CQP/TFP/RS 8 000 euros HT.",
+  "quota_horaire_min": 3.5,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Salaries secteur agricole et agroalimentaire",
+    "Apprentis",
+    "Saisonniers",
+    "Salaries de 50 ans et plus (remuneration 12 euros/h)"
+  ],
+  "tailles_cibles": "Fonds mutualises reserves aux <50 salaries (priorite TPE)",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": "Min 3h30 suivies en continu (une demi-journee)",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": 40,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "TPE <11 salaries : acces prioritaire a l'Offre regionale 100 % prise en charge + Boost Competences (50 %, 750 euros/stagiaire/dossier)."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": 40,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "11-49 salaries : Boost Competences (50 %, 750 euros/stagiaire/dossier), Soutien filieres si branche eligible, actions certifiantes jusqu'a 8 000 euros/stagiaire."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "50-299 salaries : pas de fonds mutualises PDC, alternance, versements volontaires et dispositifs specifiques."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries : acces limite, principalement alternance et versements volontaires."
+    }
+  ],
+
+  "processus_approbation": "Demande dematerialisee via le portail OCAPIAT, obligatoirement avant le debut de l'action | Boost : depot entre 2 mois avant et le 1er jour | Soutien filieres : entre 2 mois et 5 jours avant | Justificatifs sous 3 mois apres la fin | OF certifie Qualiopi",
+  "delai_validation": "Non publie, deposer au plus tot (2 mois avant le demarrage recommande)",
+  "mode_paiement": "Tiers-payant possible",
+
+  "alternance_apprentissage": "Apprentissage selon NPEC",
+  "alternance_professionnalisation": "Selon accord de branche",
+
+  "cpf_abondement": true,
+  "cpf_details": "Possible selon accord de branche",
+
+  "vae_possible": true,
+  "vae_details": "VAE accompagnee selon accord de branche. Jurys CQP alimentaire : 100 % des couts reels justifies (accord du 19/09/2025).",
+
+  "limite_dossiers_an": "DEFI Emploi : 2 par an et par entreprise (10 pour un groupement d'employeurs), 1 DEFI par salarie tous les 5 ans",
+
+  "specificites": "Regles 2026 durcies au 01/05/2026 (plafond 40 euros/h, remboursement salaires plafonne au cout pedagogique) | Soutien aux filieres : 70 % plafonne 1 050 euros HT/stagiaire, sur saisine de branche uniquement | Boost Competences : 50 % plafonne 750 euros HT/stagiaire | Remuneration 12 euros/h HT reservee aux salaries de 50 ans et plus",
+  "points_cles_maximisation": "Utiliser d'abord l'Offre regionale TPE-PME (100 % pris en charge, +3 500 formations, <50 sal.) | Offres accompagnees TSF/PRP/AFEST/Diagnostic RH financees a 100 % (1 200 euros/jour, 8 jours max) | DEFI Emploi pour integrer un nouveau collaborateur | Salaries 50 ans et plus : remuneration 12 euros/h en plus",
+
+  "dispositifs_sans_budget": [
+    {
+      "nom": "Offre regionale TPE-PME (offre cle en main)",
+      "description": "Plus de 3 500 formations courtes reservees prioritairement aux entreprises de moins de 50 salaries : 100 % des couts pedagogiques pris en charge sur les fonds mutualises OCAPIAT (+ remuneration 12 euros/h HT pour les 50 ans et plus ; frais annexes DROM/Antilles-Guyane), dans la limite de l'enveloppe annuelle.",
+      "url": "https://www.ocapiat.fr/catalogue-de-formations-et-financement/"
+    },
+    {
+      "nom": "Offres accompagnees (TSF, PRP, AFEST Time, Diagnostic RH)",
+      "description": "Prestations d'accompagnement realisees par des prestataires references et reglees directement par OCAPIAT : 1 200 euros HT/jour, 8 jours max par accompagnement, financees a 100 %.",
+      "url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+    },
+    {
+      "nom": "DEFI Emploi / DEFI Maintien / DEFI Pro",
+      "description": "Appui a l'integration-formation d'un nouveau collaborateur (CDI ou CDD >6 mois, formation interne 35-149 h) : 600 euros HT d'ingenierie regles directement par OCAPIAT + 50 % des couts de formation interne (forfait 20 euros HT/h/stagiaire). Limites : 1 DEFI/5 ans par salarie, 2 par an et par entreprise.",
+      "url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+    }
+  ],
+
+  "sources": [
+    "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
+    "https://www.ocapiat.fr/soutien-aux-filieres/",
+    "https://www.ocapiat.fr/financement-sur-mesure-par-lopco-simulateur-boost-competences/",
+    "https://www.ocapiat.fr/catalogue-de-formations-et-financement/"
+  ],
+  "derniere_verification": "2026-07-13"
+}

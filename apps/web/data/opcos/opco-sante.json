@@ -1,0 +1,178 @@
+{
+  "slug": "opco-sante",
+  "name": "OPCO Santé",
+  "nom_complet": "Opérateur de compétences des secteurs de la santé, du médico-social et du social",
+  "secteurs": "Sante, medico-social, social, services de sante au travail",
+  "secteurs_source": "https://www.opco-sante.fr/",
+  "email_contact": "",
+  "url_finance_page": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+
+  "types_formations": [
+    "Plan de developpement des competences (TPME Evolution, <50 salaries)",
+    "Alternance",
+    "VAE",
+    "Bilan de competences",
+    "Formations prioritaires de branche"
+  ],
+  "types_formations_source": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+
+  "note_generale": "Pour les entreprises de moins de 50 salaries, le dispositif TPME Evolution donne acces a une aide de 6 000 euros via la contribution legale : 100 % des couts pedagogiques et des frais annexes dans la limite de 30 euros/h/stagiaire. Pour les 50+ : plan conventionnel selon branche ou compte investissement formation (CIFA, versements volontaires, frais de services 6 %).",
+  "note_generale_source": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+
+  "cout_horaire_inter": {
+    "value": 30,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "100 % des couts pedagogiques et frais annexes dans la limite de 30 euros/h/stagiaire (TPME Evolution, <50 salaries). Exemple officiel : 140 h a 40 euros/h = 5 600 euros demandes, prise en charge 4 200 euros (140 h x 30 euros)."
+  },
+  "cout_horaire_intra": {
+    "value": 30,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "Meme plafond de 30 euros/h/stagiaire."
+  },
+  "cout_horaire_metier": {
+    "value": 30,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "30 euros/h/stagiaire, tous types de formation du PDC <50 salaries."
+  },
+
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "NON pris en charge sur les fonds legaux <50 salaries : le plafond de 30 euros/h couvre uniquement les couts pedagogiques et les frais annexes."
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
+
+  "frais_transport": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "Frais annexes pris en charge DANS le plafond de 30 euros/h/stagiaire et l'aide de 6 000 euros (pas de forfait distinct)."
+  },
+  "frais_hebergement": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "Inclus dans le plafond global (voir transport)."
+  },
+  "frais_restauration": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "Inclus dans le plafond global (voir transport)."
+  },
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "Pas de forfait pourcentage : frais annexes inclus dans le plafond 30 euros/h + 6 000 euros."
+  },
+
+  "budget_annuel_max": {
+    "value": 6000,
+    "confidence": "exact",
+    "source_url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "note": "Aide specifique de 6 000 euros (TPME Evolution, <50 salaries) via la contribution legale. La page officielle ne precise pas explicitement la periodicite annuelle (l'usage « par an » vient de sources secondaires)."
+  },
+  "budget_annuel_description": "TPME Evolution (<50 sal.) : aide de 6 000 euros, double plafond avec 30 euros/h/stagiaire. 50+ : plan conventionnel de branche ou CIFA (versements volontaires).",
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
+
+  "profils_candidats": [
+    "Salaries secteur sanitaire, social et medico-social",
+    "Apprentis"
+  ],
+  "tailles_cibles": "Fonds legaux reserves aux <50 salaries (TPME Evolution)",
+  "priorite_tpe_pme": true,
+  "duree_min_formation": null,
+
+  "processus_approbation": "Demande saisie sur Webservices AVANT le demarrage de la formation ; au moins 2 mois avant pour une garantie de reponse avant le depart (CGG 2026) | Organisme certifie Qualiopi | Adherent a jour de ses contributions N-1",
+  "delai_validation": "Depot avant le demarrage obligatoire ; 2 mois avant pour garantie de reponse (CGG 2026)",
+  "mode_paiement": "Remboursement a l'adherent apres certificat de realisation (CGG 2026), demande de remboursement dans les 6 mois suivant la fin de formation",
+
+  "alternance_apprentissage": {
+    "description": "Prise en charge selon les niveaux definis par France competences (NPEC)",
+    "source_url": "https://www.opco-sante.fr/"
+  },
+  "alternance_professionnalisation": {
+    "description": "Prise en charge selon accord de branche",
+    "source_url": "https://www.opco-sante.fr/"
+  },
+
+  "cpf_abondement": true,
+  "cpf_details": {
+    "description": "Abondement possible selon accord de branche (non verifiable en ligne)",
+    "source_url": "https://www.opco-sante.fr/"
+  },
+
+  "vae_possible": true,
+  "vae_details": {
+    "description": "Modalites de financement VAE non publiees en ligne pour 2026, selon branche",
+    "source_url": "https://www.opco-sante.fr/"
+  },
+
+  "limite_dossiers_an": null,
+  "limite_dossiers_note": "Selon regles de branche et fonds disponibles",
+
+  "plafonds_par_taille": [
+    {
+      "taille": "less_11",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 6000,
+      "quota_horaire_max": null,
+      "description": "Moins de 11 salaries : TPME Evolution, aide 6 000 euros, 100 % des couts pedagogiques et frais annexes dans la limite de 30 euros/h/stagiaire."
+    },
+    {
+      "taille": "11_49",
+      "cout_horaire_max": 30,
+      "budget_annuel_max": 6000,
+      "quota_horaire_max": null,
+      "description": "11-49 salaries : TPME Evolution, memes plafonds (6 000 euros, 30 euros/h/stagiaire)."
+    },
+    {
+      "taille": "50_299",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "50-299 salaries : pas de fonds legaux PDC, plan conventionnel selon branche ou compte investissement formation (CIFA, frais de services 6 %)."
+    },
+    {
+      "taille": "300_plus",
+      "cout_horaire_max": null,
+      "budget_annuel_max": null,
+      "quota_horaire_max": null,
+      "description": "300+ salaries : plan conventionnel selon branche ou CIFA (versements volontaires)."
+    }
+  ],
+
+  "specificites": "TPME Evolution : aide 6 000 euros + 30 euros/h/stagiaire (<50 sal.), frais annexes inclus, salaires non couverts | CGG 2026 : depot avant demarrage, 2 mois avant pour garantie de reponse, remboursement a demander sous 6 mois | CIFA : compte investissement formation (versements volontaires, report du reliquat possible, frais de services 6 %) | Recours amiable sous 2 mois apres refus",
+  "points_cles_maximisation": "Deposer sur Webservices au moins 2 mois avant le demarrage | Utiliser les formations collectives « On monte en competences » financees par l'OPCO ou la branche | TPME Evolution : catalogue collectif exclusif <50 salaries + webinaires | Conserver les justificatifs 6 ans (10 ans si cofinancement)",
+
+  "dispositifs_sans_budget": [
+    {
+      "nom": "On monte en compétences, formations collectives clés en main",
+      "description": "Formations collectives cles en main financees par l'OPCO Sante ou les branches professionnelles : lorsqu'elles sont financees par l'OPCO ou la branche, elles ne consomment pas le budget de l'entreprise (attention : la variante financee via le CIFA impute le compte de l'entreprise).",
+      "url": "https://www.opco-sante.fr/employeur/notre-offres-de-services/on-monte-en-competences/"
+    },
+    {
+      "nom": "TPME Evolution, formations collectives exclusives (<50 salariés)",
+      "description": "Catalogue dedie aux entreprises de moins de 50 salaries (gestion de l'agressivite, fin de vie, maladie mentale, HACCP...) avec webinaires et accompagnement d'un conseiller.",
+      "url": "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/"
+    },
+    {
+      "nom": "Actions collectives régionales",
+      "description": "Parcours regionaux finances par l'OPCO (ex. Ile-de-France : Parcours competences cles / pre-CLeA), accessibles via la plateforme catalogue adherent.",
+      "url": "https://www.opco-sante.fr/employeur/notre-offres-de-services/on-monte-en-competences/notre-catalogue-de-formations/"
+    }
+  ],
+
+  "sources_consultees": [
+    "https://www.opco-sante.fr/employeur/nos-offres-thematiques/tpmevolution/",
+    "https://www.opco-sante.fr/app/uploads/2026/01/opco0237_conditions-generales-de-gestion-hors-branches-2026_pdf_site.pdf",
+    "https://www.opco-sante.fr/employeur/notre-offres-de-services/on-monte-en-competences/"
+  ],
+  "derniere_verification": "2026-07-13"
+}
