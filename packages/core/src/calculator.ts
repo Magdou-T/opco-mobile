@@ -53,12 +53,20 @@ export function resolveVarianteBranche(
  * Pure : retourne un nouvel OpcoData fusionné, sans muter les entrées.
  */
 export function applyVarianteBranche(opco: OpcoData, variante: VarianteBranche): OpcoData {
+  // Une variante à plafond horaire fixe (sans barème dégressif propre) remplace le barème de l'OPCO :
+  // hériter de ses seuils les ferait passer devant le plafond fixe de la branche.
+  const plafondHoraireFixe = variante.cout_horaire_inter != null || variante.cout_horaire_metier != null;
+  const heriteBaremeDegressif = !(plafondHoraireFixe && variante.cout_horaire_seuils == null);
   return {
     ...opco,
     cout_horaire_inter: variante.cout_horaire_inter ?? opco.cout_horaire_inter,
     cout_horaire_metier: variante.cout_horaire_metier ?? opco.cout_horaire_metier,
-    cout_horaire_seuils: variante.cout_horaire_seuils ?? opco.cout_horaire_seuils,
-    cout_horaire_seuils_mode: variante.cout_horaire_seuils_mode ?? opco.cout_horaire_seuils_mode,
+    cout_horaire_seuils: heriteBaremeDegressif
+      ? (variante.cout_horaire_seuils ?? opco.cout_horaire_seuils)
+      : undefined,
+    cout_horaire_seuils_mode: heriteBaremeDegressif
+      ? (variante.cout_horaire_seuils_mode ?? opco.cout_horaire_seuils_mode)
+      : undefined,
     prise_en_charge_salaires: variante.prise_en_charge_salaires ?? opco.prise_en_charge_salaires,
     prise_en_charge_salaires_mode:
       variante.prise_en_charge_salaires_mode ?? opco.prise_en_charge_salaires_mode,
@@ -218,7 +226,7 @@ function calcPedagogy(
     sourceUrl = opco.cout_horaire_inter.source_url;
     note = 'Barème dégressif selon la durée';
     details.push(...degressif.details);
-    const reste = userCostPerHour * hours - funded;
+    const reste = arrondi(userCostPerHour * hours - funded);
     if (reste > 0) {
       warnings.push(
         `Le barème dégressif de ${opco.name} laisse un reste à charge de ${reste.toFixed(2)} € sur les coûts pédagogiques.`,
@@ -369,17 +377,24 @@ function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
     return line('hebergement', 'Hébergement', requested, funded, confidence, sourceUrl, `Plafond : ${ceiling} €/nuit`, details);
   }
 
+  // Aucun plafond exploitable : jamais de montant inventé, le coût saisi reste entièrement à charge.
+  if (ceiling === 0) {
+    return line('hebergement', 'Hébergement', requested, 0, confidence, sourceUrl, `Hébergement non pris en charge par ${opco.name}`, [
+      `${opco.name} ne finance pas l'hébergement dans ce cadre`,
+    ]);
+  }
+
   return line(
     'hebergement',
     'Hébergement',
     requested,
-    requested,
+    0,
     'depends_on_branche',
     sourceUrl,
-    "Plafond hébergement non renseigné — dépend de l'accord de branche",
+    "Plafond hébergement non publié : prise en charge selon l'accord de branche, à confirmer auprès de l'OPCO",
     [
-      `${opco.name} ne publie pas de plafond hébergement fixe`,
-      'Le montant affiché est basé sur votre estimation et reste à confirmer',
+      `${opco.name} ne publie pas de plafond hébergement`,
+      "Aucun montant n'est compté tant que l'OPCO ne l'a pas confirmé",
     ],
   );
 }
@@ -395,14 +410,20 @@ function calcMeals(opco: OpcoData, state: WizardState): FundingLine {
   const sourceUrl = opco.frais_restauration.source_url;
 
   if (rate != null && rate > 0) {
-    const funded = rate * days;
-    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, `${rate} €/jour × ${days} jours`, [
-      `Forfait restauration ${opco.name} : ${rate} €/jour`,
-      `Calcul : ${rate} €/jour × ${days} jours = ${funded.toFixed(2)} €`,
+    // Le forfait plafonne la prise en charge, il ne la garantit pas : jamais plus que le coût déclaré.
+    const tauxApplique = Math.min(userCostPerDay, rate);
+    const funded = tauxApplique * days;
+    const details = [`Forfait restauration ${opco.name} : ${rate} €/jour`];
+    if (userCostPerDay < rate) {
+      details.push(`Votre coût (${userCostPerDay} €/jour) est inférieur au forfait : prise en charge au coût réel`);
+    }
+    details.push(
+      `Calcul : ${tauxApplique} €/jour × ${days} jours = ${funded.toFixed(2)} €`,
       requested > funded
         ? `Reste à charge : ${(requested - funded).toFixed(2)} €`
         : 'Intégralement couvert par le forfait',
-    ]);
+    );
+    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, `${rate} €/jour × ${days} jours`, details);
   }
 
   return line('restauration', 'Restauration', 0, 0, 'depends_on_branche', sourceUrl, 'Montant restauration selon accord de branche', [
@@ -505,7 +526,12 @@ function generateWarnings(
   }
 
   if (budgetCapApplied) {
-    warnings.push(`Le plafond budgétaire annuel de ${opco.name} a été appliqué. Le montant total finançable est plafonné.`);
+    if ((opco.budget_annuel_portee ?? 'global') === 'pedagogie') {
+      // Salaires et frais annexes sont financés en plus (cf. calcPedagogy) : le total n'est pas plafonné.
+      warnings.push(`Le plafond budgétaire annuel de ${opco.name} a été appliqué aux coûts pédagogiques.`);
+    } else {
+      warnings.push(`Le plafond budgétaire annuel de ${opco.name} a été appliqué. Le montant total finançable est plafonné.`);
+    }
   }
 
   return warnings;
@@ -628,7 +654,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
   if (!variante && (rawOpcoData.variantes_branche?.length ?? 0) > 0) {
     earlyWarnings.push(
       `Barème général ${rawOpcoData.name} appliqué : votre branche professionnelle peut prévoir des montants différents ` +
-        `(souvent supérieurs). Sélectionnez votre branche à l'étape Entreprise ou vérifiez les règles de votre branche sur ${rawOpcoData.url_finance_page}`,
+        `(souvent supérieurs). Sélectionnez votre branche professionnelle ou vérifiez les règles de votre branche sur ${rawOpcoData.url_finance_page}`,
     );
   }
 
