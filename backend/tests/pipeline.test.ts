@@ -32,6 +32,20 @@ const atlas = (): OpcoData => {
   return o;
 };
 
+// Les données réelles n'ont plus de tailles en double (le schéma v4 les
+// interdit) : on fabrique le cas pour tester l'appariement par occurrence
+// de diffOpco / applyCorrections.
+const constructysAvecDoublon = (): OpcoData => {
+  const o = deepClone(getEmbeddedOpcoBySlug('constructys')!);
+  const premier = o.plafonds_par_taille![0];
+  o.plafonds_par_taille!.splice(1, 0, {
+    ...premier,
+    budget_annuel_max: 4000,
+    description: 'Travaux publics <11 salaries (fixture de test)',
+  });
+  return o;
+};
+
 function identityExtraction(opco: OpcoData): ExtractionResult {
   return simulateExtractionFromCurrent(opco as unknown as { slug: string });
 }
@@ -87,16 +101,16 @@ describe('verify.diffOpco', () => {
     expect(d.newValue).toBe(9000);
   });
 
-  it('tailles dupliquées (Constructys) : appariement par occurrence -> tout unchanged', () => {
-    const constructys = deepClone(getEmbeddedOpcoBySlug('constructys')!);
+  it('tailles dupliquées : appariement par occurrence -> tout unchanged', () => {
+    const constructys = constructysAvecDoublon();
     const diff = diffOpco(constructys, identityExtraction(constructys));
     expect(diff.diffs.every((d) => d.status === 'unchanged')).toBe(true);
   });
 
   it('tailles dupliquées : une modification ne touche que la bonne occurrence', () => {
-    const constructys = deepClone(getEmbeddedOpcoBySlug('constructys')!);
+    const constructys = constructysAvecDoublon();
     const ext = identityExtraction(constructys);
-    // Deux entrées less_11 (bâtiment idx 0, travaux publics idx 1) : on modifie la 2e.
+    // Deux entrées less_11 (idx 0 et idx 1, fixture) : on modifie la 2e.
     const less11 = ext.plafonds_par_taille.filter((p) => p.taille === 'less_11');
     expect(less11.length).toBeGreaterThan(1);
     const oldTp = less11[1].budget_annuel_max!;
