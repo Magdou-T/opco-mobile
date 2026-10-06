@@ -155,6 +155,7 @@ export function evaluerAide(aide: Aide, p: ProfilAides, dateRef: string): AideEv
     conditions: aide.conditions,
     montantEstime: montantFinal,
     libelleMontant: libelleFinal,
+    modeMontant: aide.montant.mode,
     cumulable: aide.cumul.cumulable,
     alternatives: aide.cumul.alternatives ?? [],
     noteCumul: aide.cumul.note ?? null,

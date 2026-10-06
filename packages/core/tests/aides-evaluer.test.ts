@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { estimerMontant, evaluerAide, evaluerAides, formaterDate, HEURES_PAR_MOIS_TEMPS_PLEIN } from '../src/aides/evaluer';
-import type { Aide, CriteresAide, MontantAide, ProfilAides } from '../src/aides/types';
+import type { Aide, CriteresAide, ModeMontant, MontantAide, ProfilAides } from '../src/aides/types';
 import { makeAide, makeProfil } from './fixtures-aides';
 
 const AUJOURDHUI = '2026-10-05';
@@ -212,6 +212,7 @@ describe("evaluerAide — recopie des champs de l'aide", () => {
       conditions: ['Première condition.', 'Seconde condition.'],
       montantEstime: 1000,
       libelleMontant: '1 000 € par dossier',
+      modeMontant: 'forfait',
       cumulable: false,
       alternatives: ['nat-autre'],
       noteCumul: 'Au choix avec nat-autre.',
@@ -227,6 +228,37 @@ describe("evaluerAide — recopie des champs de l'aide", () => {
   it('une règle de cumul sans alternative ni note donne une liste vide et une note nulle', () => {
     const r = evaluerAide(makeAide({ cumul: { cumulable: true } }), makeProfil(), AUJOURDHUI);
     expect(r).toMatchObject({ cumulable: true, alternatives: [], noteCumul: null });
+  });
+
+  // Typée par l'union des modes : un nouveau mode oblige à compléter cette table. Profil par défaut (solde CPF inconnu) :
+  // le mode est recopié même quand le montant n'est pas chiffrable (solde_cpf, non_chiffre) ou chiffré autrement (forfait…).
+  const MONTANT_PAR_MODE: Record<ModeMontant, MontantAide> = {
+    forfait: montant({ mode: 'forfait', valeur: 1000 }),
+    pourcentage: montant({ mode: 'pourcentage', pourcentage: 50, base: 'cout_pedagogique' }),
+    par_heure: montant({ mode: 'par_heure', valeur: 10 }),
+    par_mois: montant({ mode: 'par_mois', valeur: 500, duree_max_mois: 12 }),
+    solde_cpf: montant({ mode: 'solde_cpf' }),
+    non_chiffre: montant({ mode: 'non_chiffre' }),
+  };
+
+  it.each(Object.entries(MONTANT_PAR_MODE) as [ModeMontant, MontantAide][])(
+    "expose le mode de calcul du montant de l'aide : %s",
+    (mode, m) => {
+      expect(evaluerAide(makeAide({ montant: m }), makeProfil(), AUJOURDHUI).modeMontant).toBe(mode);
+    },
+  );
+
+  it("le mode de calcul est celui de l'aide, même quand une majoration remplace la valeur et le libellé, ou que l'aide n'est pas éligible", () => {
+    const majoree = makeAide({
+      montant: montant({ mode: 'par_heure', valeur: 10, majorations: [{ criteres: { rqth: true }, valeur: 20, libelle: 'RQTH' }] }),
+    });
+    expect(evaluerAide(majoree, makeProfil({ rqth: true }), AUJOURDHUI)).toMatchObject({ modeMontant: 'par_heure', montantEstime: 2800 });
+    const suspendue = makeAide({ statut: 'suspendu', montant: montant({ mode: 'solde_cpf' }) });
+    expect(evaluerAide(suspendue, makeProfil({ soldeCpf: 800 }), AUJOURDHUI)).toMatchObject({
+      statut: 'non_eligible',
+      modeMontant: 'solde_cpf',
+      montantEstime: 800,
+    });
   });
 });
 

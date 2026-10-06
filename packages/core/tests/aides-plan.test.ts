@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { construirePlan } from '../src/aides/plan';
 import { evaluerAide } from '../src/aides/evaluer';
 import { calculateFunding } from '../src/calculator';
-import type { Aide, AideEvaluee, ProfilAides } from '../src/aides/types';
+import type { Aide, AideEvaluee, CategorieAide, ProfilAides } from '../src/aides/types';
 import type { Confidence, DispositifEligible, FundingLine, FundingResult, PosteFinancement } from '../src/types';
 import { makeAide, makeProfil } from './fixtures-aides';
 import { makeFormationState, makeOpco } from './fixtures';
@@ -135,9 +135,11 @@ describe('construirePlan — intégration du calcul OPCO', () => {
   });
 });
 
-// === Tests ajoutés au-delà du brief : ils épinglent les règles du plan (une mutation du code doit les faire échouer) ===
+// === Cas limites : ils épinglent les règles du plan (une mutation du code doit les faire échouer) ===
 
 const montantNonChiffre = { ...makeAide().montant, mode: 'non_chiffre' as const, valeur: null };
+/** Aide prélevée sur le solde CPF du bénéficiaire : son montant est le solde connu du profil (éventuellement plafonné). */
+const montantSoldeCpf = { ...makeAide().montant, mode: 'solde_cpf' as const, valeur: null, libelle: 'Solde CPF disponible' };
 const evaluerPour = (p: ProfilAides, aides: Aide[]): AideEvaluee[] => aides.map((a) => evaluerAide(a, p, AUJOURDHUI));
 /** [id, montant] de chaque ligne : la forme la plus lisible pour comparer des empilements. */
 const paires = (lignes: { id: string; montant: number }[]) => lignes.map((l) => [l.id, l.montant]);
@@ -176,8 +178,15 @@ const dispositif = (
   sourceUrl: 'https://example.opco.fr/dispositif',
   ...over,
 });
-/** Calcul OPCO fabriqué à la main : le plan ne lit que `opcoName`, `lines` et `dispositifsComplementaires`. */
-const resultatOpco = (lines: FundingLine[], dispositifsComplementaires: DispositifEligible[] = []): FundingResult => ({
+/**
+ * Calcul OPCO fabriqué à la main : le plan ne lit que `opcoName`, `lines`, `budgetCapApplied` et
+ * `dispositifsComplementaires` ; `over` surcharge n'importe quel champ (par exemple `budgetCapApplied: true`).
+ */
+const resultatOpco = (
+  lines: FundingLine[],
+  dispositifsComplementaires: DispositifEligible[] = [],
+  over: Partial<FundingResult> = {},
+): FundingResult => ({
   opcoName: NOM_OPCO,
   opcoSlug: 'opco-de-test',
   opcoEmail: 'contact@example.opco.fr',
@@ -200,6 +209,7 @@ const resultatOpco = (lines: FundingLine[], dispositifsComplementaires: Disposit
   nextSteps: [],
   delaiValidation: '2-3 semaines',
   modePaiement: 'Tiers-payant',
+  ...over,
 });
 
 describe('construirePlan — seules les aides éligibles comptent', () => {
@@ -254,6 +264,7 @@ describe('construirePlan — seules les aides éligibles comptent', () => {
 describe('construirePlan — coût nul ou inconnu', () => {
   it.each<[string, ProfilAides, number[]]>([
     ['inconnu (null)', makeProfil({ coutPedagogique: null, coutFraisAnnexes: 0 }), [500, 1000]],
+    ['inconnu (null) avec 300 € de frais annexes (jamais les frais annexes seuls)', makeProfil({ coutPedagogique: null, coutFraisAnnexes: 300 }), [500, 1000]],
     ['nul (0 €)', makeProfil({ coutPedagogique: 0, coutFraisAnnexes: 0 }), [0, 0]],
   ])('coût %s : rien à empiler, reste à charge nul, sans exception', (_cas, p, montants) => {
     const aides = evaluerPour(p, [forfait('r11-region', 'region', 500), forfait('nat-etat', 'etat', 1000)]);
@@ -268,6 +279,22 @@ describe('construirePlan — coût nul ou inconnu', () => {
     const plan = construirePlan(opco, [], makeProfil({ coutPedagogique: null, coutFraisAnnexes: 0 }));
     expect(plan).toMatchObject({ financements: [], totalFinance: 0, resteACharge: 0 });
     expect(paires(plan.aidesEmployeur)).toEqual([['opco-salaires', 1200]]);
+  });
+
+  it("coût pédagogique inconnu avec des frais annexes : le coût de la formation est nul, le calcul OPCO ne finance rien", () => {
+    const opco = resultatOpco([posteOpco('pedagogie', 3000), posteOpco('hebergement', 200)]);
+    const plan = construirePlan(opco, [], makeProfil({ coutPedagogique: null, coutFraisAnnexes: 300 }));
+    expect(plan).toMatchObject({ coutFormation: 0, financements: [], totalFinance: 0, resteACharge: 0 });
+  });
+
+  it("un coût pédagogique de 0 € est connu (pas inconnu) : les frais annexes forment alors tout le coût de la formation", () => {
+    const p = makeProfil({ coutPedagogique: 0, coutFraisAnnexes: 300 });
+    const aides = evaluerPour(p, [forfait('nat-a', 'etat', 1000)]);
+    expect(aides[0].montantEstime).toBe(300); // garde-fou : l'aide est limitée au coût connu (300 €)
+    const plan = construirePlan(null, aides, p);
+    expect(plan.coutFormation).toBe(300);
+    expect(plan.financements).toEqual([expect.objectContaining({ id: 'nat-a', montant: 300 })]);
+    expect(plan).toMatchObject({ totalFinance: 300, resteACharge: 0 });
   });
 
   it('sans aide ni calcul OPCO : tout le coût (pédagogie + frais annexes) reste à charge, toutes les listes sont vides', () => {
@@ -358,11 +385,10 @@ describe("construirePlan — ordre d'empilement et plafond au reste à charge", 
     expect(paires(plan.financements)).toEqual([['nat-a', 300]]);
   });
 
-  it('un coût négatif (saisie invalide) ne donne jamais un reste à charge négatif ni une ligne de financement', () => {
+  it('un coût négatif (saisie invalide) vaut 0 : ni coût, ni total financé, ni reste à charge négatifs, aucune ligne de financement', () => {
     const p = makeProfil({ coutPedagogique: -100, coutFraisAnnexes: 0 });
     const plan = construirePlan(null, evaluerPour(p, [forfait('nat-a', 'etat', 500)]), p);
-    expect(plan.financements).toEqual([]);
-    expect(plan.resteACharge).toBe(0);
+    expect(plan).toMatchObject({ coutFormation: 0, financements: [], totalFinance: 0, resteACharge: 0 });
   });
 
   it('le coût comprend les frais annexes : une aide qui couvre tout finance aussi les frais annexes', () => {
@@ -473,6 +499,32 @@ describe('construirePlan — ce qui ne réduit pas le coût de la formation', ()
   });
 });
 
+describe("construirePlan — chaque catégorie d'aide a sa liste", () => {
+  type ListePlan = 'financements' | 'aidesEmployeur' | 'remunerations' | 'avantagesFiscauxSociaux' | 'servicesGratuits';
+  const LISTES: ListePlan[] = ['financements', 'aidesEmployeur', 'remunerations', 'avantagesFiscauxSociaux', 'servicesGratuits'];
+  // Typée par l'union des catégories : une nouvelle catégorie oblige à la ranger ici ET dans construirePlan, dont le `switch`
+  // assigne la catégorie non traitée à une constante de type `never` (il ne compile plus tant qu'elle n'y est pas traitée).
+  const LISTE_PAR_CATEGORIE: Record<CategorieAide, ListePlan> = {
+    cout_formation: 'financements',
+    aide_employeur: 'aidesEmployeur',
+    remuneration_beneficiaire: 'remunerations',
+    avantage_fiscal_social: 'avantagesFiscauxSociaux',
+    service_gratuit: 'servicesGratuits',
+  };
+
+  it.each(Object.entries(LISTE_PAR_CATEGORIE) as [CategorieAide, ListePlan][])(
+    'une aide chiffrée de catégorie %s est rangée dans %s, et dans aucune autre liste',
+    (categorie, liste) => {
+      const plan = construirePlan(null, evaluer([forfait('nat-test', 'etat', 500, { categorie })]), profil);
+      for (const nom of LISTES) {
+        expect(plan[nom].map((x) => x.id), nom).toEqual(nom === liste ? ['nat-test'] : []);
+      }
+      expect(plan.options).toEqual([]);
+      expect(plan.nonChiffrees).toEqual([]);
+    },
+  );
+});
+
 describe('construirePlan — aides au choix : détails', () => {
   it("l'option nomme l'aide retenue et garde le nom, le financeur et le montant de l'aide écartée", () => {
     const aides = evaluer([
@@ -485,14 +537,14 @@ describe('construirePlan — aides au choix : détails', () => {
     ]);
   });
 
-  it("quand deux aides retenues sont ses alternatives, l'option nomme la mieux chiffrée", () => {
+  it("quand deux aides retenues sont ses alternatives, l'option nomme la mieux chiffrée, pas la première de la liste", () => {
     const aides = evaluer([
+      forfait('nat-c', 'etat', 1000, { nom: 'Aide C' }), // la moins bien chiffrée des deux aides retenues, en tête de la liste
       forfait('nat-a', 'etat', 3000, { nom: 'Aide A' }),
-      forfait('nat-c', 'etat', 1000, { nom: 'Aide C' }),
       forfait('nat-b', 'etat', 500, { nom: 'Aide B', cumul: { cumulable: true, alternatives: ['nat-a', 'nat-c'] } }),
     ]);
     const plan = construirePlan(null, aides, profil);
-    // a (3000) et c (1000) sont retenues avant b (500), qui est l'alternative des deux : elle nomme la mieux chiffrée.
+    // a (3000) et c (1000) sont retenues avant b (500), qui est l'alternative des deux : elle nomme la mieux chiffrée (a).
     expect(plan.financements.map((l) => l.id)).toEqual(['nat-a', 'nat-c']);
     expect(plan.options).toEqual([expect.objectContaining({ id: 'nat-b', raison: 'Au choix avec « Aide A »' })]);
   });
@@ -533,6 +585,276 @@ describe('construirePlan — aides au choix : détails', () => {
     const plan = construirePlan(null, aides, profil);
     expect(plan.nonChiffrees).toEqual([]);
     expect(plan.options).toEqual([expect.objectContaining({ id: 'nat-flou', montantEstime: null })]);
+  });
+});
+
+describe("construirePlan — aides au choix à montants égaux : le pivot passe d'abord", () => {
+  // Pivot : l'aide que le plus grand nombre d'AUTRES aides éligibles déclarent comme alternative. Dans un graphe « en étoile »
+  // (les aides spécialisées ne citent que l'aide générale, comme nat-vae, nat-bilan-competences et nat-clea citent nat-cpf),
+  // retenir le pivot d'abord écarte toutes les feuilles ; retenir une feuille d'abord laisserait deux feuilles côte à côte.
+  const citeA = { cumulable: true, alternatives: ['nat-a'] };
+  const optionAuChoix = (id: string, retenue: string, montantEstime: number) => ({
+    id, nom: `Aide ${id.slice(4).toUpperCase()}`, financeurNom: 'État', montantEstime, raison: `Au choix avec « ${retenue} »`,
+  });
+
+  it("trois aides de même montant, b et c ne déclarent que a (liste dans l'ordre b, c, a) : a est retenue, b et c sont des options", () => {
+    const aides = evaluer([
+      forfait('nat-b', 'etat', 1000, { nom: 'Aide B', cumul: citeA }),
+      forfait('nat-c', 'etat', 1000, { nom: 'Aide C', cumul: citeA }),
+      forfait('nat-a', 'etat', 1000, { nom: 'Aide A' }),
+    ]);
+    const plan = construirePlan(null, aides, profil);
+    expect(plan.financements).toEqual([
+      { id: 'nat-a', nom: 'Aide A', financeurNom: 'État', montant: 1000, confidence: 'exact' },
+    ]);
+    expect(plan.options).toEqual([optionAuChoix('nat-b', 'Aide A', 1000), optionAuChoix('nat-c', 'Aide A', 1000)]);
+  });
+
+  it("le montant reste le premier critère : avec des montants différents, c'est la mieux chiffrée qui est retenue, pas le pivot", () => {
+    const aides = evaluer([
+      forfait('nat-b', 'etat', 3000, { nom: 'Aide B', cumul: citeA }),
+      forfait('nat-c', 'etat', 2000, { nom: 'Aide C', cumul: citeA }),
+      forfait('nat-a', 'etat', 1000, { nom: 'Aide A' }),
+    ]);
+    const plan = construirePlan(null, aides, profil);
+    // b (3000) puis c (2000, qui n'est liée qu'à a, pas encore retenue) sont retenues ; a (le pivot) est écartée au profit de b.
+    expect(paires(plan.financements)).toEqual([['nat-b', 3000], ['nat-c', 1200]]);
+    expect(plan.options).toEqual([optionAuChoix('nat-a', 'Aide B', 1000)]);
+  });
+
+  // À pivots égaux (par exemple deux aides qui se déclarent l'une l'autre), l'ordre de la liste évaluée départage : voir
+  // « à montant égal, l'aide placée en premier dans la liste est retenue » plus haut.
+
+  it("le pivot est celui qui est déclaré par le plus GRAND NOMBRE d'aides, pas simplement par une aide", () => {
+    // p est déclarée par q, l1 et l2 (3 déclarations) ; q est déclarée par l3 (1 seule) ; q est en tête de la liste.
+    const citeP = { cumulable: true, alternatives: ['nat-p'] };
+    const aides = evaluer([
+      forfait('nat-q', 'etat', 1000, { nom: 'Aide Q', cumul: citeP }),
+      forfait('nat-p', 'etat', 1000, { nom: 'Aide P' }),
+      forfait('nat-l1', 'etat', 1000, { nom: 'Aide L1', cumul: citeP }),
+      forfait('nat-l2', 'etat', 1000, { nom: 'Aide L2', cumul: citeP }),
+      forfait('nat-l3', 'etat', 1000, { nom: 'Aide L3', cumul: { cumulable: true, alternatives: ['nat-q'] } }),
+    ]);
+    const plan = construirePlan(null, aides, profil);
+    // p d'abord : q, l1 et l2 deviennent des options ; l3 (liée seulement à q, écartée) est retenue à côté de p.
+    expect(paires(plan.financements)).toEqual([['nat-p', 1000], ['nat-l3', 1000]]);
+    expect(plan.options.map((o) => [o.id, o.raison])).toEqual([
+      ['nat-q', 'Au choix avec « Aide P »'],
+      ['nat-l1', 'Au choix avec « Aide P »'],
+      ['nat-l2', 'Au choix avec « Aide P »'],
+    ]);
+  });
+
+  it("seules les aides éligibles déclarent : des aides non éligibles qui citent une aide ne la rendent pas pivot", () => {
+    const suspendue = { statut: 'suspendu' as const, cumul: { cumulable: true, alternatives: ['nat-x'] } };
+    const aides = evaluer([
+      forfait('nat-x', 'etat', 1000, { nom: 'Aide X', cumul: { cumulable: true, alternatives: ['nat-y'] } }), // en tête de la liste
+      forfait('nat-y', 'etat', 1000, { nom: 'Aide Y' }),
+      forfait('nat-n1', 'etat', 1000, { nom: 'Aide N1', ...suspendue }),
+      forfait('nat-n2', 'etat', 1000, { nom: 'Aide N2', ...suspendue }),
+    ]);
+    // Garde-fou : n1 et n2 citent x mais ne sont pas éligibles. x n'est déclarée par aucune aide éligible ; y l'est (par x).
+    expect(aides.map((a) => a.statut)).toEqual(['eligible', 'eligible', 'non_eligible', 'non_eligible']);
+    const plan = construirePlan(null, aides, profil);
+    expect(paires(plan.financements)).toEqual([['nat-y', 1000]]);
+    expect(plan.options).toEqual([optionAuChoix('nat-x', 'Aide Y', 1000)]);
+  });
+
+  it("une aide qui se déclare elle-même comme alternative n'est pas comptée comme déclarée par une autre", () => {
+    const aides = evaluer([
+      forfait('nat-u', 'etat', 1000, { nom: 'Aide U', cumul: { cumulable: true, alternatives: ['nat-v'] } }),
+      forfait('nat-v', 'etat', 1000, { nom: 'Aide V', cumul: { cumulable: true, alternatives: ['nat-v'] } }), // s'auto-déclare
+      forfait('nat-w', 'etat', 1000, { nom: 'Aide W', cumul: { cumulable: true, alternatives: ['nat-u'] } }),
+    ]);
+    const plan = construirePlan(null, aides, profil);
+    // u (déclarée par w) et v (déclarée par u ; son auto-déclaration ne compte pas) : 1 déclaration chacune, la liste départage → u.
+    expect(paires(plan.financements)).toEqual([['nat-u', 1000]]);
+    expect(plan.options).toEqual([optionAuChoix('nat-v', 'Aide U', 1000), optionAuChoix('nat-w', 'Aide U', 1000)]);
+  });
+
+  it("aides non chiffrées en étoile (POEI au centre, comme dans le catalogue) : la POEI est retenue, la POEC et la POEI régionale sont des options", () => {
+    const aides = evaluer([
+      makeAide({ id: 'nat-poec', nom: 'POEC', montant: montantNonChiffre, cumul: { cumulable: true, alternatives: ['nat-poei'] } }),
+      makeAide({
+        id: 'nat-poei', nom: 'POEI', montant: montantNonChiffre,
+        cumul: { cumulable: true, alternatives: ['nat-poec', 'r52-poei-region'] },
+      }),
+      makeAide({ id: 'r52-poei-region', nom: 'POEI régionale', montant: montantNonChiffre, cumul: { cumulable: true, alternatives: ['nat-poei'] } }),
+    ]);
+    const plan = construirePlan(null, aides, profil);
+    expect(plan.nonChiffrees.map((a) => a.id)).toEqual(['nat-poei']);
+    expect(plan.options.map((o) => [o.id, o.raison])).toEqual([
+      ['nat-poec', 'Au choix avec « POEI »'],
+      ['r52-poei-region', 'Au choix avec « POEI »'],
+    ]);
+  });
+});
+
+describe("construirePlan — un solde CPF ne finance qu'une fois", () => {
+  const FINANCEUR_CPF = 'Compte personnel de formation';
+  /** Aide qui prélève sur le solde CPF (mode solde_cpf) : financeur CPF, donc ordre d'empilement 90 par défaut. */
+  const surSolde = (id: string, over: Partial<Aide> = {}) =>
+    makeAide({ id, nom: `Aide ${id}`, financeur: 'cpf', financeur_nom: FINANCEUR_CPF, montant: montantSoldeCpf, ...over });
+  const avecPlafond = (plafond: number) => ({ ...montantSoldeCpf, plafond });
+  /** Profil à 4 200 € de coût pédagogique, avec le solde CPF donné. */
+  const avecSolde = (soldeCpf: number | null) => makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf });
+
+  it("deux aides sur le même solde de 500 € : une seule ligne de 500 €, celle qui passe la première dans l'ordre d'empilement", () => {
+    const p = avecSolde(500);
+    const aides = evaluerPour(p, [surSolde('nat-cpf'), surSolde('nat-vae', { ordre_empilement: 85 })]);
+    expect(aides.map((a) => a.montantEstime)).toEqual([500, 500]); // garde-fou : chacune verserait seule tout le solde
+    const plan = construirePlan(null, aides, p);
+    expect(plan.financements).toEqual([
+      { id: 'nat-vae', nom: 'Aide nat-vae', financeurNom: FINANCEUR_CPF, montant: 500, confidence: 'exact' },
+    ]);
+    expect(plan).toMatchObject({ totalFinance: 500, resteACharge: 3700 });
+  });
+
+  it("à ordre d'empilement égal, c'est la plus grosse qui prélève d'abord et le solde ne finance que le reste", () => {
+    const p = avecSolde(800);
+    const aides = evaluerPour(p, [
+      surSolde('nat-b', { montant: avecPlafond(500) }),
+      surSolde('nat-a', { montant: avecPlafond(700) }),
+      surSolde('nat-c', { montant: avecPlafond(300) }),
+    ]);
+    expect(aides.map((a) => [a.id, a.montantEstime])).toEqual([['nat-b', 500], ['nat-a', 700], ['nat-c', 300]]); // 1 500 € si on les additionnait
+    const plan = construirePlan(null, aides, p);
+    // 700 € d'abord, puis les 100 € qui restent du solde ; la troisième n'a plus rien à prélever (aucune ligne à 0 €).
+    expect(paires(plan.financements)).toEqual([['nat-a', 700], ['nat-b', 100]]);
+    expect(plan).toMatchObject({ totalFinance: 800, resteACharge: 3400 });
+  });
+
+  it("trois aides sur un solde de 800 € : le total des lignes sur le solde ne dépasse jamais 800 €", () => {
+    const p = avecSolde(800);
+    const plan = construirePlan(null, evaluerPour(p, [surSolde('nat-a'), surSolde('nat-b'), surSolde('nat-c')]), p);
+    expect(paires(plan.financements)).toEqual([['nat-a', 800]]);
+    expect(plan).toMatchObject({ totalFinance: 800, resteACharge: 3400 });
+  });
+
+  it("l'ordre d'empilement l'emporte sur le montant : la petite aide qui passe d'abord prélève sa part, la grande ne reçoit que le reste", () => {
+    const p = avecSolde(800);
+    const aides = evaluerPour(p, [
+      surSolde('nat-a', { montant: avecPlafond(700) }),
+      surSolde('nat-b', { montant: avecPlafond(500), ordre_empilement: 95 }),
+      surSolde('nat-c', { montant: avecPlafond(300), ordre_empilement: 85 }),
+    ]);
+    const plan = construirePlan(null, aides, p);
+    expect(paires(plan.financements)).toEqual([['nat-c', 300], ['nat-a', 500]]);
+    expect(plan).toMatchObject({ totalFinance: 800, resteACharge: 3400 });
+  });
+
+  it("deux aides sur le solde qui ne sont pas liées entre elles (elles ne citent que l'aide générale, absente de la liste) partagent le solde", () => {
+    const p = avecSolde(800);
+    const alternative = { cumulable: true, alternatives: ['nat-cpf'] };
+    const plan = construirePlan(
+      null,
+      evaluerPour(p, [surSolde('nat-vae', { cumul: alternative }), surSolde('nat-clea', { cumul: alternative })]),
+      p,
+    );
+    expect(paires(plan.financements)).toEqual([['nat-vae', 800]]);
+    expect(plan).toMatchObject({ totalFinance: 800, resteACharge: 3400 });
+  });
+
+  it("étoile du catalogue (nat-vae, nat-bilan-competences et nat-clea ne citent que nat-cpf) : nat-cpf est retenue, le solde finance une fois", () => {
+    const p = avecSolde(800);
+    const citeCpf = { cumulable: true, alternatives: ['nat-cpf'] };
+    const aides = evaluerPour(p, [
+      surSolde('nat-bilan-competences', { cumul: citeCpf }),
+      surSolde('nat-clea', { cumul: citeCpf }),
+      surSolde('nat-vae', { cumul: citeCpf }),
+      surSolde('nat-cpf'),
+    ]);
+    const plan = construirePlan(null, aides, p);
+    expect(plan.financements).toEqual([
+      { id: 'nat-cpf', nom: 'Aide nat-cpf', financeurNom: FINANCEUR_CPF, montant: 800, confidence: 'exact' },
+    ]);
+    expect(plan.options.map((o) => [o.id, o.raison])).toEqual([
+      ['nat-bilan-competences', 'Au choix avec « Aide nat-cpf »'],
+      ['nat-clea', 'Au choix avec « Aide nat-cpf »'],
+      ['nat-vae', 'Au choix avec « Aide nat-cpf »'],
+    ]);
+    expect(plan).toMatchObject({ totalFinance: 800, resteACharge: 3400 });
+  });
+
+  it("le reste à charge borne aussi l'aide sur le solde : 500 € de solde, 300 € restant à financer → 300 €", () => {
+    const p = avecSolde(500);
+    const plan = construirePlan(null, evaluerPour(p, [forfait('nat-etat', 'etat', 3900), surSolde('nat-cpf')]), p);
+    expect(paires(plan.financements)).toEqual([['nat-etat', 3900], ['nat-cpf', 300]]);
+    expect(plan).toMatchObject({ totalFinance: 4200, resteACharge: 0 });
+  });
+
+  // 3 700 € déjà financés par l'État : il reste 500 € à financer ; le solde est juste au-dessous, égal, ou au-dessus.
+  it.each([
+    [499.99, 499.99, 0.01],
+    [500, 500, 0],
+    [500.01, 500, 0],
+  ])('frontière entre le solde et le reste à charge : solde de %s € → ligne de %s €, reste à charge de %s €', (solde, ligne, reste) => {
+    const p = avecSolde(solde);
+    const plan = construirePlan(null, evaluerPour(p, [forfait('nat-etat', 'etat', 3700), surSolde('nat-cpf')]), p);
+    expect(paires(plan.financements)).toEqual([['nat-etat', 3700], ['nat-cpf', ligne]]);
+    expect(plan.resteACharge).toBe(reste);
+  });
+
+  it("une aide du financeur CPF qui ne prélève pas sur le solde (abondement de l'employeur, forfait) s'empile EN PLUS du solde", () => {
+    const p = avecSolde(500);
+    const solde = surSolde('nat-cpf');
+    // À ordre égal (90) : le solde (500 €) d'abord, puis le forfait (150 €) : le solde épuisé ne le borne pas.
+    const apres = construirePlan(null, evaluerPour(p, [forfait('nat-abondement', 'cpf', 150), solde]), p);
+    expect(paires(apres.financements)).toEqual([['nat-cpf', 500], ['nat-abondement', 150]]);
+    expect(apres).toMatchObject({ totalFinance: 650, resteACharge: 3550 });
+    // Passant avant le solde (ordre 80) : le forfait ne consomme rien du solde, qui finance encore ses 500 €.
+    const avant = construirePlan(null, evaluerPour(p, [solde, forfait('nat-abondement', 'cpf', 150, { ordre_empilement: 80 })]), p);
+    expect(paires(avant.financements)).toEqual([['nat-abondement', 150], ['nat-cpf', 500]]);
+    expect(avant).toMatchObject({ totalFinance: 650, resteACharge: 3550 });
+  });
+
+  it("c'est le mode de calcul qui compte, pas le financeur : une aide sur le solde d'un autre financeur partage le même solde", () => {
+    const p = avecSolde(500);
+    const aides = evaluerPour(p, [
+      surSolde('nat-cpf'),
+      surSolde('r11-solde', { financeur: 'region', financeur_nom: 'Région', ordre_empilement: 85 }),
+    ]);
+    const plan = construirePlan(null, aides, p);
+    expect(plan.financements).toEqual([{ id: 'r11-solde', nom: 'Aide r11-solde', financeurNom: 'Région', montant: 500, confidence: 'exact' }]);
+    expect(plan).toMatchObject({ totalFinance: 500, resteACharge: 3700 });
+  });
+
+  it("les autres financements (ligne OPCO, dispositif complémentaire, aide de la Région) ne consomment pas le solde CPF", () => {
+    const p = avecSolde(800);
+    const opco = resultatOpco([posteOpco('pedagogie', 1000)], [dispositif('additif', 'additif', 400)]);
+    const plan = construirePlan(opco, evaluerPour(p, [forfait('r11-region', 'region', 700), surSolde('nat-cpf')]), p);
+    expect(paires(plan.financements)).toEqual([
+      ['opco-pdc', 1000],
+      ['opco-additif', 400],
+      ['r11-region', 700],
+      ['nat-cpf', 800],
+    ]);
+  });
+
+  it("solde CPF inconnu : les aides sur le solde n'ont pas de montant, elles vont dans nonChiffrees et ne créent aucune ligne", () => {
+    const p = avecSolde(null);
+    const aides = evaluerPour(p, [surSolde('nat-cpf'), surSolde('nat-vae')]);
+    expect(aides.map((a) => a.montantEstime)).toEqual([null, null]);
+    const plan = construirePlan(null, aides, p);
+    expect(plan.nonChiffrees.map((a) => a.id)).toEqual(['nat-cpf', 'nat-vae']);
+    expect(plan).toMatchObject({ financements: [], totalFinance: 0, resteACharge: 4200 });
+  });
+
+  it('solde CPF connu et nul : des aides chiffrées à 0 €, aucune ligne', () => {
+    const p = avecSolde(0);
+    const aides = evaluerPour(p, [surSolde('nat-cpf'), surSolde('nat-vae')]);
+    expect(aides.map((a) => a.montantEstime)).toEqual([0, 0]);
+    const plan = construirePlan(null, aides, p);
+    expect(plan).toMatchObject({ financements: [], nonChiffrees: [], totalFinance: 0, resteACharge: 4200 });
+  });
+
+  it("le plan lit le solde dans le profil : rien n'est prélevé au-delà, et rien du tout quand le profil ne le connaît pas", () => {
+    const aide = evaluerPour(avecSolde(500), [surSolde('nat-cpf')])[0]; // chiffrée à 500 €
+    expect(aide.montantEstime).toBe(500);
+    expect(paires(construirePlan(null, [aide], avecSolde(500)).financements)).toEqual([['nat-cpf', 500]]);
+    expect(paires(construirePlan(null, [aide], avecSolde(300)).financements)).toEqual([['nat-cpf', 300]]);
+    expect(construirePlan(null, [aide], avecSolde(0)).financements).toEqual([]);
+    expect(construirePlan(null, [aide], avecSolde(null)).financements).toEqual([]);
   });
 });
 
@@ -604,7 +926,10 @@ describe('construirePlan — calcul OPCO', () => {
       posteOpco('transport', 80, 'depends_on_branche', 120),
     ]);
     const plan = construirePlan(opco, [], coutDe4500);
-    expect(paires(plan.financements)).toEqual([['opco-pdc', 3000]]);
+    // La fiabilité de la ligne de formation ne dépend pas des salaires (estimés) ni du transport (dépend de la branche).
+    expect(plan.financements).toEqual([
+      { id: 'opco-pdc', nom: 'Plan de développement des compétences', financeurNom: NOM_OPCO, montant: 3000, confidence: 'exact' },
+    ]);
     expect(plan.aidesEmployeur).toEqual([
       {
         id: 'opco-salaires', nom: 'Prise en charge des salaires pendant la formation', financeurNom: NOM_OPCO,
@@ -616,6 +941,30 @@ describe('construirePlan — calcul OPCO', () => {
       },
     ]);
     expect(plan).toMatchObject({ totalFinance: 3000, resteACharge: 1500 });
+  });
+
+  it('avec le plafond annuel appliqué, la ligne opco-pdc prend la fiabilité la plus faible de toutes les lignes financées', () => {
+    const opco = resultatOpco(
+      [
+        posteOpco('pedagogie', 3000),
+        posteOpco('salaires', 1200, 'estimated', 1500),
+        posteOpco('transport', 80, 'depends_on_branche', 120),
+      ],
+      [],
+      { budgetCapApplied: true },
+    );
+    const plan = construirePlan(opco, [], coutDe4500);
+    expect(plan.financements).toEqual([
+      {
+        id: 'opco-pdc', nom: 'Plan de développement des compétences', financeurNom: NOM_OPCO,
+        montant: 3000, confidence: 'depends_on_branche',
+      },
+    ]);
+    // Les aides à l'employeur gardent leur propre fiabilité et leur propre montant.
+    expect(plan.aidesEmployeur).toEqual([
+      expect.objectContaining({ id: 'opco-salaires', montant: 1200, confidence: 'estimated' }),
+      expect.objectContaining({ id: 'opco-transport', montant: 80, confidence: 'depends_on_branche' }),
+    ]);
   });
 
   it('un poste financé à 0 € ne crée aucune ligne : ni opco-pdc, ni salaires, ni transport', () => {
@@ -665,48 +1014,91 @@ describe('construirePlan — calcul OPCO', () => {
     },
   );
 
-  // Fiabilité de opco-pdc : la plus faible des postes financés (exact < estimated < depends_on_branche) ; un poste à 0 € est
-  // ignoré. Choix prudent du brief : tous les postes financés du calcul comptent, salaires et transport compris.
-  it.each<[string, FundingLine[], Confidence]>([
-    ['tous exacts', [posteOpco('pedagogie', 1000), posteOpco('hebergement', 100)], 'exact'],
-    ['un poste estimé', [posteOpco('pedagogie', 1000), posteOpco('hebergement', 100, 'estimated')], 'estimated'],
+  // Fiabilité de opco-pdc : la plus faible (exact < estimated < depends_on_branche) des postes de FORMATION financés
+  // (pédagogie, hébergement, restauration, frais annexes) ; un poste à 0 € est ignoré. Les salaires et le transport sont
+  // présentés à part, avec leur propre fiabilité : ils n'entrent pas dans cette ligne, sauf quand le plafond annuel global a
+  // été appliqué. Le calcul rééchelonne alors chaque ligne avec un même ratio : le montant de formation dépend aussi de
+  // l'estimation des salaires, donc toutes les lignes financées comptent (la troisième colonne est `budgetCapApplied`).
+  it.each<[string, FundingLine[], boolean, Confidence]>([
+    ['tous exacts', [posteOpco('pedagogie', 1000), posteOpco('hebergement', 100)], false, 'exact'],
+    ['une pédagogie estimée', [posteOpco('pedagogie', 1000, 'estimated'), posteOpco('hebergement', 100)], false, 'estimated'],
+    ['un hébergement estimé', [posteOpco('pedagogie', 1000), posteOpco('hebergement', 100, 'estimated')], false, 'estimated'],
+    ['une restauration estimée', [posteOpco('pedagogie', 1000), posteOpco('restauration', 100, 'estimated')], false, 'estimated'],
+    ['des frais annexes estimés', [posteOpco('pedagogie', 1000), posteOpco('frais_annexes', 100, 'estimated')], false, 'estimated'],
     [
-      'un poste dépend de la branche',
+      'une pédagogie qui dépend de la branche',
       [posteOpco('pedagogie', 1000, 'depends_on_branche'), posteOpco('restauration', 100)],
+      false,
+      'depends_on_branche',
+    ],
+    [
+      'un hébergement qui dépend de la branche',
+      [posteOpco('pedagogie', 1000), posteOpco('hebergement', 100, 'depends_on_branche')],
+      false,
       'depends_on_branche',
     ],
     [
       "estimé puis dépend de la branche : le plus faible l'emporte",
       [posteOpco('pedagogie', 1000, 'estimated'), posteOpco('restauration', 100, 'depends_on_branche')],
+      false,
       'depends_on_branche',
     ],
     [
       "dépend de la branche puis estimé : le plus faible l'emporte",
       [posteOpco('pedagogie', 1000, 'depends_on_branche'), posteOpco('restauration', 100, 'estimated')],
+      false,
       'depends_on_branche',
     ],
     [
       'un poste non financé (0 €) de fiabilité faible est ignoré',
       [posteOpco('pedagogie', 1000), posteOpco('hebergement', 0, 'depends_on_branche', 200)],
+      false,
       'exact',
     ],
     [
       'un poste non financé (0 €) estimé est ignoré',
       [posteOpco('pedagogie', 1000), posteOpco('restauration', 0, 'estimated', 150)],
+      false,
       'exact',
     ],
     [
-      'des salaires financés et estimés comptent aussi',
+      'des salaires financés et estimés ne comptent pas : ils ne sont pas dans la ligne',
       [posteOpco('pedagogie', 1000), posteOpco('salaires', 300, 'estimated')],
+      false,
+      'exact',
+    ],
+    [
+      'un transport financé qui dépend de la branche ne compte pas non plus',
+      [posteOpco('pedagogie', 1000), posteOpco('transport', 50, 'depends_on_branche')],
+      false,
+      'exact',
+    ],
+    [
+      'plafond annuel appliqué : des salaires financés et estimés rendent la ligne estimée',
+      [posteOpco('pedagogie', 1000), posteOpco('salaires', 300, 'estimated')],
+      true,
       'estimated',
     ],
     [
-      'un transport financé qui dépend de la branche compte aussi',
+      'plafond annuel appliqué : un transport financé qui dépend de la branche rend la ligne dépendante de la branche',
       [posteOpco('pedagogie', 1000), posteOpco('transport', 50, 'depends_on_branche')],
+      true,
       'depends_on_branche',
     ],
-  ])('fiabilité de opco-pdc : %s', (_cas, lignes, attendue) => {
-    const plan = construirePlan(resultatOpco(lignes), [], coutDe4500);
+    [
+      'plafond annuel appliqué : toutes les lignes financées exactes, la ligne reste exacte',
+      [posteOpco('pedagogie', 1000), posteOpco('salaires', 300), posteOpco('transport', 50)],
+      true,
+      'exact',
+    ],
+    [
+      'plafond annuel appliqué : une ligne non financée (0 €) de fiabilité faible reste ignorée',
+      [posteOpco('pedagogie', 1000), posteOpco('salaires', 0, 'estimated', 300), posteOpco('transport', 0, 'depends_on_branche', 120)],
+      true,
+      'exact',
+    ],
+  ])('fiabilité de opco-pdc : %s', (_cas, lignes, plafondAnnuelApplique, attendue) => {
+    const plan = construirePlan(resultatOpco(lignes, [], { budgetCapApplied: plafondAnnuelApplique }), [], coutDe4500);
     expect(plan.financements).toEqual([expect.objectContaining({ id: 'opco-pdc', confidence: attendue })]);
   });
 
@@ -818,6 +1210,43 @@ describe('construirePlan — avec le vrai calcul OPCO', () => {
     const plan = construirePlan(funding, [], makeProfil({ coutPedagogique: 3000, coutFraisAnnexes: 0 }));
     expect(plan.financements).toEqual([expect.objectContaining({ id: 'opco-pdc', montant: 3000 })]);
     expect(plan).toMatchObject({ totalFinance: 3000, resteACharge: 0 });
+  });
+
+  describe("fiabilité de opco-pdc quand le barème de salaires de l'OPCO est estimé", () => {
+    const opcoSalairesEstimes = (over: Parameters<typeof makeOpco>[0] = {}) =>
+      makeOpco({
+        cout_horaire_inter: sourcee(40),
+        prise_en_charge_salaires: { value: 12, confidence: 'estimated', source_url: 'x' },
+        prise_en_charge_salaires_mode: 'euro_par_heure',
+        ...over,
+      });
+    const profil3000 = makeProfil({ coutPedagogique: 3000, coutFraisAnnexes: 0 });
+
+    it('sans plafond annuel appliqué : la pédagogie est exacte, la ligne opco-pdc aussi ; seuls les salaires sont estimés', () => {
+      const funding = calculateFunding(opcoSalairesEstimes(), etat());
+      // Garde-fous : salaires financés (12 € × 100 h) et estimés, pédagogie exacte, aucun plafond appliqué.
+      expect(funding.lines.map((l) => [l.poste, l.fundedAmount, l.confidence])).toEqual(
+        expect.arrayContaining([['pedagogie', 3000, 'exact'], ['salaires', 1200, 'estimated']]),
+      );
+      expect(funding.budgetCapApplied).toBe(false);
+      const plan = construirePlan(funding, [], profil3000);
+      expect(plan.financements).toEqual([
+        { id: 'opco-pdc', nom: 'Plan de développement des compétences', financeurNom: 'Test OPCO', montant: 3000, confidence: 'exact' },
+      ]);
+      expect(plan.aidesEmployeur).toEqual([expect.objectContaining({ id: 'opco-salaires', montant: 1200, confidence: 'estimated' })]);
+    });
+
+    it('avec le plafond annuel global appliqué : chaque ligne est rééchelonnée, la ligne opco-pdc devient estimée', () => {
+      const funding = calculateFunding(opcoSalairesEstimes({ budget_annuel_max: sourcee(2000) }), etat());
+      // Garde-fous : pédagogie 3 000 € + salaires 1 200 € = 4 200 € ramenés à 2 000 € (même ratio sur chaque ligne).
+      expect(funding.budgetCapApplied).toBe(true);
+      expect(funding.totalFunded).toBe(2000);
+      const plan = construirePlan(funding, [], profil3000);
+      expect(plan.financements).toEqual([
+        { id: 'opco-pdc', nom: 'Plan de développement des compétences', financeurNom: 'Test OPCO', montant: 1428.57, confidence: 'estimated' },
+      ]);
+      expect(plan.aidesEmployeur).toEqual([expect.objectContaining({ id: 'opco-salaires', montant: 571.43, confidence: 'estimated' })]);
+    });
   });
 });
 

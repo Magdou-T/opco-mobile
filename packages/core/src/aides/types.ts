@@ -109,6 +109,9 @@ export interface MontantAide {
   majorations?: MajorationAide[];
 }
 
+/** Mode de calcul du montant d'une aide (`MontantAide['mode']`). */
+export type ModeMontant = MontantAide['mode'];
+
 export interface RegleCumul {
   cumulable: boolean;
   /** Identifiants d'aides « au choix » (jamais additionnées). */
@@ -224,6 +227,8 @@ export interface AideEvaluee {
    */
   montantEstime: number | null;
   libelleMontant: string;
+  /** Mode de calcul du montant de l'aide ; `solde_cpf` : prélevé sur le solde CPF du bénéficiaire (un même solde ne finance qu'une fois). */
+  modeMontant: ModeMontant;
   cumulable: boolean;
   alternatives: string[];
   noteCumul: string | null;

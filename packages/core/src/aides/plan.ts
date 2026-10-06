@@ -25,7 +25,7 @@ export interface OptionPlan {
 }
 
 export interface PlanFinancement {
-  /** Coût pédagogique + frais annexes saisis. */
+  /** Coût pédagogique + frais annexes saisis ; 0 quand le coût pédagogique est inconnu, jamais négatif. */
   coutFormation: number;
   financements: LignePlan[];
   totalFinance: number;
@@ -41,8 +41,16 @@ export interface PlanFinancement {
 const arrondi = (n: number): number => Math.round(n * 100) / 100;
 const POSTES_FORMATION: PosteFinancement[] = ['pedagogie', 'hebergement', 'restauration', 'frais_annexes'];
 
+/**
+ * Fiabilité de la ligne `opco-pdc` : la plus faible des lignes financées qu'elle contient, c'est-à-dire les postes de
+ * formation (du plus faible au plus fort : `depends_on_branche`, `estimated`, `exact`). Les salaires et le transport sont
+ * des aides à l'employeur présentées à part, avec leur propre fiabilité : ils n'entrent pas dans cette ligne. Exception :
+ * quand le plafond annuel a été appliqué (`budgetCapApplied`), le calcul rééchelonne chaque ligne avec un même ratio ; le
+ * montant de formation dépend alors aussi de l'estimation des salaires, donc toutes les lignes financées comptent (choix
+ * prudent : `budgetCapApplied` est aussi vrai quand le plafond ne limite que la pédagogie).
+ */
 function confianceOpco(r: FundingResult): Confidence {
-  const lignes = r.lines.filter((l) => l.fundedAmount > 0);
+  const lignes = r.lines.filter((l) => l.fundedAmount > 0 && (r.budgetCapApplied || POSTES_FORMATION.includes(l.poste)));
   if (lignes.some((l) => l.confidence === 'depends_on_branche')) return 'depends_on_branche';
   if (lignes.some((l) => l.confidence === 'estimated')) return 'estimated';
   return 'exact';
@@ -50,10 +58,37 @@ function confianceOpco(r: FundingResult): Confidence {
 
 interface Candidat extends LignePlan {
   ordre: number;
+  /** Aide prélevée sur le solde CPF du bénéficiaire (`modeMontant === 'solde_cpf'`) : un même solde ne finance qu'une fois. */
+  surSoldeCpf: boolean;
 }
 
+/**
+ * Plan de financement d'une formation : ce que chaque financeur prend en charge, le reste à charge, et ce qui est présenté à part.
+ *
+ * - Entrée : `aides` doit être la sortie de `evaluerAides`. Le tri de ce plan est stable : à montants et pivots égaux,
+ *   l'ordre de cette liste départage. Seules les aides `eligible` comptent : les aides « à vérifier » et non éligibles ne
+ *   figurent nulle part dans le plan.
+ * - Empilement : la ligne OPCO (`opco-pdc`, ordre 10), les dispositifs OPCO chiffrés `additif` et `hors_budget` (ordre 12) et
+ *   les aides cumulables de catégorie `cout_formation` (leur `ordreEmpilement`) sont empilés par ordre croissant, la plus
+ *   grosse d'abord à ordre égal, chacun plafonné au reste à charge : le total ne dépasse jamais le coût de la formation.
+ *   Ce coût est nul quand le coût pédagogique est inconnu (jamais les frais annexes seuls) et jamais négatif.
+ * - Solde CPF : les aides qui prélèvent sur le solde CPF (`modeMontant === 'solde_cpf'`) partagent UN seul solde, celui du
+ *   profil (`soldeCpf`, nul s'il est inconnu) : chacune est plafonnée par le reste à charge et par ce qui reste du solde
+ *   après les aides empilées avant elle. Une autre aide du financeur CPF (abondement de l'employeur, forfait) n'est pas
+ *   concernée : elle s'empile en plus du solde.
+ * - Aides « au choix » (alternatives déclarées dans un sens ou dans l'autre) : la sélection est GLOUTONNE, pas optimale.
+ *   Des mieux chiffrées aux moins bien chiffrées ; à montant égal, le pivot (l'aide déclarée comme alternative par le plus
+ *   grand nombre d'autres aides éligibles), puis l'ordre de la liste. Une aide dont une alternative est déjà retenue devient
+ *   une option.
+ * - À part, jamais déduits du coût : aides à l'employeur, rémunérations, avantages fiscaux et sociaux ; les aides sans
+ *   montant sont dans `nonChiffrees` et les services gratuits dans `servicesGratuits`.
+ * - Les dispositifs OPCO `additif` et `hors_budget` sans montant chiffré n'apparaissent pas dans le plan : l'écran lit
+ *   `FundingResult.dispositifsComplementaires` pour les afficher.
+ */
 export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[], profil: ProfilAides): PlanFinancement {
-  const coutFormation = arrondi((profil.coutPedagogique ?? 0) + profil.coutFraisAnnexes);
+  // Coût pédagogique inconnu : coût de la formation inconnu, donc nul (jamais les frais annexes seuls) ; jamais négatif.
+  const coutFormation =
+    profil.coutPedagogique == null ? 0 : Math.max(0, arrondi(profil.coutPedagogique + profil.coutFraisAnnexes));
   const candidats: Candidat[] = [];
   const aidesEmployeur: LignePlan[] = [];
   const remunerations: LignePlan[] = [];
@@ -70,6 +105,7 @@ export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[],
     if (formation > 0) {
       candidats.push({
         ordre: 10,
+        surSoldeCpf: false,
         id: 'opco-pdc',
         nom: 'Plan de développement des compétences',
         financeurNom: opco.opcoName,
@@ -107,7 +143,15 @@ export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[],
           raison: 'Alternative au plan de développement des compétences (non cumulable)',
         });
       } else if (d.montantEstime != null && d.montantEstime > 0) {
-        candidats.push({ ordre: 12, id: `opco-${d.id}`, nom: d.nom, financeurNom: opco.opcoName, montant: d.montantEstime, confidence: d.confidence });
+        candidats.push({
+          ordre: 12,
+          surSoldeCpf: false,
+          id: `opco-${d.id}`,
+          nom: d.nom,
+          financeurNom: opco.opcoName,
+          montant: d.montantEstime,
+          confidence: d.confidence,
+        });
       }
     }
   }
@@ -115,13 +159,19 @@ export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[],
   // 2. Aides éligibles du catalogue (les aides « à vérifier » ne sont jamais comptées)
   const eligibles = aides.filter((a) => a.statut === 'eligible');
   // Aides « au choix » (alternatives déclarées dans un sens ou dans l'autre) : sélection gloutonne, des
-  // mieux chiffrées aux moins bien chiffrées (à égalité, l'ordre de la liste évaluée est conservé, le tri
-  // étant stable) ; une aide dont une alternative est déjà retenue devient une option. Ce choix est
-  // indépendant de l'ordre dans lequel les alternatives sont déclarées et ne fusionne pas des aides
-  // seulement liées par un tiers (a–b, b–c : a et c peuvent être retenues ensemble).
+  // mieux chiffrées aux moins bien chiffrées. À montant égal, le « pivot » passe d'abord : l'aide que le
+  // plus grand nombre d'autres aides éligibles déclarent comme alternative (dans un graphe « en étoile »,
+  // l'aide générale que les aides spécialisées citent : retenue la première, elle écarte toutes les
+  // feuilles), puis l'ordre de la liste évaluée (le tri est stable). Une aide dont une alternative est
+  // déjà retenue devient une option. Ce choix est indépendant de l'ordre dans lequel les alternatives
+  // sont déclarées et ne fusionne pas des aides seulement liées par un tiers (a–b, b–c : a et c peuvent
+  // être retenues ensemble).
   const retenues = new Set<string>();
   const ecartees = new Set<string>();
-  const parMontant = [...eligibles].sort((x, y) => (y.montantEstime ?? -1) - (x.montantEstime ?? -1));
+  const parMontant = eligibles
+    .map((a) => ({ a, declarations: eligibles.filter((x) => x !== a && x.alternatives.includes(a.id)).length }))
+    .sort((x, y) => (y.a.montantEstime ?? -1) - (x.a.montantEstime ?? -1) || y.declarations - x.declarations)
+    .map(({ a }) => a);
   for (const a of parMontant) {
     const gagnant = parMontant.find(
       (x) => retenues.has(x.id) && (a.alternatives.includes(x.id) || x.alternatives.includes(a.id)),
@@ -153,7 +203,7 @@ export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[],
     const ligne: LignePlan = { id: a.id, nom: a.nom, financeurNom: a.financeurNom, montant: a.montantEstime, confidence: a.confidence };
     switch (a.categorie) {
       case 'cout_formation':
-        if (a.cumulable) candidats.push({ ...ligne, ordre: a.ordreEmpilement });
+        if (a.cumulable) candidats.push({ ...ligne, ordre: a.ordreEmpilement, surSoldeCpf: a.modeMontant === 'solde_cpf' });
         else {
           options.push({
             id: a.id,
@@ -173,19 +223,26 @@ export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[],
       case 'avantage_fiscal_social':
         avantagesFiscauxSociaux.push(ligne);
         break;
+      default: {
+        // Garde d'exhaustivité : une nouvelle catégorie d'aide ne compile plus tant qu'elle n'est pas traitée ici.
+        const _categorieNonTraitee: never = a.categorie;
+        break;
+      }
     }
   }
 
-  // 3. Empilement plafonné au reste à charge
+  // 3. Empilement plafonné au reste à charge ; les aides prélevées sur le solde CPF le sont aussi au solde restant
   candidats.sort((x, y) => x.ordre - y.ordre || y.montant - x.montant);
   const financements: LignePlan[] = [];
   let reste = coutFormation;
+  let soldeCpfRestant = profil.soldeCpf ?? 0;
   for (const c of candidats) {
     if (reste <= 0) break;
-    const montant = arrondi(Math.min(c.montant, reste));
+    const montant = arrondi(Math.min(c.montant, c.surSoldeCpf ? Math.min(reste, soldeCpfRestant) : reste));
     if (montant <= 0) continue;
     financements.push({ id: c.id, nom: c.nom, financeurNom: c.financeurNom, montant, confidence: c.confidence });
     reste = arrondi(reste - montant);
+    if (c.surSoldeCpf) soldeCpfRestant = arrondi(soldeCpfRestant - montant);
   }
   const resteACharge = Math.max(0, reste);
 
