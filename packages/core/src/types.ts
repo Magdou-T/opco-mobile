@@ -377,7 +377,17 @@ export interface WizardState {
 
 // --- Calculation Result Types ---
 
+/** Poste de dépense d'une ligne de financement OPCO. */
+export type PosteFinancement =
+  | 'pedagogie'
+  | 'salaires'
+  | 'transport'
+  | 'hebergement'
+  | 'restauration'
+  | 'frais_annexes';
+
 export interface FundingLine {
+  poste: PosteFinancement;
   label: string;
   requestedAmount: number;
   fundedAmount: number;

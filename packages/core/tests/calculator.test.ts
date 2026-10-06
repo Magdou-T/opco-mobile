@@ -173,10 +173,10 @@ describe('calculateFunding — V2.1 : PDC, budget consommé, cumuls', () => {
 
     // grands-comptes (300_plus) exclu ; boost et catalogue retenus
     expect(r.dispositifsComplementaires.map((d) => d.id).sort()).toEqual(['boost', 'catalogue']);
-    // boost : 50% de 3000 = 1500, plafonné à 750
-    expect(r.dispositifsComplementaires.find((d) => d.id === 'boost')!.montantEstime).toBe(750);
-    // alternatif non additionné : enveloppe = 3000 (PDC) + 750 (boost)
-    expect(r.enveloppeMaxPotentielle).toBe(3750);
+    // boost : PDC couvre déjà 100 % (30 €/h sous le plafond 40 €/h) → reste 0 → 0 €
+    expect(r.dispositifsComplementaires.find((d) => d.id === 'boost')!.montantEstime).toBe(0);
+    // l'enveloppe est plafonnée au coût : 3000
+    expect(r.enveloppeMaxPotentielle).toBe(3000);
   });
 
   it('forfait par_heure × durée pour les dispositifs hors budget', () => {
@@ -286,6 +286,107 @@ describe('calculateFunding — barèmes par branche (variantes)', () => {
     const r = calculateFunding(opco, state);
     const repas = r.lines.find((l) => l.label === 'Restauration')!;
     expect(repas.fundedAmount).toBe(38); // 19€ hérité × 2 jours
+  });
+});
+
+describe('calculateFunding — règle des 50 salariés', () => {
+  it('50+ sans enveloppe publiée : PDC mutualisé à 0 € et explication', () => {
+    const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });
+    const state = makeFormationState({ companySize: '50_299', durationHours: 100, pedagogyCostPerHour: 30, pedagogyCostTotal: 3000 });
+    const r = calculateFunding(opco, state);
+    const peda = r.lines.find((l) => l.poste === 'pedagogie')!;
+    expect(peda.requestedAmount).toBe(3000);
+    expect(peda.fundedAmount).toBe(0);
+    expect(r.totalFunded).toBe(0);
+    expect(r.warnings.some((w) => w.includes('moins de 50 salariés'))).toBe(true);
+    expect(r.dispositifPrincipal).toContain('non accessibles');
+  });
+
+  it('50+ avec enveloppe publiée : calcul appliqué avec cette enveloppe', () => {
+    const opco = makeOpco({
+      cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
+      plafonds_par_taille: [
+        { taille: '50_299', cout_horaire_max: null, budget_annuel_max: 1000, quota_horaire_max: null, description: 'Plan conventionnel 50+.' },
+      ],
+    });
+    const state = makeFormationState({ companySize: '50_299', durationHours: 100, pedagogyCostPerHour: 30 });
+    const r = calculateFunding(opco, state);
+    expect(r.totalFunded).toBe(1000);
+    expect(r.warnings.some((w) => w.includes('50 salariés et plus'))).toBe(true);
+  });
+});
+
+describe('calculateFunding — barème dégressif', () => {
+  const seuils = [
+    { max_heures: 105, valeur: 65 },
+    { max_heures: null, valeur: 15 },
+  ];
+
+  it('par tranche : chaque tranche d\'heures à son taux', () => {
+    const opco = makeOpco({ cout_horaire_seuils: seuils, cout_horaire_seuils_mode: 'par_tranche' });
+    const state = makeFormationState({ durationHours: 140, pedagogyCostPerHour: 40 });
+    const r = calculateFunding(opco, state);
+    // 105 h × min(40, 65) + 35 h × min(40, 15) = 4200 + 525
+    expect(r.lines.find((l) => l.poste === 'pedagogie')!.fundedAmount).toBe(4725);
+  });
+
+  it('selon la durée totale : un seul taux', () => {
+    const opco = makeOpco({ cout_horaire_seuils: seuils, cout_horaire_seuils_mode: 'selon_duree_totale' });
+    const state = makeFormationState({ durationHours: 140, pedagogyCostPerHour: 40 });
+    const r = calculateFunding(opco, state);
+    // 140 h > 105 h → 15 €/h × 140 h
+    expect(r.lines.find((l) => l.poste === 'pedagogie')!.fundedAmount).toBe(2100);
+  });
+});
+
+describe('calculateFunding — portée du plafond annuel', () => {
+  it('portée pédagogie : salaires financés en plus du plafond', () => {
+    const opco = makeOpco({
+      cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
+      prise_en_charge_salaires: { value: 12, confidence: 'exact', source_url: 'x' },
+      prise_en_charge_salaires_mode: 'euro_par_heure',
+      budget_annuel_max: { value: 2000, confidence: 'exact', source_url: 'x' },
+      budget_annuel_portee: 'pedagogie',
+    });
+    const state = makeFormationState({ durationHours: 100, pedagogyCostPerHour: 40 });
+    const r = calculateFunding(opco, state);
+    expect(r.lines.find((l) => l.poste === 'pedagogie')!.fundedAmount).toBe(2000);
+    expect(r.lines.find((l) => l.poste === 'salaires')!.fundedAmount).toBe(1200);
+    expect(r.totalFunded).toBe(3200);
+    expect(r.budgetCapApplied).toBe(true);
+  });
+});
+
+describe('calculateFunding — dispositifs complémentaires et enveloppe', () => {
+  const boost = {
+    id: 'boost', nom: 'Boost', cumul: 'additif' as const,
+    montant_max: 750, unite: 'par_dossier' as const, pourcentage_couts: 50,
+    description: 'd', conditions: ['c'], demarches: 'm',
+    tailles_eligibles: null, publics: null,
+    confidence: 'exact' as const, source_url: 'x',
+  };
+
+  it('un dispositif en % est calculé sur le reste à financer', () => {
+    const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' }, dispositifs_complementaires: [boost] });
+    const state = makeFormationState({ durationHours: 100, pedagogyCostPerHour: 60, pedagogyCostTotal: 6000 });
+    const r = calculateFunding(opco, state);
+    // PDC 4000 ; reste 2000 → 50 % = 1000, plafonné à 750
+    expect(r.dispositifsComplementaires[0].montantEstime).toBe(750);
+    expect(r.enveloppeMaxPotentielle).toBe(4750);
+  });
+
+  it('l\'enveloppe ne dépasse jamais le coût demandé', () => {
+    const gros = { ...boost, id: 'gros', pourcentage_couts: null, montant_max: 10000 };
+    const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' }, dispositifs_complementaires: [gros] });
+    const state = makeFormationState({ durationHours: 100, pedagogyCostPerHour: 30 });
+    const r = calculateFunding(opco, state);
+    expect(r.enveloppeMaxPotentielle).toBeLessThanOrEqual(r.totalRequested);
+  });
+
+  it('chaque ligne porte son poste', () => {
+    const opco = makeOpco();
+    const r = calculateFunding(opco, makeFormationState({ needsMeals: true, mealCostPerDay: 15, trainingDays: 2 }));
+    expect(r.lines.map((l) => l.poste)).toEqual(['pedagogie', 'salaires', 'transport', 'hebergement', 'restauration']);
   });
 });
 
