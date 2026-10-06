@@ -1,1 +1,338 @@
-[]
+[
+  {
+    "prefixe": "01",
+    "opco": "ocapiat",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Culture et production animale, chasse et services annexes",
+    "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/12/23/MTRD1936090A/jo/texte"
+  },
+  {
+    "prefixe": "03",
+    "opco": "ocapiat",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Pêche et aquaculture",
+    "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/12/23/MTRD1936090A/jo/texte"
+  },
+  {
+    "prefixe": "08",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Autres industries extractives",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "11",
+    "opco": "ocapiat",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication de boissons",
+    "source": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
+  },
+  {
+    "prefixe": "13",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication de textiles",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "14",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Industrie de l'habillement",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "15",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Industrie du cuir et de la chaussure",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "17",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Industrie du papier et du carton",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "18",
+    "opco": "opco-ep",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Imprimerie et reproduction d'enregistrements",
+    "source": "https://www.opcoep.fr/ressources/centre-ressources/juridique/Branches-opcoep.pdf"
+  },
+  {
+    "prefixe": "19",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Cokéfaction et raffinage",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "20",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Industrie chimique",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "21",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Industrie pharmaceutique",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "22",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication de produits en caoutchouc et en plastique",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "23",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication d'autres produits minéraux non métalliques",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "24",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Métallurgie",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "25",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication de produits métalliques, à l'exception des machines et des équipements",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "26",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication de produits informatiques, électroniques et optiques",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "27",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication d'équipements électriques",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "28",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication de machines et équipements n.c.a.",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "29",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Industrie automobile",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "30",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication d'autres matériels de transport",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "31",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Fabrication de meubles",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "35",
+    "opco": "opco2i",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Production et distribution d'électricité, de gaz, de vapeur et d'air conditionné",
+    "source": "https://www.opco2i.fr/wp-content/uploads/2023/04/opco2i-liste-idcc-branches-04.02.2026.xlsx"
+  },
+  {
+    "prefixe": "36",
+    "opco": "akto",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Captage, traitement et distribution d'eau",
+    "source": "https://www.akto.fr/comment-connaitre-mon-operateur-de-competences/"
+  },
+  {
+    "prefixe": "41",
+    "opco": "constructys",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Construction de bâtiments",
+    "source": "https://www.constructys.fr/vos-contributions/adhesion-a-constructys/"
+  },
+  {
+    "prefixe": "42",
+    "opco": "constructys",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Génie civil",
+    "source": "https://www.constructys.fr/vos-contributions/adhesion-a-constructys/"
+  },
+  {
+    "prefixe": "43",
+    "opco": "constructys",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Travaux de construction spécialisés",
+    "source": "https://www.constructys.fr/vos-contributions/adhesion-a-constructys/"
+  },
+  {
+    "prefixe": "45",
+    "opco": "opco-mobilites",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Commerce et réparation d'automobiles et de motocycles",
+    "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908337A/jo/texte"
+  },
+  {
+    "prefixe": "49",
+    "opco": "opco-mobilites",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Transports terrestres et transport par conduites",
+    "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908337A/jo/texte"
+  },
+  {
+    "prefixe": "50",
+    "opco": "opco-mobilites",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Transports par eau",
+    "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908337A/jo/texte"
+  },
+  {
+    "prefixe": "51",
+    "opco": "akto",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Transports aériens",
+    "source": "https://www.akto.fr/comment-connaitre-mon-operateur-de-competences/"
+  },
+  {
+    "prefixe": "56",
+    "opco": "akto",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Restauration",
+    "source": "https://www.akto.fr/comment-connaitre-mon-operateur-de-competences/"
+  },
+  {
+    "prefixe": "59",
+    "opco": "afdas",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Production de films cinématographiques, de vidéo et de programmes de télévision ; enregistrement sonore et édition musicale",
+    "source": "https://www.afdas.com/fileadmin/user_upload/Gouvernance/idcc_afdas_2026.pdf"
+  },
+  {
+    "prefixe": "60",
+    "opco": "afdas",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Programmation et diffusion",
+    "source": "https://www.afdas.com/fileadmin/user_upload/Gouvernance/idcc_afdas_2026.pdf"
+  },
+  {
+    "prefixe": "61",
+    "opco": "afdas",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Télécommunications",
+    "source": "https://www.afdas.com/fileadmin/user_upload/Gouvernance/idcc_afdas_2026.pdf"
+  },
+  {
+    "prefixe": "62",
+    "opco": "atlas",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Programmation, conseil et autres activités informatiques",
+    "source": "https://www.opco-atlas.fr/atlas/bureaux-etudes-techniques-cabinet-ingenieurs-societes-de-conseil.html"
+  },
+  {
+    "prefixe": "66",
+    "opco": "atlas",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Activités auxiliaires de services financiers et d'assurance",
+    "source": "https://www.opco-atlas.fr/sites/default/files/medias/files/2026/01/grille_contributions_conventionnelles_branches_2026.pdf"
+  },
+  {
+    "prefixe": "75",
+    "opco": "opco-ep",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Activités vétérinaires",
+    "source": "https://www.opcoep.fr/ressources/centre-ressources/juridique/Branches-opcoep.pdf"
+  },
+  {
+    "prefixe": "78",
+    "opco": "akto",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Activités liées à l'emploi",
+    "source": "https://www.akto.fr/comment-connaitre-mon-operateur-de-competences/"
+  },
+  {
+    "prefixe": "87",
+    "opco": "opco-sante",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Hébergement médico-social et social",
+    "source": "https://www.opco-sante.fr/app/uploads/2025/08/opco0178_codes_ape_pdf_site.pdf"
+  },
+  {
+    "prefixe": "90",
+    "opco": "afdas",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Activités créatives, artistiques et de spectacle",
+    "source": "https://www.afdas.com/fileadmin/user_upload/Gouvernance/idcc_afdas_2026.pdf"
+  },
+  {
+    "prefixe": "97",
+    "opco": "opco-ep",
+    "part": null,
+    "effectif_etablissements": null,
+    "libelle": "Activités des ménages en tant qu'employeurs de personnel domestique",
+    "source": "https://www.opcoep.fr/ressources/centre-ressources/juridique/Branches-opcoep.pdf"
+  }
+]

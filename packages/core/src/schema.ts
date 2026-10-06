@@ -244,7 +244,7 @@ export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
   return issues;
 }
 
-// --- Catalogue d'aides --------------------------------------------------------
+// --- Catalogue d'aides, table IDCC et suggestions NAF --------------------------
 
 export const CodeRegionSchema = z.enum([
   '84', '27', '53', '24', '94', '44', '32', '11', '28', '75', '76', '52', '93', '01', '02', '03', '04', '06',
@@ -269,8 +269,9 @@ const FinanceurSchema = z.enum([
   'europe', 'cpf', 'opco', 'faf', 'fiscal', 'branche', 'autre',
 ]);
 
-// Les schémas du catalogue sont stricts : une clé mal orthographiée (ex. `age_maxi`) serait sinon
-// supprimée en silence par Zod, et l'aide perdrait une condition d'éligibilité.
+// Les schémas objet de cette section sont tous stricts (catalogue d'aides, portails régionaux, table IDCC
+// et suggestions NAF) : une clé mal orthographiée (ex. `age_maxi`, `idcc_cibel`) serait sinon supprimée en
+// silence par Zod, et l'aide perdrait une condition d'éligibilité, la convention son rattachement.
 export const CriteresAideSchema = z.object({
   regions: z.array(CodeRegionSchema).optional(),
   perimetre_region: z.enum(['entreprise', 'beneficiaire']).optional(),
@@ -394,7 +395,7 @@ export const IdccEntreeSchema = z.object({
   opcos_possibles: z.array(z.string().min(1)).optional(),
   note: z.string().optional(),
   source: z.string().min(1),
-});
+}).strict();
 
 export const IdccTableSchema = z.record(z.string().regex(/^\d{4}$/), IdccEntreeSchema);
 
@@ -405,7 +406,7 @@ export const SuggestionNafSchema = z.object({
   effectif_etablissements: z.number().int().min(0).nullable().optional(),
   libelle: z.string(),
   source: z.string().min(1),
-});
+}).strict();
 
 /** Cohérence globale du catalogue (en plus du schéma). Renvoie la liste des problèmes. */
 export function sanityCheckAides(aides: Aide[]): string[] {

@@ -8,7 +8,7 @@ import {
   type IdccTable,
   type SuggestionNaf,
 } from '../src/opco-resolver';
-import { IdccTableSchema, SuggestionNafSchema } from '../src/schema';
+import { IdccEntreeSchema, IdccTableSchema, SuggestionNafSchema } from '../src/schema';
 import { EMBEDDED_IDCC, EMBEDDED_NAF } from '../src/data';
 
 // Table fictive (codes inventés sauf 1516/1486/3248) : seule la logique est testée ici.
@@ -20,6 +20,12 @@ const TABLE: IdccTable = {
   '8002': { idcc: '8002', titre: 'Convention fictive B', opco: 'akto', statut: 'actif', source: 'https://x.fr' },
   // Fusion vers un IDCC (8999) qui ne figure pas dans la table.
   '8003': { idcc: '8003', titre: 'Convention fusionnée vers un code absent', opco: 'atlas', statut: 'fusionne', idcc_cible: '8999', source: 'https://x.fr' },
+  // Convention connue de la table, mais dont aucune source ne confirme l'OPCO.
+  '8004': { idcc: '8004', titre: 'Convention fictive sans OPCO', opco: null, statut: 'actif', note: 'OPCO non confirmé.', source: 'https://x.fr' },
+  // Fusionnée ou close, sans convention de rattachement connue : l'OPCO est celui de l'ancienne convention.
+  '8005': { idcc: '8005', titre: 'Convention fusionnée sans cible', opco: 'atlas', statut: 'fusionne', source: 'https://x.fr' },
+  // Fusionnée ou close, sans convention de rattachement ni OPCO.
+  '8006': { idcc: '8006', titre: 'Convention close sans OPCO', opco: null, statut: 'fusionne', source: 'https://x.fr' },
   '7777': {
     idcc: '7777', titre: 'Convention partagée', opco: null, statut: 'partage',
     opcos_possibles: ['ocapiat', 'akto'], note: "Selon le secteur d'activité", source: 'https://x.fr',
@@ -27,6 +33,13 @@ const TABLE: IdccTable = {
   '7778': {
     idcc: '7778', titre: 'Convention partagée sans note', opco: null, statut: 'partage',
     opcos_possibles: ['ocapiat', 'akto'], source: 'https://x.fr',
+  },
+  // Note longue qui se termine par un point (comme les notes des conventions partagées de la table embarquée).
+  '7779': {
+    idcc: '7779', titre: 'Convention partagée à note longue', opco: null, statut: 'partage',
+    opcos_possibles: ['ocapiat', 'akto'],
+    note: "Champ partagé selon l'activité principale de l'entreprise : exploitation du bois → AKTO ; sylviculture → OCAPIAT.",
+    source: 'https://x.fr',
   },
   '9999': { idcc: '9999', titre: 'Absence de convention collective', opco: null, statut: 'echappatoire', source: 'https://x.fr' },
 };
@@ -69,17 +82,74 @@ describe('resoudreOpco', () => {
     expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: '1516' });
     expect(r.candidats).toHaveLength(1);
     expect(r.motif).toBe(
-      "Identifié via la convention collective IDCC 1516 (Organismes de formation) ; la convention IDCC 4242 ne figure pas dans notre table : vérifiez qu'elle ne désigne pas un autre OPCO.",
+      "Identifié via la convention collective IDCC 1516 (Organismes de formation) ; la convention IDCC 4242 n'a pas pu être rattachée à un OPCO : vérifiez qu'elle ne désigne pas un autre OPCO.",
     );
-    expect(r.avertissements.some((a) => a.includes('4242'))).toBe(true);
+    expect(r.avertissements).toContain('IDCC non référencé(s) dans notre table : 4242.');
   });
 
   it("plusieurs conventions inconnues à côté d'une convention connue → motif au pluriel", () => {
     const r = resoudreOpco({ idccs: ['1516', '4242', '4243'] }, TABLE);
     expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer' });
     expect(r.motif).toBe(
-      "Identifié via la convention collective IDCC 1516 (Organismes de formation) ; les conventions IDCC 4242, 4243 ne figurent pas dans notre table : vérifiez qu'elles ne désignent pas un autre OPCO.",
+      "Identifié via la convention collective IDCC 1516 (Organismes de formation) ; les conventions IDCC 4242, 4243 n'ont pas pu être rattachées à un OPCO : vérifiez qu'elles ne désignent pas un autre OPCO.",
     );
+    expect(r.avertissements).toContain('IDCC non référencé(s) dans notre table : 4242, 4243.');
+  });
+
+  // --- Convention connue de la table mais sans OPCO confirmé (≠ convention absente de la table) ---
+
+  it('convention connue sans OPCO confirmé, seule → inconnu, avertissement dédié et pas « non référencé »', () => {
+    const r = resoudreOpco({ idccs: ['8004'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'inconnu', idccRetenu: null, candidats: [] });
+    expect(r.avertissements).toContain(
+      'IDCC 8004 (Convention fictive sans OPCO) : aucun OPCO confirmé par une source officielle pour cette convention.',
+    );
+    // Elle figure dans la table : elle ne doit pas être comptée parmi les conventions non référencées.
+    expect(r.avertissements.some((a) => a.includes('non référencé'))).toBe(false);
+  });
+
+  it("convention connue sans OPCO confirmé à côté d'une convention connue → à confirmer", () => {
+    const r = resoudreOpco({ idccs: ['1516', '8004'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: '1516' });
+    expect(r.candidats).toHaveLength(1);
+    expect(r.motif).toBe(
+      "Identifié via la convention collective IDCC 1516 (Organismes de formation) ; la convention IDCC 8004 n'a pas pu être rattachée à un OPCO : vérifiez qu'elle ne désigne pas un autre OPCO.",
+    );
+    expect(r.avertissements).toContain(
+      'IDCC 8004 (Convention fictive sans OPCO) : aucun OPCO confirmé par une source officielle pour cette convention.',
+    );
+    expect(r.avertissements.some((a) => a.includes('non référencé'))).toBe(false);
+  });
+
+  it('conventions absentes de la table et sans OPCO confirmé : deux avertissements distincts, un seul motif', () => {
+    const r = resoudreOpco({ idccs: ['1516', '8004', '4242'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: '1516' });
+    // Les deux listes sont réunies, dans l'ordre des conventions déclarées.
+    expect(r.motif).toBe(
+      "Identifié via la convention collective IDCC 1516 (Organismes de formation) ; les conventions IDCC 8004, 4242 n'ont pas pu être rattachées à un OPCO : vérifiez qu'elles ne désignent pas un autre OPCO.",
+    );
+    expect(r.avertissements).toContain('IDCC non référencé(s) dans notre table : 4242.');
+    expect(r.avertissements).toContain(
+      'IDCC 8004 (Convention fictive sans OPCO) : aucun OPCO confirmé par une source officielle pour cette convention.',
+    );
+  });
+
+  it('convention connue sans OPCO confirmé + code NAF → suggestion NAF à confirmer (repli inchangé)', () => {
+    const r = resoudreOpco({ idccs: ['8004'], codeNaf: '85.59A' }, TABLE, NAF);
+    expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: null });
+    expect(r.motif).toBe(
+      "Aucune convention collective exploitable. Suggestion d'après le code NAF 85.59 (Autres enseignements) : 80 % des établissements de ce secteur relèvent de cet OPCO. À confirmer.",
+    );
+    expect(r.avertissements.some((a) => a.includes('aucun OPCO confirmé'))).toBe(true);
+    expect(r.avertissements.some((a) => a.includes('non référencé'))).toBe(false);
+  });
+
+  it('convention fusionnée ou close sans cible ni OPCO → traitée comme une convention sans OPCO confirmé', () => {
+    const r = resoudreOpco({ idccs: ['8006'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'inconnu', idccRetenu: null, candidats: [] });
+    expect(r.avertissements).toEqual([
+      'IDCC 8006 (Convention close sans OPCO) : aucun OPCO confirmé par une source officielle pour cette convention.',
+    ]);
   });
 
   it("un code échappatoire à côté d'une convention connue reste fiable", () => {
@@ -154,16 +224,59 @@ describe('resoudreOpco', () => {
     expect(r.avertissements.some((a) => a.includes("rattachement à l'IDCC 3248"))).toBe(true);
   });
 
-  it("IDCC fusionné vers un IDCC absent de la table → pas de redirection, OPCO de l'ancienne convention", () => {
+  it("IDCC fusionné vers un IDCC absent de la table → pas de redirection, OPCO de l'ancienne convention, à confirmer", () => {
     const r = resoudreOpco({ idccs: ['8003'] }, TABLE);
-    expect(r.opcoSlug).toBe('atlas');
-    expect(r.idccRetenu).toBe('8003');
+    expect(r).toMatchObject({ opcoSlug: 'atlas', certitude: 'a_confirmer', idccRetenu: '8003' });
+    expect(r.motif).toBe(
+      "Rattachement d'après l'ancienne convention IDCC 8003 (Convention fusionnée vers un code absent), fusionnée ou close : à confirmer.",
+    );
     expect(r.candidats).toEqual([{ opcoSlug: 'atlas', idccs: [{ idcc: '8003', titre: 'Convention fusionnée vers un code absent' }] }]);
     expect(r.avertissements).toContain(
       "IDCC 8003 (Convention fusionnée vers un code absent) : convention fusionnée dans l'IDCC 8999, absent de notre table ; rattachement d'après l'ancienne convention.",
     );
     // Aucun avertissement de redirection vers l'IDCC 8999 ni de « non référencé ».
     expect(r.avertissements).toHaveLength(1);
+  });
+
+  it("IDCC fusionné sans convention cible → OPCO de l'ancienne convention, à confirmer", () => {
+    const r = resoudreOpco({ idccs: ['8005'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'atlas', certitude: 'a_confirmer', idccRetenu: '8005' });
+    expect(r.motif).toBe(
+      "Rattachement d'après l'ancienne convention IDCC 8005 (Convention fusionnée sans cible), fusionnée ou close : à confirmer.",
+    );
+    expect(r.candidats).toEqual([{ opcoSlug: 'atlas', idccs: [{ idcc: '8005', titre: 'Convention fusionnée sans cible' }] }]);
+  });
+
+  it('IDCC fusionné sans cible + convention actuelle du même OPCO → la certitude suit les autres règles (fiable)', () => {
+    // 1486 est une convention en vigueur (atlas) : le candidat ne repose plus uniquement sur une convention fusionnée.
+    const r = resoudreOpco({ idccs: ['8003', '1486'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'atlas', certitude: 'fiable' });
+    expect(r.candidats).toHaveLength(1);
+    expect(r.motif).toBe(
+      "Identifié via la convention collective IDCC 8003 (Convention fusionnée vers un code absent), IDCC 1486 (Bureaux d'études techniques).",
+    );
+  });
+
+  it('plusieurs conventions fusionnées sans cible du même OPCO → motif au pluriel, à confirmer', () => {
+    const r = resoudreOpco({ idccs: ['8003', '8005'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'atlas', certitude: 'a_confirmer', idccRetenu: '8003' });
+    expect(r.motif).toBe(
+      "Rattachement d'après les anciennes conventions IDCC 8003 (Convention fusionnée vers un code absent), IDCC 8005 (Convention fusionnée sans cible), fusionnées ou closes : à confirmer.",
+    );
+  });
+
+  it('IDCC fusionné sans cible + convention inconnue → les deux réserves figurent dans le motif', () => {
+    const r = resoudreOpco({ idccs: ['8005', '4242'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'atlas', certitude: 'a_confirmer', idccRetenu: '8005' });
+    expect(r.motif).toBe(
+      "Rattachement d'après l'ancienne convention IDCC 8005 (Convention fusionnée sans cible), fusionnée ou close : à confirmer ; la convention IDCC 4242 n'a pas pu être rattachée à un OPCO : vérifiez qu'elle ne désigne pas un autre OPCO.",
+    );
+  });
+
+  it('IDCC fusionné avec une convention cible présente reste fiable (la cible fait foi)', () => {
+    const r = resoudreOpco({ idccs: ['8001'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'opco2i', certitude: 'fiable', idccRetenu: '3248' });
+    expect(r.motif).toBe('Identifié via la convention collective IDCC 3248 (Métallurgie).');
   });
 
   it('IDCC fusionné répété → un seul avertissement de fusion', () => {
@@ -185,17 +298,70 @@ describe('resoudreOpco', () => {
     // Convention partagée seule, sans code NAF : aucune présélection.
     expect(r.opcoSlug).toBeNull();
     expect(r.idccRetenu).toBeNull();
+    // Motif court : la note de la convention reste dans l'avertissement.
     expect(r.motif).toBe(
-      "La convention collective IDCC 7777 (Convention partagée) relève de plusieurs OPCO : Selon le secteur d'activité. Choisissez l'OPCO correspondant à votre activité.",
+      "La convention collective IDCC 7777 (Convention partagée) relève de plusieurs OPCO selon l'activité principale de l'entreprise. Choisissez l'OPCO correspondant à votre activité.",
     );
+    expect(r.avertissements).toContain("IDCC 7777 (Convention partagée) : Selon le secteur d'activité.");
   });
 
   it("IDCC partagé seul + code NAF d'un des OPCO → présélection d'après le code NAF", () => {
     const r = resoudreOpco({ idccs: ['7777'], codeNaf: '85.59A' }, TABLE, NAF);
     expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: '7777' });
     expect(r.motif).toBe(
-      "La convention collective IDCC 7777 (Convention partagée) relève de plusieurs OPCO : Selon le secteur d'activité. Choisissez l'OPCO correspondant à votre activité. Présélection d'après le code NAF 85.59 (Autres enseignements), à confirmer.",
+      "La convention collective IDCC 7777 (Convention partagée) relève de plusieurs OPCO selon l'activité principale de l'entreprise. Choisissez l'OPCO correspondant à votre activité. Présélection d'après le code NAF 85.59 (Autres enseignements), à confirmer.",
     );
+  });
+
+  it('IDCC partagé à note longue terminée par un point → motif court, avertissement sans point doublé', () => {
+    const r = resoudreOpco({ idccs: ['7779'] }, TABLE);
+    expect(r.motif).toBe(
+      "La convention collective IDCC 7779 (Convention partagée à note longue) relève de plusieurs OPCO selon l'activité principale de l'entreprise. Choisissez l'OPCO correspondant à votre activité.",
+    );
+    expect(r.motif).not.toContain('..');
+    // La note complète reste dans l'avertissement, avec un seul point final.
+    expect(r.avertissements).toEqual([
+      "IDCC 7779 (Convention partagée à note longue) : Champ partagé selon l'activité principale de l'entreprise : exploitation du bois → AKTO ; sylviculture → OCAPIAT.",
+    ]);
+    expect(r.avertissements.some((a) => a.includes('..'))).toBe(false);
+  });
+
+  // --- Plusieurs candidats et conventions qui n'ont pas pu être rattachées à un OPCO ---
+
+  it('convention partagée + convention absente de la table → motif complété par la vérification', () => {
+    const r = resoudreOpco({ idccs: ['7777', '4242'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'a_confirmer', idccRetenu: null });
+    expect(r.candidats.map((c) => c.opcoSlug).sort()).toEqual(['akto', 'ocapiat']);
+    expect(r.motif).toBe(
+      "La convention collective IDCC 7777 (Convention partagée) relève de plusieurs OPCO selon l'activité principale de l'entreprise. Choisissez l'OPCO correspondant à votre activité. Par ailleurs, la convention IDCC 4242 n'a pas pu être rattachée à un OPCO : vérifiez qu'elle ne désigne pas un autre OPCO.",
+    );
+    expect(r.avertissements).toContain('IDCC non référencé(s) dans notre table : 4242.');
+  });
+
+  it('conventions de plusieurs OPCO + convention sans OPCO confirmé → vérification avant la présélection du siège', () => {
+    const r = resoudreOpco({ idccs: ['1516', '1486', '8004'], idccSiege: ['1486'] }, TABLE);
+    expect(r).toMatchObject({ opcoSlug: 'atlas', certitude: 'a_confirmer', idccRetenu: '1486' });
+    expect(r.motif).toBe(
+      `${MOTIF_PLUSIEURS_OPCO} Par ailleurs, la convention IDCC 8004 n'a pas pu être rattachée à un OPCO : vérifiez qu'elle ne désigne pas un autre OPCO. Présélection : convention du siège.`,
+    );
+    expect(r.avertissements).toContain(
+      'IDCC 8004 (Convention fictive sans OPCO) : aucun OPCO confirmé par une source officielle pour cette convention.',
+    );
+  });
+
+  it("plusieurs conventions inconnues (absentes et sans OPCO) + plusieurs candidats → motif au pluriel, avant la présélection d'après le code NAF", () => {
+    const r = resoudreOpco({ idccs: ['1486', '1516', '4242', '8004'], codeNaf: '85.59A' }, TABLE, NAF);
+    expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: '1516' });
+    expect(r.motif).toBe(
+      `${MOTIF_PLUSIEURS_OPCO} Par ailleurs, les conventions IDCC 4242, 8004 n'ont pas pu être rattachées à un OPCO : vérifiez qu'elles ne désignent pas un autre OPCO. Présélection d'après le code NAF 85.59 (Autres enseignements), à confirmer.`,
+    );
+  });
+
+  it('plusieurs candidats sans convention inconnue → le motif ne contient aucune phrase de vérification', () => {
+    const r = resoudreOpco({ idccs: ['1516', '1486'] }, TABLE, NAF);
+    expect(r.motif).toBe(MOTIF_PLUSIEURS_OPCO);
+    expect(r.motif).not.toContain("n'a pas pu");
+    expect(r.motif).not.toContain("n'ont pas pu");
   });
 
   it("IDCC partagé seul : le siège n'apporte rien (tous les candidats ont le même IDCC)", () => {
@@ -204,12 +370,15 @@ describe('resoudreOpco', () => {
     expect(r.motif).not.toContain('Présélection');
   });
 
-  it("IDCC partagé sans note → motif avec l'activité principale de l'entreprise", () => {
+  it('IDCC partagé sans note → même motif court, avertissement générique', () => {
     const r = resoudreOpco({ idccs: ['7778'] }, TABLE);
     expect(r.opcoSlug).toBeNull();
     expect(r.motif).toBe(
-      "La convention collective IDCC 7778 (Convention partagée sans note) relève de plusieurs OPCO : selon l'activité principale de l'entreprise. Choisissez l'OPCO correspondant à votre activité.",
+      "La convention collective IDCC 7778 (Convention partagée sans note) relève de plusieurs OPCO selon l'activité principale de l'entreprise. Choisissez l'OPCO correspondant à votre activité.",
     );
+    expect(r.avertissements).toEqual([
+      "IDCC 7778 (Convention partagée sans note) : convention répartie entre plusieurs OPCO selon l'activité.",
+    ]);
   });
 
   it('code échappatoire + NAF → suggestion à confirmer', () => {
@@ -265,6 +434,45 @@ describe('données IDCC embarquées', () => {
       expect(EMBEDDED_IDCC[code]?.statut).toBe('echappatoire');
     }
     for (const s of EMBEDDED_NAF) expect(SuggestionNafSchema.safeParse(s).success).toBe(true);
+  });
+});
+
+describe('schémas IDCC et NAF stricts', () => {
+  // Une clé mal orthographiée ne doit pas être supprimée en silence : la convention perdrait son rattachement.
+  const fusionnee = { idcc: '8001', titre: 'Convention fusionnée', opco: 'opco2i', statut: 'fusionne', idcc_cible: '3248', source: 'https://x.fr' };
+  const partagee = {
+    idcc: '7777', titre: 'Convention partagée', opco: null, statut: 'partage',
+    opcos_possibles: ['ocapiat', 'akto'], note: 'Selon le secteur.', source: 'https://x.fr',
+  };
+  const suggestion = { prefixe: '85.59', opco: 'akto', part: 0.8, libelle: 'Autres enseignements', source: 'https://x.fr' };
+
+  it('accepte les entrées complètes (fusion avec cible, partage avec OPCO possibles)', () => {
+    expect(IdccEntreeSchema.safeParse(fusionnee).success).toBe(true);
+    expect(IdccEntreeSchema.safeParse(partagee).success).toBe(true);
+    expect(IdccTableSchema.safeParse({ '8001': fusionnee, '7777': partagee }).success).toBe(true);
+    expect(SuggestionNafSchema.safeParse(suggestion).success).toBe(true);
+    expect(SuggestionNafSchema.safeParse({ ...suggestion, part: null, effectif_etablissements: null }).success).toBe(true);
+  });
+
+  it.each([
+    ['idcc_cibel', { ...fusionnee, idcc_cibel: '3248' }],
+    ['opcos_possible', { ...partagee, opcos_possible: ['akto'] }],
+  ])('refuse une clé inconnue dans une entrée IDCC (%s)', (cle, entree) => {
+    const r = IdccEntreeSchema.safeParse(entree);
+    expect(r.success).toBe(false);
+    expect(r.success ? [] : r.error.issues).toMatchObject([{ code: 'unrecognized_keys', keys: [cle] }]);
+  });
+
+  it('refuse une clé inconnue dans une entrée de la table IDCC', () => {
+    const r = IdccTableSchema.safeParse({ '8001': { ...fusionnee, idcc_cibel: '3248' } });
+    expect(r.success).toBe(false);
+    expect(r.success ? [] : r.error.issues).toMatchObject([{ code: 'unrecognized_keys', keys: ['idcc_cibel'], path: ['8001'] }]);
+  });
+
+  it('refuse une clé inconnue dans une suggestion NAF', () => {
+    const r = SuggestionNafSchema.safeParse({ ...suggestion, effectif_etablissement: 12 });
+    expect(r.success).toBe(false);
+    expect(r.success ? [] : r.error.issues).toMatchObject([{ code: 'unrecognized_keys', keys: ['effectif_etablissement'] }]);
   });
 });
 

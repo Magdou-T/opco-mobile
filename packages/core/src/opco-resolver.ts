@@ -1,12 +1,12 @@
 // ============================================================
 // Identification de l'OPCO (v2) : IDCC → OPCO avec niveau de certitude.
 //
-// Table construite à partir de sources réutilisables : arrêtés d'agrément
-// des OPCO (Légifrance), listes de branches publiées par les OPCO, liste
-// des IDCC du ministère du Travail. Les tables de France Compétences
-// (établies par l'art. R. 6123-34 du code du travail) ne sont PAS utilisées :
-// leur réutilisation exige une licence gratuite (art. R. 6123-35). Le niveau
-// 'confirme' leur est réservé.
+// Table construite à partir de sources réutilisables : table IDCC de la
+// norme DSN, données KALI et Journal officiel (DILA), arrêtés d'agrément
+// des OPCO et listes de branches publiées par les OPCO. Les tables de
+// France Compétences (établies par l'art. R. 6123-34 du code du travail)
+// ne sont PAS utilisées : leur réutilisation exige une licence
+// (art. R. 6123-35). Le niveau 'confirme' leur est réservé.
 // ============================================================
 
 import type { CertitudeOpco } from './types';
@@ -44,10 +44,22 @@ export interface CandidatOpco {
 }
 
 export interface ResolutionOpco {
+  /**
+   * OPCO retenu ou présélectionné. Vaut `null` quand la certitude est `inconnu`, ou `a_confirmer` sans
+   * présélection fondée : plusieurs candidats, sans convention du siège qui n'en désigne qu'un seul et sans
+   * suggestion NAF qui désigne l'un d'eux. L'utilisateur choisit alors parmi `candidats`.
+   */
   opcoSlug: string | null;
   certitude: CertitudeOpco;
+  /** Explication de la résolution, destinée à l'utilisateur. */
   motif: string;
+  /** OPCO possibles et conventions qui y mènent ; vide quand la certitude est `inconnu`. */
   candidats: CandidatOpco[];
+  /**
+   * IDCC qui fonde `opcoSlug`. Vaut `null` dans les mêmes cas que `opcoSlug` (certitude `inconnu`, ou
+   * `a_confirmer` sans présélection fondée) et quand l'OPCO est seulement suggéré par le code NAF,
+   * faute de convention exploitable.
+   */
   idccRetenu: string | null;
   avertissements: string[];
   urlVerificationOfficielle: string;
@@ -77,6 +89,17 @@ const MOTIF_PLUSIEURS_OPCO =
   'Plusieurs OPCO possibles selon les conventions collectives déclarées. Une entreprise relève en principe ' +
   "d'une seule convention, déterminée par son activité principale (sauf établissement autonome) : choisissez " +
   "celle de l'établissement du salarié concerné.";
+
+/**
+ * Invite à vérifier les conventions qui n'ont pu être rattachées à aucun OPCO : absentes de la table, ou
+ * présentes mais sans OPCO confirmé par une source. Le texte commence par une minuscule : il suit un « ; »
+ * (un seul candidat) ou « Par ailleurs, » (plusieurs candidats).
+ */
+function phraseVerification(inconnues: string[]): string {
+  return inconnues.length === 1
+    ? `la convention IDCC ${inconnues[0]} n'a pas pu être rattachée à un OPCO : vérifiez qu'elle ne désigne pas un autre OPCO.`
+    : `les conventions IDCC ${inconnues.join(', ')} n'ont pas pu être rattachées à un OPCO : vérifiez qu'elles ne désignent pas un autre OPCO.`;
+}
 
 export function normaliserIdcc(raw: string): string | null {
   const s = String(raw).trim();
@@ -153,26 +176,43 @@ export function resoudreOpco(
 
   // 3. Regroupement par OPCO
   const parOpco = new Map<string, { idcc: string; titre: string }[]>();
-  const nonReferences: string[] = [];
+  const absentes: string[] = []; // code absent de la table
+  const sansOpco: string[] = []; // code présent dans la table, mais aucun OPCO utilisable (non confirmé par une source)
+  const fusionnees = new Set<string>(); // conventions fusionnées ou closes utilisées telles quelles (pas de cible utilisable)
   for (const code of exploitables) {
     const e = table[code];
-    const opcos = e ? (e.statut === 'partage' ? e.opcos_possibles ?? [] : e.opco ? [e.opco] : []) : [];
-    if (!e || opcos.length === 0) {
-      nonReferences.push(code);
+    if (!e) {
+      absentes.push(code);
+      continue;
+    }
+    const opcos = e.statut === 'partage' ? e.opcos_possibles ?? [] : e.opco ? [e.opco] : [];
+    if (opcos.length === 0) {
+      sansOpco.push(code);
       continue;
     }
     if (e.statut === 'partage') {
-      avertissements.push(`IDCC ${code} (${e.titre}) : ${e.note ?? "convention répartie entre plusieurs OPCO selon l'activité"}.`);
+      // La note complète reste dans l'avertissement (le motif reste court) ; son point final est retiré avant le nôtre.
+      const detail = e.note?.trim().replace(/\.\s*$/, '') || "convention répartie entre plusieurs OPCO selon l'activité";
+      avertissements.push(`IDCC ${code} (${e.titre}) : ${detail}.`);
     }
+    if (e.statut === 'fusionne') fusionnees.add(code);
     for (const opco of opcos) {
       const liste = parOpco.get(opco) ?? [];
       liste.push({ idcc: code, titre: e.titre });
       parOpco.set(opco, liste);
     }
   }
-  if (nonReferences.length > 0) {
-    avertissements.push(`IDCC non référencé(s) dans notre table : ${nonReferences.join(', ')}.`);
+  if (absentes.length > 0) {
+    avertissements.push(`IDCC non référencé(s) dans notre table : ${absentes.join(', ')}.`);
   }
+  for (const code of sansOpco) {
+    avertissements.push(
+      `IDCC ${code} (${table[code].titre}) : aucun OPCO confirmé par une source officielle pour cette convention.`,
+    );
+  }
+  // Conventions qui n'ont pu être rattachées à aucun OPCO (absentes ou sans OPCO confirmé), dans l'ordre déclaré.
+  const inconnues = exploitables.filter((code) => absentes.includes(code) || sansOpco.includes(code));
+  const verification = inconnues.length > 0 ? phraseVerification(inconnues) : null;
 
   const candidats: CandidatOpco[] = [...parOpco.entries()].map(([opcoSlug, idccs]) => ({ opcoSlug, idccs }));
 
@@ -180,15 +220,22 @@ export function resoudreOpco(
     const c = candidats[0];
     const conventions = c.idccs.map((i) => `IDCC ${i.idcc} (${i.titre})`).join(', ');
     let certitude: CertitudeOpco = 'fiable';
-    let motif = `Identifié via la convention collective ${conventions}.`;
-    if (nonReferences.length > 0) {
-      // Une convention absente de la table peut désigner un autre OPCO : on ne conclut pas sans confirmation.
+    let motif = `Identifié via la convention collective ${conventions}`;
+    if (c.idccs.every((i) => fusionnees.has(i.idcc))) {
+      // Le candidat ne repose que sur des conventions fusionnées ou closes, sans convention cible utilisable :
+      // l'OPCO vient de l'ancienne convention, qui peut avoir changé de champ.
       certitude = 'a_confirmer';
-      const verification =
-        nonReferences.length === 1
-          ? `la convention IDCC ${nonReferences[0]} ne figure pas dans notre table : vérifiez qu'elle ne désigne pas un autre OPCO.`
-          : `les conventions IDCC ${nonReferences.join(', ')} ne figurent pas dans notre table : vérifiez qu'elles ne désignent pas un autre OPCO.`;
-      motif = `Identifié via la convention collective ${conventions} ; ${verification}`;
+      motif =
+        c.idccs.length === 1
+          ? `Rattachement d'après l'ancienne convention ${conventions}, fusionnée ou close : à confirmer`
+          : `Rattachement d'après les anciennes conventions ${conventions}, fusionnées ou closes : à confirmer`;
+    }
+    if (verification) {
+      // Une convention absente de la table ou sans OPCO confirmé peut désigner un autre OPCO : on ne conclut pas sans confirmation.
+      certitude = 'a_confirmer';
+      motif = `${motif} ; ${verification}`;
+    } else {
+      motif = `${motif}.`;
     }
     return {
       opcoSlug: c.opcoSlug,
@@ -204,13 +251,16 @@ export function resoudreOpco(
 
   if (candidats.length > 1) {
     // Motif de base : convention partagée seule (un seul IDCC, commun à tous les candidats) ou plusieurs conventions.
+    // Pour une convention partagée, la note complète figure dans l'avertissement : le motif reste court.
     const idccsCandidats = new Set(candidats.flatMap((c) => c.idccs.map((i) => i.idcc)));
     let motif = MOTIF_PLUSIEURS_OPCO;
     if (idccsCandidats.size === 1) {
       const code = [...idccsCandidats][0];
-      const e = table[code];
-      motif = `La convention collective IDCC ${code} (${e.titre}) relève de plusieurs OPCO : ${e.note ?? "selon l'activité principale de l'entreprise"}. Choisissez l'OPCO correspondant à votre activité.`;
+      motif = `La convention collective IDCC ${code} (${table[code].titre}) relève de plusieurs OPCO selon l'activité principale de l'entreprise. Choisissez l'OPCO correspondant à votre activité.`;
     }
+    // Même vérification que pour un seul candidat : une convention absente de la table ou sans OPCO confirmé
+    // peut désigner un autre OPCO. Elle précède la phrase de présélection éventuelle.
+    if (verification) motif = `${motif} Par ailleurs, ${verification}`;
     const aConfirmer = (opcoSlug: string | null, idccRetenu: string | null, motifFinal: string): ResolutionOpco => ({
       opcoSlug,
       certitude: 'a_confirmer',
