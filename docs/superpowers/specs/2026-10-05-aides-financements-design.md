@@ -177,7 +177,7 @@ export interface CriteresAide {        // tous facultatifs ; absent = pas de con
   departements?: string[];
   effectif_min?: number; effectif_max?: number;
   age_min?: number; age_max?: number;
-  rqth?: boolean;                      // true = RQTH requise
+  rqth?: true;                         // RQTH requise (uniquement vrai : false n'ajoute aucune restriction)
   niveaux_diplome?: NiveauDiplome[];   // diplôme le plus élevé du bénéficiaire
   niveau_certification_max?: NiveauCertification; // niveau de la formation visée
   niveau_certification_min?: NiveauCertification;
@@ -188,11 +188,11 @@ export interface CriteresAide {        // tous facultatifs ; absent = pas de con
   statuts_dirigeant?: StatutDirigeant[];
   micro_entrepreneur?: boolean;        // true = réservé ; false = exclu
   certifications?: CertificationType[];
-  eligible_cpf?: boolean;
+  eligible_cpf?: true;                 // formation éligible au CPF requise (uniquement vrai)
   duree_min_heures?: number; duree_max_heures?: number;
   opcos?: string[]; idcc?: string[]; naf_prefixes?: string[];
   structures?: TypeStructure[];        // l'une au moins
-  qualiopi_requis?: boolean;
+  qualiopi_requis?: true;              // organisme de formation certifié Qualiopi requis (uniquement vrai)
 }
 
 export interface MontantAide {
