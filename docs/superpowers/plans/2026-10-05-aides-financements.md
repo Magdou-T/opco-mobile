@@ -7488,3 +7488,93 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 - [ ] **Step 5 : Rendre compte à l'utilisateur** — résumé des corrections, chiffres du catalogue, limites (aides « à confirmer », liens à vérifier), et **demander son accord** avant : (a) push de la branche, (b) publication du dataset v4 sur `main` (met à jour les APK installés). Rappeler les actions de son ressort : secret `ANTHROPIC_API_KEY` et réactivation du workflow, envoi de la demande de licence, build EAS de l'APK 1.3.0.
 
+---
+
+# Révision du 06/10/2026 — cible : site web financementOPCO
+
+L'utilisateur a choisi le **site financementOPCO** (Next.js 16, export statique, Hostinger) comme support final. Le moteur et les données (`@opco/core`) ne changent pas ; les écrans sont réalisés dans le site, intégré au monorepo sous `apps/web`. L'app mobile reste en l'état et doit continuer à compiler.
+
+## Ce qui change dans le plan
+
+- **Annulées** : tâches 6, 7, 14, 15 (écrans de l'app mobile) et 21 (version APK).
+- **Facultative** : tâche 19 (dataset v4 pour les APK), seulement si l'utilisateur veut que les APK installés reçoivent les barèmes corrigés.
+- **Compatibilité mobile** (s'applique aux tâches conservées) : ne supprimer aucun export de `@opco/core` utilisé par `apps/mobile` (`SirenSearchResult`, `SirenApiResponse`, `IdccOpcoMapping`, `resolveIdccToOpco` restent, marqués dépréciés) ; ne pas modifier `WIZARD_STEPS` ni retirer `isReconversion` / `isSortieChomage` de `WizardState` ; chaque tâche du moteur garde la vérification `cd apps/mobile && npx tsc --noEmit`.
+- **Ordre d'exécution** : 1 → 2 → 3 → 4 → 5 → W1 → 8 → 9 → 10 → 11 → 12 → 13 → W2 → W3 → W4 → W5 → 16 → 17 → 18 → 20 → W6.
+- **Conventions du site** : composants React DOM + Tailwind 4 du site (classes existantes : `border-rule`, `bg-cobalt`, `text-ink`, `bg-paper-deep`, `marginalia`, `font-display`…), textes en français, `'use client'` pour les composants interactifs, aucune nouvelle dépendance. Avant d'écrire du code Next.js, lire le guide pertinent dans `node_modules/next/dist/docs/` (consigne de `apps/web/AGENTS.md`).
+- **Global Constraints** : celles du début du plan s'appliquent ; s'y ajoute : « le site reste exportable en statique (`output: 'export'`) et déployable sur Hostinger sans serveur ».
+
+### Task W1 : Intégrer le site dans le monorepo (`apps/web`)
+
+**Files:** Create `apps/web/` (copie de `C:\Users\magdo\Desktop\Claude\Claude_OPCO\opco-funding` sans `node_modules`, `.next`, `out`, `.git`) ; Modify `apps/web/package.json`, `apps/web/next.config.ts`, `apps/web/tsconfig.json`.
+
+- [ ] Copier `src/`, `public/`, `data/`, `next.config.ts`, `postcss.config.mjs`, `eslint.config.mjs`, `tsconfig.json`, `next-env.d.ts`, `package.json`, `.gitignore`, `AGENTS.md`, `CLAUDE.md`, `start-app.bat`, `README.md` vers `apps/web/`. Le dossier d'origine n'est pas modifié.
+- [ ] `apps/web/package.json` : `"name": "web"` ; conserver scripts et dépendances.
+- [ ] `apps/web/next.config.ts` : conserver `output: 'export'`, `trailingSlash: true`, `images.unoptimized` ; `turbopack.root` = racine du monorepo (`path.resolve(__dirname, '../..')`, dépendances hissées) ; ajouter `transpilePackages: ['@opco/core']`.
+- [ ] `apps/web/tsconfig.json` : ajouter dans `paths` `"@opco/core": ["../../packages/core/src/index.ts"]` (en plus de `@/*`).
+- [ ] `npm install` à la racine ; `git diff --stat package-lock.json` ne doit montrer que l'ajout du workspace `web` et de ses dépendances (sinon restaurer les changements parasites).
+- [ ] Vérifier : `npm run build --workspace web` → `apps/web/out/` contient `/`, `/simulateur/`, `/opco/` + 11 fiches, `/comprendre-les-opco/`, `/obligations/`, `/former-sans-budget/`, `/contact/`, `404.html`, `sitemap.xml`, `robots.txt`, `.htaccess`. `cd apps/mobile && npx tsc --noEmit` et `cd packages/core && npx vitest run` passent.
+- [ ] Commit : `site : integration du site financementOPCO dans le monorepo (apps/web), sans changement fonctionnel`.
+
+### Task W2 : Le site s'appuie sur le moteur et les données de `@opco/core`
+
+**Dépend de :** tâches 2, 3, 4, 8 (barèmes OPCO vérifiés, pour ne pas régresser par rapport aux données de juillet du site).
+
+**Files:** Modify `apps/web/src/components/wizard/*`, `apps/web/src/components/results/FundingBreakdown.tsx`, `apps/web/src/app/opco/page.tsx`, `apps/web/src/app/opco/[slug]/page.tsx`, `apps/web/src/hooks/useWizard.ts` ; Delete `apps/web/src/lib/calculator.ts`, `apps/web/src/lib/opco-resolver.ts`, `apps/web/data/` ; Modify `packages/core/src/types.ts` + `schema.ts` (champ facultatif `nom_complet?: string` dans `OpcoData`).
+
+- [ ] Remplacer tous les imports du site vers `lib/calculator`, `lib/opco-resolver`, `data/opcos` et les types métier de `lib/types` par `@opco/core` (`calculateFunding`, `EMBEDDED_OPCOS`, `getEmbeddedOpcoBySlug`, `WizardState`, `createInitialWizardState`, labels). `apps/web/src/lib/types.ts` ne garde que ce qui est propre au site (ou disparaît).
+- [ ] Branche : le site passe de `selectedBranche` / `baremes_par_branche` à `selectedBrancheId` / `variantes_branche` (application automatique par IDCC, choix manuel prioritaire — voir `resolveVarianteBranche`).
+- [ ] Fiches OPCO : afficher depuis `OpcoData` de `@opco/core` ; `dispositifs_sans_budget` → `dispositifs_complementaires` (avec leur règle de cumul) ; `baremes_par_branche` → `variantes_branche` ; `generateStaticParams` à partir de `EMBEDDED_OPCOS`. Ajouter `nom_complet?: string` au type et au schéma (`z.string().optional()`), renseigné pour les 11 OPCO (reprendre les valeurs de `opco-funding/data/opcos/*.json` si absentes).
+- [ ] `FundingBreakdown` du site : lire le `FundingResult` du moteur (lignes avec `poste`, dispositifs complémentaires, démarches) ; afficher dispositifs et démarches comme sections ; lien de contact seulement si `opcoEmail` non vide.
+- [ ] Vérifier : build du site OK ; même scénario (AKTO, organismes de formation, 140 h à 4 200 €) cohérent avec les barèmes de la tâche 8 ; `cd apps/mobile && npx tsc --noEmit` ; tests core.
+- [ ] Commit : `site : moteur et donnees partages (@opco/core), fiches OPCO alimentees par les baremes verifies`.
+
+### Task W3 : Étape « Entreprise » du site
+
+**Dépend de :** tâches 4, 5, 9.
+
+**Files:** Modify `apps/web/src/components/wizard/StepIdentification.tsx` (réécriture), `apps/web/src/hooks/useSirenLookup.ts`, `apps/web/src/components/wizard/StepSituation.tsx`, `StepRecap.tsx`, `apps/web/src/hooks/useWizard.ts` ; Create `apps/web/src/components/ui/CertitudeBadge.tsx`, `apps/web/src/lib/etapes.ts`.
+
+- [ ] `apps/web/src/lib/etapes.ts` : liste des étapes propre au site : `identification` « Entreprise », `situation` « Bénéficiaire », `formation`, `frais`, `recap` (la tâche W4 y ajoute `projet`). La barre de progression du site l'utilise à la place de `WIZARD_STEPS`.
+- [ ] `useSirenLookup` : chaque résultat de l'API passe par `parseResultatRechercheEntreprises` → `EntrepriseInfo`.
+- [ ] Réécrire l'étape avec le comportement décrit à la tâche 7 (même logique, rendu web) : recherche nom/SIREN/SIRET ; sélection → `resoudreOpco({ idccs, idccSiege, codeNaf }, EMBEDDED_IDCC, EMBEDDED_NAF)` et mise à jour de l'état (OPCO détecté, IDCC retenu, certitude, IDCC des établissements, région, département, NAF, tranche INSEE, structures, taille suggérée) ; carte entreprise ; carte OPCO avec `CertitudeBadge`, motif, avertissements, choix entre candidats, lien « Vérifier sur l'outil officiel France Compétences » (`URL_VERIFICATION_OPCO`, nouvel onglet), « Ce n'est pas mon OPCO » (liste des 11 OPCO) ; mode manuel : OPCO (facultatif pour « former le dirigeant ») + code postal → département/région ; région affichée et modifiable (`REGIONS_TRIEES`) ; taille (boutons) + effectif exact facultatif ; budget déjà consommé (déplacé depuis l'étape Situation) ; bloc des barèmes de branche.
+- [ ] `canGoNext('identification')` : OPCO (sauf projet « former le dirigeant ») + région + taille.
+- [ ] Vérifier : build du site, tests core, typecheck mobile ; essai dans le navigateur (`npm run dev --workspace web`) avec une vraie entreprise (ex. SIREN 814739728) : OPCO AKTO « identifié via la convention collective », région Île-de-France.
+- [ ] Commit : `site : etape Entreprise (OPCO avec certitude, region, effectif, verification officielle)`.
+
+### Task W4 : Parcours en 6 étapes du site
+
+**Dépend de :** tâches 12, W3.
+
+**Files:** Create `apps/web/src/components/wizard/StepProjet.tsx` ; Modify `StepSituation.tsx` (Bénéficiaire), `StepFormation.tsx`, `StepRecap.tsx`, `WizardContainer.tsx`, `apps/web/src/lib/etapes.ts`, `apps/web/src/hooks/useWizard.ts`.
+
+- [ ] Ajouter l'étape `projet` en tête de `etapes.ts` (6 étapes) et `StepProjet` (5 choix `PROJET_LABELS`).
+- [ ] « Bénéficiaire », « Formation » et « Récapitulatif » : mêmes champs, mêmes règles et mêmes libellés que les composants de la tâche 14 (versions web) — questions selon `STATUT_PAR_PROJET`, oui / non / je ne sais pas, niveau visé, éligibilité CPF, mois de début (`moisDepuisSaisie` / `saisieDepuisMois`), Qualiopi.
+- [ ] `canGoNext` : règles de la tâche 14, étape 6 (par projet).
+- [ ] Le site n'utilise plus `isReconversion` / `isSortieChomage` (les champs restent dans `@opco/core` pour l'app mobile).
+- [ ] Vérifier : build, tests core, typecheck mobile ; parcours complet dans le navigateur pour les 5 projets.
+- [ ] Commit : `site : parcours en 6 etapes (projet, entreprise, beneficiaire, formation enrichie)`.
+
+### Task W5 : Écran « Votre plan de financement » du site
+
+**Dépend de :** tâches 13, W4.
+
+**Files:** Create `apps/web/src/components/results/PlanFinancement.tsx`, `AideCard.tsx`, `AidesList.tsx`, `PortailsRegionaux.tsx`, `apps/web/src/lib/format.ts` ; Modify `WizardContainer.tsx`, `FundingBreakdown.tsx`, `apps/web/src/app/simulateur/page.tsx`, `apps/web/src/app/page.tsx`, `apps/web/src/app/layout.tsx`.
+
+- [ ] Calcul des résultats identique à la tâche 15 (étape 7c) : `calculateFunding` pour les projets salariés, `profilDepuisWizard`, `evaluerAides(EMBEDDED_AIDES, …, dateDeReference(…))`, `construirePlan`, portail de la région (`EMBEDDED_PORTAILS`).
+- [ ] Composants web reprenant le contenu et les règles d'affichage de la tâche 15 : synthèse coût / financé / reste à charge ; financements empilés ; options au choix ; aides à l'employeur, rémunérations, avantages fiscaux et sociaux (séparés) ; montants selon dossier ; services gratuits ; aides groupées par financeur (statut, montant, libellé, raisons « à vérifier », conditions et démarches dépliables, bouton « Faire la demande », sources, date de vérification, fiabilité) ; non éligibles repliées sans les aides hors périmètre ; portails de la région ; détail OPCO ; boutons « Modifier mes informations », « Nouvelle simulation », « Imprimer / PDF » ; mise en page imprimable (`print:`).
+- [ ] Textes : page simulateur et accueil présentent « tous les financements » (OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe…) ; métadonnées (`title`, `description`) mises à jour ; bouton final « Trouver mes financements ».
+- [ ] Vérifier : build, tests core, typecheck mobile ; 5 scénarios dans le navigateur.
+- [ ] Commit : `site : ecran Votre plan de financement (aides par financeur, plan plafonne, portails regionaux)`.
+
+### Task W6 : Publication du site
+
+**Dépend de :** toutes les tâches précédentes.
+
+- [ ] `npm run build --workspace web` ; contrôle du contenu de `apps/web/out/`.
+- [ ] Archive pour Hostinger : `C:\Users\magdo\Desktop\Claude\Claude_OPCO\financementOPCO-hostinger-2026-10.zip` (contenu de `out/` à la racine de l'archive, `.htaccess` inclus). Ne pas écraser l'archive de juillet.
+- [ ] Workflow CI (`.github/workflows/update-dataset.yml`, tâche 20) : ajouter une étape `npm run build --workspace web` après les tests backend.
+- [ ] `.claude/launch.json` : configuration `site-web` servant `apps/web/out` (`npx serve apps/web/out -l 3000`) ; dérouler les 5 scénarios de la tâche 18 dans le navigateur et capturer le plan de financement de chacun.
+- [ ] `README.md` et `docs/donnees-aides.md` : le site (`apps/web`) est le support principal ; après une mise à jour des données : tests, build du site, nouvelle archive, dépôt sur Hostinger.
+- [ ] Commit : `site : archive Hostinger, build du site en CI, documentation`.
+- [ ] Rendre compte à l'utilisateur et demander son accord avant tout push ; rappeler les actions de son ressort (dépôt de l'archive sur Hostinger, secret `ANTHROPIC_API_KEY`, demande de licence France Compétences).
+

@@ -8,6 +8,14 @@
 
 ---
 
+> **Révision du 06/10/2026 — cible : site web.** À la demande de l'utilisateur, le support final est le **site financementOPCO** (Next.js, export statique, hébergement Hostinger), et non plus l'app mobile. Conséquences :
+> - le site est intégré au monorepo sous `apps/web` et consomme `@opco/core` (moteur, données, schémas) ; le dossier d'origine `opco-funding` n'est pas modifié ;
+> - le moteur (`@opco/core` : détection OPCO, catalogue d'aides, évaluation, plan de financement, corrections du calcul) et les données restent tels que spécifiés ci-dessous ;
+> - les écrans décrits aux §4 et §6 sont réalisés dans le site, avec sa charte (SFG) et ses composants ; les pages guides, fiches OPCO et contact sont conservées et alimentées par `@opco/core` ;
+> - l'app mobile reste en l'état : les changements de `@opco/core` restent rétrocompatibles pour elle (pas de suppression d'export qu'elle utilise ; la liste d'étapes du site est définie dans `apps/web`) ;
+> - publication : export statique du site + archive zip pour Hostinger (données embarquées au build) ; la publication du dataset v4 pour les APK devient facultative ;
+> - §11 : le build EAS est remplacé par le dépôt de l'archive sur Hostinger.
+
 ## 1. Objectifs
 
 1. **Revoir et corriger l'app existante** : justesse des montants, règles légales, fraîcheur des données, robustesse.
