@@ -99,6 +99,59 @@ describe('schéma — champs des barèmes vérifiés (v2)', () => {
     });
   });
 
+  describe('plafond par taille : confiance et source propres au plafond horaire', () => {
+    const plafond = { taille: '11_49' as const, cout_horaire_max: 24, budget_annuel_max: null, quota_horaire_max: null, description: 'PME' };
+
+    it('conserve confidence et source_url, qui restent facultatives', () => {
+      const parsed = PlafondTailleSchema.parse({ ...plafond, confidence: 'estimated', source_url: source });
+      expect(parsed.confidence).toBe('estimated');
+      expect(parsed.source_url).toBe(source);
+      const sans = PlafondTailleSchema.parse(plafond);
+      expect(sans.confidence).toBeUndefined();
+      expect(sans.source_url).toBeUndefined();
+    });
+
+    it('refuse une confiance inconnue et une source qui n\'est pas une URL', () => {
+      expect(() => PlafondTailleSchema.parse({ ...plafond, confidence: 'certain' })).toThrow();
+      expect(() => PlafondTailleSchema.parse({ ...plafond, source_url: 'pas une url' })).toThrow();
+      expect(() => PlafondTailleSchema.parse({ ...plafond, source_url: 42 })).toThrow();
+    });
+
+    it('ressortent du parsing d\'un OPCO complet, pour le défaut comme pour une variante', () => {
+      const entree = { ...plafond, confidence: 'depends_on_branche' as const, source_url: source };
+      const variante = { id: 'batiment', branche_nom: 'Bâtiment', idcc: ['1596'], source_url: source, confidence: 'exact' as const };
+      const opco = makeOpco({
+        plafonds_par_taille: [entree],
+        variantes_branche: [{ ...variante, plafonds_par_taille: [{ ...entree, confidence: 'estimated' as const }] }],
+      });
+      const parsed = OpcoDataSchema.parse(opco);
+      expect(parsed.plafonds_par_taille?.[0]).toMatchObject({ confidence: 'depends_on_branche', source_url: source });
+      expect(parsed.variantes_branche?.[0].plafonds_par_taille?.[0]).toMatchObject({ confidence: 'estimated', source_url: source });
+    });
+  });
+
+  describe('unité du forfait de restauration', () => {
+    const variante = { id: 'hcr', branche_nom: 'Hôtels, cafés, restaurants', idcc: ['1979'], source_url: source, confidence: 'exact' as const };
+
+    it('conserve frais_restauration_unite sur l\'OPCO et sur une variante', () => {
+      const opco = makeOpco({ frais_restauration_unite: 'repas', variantes_branche: [{ ...variante, frais_restauration_unite: 'jour' }] });
+      const parsed = OpcoDataSchema.parse(opco);
+      expect(parsed.frais_restauration_unite).toBe('repas');
+      expect(parsed.variantes_branche?.[0].frais_restauration_unite).toBe('jour');
+      expect(VarianteBrancheSchema.parse({ ...variante, frais_restauration_unite: 'repas' }).frais_restauration_unite).toBe('repas');
+    });
+
+    it('reste facultative', () => {
+      expect(OpcoDataSchema.parse(makeOpco()).frais_restauration_unite).toBeUndefined();
+      expect(VarianteBrancheSchema.parse(variante).frais_restauration_unite).toBeUndefined();
+    });
+
+    it('refuse une unité inconnue', () => {
+      expect(OpcoDataSchema.safeParse({ ...makeOpco(), frais_restauration_unite: 'heure' }).success).toBe(false);
+      expect(VarianteBrancheSchema.safeParse({ ...variante, frais_restauration_unite: 'semaine' }).success).toBe(false);
+    });
+  });
+
   describe('dispositif complémentaire : IDCC et note', () => {
     const dispositif = {
       id: 'transition-ecologique',

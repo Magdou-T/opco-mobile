@@ -19,19 +19,19 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils)"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_intra": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils)"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_metier": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils)"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_seuils": [
     {
@@ -70,6 +70,7 @@
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
     "note": "30 € TTC par repas : 1 repas par jour sans hébergement, 2 avec hébergement. « Repas : 30€ TTC et dans les limites suivantes : 1 repas pour une formation d’une journée sans hébergement 2 repas pour une formation d’une journée avec hébergement » (vérifié le 2026-10-05)"
   },
+  "frais_restauration_unite": "repas",
   "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "exact",
@@ -90,7 +91,7 @@
       "cout_horaire_max": null,
       "budget_annuel_max": 5000,
       "quota_horaire_max": null,
-      "description": "Moins de 11 salariés : 1 demande d'aide financière par an, 5 000 € maximum (fonds légaux) ; coût pédagogique selon le barème (65 €/h jusqu'à 105 h, 15 €/h au-delà pour les certifiantes) ; salaire 13 €/h seulement en cas de remplacement."
+      "description": "Moins de 11 salariés : 1 demande d'aide financière par an, 5 000 € maximum (fonds légaux) ; coût pédagogique selon le barème (65 €/h TTC jusqu'à 105 h, 15 €/h TTC au-delà pour les certifiantes) ; salaire 13 €/h seulement en cas de remplacement."
     },
     {
       "taille": "11_49",
@@ -164,7 +165,7 @@
     "https://www.uniformation.fr/actualites/facturation-electronique-modalites-de-mise-en-oeuvre-avec-uniformation-compter-du-1r-septembre-2026",
     "https://www.uniformation.fr/contacts"
   ],
-  "derniere_verification": "2026-10-05",
+  "derniere_verification": "2026-10-06",
   "dispositifs_complementaires": [
     {
       "id": "offre-cles-en-main",
@@ -371,11 +372,11 @@
       "prise_en_charge_salaires_mode": "selon_accord",
       "budget_annuel_max": {
         "value": 5000,
-        "confidence": "exact",
+        "confidence": "estimated",
         "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
-        "note": "Plafond par demande (intra, 1 à 4 salariés) ; plusieurs demandes possibles par an selon la taille. « Le plafond maximum est de 5 000€ par demande (coût pédagogique + frais annexes + rémunération) » « entreprise moins de 11 salariés : 7 demandes d'aide financière (dont légal+ conventionnel) entreprise de 11 à 49 salariés : 10 demandes d'aide financière (dont légal + conventionnel) entreprise de plus de 50 salariés : 25 demandes d'aide financière conventionnelles maximum » (vérifié le 2026-10-05)"
+        "note": "Estimation : plafond par demande (7 demandes par an pour moins de 11 salariés, 10 pour 11 à 49, 25 pour 50 et plus) : budget annuel non publié ; la simulation d'une seule formation est bornée à 5 000 €. Plafond par demande (intra, 1 à 4 salariés) ; plusieurs demandes possibles par an selon la taille. « Le plafond maximum est de 5 000€ par demande (coût pédagogique + frais annexes + rémunération) » « entreprise moins de 11 salariés : 7 demandes d'aide financière (dont légal+ conventionnel) entreprise de 11 à 49 salariés : 10 demandes d'aide financière (dont légal + conventionnel) entreprise de plus de 50 salariés : 25 demandes d'aide financière conventionnelles maximum » (vérifié le 2026-10-05)"
       },
-      "budget_annuel_description": "ALISFA (IDCC 1261) : plafond par demande de 5 000 € (formation intra, 1 à 4 salariés) ou 8 000 € (5 stagiaires et plus), coût pédagogique, frais annexes et rémunération compris ; jusqu'à 7 demandes par an (moins de 11 salariés), 10 (11-49) et 25 conventionnelles (50 et plus).",
+      "budget_annuel_description": "ALISFA (IDCC 1261) : plafond par demande (7 demandes par an pour moins de 11 salariés, 10 pour 11 à 49, 25 pour 50 et plus) : budget annuel non publié ; la simulation d'une seule formation est bornée à 5 000 €. Plafond par demande de 5 000 € (formation intra, 1 à 4 salariés) ou 8 000 € (5 stagiaires et plus), coût pédagogique, frais annexes et rémunération compris ; jusqu'à 7 demandes par an (moins de 11 salariés), 10 (11-49) et 25 conventionnelles (50 et plus).",
       "plafonds_par_taille": [
         {
           "taille": "less_11",

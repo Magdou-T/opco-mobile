@@ -51,14 +51,15 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » Non pris en charge en hexagone (interprofession). Mobilité ultramarine : 190 € TTC/nuit (Paris ou outre-mer) ou 120 € TTC/nuit (province), 10 jours maximum. Selon la branche : 60 € à 190 €/nuit. (vérifié le 2026-10-05)"
+    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » Non pris en charge en hexagone (interprofession). Mobilité ultramarine : 190 € TTC/nuit (Paris ou outre-mer) ou 120 € TTC/nuit (province), 10 jours maximum. Selon la branche : 60 € à 190 €/nuit. Seuls les montants de l'outre-mer sont ici en TTC ; ceux de l'hexagone sont en HT (« Les montants indiqués s'entendent hors taxe – HT. »). (vérifié le 2026-10-05)"
   },
   "frais_restauration": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » ; « Frais annexes (Repas, dîner) : Coûts réels, plafonnées à 33€ TTC / jour de formation par salarié formé » Non pris en charge en hexagone (interprofession) ; outre-mer 33 € TTC/jour. Selon la branche : 15 € à 25 € par repas. (vérifié le 2026-10-05)"
+    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » ; « Frais annexes (Repas, dîner) : Coûts réels, plafonnées à 33€ TTC / jour de formation par salarié formé » Non pris en charge en hexagone (interprofession) ; outre-mer 33 € TTC/jour. Selon la branche : 15 € à 25 € par repas. Seuls les montants de l'outre-mer sont ici en TTC ; ceux de l'hexagone sont en HT (« Les montants indiqués s'entendent hors taxe – HT. »). (vérifié le 2026-10-05)"
   },
+  "frais_restauration_unite": "repas",
   "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "exact",
@@ -99,14 +100,14 @@
   "plafonds_par_taille": [
     {
       "taille": "less_11",
-      "cout_horaire_max": 30,
+      "cout_horaire_max": null,
       "budget_annuel_max": 2500,
       "quota_horaire_max": null,
       "description": "Moins de 11 salariés (interprofession, hexagone) : budget annuel 2 500 €, 30 €/h/salarié formé (outre-mer : 5 000 €, 40 €/h)."
     },
     {
       "taille": "11_49",
-      "cout_horaire_max": 30,
+      "cout_horaire_max": null,
       "budget_annuel_max": 4000,
       "quota_horaire_max": null,
       "description": "11 à 49 salariés (interprofession, hexagone) : budget annuel 4 000 €, 30 €/h/salarié formé (outre-mer : 7 000 €, 40 €/h)."
@@ -243,16 +244,20 @@
         {
           "taille": "50_299",
           "cout_horaire_max": 35,
+          "confidence": "estimated",
+          "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "HCR 50 salariés et plus : budget égal à 80 % de la contribution conventionnelle ; 35 €/h (formations transverses, réglementaires, relation clientèle) à 45 €/h (formations métiers)."
+          "description": "HCR 50 salariés et plus : budget égal à 80 % de la contribution conventionnelle ; plafond horaire variable selon le type de formation, de 20 €/h (hygiène alimentaire) et 25 €/h (autres formations) à 45 €/h (formations métiers) et 50 €/h (langues en présentiel) ; 35 €/h retenu (formations réglementaires et transverses, relation clientèle et sécurité) : estimation à confirmer. Extrait de la grille : « Relation clientèle & Sécurité | Relation clientèle, santé-sécurité, hébergement, sécurité alimentaire non obligatoire | 35€/h »."
         },
         {
           "taille": "300_plus",
           "cout_horaire_max": 35,
+          "confidence": "estimated",
+          "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "HCR 300 salariés et plus : 80 % de la contribution conventionnelle ; 35 €/h à 45 €/h selon le type de formation."
+          "description": "HCR 300 salariés et plus : 80 % de la contribution conventionnelle ; plafond horaire variable selon le type de formation (de 20 €/h à 50 €/h) ; 35 €/h retenu : estimation à confirmer. Extrait de la grille : « Relation clientèle & Sécurité | Relation clientèle, santé-sécurité, hébergement, sécurité alimentaire non obligatoire | 35€/h »."
         }
       ]
     },
@@ -447,14 +452,14 @@
       "plafonds_par_taille": [
         {
           "taille": "less_11",
-          "cout_horaire_max": 21,
+          "cout_horaire_max": null,
           "budget_annuel_max": 7000,
           "quota_horaire_max": null,
           "description": "Prévention-sécurité moins de 11 salariés : 7 000 €/an de coûts pédagogiques, 21 €/h ; distanciel non financé (sauf réglementaire)."
         },
         {
           "taille": "11_49",
-          "cout_horaire_max": 21,
+          "cout_horaire_max": null,
           "budget_annuel_max": 7000,
           "quota_horaire_max": null,
           "description": "Prévention-sécurité 11 à 49 salariés : 7 000 €/an de coûts pédagogiques, 21 €/h ; distanciel non financé (sauf réglementaire)."
@@ -532,28 +537,28 @@
       "plafonds_par_taille": [
         {
           "taille": "less_11",
-          "cout_horaire_max": 60,
+          "cout_horaire_max": null,
           "budget_annuel_max": 10000,
           "quota_horaire_max": null,
           "description": "Organismes de formation moins de 11 salariés : PDC 2026 épuisé, plan conventionnel jusqu'à 10 000 €/an (60 €/h) + rémunération 15 €/h et frais annexes hors plafond."
         },
         {
           "taille": "11_49",
-          "cout_horaire_max": 60,
+          "cout_horaire_max": null,
           "budget_annuel_max": 10000,
           "quota_horaire_max": null,
           "description": "Organismes de formation 11 à 49 salariés : PDC 2026 épuisé, plan conventionnel jusqu'à 10 000 €/an (60 €/h) + rémunération 15 €/h et frais annexes hors plafond."
         },
         {
           "taille": "50_299",
-          "cout_horaire_max": 60,
+          "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
           "description": "Organismes de formation 50 salariés et plus : budget égal à 80 % de la contribution conventionnelle versée en mars 2025 (moins frais de gestion), 60 €/h."
         },
         {
           "taille": "300_plus",
-          "cout_horaire_max": 60,
+          "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
           "description": "Organismes de formation 300 salariés et plus : 80 % de la contribution conventionnelle versée en mars 2025 (moins frais de gestion), 60 €/h."
@@ -574,7 +579,7 @@
       ],
       "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
       "confidence": "exact",
-      "note": "« Suspension du financement des formations hors Espace Formation » ; « Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026 » Même constat, « A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. », sur les pages 2026 des branches déchet (IDCC 2149), autoroutes (2583), quincaillerie (3243), location et entretien textile (2002), eau et assainissement (2147), travail mécanique du bois (0158) et exploitations forestières (sans IDCC indiqué). Plafonds (horaire et annuel) mis à 0 € pour signaler qu'aucun nouveau dossier hors Espace Formation n'est financé en 2026 ; Espace Formation reste ouvert pour les commerces de gros et le textile, mais est aussi épuisé pour la quincaillerie, le travail du bois et les exploitations forestières. (vérifié le 2026-10-05)",
+      "note": "Page des commerces de gros : « Suspension du financement des formations hors Espace Formation » ; « A ce jour, une partie de l'enveloppe budgétaire a été intégralement engagée. » ; « Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026 ». Même constat, formulé « A ce jour l'enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. », sur les pages 2026 des branches déchet (IDCC 2149), autoroutes (2583), quincaillerie (3243), location et entretien textile (2002), eau et assainissement (2147), travail mécanique du bois (0158) et exploitations forestières (sans IDCC indiqué). Plafonds (horaire et annuel) mis à 0 € pour signaler qu'aucun nouveau dossier hors Espace Formation n'est financé en 2026 ; Espace Formation reste ouvert pour les commerces de gros et le textile, mais est aussi épuisé pour la quincaillerie, le travail du bois, les exploitations forestières et le déchet. (vérifié le 2026-10-05 ; libellé de la page des commerces de gros relu en ligne le 2026-10-06)",
       "cout_horaire_inter": {
         "value": 0,
         "confidence": "exact",
@@ -604,14 +609,14 @@
       "plafonds_par_taille": [
         {
           "taille": "less_11",
-          "cout_horaire_max": 0,
+          "cout_horaire_max": null,
           "budget_annuel_max": 0,
           "quota_horaire_max": null,
           "description": "Enveloppe PDC 2026 de votre branche épuisée : aucun nouveau dossier hors Espace Formation financé en 2026 (plafond mis à 0 ; vérifier Espace Formation et les critères 2027)."
         },
         {
           "taille": "11_49",
-          "cout_horaire_max": 0,
+          "cout_horaire_max": null,
           "budget_annuel_max": 0,
           "quota_horaire_max": null,
           "description": "Enveloppe PDC 2026 de votre branche épuisée : aucun nouveau dossier hors Espace Formation financé en 2026 (plafond mis à 0 ; vérifier Espace Formation et les critères 2027)."

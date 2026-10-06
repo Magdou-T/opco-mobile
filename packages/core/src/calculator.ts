@@ -79,6 +79,7 @@ export function applyVarianteBranche(opco: OpcoData, variante: VarianteBranche):
     frais_transport: variante.frais_transport ?? opco.frais_transport,
     frais_hebergement: variante.frais_hebergement ?? opco.frais_hebergement,
     frais_restauration: variante.frais_restauration ?? opco.frais_restauration,
+    frais_restauration_unite: variante.frais_restauration_unite ?? opco.frais_restauration_unite,
     frais_annexes_pourcentage: variante.frais_annexes_pourcentage ?? opco.frais_annexes_pourcentage,
     budget_annuel_max: variante.budget_annuel_max ?? opco.budget_annuel_max,
     budget_annuel_portee: variante.budget_annuel_portee ?? opco.budget_annuel_portee,
@@ -123,6 +124,16 @@ function line(
   };
 }
 
+/**
+ * Fin d'un message de plafond annuel appliqué : le point final quand le budget publié est « exact », sinon la mention
+ * d'estimation (le message se termine alors par cette mention, sans point après).
+ */
+function finMessagePlafondAnnuel(opco: OpcoData): string {
+  return opco.budget_annuel_max.confidence === 'exact'
+    ? '.'
+    : ` (montant estimé : à confirmer auprès de ${opco.name})`;
+}
+
 function resolvePlafondForSize(opco: OpcoData, size: CompanySize | null): PlafondTaille | null {
   if (!opco.plafonds_par_taille || !size) return null;
   return opco.plafonds_par_taille.find((p) => p.taille === size) ?? null;
@@ -143,6 +154,8 @@ function enveloppe50Plus(opco: OpcoData, size: CompanySize | null): PlafondTaill
 /**
  * Determine the effective hourly ceiling for pedagogy costs.
  * Priority: 1. size-specific ceiling, 2. training-type ceiling, 3. null.
+ * Un plafond propre à la taille porte sa confiance et sa source quand elles sont renseignées (« exact » et la page de
+ * critères de l'OPCO sinon) : il ne doit pas masquer la confiance de la valeur qu'il répète.
  */
 function resolveHourlyCeiling(
   opco: OpcoData,
@@ -150,7 +163,11 @@ function resolveHourlyCeiling(
 ): { ceiling: number | null; confidence: Confidence; sourceUrl: string } {
   const plafond = resolvePlafondForSize(opco, state.companySize);
   if (plafond?.cout_horaire_max != null) {
-    return { ceiling: plafond.cout_horaire_max, confidence: 'exact', sourceUrl: opco.url_finance_page };
+    return {
+      ceiling: plafond.cout_horaire_max,
+      confidence: plafond.confidence ?? 'exact',
+      sourceUrl: plafond.source_url ?? opco.url_finance_page,
+    };
   }
 
   const isMetier =
@@ -309,7 +326,7 @@ function calcPedagogy(
     capApplique = true;
     if (!budgetAnnuelNul) {
       warnings.push(
-        `Plafond annuel appliqué aux coûts pédagogiques : ${capPedagogie.toFixed(2)} € (salaires et frais annexes financés en plus).`,
+        `Plafond annuel appliqué aux coûts pédagogiques : ${capPedagogie.toFixed(2)} € (salaires et frais annexes financés en plus)${finMessagePlafondAnnuel(opco)}`,
       );
     }
   }
@@ -464,17 +481,24 @@ function calcMeals(opco: OpcoData, state: WizardState): FundingLine {
     // Le forfait plafonne la prise en charge, il ne la garantit pas : jamais plus que le coût déclaré.
     const tauxApplique = Math.min(userCostPerDay, rate);
     const funded = tauxApplique * days;
-    const details = [`Forfait restauration ${opco.name} : ${rate} €/jour`];
+    // Forfait par repas : l'estimation retient un repas par jour de formation (le coût déclaré reste saisi par jour).
+    const parRepas = opco.frais_restauration_unite === 'repas';
+    const tarif = (montant: number): string => (parRepas ? `${montant} € par repas` : `${montant} €/jour`);
+    const details = [
+      parRepas
+        ? `Forfait restauration ${opco.name} : ${rate} € par repas (un repas par jour de formation retenu)`
+        : `Forfait restauration ${opco.name} : ${rate} €/jour`,
+    ];
     if (userCostPerDay < rate) {
       details.push(`Votre coût (${userCostPerDay} €/jour) est inférieur au forfait : prise en charge au coût réel`);
     }
     details.push(
-      `Calcul : ${tauxApplique} €/jour × ${days} jours = ${funded.toFixed(2)} €`,
+      `Calcul : ${tarif(tauxApplique)} × ${days} jours = ${funded.toFixed(2)} €`,
       requested > funded
         ? `Reste à charge : ${(requested - funded).toFixed(2)} €`
         : 'Intégralement couvert par le forfait',
     );
-    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, `${tauxApplique} €/jour × ${days} jours`, details);
+    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, `${tarif(tauxApplique)} × ${days} jours`, details);
   }
 
   // Aucun forfait publié : le coût déclaré reste affiché comme demandé (comme l'hébergement), rien n'est financé.
@@ -587,9 +611,11 @@ function generateWarnings(
   } else if (budgetCapApplied) {
     if ((opco.budget_annuel_portee ?? 'global') === 'pedagogie') {
       // Salaires et frais annexes sont financés en plus (cf. calcPedagogy) : le total n'est pas plafonné.
-      warnings.push(`Le plafond budgétaire annuel de ${opco.name} a été appliqué aux coûts pédagogiques.`);
+      warnings.push(`Le plafond budgétaire annuel de ${opco.name} a été appliqué aux coûts pédagogiques${finMessagePlafondAnnuel(opco)}`);
     } else {
-      warnings.push(`Le plafond budgétaire annuel de ${opco.name} a été appliqué. Le montant total finançable est plafonné.`);
+      warnings.push(
+        `Le plafond budgétaire annuel de ${opco.name} a été appliqué. Le montant total finançable est plafonné${finMessagePlafondAnnuel(opco)}`,
+      );
     }
   }
 

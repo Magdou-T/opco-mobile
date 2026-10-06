@@ -23,21 +23,21 @@
   "types_formations_source": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
   "cout_horaire_inter": {
     "value": 40,
-    "confidence": "exact",
+    "confidence": "estimated",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Plafond horaire commun aux offres du plan de développement des compétences des moins de 50 salariés (Boost Compétences, Compétences d'avenir, Soutien aux filières), règles 2026 V6 du conseil d'administration du 03/09/2026. Le taux appliqué sous ce plafond dépend de l'offre : 50 % (Boost, 750 € HT par stagiaire et par dossier), 70 % (Compétences d'avenir, Soutien aux filières, 1 050 € HT), 100 % (offre régionale TPE-PME, parcours certifiants). Extrait : « Coût horaire de formation plafonné à 40 €/h stagiaire HT » (vérifié le 2026-10-05)."
+    "note": "Plafond horaire commun aux offres du plan de développement des compétences des moins de 50 salariés (Boost Compétences, Compétences d'avenir, Soutien aux filières), règles 2026 V6 du conseil d'administration du 03/09/2026. Le taux appliqué sous ce plafond dépend de l'offre : 50 % (Boost, 750 € HT par stagiaire et par dossier), 70 % (Compétences d'avenir, Soutien aux filières, 1 050 € HT), 100 % (offre régionale TPE-PME, parcours certifiants). Extrait : « Coût horaire de formation plafonné à 40 €/h stagiaire HT » Estimation : plafond horaire de 40 €/h ; le taux effectif est de 50 %, 70 % ou 100 % selon l'offre et un plafond par stagiaire et par dossier s'applique (750 € pour Boost, 8 000 € pour les parcours certifiants) : à confirmer auprès d'OCAPIAT. (vérifié le 2026-10-05)."
   },
   "cout_horaire_intra": {
     "value": 40,
     "confidence": "estimated",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Les règles ne distinguent pas inter et intra : le plafond de 40 €/h s'applique à toute formation externe dispensée par un organisme certifié Qualiopi (Boost Compétences). Les formations internes (formateur salarié de l'entreprise) relèvent d'un forfait distinct de 20 € HT/h/stagiaire financé à 50 %. Extrait : « Formation externe dispensée par un organisme de formation externe certifié Qualiopi ou équivalent » (vérifié le 2026-10-05)."
+    "note": "Les règles ne distinguent pas inter et intra : le plafond de 40 €/h s'applique à toute formation externe dispensée par un organisme certifié Qualiopi (Boost Compétences). Les formations internes (formateur salarié de l'entreprise) relèvent d'un forfait distinct de 20 € HT/h/stagiaire financé à 50 %. Extrait : « Formation externe dispensée par un organisme de formation externe certifié Qualiopi ou équivalent » Estimation : plafond horaire de 40 €/h ; le taux effectif est de 50 %, 70 % ou 100 % selon l'offre et un plafond par stagiaire et par dossier s'applique (750 € pour Boost, 8 000 € pour les parcours certifiants) : à confirmer auprès d'OCAPIAT. (vérifié le 2026-10-05)."
   },
   "cout_horaire_metier": {
     "value": 40,
-    "confidence": "exact",
+    "confidence": "estimated",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Parcours certifiants (CQP, TFP, CléA, certifications RS relevant d'une branche OCAPIAT) des moins de 50 salariés, hors pêche : 40 €/h et 8 000 € HT par stagiaire et par dossier. Extrait : « Coût horaire de formation plafonné à 40 €/h stagiaire HT - Limite de prise en charge plafonnée à 8 000 € HT par stagiaire et par dossier » (vérifié le 2026-10-05)."
+    "note": "Parcours certifiants (CQP, TFP, CléA, certifications RS relevant d'une branche OCAPIAT) des moins de 50 salariés, hors pêche : 40 €/h et 8 000 € HT par stagiaire et par dossier. Extrait : « Coût horaire de formation plafonné à 40 €/h stagiaire HT - Limite de prise en charge plafonnée à 8 000 € HT par stagiaire et par dossier » Estimation : plafond horaire de 40 €/h ; le taux effectif est de 50 %, 70 % ou 100 % selon l'offre et un plafond par stagiaire et par dossier s'applique (750 € pour Boost, 8 000 € pour les parcours certifiants) : à confirmer auprès d'OCAPIAT. (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires": {
     "value": 12,
@@ -64,6 +64,7 @@
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
     "note": "Non pris en charge hors cas des salariés des DROM suivant une formation de l'offre régionale hors de leur territoire (voir frais de transport). Extrait : « Frais annexes (déplacement, restauration, hébergement) des salariés des DROM suivant une formation de l’offre régionale TPE-PME en métropole par défaut de présence d’organisme sur ces territoires spécifiques » (vérifié le 2026-10-05)."
   },
+  "frais_restauration_unite": "repas",
   "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "exact",
@@ -93,14 +94,14 @@
   "plafonds_par_taille": [
     {
       "taille": "less_11",
-      "cout_horaire_max": 40,
+      "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
       "description": "Moins de 11 salariés (hors pêche) : offre régionale TPE-PME 100 % ; Boost Compétences 50 % (750 € HT par stagiaire et par dossier) ; Compétences d'avenir 70 % (1 050 € HT) ; parcours certifiants 40 €/h et 8 000 € HT par stagiaire et par dossier ; formations internes 50 % d'un forfait de 20 € HT/h/stagiaire ; DEFI Emploi, DEFI Pro et DEFI Maintien. Aucun plafond annuel par entreprise publié, attribution dans la limite de l'enveloppe annuelle d'OCAPIAT."
     },
     {
       "taille": "11_49",
-      "cout_horaire_max": 40,
+      "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
       "description": "11 à 49 salariés (hors pêche) : offre régionale TPE-PME 100 % ; Boost Compétences 50 % (750 € HT par stagiaire et par dossier) ; Compétences d'avenir 70 % (1 050 € HT) ; parcours certifiants 40 €/h et 8 000 € HT par stagiaire et par dossier ; formations internes 50 % d'un forfait de 20 € HT/h/stagiaire. Aucun plafond annuel par entreprise publié, attribution dans la limite de l'enveloppe annuelle d'OCAPIAT."
@@ -163,7 +164,7 @@
     "note": "Branches du secteur alimentaire relevant de l'accord du 19/09/2025. Extrait : « Branches du secteur alimentaire relevant de l’accord du 19.09.25 : prise en charge de 100 % des coûts réels justifiés pour les jurys de CQP » (vérifié le 2026-10-05).",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf"
   },
-  "derniere_verification": "2026-10-05",
+  "derniere_verification": "2026-10-06",
   "dispositifs_complementaires": [
     {
       "id": "offre-regionale-tpe-pme",
@@ -454,14 +455,14 @@
       "plafonds_par_taille": [
         {
           "taille": "less_11",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
           "description": "Pêche, moins de 11 salariés : 15 à 40 € HT/h selon le type de formation ; 7 000 € HT par stagiaire (formation réglementaire jusqu'à 750 h, contribution conventionnelle versée), 10 500 € HT au-delà de 750 h ; autres formations prioritaires 1 000 € HT par entreprise ; ancienneté de 6 mois dans les 12 derniers mois (3 mois pour les formations d'accès au métier)."
         },
         {
           "taille": "11_49",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
           "description": "Pêche, 11 à 49 salariés : 15 à 40 € HT/h selon le type de formation ; 7 000 € HT par stagiaire (formation réglementaire jusqu'à 750 h), 10 500 € HT au-delà ; hébergement 68 € HT/jour (83 € à Paris) et repas 15 € HT pour les formations de moins de 150 h."

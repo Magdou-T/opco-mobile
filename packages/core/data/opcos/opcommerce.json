@@ -67,6 +67,7 @@
     "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
     "note": "Barème par défaut : 18 €/jour en région, 23 €/jour en Île-de-France, imputés sur le budget annuel. Nombreuses branches sans prise en charge des frais annexes. « restauration : plafond de 18 €/jour en région et de 23 €/jour en Ile-de-France ; hébergement : plafond de 100 € petit-déjeuner compris en région et de 130 € petit-déjeuner compris en Ile-de-France ; Transport : tous les modes de transport aux frais réels dans la limite de 0,30 € / km » (vérifié le 2026-10-05)"
   },
+  "frais_restauration_unite": "jour",
   "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "depends_on_branche",
@@ -209,7 +210,7 @@
       ],
       "source_url": "https://www.lopcommerce.com/media/ze0haai0/cpc_commerce_detail_alimentaire_non_specialise.pdf",
       "confidence": "exact",
-      "note": "Critères 2026 (en vigueur depuis le 20/04/2026). Click&Form : 100 % des coûts pédagogiques dans la limite de 5 inscriptions par an. IDCC 1505 confirmé sur la page de la branche (31 110 établissements). « Dernière mise à jour le 21 septembre 2026 » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 3 000 €, comprenant → Les coûts pédagogiques → Les Salaires à 13 €/h → Frais annexes : pas de prise en charge. » (vérifié le 2026-10-05)",
+      "note": "Critères 2026 (PDF : « EN VIGUEUR A COMPTER DU 1er/10/2026 » ; valeurs inchangées par rapport à la version précédente). Click&Form : 100 % des coûts pédagogiques dans la limite de 5 inscriptions par an. IDCC 1505 confirmé sur la page de la branche (31 110 établissements). « Dernière mise à jour le 05 octobre 2026 » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 3 000 €, comprenant → Les coûts pédagogiques → Les Salaires à 13 €/h → Frais annexes : pas de prise en charge. » (vérifié le 2026-10-05 ; dates relues dans le PDF en ligne le 2026-10-06)",
       "prise_en_charge_salaires": {
         "value": 13,
         "confidence": "exact",
@@ -545,14 +546,14 @@
       "plafonds_par_taille": [
         {
           "taille": "less_11",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
           "budget_annuel_max": 2000,
           "quota_horaire_max": null,
           "description": "Moins de 11 salariés : budget annuel 2 000 € (formation plafonnée à 40 €/h/stagiaire + salaires 14,50 €/h), pas de frais annexes."
         },
         {
           "taille": "11_49",
-          "cout_horaire_max": 40,
+          "cout_horaire_max": null,
           "budget_annuel_max": 5400,
           "quota_horaire_max": null,
           "description": "11 à 49 salariés : budget annuel 5 400 € (formation plafonnée à 40 €/h/stagiaire + salaires 14,50 €/h), pas de frais annexes."

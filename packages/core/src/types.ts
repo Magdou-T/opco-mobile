@@ -35,6 +35,13 @@ export type ModeSeuils = 'par_tranche' | 'selon_duree_totale';
  */
 export type PorteeBudget = 'global' | 'pedagogie';
 
+/**
+ * Unité du forfait de restauration publié par l'OPCO :
+ * - 'repas' : montant par repas (l'estimation retient un repas par jour de formation) ;
+ * - 'jour' (défaut) : montant par jour de formation.
+ */
+export type UniteRestauration = 'repas' | 'jour';
+
 export interface OpcoData {
   slug: string;
   name: string;
@@ -50,6 +57,7 @@ export interface OpcoData {
   // Coûts pédagogiques
   cout_horaire_inter: SourcedValue<number | null>;
   cout_horaire_intra: SourcedValue<number | null>;
+  /** Plafond horaire des formations certifiantes (CQP, certification, habilitation) ; à défaut, `cout_horaire_inter`. */
   cout_horaire_metier: SourcedValue<number | null>;
   /** Barème dégressif selon la durée (prioritaire sur les plafonds horaires ci-dessus). */
   cout_horaire_seuils?: CoutHoraireSeuil[];
@@ -65,6 +73,8 @@ export interface OpcoData {
   frais_transport: SourcedValue<number | null>;
   frais_hebergement: SourcedValue<number | null>;
   frais_restauration: SourcedValue<number | null>;
+  /** Unité du forfait de restauration : par repas (l'estimation retient un repas par jour de formation) ou par jour. Absent : par jour. */
+  frais_restauration_unite?: UniteRestauration;
   frais_annexes_pourcentage: SourcedValue<number | null>; // ex: Atlas 8%
 
   // Budget et plafonds
@@ -72,6 +82,7 @@ export interface OpcoData {
   budget_annuel_portee?: PorteeBudget;
   budget_annuel_description: string;
   quota_horaire_min: number | null;
+  /** Plafond d'heures : par action de formation, par salarié et par an, ou par stagiaire selon l'OPCO (voir `budget_annuel_description`). */
   quota_horaire_max: number | null;
 
   // Profils et conditions
@@ -154,6 +165,8 @@ export interface VarianteBranche {
   frais_transport?: SourcedValue<number | null>;
   frais_hebergement?: SourcedValue<number | null>;
   frais_restauration?: SourcedValue<number | null>;
+  /** Unité du forfait de restauration de la branche ; absent : celle de l'OPCO (même règle d'héritage que `frais_restauration`). */
+  frais_restauration_unite?: UniteRestauration;
   /** Forfait de frais annexes en % des coûts pédagogiques financés ; value null : pas de forfait dans cette branche. */
   frais_annexes_pourcentage?: SourcedValue<number | null>;
   budget_annuel_max?: SourcedValue<number | null>;
@@ -164,8 +177,18 @@ export interface VarianteBranche {
 
 export interface PlafondTaille {
   taille: CompanySize;
+  /**
+   * Plafond horaire propre à cette taille (prioritaire sur les plafonds de l'OPCO). À renseigner seulement quand il diffère
+   * selon la taille : une valeur qui répète `cout_horaire_inter` ou `cout_horaire_metier` reste à null, le champ garde alors
+   * sa confiance et sa source.
+   */
   cout_horaire_max: number | null;
+  /** Confiance de `cout_horaire_max` ; absent : « exact ». */
+  confidence?: Confidence;
+  /** Source de `cout_horaire_max` ; absent : la page de critères de l'OPCO. */
+  source_url?: string;
   budget_annuel_max: number | null;
+  /** Plafond d'heures : par action de formation, par salarié et par an, ou par stagiaire selon l'OPCO (voir `description`). */
   quota_horaire_max: number | null;
   description: string;
   /** Prise en charge des salaires en €/h propre à cette taille (mode euro_par_heure). Absent : taux de l'OPCO ; null : pas de prise en charge pour cette taille. */

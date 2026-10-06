@@ -1233,6 +1233,266 @@ describe('calculateFunding — montants non publiés : jamais comptés comme fin
   });
 });
 
+describe('calculateFunding — plafond horaire des formations certifiantes (CQP, certification, habilitation)', () => {
+  const opcoMetier = (metier: number | null): OpcoData =>
+    makeOpco({
+      cout_horaire_inter: { value: 25, confidence: 'exact', source_url: 'https://exemple.fr/inter' },
+      cout_horaire_metier: { value: metier, confidence: 'estimated', source_url: 'https://exemple.fr/metier' },
+    });
+  const pedagogie = (opco: OpcoData, formationType: WizardState['formationType']) =>
+    calculateFunding(opco, makeFormationState({ formationType, durationHours: 10, pedagogyCostPerHour: 60 })).lines.find(
+      (l) => l.poste === 'pedagogie',
+    )!;
+
+  it.each(['cqp', 'certification', 'habilitation'] as const)(
+    '%s : le plafond « métier » de l\'OPCO s\'applique, avec sa confiance et sa source',
+    (formationType) => {
+      const peda = pedagogie(opcoMetier(15), formationType);
+      expect(peda.fundedAmount).toBe(150); // 10 h × 15 €/h
+      expect(peda.confidence).toBe('estimated');
+      expect(peda.sourceUrl).toBe('https://exemple.fr/metier');
+    },
+  );
+
+  it.each(['non_certifiante', 'qualification', 'vae', 'reconversion'] as const)(
+    '%s : le plafond « inter » s\'applique, pas celui des formations certifiantes',
+    (formationType) => {
+      const peda = pedagogie(opcoMetier(15), formationType);
+      expect(peda.fundedAmount).toBe(250); // 10 h × 25 €/h
+      expect(peda.confidence).toBe('exact');
+      expect(peda.sourceUrl).toBe('https://exemple.fr/inter');
+    },
+  );
+
+  it('sans plafond « métier » publié (null), une formation certifiante retombe sur le plafond « inter »', () => {
+    const peda = pedagogie(opcoMetier(null), 'cqp');
+    expect(peda.fundedAmount).toBe(250);
+    expect(peda.confidence).toBe('exact');
+    expect(peda.sourceUrl).toBe('https://exemple.fr/inter');
+  });
+});
+
+describe('calculateFunding — plafond horaire par taille : confiance et source de la valeur', () => {
+  const PAGE_CRITERES = 'https://exemple.fr/criteres';
+  const SOURCE_PLAFOND = 'https://exemple.fr/branche/plafonds';
+  const SOURCE_CHAMP = 'https://exemple.fr/branche/champ-inter';
+  const plafondTpe = (over: Partial<PlafondTaille> = {}): PlafondTaille => ({
+    taille: 'less_11',
+    cout_horaire_max: 50,
+    budget_annuel_max: null,
+    quota_horaire_max: null,
+    description: 'Moins de 11 salariés : 50 €/h',
+    ...over,
+  });
+  const opcoAvecPlafond = (plafond: PlafondTaille): OpcoData =>
+    makeOpco({
+      url_finance_page: PAGE_CRITERES,
+      cout_horaire_inter: { value: 30, confidence: 'depends_on_branche', source_url: SOURCE_CHAMP },
+      plafonds_par_taille: [plafond],
+    });
+  const etatTpe = (over: Partial<WizardState> = {}) =>
+    makeFormationState({ companySize: 'less_11', durationHours: 10, pedagogyCostPerHour: 60, ...over });
+  const pedagogie = (opco: OpcoData, state: WizardState = etatTpe()) =>
+    calculateFunding(opco, state).lines.find((l) => l.poste === 'pedagogie')!;
+
+  it('un plafond de taille sans confiance propre reste « exact » et renvoie à la page de critères (comportement inchangé)', () => {
+    const peda = pedagogie(opcoAvecPlafond(plafondTpe()));
+    expect(peda.fundedAmount).toBe(500); // 10 h × 50 €/h
+    expect(peda.confidence).toBe('exact');
+    expect(peda.sourceUrl).toBe(PAGE_CRITERES);
+  });
+
+  it('un plafond de taille estimé, avec sa source, les reporte dans la ligne pédagogie', () => {
+    const peda = pedagogie(opcoAvecPlafond(plafondTpe({ confidence: 'estimated', source_url: SOURCE_PLAFOND })));
+    expect(peda.fundedAmount).toBe(500);
+    expect(peda.confidence).toBe('estimated');
+    expect(peda.sourceUrl).toBe(SOURCE_PLAFOND);
+  });
+
+  it('une confiance sans source garde la page de critères ; une source sans confiance garde « exact »', () => {
+    const sansSource = pedagogie(opcoAvecPlafond(plafondTpe({ confidence: 'depends_on_branche' })));
+    expect(sansSource.confidence).toBe('depends_on_branche');
+    expect(sansSource.sourceUrl).toBe(PAGE_CRITERES);
+    const sansConfiance = pedagogie(opcoAvecPlafond(plafondTpe({ source_url: SOURCE_PLAFOND })));
+    expect(sansConfiance.confidence).toBe('exact');
+    expect(sansConfiance.sourceUrl).toBe(SOURCE_PLAFOND);
+  });
+
+  it('un plafond de taille sans valeur horaire laisse la confiance et la source du champ de l\'OPCO', () => {
+    const peda = pedagogie(
+      opcoAvecPlafond(plafondTpe({ cout_horaire_max: null, confidence: 'estimated', source_url: SOURCE_PLAFOND })),
+    );
+    expect(peda.fundedAmount).toBe(300); // 10 h × 30 €/h du champ « inter »
+    expect(peda.confidence).toBe('depends_on_branche');
+    expect(peda.sourceUrl).toBe(SOURCE_CHAMP);
+  });
+
+  it('le plafond estimé d\'une variante de branche est celui qui s\'affiche', () => {
+    const opco = makeOpco({
+      url_finance_page: PAGE_CRITERES,
+      variantes_branche: [
+        {
+          id: 'branche',
+          branche_nom: 'Branche',
+          idcc: ['1234'],
+          source_url: 'https://exemple.fr/branche',
+          confidence: 'exact',
+          plafonds_par_taille: [plafondTpe({ confidence: 'estimated', source_url: SOURCE_PLAFOND })],
+        },
+      ],
+    });
+    const peda = pedagogie(opco, etatTpe({ detectedIdcc: '1234' }));
+    expect(peda.fundedAmount).toBe(500);
+    expect(peda.confidence).toBe('estimated');
+    expect(peda.sourceUrl).toBe(SOURCE_PLAFOND);
+  });
+});
+
+describe('calculateFunding — forfait de restauration : unité du forfait (repas ou jour)', () => {
+  const forfait = { value: 20, confidence: 'exact' as const, source_url: 'x' };
+  const opcoRestauration = (over: Partial<OpcoData> = {}): OpcoData => makeOpco({ frais_restauration: forfait, ...over });
+  const stateRepas = (mealCostPerDay: number) => makeFormationState({ needsMeals: true, mealCostPerDay, trainingDays: 5 });
+  const restauration = (opco: OpcoData, mealCostPerDay: number) =>
+    calculateFunding(opco, stateRepas(mealCostPerDay)).lines.find((l) => l.poste === 'restauration')!;
+
+  describe('forfait par repas', () => {
+    const opcoParRepas = () => opcoRestauration({ frais_restauration_unite: 'repas' });
+
+    it('coût déclaré supérieur au forfait : financé au forfait, avec des textes « par repas »', () => {
+      const repas = restauration(opcoParRepas(), 28);
+      expect(repas.requestedAmount).toBe(140); // 28 € × 5 jours
+      expect(repas.fundedAmount).toBe(100); // 20 € par repas × 5 jours
+      expect(repas.details).toContain('Forfait restauration Test OPCO : 20 € par repas (un repas par jour de formation retenu)');
+      expect(repas.details).toContain('Calcul : 20 € par repas × 5 jours = 100.00 €');
+      expect(repas.note).toBe('20 € par repas × 5 jours');
+    });
+
+    it('coût déclaré inférieur au forfait : financé au coût réel, avec des textes « par repas »', () => {
+      const repas = restauration(opcoParRepas(), 15);
+      expect(repas.fundedAmount).toBe(75);
+      expect(repas.details).toContain('Calcul : 15 € par repas × 5 jours = 75.00 €');
+      expect(repas.note).toBe('15 € par repas × 5 jours');
+    });
+
+    it('aucun texte du forfait ne parle de « €/jour » quand le coût déclaré dépasse le forfait', () => {
+      const repas = restauration(opcoParRepas(), 28);
+      expect(repas.note).not.toContain('€/jour');
+      expect((repas.details ?? []).length).toBeGreaterThan(0);
+      for (const d of repas.details ?? []) expect(d, d).not.toContain('€/jour');
+    });
+  });
+
+  describe('forfait par jour', () => {
+    it.each([['explicite', 'jour' as const], ['par défaut (unité absente)', undefined]])(
+      'unité %s : textes « €/jour »',
+      (_libelle, unite) => {
+        const repas = restauration(opcoRestauration({ frais_restauration_unite: unite }), 28);
+        expect(repas.fundedAmount).toBe(100);
+        expect(repas.details).toContain('Forfait restauration Test OPCO : 20 €/jour');
+        expect(repas.details).toContain('Calcul : 20 €/jour × 5 jours = 100.00 €');
+        expect(repas.note).toBe('20 €/jour × 5 jours');
+      },
+    );
+  });
+
+  describe('variante de branche', () => {
+    const variante = (over: Partial<VarianteBranche> = {}): VarianteBranche => ({
+      id: 'branche',
+      branche_nom: 'Branche',
+      idcc: ['1234'],
+      source_url: 'x',
+      confidence: 'exact',
+      ...over,
+    });
+    const etat = (mealCostPerDay: number) => ({ ...stateRepas(mealCostPerDay), detectedIdcc: '1234' });
+
+    it('la variante hérite de l\'unité de l\'OPCO quand elle n\'en déclare pas', () => {
+      const opco = opcoRestauration({ frais_restauration_unite: 'repas', variantes_branche: [variante()] });
+      const repas = calculateFunding(opco, etat(28)).lines.find((l) => l.poste === 'restauration')!;
+      expect(repas.note).toBe('20 € par repas × 5 jours');
+    });
+
+    it('la variante peut surcharger l\'unité (et son forfait) : par jour chez l\'OPCO, par repas dans la branche', () => {
+      const opco = opcoRestauration({
+        frais_restauration_unite: 'jour',
+        variantes_branche: [
+          variante({ frais_restauration: { value: 25, confidence: 'exact', source_url: 'x' }, frais_restauration_unite: 'repas' }),
+        ],
+      });
+      const repas = calculateFunding(opco, etat(30)).lines.find((l) => l.poste === 'restauration')!;
+      expect(repas.fundedAmount).toBe(125);
+      expect(repas.note).toBe('25 € par repas × 5 jours');
+    });
+
+    it('une variante « par jour » chez un OPCO « par repas » repasse aux textes « €/jour »', () => {
+      const opco = opcoRestauration({
+        frais_restauration_unite: 'repas',
+        variantes_branche: [variante({ frais_restauration_unite: 'jour' })],
+      });
+      const repas = calculateFunding(opco, etat(28)).lines.find((l) => l.poste === 'restauration')!;
+      expect(repas.note).toBe('20 €/jour × 5 jours');
+    });
+
+    it('applyVarianteBranche : l\'unité de la variante remplace celle de l\'OPCO, sinon elle est héritée', () => {
+      const opco = opcoRestauration({ frais_restauration_unite: 'repas' });
+      expect(applyVarianteBranche(opco, variante()).frais_restauration_unite).toBe('repas');
+      expect(applyVarianteBranche(opco, variante({ frais_restauration_unite: 'jour' })).frais_restauration_unite).toBe('jour');
+      expect(applyVarianteBranche(opcoRestauration(), variante()).frais_restauration_unite).toBeUndefined();
+    });
+  });
+});
+
+describe('calculateFunding — plafond annuel estimé : mention « à confirmer » dans les messages', () => {
+  const MENTION = ' (montant estimé : à confirmer auprès de Test OPCO)';
+  const opcoPlafonne = (confidence: 'exact' | 'estimated' | 'depends_on_branche', portee?: 'global' | 'pedagogie'): OpcoData =>
+    makeOpco({
+      cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
+      prise_en_charge_salaires: { value: 12, confidence: 'exact', source_url: 'x' },
+      prise_en_charge_salaires_mode: 'euro_par_heure',
+      budget_annuel_max: { value: 2000, confidence, source_url: 'x' },
+      budget_annuel_portee: portee,
+    });
+  const etat = () => makeFormationState({ durationHours: 100, pedagogyCostPerHour: 40 });
+  const messagesDePlafond = (warnings: string[]) =>
+    warnings.filter((w) => w.startsWith('Plafond annuel appliqué') || w.startsWith('Le plafond budgétaire annuel'));
+
+  it('budget estimé, portée pédagogie : les deux messages de plafond se terminent par la mention', () => {
+    const r = calculateFunding(opcoPlafonne('estimated', 'pedagogie'), etat());
+    expect(r.budgetCapApplied).toBe(true);
+    const messages = messagesDePlafond(r.warnings);
+    expect(messages).toHaveLength(2); // calcPedagogy (montant) et generateWarnings (plafond appliqué)
+    expect(messages.some((m) => m.startsWith('Plafond annuel appliqué aux coûts pédagogiques : 2000.00 €'))).toBe(true);
+    expect(messages.some((m) => m.startsWith('Le plafond budgétaire annuel de Test OPCO a été appliqué aux coûts pédagogiques'))).toBe(true);
+    for (const m of messages) expect(m.endsWith(MENTION), m).toBe(true);
+  });
+
+  it('budget estimé, portée globale : le message de plafond se termine par la mention', () => {
+    const r = calculateFunding(opcoPlafonne('estimated'), etat());
+    const messages = messagesDePlafond(r.warnings);
+    expect(messages).toHaveLength(1);
+    expect(messages[0]).toBe(
+      'Le plafond budgétaire annuel de Test OPCO a été appliqué. Le montant total finançable est plafonné' + MENTION,
+    );
+  });
+
+  it('un budget « depends_on_branche » est aussi signalé comme estimé', () => {
+    const r = calculateFunding(opcoPlafonne('depends_on_branche'), etat());
+    for (const m of messagesDePlafond(r.warnings)) expect(m.endsWith(MENTION), m).toBe(true);
+  });
+
+  it.each([undefined, 'pedagogie'] as const)('budget exact (portée %s) : aucune mention d\'estimation', (portee) => {
+    const r = calculateFunding(opcoPlafonne('exact', portee), etat());
+    expect(messagesDePlafond(r.warnings).length).toBeGreaterThan(0);
+    expect(r.warnings.some((w) => w.includes('montant estimé'))).toBe(false);
+    for (const m of messagesDePlafond(r.warnings)) expect(m.endsWith('.'), m).toBe(true);
+  });
+
+  it('le détail de la ligne pédagogie n\'est pas modifié par la mention', () => {
+    const peda = calculateFunding(opcoPlafonne('estimated', 'pedagogie'), etat()).lines.find((l) => l.poste === 'pedagogie')!;
+    expect(peda.details?.some((d) => d.includes('montant estimé'))).toBe(false);
+  });
+});
+
 describe('calculateFunding — déterminisme', () => {
   it('mêmes entrées → mêmes sorties', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });

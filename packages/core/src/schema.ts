@@ -39,6 +39,9 @@ const HttpsUrlSchema = z.string().url().startsWith('https://');
 export const PlafondTailleSchema = z.object({
   taille: CompanySizeSchema,
   cout_horaire_max: z.number().nullable(),
+  // Confiance et source propres au plafond horaire de la taille (absentes : « exact » et page de critères de l'OPCO).
+  confidence: ConfidenceSchema.optional(),
+  source_url: z.string().url().optional(),
   budget_annuel_max: z.number().nullable(),
   quota_horaire_max: z.number().nullable(),
   description: z.string(),
@@ -63,6 +66,7 @@ export const CoutHoraireSeuilSchema = z.object({
 const ModeSeuilsSchema = z.enum(['par_tranche', 'selon_duree_totale']);
 const PorteeBudgetSchema = z.enum(['global', 'pedagogie']);
 const ModeSalairesSchema = z.enum(['euro_par_heure', 'pourcentage_pedagogique', 'selon_accord', 'inclus_plafond_horaire']);
+const UniteRestaurationSchema = z.enum(['repas', 'jour']);
 
 export const VarianteBrancheSchema = z.object({
   id: z.string().min(1),
@@ -82,6 +86,7 @@ export const VarianteBrancheSchema = z.object({
   frais_transport: SourcedNumberSchema.optional(),
   frais_hebergement: SourcedNumberSchema.optional(),
   frais_restauration: SourcedNumberSchema.optional(),
+  frais_restauration_unite: UniteRestaurationSchema.optional(),
   frais_annexes_pourcentage: SourcedNumberSchema.optional(),
   budget_annuel_max: SourcedNumberSchema.optional(),
   budget_annuel_portee: PorteeBudgetSchema.optional(),
@@ -150,6 +155,7 @@ export const OpcoDataSchema = z.object({
   frais_transport: SourcedNumberSchema,
   frais_hebergement: SourcedNumberSchema,
   frais_restauration: SourcedNumberSchema,
+  frais_restauration_unite: UniteRestaurationSchema.optional(),
   frais_annexes_pourcentage: SourcedNumberSchema,
 
   budget_annuel_max: SourcedNumberSchema,
