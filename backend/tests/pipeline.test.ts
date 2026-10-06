@@ -34,15 +34,16 @@ const atlas = (): OpcoData => {
 
 // Les données réelles n'ont plus de tailles en double (le schéma v4 les
 // interdit) : on fabrique le cas pour tester l'appariement par occurrence
-// de diffOpco / applyCorrections.
+// de diffOpco / applyCorrections. Le tableau est entièrement synthétique : il
+// ne dépend pas du contenu des données de Constructys, réécrites au fil des
+// vérifications de sources.
 const constructysAvecDoublon = (): OpcoData => {
   const o = deepClone(getEmbeddedOpcoBySlug('constructys')!);
-  const premier = o.plafonds_par_taille![0];
-  o.plafonds_par_taille!.splice(1, 0, {
-    ...premier,
-    budget_annuel_max: 4000,
-    description: 'Travaux publics <11 salaries (fixture de test)',
-  });
+  o.plafonds_par_taille = [
+    { taille: 'less_11', cout_horaire_max: 24, budget_annuel_max: 3500, quota_horaire_max: null, description: 'Bâtiment <11 (fixture)' },
+    { taille: 'less_11', cout_horaire_max: 24, budget_annuel_max: 4000, quota_horaire_max: null, description: 'Travaux publics <11 (fixture)' },
+    { taille: '11_49', cout_horaire_max: 19, budget_annuel_max: 6000, quota_horaire_max: null, description: 'Bâtiment 11-49 (fixture)' },
+  ];
   return o;
 };
 
@@ -113,8 +114,8 @@ describe('verify.diffOpco', () => {
     // Deux entrées less_11 (idx 0 et idx 1, fixture) : on modifie la 2e.
     const less11 = ext.plafonds_par_taille.filter((p) => p.taille === 'less_11');
     expect(less11.length).toBeGreaterThan(1);
-    const oldTp = less11[1].budget_annuel_max!;
-    less11[1].budget_annuel_max = oldTp + 100;
+    const ancienBudget = less11[1].budget_annuel_max!;
+    less11[1].budget_annuel_max = ancienBudget + 100;
 
     const diff = diffOpco(constructys, ext);
     const modified = diff.diffs.filter((d) => d.status !== 'unchanged');
@@ -123,7 +124,7 @@ describe('verify.diffOpco', () => {
 
     const { opco: out } = applyCorrections(constructys, diff, { now: new Date(2026, 5, 10) });
     expect(out.plafonds_par_taille![0].budget_annuel_max).toBe(constructys.plafonds_par_taille![0].budget_annuel_max); // intact
-    expect(out.plafonds_par_taille![1].budget_annuel_max).toBe(oldTp + 100); // bonne occurrence corrigée
+    expect(out.plafonds_par_taille![1].budget_annuel_max).toBe(ancienBudget + 100); // bonne occurrence corrigée
   });
 });
 

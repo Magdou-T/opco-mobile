@@ -1,8 +1,8 @@
 // ============================================================
-// Schema de validation (Zod) — miroir de types.ts et aides/types.ts.
-// Source de verite partagee : utilise par le BACKEND avant publication
-// d'un dataset ET par l'APP apres telechargement, pour ne jamais
-// charger de donnees corrompues.
+// Schéma de validation (Zod) — miroir de types.ts et aides/types.ts.
+// Source de vérité partagée : utilisé par le BACKEND avant publication
+// d'un dataset ET par l'APP après téléchargement, pour ne jamais
+// charger de données corrompues.
 // ============================================================
 
 import { z } from 'zod';
@@ -19,14 +19,21 @@ export const SourcedNumberSchema = z.object({
 });
 
 /**
- * Champ descriptif libre. Les donnees reelles melangent string, objet source
+ * Champ descriptif libre. Les données réelles mélangent string, objet sourcé
  * enrichi ou null. Ces champs ne pilotent PAS le calcul.
  */
 export const FreeTextSchema = z.union([z.string(), z.record(z.unknown())]).nullable();
 
 export const CompanySizeSchema = z.enum(['less_11', '11_49', '50_299', '300_plus']);
 
-const DateIsoSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date attendue au format AAAA-MM-JJ');
+const DateIsoSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'date attendue au format AAAA-MM-JJ')
+  .refine((s) => {
+    // Aller-retour par Date : 2026-13-45 est invalide (toISOString lèverait), 2026-02-30 devient 2026-03-02.
+    const d = new Date(`${s}T00:00:00Z`);
+    return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }, 'date inexistante dans le calendrier');
 const HttpsUrlSchema = z.string().url().startsWith('https://');
 
 export const PlafondTailleSchema = z.object({
@@ -37,7 +44,7 @@ export const PlafondTailleSchema = z.object({
   description: z.string(),
 });
 
-/** Une seule entree par taille : le calcul ne retiendrait que la premiere. */
+/** Une seule entrée par taille : le calcul ne retiendrait que la première. */
 export const PlafondsParTailleSchema = z.array(PlafondTailleSchema).superRefine((plafonds, ctx) => {
   const vues = new Set<string>();
   for (const p of plafonds) {
@@ -156,13 +163,22 @@ export const OpcoDataSchema = z.object({
 });
 
 /**
- * Bornes de coherence (sanity checks) appliquees en plus du schema de forme.
- * Renvoie la liste des problemes detectes (vide = OK).
+ * Bornes de cohérence (sanity checks) appliquées en plus du schéma de forme.
+ * Renvoie la liste des problèmes détectés (vide = OK).
  */
 export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
   const issues: string[] = [];
   const inRange = (v: number | null, lo: number, hi: number, label: string) => {
     if (v != null && (v < lo || v > hi)) issues.push(`${o.slug}: ${label}=${v} hors bornes [${lo}, ${hi}]`);
+  };
+  /** Barème par tranche : valeurs bornées, et dernière tranche (après tri par max_heures) sans limite d'heures. */
+  const verifierBareme = (seuils: z.infer<typeof CoutHoraireSeuilSchema>[] | undefined, prefixe: string) => {
+    if (!seuils?.length) return;
+    for (const s of seuils) inRange(s.valeur, 0, 200, `${prefixe}cout_horaire_seuils.valeur`);
+    const triees = [...seuils].sort((a, b) => (a.max_heures ?? Infinity) - (b.max_heures ?? Infinity));
+    if (triees[triees.length - 1].max_heures != null) {
+      issues.push(`${o.slug}: ${prefixe}cout_horaire_seuils : la dernière tranche doit avoir max_heures null`);
+    }
   };
 
   inRange(o.cout_horaire_inter.value, 0, 200, 'cout_horaire_inter');
@@ -170,7 +186,7 @@ export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
   inRange(o.cout_horaire_metier.value, 0, 200, 'cout_horaire_metier');
   inRange(o.frais_annexes_pourcentage.value, 0, 100, 'frais_annexes_pourcentage');
   inRange(o.budget_annuel_max.value, 0, 1_000_000, 'budget_annuel_max');
-  for (const s of o.cout_horaire_seuils ?? []) inRange(s.valeur, 0, 200, 'cout_horaire_seuils.valeur');
+  verifierBareme(o.cout_horaire_seuils, '');
 
   for (const p of o.plafonds_par_taille ?? []) {
     inRange(p.cout_horaire_max, 0, 200, `plafond[${p.taille}].cout_horaire_max`);
@@ -184,6 +200,7 @@ export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
     inRange(v.cout_horaire_inter?.value ?? null, 0, 200, `variante[${v.id}].cout_horaire_inter`);
     inRange(v.cout_horaire_metier?.value ?? null, 0, 200, `variante[${v.id}].cout_horaire_metier`);
     inRange(v.budget_annuel_max?.value ?? null, 0, 1_000_000, `variante[${v.id}].budget_annuel_max`);
+    verifierBareme(v.cout_horaire_seuils, `variante[${v.id}].`);
     for (const p of v.plafonds_par_taille ?? []) {
       inRange(p.cout_horaire_max, 0, 200, `variante[${v.id}].plafond[${p.taille}].cout_horaire_max`);
       inRange(p.budget_annuel_max, 0, 1_000_000, `variante[${v.id}].plafond[${p.taille}].budget_annuel_max`);
@@ -192,7 +209,7 @@ export function sanityCheckOpco(o: z.infer<typeof OpcoDataSchema>): string[] {
   return issues;
 }
 
-// --- Catalogue d'aides -------------------------------------------------------
+// --- Catalogue d'aides --------------------------------------------------------
 
 export const CodeRegionSchema = z.enum([
   '84', '27', '53', '24', '94', '44', '32', '11', '28', '75', '76', '52', '93', '01', '02', '03', '04', '06',
@@ -217,6 +234,8 @@ const FinanceurSchema = z.enum([
   'europe', 'cpf', 'opco', 'faf', 'fiscal', 'branche', 'autre',
 ]);
 
+// Les schémas du catalogue sont stricts : une clé mal orthographiée (ex. `age_maxi`) serait sinon
+// supprimée en silence par Zod, et l'aide perdrait une condition d'éligibilité.
 export const CriteresAideSchema = z.object({
   regions: z.array(CodeRegionSchema).optional(),
   perimetre_region: z.enum(['entreprise', 'beneficiaire']).optional(),
@@ -244,7 +263,7 @@ export const CriteresAideSchema = z.object({
   naf_prefixes: z.array(z.string().min(2)).optional(),
   structures: z.array(z.enum(['ess', 'siae', 'association'])).optional(),
   qualiopi_requis: z.boolean().optional(),
-});
+}).strict();
 
 const MajorationAideSchema = z.object({
   criteres: CriteresAideSchema,
@@ -252,7 +271,7 @@ const MajorationAideSchema = z.object({
   pourcentage: z.number().min(0).max(100).nullable().optional(),
   plafond: z.number().min(0).nullable().optional(),
   libelle: z.string().min(1),
-});
+}).strict();
 
 export const MontantAideSchema = z
   .object({
@@ -265,6 +284,7 @@ export const MontantAideSchema = z
     libelle: z.string().min(1),
     majorations: z.array(MajorationAideSchema).optional(),
   })
+  .strict()
   .superRefine((m, ctx) => {
     if ((m.mode === 'forfait' || m.mode === 'par_heure' || m.mode === 'par_mois') && m.valeur == null) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: `montant.valeur requis pour le mode ${m.mode}` });
@@ -281,7 +301,7 @@ export const SourceAideSchema = z.object({
   url: HttpsUrlSchema,
   titre: z.string().min(1),
   extrait: z.string().min(1).max(600),
-});
+}).strict();
 
 export const AideSchema = z.object({
   id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'identifiant kebab-case attendu'),
@@ -295,36 +315,40 @@ export const AideSchema = z.object({
   criteres: CriteresAideSchema,
   conditions: z.array(z.string().min(1)),
   montant: MontantAideSchema,
-  cumul: z.object({
-    cumulable: z.boolean(),
-    alternatives: z.array(z.string()).optional(),
-    note: z.string().optional(),
-  }),
+  cumul: z
+    .object({
+      cumulable: z.boolean(),
+      alternatives: z.array(z.string()).optional(),
+      note: z.string().optional(),
+    })
+    .strict(),
   demarches: z.array(z.string().min(1)).min(1),
   url_demarche: HttpsUrlSchema.nullable(),
   liens_par_region: z.record(CodeRegionSchema, HttpsUrlSchema).optional(),
   sources: z.array(SourceAideSchema).min(1),
   derniere_verification: DateIsoSchema,
-  validite: z.object({ debut: DateIsoSchema.nullable(), fin: DateIsoSchema.nullable() }),
+  validite: z.object({ debut: DateIsoSchema.nullable(), fin: DateIsoSchema.nullable() }).strict(),
   statut: z.enum(['actif', 'a_confirmer', 'suspendu']),
   confidence: ConfidenceSchema,
   ordre_empilement: z.number().optional(),
-});
+}).strict();
 
 export const PortailRegionalSchema = z.object({
   region: CodeRegionSchema,
   nom_region: z.string().min(1),
   liens: z
     .array(
-      z.object({
-        titre: z.string().min(1),
-        url: HttpsUrlSchema,
-        type: z.enum(['region', 'carif_oref', 'transitions_pro', 'france_travail', 'agefiph', 'autre']),
-      }),
+      z
+        .object({
+          titre: z.string().min(1),
+          url: HttpsUrlSchema,
+          type: z.enum(['region', 'carif_oref', 'transitions_pro', 'france_travail', 'agefiph', 'autre']),
+        })
+        .strict(),
     )
     .min(1),
   derniere_verification: DateIsoSchema,
-});
+}).strict();
 
 export const IdccEntreeSchema = z.object({
   idcc: z.string().regex(/^\d{4}$/),
@@ -348,7 +372,7 @@ export const SuggestionNafSchema = z.object({
   source: z.string().min(1),
 });
 
-/** Coherence globale du catalogue (en plus du schema). Renvoie la liste des problemes. */
+/** Cohérence globale du catalogue (en plus du schéma). Renvoie la liste des problèmes. */
 export function sanityCheckAides(aides: Aide[]): string[] {
   const issues: string[] = [];
   const ids = new Set<string>();
@@ -369,15 +393,15 @@ export function sanityCheckAides(aides: Aide[]): string[] {
       issues.push(`aide ${a.id} : effectif_min > effectif_max`);
     }
     if (a.validite.debut && a.validite.fin && a.validite.debut > a.validite.fin) {
-      issues.push(`aide ${a.id} : validite incoherente`);
+      issues.push(`aide ${a.id} : validité incohérente`);
     }
   }
   return issues;
 }
 
-// --- Dataset et manifest -------------------------------------------------------
+// --- Dataset et manifest --------------------------------------------------------
 
-/** Manifest publie a cote du dataset, lu par l'app pour decider de la sync. */
+/** Manifest publié à côté du dataset, lu par l'app pour décider de la sync. */
 export const DatasetManifestSchema = z.object({
   version: z.number().int().positive(),
   generatedAt: z.string(),
@@ -387,7 +411,7 @@ export const DatasetManifestSchema = z.object({
   changelog: z.array(z.string()),
 });
 
-/** Dataset complet telecharge par l'app. Les sections v4 sont facultatives (compatibilite). */
+/** Dataset complet téléchargé par l'app. Les sections v4 sont facultatives (compatibilité). */
 export const DatasetSchema = z.object({
   version: z.number().int().positive(),
   generatedAt: z.string(),
@@ -402,8 +426,8 @@ export type DatasetManifest = z.infer<typeof DatasetManifestSchema>;
 export type Dataset = z.infer<typeof DatasetSchema>;
 
 /**
- * Valide un dataset complet (forme + bornes + presence des 11 OPCO + coherence des aides).
- * Leve une erreur agregee si invalide. Utilise backend ET app.
+ * Valide un dataset complet (forme + bornes + présence des 11 OPCO + cohérence des aides).
+ * Lève une erreur agrégée si invalide. Utilisé backend ET app.
  */
 export function validateDataset(raw: unknown, opts: { minOpcoCount?: number } = {}): Dataset {
   const parsed = DatasetSchema.parse(raw);
@@ -413,10 +437,10 @@ export function validateDataset(raw: unknown, opts: { minOpcoCount?: number } = 
   }
   const issues = [
     ...parsed.opcos.flatMap((o) => sanityCheckOpco(o)),
-    ...(parsed.aides ? sanityCheckAides(parsed.aides as unknown as Aide[]) : []),
+    ...(parsed.aides ? sanityCheckAides(parsed.aides) : []),
   ];
   if (issues.length > 0) {
-    throw new Error(`Dataset rejet :\n- ${issues.join('\n- ')}`);
+    throw new Error(`Dataset rejeté :\n- ${issues.join('\n- ')}`);
   }
   return parsed;
 }

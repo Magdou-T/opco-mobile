@@ -1,6 +1,6 @@
 // ============================================================
-// Catalogue d'aides et de financements : types des donnees
-// (snake_case, comme les fichiers JSON) et des resultats (camelCase).
+// Catalogue d'aides et de financements : types des données
+// (snake_case, comme les fichiers JSON) et des résultats (camelCase).
 // ============================================================
 
 import type {
@@ -32,12 +32,12 @@ export type Financeur =
   | 'branche'
   | 'autre';
 
-/** Ce que l'aide reduit ou apporte. */
+/** Ce que l'aide réduit ou apporte. */
 export type CategorieAide =
-  | 'cout_formation' // reduit le cout pedagogique et les frais annexes
-  | 'aide_employeur' // versee a l'employeur (embauche, salaires...)
-  | 'remuneration_beneficiaire' // revenu du beneficiaire pendant la formation
-  | 'avantage_fiscal_social' // credit d'impot, exonerations
+  | 'cout_formation' // réduit le coût pédagogique et les frais annexes
+  | 'aide_employeur' // versée à l'employeur (embauche, salaires…)
+  | 'remuneration_beneficiaire' // revenu du bénéficiaire pendant la formation
+  | 'avantage_fiscal_social' // crédit d'impôt, exonérations
   | 'service_gratuit'; // conseil ou accompagnement gratuit (sans montant)
 
 export interface SourceAide {
@@ -47,17 +47,17 @@ export interface SourceAide {
   extrait: string;
 }
 
-/** Criteres verifies automatiquement ; un critere absent n'impose aucune contrainte. */
+/** Critères vérifiés automatiquement ; un critère absent n'impose aucune contrainte. */
 export interface CriteresAide {
   regions?: CodeRegion[];
-  /** Localisation prise en compte : etablissement (defaut) ou residence du beneficiaire. */
+  /** Localisation prise en compte : établissement (défaut) ou résidence du bénéficiaire. */
   perimetre_region?: 'entreprise' | 'beneficiaire';
   departements?: string[];
   effectif_min?: number;
   effectif_max?: number;
   age_min?: number;
   age_max?: number;
-  /** true : reserve aux personnes reconnues travailleurs handicapes. */
+  /** true : réservé aux personnes reconnues travailleurs handicapés. */
   rqth?: boolean;
   niveaux_diplome?: NiveauDiplome[];
   niveau_certification_max?: NiveauCertification;
@@ -67,7 +67,7 @@ export interface CriteresAide {
   anciennete_min_mois?: number;
   inscrit_france_travail?: boolean;
   statuts_dirigeant?: StatutDirigeant[];
-  /** true : reserve aux micro-entrepreneurs ; false : les exclut. */
+  /** true : réservé aux micro-entrepreneurs ; false : les exclut. */
   micro_entrepreneur?: boolean;
   certifications?: CertificationType[];
   eligible_cpf?: boolean;
@@ -95,15 +95,15 @@ export interface MontantAide {
   base: 'cout_pedagogique' | 'cout_total' | null;
   plafond: number | null;
   duree_max_mois: number | null;
-  /** Regle lisible : « 5 000 € pour la 1re annee du contrat ». */
+  /** Règle lisible : « 5 000 € pour la 1re année du contrat ». */
   libelle: string;
-  /** La premiere majoration dont tous les criteres sont remplis remplace valeur, pourcentage et plafond. */
+  /** La première majoration dont tous les critères sont remplis remplace valeur, pourcentage et plafond. */
   majorations?: MajorationAide[];
 }
 
 export interface RegleCumul {
   cumulable: boolean;
-  /** Identifiants d'aides « au choix » (jamais additionnees). */
+  /** Identifiants d'aides « au choix » (jamais additionnées). */
   alternatives?: string[];
   note?: string;
 }
@@ -123,7 +123,7 @@ export interface Aide {
   cumul: RegleCumul;
   demarches: string[];
   url_demarche: string | null;
-  /** Dispositifs nationaux geres en region (Transitions Pro, Agefiph...). */
+  /** Dispositifs nationaux gérés en région (Transitions Pro, Agefiph…). */
   liens_par_region?: Partial<Record<CodeRegion, string>>;
   sources: SourceAide[];
   /** AAAA-MM-JJ */
@@ -147,7 +147,7 @@ export interface PortailRegional {
   derniere_verification: string;
 }
 
-/** Fichiers JSON du catalogue embarque (data/aides/*.json). */
+/** Fichiers JSON du catalogue embarqué (data/aides/*.json). */
 export interface FichierAides {
   meta: Record<string, unknown>;
   aides: Aide[];
@@ -158,11 +158,11 @@ export interface FichierPortails {
   portails: PortailRegional[];
 }
 
-// --- Evaluation ---------------------------------------------------------------
+// --- Évaluation -------------------------------------------------------------
 
 export type StatutEligibilite = 'eligible' | 'a_verifier' | 'non_eligible';
 
-/** Situation evaluee (derivee du parcours par profilDepuisWizard). null = information inconnue. */
+/** Situation évaluée (dérivée du parcours par profilDepuisWizard). null = information inconnue. */
 export interface ProfilAides {
   projet: ProjetType;
   statutBeneficiaire: StatutBeneficiaire;
@@ -191,7 +191,7 @@ export interface ProfilAides {
   eligibleCpf: boolean | null;
   dureeHeures: number | null;
   coutPedagogique: number | null;
-  /** Frais annexes saisis (hebergement + restauration), en euros. */
+  /** Frais annexes saisis (hébergement + restauration), en euros. */
   coutFraisAnnexes: number;
   qualiopi: boolean | null;
   soldeCpf: number | null;
@@ -205,9 +205,9 @@ export interface AideEvaluee {
   categorie: CategorieAide;
   description: string;
   statut: StatutEligibilite;
-  /** non_eligible : criteres non remplis ; a_verifier : informations a confirmer. */
+  /** non_eligible : critères non remplis ; a_verifier : informations à confirmer. */
   raisons: string[];
-  /** true : aide sans rapport avec la situation (autre projet, autre public, autre region) — masquee a l'ecran. */
+  /** true : aide sans rapport avec la situation (autre projet, autre public, autre région) — masquée à l'écran. */
   horsPerimetre: boolean;
   conditions: string[];
   montantEstime: number | null;
@@ -223,7 +223,7 @@ export interface AideEvaluee {
   ordreEmpilement: number;
 }
 
-/** Ordre d'empilement par defaut dans le plan de financement (petit = d'abord). */
+/** Ordre d'empilement par défaut dans le plan de financement (petit = d'abord). */
 export const ORDRE_EMPILEMENT_DEFAUT: Record<Financeur, number> = {
   opco: 10,
   branche: 15,
@@ -241,17 +241,17 @@ export const ORDRE_EMPILEMENT_DEFAUT: Record<Financeur, number> = {
 };
 
 export const FINANCEUR_LABELS: Record<Financeur, string> = {
-  etat: 'Etat',
-  region: 'Region',
-  departement: 'Departement',
+  etat: 'État',
+  region: 'Région',
+  departement: 'Département',
   france_travail: 'France Travail',
   transitions_pro: 'Transitions Pro',
   agefiph: 'Agefiph',
-  europe: 'Union europeenne',
+  europe: 'Union européenne',
   cpf: 'Compte personnel de formation',
   opco: 'OPCO',
-  faf: 'Fonds de formation des non-salaries',
-  fiscal: 'Fiscalite',
+  faf: 'Fonds de formation des non-salariés',
+  fiscal: 'Fiscalité',
   branche: 'Branche professionnelle',
   autre: 'Autres financeurs',
 };
