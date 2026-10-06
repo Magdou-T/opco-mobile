@@ -158,7 +158,8 @@ function enveloppe50Plus(opco: OpcoData, size: CompanySize | null): PlafondTaill
  * critères de l'OPCO sinon) : il ne doit pas masquer la confiance de la valeur qu'il répète.
  * Habilitation : `cout_horaire_metier` est le taux publié pour les CQP et certifications, pas celui des formations
  * réglementaires (parfois plus bas : OPCO EP, immobilier). Le plafond est appliqué (résultat prudent) mais ne s'affiche
- * jamais « exact » pour une habilitation ; le repli sur `cout_horaire_inter` et un plafond de taille gardent leur confiance.
+ * jamais « exact » pour une habilitation ; le repli sur `cout_horaire_inter`, un plafond de taille et un taux à 0
+ * (marqueur d'enveloppe épuisée : ce n'est pas un taux) gardent leur confiance.
  */
 function resolveHourlyCeiling(
   opco: OpcoData,
@@ -181,8 +182,10 @@ function resolveHourlyCeiling(
   const fallback = isMetier ? opco.cout_horaire_inter : opco.cout_horaire_metier;
   const chosen = sourcedCeiling.value != null ? sourcedCeiling : fallback;
 
-  // Une habilitation qui prend le taux « métier » (et non le repli sur « inter ») n'est pas établie par ce taux : « exact » devient « estimated ».
-  const habilitationAuTauxMetier = state.formationType === 'habilitation' && opco.cout_horaire_metier.value != null;
+  // Une habilitation qui prend un vrai taux « métier » (ni le repli sur « inter », ni le 0 qui marque une enveloppe épuisée)
+  // n'est pas établie par ce taux : « exact » devient « estimated ».
+  const tauxMetier = opco.cout_horaire_metier.value;
+  const habilitationAuTauxMetier = state.formationType === 'habilitation' && tauxMetier != null && tauxMetier > 0;
   const confidence: Confidence = habilitationAuTauxMetier && chosen.confidence === 'exact' ? 'estimated' : chosen.confidence;
 
   return { ceiling: chosen.value, confidence, sourceUrl: chosen.source_url };

@@ -1319,6 +1319,15 @@ describe('calculateFunding — habilitation au taux « métier » : jamais « ex
     expect(peda.sourceUrl).toBe(SOURCE_INTER);
   });
 
+  it('habilitation avec un plafond « métier » à 0 (marqueur d\'enveloppe épuisée) : ce n\'est pas un taux, la ligne garde sa confiance « exact »', () => {
+    const opco = opcoMetier(0, 'exact', { cout_horaire_inter: { value: 0, confidence: 'exact', source_url: SOURCE_INTER } });
+    const peda = pedagogie(opco, 'habilitation');
+    expect(peda.requestedAmount).toBe(400);
+    expect(peda.fundedAmount).toBe(0); // enveloppe épuisée : aucun financement simulé, comme avant
+    expect(peda.confidence).toBe('exact');
+    expect(peda.sourceUrl).toBe(SOURCE_METIER);
+  });
+
   it.each([
     ['sans confiance ni source propres', {}],
     ['avec sa propre confiance « exact » et sa source', { confidence: 'exact' as const, source_url: 'https://exemple.fr/branche/plafond' }],

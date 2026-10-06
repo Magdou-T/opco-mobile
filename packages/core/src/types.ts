@@ -57,7 +57,11 @@ export interface OpcoData {
   // Coûts pédagogiques
   cout_horaire_inter: SourcedValue<number | null>;
   cout_horaire_intra: SourcedValue<number | null>;
-  /** Plafond horaire des formations certifiantes (CQP, certification, habilitation) ; à défaut, `cout_horaire_inter`. */
+  /**
+   * Plafond horaire des formations certifiantes (CQP, certification, habilitation) ; à défaut, `cout_horaire_inter`.
+   * Pour une habilitation, ce taux n'établit pas le plafond (les formations réglementaires ont parfois un taux distinct) :
+   * une confiance « exact » devient « estimated » (voir `resolveHourlyCeiling`), sauf pour 0, marqueur d'enveloppe épuisée.
+   */
   cout_horaire_metier: SourcedValue<number | null>;
   /** Barème dégressif selon la durée (prioritaire sur les plafonds horaires ci-dessus). */
   cout_horaire_seuils?: CoutHoraireSeuil[];
