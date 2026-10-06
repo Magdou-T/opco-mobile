@@ -286,7 +286,8 @@ export const CriteresAideSchema = z.object({
   effectif_max: z.number().int().min(0).optional(),
   age_min: z.number().int().min(0).max(100).optional(),
   age_max: z.number().int().min(0).max(100).optional(),
-  rqth: z.boolean().optional(),
+  // rqth, eligible_cpf et qualiopi_requis : vrais seulement (un `false` serait ignoré sans bruit par l'évaluation).
+  rqth: z.literal(true).optional(),
   niveaux_diplome: z.array(NiveauDiplomeSchema).optional(),
   niveau_certification_max: NiveauCertificationSchema.optional(),
   niveau_certification_min: NiveauCertificationSchema.optional(),
@@ -297,14 +298,14 @@ export const CriteresAideSchema = z.object({
   statuts_dirigeant: z.array(StatutDirigeantSchema).optional(),
   micro_entrepreneur: z.boolean().optional(),
   certifications: z.array(CertificationTypeSchema).optional(),
-  eligible_cpf: z.boolean().optional(),
+  eligible_cpf: z.literal(true).optional(),
   duree_min_heures: z.number().min(0).optional(),
   duree_max_heures: z.number().min(0).optional(),
   opcos: z.array(z.string().min(1)).optional(),
   idcc: z.array(z.string().regex(/^\d{4}$/)).optional(),
   naf_prefixes: z.array(z.string().min(2)).optional(),
   structures: z.array(z.enum(['ess', 'siae', 'association'])).optional(),
-  qualiopi_requis: z.boolean().optional(),
+  qualiopi_requis: z.literal(true).optional(),
 }).strict();
 
 const MajorationAideSchema = z.object({

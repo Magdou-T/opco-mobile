@@ -12,6 +12,7 @@ import {
   NIVEAU_DIPLOME_LABELS,
   STATUT_DIRIGEANT_LABELS,
   TYPE_ALTERNANCE_LABELS,
+  type CodeRegion,
 } from '../types';
 import type { CriteresAide, ProfilAides } from './types';
 
@@ -41,18 +42,47 @@ const LIBELLES_STRUCTURES = { ess: 'ESS', siae: "structure d'insertion (SIAE)", 
 
 const liste = (valeurs: string[]) => valeurs.join(', ');
 
+/** Code NAF sans points et en majuscules : « 86.21z », « 8621Z » et « 86.21Z » désignent le même code. */
+const normaliserNaf = (code: string): string => code.replace(/\./g, '').toUpperCase();
+
 function trancheAge(min?: number, max?: number): string {
-  if (min != null && max != null) return `Réservé aux personnes de ${min} à ${max} ans`;
+  if (min != null && max != null) {
+    return min === max ? `Réservé aux personnes de ${min} ans` : `Réservé aux personnes de ${min} à ${max} ans`;
+  }
   if (min != null) return `Réservé aux personnes de ${min} ans et plus`;
   return `Réservé aux personnes de ${max} ans au plus`;
 }
 
+/**
+ * Région à laquelle l'aide se rapporte pour ce profil : celle du bénéficiaire (à défaut celle de l'entreprise) quand
+ * l'aide est jugée sur sa résidence (`perimetre_region: 'beneficiaire'`), sinon celle de l'établissement.
+ * `null` si elle est inconnue.
+ */
+export function regionDeReference(c: Pick<CriteresAide, 'perimetre_region'>, p: ProfilAides): CodeRegion | null {
+  return c.perimetre_region === 'beneficiaire' ? (p.regionBeneficiaire ?? p.regionEntreprise) : p.regionEntreprise;
+}
+
+/**
+ * Évalue les critères d'une aide pour un profil, en trois états (`ok`, `ko`, `inconnu`), avec les raisons de chaque
+ * critère non rempli (`raisonsKo`) ou à vérifier (`raisonsInconnu`).
+ *
+ * - Tri-état : une information manquante dans le profil donne `inconnu` (jamais `ok` par défaut) ; un critère absent
+ *   n'impose aucune contrainte.
+ * - `ko` l'emporte sur `inconnu` : un seul critère non rempli suffit, même si d'autres informations manquent.
+ * - `rqth`, `eligible_cpf` et `qualiopi_requis` ne sont évalués que lorsqu'ils valent `true` ; `false` n'ajoute aucune
+ *   restriction.
+ * - `departements` avec `perimetre_region: 'beneficiaire'` est toujours `inconnu` : le profil ne porte que le
+ *   département de l'établissement, pas celui du bénéficiaire.
+ * - Avec `perimetre_region: 'beneficiaire'`, la région du bénéficiaire par défaut est celle de l'entreprise (voir
+ *   `regionDeReference`).
+ * - `naf_prefixes` : préfixes du code NAF, sans tenir compte de la casse ni des points (`86.21Z` = `8621z`).
+ */
 export function evaluerCriteres(c: CriteresAide, p: ProfilAides): BilanCriteres {
   const ko: string[] = [];
   const inconnu: string[] = [];
 
   if (c.regions?.length) {
-    const region = c.perimetre_region === 'beneficiaire' ? (p.regionBeneficiaire ?? p.regionEntreprise) : p.regionEntreprise;
+    const region = regionDeReference(c, p);
     if (region == null) inconnu.push('Précisez la région');
     else if (!c.regions.includes(region)) ko.push(`Réservé à : ${liste(c.regions.map((r) => REGIONS[r]))}`);
   }
@@ -123,7 +153,7 @@ export function evaluerCriteres(c: CriteresAide, p: ProfilAides): BilanCriteres 
   if (c.types_alternance?.length) {
     if (p.typeAlternance == null) inconnu.push("Précisez le type de contrat d'alternance");
     else if (!c.types_alternance.includes(p.typeAlternance)) {
-      ko.push(`Réservé aux : ${liste(c.types_alternance.map((t) => TYPE_ALTERNANCE_LABELS[t]))}`);
+      ko.push(`Réservé aux contrats d'alternance suivants : ${liste(c.types_alternance.map((t) => TYPE_ALTERNANCE_LABELS[t]))}`);
     }
   }
 
@@ -144,7 +174,7 @@ export function evaluerCriteres(c: CriteresAide, p: ProfilAides): BilanCriteres 
   if (c.statuts_dirigeant?.length) {
     if (p.statutDirigeant == null) inconnu.push('Précisez le statut du dirigeant');
     else if (!c.statuts_dirigeant.includes(p.statutDirigeant)) {
-      ko.push(`Réservé aux : ${liste(c.statuts_dirigeant.map((s) => STATUT_DIRIGEANT_LABELS[s]))}`);
+      ko.push(`Réservé aux statuts suivants : ${liste(c.statuts_dirigeant.map((s) => STATUT_DIRIGEANT_LABELS[s]))}`);
     }
   }
 
@@ -181,22 +211,24 @@ export function evaluerCriteres(c: CriteresAide, p: ProfilAides): BilanCriteres 
   }
 
   if (c.idcc?.length) {
+    const idcc = c.idcc;
     if (p.idccs.length === 0) inconnu.push("Précisez la convention collective de l'entreprise");
-    else if (!p.idccs.some((i) => c.idcc!.includes(i))) ko.push(`Réservé aux conventions collectives : IDCC ${liste(c.idcc)}`);
+    else if (!p.idccs.some((i) => idcc.includes(i))) ko.push(`Réservé aux conventions collectives : IDCC ${liste(idcc)}`);
   }
 
   if (c.naf_prefixes?.length) {
-    const naf = p.codeNaf?.toUpperCase();
+    const naf = p.codeNaf == null ? null : normaliserNaf(p.codeNaf);
     if (naf == null) inconnu.push("Précisez le code NAF de l'entreprise");
-    else if (!c.naf_prefixes.some((pre) => naf.startsWith(pre.toUpperCase()))) {
+    else if (!c.naf_prefixes.some((pre) => naf.startsWith(normaliserNaf(pre)))) {
       ko.push(`Réservé aux secteurs (code NAF) : ${liste(c.naf_prefixes)}`);
     }
   }
 
   if (c.structures?.length) {
-    const libelles = liste(c.structures.map((s) => LIBELLES_STRUCTURES[s]));
+    const structures = c.structures;
+    const libelles = liste(structures.map((s) => LIBELLES_STRUCTURES[s]));
     if (p.structures == null) inconnu.push(`Vérifiez que votre structure relève de : ${libelles}`);
-    else if (!p.structures.some((s) => c.structures!.includes(s))) ko.push(`Réservé aux structures : ${libelles}`);
+    else if (!p.structures.some((s) => structures.includes(s))) ko.push(`Réservé aux structures : ${libelles}`);
   }
 
   if (c.qualiopi_requis === true) {

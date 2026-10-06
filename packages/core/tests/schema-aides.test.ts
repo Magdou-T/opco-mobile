@@ -12,8 +12,8 @@ import {
   sanityCheckOpco,
   validateDataset,
 } from '../src/schema';
-import { FINANCEUR_LABELS, type Aide } from '../src/aides/types';
-import { EMBEDDED_OPCOS } from '../src/data';
+import { FINANCEUR_LABELS, type Aide, type CriteresAide } from '../src/aides/types';
+import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '../src/data';
 import { makeAide } from './fixtures-aides';
 
 // Vérification à la compilation : le schéma Zod produit bien des `Aide`.
@@ -101,6 +101,56 @@ describe('schéma du catalogue d’aides', () => {
   it('applique le même contrôle aux dates de validité', () => {
     expect(AideSchema.safeParse(makeAide({ validite: { debut: '2026-02-30', fin: null } })).success).toBe(false);
     expect(AideSchema.safeParse(makeAide({ validite: { debut: null, fin: '2026-13-45' } })).success).toBe(false);
+  });
+});
+
+describe('critères booléens : vrais seulement', () => {
+  // `rqth`, `eligible_cpf` et `qualiopi_requis` n'ont de sens que s'ils valent `true` ; un `false` serait ignoré
+  // sans bruit : le schéma le refuse. `micro_entrepreneur` et `inscrit_france_travail` gardent les deux valeurs.
+  const aide = makeAide();
+  const majoration = { criteres: { age_max: 25 }, valeur: 6000, libelle: 'Moins de 26 ans' };
+  const avecCriteres = (criteres: object) => ({ ...aide, criteres });
+  const dansUneMajoration = (criteres: object) => ({
+    ...aide,
+    montant: { ...aide.montant, majorations: [{ ...majoration, criteres }] },
+  });
+
+  it('le type CriteresAide refuse aussi false (vérifié à la compilation par tsc)', () => {
+    const faux: CriteresAide[] = [
+      // @ts-expect-error `false` n'est pas une valeur de `rqth`
+      { rqth: false },
+      // @ts-expect-error `false` n'est pas une valeur de `eligible_cpf`
+      { eligible_cpf: false },
+      // @ts-expect-error `false` n'est pas une valeur de `qualiopi_requis`
+      { qualiopi_requis: false },
+    ];
+    expect(faux).toHaveLength(3);
+  });
+
+  describe.each([
+    ["dans les critères de l'aide", avecCriteres],
+    ["dans les critères d'une majoration", dansUneMajoration],
+  ])('%s', (_ou, fabriquer) => {
+    it.each(['rqth', 'eligible_cpf', 'qualiopi_requis'])('refuse %s à false', (cle) => {
+      expect(problemes(AideSchema, fabriquer({ [cle]: false }))).toMatchObject([{ code: 'invalid_literal', path: expect.arrayContaining([cle]) }]);
+    });
+
+    it.each(['rqth', 'eligible_cpf', 'qualiopi_requis'])('accepte %s à true', (cle) => {
+      expect(problemes(AideSchema, fabriquer({ [cle]: true }))).toEqual([]);
+    });
+
+    it.each(['micro_entrepreneur', 'inscrit_france_travail'])('accepte toujours %s à false (il exclut un public)', (cle) => {
+      expect(problemes(AideSchema, fabriquer({ [cle]: false }))).toEqual([]);
+    });
+  });
+
+  it('le catalogue embarqué ne contient aucun de ces critères à false', () => {
+    const faux = EMBEDDED_AIDES.flatMap((a) =>
+      [a.criteres, ...(a.montant.majorations ?? []).map((m) => m.criteres)].flatMap((c) =>
+        (['rqth', 'eligible_cpf', 'qualiopi_requis'] as const).filter((cle) => cle in c && c[cle] !== true).map((cle) => `${a.id}.${cle}`),
+      ),
+    );
+    expect(faux).toEqual([]);
   });
 });
 

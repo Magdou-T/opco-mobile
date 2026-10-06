@@ -3,7 +3,7 @@
 // raisons, montant estimé. Fonctions pures (date de référence en paramètre).
 // ============================================================
 
-import { evaluerCriteres } from './criteres';
+import { evaluerCriteres, regionDeReference } from './criteres';
 import {
   ORDRE_EMPILEMENT_DEFAUT,
   type Aide,
@@ -15,13 +15,47 @@ import {
 
 const arrondi = (n: number): number => Math.round(n * 100) / 100;
 
+/**
+ * Heures de formation par mois à temps plein : 35 h × 52 semaines / 12 mois.
+ * Base prudente : un temps partiel dure plus longtemps pour les mêmes heures, donc la durée en mois (et le montant
+ * d'une aide `par_mois`) est plutôt sous-estimée que surestimée.
+ */
+export const HEURES_PAR_MOIS_TEMPS_PLEIN = 151.67;
+
+const MENTION_LIMITE_COUT = '(limité au coût de la formation)';
+
+/** Ajoute la mention de limite au libellé, avant le point final s'il y en a un (jamais de double point). */
+function avecMentionLimiteCout(libelle: string): string {
+  return libelle.endsWith('.') && !libelle.endsWith('..')
+    ? `${libelle.slice(0, -1)} ${MENTION_LIMITE_COUT}.`
+    : `${libelle} ${MENTION_LIMITE_COUT}`;
+}
+
 /** AAAA-MM-JJ → JJ/MM/AAAA */
 export function formaterDate(iso: string): string {
   const [annee, mois, jour] = iso.split('-');
   return annee && mois && jour ? `${jour}/${mois}/${annee}` : iso;
 }
 
-/** Montant estimé d'une aide pour le profil (null si non chiffrable). */
+/**
+ * Montant estimé d'une aide pour le profil (`null` si non chiffrable : le libellé seul s'affiche alors).
+ *
+ * La première majoration dont tous les critères sont remplis remplace la valeur, le pourcentage et le plafond qu'elle
+ * renseigne (un `plafond: null` explicite lève le plafond de l'aide) ainsi que le libellé.
+ *
+ * Selon le mode :
+ * - `forfait` : la valeur ;
+ * - `pourcentage` : pourcentage du coût pédagogique (ou du coût total, frais annexes compris) ; `null` si ce coût est inconnu ;
+ * - `par_heure` : valeur × durée de la formation ; `null` si la durée est inconnue ;
+ * - `par_mois` : versé chaque mois de formation, au prorata de la durée de la formation à temps plein
+ *   (durée en heures / `HEURES_PAR_MOIS_TEMPS_PLEIN`), dans la limite de `duree_max_mois` ; `null` si la valeur, la durée
+ *   maximale ou la durée de la formation est inconnue. Pour une aide versée sur une période indépendante de la
+ *   formation, utiliser `forfait` avec le total maximal ;
+ * - `solde_cpf` : le solde CPF connu ; `non_chiffre` : jamais d'estimation.
+ *
+ * Le plafond (de l'aide ou de la majoration) s'applique ensuite au total ; le résultat est arrondi aux centimes et
+ * jamais négatif.
+ */
 export function estimerMontant(m: MontantAide, p: ProfilAides): { montant: number | null; libelle: string } {
   let valeur = m.valeur;
   let pourcentage = m.pourcentage;
@@ -57,7 +91,10 @@ export function estimerMontant(m: MontantAide, p: ProfilAides): { montant: numbe
       montant = valeur != null && p.dureeHeures != null ? valeur * p.dureeHeures : null;
       break;
     case 'par_mois':
-      montant = valeur != null && m.duree_max_mois != null ? valeur * m.duree_max_mois : null;
+      montant =
+        valeur != null && m.duree_max_mois != null && p.dureeHeures != null
+          ? valeur * Math.min(m.duree_max_mois, p.dureeHeures / HEURES_PAR_MOIS_TEMPS_PLEIN)
+          : null;
       break;
     case 'solde_cpf':
       montant = p.soldeCpf;
@@ -96,10 +133,11 @@ export function evaluerAide(aide: Aide, p: ProfilAides, dateRef: string): AideEv
   const coutConnu = p.coutPedagogique != null ? p.coutPedagogique + p.coutFraisAnnexes : null;
   const plafonne = aide.categorie === 'cout_formation' && montant != null && coutConnu != null && montant > coutConnu;
   const montantFinal = plafonne ? arrondi(coutConnu) : montant;
-  const libelleFinal = plafonne ? `${libelle} (limité au coût de la formation)` : libelle;
-  const region =
-    aide.criteres.perimetre_region === 'beneficiaire' ? (p.regionBeneficiaire ?? p.regionEntreprise) : p.regionEntreprise;
-  const lienRegional = region ? aide.liens_par_region?.[region] : undefined;
+  const libelleFinal = plafonne ? avecMentionLimiteCout(libelle) : libelle;
+  const region = regionDeReference(aide.criteres, p);
+  // Pour le seul lien : sans région de référence, on prend la région connue du bénéficiaire, puis celle de l'entreprise.
+  const regionDuLien = region ?? p.regionBeneficiaire ?? p.regionEntreprise;
+  const lienRegional = regionDuLien ? aide.liens_par_region?.[regionDuLien] : undefined;
   const autreRegion = !!aide.criteres.regions?.length && region != null && !aide.criteres.regions.includes(region);
   const horsPerimetre =
     !aide.projets.includes(p.projet) || !aide.beneficiaires.includes(p.statutBeneficiaire) || autreRegion;
@@ -131,6 +169,13 @@ export function evaluerAide(aide: Aide, p: ProfilAides, dateRef: string): AideEv
 
 const RANG: Record<StatutEligibilite, number> = { eligible: 0, a_verifier: 1, non_eligible: 2 };
 
+/** Comparaison par valeur de code, sans Intl : le même ordre sur tous les moteurs (l'ordre des accents n'a pas d'importance). */
+const comparer = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
+
+/**
+ * Évalue toutes les aides et les trie : éligibles, puis à vérifier, puis non éligibles ; à statut égal, montant estimé
+ * décroissant (un montant non chiffré après un montant de 0 €), puis nom (sans tenir compte de la casse), puis identifiant.
+ */
 export function evaluerAides(aides: Aide[], p: ProfilAides, dateRef: string): AideEvaluee[] {
   return aides
     .map((a) => evaluerAide(a, p, dateRef))
@@ -138,7 +183,7 @@ export function evaluerAides(aides: Aide[], p: ProfilAides, dateRef: string): Ai
       (a, b) =>
         RANG[a.statut] - RANG[b.statut] ||
         (b.montantEstime ?? -1) - (a.montantEstime ?? -1) ||
-        a.nom.localeCompare(b.nom, 'fr') ||
-        a.id.localeCompare(b.id),
+        comparer(a.nom.toLowerCase(), b.nom.toLowerCase()) ||
+        comparer(a.id, b.id),
     );
 }

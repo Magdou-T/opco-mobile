@@ -57,8 +57,8 @@ export interface CriteresAide {
   effectif_max?: number;
   age_min?: number;
   age_max?: number;
-  /** true : réservé aux personnes reconnues travailleurs handicapés. */
-  rqth?: boolean;
+  /** true : réservé aux personnes reconnues travailleurs handicapés. Uniquement vrai : `false` n'ajoute aucune restriction. */
+  rqth?: true;
   niveaux_diplome?: NiveauDiplome[];
   niveau_certification_max?: NiveauCertification;
   niveau_certification_min?: NiveauCertification;
@@ -70,14 +70,16 @@ export interface CriteresAide {
   /** true : réservé aux micro-entrepreneurs ; false : les exclut. */
   micro_entrepreneur?: boolean;
   certifications?: CertificationType[];
-  eligible_cpf?: boolean;
+  /** true : réservé aux formations éligibles au CPF. Uniquement vrai : `false` n'ajoute aucune restriction. */
+  eligible_cpf?: true;
   duree_min_heures?: number;
   duree_max_heures?: number;
   opcos?: string[];
   idcc?: string[];
   naf_prefixes?: string[];
   structures?: TypeStructure[];
-  qualiopi_requis?: boolean;
+  /** true : organisme de formation certifié Qualiopi exigé. Uniquement vrai : `false` n'ajoute aucune restriction. */
+  qualiopi_requis?: true;
 }
 
 export interface MajorationAide {
@@ -89,11 +91,17 @@ export interface MajorationAide {
 }
 
 export interface MontantAide {
+  /**
+   * Mode de calcul de l'estimation. `par_mois` : versé chaque mois de formation, au prorata de la durée de la
+   * formation à temps plein (bornée à `duree_max_mois`) ; pour une aide versée sur une période indépendante de la
+   * formation, utiliser `forfait` avec le total maximal.
+   */
   mode: 'forfait' | 'pourcentage' | 'par_heure' | 'par_mois' | 'solde_cpf' | 'non_chiffre';
   valeur: number | null;
   pourcentage: number | null;
   base: 'cout_pedagogique' | 'cout_total' | null;
   plafond: number | null;
+  /** `par_mois` : nombre maximal de mensualités, borne du prorata sur la durée de la formation. */
   duree_max_mois: number | null;
   /** Règle lisible : « 5 000 € pour la 1re année du contrat ». */
   libelle: string;
@@ -210,6 +218,10 @@ export interface AideEvaluee {
   /** true : aide sans rapport avec la situation (autre projet, autre public, autre région) — masquée à l'écran. */
   horsPerimetre: boolean;
   conditions: string[];
+  /**
+   * Rempli aussi pour une aide `non_eligible` (ce que l'aide verserait si le profil y avait droit) : ne jamais
+   * l'afficher ni l'additionner pour une aide qui n'est pas `eligible`.
+   */
   montantEstime: number | null;
   libelleMontant: string;
   cumulable: boolean;
