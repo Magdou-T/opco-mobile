@@ -192,6 +192,7 @@ const resultatOpco = (
   opcoEmail: 'contact@example.opco.fr',
   opcoUrl: 'https://example.opco.fr/criteres',
   dispositifPrincipal: 'Plan de développement des compétences (fonds mutualisés OPCO)',
+  pdcFerme: false,
   brancheAppliquee: null,
   lines,
   totalRequested: 0,

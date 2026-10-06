@@ -215,6 +215,13 @@ describe('barèmes OPCO embarqués', () => {
     }
   });
 
+  it('les 11 OPCO embarqués ont un nom complet non vide, repris de la dénomination officielle (affiché par le site)', () => {
+    expect(EMBEDDED_OPCOS).toHaveLength(11);
+    const sansNomComplet = EMBEDDED_OPCOS.filter((o) => typeof o.nom_complet !== 'string' || o.nom_complet.trim() === '');
+    expect(sansNomComplet.map((o) => o.slug)).toEqual([]);
+    for (const o of EMBEDDED_OPCOS) expect(o.nom_complet, o.slug).toMatch(/^Opérateur de compétences /);
+  });
+
   it('ont été vérifiés il y a moins de 12 mois', () => {
     for (const o of EMBEDDED_OPCOS) {
       expect(o.derniere_verification, o.slug).toMatch(/^\d{4}-\d{2}-\d{2}$/);

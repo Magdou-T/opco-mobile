@@ -1,6 +1,7 @@
 {
   "slug": "opco-mobilites",
   "name": "OPCO Mobilités",
+  "nom_complet": "Opérateur de compétences des métiers de la mobilité",
   "secteurs": "Transports routiers (marchandises, voyageurs, sanitaires), transports urbains, ferroviaire, RATP, transports maritimes et fluviaux, ports et manutention, ports de plaisance, services de l'automobile, opérateurs de voyages, distributeurs de boissons",
   "secteurs_source": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
   "email_contact": "",

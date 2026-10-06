@@ -45,6 +45,8 @@ export type UniteRestauration = 'repas' | 'jour';
 export interface OpcoData {
   slug: string;
   name: string;
+  /** Dénomination officielle complète de l'OPCO (« Opérateur de compétences de … »), affichée à côté du nom court. */
+  nom_complet?: string;
   secteurs: string;
   secteurs_source: string;
   email_contact: string;
@@ -195,7 +197,10 @@ export interface PlafondTaille {
   /** Plafond d'heures : par action de formation, par salarié et par an, ou par stagiaire selon l'OPCO (voir `description`). */
   quota_horaire_max: number | null;
   description: string;
-  /** Prise en charge des salaires en €/h propre à cette taille (mode euro_par_heure). Absent : taux de l'OPCO ; null : pas de prise en charge pour cette taille. */
+  /**
+   * Prise en charge des salaires en €/h propre à cette taille (mode euro_par_heure). Absent : taux de l'OPCO ; null : pas de prise en charge pour cette taille.
+   * Un taux propre à la taille l'emporte sur le salaire d'une variante de branche qui hérite des `plafonds_par_taille` de l'OPCO : une variante qui change les salaires doit aussi surcharger ces entrées.
+   */
   prise_en_charge_salaires_horaire?: number | null;
 }
 
@@ -495,6 +500,8 @@ export interface DispositifEligible {
   conditions: string[];
   demarches: string;
   publics: string | null;
+  /** Précision sur le dispositif (portée, plafond, particularité), reprise de `DispositifComplementaire.note` ; absente sans note. */
+  note?: string;
   confidence: Confidence;
   sourceUrl: string;
 }
@@ -506,6 +513,12 @@ export interface FundingResult {
   opcoUrl: string;
   /** Dispositif au titre duquel l'estimation principale est calculée. */
   dispositifPrincipal: string;
+  /**
+   * true : entreprise de 50 salariés et plus pour laquelle l'OPCO ne publie aucune enveloppe (conventionnelle ou volontaire).
+   * Les fonds mutualisés du plan de développement des compétences lui sont fermés (art. L. 6332-17 du code du travail) :
+   * aucun financement n'est estimé sur ce dispositif et `demarches` renvoie vers les autres financements.
+   */
+  pdcFerme: boolean;
   /** Nom de la branche dont le barème a été appliqué (null = barème général de l'OPCO). */
   brancheAppliquee: string | null;
   lines: FundingLine[];

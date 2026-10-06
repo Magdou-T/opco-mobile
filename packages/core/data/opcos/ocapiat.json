@@ -1,6 +1,7 @@
 {
   "slug": "ocapiat",
   "name": "OCAPIAT",
+  "nom_complet": "Opérateur de compétences pour la coopération agricole, l'agriculture, la pêche, l'industrie agroalimentaire et les territoires",
   "secteurs": "Coopération agricole, agriculture, pêche et cultures marines, industries agroalimentaires, territoires",
   "secteurs_source": "https://www.ocapiat.fr/",
   "email_contact": "",

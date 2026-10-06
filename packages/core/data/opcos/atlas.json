@@ -1,6 +1,7 @@
 {
   "slug": "atlas",
   "name": "ATLAS",
+  "nom_complet": "Opérateur de compétences des services financiers et du conseil",
   "secteurs": "Services financiers et conseil : bureaux d'études, ingénierie, numérique, conseil et événementiel, expertise comptable, banque, assurance, courtage, agences générales d'assurance, sociétés financières, géomètres, économistes de la construction (14 branches)",
   "secteurs_source": "https://www.opco-atlas.fr/adhesion-entreprise-sans-convention-ou-a-statut.html",
   "email_contact": "",

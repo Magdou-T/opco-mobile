@@ -474,6 +474,122 @@ describe('calculateFunding — règle des 50 salariés', () => {
   });
 });
 
+describe('calculateFunding — plan de développement des compétences fermé (pdcFerme)', () => {
+  const PREMIERE_DEMARCHE =
+    'Votre entreprise compte 50 salariés ou plus : le plan de développement des compétences est financé sur ses fonds propres (art. L. 6332-17 du code du travail).';
+  const demarchesFerme = (nomOpco: string) => [
+    PREMIERE_DEMARCHE,
+    `Demandez à ${nomOpco} si votre branche prévoit des fonds conventionnels ou un plan volontaire pour les entreprises de votre taille.`,
+    'Consultez les autres financements mobilisables (CPF, Région, France Travail, Transitions Pro…) avant de démarrer la formation.',
+  ];
+  // Démarches générales de l'OPCO de la fixture (processus d'approbation et délai publiés, sans dispositif complémentaire).
+  const DEMARCHES_GENERALES = [
+    'Vérifier que votre entreprise est à jour de ses cotisations auprès de Test OPCO.',
+    "Demander un devis et le programme détaillé à l'organisme de formation (certifié Qualiopi).",
+    'Demande dématérialisée',
+    'Délai : 2-3 semaines',
+    "Attendre l'accord de prise en charge AVANT de démarrer la formation (sous réserve de fonds disponibles).",
+  ];
+  const enveloppe = (taille: PlafondTaille['taille'], budget: number | null): PlafondTaille => ({
+    taille,
+    cout_horaire_max: null,
+    budget_annuel_max: budget,
+    quota_horaire_max: null,
+    description: `Plan conventionnel ${taille}.`,
+  });
+  const resultat = (opco: OpcoData, companySize: WizardState['companySize']) =>
+    calculateFunding(opco, makeFormationState({ companySize, durationHours: 100, pedagogyCostPerHour: 30 }));
+
+  it('300 salariés et plus sans enveloppe publiée : pdcFerme est vrai et la première démarche annonce le financement sur fonds propres', () => {
+    const r = resultat(makeOpco(), '300_plus');
+    expect(r.pdcFerme).toBe(true);
+    expect(r.demarches[0]).toBe(
+      'Votre entreprise compte 50 salariés ou plus : le plan de développement des compétences est financé sur ses fonds propres (art. L. 6332-17 du code du travail).',
+    );
+  });
+
+  it('les démarches sont exactement les trois textes du PDC fermé, avec le nom de l\'OPCO', () => {
+    expect(resultat(makeOpco(), '300_plus').demarches).toEqual(demarchesFerme('Test OPCO'));
+    expect(resultat(makeOpco({ name: "L'Opcommerce" }), '300_plus').demarches[1]).toBe(
+      "Demandez à L'Opcommerce si votre branche prévoit des fonds conventionnels ou un plan volontaire pour les entreprises de votre taille.",
+    );
+  });
+
+  it('les démarches générales, y compris celle des dispositifs cumulables, sont remplacées et non complétées', () => {
+    const cumulable: DispositifComplementaire = {
+      id: 'fonds-branche',
+      nom: 'Fonds de branche',
+      cumul: 'additif',
+      montant_max: 1000,
+      unite: 'par_dossier',
+      pourcentage_couts: null,
+      description: 'd',
+      conditions: ['c'],
+      demarches: 'm',
+      tailles_eligibles: null,
+      publics: null,
+      confidence: 'exact',
+      source_url: 'x',
+    };
+    const r = resultat(makeOpco({ dispositifs_complementaires: [cumulable] }), '300_plus');
+    expect(r.pdcFerme).toBe(true);
+    expect(r.demarches).toEqual(demarchesFerme('Test OPCO'));
+    expect(r.dispositifsComplementaires.map((d) => d.id)).toEqual(['fonds-branche']); // le dispositif reste exposé à part
+  });
+
+  it('50 à 299 salariés sans enveloppe publiée : pdcFerme est vrai, comme le dispositif principal et le financement à 0', () => {
+    const r = resultat(makeOpco(), '50_299');
+    expect(r.pdcFerme).toBe(true);
+    expect(r.dispositifPrincipal).toContain('non accessibles');
+    expect(r.totalFunded).toBe(0);
+    expect(r.demarches).toEqual(demarchesFerme('Test OPCO'));
+  });
+
+  it('une enveloppe 50+ à 0 n\'ouvre pas le PDC : pdcFerme reste vrai', () => {
+    const r = resultat(makeOpco({ plafonds_par_taille: [enveloppe('50_299', 0)] }), '50_299');
+    expect(r.pdcFerme).toBe(true);
+    expect(r.demarches).toEqual(demarchesFerme('Test OPCO'));
+  });
+
+  it('l\'enveloppe publiée pour les 50 à 299 salariés n\'ouvre pas le PDC des 300 salariés et plus', () => {
+    const opco = makeOpco({ plafonds_par_taille: [enveloppe('50_299', 1000)] });
+    expect(resultat(opco, '50_299').pdcFerme).toBe(false);
+    expect(resultat(opco, '300_plus').pdcFerme).toBe(true);
+  });
+
+  it('50 à 299 salariés avec enveloppe 50+ publiée : pdcFerme est faux et les démarches sont les démarches générales', () => {
+    const r = resultat(makeOpco({ plafonds_par_taille: [enveloppe('50_299', 1000)] }), '50_299');
+    expect(r.pdcFerme).toBe(false);
+    expect(r.dispositifPrincipal).not.toContain('non accessibles');
+    expect(r.demarches).toEqual(DEMARCHES_GENERALES);
+  });
+
+  it.each(['less_11', '11_49', null] as const)('taille %s : pdcFerme est faux et les démarches sont inchangées', (taille) => {
+    const r = resultat(makeOpco(), taille);
+    expect(r.pdcFerme).toBe(false);
+    expect(r.demarches).toEqual(DEMARCHES_GENERALES);
+  });
+
+  it('pdcFerme suit le barème appliqué : l\'enveloppe 50+ d\'une branche ouvre le PDC, le barème général le laisse fermé', () => {
+    const opco = makeOpco({
+      variantes_branche: [
+        {
+          id: 'pharmacie',
+          branche_nom: 'Pharmacie',
+          idcc: ['1996'],
+          source_url: 'x',
+          confidence: 'exact',
+          plafonds_par_taille: [enveloppe('300_plus', 15000)],
+        },
+      ],
+    });
+    const etat = (over: Partial<WizardState>) =>
+      makeFormationState({ companySize: '300_plus', durationHours: 100, pedagogyCostPerHour: 30, ...over });
+    expect(calculateFunding(opco, etat({ detectedIdcc: '1996' })).pdcFerme).toBe(false);
+    expect(calculateFunding(opco, etat({ detectedIdcc: null })).pdcFerme).toBe(true);
+  });
+});
+
 describe('calculateFunding — barème dégressif', () => {
   const seuils = [
     { max_heures: 105, valeur: 65 },
@@ -869,6 +985,20 @@ describe('calculateFunding — dispositifs complémentaires et enveloppe', () =>
     expect(r.enveloppeMaxPotentielle).toBe(3000);
   });
 
+  it('un dispositif avec une note la retrouve dans le dispositif retourné', () => {
+    const note = 'Plafond de 750 € par dossier, hors budget annuel.';
+    const opco = makeOpco({ dispositifs_complementaires: [{ ...boost, note }] });
+    const r = calculateFunding(opco, makeFormationState());
+    expect(r.dispositifsComplementaires[0].note).toBe(note);
+  });
+
+  it('un dispositif sans note n\'a pas de champ note (clé absente, et non undefined)', () => {
+    const opco = makeOpco({ dispositifs_complementaires: [boost] });
+    const [dispositif] = calculateFunding(opco, makeFormationState()).dispositifsComplementaires;
+    expect(dispositif.id).toBe('boost');
+    expect(Object.keys(dispositif)).not.toContain('note');
+  });
+
   it('chaque ligne porte son poste', () => {
     const opco = makeOpco();
     const r = calculateFunding(opco, makeFormationState({ needsMeals: true, mealCostPerDay: 15, trainingDays: 2 }));
@@ -915,11 +1045,20 @@ describe('calculateFunding — dispositifs réservés à certaines conventions c
     expect(idsRetenus(opcoTp(), { detectedIdcc: '1596', idccEtablissements: ['1596', '1702'] })).toEqual(['transition-ecologique']);
   });
 
-  it('présent quand la branche appliquée (choix manuel) couvre l\'IDCC, même sans IDCC détecté', () => {
+  it('présent quand la branche appliquée (choix manuel, à un seul IDCC) couvre l\'IDCC, même sans IDCC détecté', () => {
+    const opco = opcoAvecDispositif(dispositif({ idcc: ['1702'] }), {
+      variantes_branche: [{ id: 'travaux-publics', branche_nom: 'Travaux publics', idcc: ['1702'], source_url: 'x', confidence: 'exact' }],
+    });
+    expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null })).toEqual(['transition-ecologique']);
+  });
+
+  it('une variante groupée n\'ajoute aucun IDCC : elle n\'ouvre pas les dispositifs des autres conventions du groupe', () => {
     const opco = opcoAvecDispositif(dispositif({ idcc: ['1702'] }), {
       variantes_branche: [{ id: 'travaux-publics', branche_nom: 'Travaux publics', idcc: ['1702', '2614'], source_url: 'x', confidence: 'exact' }],
     });
-    expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null })).toEqual(['transition-ecologique']);
+    expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null })).toEqual([]); // convention inconnue parmi les deux
+    expect(idsRetenus(opco, { detectedIdcc: '2614' })).toEqual([]); // la convention détectée est 2614, le dispositif vise 1702
+    expect(idsRetenus(opco, { detectedIdcc: '1702' })).toEqual(['transition-ecologique']);
   });
 
   it('normalise les IDCC sur 4 chiffres avant de comparer', () => {
@@ -1034,6 +1173,46 @@ describe('calculateFunding — alertes publiées par l\'OPCO', () => {
       variantes_branche: [{ id: 'of', branche_nom: 'Organismes de formation', idcc: ['1516'], source_url: 'x', confidence: 'exact' }],
     });
     expect(calculateFunding(opco, makeFormationState({ selectedBrancheId: 'of' })).alertes).toEqual([a]);
+  });
+
+  describe('variante de branche groupée (plusieurs IDCC) ou à un seul IDCC', () => {
+    const gros = alerte({ branche: 'Commerces de gros', idcc: ['0573'], verifie_le: '2026-01-09' });
+    const dechet = alerte({ branche: 'Activités du déchet', idcc: ['2149'] });
+    const opcoAvecVariante = (idcc: string[]): OpcoData =>
+      makeOpco({
+        alertes: [gros, dechet],
+        variantes_branche: [{ id: 'groupe', branche_nom: 'Branches groupées', idcc, source_url: 'x', confidence: 'exact' }],
+      });
+
+    it('variante groupée appliquée par l\'IDCC détecté : seule l\'alerte de la convention de l\'entreprise est retenue', () => {
+      const r = calculateFunding(opcoAvecVariante(['0573', '2149']), makeFormationState({ detectedIdcc: '0573' }));
+      expect(r.brancheAppliquee).toBe('Branches groupées');
+      expect(r.alertes).toEqual([gros]); // et non aussi celle du déchet (2149), autre convention du même groupe
+      expect(avertissementsEpuisement(r.warnings)).toHaveLength(1);
+      expect(r.warnings.some((w) => w.includes('Activités du déchet'))).toBe(false);
+    });
+
+    it('variante à un seul IDCC choisie manuellement, sans IDCC détecté : l\'alerte de cet IDCC est retenue', () => {
+      const r = calculateFunding(opcoAvecVariante(['0573']), makeFormationState({ selectedBrancheId: 'groupe', detectedIdcc: null }));
+      expect(r.brancheAppliquee).toBe('Branches groupées');
+      expect(r.alertes).toEqual([gros]);
+      expect(avertissementsEpuisement(r.warnings)).toHaveLength(1);
+    });
+
+    it('variante groupée choisie manuellement, sans IDCC détecté : aucune convention n\'est supposée, donc aucune alerte de branche', () => {
+      const r = calculateFunding(opcoAvecVariante(['0573', '2149']), makeFormationState({ selectedBrancheId: 'groupe', detectedIdcc: null }));
+      expect(r.brancheAppliquee).toBe('Branches groupées'); // le barème de la variante s'applique quand même
+      expect(r.alertes).toEqual([]);
+      expect(avertissementsEpuisement(r.warnings)).toEqual([]);
+    });
+
+    it('variante groupée : les IDCC des établissements restent pris en compte', () => {
+      const r = calculateFunding(
+        opcoAvecVariante(['0573', '2149']),
+        makeFormationState({ detectedIdcc: '0573', idccEtablissements: ['0573', '2149'] }),
+      );
+      expect(r.alertes).toEqual([gros, dechet]);
+    });
   });
 
   it('sans alertes dans l\'OPCO : liste vide, jamais undefined', () => {

@@ -134,6 +134,7 @@ export const AlerteOpcoSchema = z.object({
 export const OpcoDataSchema = z.object({
   slug: z.string().min(1),
   name: z.string().min(1),
+  nom_complet: z.string().optional(),
   secteurs: z.string(),
   secteurs_source: z.string(),
   email_contact: z.string(),

@@ -653,11 +653,14 @@ function generateNextSteps(opco: OpcoData): { label: string; url: string }[] {
 // ---------------------------------------------------------------------------
 
 /**
- * IDCC de l'entreprise : celui détecté, ceux de ses établissements et ceux de la
- * branche appliquée (y compris par choix manuel), sur 4 chiffres et sans doublon.
+ * IDCC de l'entreprise : celui détecté, ceux de ses établissements et, quand la branche appliquée (y compris par choix
+ * manuel) n'en compte qu'un seul, celui de cette branche ; sur 4 chiffres et sans doublon.
+ * Une variante groupée (plusieurs IDCC) n'ajoute rien : elle ne dit pas de laquelle de ces conventions l'entreprise relève,
+ * et lui prêter toutes celles du groupe lui ferait recevoir les alertes et dispositifs des autres.
  */
 function idccEntreprise(state: WizardState, variante: VarianteBranche | null): string[] {
-  const codes = [state.detectedIdcc, ...(state.idccEtablissements ?? []), ...(variante?.idcc ?? [])];
+  const idccDeLaBranche = variante?.idcc.length === 1 ? variante.idcc : [];
+  const codes = [state.detectedIdcc, ...(state.idccEtablissements ?? []), ...idccDeLaBranche];
   const normalises = codes.filter((c): c is string => !!c).map((c) => c.padStart(4, '0'));
   return [...new Set(normalises)];
 }
@@ -724,6 +727,7 @@ function evaluateDispositifs(
       conditions: d.conditions,
       demarches: d.demarches,
       publics: d.publics,
+      ...(d.note !== undefined ? { note: d.note } : {}),
       confidence: d.confidence,
       sourceUrl: d.source_url,
     });
@@ -753,6 +757,18 @@ function generateDemarches(opco: OpcoData, dispositifs: DispositifEligible[]): s
     );
   }
   return steps;
+}
+
+/**
+ * Démarches d'une entreprise de 50 salariés et plus quand l'OPCO ne publie aucune enveloppe pour sa taille : le plan de
+ * développement des compétences mutualisé lui est fermé, elles remplacent les démarches générales.
+ */
+function demarchesPdcFerme(opco: OpcoData): string[] {
+  return [
+    `Votre entreprise compte 50 salariés ou plus : le plan de développement des compétences est financé sur ses fonds propres (${REFERENCE_REGLE_50_SALARIES}).`,
+    `Demandez à ${opco.name} si votre branche prévoit des fonds conventionnels ou un plan volontaire pour les entreprises de votre taille.`,
+    'Consultez les autres financements mobilisables (CPF, Région, France Travail, Transitions Pro…) avant de démarrer la formation.',
+  ];
 }
 
 // ---------------------------------------------------------------------------
@@ -919,6 +935,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
     opcoEmail: opcoData.email_contact,
     opcoUrl: opcoData.url_finance_page,
     dispositifPrincipal,
+    pdcFerme,
     brancheAppliquee,
     lines: allLines,
     totalRequested: arrondi(totalRequested),
@@ -932,7 +949,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
     warnings,
     alertes,
     conditions: generateConditions(opcoData, state),
-    demarches: generateDemarches(opcoData, dispositifsComplementaires),
+    demarches: pdcFerme ? demarchesPdcFerme(opcoData) : generateDemarches(opcoData, dispositifsComplementaires),
     nextSteps: generateNextSteps(opcoData),
     delaiValidation: opcoData.delai_validation,
     modePaiement: opcoData.mode_paiement,

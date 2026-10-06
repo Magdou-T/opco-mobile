@@ -1,6 +1,7 @@
 {
   "slug": "akto",
   "name": "AKTO",
+  "nom_complet": "Opérateur de compétences des services à forte intensité de main-d'œuvre",
   "secteurs": "Services à forte intensité de main-d'œuvre : hôtels-cafés-restaurants, restauration rapide et collective, propreté, travail temporaire, prévention-sécurité, commerces de gros, organismes de formation, enseignement privé, déchet, autoroutes, portage salarial, etc.",
   "secteurs_source": "https://www.akto.fr/entreprise/financer-une-formation/regles-de-prise-en-charge/",
   "email_contact": "",

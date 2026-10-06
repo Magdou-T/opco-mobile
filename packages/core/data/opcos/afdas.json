@@ -1,6 +1,7 @@
 {
   "slug": "afdas",
   "name": "AFDAS",
+  "nom_complet": "Opérateur de compétences des secteurs de la culture, des médias, des loisirs et du sport",
   "secteurs": "Culture, industries créatives, médias, communication, télécommunications, sport, tourisme, loisirs et divertissement",
   "secteurs_source": "https://www.afdas.com/lafdas/nos-branches-professionnelles.html",
   "email_contact": "",

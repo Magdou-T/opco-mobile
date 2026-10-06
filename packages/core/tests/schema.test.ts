@@ -130,6 +130,21 @@ describe('schéma — champs des barèmes vérifiés (v2)', () => {
     });
   });
 
+  describe('nom complet de l\'OPCO', () => {
+    it('conserve nom_complet au parsing d\'un OPCO complet', () => {
+      const opco = makeOpco({ nom_complet: 'Opérateur de compétences de test' });
+      expect(OpcoDataSchema.parse(opco).nom_complet).toBe('Opérateur de compétences de test');
+    });
+
+    it('reste facultatif', () => {
+      expect(OpcoDataSchema.parse(makeOpco()).nom_complet).toBeUndefined();
+    });
+
+    it('refuse une valeur qui n\'est pas une chaîne', () => {
+      expect(OpcoDataSchema.safeParse({ ...makeOpco(), nom_complet: 42 }).success).toBe(false);
+    });
+  });
+
   describe('unité du forfait de restauration', () => {
     const variante = { id: 'hcr', branche_nom: 'Hôtels, cafés, restaurants', idcc: ['1979'], source_url: source, confidence: 'exact' as const };
 

@@ -1,6 +1,7 @@
 {
   "slug": "constructys",
   "name": "Constructys",
+  "nom_complet": "Opérateur de compétences de la construction",
   "secteurs": "Bâtiment, Travaux publics et Négoce des matériaux de construction",
   "secteurs_source": "https://www.constructys.fr/vos-contributions/adhesion-a-constructys/",
   "email_contact": "",

@@ -1,6 +1,7 @@
 {
   "slug": "opcommerce",
   "name": "L'Opcommerce",
+  "nom_complet": "Opérateur de compétences du commerce",
   "secteurs": "Commerce (20 branches professionnelles) : commerce de détail alimentaire non spécialisé, commerce à prédominance alimentaire, commerce de détail alimentaire spécialisé, commerces de détail non alimentaires, optique-lunetterie, bureau et numérique, import-export, sport-loisirs, bricolage, habillement, horlogerie-bijouterie, jardineries, commerce à distance… et entreprises du commerce sans convention collective",
   "secteurs_source": "https://www.lopcommerce.com/lopcommerce/les-20-branches-professionnelles/les-branches-professionnelles-de-lopcommerce/",
   "email_contact": "",

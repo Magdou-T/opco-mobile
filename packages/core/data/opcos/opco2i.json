@@ -1,6 +1,7 @@
 {
   "slug": "opco2i",
   "name": "OPCO 2i",
+  "nom_complet": "Opérateur de compétences interindustriel",
   "secteurs": "Interindustrie : métallurgie, chimie, pharmacie, plasturgie et composites, papier-carton, textile, habillement, ameublement, verre, céramique, matériaux, pétrole, industries électriques et gazières, recyclage… (29 branches professionnelles selon OPCO 2i, septembre 2026)",
   "secteurs_source": "https://www.opco2i.fr/wp-content/uploads/2026/09/opco2i-communique-de-presse-opco2i-accelere-la-transformation-de-son-accompagnement.pdf",
   "email_contact": "contact@opco2i.fr",

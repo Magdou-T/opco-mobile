@@ -1,6 +1,7 @@
 {
   "slug": "uniformation",
   "name": "Uniformation",
+  "nom_complet": "Opérateur de compétences de la cohésion sociale",
   "secteurs": "Cohésion sociale (16 branches professionnelles) : aide à domicile, animation (ÉCLAT), acteurs du lien social et familial (ALISFA), ateliers et chantiers d'insertion, régies de quartier, missions locales, habitat social (ESH, OPCHS), habitat et logement accompagnés, mutualité, sécurité sociale, retraite complémentaire et prévoyance, tourisme social et familial",
   "secteurs_source": "https://www.uniformation.fr/contacts",
   "email_contact": "",
