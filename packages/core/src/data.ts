@@ -2,18 +2,14 @@
 // Données embarquées (fallback hors-ligne / source de secours).
 // Agrège, en structures prêtes à l'emploi :
 //   - les barèmes des 11 OPCO (data/opcos) ;
-//   - la table IDCC → OPCO et les suggestions d'OPCO par code NAF (data/idcc) ;
-//   - le catalogue d'aides, nationales puis régionales, et les portails
-//     régionaux officiels (data/aides).
+//   - la table IDCC → OPCO et les suggestions d'OPCO par code NAF (data/idcc).
+// Le catalogue d'aides et les portails régionaux (data/aides) vivent dans data-aides.ts, le plus lourd des jeux de
+// données : ils sont réexportés ici pour que l'API publique ne change pas, sans que ce module n'importe leurs JSON.
 // ============================================================
 
 import type { OpcoData } from './types';
 import idccData from '../data/idcc/idcc-opco.json';
 import nafData from '../data/idcc/naf-suggestions.json';
-import aidesNationalesData from '../data/aides/nationales.json';
-import aidesRegionalesData from '../data/aides/regions.json';
-import portailsData from '../data/aides/portails.json';
-import type { Aide, FichierAides, FichierPortails, PortailRegional } from './aides/types';
 import type { IdccTable, SuggestionNaf } from './opco-resolver';
 
 import afdasData from '../data/opcos/afdas.json';
@@ -69,11 +65,5 @@ export const EMBEDDED_IDCC = idccData as unknown as IdccTable;
 /** Suggestions d'OPCO par code NAF (utilisées sans IDCC exploitable). */
 export const EMBEDDED_NAF = nafData as unknown as SuggestionNaf[];
 
-/** Catalogue d'aides embarqué : nationales puis régionales. */
-export const EMBEDDED_AIDES: Aide[] = [
-  ...(aidesNationalesData as unknown as FichierAides).aides,
-  ...(aidesRegionalesData as unknown as FichierAides).aides,
-];
-
-/** Portails officiels par région (« pour aller plus loin »). */
-export const EMBEDDED_PORTAILS: PortailRegional[] = (portailsData as unknown as FichierPortails).portails;
+/** Catalogue d'aides embarqué (nationales puis régionales) et portails officiels par région : voir data-aides.ts. */
+export { EMBEDDED_AIDES, EMBEDDED_PORTAILS } from './data-aides';

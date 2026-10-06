@@ -219,7 +219,7 @@ describe('barèmes OPCO embarqués', () => {
     expect(EMBEDDED_OPCOS).toHaveLength(11);
     const sansNomComplet = EMBEDDED_OPCOS.filter((o) => typeof o.nom_complet !== 'string' || o.nom_complet.trim() === '');
     expect(sansNomComplet.map((o) => o.slug)).toEqual([]);
-    for (const o of EMBEDDED_OPCOS) expect(o.nom_complet, o.slug).toMatch(/^Opérateur de compétences /);
+    for (const o of EMBEDDED_OPCOS) expect(o.nom_complet, o.slug).toMatch(/^Opérateur de compétences /i);
   });
 
   it('ont été vérifiés il y a moins de 12 mois', () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import {
   AlerteOpcoSchema,
   DispositifComplementaireSchema,
@@ -9,8 +9,9 @@ import {
   sanityCheckOpco,
 } from '../src/schema';
 import { ALERTE_OPCO_LABELS } from '../src/types';
-import type { AlerteOpco } from '../src/types';
+import type { AlerteOpco, FreeText, OpcoData } from '../src/types';
 import { EMBEDDED_OPCOS } from '../src/data';
+import paquet from '../package.json';
 import { makeOpco } from './fixtures';
 
 describe('schéma — dataset embarqué', () => {
@@ -357,5 +358,81 @@ describe('schéma — champs des barèmes vérifiés (v2)', () => {
       expect(OpcoDataSchema.safeParse(avecAlerte({ verifie_le: '' })).success).toBe(false);
       expect(OpcoDataSchema.safeParse(avecAlerte({ verifie_le: '2026-10-05' })).success).toBe(true);
     });
+  });
+});
+
+// Les champs descriptifs libres : les données réelles mélangent texte, objet détaillé { description, source_url, … } et null
+// (OPCO EP, OPCO Santé, Uniformation). Le type doit dire ce que le schéma accepte, sans quoi un composant typé « string »
+// reçoit un objet sans le savoir. Ces champs ne pilotent pas le calcul.
+describe('schéma et types — textes libres des OPCO (FreeText)', () => {
+  const CHAMPS_TEXTE_LIBRE = [
+    'delai_validation',
+    'alternance_apprentissage',
+    'alternance_professionnalisation',
+    'cpf_details',
+    'vae_details',
+    'limite_dossiers_an',
+  ] as const;
+  type ChampTexteLibre = (typeof CHAMPS_TEXTE_LIBRE)[number];
+  const objetDetaille = { description: 'Forfait selon la branche', source_url: 'https://exemple.fr/forfaits', verifie: true };
+
+  it.each(CHAMPS_TEXTE_LIBRE)('%s : le schéma accepte une chaîne, un objet détaillé et null, et les conserve tels quels', (champ) => {
+    for (const valeur of ['Texte libre', '', objetDetaille, null]) {
+      const resultat = OpcoDataSchema.safeParse({ ...makeOpco(), [champ]: valeur });
+      expect(resultat.success, `${champ} = ${JSON.stringify(valeur)}`).toBe(true);
+      if (resultat.success) expect(resultat.data[champ]).toEqual(valeur);
+    }
+  });
+
+  it.each(CHAMPS_TEXTE_LIBRE)('%s : le schéma refuse un nombre, un booléen et un tableau', (champ) => {
+    for (const valeur of [42, true, ['texte']]) {
+      expect(OpcoDataSchema.safeParse({ ...makeOpco(), [champ]: valeur }).success, `${champ} = ${JSON.stringify(valeur)}`).toBe(false);
+    }
+  });
+
+  // Les deux tests suivants ne peuvent échouer qu'à la compilation (`tsc --noEmit` : le dossier tests en fait partie).
+  it('le type OpcoData accepte une chaîne, un objet détaillé et null pour chacun des six champs', () => {
+    const vae: OpcoData['vae_details'] = { description: 'VAE plafonnée par parcours', source_url: 'https://exemple.fr/vae' };
+    // @ts-expect-error un nombre n'est pas un texte libre
+    const nombre: OpcoData['vae_details'] = 42;
+    expect(OpcoDataSchema.shape.vae_details.safeParse(vae).success).toBe(true); // le schéma accepte ce que le type accepte…
+    expect(OpcoDataSchema.shape.vae_details.safeParse(nombre).success).toBe(false); // …et refuse ce que le type refuse
+
+    const opco: OpcoData = makeOpco({
+      delai_validation: objetDetaille,
+      alternance_apprentissage: { description: 'Niveaux de prise en charge par certification' },
+      alternance_professionnalisation: 'Forfait horaire fixé par la branche',
+      cpf_details: null,
+      vae_details: { vae_simple: { value: 1500, note: 'plafond par parcours' }, vae_mixte: null },
+      limite_dossiers_an: null,
+    });
+    expect(OpcoDataSchema.safeParse(opco).success).toBe(true); // un OpcoData ainsi typé passe le schéma
+  });
+
+  it('chacun des six champs a exactement le type FreeText, dans OpcoData comme dans le type déduit du schéma', () => {
+    type OpcoParse = ReturnType<typeof OpcoDataSchema.parse>;
+    expectTypeOf<Pick<OpcoData, ChampTexteLibre>>().toEqualTypeOf<Record<ChampTexteLibre, FreeText>>();
+    expectTypeOf<Pick<OpcoParse, ChampTexteLibre>>().toEqualTypeOf<Record<ChampTexteLibre, FreeText>>();
+    expectTypeOf<FreeText>().toEqualTypeOf<string | Record<string, unknown> | null>();
+  });
+});
+
+// Le catalogue d'aides (le plus lourd des jeux de données) vit dans son propre module : un composant du site qui n'importe que
+// les barèmes ou la table IDCC n'embarque pas le catalogue, à condition que le paquet se déclare sans effet de bord.
+describe('données embarquées — catalogue d\'aides séparé du reste', () => {
+  it('data.ts et l\'index du paquet exposent toujours le catalogue et les portails, avec les mêmes références que data-aides', async () => {
+    const aides = await import('../src/data-aides');
+    const data = await import('../src/data');
+    const index = await import('../src/index');
+    expect(aides.EMBEDDED_AIDES.length).toBeGreaterThan(0);
+    expect(aides.EMBEDDED_PORTAILS.length).toBeGreaterThan(0);
+    expect(data.EMBEDDED_AIDES).toBe(aides.EMBEDDED_AIDES);
+    expect(data.EMBEDDED_PORTAILS).toBe(aides.EMBEDDED_PORTAILS);
+    expect(index.EMBEDDED_AIDES).toBe(aides.EMBEDDED_AIDES);
+    expect(index.EMBEDDED_PORTAILS).toBe(aides.EMBEDDED_PORTAILS);
+  });
+
+  it('le paquet se déclare sans effet de bord (sideEffects false) : un bundler écarte les données qu\'aucun import n\'utilise', () => {
+    expect((paquet as { sideEffects?: unknown }).sideEffects).toBe(false);
   });
 });

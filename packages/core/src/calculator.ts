@@ -955,7 +955,8 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
     conditions: generateConditions(opcoData, state),
     demarches: pdcFerme ? demarchesPdcFerme(opcoData) : generateDemarches(opcoData, dispositifsComplementaires),
     nextSteps: generateNextSteps(opcoData),
-    delaiValidation: opcoData.delai_validation,
+    // Champ libre de l'OPCO (texte, objet détaillé ou null) : le résultat reste une chaîne, comme dans les démarches.
+    delaiValidation: typeof opcoData.delai_validation === 'string' ? opcoData.delai_validation : '',
     modePaiement: opcoData.mode_paiement,
   };
 }

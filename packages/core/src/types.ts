@@ -42,6 +42,13 @@ export type PorteeBudget = 'global' | 'pedagogie';
  */
 export type UniteRestauration = 'repas' | 'jour';
 
+/**
+ * Champ descriptif libre d'un OPCO : texte libre ou objet détaillé { description, source_url, … } (null quand rien n'est
+ * publié). Les données réelles mélangent les trois formes (OPCO EP, OPCO Santé, Uniformation) et FreeTextSchema les accepte.
+ * Ces champs ne pilotent pas le calcul : un consommateur qui les affiche doit tolérer l'objet et null.
+ */
+export type FreeText = string | Record<string, unknown> | null;
+
 export interface OpcoData {
   slug: string;
   name: string;
@@ -99,23 +106,23 @@ export interface OpcoData {
 
   // Processus
   processus_approbation: string;
-  delai_validation: string;
+  delai_validation: FreeText;
   mode_paiement: string;
 
   // Alternance
-  alternance_apprentissage: string;
-  alternance_professionnalisation: string;
+  alternance_apprentissage: FreeText;
+  alternance_professionnalisation: FreeText;
 
   // CPF
   cpf_abondement: boolean;
-  cpf_details: string;
+  cpf_details: FreeText;
 
   // VAE
   vae_possible: boolean;
-  vae_details: string;
+  vae_details: FreeText;
 
   // Limites
-  limite_dossiers_an: string;
+  limite_dossiers_an: FreeText;
 
   // Spécificités
   specificites: string;
@@ -544,6 +551,7 @@ export interface FundingResult {
   /** Démarches concrètes, dans l'ordre, pour obtenir le financement. */
   demarches: string[];
   nextSteps: { label: string; url: string }[];
+  /** Délai de validation publié par l'OPCO, en texte ; chaîne vide quand son champ libre est un objet détaillé ou null. */
   delaiValidation: string;
   modePaiement: string;
 }

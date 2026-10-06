@@ -1073,6 +1073,50 @@ describe('calculateFunding — dispositifs réservés à certaines conventions c
     expect(idsRetenus(opco, { detectedIdcc: '1702' })).toEqual(['transition-ecologique']);
   });
 
+  describe('variante groupée choisie à la main et IDCC connu hors de la variante (3333)', () => {
+    const groupe = (): Partial<OpcoData> => ({
+      variantes_branche: [{ id: 'travaux-publics', branche_nom: 'Travaux publics', idcc: ['1702', '2614'], source_url: 'x', confidence: 'exact' }],
+    });
+
+    it('n\'ouvre pas le dispositif réservé à l\'une des conventions de la variante', () => {
+      const opco = opcoAvecDispositif(dispositif({ idcc: ['1702'] }), groupe());
+      expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: '3333' })).toEqual([]);
+      expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null, idccEtablissements: ['3333'] })).toEqual([]);
+    });
+
+    it('symétrique : offre le dispositif réservé à l\'IDCC connu, et lui seul', () => {
+      const opco = makeOpco({
+        dispositifs_complementaires: [
+          dispositif({ id: 'tp-1702', idcc: ['1702'] }),
+          dispositif({ id: 'tp-2614', idcc: ['2614'] }),
+          dispositif({ id: 'autre-3333', idcc: ['3333'] }),
+        ],
+        ...groupe(),
+      });
+      expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: '3333' })).toEqual(['autre-3333']);
+      expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', detectedIdcc: null, idccEtablissements: ['3333'] })).toEqual(['autre-3333']);
+    });
+
+    it('un IDCC vide (détecté ou d\'établissement) compte comme « aucun IDCC connu » : la branche choisie ouvre les dispositifs de chacune de ses conventions', () => {
+      const opco = makeOpco({
+        dispositifs_complementaires: [
+          dispositif({ id: 'tp-1702', idcc: ['1702'] }),
+          dispositif({ id: 'tp-2614', idcc: ['2614'] }),
+          dispositif({ id: 'autre-3333', idcc: ['3333'] }),
+        ],
+        ...groupe(),
+      });
+      const etats: Parameters<typeof makeFormationState>[0][] = [
+        { detectedIdcc: '' },
+        { detectedIdcc: null, idccEtablissements: [''] },
+        { detectedIdcc: '', idccEtablissements: [''] },
+      ];
+      for (const etat of etats) {
+        expect(idsRetenus(opco, { selectedBrancheId: 'travaux-publics', ...etat }), JSON.stringify(etat)).toEqual(['tp-1702', 'tp-2614']);
+      }
+    });
+  });
+
   it('normalise les IDCC sur 4 chiffres avant de comparer', () => {
     const opco = opcoAvecDispositif(dispositif({ idcc: ['0702'] }));
     expect(idsRetenus(opco, { detectedIdcc: '702' })).toEqual(['transition-ecologique']);
@@ -1240,6 +1284,34 @@ describe('calculateFunding — alertes publiées par l\'OPCO', () => {
         makeFormationState({ detectedIdcc: '0573', idccEtablissements: ['0573', '2149'] }),
       );
       expect(r.alertes).toEqual([gros, dechet]);
+    });
+
+    it('variante groupée choisie manuellement avec un IDCC connu hors de la variante : elle n\'ajoute rien, seule l\'alerte de cet IDCC (et celles de toutes les branches) est retenue', () => {
+      const autre = alerte({ branche: 'Autre convention', idcc: ['3333'] });
+      const toutes = alerte({ type: 'changement_paiement', branche: 'Toutes branches', idcc: [] });
+      const opco = makeOpco({
+        alertes: [gros, dechet, autre, toutes],
+        variantes_branche: [{ id: 'groupe', branche_nom: 'Branches groupées', idcc: ['0573', '2149'], source_url: 'x', confidence: 'exact' }],
+      });
+      const r = calculateFunding(opco, makeFormationState({ selectedBrancheId: 'groupe', detectedIdcc: '3333' }));
+      expect(r.brancheAppliquee).toBe('Branches groupées'); // le choix manuel donne le barème, il ne donne pas les IDCC du groupe
+      expect(r.alertes).toEqual([autre, toutes]); // ni celle de 0573 ni celle de 2149 : l'entreprise déclare 3333, hors du groupe
+      expect(avertissementsEpuisement(r.warnings)).toHaveLength(1); // le fonds épuisé de 3333 seul ; l'alerte de toutes les branches est un changement de paiement
+      expect(r.warnings.some((w) => w.includes('Commerces de gros') || w.includes('Activités du déchet'))).toBe(false);
+    });
+
+    it('un IDCC vide (détecté ou d\'établissement) compte comme « aucun IDCC connu » : la variante groupée choisie à la main garde tous ses IDCC', () => {
+      const etats: Parameters<typeof makeFormationState>[0][] = [
+        { detectedIdcc: '' },
+        { detectedIdcc: null, idccEtablissements: [''] },
+        { detectedIdcc: '', idccEtablissements: [''] },
+      ];
+      for (const etat of etats) {
+        const r = calculateFunding(opcoAvecVariante(['0573', '2149']), makeFormationState({ selectedBrancheId: 'groupe', ...etat }));
+        expect(r.brancheAppliquee, JSON.stringify(etat)).toBe('Branches groupées');
+        expect(r.alertes, JSON.stringify(etat)).toEqual([gros, dechet]);
+        expect(avertissementsEpuisement(r.warnings), JSON.stringify(etat)).toHaveLength(2);
+      }
     });
   });
 
@@ -1832,6 +1904,33 @@ describe('calculateFunding — plafond annuel estimé : mention « à confirmer 
         for (const m of messages) expect(m.endsWith('.'), m).toBe(true);
       },
     );
+  });
+});
+
+describe('calculateFunding — délai de validation (texte libre de l\'OPCO)', () => {
+  // delai_validation est un champ libre : le schéma accepte aussi un objet détaillé ou null. Le résultat reste une chaîne
+  // (l'application mobile l'affiche telle quelle dans un <Text>, un objet y planterait) : sans texte, chaîne vide.
+  const resultat = (delai_validation: OpcoData['delai_validation']) => calculateFunding(makeOpco({ delai_validation }), makeFormationState());
+  const objetDetaille = { description: 'Réponse sous 30 jours', source_url: 'https://exemple.fr/delais' };
+
+  it('recopie le délai publié quand c\'est un texte, et l\'ajoute aux démarches', () => {
+    const r = resultat('2-3 semaines');
+    expect(r.delaiValidation).toBe('2-3 semaines');
+    expect(r.demarches).toContain('Délai : 2-3 semaines');
+  });
+
+  it('donne une chaîne vide quand l\'OPCO publie un objet détaillé ou rien : le résultat reste une chaîne', () => {
+    for (const delai of [objetDetaille, null]) {
+      const r = resultat(delai);
+      expect(r.delaiValidation, JSON.stringify(delai)).toBe('');
+      expect(typeof r.delaiValidation).toBe('string');
+    }
+  });
+
+  it('n\'ajoute aucune étape « Délai » aux démarches quand le délai n\'est pas un texte, ni quand il est vide', () => {
+    for (const delai of [objetDetaille, null, '']) {
+      expect(resultat(delai).demarches.some((d) => d.startsWith('Délai')), JSON.stringify(delai)).toBe(false);
+    }
   });
 });
 
