@@ -11,3 +11,4 @@ export * from './data';
 export * from './geo';
 export * from './entreprise';
 export * from './aides/types';
+export * from './aides/criteres';
