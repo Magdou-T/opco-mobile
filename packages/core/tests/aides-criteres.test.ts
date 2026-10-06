@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { evaluerCriteres, regionDeReference } from '../src/aides/criteres';
 import type { CriteresAide, ProfilAides } from '../src/aides/types';
+import { TRAINING_TYPE_LABELS, type TrainingType } from '../src/types';
 import { makeProfil } from './fixtures-aides';
 
 describe('evaluerCriteres', () => {
@@ -13,7 +14,7 @@ describe('evaluerCriteres', () => {
     ['région ko', { regions: ['84'] }, {}, 'ko'],
     ['région inconnue', { regions: ['11'] }, { regionEntreprise: null }, 'inconnu'],
     ['région du bénéficiaire', { regions: ['76'], perimetre_region: 'beneficiaire' }, { regionBeneficiaire: '76' }, 'ok'],
-    ['bénéficiaire sans région : celle de l’entreprise', { regions: ['11'], perimetre_region: 'beneficiaire' }, {}, 'ok'],
+    ["bénéficiaire sans région : celle de l'entreprise", { regions: ['11'], perimetre_region: 'beneficiaire' }, {}, 'ok'],
     ['département', { departements: ['95'] }, {}, 'ok'],
     ['effectif sous le seuil', { effectif_max: 249 }, { effectifMin: 0, effectifMax: 10 }, 'ok'],
     ['effectif dans une tranche ambiguë', { effectif_max: 249 }, { effectifMin: 50, effectifMax: 299 }, 'inconnu'],
@@ -29,7 +30,7 @@ describe('evaluerCriteres', () => {
     ['niveau visé trop élevé', { niveau_certification_max: 4 }, { niveauFormationVise: 5 }, 'ko'],
     ['niveau visé inconnu', { niveau_certification_max: 4 }, { niveauFormationVise: null }, 'inconnu'],
     ['contrat', { contrats: ['cdi'] }, { contrat: 'cdd' }, 'ko'],
-    ['type d’alternance', { types_alternance: ['apprentissage'] }, { typeAlternance: 'apprentissage' }, 'ok'],
+    ["type d'alternance", { types_alternance: ['apprentissage'] }, { typeAlternance: 'apprentissage' }, 'ok'],
     ['ancienneté insuffisante', { anciennete_min_mois: 24 }, { ancienneteMois: 12 }, 'ko'],
     ['inscription France Travail inconnue', { inscrit_france_travail: true }, { inscritFranceTravail: null }, 'inconnu'],
     ['statut du dirigeant', { statuts_dirigeant: ['artisan'] }, { statutDirigeant: 'artisan' }, 'ok'],
@@ -158,6 +159,18 @@ describe('evaluerCriteres', () => {
     ['Qualiopi : organisme certifié', { qualiopi_requis: true }, { qualiopi: true }, 'ok'],
     ['CPF : formation éligible', { eligible_cpf: true }, { eligibleCpf: true }, 'ok'],
     ['CPF : formation non éligible', { eligible_cpf: true }, { eligibleCpf: false }, 'ko'],
+
+    // --- Type de formation du parcours (VAE, CQP…) : distinct de la certification visée
+    ['type de formation : le type réservé', { types_formation: ['vae'] }, { typeFormation: 'vae' }, 'ok'],
+    ['type de formation : un autre type', { types_formation: ['vae'] }, { typeFormation: 'certification' }, 'ko'],
+    ['type de formation inconnu', { types_formation: ['vae'] }, { typeFormation: null }, 'inconnu'],
+    ["type de formation : premier type d'une liste de deux", { types_formation: ['vae', 'reconversion'] }, { typeFormation: 'vae' }, 'ok'],
+    ["type de formation : second type d'une liste de deux", { types_formation: ['vae', 'reconversion'] }, { typeFormation: 'reconversion' }, 'ok'],
+    ["type de formation : hors d'une liste de deux", { types_formation: ['vae', 'reconversion'] }, { typeFormation: 'cqp' }, 'ko'],
+    ['type de formation inconnu avec une liste de deux', { types_formation: ['vae', 'reconversion'] }, { typeFormation: null }, 'inconnu'],
+    ["type de formation : la certification visée n'est pas le type (RNCP, type « certification »)", { types_formation: ['vae'] }, { certification: 'rncp', typeFormation: 'certification' }, 'ko'],
+    ['type de formation : seul le type du parcours compte, pas la certification visée', { types_formation: ['vae'] }, { certification: 'aucune', typeFormation: 'vae' }, 'ok'],
+    ["type de formation : une certification homonyme du type n'y change rien", { types_formation: ['cqp'] }, { certification: 'cqp', typeFormation: 'qualification' }, 'ko'],
   ];
 
   it.each(cas)('%s', (_nom, criteres, profil, attendu) => {
@@ -170,7 +183,7 @@ describe('evaluerCriteres', () => {
     expect(r.raisonsKo.some((x) => x.includes('29 ans'))).toBe(true);
   });
 
-  it('ko l’emporte sur inconnu', () => {
+  it("ko l'emporte sur inconnu", () => {
     const r = evaluerCriteres({ regions: ['84'], age_max: 29 }, makeProfil({ age: null }));
     expect(r.etat).toBe('ko');
     expect(r.raisonsInconnu.length).toBe(1);
@@ -262,6 +275,78 @@ describe('evaluerCriteres : code NAF', () => {
   });
 });
 
+describe('evaluerCriteres : type de formation', () => {
+  const TYPES = Object.keys(TRAINING_TYPE_LABELS) as TrainingType[];
+  const bilan = (types: TrainingType[], typeFormation: TrainingType | null) =>
+    evaluerCriteres({ types_formation: types }, makeProfil({ typeFormation }));
+
+  it('les sept types du parcours sont couverts', () => {
+    expect(TYPES).toEqual(['non_certifiante', 'qualification', 'certification', 'vae', 'reconversion', 'cqp', 'habilitation']);
+  });
+
+  it.each(TYPES)('critère limité au type %s : ok pour ce type, ko pour chacun des six autres, inconnu sans type', (type) => {
+    expect(bilan([type], type)).toEqual({ etat: 'ok', raisonsKo: [], raisonsInconnu: [] });
+    expect(TYPES.filter((autre) => autre !== type && bilan([type], autre).etat !== 'ko')).toEqual([]);
+    expect(bilan([type], null).etat).toBe('inconnu');
+  });
+
+  it('une liste de deux types accepte chacun des deux et refuse les cinq autres', () => {
+    const acceptes = TYPES.filter((t) => bilan(['qualification', 'cqp'], t).etat === 'ok');
+    expect(acceptes).toEqual(['qualification', 'cqp']);
+    expect(TYPES.filter((t) => !acceptes.includes(t) && bilan(['qualification', 'cqp'], t).etat !== 'ko')).toEqual([]);
+  });
+
+  it("une liste vide n'impose aucune contrainte, comme un critère absent (le schéma la refuse)", () => {
+    expect(bilan([], 'cqp')).toEqual({ etat: 'ok', raisonsKo: [], raisonsInconnu: [] });
+    expect(bilan([], null)).toEqual({ etat: 'ok', raisonsKo: [], raisonsInconnu: [] });
+  });
+
+  it("sans critère de type, le type du parcours (connu ou non) n'est jamais examiné", () => {
+    for (const typeFormation of [...TYPES, null]) {
+      expect(evaluerCriteres({}, makeProfil({ typeFormation }))).toEqual({ etat: 'ok', raisonsKo: [], raisonsInconnu: [] });
+    }
+  });
+
+  it('ko : un seul type ne remplit pas le critère, la raison nomme les types réservés avec leurs libellés', () => {
+    expect(bilan(['vae'], 'certification')).toEqual({
+      etat: 'ko',
+      raisonsKo: ["Réservé aux formations de type : VAE (Validation des Acquis de l'Expérience)"],
+      raisonsInconnu: [],
+    });
+  });
+
+  it('inconnu : la raison demande de préciser le type de formation', () => {
+    expect(bilan(['vae'], null)).toEqual({
+      etat: 'inconnu',
+      raisonsKo: [],
+      raisonsInconnu: ['Précisez le type de formation'],
+    });
+  });
+
+  it("ordre des critères : le type de formation vient après la certification visée et avant l'éligibilité au CPF", () => {
+    const criteres: CriteresAide = { eligible_cpf: true, types_formation: ['vae'], certifications: ['rncp'] };
+    expect(evaluerCriteres(criteres, makeProfil({ certification: 'aucune', typeFormation: 'cqp', eligibleCpf: false })).raisonsKo).toEqual([
+      'Réservé aux formations menant à : RNCP (titre ou diplôme enregistré)',
+      "Réservé aux formations de type : VAE (Validation des Acquis de l'Expérience)",
+      'Réservé aux formations éligibles au CPF',
+    ]);
+    expect(evaluerCriteres(criteres, makeProfil({ certification: null, typeFormation: null, eligibleCpf: null })).raisonsInconnu).toEqual([
+      'Précisez la certification visée par la formation',
+      'Précisez le type de formation',
+      'Vérifiez que la formation est éligible au CPF',
+    ]);
+  });
+
+  it("ko l'emporte sur inconnu : un autre critère non rempli suffit, le type inconnu reste signalé", () => {
+    const r = evaluerCriteres({ types_formation: ['vae'], age_max: 29 }, makeProfil({ typeFormation: null, age: 40 }));
+    expect(r).toEqual({
+      etat: 'ko',
+      raisonsKo: ['Réservé aux personnes de 29 ans au plus'],
+      raisonsInconnu: ['Précisez le type de formation'],
+    });
+  });
+});
+
 describe('evaluerCriteres : libellés des raisons', () => {
   const raisonsKo = (criteres: CriteresAide, profil: Partial<ProfilAides> = {}) =>
     evaluerCriteres(criteres, makeProfil(profil)).raisonsKo;
@@ -313,6 +398,18 @@ describe('evaluerCriteres : libellés des raisons', () => {
       { certification: 'aucune' },
       'Réservé aux formations menant à : RNCP (titre ou diplôme enregistré), Répertoire spécifique (RS)',
     ],
+    [
+      'type de formation',
+      { types_formation: ['vae'] },
+      { typeFormation: 'certification' },
+      "Réservé aux formations de type : VAE (Validation des Acquis de l'Expérience)",
+    ],
+    [
+      "types de formation (libellés du parcours, dans l'ordre du critère)",
+      { types_formation: ['reconversion', 'non_certifiante', 'cqp'] },
+      { typeFormation: 'vae' },
+      'Réservé aux formations de type : Reconversion professionnelle, Formation courte / non certifiante (plan de développement des compétences), CQP (Certificat de Qualification Professionnelle)',
+    ],
     ['éligibilité CPF', { eligible_cpf: true }, { eligibleCpf: false }, 'Réservé aux formations éligibles au CPF'],
     ['durée minimale', { duree_min_heures: 150 }, {}, 'Durée minimale : 150 h'],
     ['durée maximale', { duree_max_heures: 100 }, {}, 'Durée maximale : 100 h'],
@@ -352,6 +449,7 @@ describe('evaluerCriteres : libellés des raisons', () => {
     ['statut du dirigeant', { statuts_dirigeant: ['artisan'] }, { statutDirigeant: null }, 'Précisez le statut du dirigeant'],
     ['micro-entrepreneur', { micro_entrepreneur: true }, { microEntrepreneur: null }, 'Précisez si le dirigeant est micro-entrepreneur'],
     ['certification', { certifications: ['rncp'] }, { certification: null }, 'Précisez la certification visée par la formation'],
+    ['type de formation', { types_formation: ['vae'] }, { typeFormation: null }, 'Précisez le type de formation'],
     ['éligibilité CPF', { eligible_cpf: true }, { eligibleCpf: null }, 'Vérifiez que la formation est éligible au CPF'],
     ['durée', { duree_min_heures: 150 }, { dureeHeures: null }, 'Précisez la durée de la formation'],
     ['OPCO', { opcos: ['akto'] }, { opco: null }, "Identifiez l'OPCO de l'entreprise"],

@@ -139,8 +139,14 @@ export function evaluerAide(aide: Aide, p: ProfilAides, dateRef: string): AideEv
   const regionDuLien = region ?? p.regionBeneficiaire ?? p.regionEntreprise;
   const lienRegional = regionDuLien ? aide.liens_par_region?.[regionDuLien] : undefined;
   const autreRegion = !!aide.criteres.regions?.length && region != null && !aide.criteres.regions.includes(region);
+  // Aide propre à un type de formation (la VAE, par exemple) : hors périmètre quand le type du parcours est connu et
+  // différent ; type inconnu : l'aide reste visible (à vérifier).
+  const autreType =
+    !!aide.criteres.types_formation?.length &&
+    p.typeFormation != null &&
+    !aide.criteres.types_formation.includes(p.typeFormation);
   const horsPerimetre =
-    !aide.projets.includes(p.projet) || !aide.beneficiaires.includes(p.statutBeneficiaire) || autreRegion;
+    !aide.projets.includes(p.projet) || !aide.beneficiaires.includes(p.statutBeneficiaire) || autreRegion || autreType;
 
   return {
     id: aide.id,

@@ -2,9 +2,11 @@
 // Catalogue d'aides embarqué : corrections décidées à la revue du moteur
 // (table CORRECTIONS de scripts/integrer-recherches.mjs). Trois contrôles :
 //   1. catégories : une aide qui paie une dépense de la personne (permis, transport, hébergement, restauration,
-//      équipement, mobilité, fonds social, aide aux apprentis) n'est jamais déduite du coût de la formation ;
-//   2. modes : seule la rémunération de formation de France Travail reste en `par_mois`, et une majoration RQTH
-//      n'estime jamais un travailleur handicapé en dessous d'un autre demandeur d'emploi ;
+//      équipement, mobilité, fonds social, aide aux apprentis) n'est jamais déduite du coût de la formation, et une aide
+//      versée à une entreprise ou à une structure qui ne paie pas la formation elle-même est une aide à l'employeur ;
+//   2. modes : seule la rémunération de formation de France Travail reste en `par_mois`, une majoration RQTH
+//      n'estime jamais un travailleur handicapé en dessous d'un autre demandeur d'emploi, et seul le coût de la formation
+//      peut servir de base à un pourcentage ;
 //   3. forfaits : une aide versée sur une période sans lien avec la durée de la formation est un forfait.
 // ============================================================
 
@@ -106,6 +108,24 @@ const AIDES_A_LA_PERSONNE = [
   'r11-daeu',
 ];
 
+/**
+ * Aides versées à une entreprise ou à une structure, qui ne paient pas la formation elle-même (audit de la tâche 17b,
+ * corrigé à la tâche 17c) : r75-aiei-ingefor (50 % des salaires d'ingénierie interne préalable à une formation),
+ * r53-pass-transitions (conseil et diagnostic pour les entreprises de 50 salariés au plus), r01-iae-formation-salaries-insertion
+ * (subvention de fonctionnement d'une structure d'insertion).
+ */
+const AIDES_A_L_EMPLOYEUR = ['r75-aiei-ingefor', 'r53-pass-transitions', 'r01-iae-formation-salaries-insertion'];
+
+/** Subventions aux entreprises qui financent des coûts de formation (dépenses pédagogiques, heures de formation) : `cout_formation`. */
+const SUBVENTIONS_QUI_FINANCENT_LA_FORMATION = [
+  'r32-dvrh', // subvention régionale aux actions de formation du plan de formation de l'entreprise
+  'r27-arefe', // coûts pédagogiques et ingénierie de formation de programmes de développement des compétences
+  'r75-afest-former-pour-recruter', // jusqu'à 70 % des dépenses d'AFEST (ingénierie, coûts pédagogiques)
+  'r75-aiei-formation', // 40 à 60 % des coûts pédagogiques des formations du plan de développement des compétences
+  'r28-formation-salaries-insertion', // jusqu'à 70 % des coûts pédagogiques de la formation des salariés en insertion
+  'r84-pacte-region-emploi-apres-embauche', // 5 € par heure de formation versés à l'entreprise qui forme
+];
+
 const EVOQUE_UNE_AIDE_A_LA_PERSONNE = /permis|transport|h[ée]bergement|restauration|[ée]quipement|mobilit[ée]|billet|fonds social|train gratuit/i;
 
 /** Aides restées `cout_formation` bien que leur nom évoque une aide à la personne : elles paient réellement la formation. */
@@ -138,6 +158,18 @@ describe('catégories : aide à la personne ou paiement de la formation', () => 
       expect(aide(id).categorie).toBe('cout_formation');
       expect(EVOQUE_UNE_AIDE_A_LA_PERSONNE.test(aide(id).nom)).toBe(true);
     }
+  });
+
+  it('classe en aide_employeur les trois aides versées à une entreprise ou à une structure qui ne paient pas la formation', () => {
+    expect(new Set(AIDES_A_L_EMPLOYEUR).size).toBe(AIDES_A_L_EMPLOYEUR.length);
+    expect(AIDES_A_L_EMPLOYEUR.filter((id) => !aideParId.has(id))).toEqual([]);
+    expect(AIDES_A_L_EMPLOYEUR.filter((id) => aideParId.get(id)?.categorie !== 'aide_employeur')).toEqual([]);
+  });
+
+  it('laisse en cout_formation les autres subventions aux entreprises : elles financent des coûts de formation', () => {
+    expect(new Set(SUBVENTIONS_QUI_FINANCENT_LA_FORMATION).size).toBe(SUBVENTIONS_QUI_FINANCENT_LA_FORMATION.length);
+    expect(SUBVENTIONS_QUI_FINANCENT_LA_FORMATION.filter((id) => !aideParId.has(id))).toEqual([]);
+    expect(SUBVENTIONS_QUI_FINANCENT_LA_FORMATION.filter((id) => aideParId.get(id)?.categorie !== 'cout_formation')).toEqual([]);
   });
 });
 
@@ -181,6 +213,25 @@ describe('modes de calcul : par_mois réservé à la rémunération de formation
     const autre = montantEstime('nat-rfft', profilDemandeurEmploi({ age: 30, dureeHeures: 140, rqth: false }));
     expect(rqth).toBe(Math.round(((2188.27 * 140) / 151.67) * 100) / 100);
     expect(rqth).toBeGreaterThan(autre ?? Infinity);
+  });
+});
+
+describe('modes de calcul : un pourcentage ne porte que sur le coût de la formation', () => {
+  it("aucune aide qui ne réduit pas le coût de la formation n'est en mode pourcentage", () => {
+    const fautives = EMBEDDED_AIDES.filter((a) => a.categorie !== 'cout_formation' && a.montant.mode === 'pourcentage');
+    expect(fautives.map((a) => a.id)).toEqual([]);
+  });
+
+  it("r32-aide-permis : le pourcentage porte sur le contrat d'enseignement à la conduite, l'aide n'est pas chiffrée (libellé conservé)", () => {
+    const { categorie, montant } = aide('r32-aide-permis');
+    expect(categorie).toBe('remuneration_beneficiaire');
+    expect(montant).toMatchObject({ mode: 'non_chiffre', valeur: null, pourcentage: null, base: null, plafond: null, duree_max_mois: null });
+    expect('majorations' in montant).toBe(false);
+    expect(montant.libelle).toContain("jusqu'à 90 % du coût du contrat d'enseignement à la conduite ; total plafonné à 1 200 €");
+    // Avant la correction : 90 % du coût total de la formation (450 € pour une formation de 500 €).
+    for (const coutPedagogique of [500, 4200]) {
+      expect(montantEstime('r32-aide-permis', profilAlternant({ coutPedagogique }))).toBeNull();
+    }
   });
 });
 

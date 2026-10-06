@@ -1656,11 +1656,11 @@
         "Conditions de revenus (revenu fiscal de référence plafonné)"
       ],
       "montant": {
-        "mode": "pourcentage",
+        "mode": "non_chiffre",
         "valeur": null,
-        "pourcentage": 90,
-        "base": "cout_total",
-        "plafond": 1200,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
         "duree_max_mois": null,
         "libelle": "Complète les autres aides publiques et le CPF jusqu'à 90 % du coût du contrat d'enseignement à la conduite ; total plafonné à 1 200 €"
       },
@@ -2347,7 +2347,10 @@
         "regions": [
           "28"
         ],
-        "perimetre_region": "beneficiaire"
+        "perimetre_region": "beneficiaire",
+        "types_formation": [
+          "vae"
+        ]
       },
       "conditions": [
         "Être demandeur d'emploi",
@@ -3162,7 +3165,7 @@
       "nom": "PASS Transitions (volet Conseil)",
       "financeur": "region",
       "financeur_nom": "Région Bretagne",
-      "categorie": "cout_formation",
+      "categorie": "aide_employeur",
       "projets": [
         "formation_salarie",
         "formation_dirigeant"
@@ -3643,7 +3646,8 @@
       "cumul": {
         "cumulable": false,
         "alternatives": [
-          "nat-poei"
+          "nat-poei",
+          "nat-poec"
         ],
         "note": "Déclinaison régionale de la POEI nationale de France Travail : à ne pas cumuler avec l'entrée POEI nationale (à fusionner ou à privilégier pour un employeur des Pays de la Loire)."
       },
@@ -4234,7 +4238,10 @@
           "24"
         ],
         "perimetre_region": "beneficiaire",
-        "eligible_cpf": true
+        "eligible_cpf": true,
+        "types_formation": [
+          "vae"
+        ]
       },
       "conditions": [
         "Parcours VAE et organisme accompagnateur éligibles au CPF (décret n° 2025-663 du 18 juillet 2025).",
@@ -4628,7 +4635,10 @@
         "certifications": [
           "rncp"
         ],
-        "qualiopi_requis": true
+        "qualiopi_requis": true,
+        "types_formation": [
+          "vae"
+        ]
       },
       "conditions": [
         "Résider en Bourgogne-Franche-Comté : demandeurs d'emploi inscrits à France Travail, personnes placées sous main de justice ; à défaut d'autres financements, bénévoles, aidants familiaux, salariés en congé parental, personnes en situation d'illettrisme, bénéficiaires du RSA, salariés en contrat aidé.",
@@ -4707,7 +4717,10 @@
         "regions": [
           "27"
         ],
-        "perimetre_region": "beneficiaire"
+        "perimetre_region": "beneficiaire",
+        "types_formation": [
+          "vae"
+        ]
       },
       "conditions": [
         "Demandeur d'emploi ayant une activité salariée inférieure à 10 heures par semaine, ou personne placée sous main de justice ; à défaut d'autres financements, bénévoles, aidants familiaux, personnes en congé parental ou en situation d'illettrisme, salariés en contrat aidé, bénéficiaires du RSA.",
@@ -5342,7 +5355,7 @@
       "nom": "AIEI IngeFor - Ingénierie de formation interne (entreprises industrielles)",
       "financeur": "region",
       "financeur_nom": "Région Nouvelle-Aquitaine",
-      "categorie": "cout_formation",
+      "categorie": "aide_employeur",
       "projets": [
         "formation_salarie"
       ],
@@ -7468,7 +7481,10 @@
         "regions": [
           "93"
         ],
-        "perimetre_region": "beneficiaire"
+        "perimetre_region": "beneficiaire",
+        "types_formation": [
+          "vae"
+        ]
       },
       "conditions": [
         "Être demandeur d'emploi, salarié en contrat précaire (CDD, intérim, saisonnier, remplacement, CDI à temps partiel de 60 % maximum), auto-entrepreneur dont l'activité est « en création » ou « conservée » par France Travail, militaire en transition professionnelle ou détenu",
@@ -8044,7 +8060,10 @@
           "94"
         ],
         "perimetre_region": "beneficiaire",
-        "qualiopi_requis": true
+        "qualiopi_requis": true,
+        "types_formation": [
+          "vae"
+        ]
       },
       "conditions": [
         "Résider en Corse et avoir obtenu la recevabilité de la demande de VAE",
@@ -8909,7 +8928,7 @@
       "nom": "Aide à l’Insertion par l’Activité Économique (IAE) – volet fonctionnement (formation des salariés en insertion)",
       "financeur": "region",
       "financeur_nom": "Région Guadeloupe",
-      "categorie": "cout_formation",
+      "categorie": "aide_employeur",
       "projets": [
         "formation_salarie"
       ],
@@ -9222,6 +9241,9 @@
         "inscrit_france_travail": true,
         "certifications": [
           "rncp"
+        ],
+        "types_formation": [
+          "vae"
         ]
       },
       "conditions": [

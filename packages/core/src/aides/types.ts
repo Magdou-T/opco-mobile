@@ -13,6 +13,7 @@ import type {
   ProjetType,
   StatutBeneficiaire,
   StatutDirigeant,
+  TrainingType,
   TypeAlternance,
   TypeStructure,
 } from '../types';
@@ -70,6 +71,8 @@ export interface CriteresAide {
   /** true : réservé aux micro-entrepreneurs ; false : les exclut. */
   micro_entrepreneur?: boolean;
   certifications?: CertificationType[];
+  /** Type de formation du parcours ; une aide propre à un type, par exemple la VAE, ne s'applique pas aux autres. */
+  types_formation?: TrainingType[];
   /** true : réservé aux formations éligibles au CPF. Uniquement vrai : `false` n'ajoute aucune restriction. */
   eligible_cpf?: true;
   duree_min_heures?: number;
@@ -198,6 +201,8 @@ export interface ProfilAides {
   statutDirigeant: StatutDirigeant | null;
   microEntrepreneur: boolean | null;
   certification: CertificationType | null;
+  /** Type de formation du parcours (VAE, CQP, reconversion…) ; null = inconnu. Distinct de la certification visée. */
+  typeFormation: TrainingType | null;
   niveauFormationVise: NiveauCertification | null;
   eligibleCpf: boolean | null;
   dureeHeures: number | null;
@@ -218,7 +223,10 @@ export interface AideEvaluee {
   statut: StatutEligibilite;
   /** non_eligible : critères non remplis ; a_verifier : informations à confirmer. */
   raisons: string[];
-  /** true : aide sans rapport avec la situation (autre projet, autre public, autre région) — masquée à l'écran. */
+  /**
+   * true : aide sans rapport avec la situation (autre projet, autre public, autre région, autre type de formation) —
+   * masquée à l'écran. Une information inconnue (région, type de formation) ne rend jamais une aide hors périmètre.
+   */
   horsPerimetre: boolean;
   conditions: string[];
   /**

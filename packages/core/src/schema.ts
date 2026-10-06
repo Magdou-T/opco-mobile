@@ -270,6 +270,8 @@ const NiveauCertificationSchema = z.union([
 const StatutDirigeantSchema = z.enum(['commercant', 'artisan', 'profession_liberale', 'exploitant_agricole', 'assimile_salarie']);
 const ContractTypeSchema = z.enum(['cdi', 'cdd', 'interim', 'alternance']);
 const CertificationTypeSchema = z.enum(['rncp', 'rs', 'cqp', 'diplome', 'habilitation', 'aucune', 'autre']);
+// Types de formation du parcours (WizardState.formationType), distincts de la certification visée.
+const TrainingTypeSchema = z.enum(['non_certifiante', 'qualification', 'certification', 'vae', 'reconversion', 'cqp', 'habilitation']);
 const FinanceurSchema = z.enum([
   'etat', 'region', 'departement', 'france_travail', 'transitions_pro', 'agefiph',
   'europe', 'cpf', 'opco', 'faf', 'fiscal', 'branche', 'autre',
@@ -298,6 +300,7 @@ export const CriteresAideSchema = z.object({
   statuts_dirigeant: z.array(StatutDirigeantSchema).optional(),
   micro_entrepreneur: z.boolean().optional(),
   certifications: z.array(CertificationTypeSchema).optional(),
+  types_formation: z.array(TrainingTypeSchema).min(1).optional(),
   eligible_cpf: z.literal(true).optional(),
   duree_min_heures: z.number().min(0).optional(),
   duree_max_heures: z.number().min(0).optional(),

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { bornesEffectif, dateDeReference, moisDepuisSaisie, profilDepuisWizard, saisieDepuisMois } from '../src/aides/profil';
-import { createInitialWizardState, type WizardState } from '../src/types';
+import { createInitialWizardState, TRAINING_TYPE_LABELS, type TrainingType, type WizardState } from '../src/types';
 
 describe('bornesEffectif', () => {
   it('effectif exact prioritaire, sinon bornes de la tranche', () => {
@@ -119,6 +119,7 @@ describe('profilDepuisWizard : une information inconnue reste inconnue', () => {
       statutDirigeant: null,
       microEntrepreneur: null,
       certification: null,
+      typeFormation: null,
       niveauFormationVise: null,
       eligibleCpf: null,
       dureeHeures: null,
@@ -154,7 +155,7 @@ describe('profilDepuisWizard : recopie du parcours', () => {
     statutDirigeant: 'artisan',
     microEntrepreneur: false,
     certificationLevel: 'rncp',
-    formationType: 'certification',
+    formationType: 'vae',
     niveauFormationVise: 5,
     eligibleCpf: true,
     organismeQualiopi: false,
@@ -186,6 +187,7 @@ describe('profilDepuisWizard : recopie du parcours', () => {
       statutDirigeant: 'artisan',
       microEntrepreneur: false,
       certification: 'rncp',
+      typeFormation: 'vae',
       niveauFormationVise: 5,
       eligibleCpf: true,
       dureeHeures: 35,
@@ -204,6 +206,34 @@ describe('profilDepuisWizard : recopie du parcours', () => {
     const p = profilDepuisWizard({ ...complet, regionCode: '99' as never, regionBeneficiaireCode: 'XX' as never }, null);
     expect(p.regionEntreprise).toBeNull();
     expect(p.regionBeneficiaire).toBeNull();
+  });
+});
+
+describe('profilDepuisWizard : type de formation', () => {
+  const TYPES = Object.keys(TRAINING_TYPE_LABELS) as TrainingType[];
+  const profil = (over: Partial<WizardState>) => profilDepuisWizard({ ...createInitialWizardState(), ...over }, null);
+
+  it.each(TYPES)('le type %s du parcours arrive tel quel dans le profil', (formationType) => {
+    expect(profil({ formationType }).typeFormation).toBe(formationType);
+  });
+
+  it("un type inconnu reste null (jamais une valeur par défaut), qu'il soit nul ou jamais renseigné", () => {
+    expect(profil({ formationType: null }).typeFormation).toBeNull();
+    expect(profil({}).typeFormation).toBeNull();
+  });
+
+  it('le type de formation et la certification visée sont deux champs distincts du parcours', () => {
+    expect(profil({ formationType: 'cqp', certificationLevel: 'rncp' })).toMatchObject({ typeFormation: 'cqp', certification: 'rncp' });
+    expect(profil({ formationType: null, certificationLevel: 'rncp' })).toMatchObject({ typeFormation: null, certification: 'rncp' });
+    expect(profil({ formationType: 'vae', certificationLevel: null })).toMatchObject({ typeFormation: 'vae', certification: null });
+  });
+
+  it("ne dépend ni du projet ni de l'OPCO", () => {
+    const parcours = { ...createInitialWizardState(), formationType: 'habilitation' as const };
+    for (const projetType of ['formation_salarie', 'reconversion_salarie', 'recrutement_demandeur_emploi', 'alternance', 'formation_dirigeant'] as const) {
+      expect(profilDepuisWizard({ ...parcours, projetType }, 'akto').typeFormation).toBe('habilitation');
+    }
+    expect(profilDepuisWizard(parcours, null).typeFormation).toBe('habilitation');
   });
 });
 

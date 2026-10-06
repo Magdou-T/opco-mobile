@@ -79,7 +79,9 @@ interface Candidat extends LignePlan {
  * - Aides « au choix » (alternatives déclarées dans un sens ou dans l'autre) : la sélection est GLOUTONNE, pas optimale.
  *   Des mieux chiffrées aux moins bien chiffrées ; à montant égal, le pivot (l'aide déclarée comme alternative par le plus
  *   grand nombre d'autres aides éligibles), puis l'ordre de la liste. Une aide dont une alternative est déjà retenue devient
- *   une option.
+ *   une option. Une aide plafonnée à 0 € (coût déjà couvert, solde CPF partagé épuisé) n'apparaît ni dans `financements` ni
+ *   dans `options` : le gagnant nommé dans la raison d'une option (`Au choix avec « X »`) peut donc lui-même être absent des
+ *   listes, et l'écran ne doit pas compter sur son affichage.
  * - À part, jamais déduits du coût : aides à l'employeur, rémunérations, avantages fiscaux et sociaux ; les aides sans
  *   montant sont dans `nonChiffrees` et les services gratuits dans `servicesGratuits`.
  * - Les dispositifs OPCO `additif` et `hors_budget` sans montant chiffré n'apparaissent pas dans le plan : l'écran lit
@@ -159,13 +161,13 @@ export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[],
   // 2. Aides éligibles du catalogue (les aides « à vérifier » ne sont jamais comptées)
   const eligibles = aides.filter((a) => a.statut === 'eligible');
   // Aides « au choix » (alternatives déclarées dans un sens ou dans l'autre) : sélection gloutonne, des
-  // mieux chiffrées aux moins bien chiffrées. À montant égal, le « pivot » passe d'abord : l'aide que le
-  // plus grand nombre d'autres aides éligibles déclarent comme alternative (dans un graphe « en étoile »,
-  // l'aide générale que les aides spécialisées citent : retenue la première, elle écarte toutes les
-  // feuilles), puis l'ordre de la liste évaluée (le tri est stable). Une aide dont une alternative est
-  // déjà retenue devient une option. Ce choix est indépendant de l'ordre dans lequel les alternatives
-  // sont déclarées et ne fusionne pas des aides seulement liées par un tiers (a–b, b–c : a et c peuvent
-  // être retenues ensemble).
+  // mieux chiffrées aux moins bien chiffrées. À montant égal, l'aide citée comme alternative par le plus
+  // grand nombre d'autres aides éligibles l'emporte : le « pivot », l'aide générale que les aides
+  // spécialisées citent (dans un graphe « en étoile », retenue la première, elle écarte toutes les
+  // feuilles) ; puis l'ordre de la liste évaluée départage (le tri est stable). Le sens dans lequel une
+  // alternative est déclarée n'intervient que par ce décompte. Une aide dont une alternative est déjà
+  // retenue devient une option. Le choix ne fusionne pas des aides seulement liées par un tiers (a–b,
+  // b–c : a et c peuvent être retenues ensemble).
   const retenues = new Set<string>();
   const ecartees = new Set<string>();
   const parMontant = eligibles

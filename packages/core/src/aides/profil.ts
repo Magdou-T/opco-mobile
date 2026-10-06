@@ -31,7 +31,8 @@ export function bornesEffectif(
 /**
  * Projet par défaut : « former un salarié » ; `structures` connues seulement après une recherche d'entreprise (SIREN renseigné), sinon `null`.
  * `idccs` : IDCC des établissements + IDCC détecté, sans doublon.
- * Un champ inconnu du parcours reste `null` (jamais remplacé par 0, `''` ou `false`), sauf `rqth` et `coutFraisAnnexes`, non nuls par construction.
+ * Un champ inconnu du parcours reste `null` (jamais remplacé par 0, `''` ou `false`), y compris le type de formation
+ * (`typeFormation`), sauf `rqth` et `coutFraisAnnexes`, non nuls par construction.
  */
 export function profilDepuisWizard(state: WizardState, opcoSlug: string | null): ProfilAides {
   const projet = state.projetType ?? 'formation_salarie';
@@ -67,6 +68,7 @@ export function profilDepuisWizard(state: WizardState, opcoSlug: string | null):
     statutDirigeant: state.statutDirigeant,
     microEntrepreneur: state.microEntrepreneur,
     certification: state.certificationLevel,
+    typeFormation: state.formationType,
     niveauFormationVise: state.niveauFormationVise,
     eligibleCpf: state.eligibleCpf,
     dureeHeures: state.durationHours,

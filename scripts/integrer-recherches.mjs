@@ -7,12 +7,17 @@
 //   - un montant dont les champs ne correspondent pas à son mode (refusé par AideSchema) passe en « non_chiffre » ;
 //     le libellé est conservé, aucun montant n'est inventé ni complété ;
 //   - le lien Agefiph de chaque région (liens_par_region des aides nat-agefiph-*) est ajouté au portail de la région ;
-//   - les doublons connus entre fichiers (POEI nationale et POEI Pays de la Loire) sont liés par cumul.alternatives ;
+//   - les alternatives connues (table ALTERNATIVES_CONNUES : même dispositif présent dans plusieurs aides, comme la POE,
+//     ou aides financées par le même solde CPF) sont déclarées dans les deux sens par cumul.alternatives ;
 //   - la table CORRECTIONS (revue du moteur d'aides, octobre 2026) recatégorise en « remuneration_beneficiaire » les aides
 //     qui paient une dépense de la personne et non la formation (permis, transport, hébergement, restauration, équipement,
-//     mobilité, fonds social, aides aux apprentis) et corrige trois montants (majoration RQTH du RFFT, deux aides versées
-//     sur une période qui n'est pas la durée de la formation). Chaque correction vérifie l'état attendu de l'aide avant de
-//     la modifier : si l'aide a disparu ou a changé, le script s'arrête (code 1) sans rien écrire.
+//     mobilité, fonds social, aides aux apprentis), recatégorise en « aide_employeur » les aides versées à une entreprise
+//     ou à une structure qui ne paient pas la formation elle-même, réserve les aides propres à la VAE au type de formation
+//     « vae » (critère types_formation), passe en « non_chiffre » le pourcentage de l'aide au permis de la Région
+//     Hauts-de-France (il porte sur le contrat d'enseignement à la conduite, pas sur la formation) et corrige trois montants
+//     (majoration RQTH du RFFT, deux aides versées sur une période qui n'est pas la durée de la formation). Chaque
+//     correction vérifie l'état attendu de l'aide avant de la modifier : si l'aide a disparu ou a changé, le script
+//     s'arrête (code 1) sans rien écrire.
 // Usage : node scripts/integrer-recherches.mjs docs/recherche-aides/2026-10 (depuis la racine du dépôt)
 // Le script réécrit les trois fichiers du catalogue : pour une mise à jour ponctuelle d'une aide, modifier directement
 // `packages/core/data/aides/*.json` (puis lancer les tests) sans relancer le script ; une nouvelle campagne de recherche
@@ -40,10 +45,40 @@ const CLES_SOURCE = new Set(['url', 'titre', 'extrait']);
 const CLES_PORTAIL = new Set(['region', 'nom_region', 'liens', 'derniere_verification']);
 const CLES_LIEN = new Set(['titre', 'url', 'type']);
 
-// Doublons connus entre fichiers (signalés par les vérificateurs, tâche 16) : la POEI nationale (nat-2) et la POEI
-// financée par la Région Pays de la Loire (regions-2) sont le même dispositif (mêmes plafonds de 300 / 450 / 600 h).
-// Chacune est déclarée alternative de l'autre : le plan de financement ne retient que la mieux chiffrée.
-const DOUBLONS_CONNUS = [['nat-poei', 'r52-poei-region']];
+// Alternatives connues : des aides « au choix », jamais additionnées, que les fichiers de recherche ne déclarent pas
+// toutes entre elles. Chaque paire est déclarée dans les deux sens (cumul.alternatives de chacune des deux aides) : le
+// plan de financement ne retient qu'une aide par groupe d'alternatives, et un groupe doit être complet (chaque aide
+// déclarée alternative de toutes les autres : voir tests/donnees-aides-coherence.test.ts).
+//   - POE : la POEI nationale (nat-2) et la POEI financée par la Région Pays de la Loire (regions-2) sont le même
+//     dispositif (mêmes plafonds de 300 / 450 / 600 h ; doublon signalé par les vérificateurs, tâche 16) ; la POEC
+//     nationale est déjà au choix avec la POEI nationale ;
+//   - solde CPF : nat-cpf, nat-vae, nat-clea et nat-bilan-competences prélèvent sur le même solde de droits CPF (les trois
+//     dernières déclarent déjà nat-cpf).
+// Deux paires restent volontairement non déclarées (justifiées dans le test de cohérence) : nat-ptp et nat-ptp-remuneration
+// (même dispositif, cumulables) ; r84-pacte-region-emploi et r84-formations-individuelles (aucune des deux n'est déclarée
+// incompatible avec l'autre).
+const ALTERNATIVES_CONNUES = [
+  {
+    paire: ['nat-poei', 'r52-poei-region'],
+    motif: 'même dispositif : la POEI nationale et la POEI de la Région Pays de la Loire ont les mêmes plafonds de 300 / 450 / 600 h',
+  },
+  {
+    paire: ['nat-poec', 'r52-poei-region'],
+    motif: 'POE : la POEC est au choix avec la POEI nationale, dont la POEI de la Région Pays de la Loire est la déclinaison régionale',
+  },
+  {
+    paire: ['nat-vae', 'nat-clea'],
+    motif: 'financées par le même solde CPF (chacune est déjà au choix avec nat-cpf) : jamais additionnées',
+  },
+  {
+    paire: ['nat-vae', 'nat-bilan-competences'],
+    motif: 'financées par le même solde CPF (chacune est déjà au choix avec nat-cpf) : jamais additionnées',
+  },
+  {
+    paire: ['nat-clea', 'nat-bilan-competences'],
+    motif: 'financées par le même solde CPF (chacune est déjà au choix avec nat-cpf) : jamais additionnées',
+  },
+];
 const TITRE_AGEFIPH = "Agefiph : aides pour l'emploi des personnes handicapées";
 
 const aujourdhui = new Date().toISOString().slice(0, 10);
@@ -79,6 +114,17 @@ function verifierCles(objet, autorisees, contexte) {
   for (const cle of Object.keys(objet ?? {})) {
     if (!autorisees.has(cle)) alertes.push(`${contexte} : clé ignorée « ${cle} »`);
   }
+}
+
+// Abandonne l'estimation chiffrée d'un montant : le libellé lisible est conservé, aucun montant n'est inventé.
+function passerEnNonChiffre(montant) {
+  montant.mode = 'non_chiffre';
+  montant.valeur = null;
+  montant.pourcentage = null;
+  montant.base = null;
+  montant.plafond = null;
+  montant.duree_max_mois = null;
+  delete montant.majorations;
 }
 
 function normaliserAide(a, origine) {
@@ -123,13 +169,7 @@ function normaliserAide(a, origine) {
   if (incoherent) {
     alertes.push(`${origine} / ${a.id} : montant « ${montant.mode} » incomplet, passé en non_chiffre (libellé conservé)`);
     montantsNormalises.push(a.id);
-    montant.mode = 'non_chiffre';
-    montant.valeur = null;
-    montant.pourcentage = null;
-    montant.base = null;
-    montant.plafond = null;
-    montant.duree_max_mois = null;
-    delete montant.majorations;
+    passerEnNonChiffre(montant);
   }
 
   const cumul = { cumulable: a.cumul?.cumulable ?? true };
@@ -229,24 +269,27 @@ const nationaux = fusionner(fichiersNat, ids);
 const regionaux = fusionner(fichiersReg, ids);
 const toutes = [...nationaux.aides, ...regionaux.aides];
 
-// Doublons connus : chaque aide devient l'alternative de l'autre.
+// Alternatives connues : chaque aide de la paire devient l'alternative de l'autre (sans doublon : une déclaration déjà
+// présente dans les fichiers de recherche est conservée, jamais répétée).
 const parId = new Map(toutes.map((a) => [a.id, a]));
-const doublonsLies = [];
-for (const [x, y] of DOUBLONS_CONNUS) {
+const alternativesLiees = [];
+for (const { paire: [x, y], motif } of ALTERNATIVES_CONNUES) {
   const ax = parId.get(x);
   const ay = parId.get(y);
   if (!ax || !ay) {
-    alertes.push(`doublon connu ${x} / ${y} : identifiant absent du catalogue, alternatives non créées`);
+    alertes.push(`alternative connue ${x} / ${y} : identifiant absent du catalogue, alternatives non créées`);
     continue;
   }
+  let declarations = 0;
   for (const [aide, autre] of [[ax, y], [ay, x]]) {
     const alternatives = aide.cumul.alternatives ?? [];
     if (alternatives.includes(autre)) continue;
     // Reconstruit l'objet pour garder l'ordre des clés : cumulable, alternatives, note.
     const { cumulable, note } = aide.cumul;
     aide.cumul = { cumulable, alternatives: [...alternatives, autre], ...(note !== undefined && { note }) };
+    declarations += 1;
   }
-  doublonsLies.push(`${x} et ${y} : même dispositif, déclarés alternatives l'un de l'autre`);
+  alternativesLiees.push(`${x} et ${y} : ${motif}${declarations === 0 ? ' (déjà déclarées dans les deux sens par la recherche)' : ''}`);
 }
 
 for (const a of toutes) {
@@ -277,6 +320,31 @@ const aideALaPersonne = (id, motif) => ({
   condition: (aide) => aide.categorie === 'cout_formation',
   appliquer: (aide) => {
     aide.categorie = 'remuneration_beneficiaire';
+  },
+});
+
+// Catégorie « aide_employeur » : aide versée à une entreprise ou à une structure qui ne paie pas la formation elle-même
+// (ingénierie interne, conseil et diagnostic, fonctionnement d'une structure d'insertion). Les subventions aux entreprises
+// qui financent des coûts de formation (dépenses pédagogiques, heures de formation) restent « cout_formation ».
+const aideALEmployeur = (id, motif) => ({
+  id,
+  motif,
+  condition: (aide) => aide.categorie === 'cout_formation',
+  appliquer: (aide) => {
+    aide.categorie = 'aide_employeur';
+  },
+});
+
+// Aide propre à la VAE : tout son objet est un parcours de validation des acquis de l'expérience (accompagnement,
+// formation liée au parcours, abondement du CPF, forfait). Le critère `types_formation: ['vae']` la masque (hors
+// périmètre) quand le type de formation du parcours est connu et différent, et la laisse « à vérifier » quand il est
+// inconnu. Une aide qui couvre la VAE parmi d'autres objets (CPF, C2P, aide de l'Agefiph, FAFCEA…) n'est pas concernée.
+const aidePropreALaVae = (id, motif) => ({
+  id,
+  motif,
+  condition: (aide) => aide.criteres.types_formation === undefined,
+  appliquer: (aide) => {
+    aide.criteres.types_formation = ['vae'];
   },
 });
 
@@ -325,6 +393,23 @@ const CORRECTIONS = [
   // Autres aides à la personne
   aideALaPersonne('nat-agefiph-parcours-vers-emploi', 'aide à la personne handicapée en situation de précarité (déplacements, hébergement, restauration, vêtements), pas la formation'),
   aideALaPersonne('r11-daeu', "prime incitative versée à la personne sous condition d'assiduité, qui n'avance pas les droits d'inscription : pas la formation"),
+
+  // Aides versées à une entreprise ou à une structure, qui ne paient pas la formation elle-même (audit de la tâche 17b :
+  // le plan ne les compte pas aujourd'hui car elles sont à confirmer et non chiffrées, mais leur catégorie est fausse)
+  aideALEmployeur('r75-aiei-ingefor', "subvention de 50 % des dépenses d'ingénierie interne préalable à une formation (aide à l'entreprise), pas la formation"),
+  aideALEmployeur('r53-pass-transitions', "subvention de la Région aux entreprises de 50 salariés au plus pour des prestations de conseil et de diagnostic (aide à l'entreprise), pas la formation"),
+  aideALEmployeur('r01-iae-formation-salaries-insertion', "subvention de fonctionnement d'une structure d'insertion (aide à la structure), pas la formation"),
+
+  // Aides propres à la VAE : lues une par une, tout leur objet est un parcours VAE
+  aidePropreALaVae('nat-vae', "accompagnement d'un parcours VAE financé par le solde CPF : propre à la VAE"),
+  aidePropreALaVae('nat-vae-transitions-pro', 'forfait de 2 000 € de la Transitions Pro pour un parcours VAE (accompagnement, formations, jury) : propre à la VAE'),
+  aidePropreALaVae('r02-aide-vae', "aide de la CTM à l'accompagnement VAE des demandeurs d'emploi : propre à la VAE"),
+  aidePropreALaVae('r24-abondement-cpf-vae', "abondement régional du CPF pour l'accompagnement VAE (Centre-Val de Loire) : propre à la VAE"),
+  aidePropreALaVae('r27-pass-vae-accompagnement', "PASS'VAE Accompagnement : accompagnement méthodologique à la VAE : propre à la VAE"),
+  aidePropreALaVae('r27-pass-vae-hybride', "PASS'VAE Hybride : formation complémentaire liée à un parcours VAE (avant le jury ou après une validation partielle) : propre à la VAE"),
+  aidePropreALaVae('r28-vae-demandeurs-emploi', "accompagnement méthodologique à la VAE des demandeurs d'emploi (Région Normandie) : propre à la VAE"),
+  aidePropreALaVae('r93-pass-vae', 'Pass VAE de la Région Sud (accompagnement, modules manquants, formations obligatoires du parcours VAE) : propre à la VAE'),
+  aidePropreALaVae('r94-assegnu-vae', "Assegnu VAE : accompagnement méthodologique d'une VAE : propre à la VAE"),
 
   // Montants : le moteur calcule `par_mois` au prorata de la durée de la formation (valeur × min(duree_max_mois, durée en
   // heures / 151,67)) et applique le plafond d'une majoration comme un total.
@@ -377,6 +462,22 @@ const CORRECTIONS = [
       aide.montant.valeur = 1100;
       aide.montant.plafond = null;
       aide.montant.duree_max_mois = null;
+    },
+  },
+
+  // Pourcentage d'une dépense qui n'est pas la formation : le moteur le calcule sur le coût de la formation (450 € pour une
+  // formation de 500 €), alors que le pourcentage porte sur le coût du contrat d'enseignement à la conduite.
+  {
+    id: 'r32-aide-permis',
+    motif:
+      "90 % du coût du contrat d'enseignement à la conduite (1 200 € au plus) : le pourcentage ne porte pas sur le coût de la formation, aide non chiffrée (libellé conservé, aucun montant inventé)",
+    condition: (aide) =>
+      aide.montant.mode === 'pourcentage' &&
+      aide.montant.pourcentage === 90 &&
+      aide.montant.base === 'cout_total' &&
+      aide.montant.plafond === 1200,
+    appliquer: (aide) => {
+      passerEnNonChiffre(aide.montant);
     },
   },
 ];
@@ -487,6 +588,7 @@ const rapport = [
   `- Portails régionaux : ${portails.length} (dont ${nbPortailsAgefiph} avec un lien Agefiph)`,
   `- Aides à confirmer : ${aConfirmer.length}`,
   `- Montants passés en non_chiffre (libellé conservé) : ${montantsNormalises.length}`,
+  `- Paires d'alternatives connues : ${alternativesLiees.length}`,
   `- Corrections appliquées après la revue du moteur : ${correctionsAppliquees.length}`,
   `- Alertes : ${alertes.length}`,
   '',
@@ -496,8 +598,11 @@ const rapport = [
   '## Aides à confirmer',
   ...puces(aConfirmer.map((a) => `${a.id} — ${a.nom}`)),
   '',
+  '## Alternatives connues (aides au choix, déclarées dans les deux sens)',
+  ...puces(alternativesLiees),
+  '',
   '## Doublons connus entre fichiers',
-  ...puces([...doublonsLies, ...exclusionsFusionnees]),
+  ...puces(exclusionsFusionnees),
   '',
   '## Liens Agefiph ajoutés aux portails',
   ...puces(liensAgefiphAjoutes),
@@ -518,5 +623,5 @@ const rapport = [
 fs.writeFileSync(path.join(dossier, 'rapport-integration.md'), rapport, 'utf-8');
 
 console.log(`Nationales : ${nationaux.aides.length} | Régionales : ${regionaux.aides.length} | Portails : ${portails.length} | Alertes : ${alertes.length}`);
-console.log(`À confirmer : ${aConfirmer.length} | Montants passés en non_chiffre : ${montantsNormalises.length} | Portails avec lien Agefiph : ${nbPortailsAgefiph} | Corrections appliquées : ${correctionsAppliquees.length}`);
+console.log(`À confirmer : ${aConfirmer.length} | Montants passés en non_chiffre : ${montantsNormalises.length} | Portails avec lien Agefiph : ${nbPortailsAgefiph} | Paires d'alternatives connues : ${alternativesLiees.length} | Corrections appliquées : ${correctionsAppliquees.length}`);
 console.log(`Rapport : ${path.join(dossier, 'rapport-integration.md')}`);

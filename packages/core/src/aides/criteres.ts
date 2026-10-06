@@ -11,6 +11,7 @@ import {
   CONTRACT_TYPE_LABELS,
   NIVEAU_DIPLOME_LABELS,
   STATUT_DIRIGEANT_LABELS,
+  TRAINING_TYPE_LABELS,
   TYPE_ALTERNANCE_LABELS,
   type CodeRegion,
 } from '../types';
@@ -76,6 +77,8 @@ export function regionDeReference(c: Pick<CriteresAide, 'perimetre_region'>, p: 
  * - Avec `perimetre_region: 'beneficiaire'`, la région du bénéficiaire par défaut est celle de l'entreprise (voir
  *   `regionDeReference`).
  * - `naf_prefixes` : préfixes du code NAF, sans tenir compte de la casse ni des points (`86.21Z` = `8621z`).
+ * - `types_formation` : type de formation du parcours (VAE, CQP, reconversion…), distinct de la certification visée
+ *   (`certifications`) ; un type inconnu donne `inconnu`.
  */
 export function evaluerCriteres(c: CriteresAide, p: ProfilAides): BilanCriteres {
   const ko: string[] = [];
@@ -189,6 +192,13 @@ export function evaluerCriteres(c: CriteresAide, p: ProfilAides): BilanCriteres 
     if (p.certification == null) inconnu.push('Précisez la certification visée par la formation');
     else if (!c.certifications.includes(p.certification)) {
       ko.push(`Réservé aux formations menant à : ${liste(c.certifications.map((k) => CERTIFICATION_LABELS[k]))}`);
+    }
+  }
+
+  if (c.types_formation?.length) {
+    if (p.typeFormation == null) inconnu.push('Précisez le type de formation');
+    else if (!c.types_formation.includes(p.typeFormation)) {
+      ko.push(`Réservé aux formations de type : ${liste(c.types_formation.map((t) => TRAINING_TYPE_LABELS[t]))}`);
     }
   }
 

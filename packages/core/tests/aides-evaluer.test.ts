@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { estimerMontant, evaluerAide, evaluerAides, formaterDate, HEURES_PAR_MOIS_TEMPS_PLEIN } from '../src/aides/evaluer';
 import type { Aide, CriteresAide, ModeMontant, MontantAide, ProfilAides } from '../src/aides/types';
+import { TRAINING_TYPE_LABELS, type TrainingType } from '../src/types';
 import { makeAide, makeProfil } from './fixtures-aides';
 
 const AUJOURDHUI = '2026-10-05';
@@ -32,12 +33,12 @@ describe('evaluerAide — statut', () => {
     expect(evaluerAide(makeAide({ validite: { debut: '2027-01-01', fin: null } }), makeProfil(), AUJOURDHUI).statut).toBe('a_verifier');
   });
 
-  it('un critère ko l’emporte sur une information manquante', () => {
+  it("un critère ko l'emporte sur une information manquante", () => {
     const r = evaluerAide(makeAide({ criteres: { regions: ['84'], age_max: 29 } }), makeProfil({ age: null }), AUJOURDHUI);
     expect(r.statut).toBe('non_eligible');
   });
 
-  it('marque hors périmètre une aide d’un autre projet ou d’une autre région', () => {
+  it("marque hors périmètre une aide d'un autre projet ou d'une autre région", () => {
     expect(evaluerAide(makeAide({ projets: ['alternance'] }), makeProfil(), AUJOURDHUI).horsPerimetre).toBe(true);
     expect(evaluerAide(makeAide({ criteres: { regions: ['84'] } }), makeProfil(), AUJOURDHUI).horsPerimetre).toBe(true);
     expect(evaluerAide(makeAide({ criteres: { age_max: 29 } }), makeProfil({ age: 40 }), AUJOURDHUI).horsPerimetre).toBe(false);
@@ -49,7 +50,7 @@ describe('evaluerAide — statut', () => {
     expect(evaluerAide(aide, makeProfil({ regionEntreprise: '84' }), AUJOURDHUI).urlDemarche).toBe('https://www.example.gouv.fr/demande');
   });
 
-  it('ordre d’empilement par défaut selon le financeur', () => {
+  it("ordre d'empilement par défaut selon le financeur", () => {
     expect(evaluerAide(makeAide({ financeur: 'cpf' }), makeProfil(), AUJOURDHUI).ordreEmpilement).toBe(90);
     expect(evaluerAide(makeAide({ ordre_empilement: 5 }), makeProfil(), AUJOURDHUI).ordreEmpilement).toBe(5);
   });
@@ -179,6 +180,121 @@ describe("evaluerAide — ordre d'empilement et périmètre", () => {
   it("une aide du bon projet, du bon public et de la bonne région n'est pas hors périmètre, même non éligible", () => {
     const suspendue = evaluerAide(makeAide({ statut: 'suspendu', criteres: { regions: ['11'] } }), makeProfil(), AUJOURDHUI);
     expect(suspendue).toMatchObject({ statut: 'non_eligible', horsPerimetre: false });
+  });
+});
+
+describe('evaluerAide — type de formation (aide propre à un type, par exemple la VAE)', () => {
+  const TYPES = Object.keys(TRAINING_TYPE_LABELS) as TrainingType[];
+  const RAISON_VAE = "Réservé aux formations de type : VAE (Validation des Acquis de l'Expérience)";
+  const aideVae = makeAide({ criteres: { types_formation: ['vae'] } });
+  const evaluerVae = (typeFormation: TrainingType | null) => evaluerAide(aideVae, makeProfil({ typeFormation }), AUJOURDHUI);
+
+  it("type connu et exclu : non éligible et hors périmètre (masquée à l'écran), avec la raison du type", () => {
+    expect(evaluerVae('certification')).toMatchObject({ statut: 'non_eligible', horsPerimetre: true, raisons: [RAISON_VAE] });
+  });
+
+  it("type inconnu : à vérifier, jamais hors périmètre (l'aide reste visible)", () => {
+    expect(evaluerVae(null)).toMatchObject({
+      statut: 'a_verifier',
+      horsPerimetre: false,
+      raisons: ['Précisez le type de formation'],
+    });
+  });
+
+  it('type inclus : éligible, dans le périmètre', () => {
+    expect(evaluerVae('vae')).toMatchObject({ statut: 'eligible', horsPerimetre: false, raisons: [], montantEstime: 1000 });
+  });
+
+  it('chacun des six types exclus rend une aide propre à la VAE hors périmètre, le type réservé et le type inconnu jamais', () => {
+    expect(TYPES.filter((t) => t !== 'vae' && !evaluerVae(t).horsPerimetre)).toEqual([]);
+    expect(evaluerVae('vae').horsPerimetre).toBe(false);
+    expect(evaluerVae(null).horsPerimetre).toBe(false);
+  });
+
+  it("une liste de deux types : hors périmètre seulement pour un type qui n'est dans aucun des deux", () => {
+    const aide = makeAide({ criteres: { types_formation: ['vae', 'reconversion'] } });
+    const horsPerimetre = (typeFormation: TrainingType | null) =>
+      evaluerAide(aide, makeProfil({ typeFormation }), AUJOURDHUI).horsPerimetre;
+    expect(horsPerimetre('vae')).toBe(false);
+    expect(horsPerimetre('reconversion')).toBe(false);
+    expect(horsPerimetre('cqp')).toBe(true);
+    expect(horsPerimetre(null)).toBe(false);
+  });
+
+  it('sans critère de type, le type du parcours ne rend jamais une aide hors périmètre', () => {
+    for (const typeFormation of [...TYPES, null]) {
+      expect(evaluerAide(makeAide(), makeProfil({ typeFormation }), AUJOURDHUI)).toMatchObject({
+        statut: 'eligible',
+        horsPerimetre: false,
+      });
+    }
+  });
+
+  it("une liste vide n'impose aucune contrainte (le schéma la refuse) : éligible, dans le périmètre", () => {
+    const aide = makeAide({ criteres: { types_formation: [] } });
+    expect(evaluerAide(aide, makeProfil({ typeFormation: 'cqp' }), AUJOURDHUI)).toMatchObject({
+      statut: 'eligible',
+      horsPerimetre: false,
+      raisons: [],
+    });
+  });
+
+  it('hors périmètre : le type seul suffit (projet, public et région compatibles)', () => {
+    const aide = makeAide({
+      projets: ['formation_salarie'],
+      beneficiaires: ['salarie'],
+      criteres: { regions: ['11'], types_formation: ['vae'] },
+    });
+    expect(evaluerAide(aide, makeProfil({ typeFormation: 'certification' }), AUJOURDHUI).horsPerimetre).toBe(true);
+    expect(evaluerAide(aide, makeProfil({ typeFormation: 'vae' }), AUJOURDHUI).horsPerimetre).toBe(false);
+  });
+
+  it("type connu et exclu, région inconnue : hors périmètre par le type seul (une région inconnue n'exclut rien)", () => {
+    const aide = makeAide({ criteres: { regions: ['11'], types_formation: ['vae'] } });
+    const r = evaluerAide(aide, makeProfil({ regionEntreprise: null, typeFormation: 'certification' }), AUJOURDHUI);
+    expect(r).toMatchObject({ statut: 'non_eligible', horsPerimetre: true, raisons: [RAISON_VAE] });
+  });
+
+  it('type inconnu, autre région : hors périmètre par la région, pas par le type', () => {
+    const aide = makeAide({ criteres: { regions: ['84'], types_formation: ['vae'] } });
+    const r = evaluerAide(aide, makeProfil({ typeFormation: null }), AUJOURDHUI);
+    expect(r).toMatchObject({ statut: 'non_eligible', horsPerimetre: true, raisons: ['Réservé à : Auvergne-Rhône-Alpes'] });
+  });
+
+  it('type inclus mais un autre critère non rempli : non éligible, pas hors périmètre', () => {
+    const aide = makeAide({ criteres: { types_formation: ['vae'], age_max: 29 } });
+    expect(evaluerAide(aide, makeProfil({ typeFormation: 'vae', age: 40 }), AUJOURDHUI)).toMatchObject({
+      statut: 'non_eligible',
+      horsPerimetre: false,
+      raisons: ['Réservé aux personnes de 29 ans au plus'],
+    });
+  });
+
+  it("les raisons suivent l'ordre des critères : région d'abord, type de formation ensuite", () => {
+    const aide = makeAide({ criteres: { types_formation: ['vae'], regions: ['84'] } });
+    expect(evaluerAide(aide, makeProfil({ typeFormation: 'cqp' }), AUJOURDHUI).raisons).toEqual([
+      'Réservé à : Auvergne-Rhône-Alpes',
+      RAISON_VAE,
+    ]);
+  });
+
+  it('type inconnu : la demande de précision se range avec les autres doutes (confirmation du financeur)', () => {
+    const aide = makeAide({ criteres: { types_formation: ['vae'] }, statut: 'a_confirmer' });
+    expect(evaluerAide(aide, makeProfil({ typeFormation: null }), AUJOURDHUI)).toMatchObject({
+      statut: 'a_verifier',
+      horsPerimetre: false,
+      raisons: ['Précisez le type de formation', 'Montant ou conditions en cours de confirmation auprès du financeur'],
+    });
+  });
+
+  it('un type exclu rend aussi hors périmètre une aide suspendue ou à confirmer (le périmètre ne dépend pas du statut)', () => {
+    for (const statut of ['suspendu', 'a_confirmer'] as const) {
+      const aide = makeAide({ criteres: { types_formation: ['vae'] }, statut });
+      expect(evaluerAide(aide, makeProfil({ typeFormation: 'cqp' }), AUJOURDHUI)).toMatchObject({
+        statut: 'non_eligible',
+        horsPerimetre: true,
+      });
+    }
   });
 });
 

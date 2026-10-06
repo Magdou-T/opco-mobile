@@ -773,6 +773,9 @@
       "criteres": {
         "certifications": [
           "rncp"
+        ],
+        "types_formation": [
+          "vae"
         ]
       },
       "conditions": [
@@ -796,7 +799,9 @@
       "cumul": {
         "cumulable": true,
         "alternatives": [
-          "nat-cpf"
+          "nat-cpf",
+          "nat-clea",
+          "nat-bilan-competences"
         ],
         "note": "Mobilise le même solde CPF que nat-cpf (ne pas additionner). Cumulable avec le forfait Transitions Pro (nat-vae-transitions-pro)."
       },
@@ -879,6 +884,9 @@
         ],
         "certifications": [
           "rncp"
+        ],
+        "types_formation": [
+          "vae"
         ]
       },
       "conditions": [
@@ -1019,7 +1027,9 @@
       "cumul": {
         "cumulable": true,
         "alternatives": [
-          "nat-cpf"
+          "nat-cpf",
+          "nat-vae",
+          "nat-clea"
         ],
         "note": "Mobilise le même solde CPF que nat-cpf, dans la limite de 1 600 €."
       },
@@ -1104,7 +1114,9 @@
       "cumul": {
         "cumulable": true,
         "alternatives": [
-          "nat-cpf"
+          "nat-cpf",
+          "nat-vae",
+          "nat-bilan-competences"
         ],
         "note": "Mobilise le même solde CPF que nat-cpf lorsqu'il est utilisé ; peut aussi être financé dans nat-periode-reconversion."
       },
@@ -2805,7 +2817,8 @@
       "cumul": {
         "cumulable": true,
         "alternatives": [
-          "nat-poei"
+          "nat-poei",
+          "r52-poei-region"
         ],
         "note": "Le stagiaire peut bénéficier de l'aide à la mobilité et de l'aide à la garde d'enfants de France Travail."
       },

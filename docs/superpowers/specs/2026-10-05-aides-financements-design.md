@@ -188,6 +188,7 @@ export interface CriteresAide {        // tous facultatifs ; absent = pas de con
   statuts_dirigeant?: StatutDirigeant[];
   micro_entrepreneur?: boolean;        // true = réservé ; false = exclu
   certifications?: CertificationType[];
+  types_formation?: TrainingType[];    // type de formation du parcours ; une aide propre à un type (par exemple la VAE) ne s'applique pas aux autres
   eligible_cpf?: true;                 // formation éligible au CPF requise (uniquement vrai)
   duree_min_heures?: number; duree_max_heures?: number;
   opcos?: string[]; idcc?: string[]; naf_prefixes?: string[];
@@ -235,13 +236,14 @@ Types existants étendus : `CertificationType` reçoit `'rs'` et `'aucune'` ; `W
 
 `evaluerAides(aides: Aide[], profil: ProfilAides, dateRef: string): AideEvaluee[]`
 
-- `ProfilAides` est dérivé de `WizardState` + résolution OPCO par `profilDepuisWizard()` (projet, statut, région entreprise/bénéficiaire, département, effectif ou tranche, NAF, IDCC, OPCO, structures, âge, RQTH, diplôme, contrat, ancienneté, inscription France Travail, statut dirigeant, micro-entreprise, certification, niveau visé, CPF, durée, coûts, Qualiopi, solde CPF, date de début).
+- `ProfilAides` est dérivé de `WizardState` + résolution OPCO par `profilDepuisWizard()` (projet, statut, région entreprise/bénéficiaire, département, effectif ou tranche, NAF, IDCC, OPCO, structures, âge, RQTH, diplôme, contrat, ancienneté, inscription France Travail, statut dirigeant, micro-entreprise, certification, type de formation, niveau visé, CPF, durée, coûts, Qualiopi, solde CPF, date de début).
 - Chaque critère défini est évalué en **trois états** : `ok`, `ko` (raison : « Réservé aux … »), `inconnu` (raison : « Précisez … »).
   - Effectif : si l'effectif exact est inconnu, on utilise les bornes de la tranche (`less_11` = 0–10, `11_49` = 11–49, `50_299` = 50–299, `300_plus` = ≥ 300) ; un seuil situé à l'intérieur de la tranche donne `inconnu` (ex. « Vérifiez que l'effectif est inférieur à 250 salariés »).
 - Statut global :
   - `non_eligible` si un critère est `ko`, si le projet ou le statut du bénéficiaire ne correspondent pas, si `statut = 'suspendu'` ou si la fin de validité est dépassée à `dateRef` ;
   - sinon `a_verifier` si un critère est `inconnu` ou si `statut = 'a_confirmer'` ;
   - sinon `eligible` (les `conditions` non vérifiables restent affichées).
+- **Hors périmètre** (`horsPerimetre`, l'aide est masquée à l'écran car sans rapport avec la situation) : autre projet, autre public ou autre région (critère `regions` renseigné, région connue et différente) ; une aide propre à un type de formation (par exemple la VAE) est hors périmètre quand le type du parcours est connu et différent ; inconnu : à vérifier. Une information inconnue ne rend jamais une aide hors périmètre, et une aide hors périmètre n'est jamais `eligible` ni `a_verifier`.
 - Montant estimé (arrondi au centime, jamais négatif) :
   - `forfait` → `valeur` ; `pourcentage` → `pourcentage × base` ; `par_heure` → `valeur × durée` ; `par_mois` → `valeur × min(duree_max_mois, durée de la formation en mois à temps plein)` (« jusqu'à » ; 1 mois = 151,67 h = 35 h × 52 / 12, au prorata sans arrondi supérieur ; `null` si la durée du profil, `valeur` ou `duree_max_mois` est inconnu) ; `solde_cpf` → solde CPF saisi, sinon `null` (« jusqu'au montant de vos droits ») ; `non_chiffre` → `null`. Une aide versée sur une période indépendante de la formation (par exemple 500 € par mois pendant 3 mois après une rupture de contrat) est un `forfait` du total maximal, pas un `par_mois`.
   - Le `plafond` s'applique ; la première `majoration` dont les critères sont tous `ok` remplace valeur/pourcentage/plafond (un `plafond: null` explicite lève le plafond de base).

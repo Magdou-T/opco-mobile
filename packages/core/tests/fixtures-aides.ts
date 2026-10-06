@@ -36,7 +36,7 @@ export function makeAide(over: Partial<Aide> = {}): Aide {
   };
 }
 
-/** Profil type : salarié en CDI d'une TPE d'Île-de-France (AKTO), formation RNCP de 140 h à 4 200 €. */
+/** Profil type : salarié en CDI d'une TPE d'Île-de-France (AKTO), formation RNCP (type « certification ») de 140 h à 4 200 €. */
 export function makeProfil(over: Partial<ProfilAides> = {}): ProfilAides {
   return {
     projet: 'formation_salarie',
@@ -60,6 +60,7 @@ export function makeProfil(over: Partial<ProfilAides> = {}): ProfilAides {
     statutDirigeant: null,
     microEntrepreneur: null,
     certification: 'rncp',
+    typeFormation: 'certification',
     niveauFormationVise: 5,
     eligibleCpf: true,
     dureeHeures: 140,

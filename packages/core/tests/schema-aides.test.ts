@@ -14,6 +14,7 @@ import {
 } from '../src/schema';
 import { FINANCEUR_LABELS, type Aide, type CriteresAide } from '../src/aides/types';
 import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '../src/data';
+import { TRAINING_TYPE_LABELS, type TrainingType } from '../src/types';
 import { makeAide } from './fixtures-aides';
 
 // Vérification à la compilation : le schéma Zod produit bien des `Aide`.
@@ -27,7 +28,7 @@ function problemes(schema: z.ZodTypeAny, donnee: unknown) {
   return r.success ? [] : r.error.issues;
 }
 
-describe('schéma du catalogue d’aides', () => {
+describe("schéma du catalogue d'aides", () => {
   it('accepte une aide complète', () => {
     expect(versAide(AideSchema.parse(depuisAide(makeAide()))).id).toBe('nat-test');
   });
@@ -154,6 +155,82 @@ describe('critères booléens : vrais seulement', () => {
   });
 });
 
+describe('critère types_formation : type de formation du parcours', () => {
+  // Valeurs : celles du parcours (WizardState.formationType). Une liste vide serait un critère qui ne dit rien : refusée.
+  const TYPES = Object.keys(TRAINING_TYPE_LABELS) as TrainingType[];
+  const aide = makeAide();
+  const majoration = { criteres: { age_max: 25 }, valeur: 6000, libelle: 'Moins de 26 ans' };
+  const avecCriteres = (criteres: object) => ({ ...aide, criteres });
+  const dansUneMajoration = (criteres: object) => ({
+    ...aide,
+    montant: { ...aide.montant, majorations: [{ ...majoration, criteres }] },
+  });
+
+  it('le type CriteresAide porte types_formation (vérifié à la compilation par tsc)', () => {
+    const critere: CriteresAide = { types_formation: ['vae', 'reconversion'] };
+    expect(critere.types_formation).toEqual(['vae', 'reconversion']);
+    const faux: CriteresAide[] = [
+      // @ts-expect-error `autre` n'est pas un type de formation du parcours
+      { types_formation: ['autre'] },
+      // @ts-expect-error une chaîne n'est pas une liste de types
+      { types_formation: 'vae' },
+    ];
+    expect(faux).toHaveLength(2);
+  });
+
+  describe.each([
+    ["dans les critères de l'aide", avecCriteres, ['criteres']],
+    ["dans les critères d'une majoration", dansUneMajoration, ['montant', 'majorations', 0, 'criteres']],
+  ])('%s', (_ou, fabriquer, chemin) => {
+    it("accepte une liste d'un seul type", () => {
+      expect(problemes(AideSchema, fabriquer({ types_formation: ['vae'] }))).toEqual([]);
+    });
+
+    it.each(TYPES)('accepte le type %s', (type) => {
+      expect(problemes(AideSchema, fabriquer({ types_formation: [type] }))).toEqual([]);
+    });
+
+    it('accepte une liste de plusieurs types', () => {
+      expect(problemes(AideSchema, fabriquer({ types_formation: ['vae', 'reconversion', 'cqp'] }))).toEqual([]);
+    });
+
+    it('refuse une liste vide (au moins un type)', () => {
+      expect(problemes(AideSchema, fabriquer({ types_formation: [] }))).toMatchObject([
+        { code: 'too_small', minimum: 1, type: 'array', path: [...chemin, 'types_formation'] },
+      ]);
+    });
+
+    it.each(['autre', 'VAE', 'certifiante', ''])('refuse le type inconnu « %s »', (inconnu) => {
+      expect(problemes(AideSchema, fabriquer({ types_formation: [inconnu] }))).toMatchObject([
+        { code: 'invalid_enum_value', received: inconnu, path: [...chemin, 'types_formation', 0] },
+      ]);
+    });
+
+    it("refuse un type inconnu au milieu d'une liste valide", () => {
+      expect(problemes(AideSchema, fabriquer({ types_formation: ['vae', 'autre'] }))).toMatchObject([
+        { code: 'invalid_enum_value', received: 'autre', path: [...chemin, 'types_formation', 1] },
+      ]);
+    });
+
+    it("refuse une valeur qui n'est pas une liste", () => {
+      expect(problemes(AideSchema, fabriquer({ types_formation: 'vae' }))).toMatchObject([
+        { code: 'invalid_type', expected: 'array', received: 'string', path: [...chemin, 'types_formation'] },
+      ]);
+    });
+  });
+
+  it('le critère est facultatif : une aide sans types_formation reste valide', () => {
+    expect(problemes(AideSchema, makeAide({ criteres: {} }))).toEqual([]);
+  });
+
+  it('le catalogue embarqué, avec ses aides propres à la VAE, est valide au schéma strict et cohérent', () => {
+    const invalides = EMBEDDED_AIDES.filter((a) => problemes(AideSchema, a).length > 0).map((a) => a.id);
+    expect(invalides).toEqual([]);
+    expect(sanityCheckAides(EMBEDDED_AIDES)).toEqual([]);
+    expect(EMBEDDED_AIDES.filter((a) => a.criteres.types_formation !== undefined).length).toBeGreaterThan(0);
+  });
+});
+
 describe('schémas du catalogue stricts', () => {
   // Une clé mal orthographiée ne doit pas disparaître en silence : elle retirerait une condition de l'aide.
   const aide = makeAide();
@@ -168,11 +245,11 @@ describe('schémas du catalogue stricts', () => {
   };
 
   const cas: [string, z.ZodTypeAny, unknown, string, (string | number)[]][] = [
-    ['l’aide', AideSchema, { ...aide, region: '11' }, 'region', []],
+    ["l'aide", AideSchema, { ...aide, region: '11' }, 'region', []],
     ['les critères', AideSchema, { ...aide, criteres: { age_maxi: 30 } }, 'age_maxi', ['criteres']],
     ['le montant', AideSchema, avecMontant({ plafon: 500 }), 'plafon', ['montant']],
     ['une majoration', AideSchema, avecMajoration({ plafon: 1 }), 'plafon', ['montant', 'majorations', 0]],
-    ['les critères d’une majoration', AideSchema, avecMajoration({ criteres: { age_maxi: 25 } }), 'age_maxi', ['montant', 'majorations', 0, 'criteres']],
+    ["les critères d'une majoration", AideSchema, avecMajoration({ criteres: { age_maxi: 25 } }), 'age_maxi', ['montant', 'majorations', 0, 'criteres']],
     ['une source', AideSchema, { ...aide, sources: [{ ...aide.sources[0], titr: 'x' }] }, 'titr', ['sources', 0]],
     ['la règle de cumul', AideSchema, { ...aide, cumul: { cumulable: true, alternative: ['nat-z'] } }, 'alternative', ['cumul']],
     ['la période de validité', AideSchema, { ...aide, validite: { debut: null, fin: null, jusque: null } }, 'jusque', ['validite']],
@@ -205,6 +282,7 @@ describe('schémas du catalogue stricts', () => {
         statuts_dirigeant: ['artisan'],
         micro_entrepreneur: false,
         certifications: ['rncp'],
+        types_formation: ['vae'],
         eligible_cpf: true,
         duree_min_heures: 10,
         duree_max_heures: 500,
@@ -255,14 +333,14 @@ describe('sanityCheckOpco : barèmes par tranche', () => {
   });
   const DERNIERE_TRANCHE = 'cout_horaire_seuils : la dernière tranche doit avoir max_heures null';
 
-  it('accepte une dernière tranche sans limite, quel que soit l’ordre de saisie', () => {
+  it("accepte une dernière tranche sans limite, quel que soit l'ordre de saisie", () => {
     const o = opco();
     o.cout_horaire_seuils = [{ max_heures: null, valeur: 20 }, { max_heures: 100, valeur: 30 }];
     o.variantes_branche = [variante([{ max_heures: null, valeur: 10 }, { max_heures: 50, valeur: 25 }])];
     expect(sanityCheckOpco(o).filter((i) => i.includes('cout_horaire_seuils'))).toEqual([]);
   });
 
-  it('signale un barème de l’OPCO dont la dernière tranche est limitée', () => {
+  it("signale un barème de l'OPCO dont la dernière tranche est limitée", () => {
     const o = opco();
     o.cout_horaire_seuils = [{ max_heures: 200, valeur: 20 }, { max_heures: 100, valeur: 30 }];
     expect(sanityCheckOpco(o)).toContain(`${o.slug}: ${DERNIERE_TRANCHE}`);
@@ -274,7 +352,7 @@ describe('sanityCheckOpco : barèmes par tranche', () => {
     expect(sanityCheckOpco(o)).toContain(`${o.slug}: variante[v1].${DERNIERE_TRANCHE}`);
   });
 
-  it('contrôle les bornes des tranches de l’OPCO et celles de chaque variante', () => {
+  it("contrôle les bornes des tranches de l'OPCO et celles de chaque variante", () => {
     const o = opco();
     o.cout_horaire_seuils = [{ max_heures: null, valeur: 250 }];
     o.variantes_branche = [variante([{ max_heures: 100, valeur: 250 }, { max_heures: null, valeur: 10 }])];
