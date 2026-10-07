@@ -211,13 +211,15 @@ function CarteOpco({
             {opco?.name ?? 'OPCO non identifié'}
           </h3>
           {opco?.nom_complet && <p className="mt-0.5 text-sm leading-snug text-texte-doux">{opco.nom_complet}</p>}
-          {resolution && !choixManuel && (
-            <div className="mt-2.5">
-              <CertitudeBadge certitude={resolution.certitude} />
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Sur sa propre ligne : l'étiquette ne se coupe pas et tient dans la carte dès 320 px. */}
+      {resolution && !choixManuel && (
+        <div>
+          <CertitudeBadge certitude={resolution.certitude} />
+        </div>
+      )}
 
       {choixManuel ? (
         <p className="text-sm leading-relaxed text-texte-doux">OPCO choisi manuellement.</p>
@@ -553,6 +555,7 @@ export function StepIdentification({ state, updateState }: Props) {
 
             {results.length > 0 && !state.sirenNumber && (
               <ul
+                role="list"
                 aria-label="Entreprises trouvées"
                 className="max-h-[26rem] divide-y divide-filet overflow-y-auto rounded-carte border border-filet bg-white shadow-douce"
               >
@@ -565,7 +568,7 @@ export function StepIdentification({ state, updateState }: Props) {
                       <button
                         type="button"
                         onClick={() => choisirEntreprise(entreprise)}
-                        className="group flex w-full items-start gap-3 px-4 py-3.5 text-left transition-colors hover:bg-lin-soft focus-visible:bg-lin-soft focus-visible:outline-offset-[-3px]"
+                        className="group flex w-full items-start gap-3 px-4 py-3.5 text-left transition-[background-color] hover:bg-lin-soft focus-visible:bg-lin-soft focus-visible:outline-offset-[-3px]"
                       >
                         <span
                           aria-hidden="true"

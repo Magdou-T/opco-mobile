@@ -273,10 +273,13 @@ describe("taille déduite de l'effectif exact", () => {
   });
 
   test("après toute suite d'actions, la taille et l'effectif ne se contredisent jamais", () => {
+    // mulberry32 : tirages indépendants et reproductibles.
     let graine = 7;
     const hasard = (n: number) => {
-      graine = (graine * 1103515245 + 12345) & 0x7fffffff;
-      return graine % n;
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
     };
     const TAILLES: CompanySize[] = ['less_11', '11_49', '50_299', '300_plus'];
     for (let partie = 0; partie < 300; partie++) {

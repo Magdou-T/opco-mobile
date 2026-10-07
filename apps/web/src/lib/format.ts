@@ -5,6 +5,11 @@
 
 import type { DispositifComplementaire } from '@opco/core';
 
+/** « de » devant un nom, élidé devant une voyelle : « d'AKTO », « d'OPCO 2i », « de Constructys ». */
+export function de(nom: string): string {
+  return /^[aeiouyàâäéèêëîïôöûü]/i.test(nom) ? `d'${nom}` : `de ${nom}`;
+}
+
 /** Montant en euros, à la française (« 6 300 € »). */
 export function formatEuro(amount: number): string {
   return new Intl.NumberFormat('fr-FR', {

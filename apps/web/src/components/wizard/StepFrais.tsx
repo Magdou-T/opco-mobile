@@ -1,174 +1,142 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import type { TransportMode, WizardState } from '@opco/core';
+import type { IconName } from '@/components/ui/Icon';
+import { CheckboxRow, ChoiceButton, ChoiceGroup, NumberField } from '@/components/ui/forms';
+import { EnTeteEtape } from './EnTeteEtape';
+import { TRANSPORT_LABELS } from './libelles';
 
 interface Props {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
 }
 
+/** Besoin de frais (case à cocher en carte) et, quand il est coché, ses montants dans un panneau relié par un rail. */
+function BlocFrais({
+  icone,
+  label,
+  description,
+  checked,
+  onToggle,
+  children,
+}: {
+  icone: IconName;
+  label: string;
+  description: string;
+  checked: boolean;
+  onToggle: (checked: boolean) => void;
+  children: ReactNode;
+}) {
+  return (
+    <div>
+      <CheckboxRow icone={icone} label={label} description={description} checked={checked} onToggle={onToggle} />
+      {checked && (
+        <div className="ml-6 space-y-5 border-l-2 border-orange-deep/40 pt-4 pb-1 pl-5 sm:ml-8 sm:pl-6">{children}</div>
+      )}
+    </div>
+  );
+}
+
+/** Étape 5 (sautée pour une formation à distance) : frais de déplacement, d'hébergement et de repas, tous facultatifs. */
 export function StepFrais({ state, updateState }: Props) {
-  // Auto-calculate training days from hours (7h/day standard)
-  const estimatedDays = state.durationHours ? Math.ceil(state.durationHours / 7) : 0;
+  // Jours de formation estimés sur une base de 7 heures par jour, retenus quand le champ reste vide.
+  const joursEstimes = state.durationHours ? Math.ceil(state.durationHours / 7) : 0;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-display text-xl font-bold text-ink mb-2">
-          Frais annexes
-        </h2>
-        <p className="text-ink-soft text-sm">
-          Si la formation nécessite un déplacement, indiquez vos frais prévisionnels.
-          Certains OPCO prennent en charge tout ou partie de ces frais.
-        </p>
-      </div>
+    <div className="space-y-8">
+      <EnTeteEtape
+        etape="frais"
+        titre="Frais annexes"
+        chapeau="Si la formation oblige à se déplacer, indiquez les frais prévus. Certains OPCO prennent en charge tout ou partie de ces frais."
+      />
 
-      {/* Training days */}
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-ink-soft">
-          Nombre de jours de formation
-        </label>
-        <input
-          type="number"
-          min="1"
-          value={state.trainingDays ?? (estimatedDays || '')}
-          onChange={(e) => updateState({ trainingDays: e.target.value ? parseInt(e.target.value) : null })}
-          placeholder={`Estimation : ${estimatedDays} jours (base 7h/jour)`}
-          className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
-        />
-        {!state.trainingDays && estimatedDays > 0 && (
-          <p className="text-xs text-ink-faint">
-            Estimation automatique : {estimatedDays} jours (base 7h/jour). Modifiable.
-          </p>
-        )}
-      </div>
+      <NumberField
+        label="Nombre de jours de formation"
+        facultatif
+        value={state.trainingDays}
+        onChange={(trainingDays) => updateState({ trainingDays })}
+        min={1}
+        placeholder={joursEstimes > 0 ? `Ex : ${joursEstimes}` : 'Ex : 5'}
+        helper={
+          joursEstimes > 0
+            ? `Sans saisie, ${joursEstimes} ${joursEstimes > 1 ? 'jours sont retenus' : 'jour est retenu'} (7 heures par jour).`
+            : undefined
+        }
+      />
 
-      {/* Transport */}
-      <div className="space-y-3 p-4 border border-rule rounded">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={state.needsTransport}
-            onChange={(e) => updateState({ needsTransport: e.target.checked })}
-            className="h-4 w-4 rounded border-rule text-cobalt focus:ring-cobalt"
+      <div className="space-y-4">
+        <BlocFrais
+          icone="train"
+          label="J'ai besoin d'un déplacement"
+          description="Trajet entre le lieu de travail ou le domicile et le lieu de formation."
+          checked={state.needsTransport}
+          onToggle={(needsTransport) => updateState({ needsTransport })}
+        >
+          <ChoiceGroup label="Mode de transport">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {(Object.entries(TRANSPORT_LABELS) as [TransportMode, string][]).map(([mode, libelle]) => (
+                <ChoiceButton
+                  key={mode}
+                  label={libelle}
+                  selected={state.transportMode === mode}
+                  onClick={() => updateState({ transportMode: mode })}
+                  compact
+                />
+              ))}
+            </div>
+          </ChoiceGroup>
+          <NumberField
+            label="Distance estimée (km)"
+            facultatif
+            value={state.transportDistanceKm}
+            onChange={(transportDistanceKm) => updateState({ transportDistanceKm })}
+            placeholder="Ex : 250"
           />
-          <span className="text-sm font-medium text-ink">
-            J&apos;ai besoin d&apos;un déplacement
-          </span>
-        </label>
+        </BlocFrais>
 
-        {state.needsTransport && (
-          <div className="ml-7 space-y-3">
-            <div className="space-y-2">
-              <label className="block text-sm text-ink-soft">Mode de transport</label>
-              <div className="grid grid-cols-4 gap-2">
-                {([
-                  ['train', 'Train'],
-                  ['avion', 'Avion'],
-                  ['voiture', 'Voiture'],
-                  ['autre', 'Autre'],
-                ] as [TransportMode, string][]).map(([key, label]) => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => updateState({ transportMode: key })}
-                    className={`p-2 rounded border text-xs text-center transition-all ${
-                      state.transportMode === key
-                        ? 'border-cobalt bg-cobalt-soft text-navy font-medium'
-                        : 'border-rule hover:border-ink-faint text-ink-soft'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm text-ink-soft mb-1">Distance estimée (km)</label>
-              <input
-                type="number"
-                min="0"
-                value={state.transportDistanceKm ?? ''}
-                onChange={(e) => updateState({ transportDistanceKm: e.target.value ? parseInt(e.target.value) : null })}
-                placeholder="Ex: 250"
-                className="w-full rounded border border-rule bg-white px-4 py-2 text-sm text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Hébergement */}
-      <div className="space-y-3 p-4 border border-rule rounded">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={state.needsAccommodation}
-            onChange={(e) => updateState({ needsAccommodation: e.target.checked })}
-            className="h-4 w-4 rounded border-rule text-cobalt focus:ring-cobalt"
-          />
-          <span className="text-sm font-medium text-ink">
-            J&apos;ai besoin d&apos;un hébergement
-          </span>
-        </label>
-
-        {state.needsAccommodation && (
-          <div className="ml-7 grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm text-ink-soft mb-1">Nombre de nuits</label>
-              <input
-                type="number"
-                min="1"
-                value={state.accommodationNights ?? ''}
-                onChange={(e) => updateState({ accommodationNights: e.target.value ? parseInt(e.target.value) : null })}
-                placeholder="Ex: 10"
-                className="w-full rounded border border-rule bg-white px-4 py-2 text-sm text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-ink-soft mb-1">Coût par nuit (€)</label>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={state.accommodationCostPerNight ?? ''}
-                onChange={(e) => updateState({ accommodationCostPerNight: e.target.value ? parseFloat(e.target.value) : null })}
-                placeholder="Ex: 80"
-                className="w-full rounded border border-rule bg-white px-4 py-2 text-sm text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Restauration */}
-      <div className="space-y-3 p-4 border border-rule rounded">
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={state.needsMeals}
-            onChange={(e) => updateState({ needsMeals: e.target.checked })}
-            className="h-4 w-4 rounded border-rule text-cobalt focus:ring-cobalt"
-          />
-          <span className="text-sm font-medium text-ink">
-            Frais de restauration
-          </span>
-        </label>
-
-        {state.needsMeals && (
-          <div className="ml-7">
-            <label className="block text-sm text-ink-soft mb-1">Coût moyen par jour (€)</label>
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={state.mealCostPerDay ?? ''}
-              onChange={(e) => updateState({ mealCostPerDay: e.target.value ? parseFloat(e.target.value) : null })}
-              placeholder="Ex: 15"
-              className="w-full rounded border border-rule bg-white px-4 py-2 text-sm text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
+        <BlocFrais
+          icone="lit"
+          label="J'ai besoin d'un hébergement"
+          description="Nuits sur place quand la formation est loin du domicile."
+          checked={state.needsAccommodation}
+          onToggle={(needsAccommodation) => updateState({ needsAccommodation })}
+        >
+          <div className="grid gap-x-5 gap-y-5 sm:grid-cols-2">
+            <NumberField
+              label="Nombre de nuits"
+              value={state.accommodationNights}
+              onChange={(accommodationNights) => updateState({ accommodationNights })}
+              min={1}
+              placeholder="Ex : 10"
+              largeur="pleine"
+            />
+            <NumberField
+              label="Coût par nuit (€)"
+              decimal
+              value={state.accommodationCostPerNight}
+              onChange={(accommodationCostPerNight) => updateState({ accommodationCostPerNight })}
+              placeholder="Ex : 80"
+              largeur="pleine"
             />
           </div>
-        )}
+        </BlocFrais>
+
+        <BlocFrais
+          icone="couverts"
+          label="Frais de restauration"
+          description="Repas pris pendant les jours de formation."
+          checked={state.needsMeals}
+          onToggle={(needsMeals) => updateState({ needsMeals })}
+        >
+          <NumberField
+            label="Coût moyen par jour (€)"
+            decimal
+            value={state.mealCostPerDay}
+            onChange={(mealCostPerDay) => updateState({ mealCostPerDay })}
+            placeholder="Ex : 15"
+          />
+        </BlocFrais>
       </div>
     </div>
   );

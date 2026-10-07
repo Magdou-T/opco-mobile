@@ -1,138 +1,238 @@
 'use client';
 
+import { useId } from 'react';
+import type { ReactNode } from 'react';
 import {
-  CONTRACT_TYPE_LABELS,
+  CERTIFICATION_LABELS,
   COMPANY_SIZE_LABELS,
-  REGIONS,
-  TRAINING_TYPE_LABELS,
-  TRAINING_MODE_LABELS,
+  CONTRACT_TYPE_LABELS,
   EMBEDDED_OPCO_LIST,
+  NIVEAU_CERTIFICATION_LABELS,
+  NIVEAU_DIPLOME_LABELS,
+  PROJET_LABELS,
+  REGIONS,
+  STATUT_DIRIGEANT_LABELS,
+  STATUT_PAR_PROJET,
+  TRAINING_MODE_LABELS,
+  TRAINING_TYPE_LABELS,
+  TYPE_ALTERNANCE_LABELS,
   getEmbeddedOpcoBySlug,
   resolveVarianteBranche,
+  saisieDepuisMois,
 } from '@opco/core';
 import type { WizardState } from '@opco/core';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { Icon } from '@/components/ui/Icon';
+import type { IconName } from '@/components/ui/Icon';
 import type { EtapeSite } from '@/lib/etapes';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { formatEuro } from '@/lib/format';
+import { numeroLisible } from '@/lib/recherche';
+import { EnTeteEtape } from './EnTeteEtape';
+import { ICONES_PROJET, TRANSPORT_LABELS } from './libelles';
 
 interface Props {
   state: WizardState;
   onEdit: (step: EtapeSite) => void;
 }
 
-function Section({ title, onEdit, children }: { title: string; onEdit: () => void; children: React.ReactNode }) {
+/** Ligne du récapitulatif : une valeur nulle s'affiche « Non renseigné ». */
+type Ligne = [libelle: string, valeur: ReactNode | null | undefined];
+
+const nombre = (n: number): string => new Intl.NumberFormat('fr-FR').format(n);
+const pluriel = (n: number, un: string, plusieurs: string): string => `${nombre(n)} ${n > 1 ? plusieurs : un}`;
+const ouiNon = (valeur: boolean | null): string | null => (valeur == null ? null : valeur ? 'Oui' : 'Non');
+
+/** Section du récapitulatif : en-tête iconifié, bouton « Modifier » qui rouvre l'étape, lignes libellé / valeur. */
+function Section({
+  titre,
+  icone,
+  onEdit,
+  lignes,
+}: {
+  titre: string;
+  icone: IconName;
+  onEdit: () => void;
+  lignes: Ligne[];
+}) {
+  const id = useId();
   return (
-    <div className="border border-rule rounded p-4">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-medium text-ink">{title}</h3>
-        <button
-          type="button"
-          onClick={onEdit}
-          aria-label={`Modifier la section ${title}`}
-          className="text-sm text-cobalt hover:text-navy font-medium"
-        >
+    <Card as="section" aria-labelledby={id} padding="none">
+      <div className="flex items-center justify-between gap-4 border-b border-filet px-4 py-3 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="grid size-9 shrink-0 place-items-center rounded-xl bg-turquoise-soft text-turquoise-deep"
+          >
+            <Icon name={icone} className="size-[18px]" />
+          </span>
+          <h3 id={id} className="text-lg leading-snug font-bold tracking-[-0.01em] text-texte">
+            {titre}
+          </h3>
+        </div>
+        <Button variant="ghost" icone="crayon" onClick={onEdit} aria-label={`Modifier la section ${titre}`}>
           Modifier
-        </button>
+        </Button>
       </div>
-      <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">{children}</dl>
-    </div>
+      <dl className="divide-y divide-filet px-4 sm:px-6">
+        {lignes.map(([libelle, valeur]) => (
+          <div key={libelle} className="grid gap-0.5 py-3 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:gap-6">
+            <dt className="text-sm text-texte-doux">{libelle}</dt>
+            <dd className="text-sm font-medium break-words text-texte">
+              {valeur == null || valeur === '' ? (
+                <span className="font-normal text-texte-discret">Non renseigné</span>
+              ) : (
+                valeur
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </Card>
   );
 }
 
-function Item({ label, value }: { label: string; value: string | null | undefined }) {
-  return (
-    <>
-      <dt className="text-ink-faint">{label}</dt>
-      <dd className="text-ink font-medium">{value || '-'}</dd>
-    </>
-  );
-}
-
+/** Étape 6 : tout ce qui a été saisi, section par section, avant de lancer la recherche des financements. */
 export function StepRecap({ state, onEdit }: Props) {
+  const projet = state.projetType ?? 'formation_salarie';
+  const statut = STATUT_PAR_PROJET[projet];
+
+  // OPCO et barème de branche appliqué par le moteur : choix manuel, sinon variante qui couvre l'IDCC détecté, sinon
+  // barème général (la ligne n'existe que pour un OPCO qui a des barèmes par branche).
   const opcoSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const opco = opcoSlug ? EMBEDDED_OPCO_LIST.find(o => o.slug === opcoSlug) : null;
-  const fullOpco = opcoSlug ? getEmbeddedOpcoBySlug(opcoSlug) : null;
-  // Barème de branche appliqué par le moteur : choix manuel, sinon variante qui couvre l'IDCC détecté, sinon barème général
-  // (la ligne n'existe que pour un OPCO qui a des barèmes par branche).
-  const variante = fullOpco ? resolveVarianteBranche(fullOpco, state) : null;
-  const aDesVariantes = (fullOpco?.variantes_branche?.length ?? 0) > 0;
-  const brancheNom = !aDesVariantes
-    ? null
-    : variante
-      ? variante.id === state.selectedBrancheId
-        ? variante.branche_nom
-        : `${variante.branche_nom} (détecté d'après l'IDCC ${state.detectedIdcc})`
-      : 'Barème général';
+  const opco = opcoSlug ? EMBEDDED_OPCO_LIST.find((o) => o.slug === opcoSlug) : null;
+  const opcoComplet = opcoSlug ? getEmbeddedOpcoBySlug(opcoSlug) : null;
+  const variante = opcoComplet ? resolveVarianteBranche(opcoComplet, state) : null;
+  const aDesVariantes = (opcoComplet?.variantes_branche?.length ?? 0) > 0;
+  const brancheNom = variante
+    ? variante.id === state.selectedBrancheId
+      ? variante.branche_nom
+      : `${variante.branche_nom} (détectée d'après l'IDCC ${state.detectedIdcc})`
+    : 'Barème général';
+
+  const entreprise: Ligne[] = [
+    ...(state.detectedCompanyName && state.sirenNumber
+      ? ([['Entreprise', `${state.detectedCompanyName} (SIREN ${numeroLisible(state.sirenNumber)})`]] as Ligne[])
+      : []),
+    ['OPCO', opco ? `${opco.name}${state.selectedOpcoSlug ? ' (choisi manuellement)' : ''}` : null],
+    ...(aDesVariantes ? ([['Accord de branche', brancheNom]] as Ligne[]) : []),
+    ['Région', state.regionCode ? REGIONS[state.regionCode] : null],
+    [
+      'Taille',
+      state.companySize
+        ? `${COMPANY_SIZE_LABELS[state.companySize]}${state.effectif != null ? " (déduite de l'effectif)" : ''}`
+        : null,
+    ],
+    ['Effectif exact', state.effectif != null ? pluriel(state.effectif, 'salarié', 'salariés') : null],
+    ...(ouvreBudgetOpco(state.projetType)
+      ? ([
+          ['Budget déjà consommé', state.budgetDejaConsomme != null ? formatEuro(state.budgetDejaConsomme) : null],
+        ] as Ligne[])
+      : []),
+  ];
+
+  const regionResidence: Ligne = [
+    'Région de résidence',
+    state.regionBeneficiaireCode
+      ? REGIONS[state.regionBeneficiaireCode]
+      : state.regionCode
+        ? `${REGIONS[state.regionCode]} (celle de l'entreprise)`
+        : null,
+  ];
+  const communes: Ligne[] = [
+    ['Âge', state.ageBeneficiaire != null ? pluriel(state.ageBeneficiaire, 'an', 'ans') : null],
+    ['Diplôme le plus élevé', state.niveauDiplome ? NIVEAU_DIPLOME_LABELS[state.niveauDiplome] : null],
+    ['Reconnaissance de travailleur handicapé', state.isHandicap ? 'Oui' : 'Non'],
+  ];
+  const soldeCpf: Ligne = ['Solde CPF', state.soldeCpf != null ? formatEuro(state.soldeCpf) : null];
+  const beneficiaire: Ligne[] =
+    statut === 'salarie'
+      ? [
+          ['Contrat', state.contractType && state.contractType !== 'alternance' ? CONTRACT_TYPE_LABELS[state.contractType] : null],
+          ['Ancienneté', state.anciennete_mois != null ? `${nombre(state.anciennete_mois)} mois` : null],
+          ...communes,
+          soldeCpf,
+        ]
+      : statut === 'demandeur_emploi'
+        ? [['Inscription à France Travail', ouiNon(state.inscritFranceTravail)], regionResidence, ...communes]
+        : statut === 'alternant'
+          ? [
+              ["Type de contrat d'alternance", state.typeAlternance ? TYPE_ALTERNANCE_LABELS[state.typeAlternance] : null],
+              ['Inscription à France Travail', ouiNon(state.inscritFranceTravail)],
+              regionResidence,
+              ...communes,
+            ]
+          : [
+              ['Statut du dirigeant', state.statutDirigeant ? STATUT_DIRIGEANT_LABELS[state.statutDirigeant] : null],
+              ['Micro-entrepreneur', ouiNon(state.microEntrepreneur)],
+              ...communes,
+              soldeCpf,
+            ];
+
+  const formation: Ligne[] = [
+    ['Formation', state.formationNom],
+    ['Type', state.formationType ? TRAINING_TYPE_LABELS[state.formationType] : null],
+    ['Certification visée', state.certificationLevel ? CERTIFICATION_LABELS[state.certificationLevel] : null],
+    ['Niveau visé', state.niveauFormationVise ? NIVEAU_CERTIFICATION_LABELS[state.niveauFormationVise] : null],
+    ['Éligible au CPF', ouiNon(state.eligibleCpf)],
+    ['Mode', state.trainingMode ? TRAINING_MODE_LABELS[state.trainingMode] : null],
+    ['Durée', state.durationHours ? `${nombre(state.durationHours)} h` : null],
+    ['Coût total HT', state.pedagogyCostTotal ? formatEuro(state.pedagogyCostTotal) : null],
+    ['Coût horaire', state.pedagogyCostPerHour ? `${formatEuro(state.pedagogyCostPerHour)}/h` : null],
+    ['Début prévu', saisieDepuisMois(state.dateDebutFormation) || null],
+    ['Organisme', state.organismeFormation],
+    ['Organisme certifié Qualiopi', ouiNon(state.organismeQualiopi)],
+  ];
+
+  const joursEstimes = state.durationHours ? Math.ceil(state.durationHours / 7) : 0;
+  const avecFrais = state.needsTransport || state.needsAccommodation || state.needsMeals;
+  const frais: Ligne[] = [
+    ...(state.needsTransport
+      ? ([
+          ['Transport', state.transportMode ? TRANSPORT_LABELS[state.transportMode] : 'Oui'],
+          ['Distance', state.transportDistanceKm != null ? `${nombre(state.transportDistanceKm)} km` : null],
+        ] as Ligne[])
+      : []),
+    ...(state.needsAccommodation
+      ? ([
+          ['Hébergement', state.accommodationNights ? pluriel(state.accommodationNights, 'nuit', 'nuits') : 'Oui'],
+          ['Coût par nuit', state.accommodationCostPerNight != null ? formatEuro(state.accommodationCostPerNight) : null],
+        ] as Ligne[])
+      : []),
+    ...(state.needsMeals
+      ? ([['Restauration', state.mealCostPerDay != null ? `${formatEuro(state.mealCostPerDay)} par jour` : 'Oui']] as Ligne[])
+      : []),
+    [
+      'Jours de formation',
+      state.trainingDays
+        ? pluriel(state.trainingDays, 'jour', 'jours')
+        : joursEstimes > 0
+          ? `${pluriel(joursEstimes, 'jour', 'jours')} (estimation, 7 heures par jour)`
+          : null,
+    ],
+  ];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-display text-xl font-bold text-ink mb-2">
-          Récapitulatif
-        </h2>
-        <p className="text-ink-soft text-sm">
-          Vérifiez vos informations avant de lancer le calcul du financement.
-        </p>
+    <div className="space-y-8">
+      <EnTeteEtape
+        etape="recap"
+        titre="Récapitulatif"
+        chapeau="Vérifiez vos informations avant de lancer la recherche de financements."
+      />
+
+      <div className="space-y-4">
+        <Section
+          titre="Projet"
+          icone={ICONES_PROJET[projet]}
+          onEdit={() => onEdit('projet')}
+          lignes={[['Projet', state.projetType ? PROJET_LABELS[state.projetType].label : null]]}
+        />
+        <Section titre="Entreprise" icone="batiment" onEdit={() => onEdit('identification')} lignes={entreprise} />
+        <Section titre="Bénéficiaire" icone="personne" onEdit={() => onEdit('situation')} lignes={beneficiaire} />
+        <Section titre="Formation" icone="livre" onEdit={() => onEdit('formation')} lignes={formation} />
+        {avecFrais && <Section titre="Frais annexes" icone="euro" onEdit={() => onEdit('frais')} lignes={frais} />}
       </div>
-
-      {/* Entreprise */}
-      <Section title="Entreprise" onEdit={() => onEdit('identification')}>
-        {state.detectedCompanyName && (
-          <Item label="Entreprise" value={`${state.detectedCompanyName} (SIREN ${state.sirenNumber})`} />
-        )}
-        <Item label="OPCO" value={opco?.name} />
-        {brancheNom && <Item label="Accord de branche" value={brancheNom} />}
-        <Item label="Région" value={state.regionCode ? REGIONS[state.regionCode] : null} />
-        <Item label="Taille" value={state.companySize ? COMPANY_SIZE_LABELS[state.companySize] : null} />
-        {state.effectif != null && (
-          <Item label="Effectif exact" value={`${state.effectif} ${state.effectif > 1 ? 'salariés' : 'salarié'}`} />
-        )}
-        {ouvreBudgetOpco(state.projetType) && state.budgetDejaConsomme != null && (
-          <Item label="Budget déjà consommé" value={formatEuro(state.budgetDejaConsomme)} />
-        )}
-      </Section>
-
-      {/* Bénéficiaire */}
-      <Section title="Bénéficiaire" onEdit={() => onEdit('situation')}>
-        <Item label="Contrat" value={state.contractType ? CONTRACT_TYPE_LABELS[state.contractType] : null} />
-        <Item label="Ancienneté" value={state.anciennete_mois ? `${state.anciennete_mois} mois` : null} />
-        {state.isHandicap && <Item label="Handicap" value="Oui (RQTH)" />}
-        {state.isReconversion && <Item label="Reconversion" value="Oui" />}
-        {state.isSortieChomage && <Item label="Sortie chômage" value="Oui" />}
-      </Section>
-
-      {/* Formation */}
-      <Section title="Formation" onEdit={() => onEdit('formation')}>
-        <Item label="Formation" value={state.formationNom} />
-        <Item label="Type" value={state.formationType ? TRAINING_TYPE_LABELS[state.formationType] : null} />
-        <Item label="Mode" value={state.trainingMode ? TRAINING_MODE_LABELS[state.trainingMode] : null} />
-        <Item label="Durée" value={state.durationHours ? `${state.durationHours}h` : null} />
-        <Item label="Coût total" value={state.pedagogyCostTotal ? `${state.pedagogyCostTotal} €` : null} />
-        <Item label="Coût/heure" value={state.pedagogyCostPerHour ? `${state.pedagogyCostPerHour} €/h` : null} />
-        <Item label="Organisme" value={state.organismeFormation} />
-      </Section>
-
-      {/* Frais */}
-      {(state.needsTransport || state.needsAccommodation || state.needsMeals) && (
-        <Section title="Frais annexes" onEdit={() => onEdit('frais')}>
-          {state.needsTransport && (
-            <>
-              <Item label="Transport" value={state.transportMode || 'Oui'} />
-              {state.transportDistanceKm && <Item label="Distance" value={`${state.transportDistanceKm} km`} />}
-            </>
-          )}
-          {state.needsAccommodation && (
-            <>
-              <Item label="Hébergement" value={`${state.accommodationNights} nuits`} />
-              <Item label="Coût/nuit" value={state.accommodationCostPerNight ? `${state.accommodationCostPerNight} €` : null} />
-            </>
-          )}
-          {state.needsMeals && (
-            <Item label="Restauration" value={state.mealCostPerDay ? `${state.mealCostPerDay} €/jour` : 'Oui'} />
-          )}
-          <Item label="Jours de formation" value={state.trainingDays ? `${state.trainingDays} jours` : null} />
-        </Section>
-      )}
     </div>
   );
 }

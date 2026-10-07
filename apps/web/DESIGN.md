@@ -206,7 +206,8 @@ statique : pas de `role="alert"`.
 
 Grille 24 px, trait 1,75 px à bouts ronds, `currentColor`. Noms : `batiment`, `calculatrice`, `euro`, `repere`,
 `bouclier`, `document`, `fleche`, `coche`, `info`, `alerte`, `lien-externe`, `menu`, `fermer`, `globe`, `personne`,
-`mallette`, `courriel`, `chevron`. Décorative par défaut (`aria-hidden`) ; `titre` lui donne un nom quand elle porte
+`mallette`, `courriel`, `chevron`, `loupe`, `retour`, `crayon`, `livre`, `diplome`, `recrutement`, `virage`, `train`,
+`lit`, `couverts`. Décorative par défaut (`aria-hidden`) ; `titre` lui donne un nom quand elle porte
 seule un sens. Taille par classe (`size-5` par défaut). Pas de bibliothèque d'icônes, pas d'émoji.
 
 ### `Logo` (`components/site/Logo.tsx`)
@@ -234,7 +235,7 @@ Logo SFG + filet + « financementOPCO » (OPCO en orange-deep, ou orange-clair a
 | `.reflet` | balayage lumineux au survol (bouton primaire) |
 
 Rail et jalons : voir la section « Comment ça marche » de `app/page.tsx` (rail de 4 à 6 px, jalons ronds turquoise-deep
-cerclés de la couleur du fond). À reprendre pour la progression du simulateur.
+cerclés de la couleur du fond). La progression du simulateur le reprend (section 14).
 
 ## 6. Dégradés et icônes
 
@@ -324,17 +325,66 @@ cerclés de la couleur du fond). À reprendre pour la progression du simulateur.
 ## 12. Garde de charte
 
 `npm run check:charte` (script `scripts/check-charte-sfg.mjs`, Node seul) parcourt `apps/web/src/**/*.{ts,tsx,css}` et
-signale, avec fichier, ligne et colonne : le tiret cadratin, les classes et couleurs bleues ou violettes (teinte de 190
-à 320 degrés), `font-mono` et IBM Plex, les émojis (U+1F000 à U+1FAFF). Code de sortie 1 en cas de problème.
-`node scripts/check-charte-sfg.mjs --self-test` vérifie le garde lui-même sur des cas fautifs et propres.
+signale, avec fichier, ligne et colonne (code de sortie 1 en cas de problème) :
+
+- le tiret cadratin et ses variantes (U+2014, la barre horizontale U+2015, U+2E3A, U+2E3B, U+FE58), écrits tels quels,
+  en entité HTML (`&mdash;`, `&horbar;`, `&#8212;`, `&#x2014;`), en échappement JavaScript (`\u{2014}` et sa forme
+  courte à quatre chiffres) ou CSS (`\2014`) ;
+- le bleu et le violet (teinte TSL de 190 à 320 degrés) : classes de la palette retirée sur les 49 utilitaires de
+  couleur de Tailwind 4 (`bg-`, `drop-shadow-`, `inset-ring-`, `text-shadow-`, `mask-*-from-`…), variables
+  `--color-blue…`, fonctions `rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, `color()` (séparateurs
+  virgule, espace, barre ou souligné des valeurs arbitraires), hexadécimaux et couleurs nommées CSS (`blue`, `navy`,
+  `rebeccapurple`…) **dans un contexte de couleur** : déclaration ou objet de style, attribut `fill`, `stroke`, `color`,
+  valeur arbitraire `[…]`, argument d'un dégradé ou de `color-mix()`, chaîne qui n'est qu'un hexadécimal (sauf ancre :
+  `href="#bad"` n'est pas une couleur). Un gris (chroma OKLCH inférieure à 0,01) n'est pas signalé ;
+- la police mono : `font-mono`, `monospace`, IBM Plex et les familles mono connues, les balises `<code>`, `<pre>`,
+  `<kbd>`, `<samp>`, `<tt>` ;
+- les émojis : tout pictogramme Unicode (propriétés `Extended_Pictographic` et `Emoji_Presentation`, sélecteur U+FE0F),
+  sauf les signes typographiques tolérés sans sélecteur : ✓ ⚠ ↗ ▸ ▾ © ® ™ (ils s'affichent en glyphes de texte).
+
+`node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 112 cas (chaque règle a une violation et un jumeau
+propre). Limites : la garde lit le texte source, pas le rendu ; une couleur calculée à l'exécution (variable,
+concaténation, donnée), un hexadécimal sans contexte de couleur (commentaire, texte courant), une police mono sous un nom
+inconnu, une image ou une icône bleue lui échappent. Les données de `packages/core` (barèmes, table IDCC, aides) sont
+contrôlées à part par `packages/core/tests/charte-sfg.test.ts` (tiret cadratin et barre horizontale).
 
 ## 13. Dette connue
 
 | Élément | Où | Pourquoi il reste | À retirer par |
 |---|---|---|---|
-| Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 12 emplois hérités (page contact, liste et fiches OPCO, écran de résultats, formulaire de contact, guides ; ceux du simulateur partent avec W4). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | W5 (résultats), D3 (fiches, guides, contact), puis suppression de la règle |
+| Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 12 emplois hérités (page contact, liste et fiches OPCO, écran de résultats, formulaire de contact, guides ; le parcours du simulateur n'en a plus depuis W4). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | W5 (résultats), D3 (fiches, guides, contact), puis suppression de la règle |
 | `section[id].scroll-mt-24 { scroll-margin-top: 0 }` | `globals.css` | Les sections des guides (`GuideSection`) portent encore `scroll-mt-24`. | D3 (restylage des guides) |
-| Copies locales de `cx` | `forms.tsx`, `ProgressBar.tsx` | Fichiers du simulateur en cours de travail (W4). | W4 : importer `@/lib/cx` |
+
+## 14. Parcours du simulateur
+
+Les six étapes (`components/wizard/`) se composent avec les primitives et les champs de `components/ui/forms.tsx`.
+
+- **Cadre** : à partir de 640 px, un panneau lin-soft arrondi (`rounded-panneau`) porte la progression et une `Card`
+  blanche par étape ; en dessous, ni panneau ni marge de plus.
+- **Progression** (`ProgressBar`) : liste ordonnée de jalons reliés par un rail de 4 px (part parcourue en turquoise).
+  Étape faite : disque turquoise de marque cerclé de turquoise-deep, coche encre, cliquable pour y revenir. En cours :
+  disque orange-deep, numéro blanc, `aria-current="step"`. À venir : disque blanc cerclé de filet-fort. Sans objet (les
+  frais d'une formation à distance) : contour en tirets. Sous 640 px, numéros seuls et libellé de l'étape en cours sous
+  le rail ; chaque étape garde son nom complet pour les lecteurs d'écran (« Étape 2 sur 6 : Entreprise (en cours) »).
+- **En-tête d'étape** (`EnTeteEtape`) : `SectionTitle` (surtitre « Étape n sur 6 », `h2` focalisable par programme,
+  chapeau). À chaque changement d'étape, le haut du parcours revient à l'écran et le focus passe au titre.
+- **Navigation** : `Button` secondary « Retour » (flèche seule sous 640 px, nom gardé) et primary « Suivant ». Tant que
+  l'étape est incomplète, « Suivant » reste atteignable au clavier mais porte `aria-disabled`, grisé (texte-discret sur
+  lin), et un texte dit ce qui manque (« Pour continuer, indiquez la région et la taille de l'entreprise. »), relié par
+  `aria-describedby`. Sous 1 024 px la barre colle au bas de l'écran (cibles de 44 px) ; au récapitulatif, qui se lit
+  avant de calculer, elle reste en pied de carte et ses boutons s'empilent.
+- **Choix** : `ChoiceButton` en carte (indicateur rond, coche, contour et fond orange quand il est choisi,
+  `aria-pressed`) ; `OuiNonChoix` en groupe segmenté de pilules, où « Je ne sais pas » n'apparaît choisi qu'après une
+  réponse ; `CheckboxRow` en carte. Un choix facultatif se retire d'un second clic.
+- **Champs** : 48 px, rayon 12 px, contour filet-fort, orange-deep au focus, rouge en erreur. Libellé Inter 600, aide
+  en texte-discret et erreur en rouge avec icône, entre le libellé et le champ ; l'erreur paraît quand on quitte le
+  champ et s'annonce poliment. Les nombres se lisent à la française (`lib/saisie.ts` : espaces de milliers, virgule).
+- **Région** (`ChampRegion`) : la région connue s'affiche avec « Modifier », qui ouvre la liste sur la région choisie ;
+  un choix referme la liste et rend le focus au nom de la région.
+- **Alertes** : `Callout` avertissement pour le plafond horaire indicatif (rien n'est bloqué) ; le rouge reste réservé
+  aux saisies refusées et à l'échec de la recherche d'entreprise.
+- **Récapitulatif** : une `Card` par étape (pastille d'icône, `h3`, « Modifier ») ; une valeur absente s'écrit
+  « Non renseigné » en texte-discret, jamais un tiret.
 
 ## Annexe : tableau des contrastes
 
@@ -364,9 +414,9 @@ emplois : elles expliquent une règle.
 | `#3E6860` | `#FFFFFF` | Button secondary, .surtitre, icônes (turquoise-deep, valid) sur blanc | 6,26:1 | 4,50:1 | conforme |
 | `#3E6860` | `#F3F7F6` | .surtitre sur bande lin-soft | 5,80:1 | 4,50:1 | conforme |
 | `#3E6860` | `#E6EFEC` | turquoise-deep sur lin | 5,34:1 | 4,50:1 | conforme |
-| `#3E6860` | `#EDF5F2` | Étiquette turquoise, ConfidenceBadge exact, survol secondary | 5,65:1 | 4,50:1 | conforme |
+| `#3E6860` | `#EDF5F2` | Étiquette turquoise, ConfidenceBadge exact, CertitudeBadge confirmé ou fiable, survol secondary | 5,65:1 | 4,50:1 | conforme |
 | `#3E6860` | `#E6F2EF` | marginalia !text-valid sur marker-soft (contact) | 5,46:1 | 4,50:1 | conforme |
-| `#FFFFFF` | `#3E6860` | CertitudeBadge confirmé, pastille Callout info / confirmation | 6,26:1 | 4,50:1 | conforme |
+| `#FFFFFF` | `#3E6860` | pastille Callout info / confirmation, jalon d'étape faite du simulateur au survol | 6,26:1 | 4,50:1 | conforme |
 | `#5E9F92` | `#FFFFFF` | repère : turquoise de marque sur blanc (graphismes seulement) | 3,07:1 | - | repère |
 | `#BC1723` | `#FFFFFF` | rouge (alert) sur blanc | 6,39:1 | 4,50:1 | conforme |
 | `#BC1723` | `#FBEDEE` | Étiquette rouge, ConfidenceBadge estimé, titre AlertesOpco | 5,62:1 | 4,50:1 | conforme |
@@ -427,16 +477,23 @@ emplois : elles expliquent une règle.
 | `#3E6860` | `#FFFFFF` | contour du Button secondary | 6,26:1 | 3,00:1 | conforme |
 | `#44514E` | `#FBEDEE` | AlertesOpco : texte ink-soft sur alert-soft | 7,28:1 | 4,50:1 | conforme |
 | `#C43F13` | `#FBEDEE` | AlertesOpco : lien « Voir la source » cobalt sur alert-soft | 4,54:1 | 4,50:1 | conforme |
-| `#44514E` | `#E6F2EF` | StepIdentification, contact : ink-soft sur marker-soft | 7,23:1 | 4,50:1 | conforme |
-| `#0F1E1B` | `#FDF0EA` | choix sélectionné, Callout info des guides : navy sur cobalt-soft | 15,41:1 | 4,50:1 | conforme |
+| `#44514E` | `#E6F2EF` | contact : ink-soft sur marker-soft | 7,23:1 | 4,50:1 | conforme |
+| `#0F1E1B` | `#FDF0EA` | Callout info des guides : navy sur cobalt-soft | 15,41:1 | 4,50:1 | conforme |
 | `#273330` | `#FDF0EA` | Callout info des guides : navy à 90 % sur cobalt-soft | 11,75:1 | 4,50:1 | conforme |
 | `#50766F` | `#EDF5F2` | Callout ok des guides : valid à 90 % sur valid-soft | 4,55:1 | 4,50:1 | conforme |
 | `#C22C37` | `#FBEDEE` | Callout warn des guides : alert à 90 % sur alert-soft | 4,97:1 | 4,50:1 | conforme |
-| `#FFFFFF` | `#1A1A1A` | ProgressBar étape passée : paper sur ink | 17,40:1 | 4,50:1 | conforme |
 | `#9FA5A4` | `#0F1E1B` | FundingBreakdown : paper 60 % sur navy | 6,87:1 | 4,50:1 | conforme |
 | `#B7BCBB` | `#0F1E1B` | FundingBreakdown : paper 70 % sur navy | 8,94:1 | 4,50:1 | conforme |
 | `#C3C7C6` | `#0F1E1B` | FundingBreakdown : paper 75 % sur navy | 10,07:1 | 4,50:1 | conforme |
 | `#CFD2D1` | `#0F1E1B` | FundingBreakdown : paper 80 % sur navy | 11,29:1 | 4,50:1 | conforme |
-| `#1A1A1A` | `#A3D1C8` | CertitudeBadge à confirmer, ProgressBar étape en cours : ink sur marker | 10,37:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#FDF0EA` | simulateur, choix sélectionné (carte, carte de projet, case cochée) : libellé sur orange-soft | 15,60:1 | 4,50:1 | conforme |
+| `#44514E` | `#FDF0EA` | simulateur, choix sélectionné : description texte-doux sur orange-soft | 7,43:1 | 4,50:1 | conforme |
+| `#3E6860` | `#FDF0EA` | simulateur, branche choisie : « Détectée via votre convention collective » sur orange-soft | 5,61:1 | 4,50:1 | conforme |
+| `#C43F13` | `#FDF0EA` | simulateur : contour orange-deep du choix sélectionné contre son fond orange-soft | 4,63:1 | 3,00:1 | conforme |
+| `#1A1A1A` | `#5E9F92` | simulateur, jalon d'étape faite : coche encre sur turquoise de marque | 5,68:1 | 3,00:1 | conforme |
+| `#3E6860` | `#F3F7F6` | simulateur, jalon d'étape faite : contour turquoise-deep sur le panneau lin-soft | 5,80:1 | 3,00:1 | conforme |
+| `#5E9F92` | `#F3F7F6` | repère : turquoise de marque seul sur lin-soft (d'où le contour du jalon fait) | 2,84:1 | - | repère |
+| `#7A8C88` | `#F3F7F6` | simulateur, jalon à venir : contour filet-fort sur le panneau lin-soft | 3,28:1 | 3,00:1 | conforme |
+| `#1A1A1A` | `#FBEDEE` | simulateur, recherche d'entreprise impossible : message sur rouge-soft | 15,29:1 | 4,50:1 | conforme |
 
-93 couples (dont 9 repères), aucun sous son seuil.
+100 couples (dont 10 repères), aucun sous son seuil.

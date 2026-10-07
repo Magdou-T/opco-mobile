@@ -14,18 +14,17 @@ import { REGIONS, REGIONS_TRIEES } from '@opco/core';
 import type { CodeRegion } from '@opco/core';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
+import { cx } from '@/lib/cx';
 import { texteFr } from '@/lib/format';
 import { lireNombre, saisieDuNombre } from '@/lib/saisie';
-
-const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
 /**
  * Champ de saisie : 48 px de haut, rayon 12 px (`rounded-champ`), contour filet-fort (3,54:1 sur blanc), contour
  * orange foncé au focus (en plus de l'anneau du site), rouge quand la saisie est refusée. La couleur du texte d'exemple
- * (placeholder) vient de la règle globale du site (globals.css).
+ * (placeholder) vient de la règle globale du site (globals.css). Transition sans `outline-color` (DESIGN.md, section 7).
  */
 const CHAMP =
-  'block min-h-12 w-full rounded-champ border border-filet-fort bg-white px-4 py-2.5 text-base text-texte transition-colors hover:border-texte-doux focus-visible:border-orange-deep aria-invalid:border-rouge';
+  'block min-h-12 w-full rounded-champ border border-filet-fort bg-white px-4 py-2.5 text-base text-texte transition-[color,background-color,border-color] hover:border-texte-doux focus-visible:border-orange-deep aria-invalid:border-rouge';
 
 /** Largeur d'un champ court (nombre, code postal, date) : le libellé et l'aide gardent toute la largeur. */
 export type LargeurChamp = 'courte' | 'moyenne' | 'pleine';
@@ -242,7 +241,7 @@ export function OuiNonChoix({
                 onChange(o.valeur);
               }}
               className={cx(
-                'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-colors lg:min-h-10',
+                'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-[color,background-color] lg:min-h-10',
                 choisi ? 'bg-orange-deep text-white' : 'text-texte-doux hover:bg-lin-soft hover:text-texte',
               )}
             >

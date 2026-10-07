@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { createInitialWizardState } from '@opco/core';
 import type { WizardState } from '@opco/core';
-import { ETAPES } from '@/lib/etapes';
+import { ETAPES, champsManquants, indexPrecedent, indexSuivant } from '@/lib/etapes';
 import type { EtapeSite } from '@/lib/etapes';
-import { opcoRequis } from '@/lib/entreprise';
 
 export function useWizard() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -15,57 +14,26 @@ export function useWizard() {
   const currentStep = ETAPES[currentStepIndex];
 
   const updateState = useCallback((updates: Partial<WizardState>) => {
-    setState(prev => ({ ...prev, ...updates }));
+    setState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const canGoNext = useCallback((): boolean => {
-    switch (currentStep.key) {
-      case 'identification':
-        // OPCO choisi ou détecté (facultatif pour « former le dirigeant »), région et taille de l'entreprise.
-        return (
-          (!opcoRequis(state.projetType) || !!(state.selectedOpcoSlug || state.detectedOpcoSlug)) &&
-          state.regionCode != null &&
-          state.companySize != null
-        );
-      case 'situation':
-        return !!state.contractType;
-      case 'formation':
-        return !!(state.durationHours && state.pedagogyCostTotal && state.trainingMode);
-      case 'frais':
-        return true; // Optional step
-      case 'recap':
-        return true;
-      default:
-        return false;
-    }
-  }, [currentStep.key, state]);
+  /** Ce qui manque pour quitter l'étape affichée (vide : « Suivant » est actif). Voir `champsManquants`. */
+  const manquants = useMemo(() => champsManquants(currentStep.key, state), [currentStep.key, state]);
 
+  const canGoNext = useCallback((): boolean => manquants.length === 0, [manquants]);
+
+  // L'étape « Frais » est sautée, dans les deux sens, pour une formation entièrement à distance.
   const goNext = useCallback(() => {
-    if (currentStepIndex < ETAPES.length - 1) {
-      // Skip frais step if training is distance-only
-      const nextIndex = currentStepIndex + 1;
-      if (ETAPES[nextIndex].key === 'frais' && state.trainingMode === 'distance') {
-        setCurrentStepIndex(nextIndex + 1);
-      } else {
-        setCurrentStepIndex(nextIndex);
-      }
-    }
-  }, [currentStepIndex, state.trainingMode]);
+    if (manquants.length > 0) return;
+    setCurrentStepIndex((index) => indexSuivant(index, state));
+  }, [manquants, state]);
 
   const goPrev = useCallback(() => {
-    if (currentStepIndex > 0) {
-      const prevIndex = currentStepIndex - 1;
-      // Skip frais step going backwards if training is distance
-      if (ETAPES[prevIndex].key === 'frais' && state.trainingMode === 'distance') {
-        setCurrentStepIndex(prevIndex - 1);
-      } else {
-        setCurrentStepIndex(prevIndex);
-      }
-    }
-  }, [currentStepIndex, state.trainingMode]);
+    setCurrentStepIndex((index) => indexPrecedent(index, state));
+  }, [state]);
 
   const goToStep = useCallback((step: EtapeSite) => {
-    const index = ETAPES.findIndex(s => s.key === step);
+    const index = ETAPES.findIndex((s) => s.key === step);
     if (index >= 0) {
       setCurrentStepIndex(index);
       setShowResults(false);
@@ -86,10 +54,10 @@ export function useWizard() {
     return state.selectedOpcoSlug || state.detectedOpcoSlug;
   }, [state.selectedOpcoSlug, state.detectedOpcoSlug]);
 
-  // Auto-calculate pedagogyCostPerHour when total and hours change
+  // Coût horaire recalculé quand le coût total ou la durée change.
   const updateFormationCosts = useCallback((total: number | null, hours: number | null) => {
     const perHour = total && hours && hours > 0 ? Math.round((total / hours) * 100) / 100 : null;
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       pedagogyCostTotal: total,
       durationHours: hours,
@@ -102,6 +70,7 @@ export function useWizard() {
     currentStepIndex,
     state,
     showResults,
+    manquants,
     updateState,
     canGoNext,
     goNext,

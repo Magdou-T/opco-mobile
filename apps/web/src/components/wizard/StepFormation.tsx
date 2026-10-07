@@ -1,13 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import {
-  TRAINING_TYPE_LABELS,
+  CERTIFICATION_LABELS,
+  NIVEAU_CERTIFICATION_LABELS,
   TRAINING_MODE_LABELS,
-  applyVarianteBranche,
+  TRAINING_TYPE_LABELS,
   getEmbeddedOpcoBySlug,
-  resolveVarianteBranche,
+  moisDepuisSaisie,
+  saisieDepuisMois,
 } from '@opco/core';
-import type { CertificationType, TrainingMode, TrainingType, WizardState } from '@opco/core';
+import type { CertificationType, NiveauCertification, TrainingMode, TrainingType, WizardState } from '@opco/core';
+import { Callout } from '@/components/ui/Callout';
+import { Icon } from '@/components/ui/Icon';
+import { ChoiceButton, ChoiceGroup, NumberField, OuiNonChoix, SelectField, TextField } from '@/components/ui/forms';
+import { ouvreBudgetOpco } from '@/lib/entreprise';
+import { de, formatEuro } from '@/lib/format';
+import { etatDepuisModeFormation, plafondHoraireIndicatif } from '@/lib/parcours';
+import { EnTeteEtape } from './EnTeteEtape';
 
 interface Props {
   state: WizardState;
@@ -15,171 +25,206 @@ interface Props {
   updateFormationCosts: (total: number | null, hours: number | null) => void;
 }
 
-export function StepFormation({ state, updateState, updateFormationCosts }: Props) {
-  const opcoSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const opcoGeneral = opcoSlug ? getEmbeddedOpcoBySlug(opcoSlug) : null;
-  // Plafond de la branche appliquée (choix manuel ou IDCC détecté), comme le fera le moteur.
-  const variante = opcoGeneral ? resolveVarianteBranche(opcoGeneral, state) : null;
-  const opco = opcoGeneral && variante ? applyVarianteBranche(opcoGeneral, variante) : opcoGeneral;
+const parHeure = (montant: number): string => `${formatEuro(montant)}/h`;
 
-  // Alert if cost/h exceeds OPCO ceiling
-  const ceilingWarning = (() => {
-    if (!opco || !state.pedagogyCostPerHour) return null;
-    const ceiling = opco.cout_horaire_inter?.value || opco.cout_horaire_metier?.value;
-    if (ceiling && state.pedagogyCostPerHour > ceiling) {
-      return `Le coût horaire (${state.pedagogyCostPerHour} €/h) dépasse le plafond ${opco.name} (${ceiling} €/h). Le surplus sera à votre charge.`;
-    }
-    return null;
-  })();
+const OPTIONS_CERTIFICATION = [
+  { valeur: '', libelle: 'Ne sait pas' },
+  ...(Object.entries(CERTIFICATION_LABELS) as [CertificationType, string][]).map(([valeur, libelle]) => ({
+    valeur,
+    libelle,
+  })),
+];
+
+const OPTIONS_NIVEAU = [
+  ...Object.entries(NIVEAU_CERTIFICATION_LABELS).map(([valeur, libelle]) => ({ valeur, libelle })),
+  { valeur: '', libelle: 'Ne sait pas' },
+];
+
+/** Étape 4 : la formation. Type, mode, durée et coût sont obligatoires ; le reste affine la recherche des aides. */
+export function StepFormation({ state, updateState, updateFormationCosts }: Props) {
+  // Saisie du mois de début gardée telle quelle : l'état ne reçoit qu'un mois valide (AAAA-MM), sinon null.
+  const [saisieDebut, setSaisieDebut] = useState(() => saisieDepuisMois(state.dateDebutFormation));
+  const [debutQuitte, setDebutQuitte] = useState(false);
+  const debutInvalide = saisieDebut.trim() !== '' && moisDepuisSaisie(saisieDebut) == null;
+
+  // Plafond horaire indicatif du barème appliqué, pour les projets qui passent par le budget de l'OPCO.
+  const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
+  const opco = slug ? getEmbeddedOpcoBySlug(slug) : undefined;
+  const plafond = ouvreBudgetOpco(state.projetType) ? plafondHoraireIndicatif(opco, state) : null;
+  const coutHoraire = state.pedagogyCostPerHour != null && state.pedagogyCostPerHour > 0 ? state.pedagogyCostPerHour : null;
+  const enveloppeEpuisee = plafond === 0;
+  const depasse = plafond != null && plafond > 0 && coutHoraire != null && coutHoraire > plafond;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="font-display text-xl font-bold text-ink mb-2">
-          Formation souhaitée
-        </h2>
-        <p className="text-ink-soft text-sm">
-          Décrivez la formation pour laquelle vous souhaitez un financement.
-        </p>
-      </div>
+    <div className="space-y-8">
+      <EnTeteEtape
+        etape="formation"
+        titre="La formation"
+        chapeau="Décrivez la formation à financer. Son type et son coût horaire déterminent les plafonds et les aides qui s'appliquent."
+        obligatoires
+      />
 
-      {/* Nom formation */}
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-ink-soft">
-          Nom de la formation
-        </label>
-        <input
-          type="text"
-          value={state.formationNom || ''}
-          onChange={(e) => updateState({ formationNom: e.target.value || null })}
-          placeholder="Ex: Développeur web full stack"
-          className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
+      <div className="space-y-7">
+        <TextField
+          label="Nom de la formation"
+          facultatif
+          value={state.formationNom ?? ''}
+          onChange={(formationNom) => updateState({ formationNom: formationNom || null })}
+          placeholder="Ex : Développeur web full stack"
+        />
+
+        <ChoiceGroup
+          label="Type de formation"
+          required
+          aide="Il fixe le plafond horaire de l'OPCO et les aides propres à un type. Une aide propre à la VAE ne s'applique qu'aux parcours de VAE."
+        >
+          <div className="grid gap-2 sm:grid-cols-2">
+            {(Object.entries(TRAINING_TYPE_LABELS) as [TrainingType, string][]).map(([type, libelle]) => (
+              <ChoiceButton
+                key={type}
+                label={libelle}
+                selected={state.formationType === type}
+                onClick={() => updateState({ formationType: type })}
+                compact
+              />
+            ))}
+          </div>
+        </ChoiceGroup>
+
+        <div className="grid gap-x-5 gap-y-7 sm:grid-cols-2">
+          <SelectField
+            label="Certification visée"
+            value={state.certificationLevel ?? ''}
+            onChange={(valeur) => updateState({ certificationLevel: (valeur || null) as CertificationType | null })}
+            options={OPTIONS_CERTIFICATION}
+          />
+          <SelectField
+            label="Niveau de la certification visée"
+            value={state.niveauFormationVise == null ? '' : String(state.niveauFormationVise)}
+            onChange={(valeur) =>
+              updateState({ niveauFormationVise: valeur ? (Number(valeur) as NiveauCertification) : null })
+            }
+            options={OPTIONS_NIVEAU}
+          />
+        </div>
+
+        <OuiNonChoix
+          label="Formation éligible au CPF"
+          value={state.eligibleCpf}
+          onChange={(eligibleCpf) => updateState({ eligibleCpf })}
+          avecInconnu
         />
       </div>
 
-      {/* Type de formation */}
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-ink-soft">
-          Type de formation
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          {(Object.entries(TRAINING_TYPE_LABELS) as [TrainingType, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => updateState({ formationType: key })}
-              className={`p-3 rounded border-2 text-sm text-left transition-all ${
-                state.formationType === key
-                  ? 'border-cobalt bg-cobalt-soft text-navy font-medium'
-                  : 'border-rule hover:border-ink-faint text-ink-soft'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Certification visée */}
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-ink-soft">
-          Certification visée
-        </label>
-        <select
-          value={state.certificationLevel || ''}
-          onChange={(e) => updateState({ certificationLevel: (e.target.value || null) as CertificationType | null })}
-          className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
+      <div className="space-y-7 border-t border-filet pt-8">
+        <ChoiceGroup
+          label="Mode de formation"
+          required
+          aide={
+            state.trainingMode === 'distance'
+              ? "Formation entièrement à distance : l'étape des frais de déplacement est sautée."
+              : undefined
+          }
         >
-          <option value="">-- Aucune / Ne sait pas --</option>
-          <option value="rncp">RNCP (Répertoire National)</option>
-          <option value="cqp">CQP (Certificat de Qualification Professionnelle)</option>
-          <option value="diplome">Diplôme d&apos;État</option>
-          <option value="habilitation">Habilitation</option>
-          <option value="autre">Autre</option>
-        </select>
-      </div>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {(Object.entries(TRAINING_MODE_LABELS) as [TrainingMode, string][]).map(([mode, libelle]) => (
+              <ChoiceButton
+                key={mode}
+                label={libelle}
+                selected={state.trainingMode === mode}
+                onClick={() => updateState(etatDepuisModeFormation(mode))}
+                compact
+              />
+            ))}
+          </div>
+        </ChoiceGroup>
 
-      {/* Mode formation */}
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-ink-soft">
-          Mode de formation <span className="text-alert">*</span>
-        </label>
-        <div className="grid grid-cols-3 gap-2">
-          {(Object.entries(TRAINING_MODE_LABELS) as [TrainingMode, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => updateState({ trainingMode: key })}
-              className={`p-3 rounded border-2 text-sm text-center transition-all ${
-                state.trainingMode === key
-                  ? 'border-cobalt bg-cobalt-soft text-navy font-medium'
-                  : 'border-rule hover:border-ink-faint text-ink-soft'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Durée et coûts */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-ink-soft">
-            Durée (en heures) <span className="text-alert">*</span>
-          </label>
-          <input
-            type="number"
-            min="1"
-            value={state.durationHours ?? ''}
-            onChange={(e) => {
-              const h = e.target.value ? parseInt(e.target.value) : null;
-              updateFormationCosts(state.pedagogyCostTotal, h);
-            }}
-            placeholder="Ex: 140"
-            className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
+        <div className="grid gap-x-5 gap-y-7 sm:grid-cols-2">
+          <NumberField
+            label="Durée (en heures)"
+            required
+            value={state.durationHours}
+            onChange={(heures) => updateFormationCosts(state.pedagogyCostTotal, heures)}
+            min={1}
+            placeholder="Ex : 140"
+            largeur="pleine"
+          />
+          <NumberField
+            label="Coût total HT (€)"
+            required
+            decimal
+            value={state.pedagogyCostTotal}
+            onChange={(total) => updateFormationCosts(total, state.durationHours)}
+            min={1}
+            placeholder="Ex : 5600"
+            largeur="pleine"
           />
         </div>
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-ink-soft">
-            Coût total HT (€) <span className="text-alert">*</span>
-          </label>
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            value={state.pedagogyCostTotal ?? ''}
-            onChange={(e) => {
-              const t = e.target.value ? parseFloat(e.target.value) : null;
-              updateFormationCosts(t, state.durationHours);
-            }}
-            placeholder="Ex: 5600"
-            className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
-          />
-        </div>
+
+        {coutHoraire != null && (
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-champ border border-filet bg-lin-soft px-4 py-3">
+              <p className="flex items-center gap-2.5 text-sm text-texte-doux">
+                <Icon name="calculatrice" className="size-5 shrink-0 text-turquoise-deep" />
+                <span>
+                  Coût horaire calculé :{' '}
+                  <span className="amount text-lg text-texte">{parHeure(coutHoraire)}</span>
+                </span>
+              </p>
+              {plafond != null && plafond > 0 && opco && (
+                <p className="text-sm text-texte-doux">
+                  {`Plafond indicatif ${de(opco.name)} : `}
+                  <span className="font-semibold text-texte">{parHeure(plafond)}</span>
+                </p>
+              )}
+            </div>
+            {depasse && opco && plafond != null && (
+              <Callout tone="avertissement" titre="Coût horaire au-dessus du plafond indicatif">
+                {`Le coût horaire (${parHeure(coutHoraire)}) dépasse le plafond indicatif ${de(opco.name)} (${parHeure(plafond)}). Le surplus sera à votre charge.`}
+              </Callout>
+            )}
+            {enveloppeEpuisee && opco && (
+              <Callout tone="avertissement" titre="Enveloppe épuisée dans le barème appliqué">
+                {`Le barème appliqué ${de(opco.name)} affiche un plafond de 0 €/h : l'enveloppe est épuisée. Sur ce barème, le coût de la formation resterait à votre charge.`}
+              </Callout>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Auto-calculated cost per hour */}
-      {state.pedagogyCostPerHour != null && state.pedagogyCostPerHour > 0 && (
-        <div className={`text-sm px-4 py-2 rounded ${ceilingWarning ? 'bg-alert-soft text-alert' : 'bg-paper-deep text-ink-soft'}`}>
-          Coût horaire calculé : <span className="font-semibold">{state.pedagogyCostPerHour} €/h</span>
-          {ceilingWarning && (
-            <div className="mt-1 text-alert text-xs">{ceilingWarning}</div>
-          )}
-        </div>
-      )}
+      <div className="space-y-7 border-t border-filet pt-8">
+        <TextField
+          label="Mois de début prévu (MM/AAAA)"
+          value={saisieDebut}
+          onChange={(saisie) => {
+            setSaisieDebut(saisie);
+            updateState({ dateDebutFormation: moisDepuisSaisie(saisie) });
+          }}
+          onBlur={() => setDebutQuitte(true)}
+          placeholder="Ex : 03/2027"
+          autoComplete="off"
+          largeur="courte"
+          helper={
+            debutInvalide && !debutQuitte
+              ? 'Format attendu : MM/AAAA'
+              : 'Facultatif : sert à vérifier les dates de validité des aides.'
+          }
+          erreur={debutInvalide && debutQuitte ? 'Format attendu : MM/AAAA, par exemple 03/2027.' : undefined}
+        />
 
-      {/* Organisme */}
-      <div className="space-y-2">
-        <label className="block text-sm font-medium text-ink-soft">
-          Organisme de formation (optionnel)
-        </label>
-        <input
-          type="text"
-          value={state.organismeFormation || ''}
-          onChange={(e) => updateState({ organismeFormation: e.target.value || null })}
-          placeholder="Ex: AFPA, CNAM, organisme privé..."
-          className="w-full rounded border border-rule bg-white px-4 py-3 text-ink focus:border-cobalt focus:ring-2 focus:ring-cobalt-soft"
+        <OuiNonChoix
+          label="Organisme de formation certifié Qualiopi"
+          value={state.organismeQualiopi}
+          onChange={(organismeQualiopi) => updateState({ organismeQualiopi })}
+          avecInconnu
+        />
+
+        <TextField
+          label="Organisme de formation"
+          facultatif
+          value={state.organismeFormation ?? ''}
+          onChange={(organismeFormation) => updateState({ organismeFormation: organismeFormation || null })}
+          placeholder="Ex : AFPA, CNAM, organisme privé"
         />
       </div>
     </div>

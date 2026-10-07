@@ -50,7 +50,7 @@ export function SectionTitle({
       <Titre
         id={id}
         tabIndex={titreFocusable ? -1 : undefined}
-        className={cx('font-display font-bold', TAILLES[taille], titreFocusable && 'scroll-mt-32 rounded-md')}
+        className={cx('font-display font-bold', TAILLES[taille], titreFocusable && 'rounded-md')}
       >
         {titre}
       </Titre>

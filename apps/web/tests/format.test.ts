@@ -3,7 +3,7 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '@opco/core';
-import { formatEuro, moisAnneeFr, premierePhrase, texteFr } from '../src/lib/format';
+import { de, formatEuro, moisAnneeFr, premierePhrase, texteFr } from '../src/lib/format';
 
 /** Toutes les chaînes des données (OPCO et aides), parcourues récursivement. */
 function chainesDesDonnees(): string[] {
@@ -99,10 +99,13 @@ describe('texteFr', () => {
   });
 
   test('textes construits au hasard : les extraits sont gardés, les dates hors citation converties', () => {
+    // mulberry32 : tirages indépendants et reproductibles.
     let graine = 11;
     const hasard = (n: number) => {
-      graine = (graine * 1103515245 + 12345) & 0x7fffffff;
-      return graine % n;
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
     };
     const morceaux = ['texte ', '2026-10-05', ' ', '« ', ' »', 'le 2025-01-31', ', ', '(vérifié le 2026-02-28)'];
     for (let i = 0; i < 2000; i++) {
@@ -195,6 +198,28 @@ describe('premierePhrase', () => {
       assert.ok(resume.length > 0, id);
       assert.ok(!/https?:\/\//.test(resume), `${id} : ${resume}`);
       assert.ok(!/\b\d{4}-\d{2}-\d{2}\b/.test(resume.replace(/«[^»]*»/g, '')), `${id} : ${resume}`);
+    }
+  });
+});
+
+describe('de (élision)', () => {
+  test("« de » s'élide devant une voyelle, pour les noms des 11 OPCO", () => {
+    const attendu: Record<string, string> = {
+      AKTO: "d'AKTO",
+      ATLAS: "d'ATLAS",
+      AFDAS: "d'AFDAS",
+      'OPCO 2i': "d'OPCO 2i",
+      'OPCO EP': "d'OPCO EP",
+      'OPCO Santé': "d'OPCO Santé",
+      'OPCO Mobilités': "d'OPCO Mobilités",
+      OCAPIAT: "d'OCAPIAT",
+      Uniformation: "d'Uniformation",
+      Constructys: 'de Constructys',
+      "L'Opcommerce": "de L'Opcommerce",
+    };
+    for (const opco of EMBEDDED_OPCOS) {
+      assert.ok(opco.name in attendu, `OPCO non prévu par le test : ${opco.name}`);
+      assert.equal(de(opco.name), attendu[opco.name]);
     }
   });
 });
