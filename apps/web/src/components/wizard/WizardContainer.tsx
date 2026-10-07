@@ -139,14 +139,15 @@ export function WizardContainer() {
           {currentStep.key === 'recap' && <StepRecap state={state} onEdit={goToStep} />}
         </div>
 
-        {/* Navigation : barre collée en bas de l'écran sous 1 024 px (cibles de 44 px), en pied de carte au-delà. Au
-            récapitulatif, qui se lit avant de calculer, la barre reste en pied de carte et les boutons s'empilent. */}
+        {/* Navigation : barre collée en bas de l'écran sous 1 024 px (cibles de 44 px), en pied de carte au-delà ; son
+            ombre vers le haut est teintée d'encre (jeton --encre, aucune couleur écrite en dur). Au récapitulatif, qui se
+            lit avant de calculer, la barre reste en pied de carte et les boutons s'empilent. */}
         <div
           className={cx(
             'rounded-b-carte border-t border-filet bg-white px-4 sm:px-8 lg:px-10 lg:py-6 print:hidden',
             derniereEtape
               ? 'py-5'
-              : 'sticky bottom-0 z-10 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-14px_28px_-24px_rgb(15_30_27/0.45)] lg:static lg:shadow-none',
+              : 'sticky bottom-0 z-10 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-14px_28px_-24px_color-mix(in_srgb,var(--encre)_45%,transparent)] lg:static lg:shadow-none',
           )}
         >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
