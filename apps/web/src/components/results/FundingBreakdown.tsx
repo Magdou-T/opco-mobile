@@ -396,7 +396,7 @@ export function FundingBreakdown({ result }: Props) {
             Financements complémentaires {de(opcoName)}
           </h3>
           <p className="mt-1 text-sm leading-relaxed text-texte-doux">
-            Dispositifs de {opcoName}{' '}accessibles à votre entreprise. L&apos;étiquette dit comment chacun se combine
+            Dispositifs {de(opcoName)}{' '}accessibles à votre entreprise. L&apos;étiquette dit comment chacun se combine
             avec le plan de développement des compétences&nbsp;; un montant n&apos;est donné que s&apos;il est calculable
             pour votre formation.
           </p>
