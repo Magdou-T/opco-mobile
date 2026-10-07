@@ -9,7 +9,9 @@
 //   3. POE : une seule des trois entrées de la préparation opérationnelle à l'emploi est retenue ;
 //   4. VAE : une aide propre à la VAE n'est ni éligible ni à vérifier pour une autre formation, et jamais comptée dans le
 //      plan quand le type de formation n'est pas la VAE ;
-//   5. invariants du plan sur une grille de profils (et sur une grille élargie à l'alternance et aux demandeurs d'emploi).
+//   5. invariants du plan sur une grille de profils (et sur une grille élargie à l'alternance et aux demandeurs d'emploi) : le
+//      projet « former le dirigeant » y est décliné en artisan, commerçant, avocat et médecin, pour exercer les quatre fonds
+//      d'assurance formation des non-salariés (FAFCEA, AGEFICE, FIF PL, FAF PM) comme le reste du catalogue.
 // ============================================================
 
 import { beforeAll, describe, it, expect } from 'vitest';
@@ -67,8 +69,25 @@ const FRAIS_ANNEXES: Partial<WizardState> = {
 };
 const MONTANT_FRAIS_ANNEXES = 205;
 
+/**
+ * Dirigeant du projet « former le dirigeant » : son statut et le code NAF de son activité. Le FAFCEA vise les artisans, l'AGEFICE
+ * les commerçants, le FIF PL les professions libérales (un avocat, NAF 69.10Z) et le FAF PM les médecins libéraux (NAF 86.21Z).
+ */
+type ProfilDirigeant = 'artisan' | 'commercant' | 'avocat' | 'medecin';
+
+const DIRIGEANTS: Record<ProfilDirigeant, Pick<WizardState, 'statutDirigeant' | 'codeNaf'>> = {
+  artisan: { statutDirigeant: 'artisan', codeNaf: '85.59A' },
+  commercant: { statutDirigeant: 'commercant', codeNaf: '85.59A' },
+  avocat: { statutDirigeant: 'profession_liberale', codeNaf: '69.10Z' },
+  medecin: { statutDirigeant: 'profession_liberale', codeNaf: '86.21Z' },
+};
+
+const PROFILS_DIRIGEANT = Object.keys(DIRIGEANTS) as ProfilDirigeant[];
+
 interface Scenario {
   projet: ProjetType;
+  /** Statut et activité du dirigeant (projet « former le dirigeant » seulement ; artisan par défaut). */
+  dirigeant?: ProfilDirigeant;
   soldeCpf: number;
   /** Coût pédagogique total de la formation, en euros. */
   cout: number;
@@ -87,6 +106,7 @@ const coutAttendu = (s: Scenario): number => s.cout + (s.annexes ? MONTANT_FRAIS
 
 /** Parcours d'une TPE d'Île-de-France (IDCC 1516, CDI) : le scénario de référence de la spécification, décliné par `Scenario`. */
 function etatDuScenario(s: Scenario): WizardState {
+  const dirigeant = s.projet === 'formation_dirigeant' ? DIRIGEANTS[s.dirigeant ?? 'artisan'] : null;
   return {
     ...createInitialWizardState(),
     projetType: s.projet,
@@ -94,14 +114,14 @@ function etatDuScenario(s: Scenario): WizardState {
     selectedOpcoSlug: s.opco,
     regionCode: '11',
     departementCode: '95',
-    codeNaf: '85.59A',
+    codeNaf: dirigeant?.codeNaf ?? '85.59A',
     companySize: 'less_11',
     idccEtablissements: ['1516'],
     contractType: 'cdi',
     anciennete_mois: 24,
     ageBeneficiaire: 35,
     niveauDiplome: 'bac',
-    statutDirigeant: s.projet === 'formation_dirigeant' ? 'artisan' : null,
+    statutDirigeant: dirigeant?.statutDirigeant ?? null,
     soldeCpf: s.soldeCpf,
     formationType: s.typeFormation,
     certificationLevel: s.certification,
@@ -134,13 +154,18 @@ function jouer(scenario: Scenario, catalogue: Aide[] = EMBEDDED_AIDES): Resultat
 }
 
 /**
- * Grille de profils : trois projets (salarié, reconversion, dirigeant) × solde CPF (300, 800, 5 000 €) × coût (1 000,
- * 4 200 avec ou sans frais annexes, 9 000 €) × durée (24 h : un bilan de compétences est possible ; 140 h) ×
- * certification (RNCP ou aucune) × type de formation (les sept types et un type inconnu) × OPCO (AKTO ou aucun).
+ * Grille de profils : deux projets de salarié (formation, reconversion) et le projet de dirigeant décliné en quatre profils
+ * (artisan, commerçant, avocat, médecin) × solde CPF (300, 800, 5 000 €) × coût (1 000, 4 200 avec ou sans frais annexes,
+ * 9 000 €) × durée (24 h : un bilan de compétences est possible ; 140 h) × certification (RNCP ou aucune) × type de formation
+ * (les sept types et un type inconnu) × OPCO (AKTO ou aucun).
  */
 function grille(): Scenario[] {
   const scenarios: Scenario[] = [];
-  const projets: Scenario['projet'][] = ['formation_salarie', 'reconversion_salarie', 'formation_dirigeant'];
+  const profils: Pick<Scenario, 'projet' | 'dirigeant'>[] = [
+    { projet: 'formation_salarie' },
+    { projet: 'reconversion_salarie' },
+    ...PROFILS_DIRIGEANT.map((dirigeant) => ({ projet: 'formation_dirigeant' as const, dirigeant })),
+  ];
   const couts: Pick<Scenario, 'cout' | 'annexes'>[] = [
     { cout: 1000, annexes: false },
     { cout: 4200, annexes: false },
@@ -150,14 +175,14 @@ function grille(): Scenario[] {
   const certifications: Scenario['certification'][] = ['rncp', 'aucune'];
   const typesFormation: (TrainingType | null)[] = [...TYPES_FORMATION, null];
   const opcos: Scenario['opco'][] = ['akto', null];
-  for (const projet of projets) {
+  for (const { projet, dirigeant } of profils) {
     for (const soldeCpf of [300, 800, 5000]) {
       for (const { cout, annexes } of couts) {
         for (const dureeHeures of [24, 140]) {
           for (const certification of certifications) {
             for (const typeFormation of typesFormation) {
               for (const opco of opcos) {
-                scenarios.push({ projet, soldeCpf, cout, annexes, dureeHeures, certification, typeFormation, opco });
+                scenarios.push({ projet, ...(dirigeant && { dirigeant }), soldeCpf, cout, annexes, dureeHeures, certification, typeFormation, opco });
               }
             }
           }
@@ -168,7 +193,7 @@ function grille(): Scenario[] {
   return scenarios;
 }
 
-const TAILLE_DE_LA_GRILLE = 3 * 3 * 4 * 2 * 2 * 8 * 2;
+const TAILLE_DE_LA_GRILLE = (2 + PROFILS_DIRIGEANT.length) * 3 * 4 * 2 * 2 * 8 * 2;
 
 /**
  * Grille élargie aux deux projets que la grille principale ne couvre pas, pour exercer les aides à l'employeur et les
@@ -245,7 +270,7 @@ beforeAll(() => {
 }, 60_000);
 
 const decrire = (s: Scenario): string =>
-  `${s.projet}${s.parcours?.regionCode ? ` en région ${s.parcours.regionCode}` : ''}${s.parcours?.typeAlternance ? ` (${s.parcours.typeAlternance})` : ''}${s.parcours?.isHandicap ? ' RQTH' : ''}, solde CPF ${s.soldeCpf} €, coût ${s.cout} €${s.annexes ? ` + ${MONTANT_FRAIS_ANNEXES} € de frais annexes` : ''}, ${s.dureeHeures} h, certification ${s.certification}, type ${s.typeFormation ?? 'inconnu'}, OPCO ${s.opco ?? 'aucun'}`;
+  `${s.projet}${s.dirigeant ? ` (${s.dirigeant})` : ''}${s.parcours?.regionCode ? ` en région ${s.parcours.regionCode}` : ''}${s.parcours?.typeAlternance ? ` (${s.parcours.typeAlternance})` : ''}${s.parcours?.isHandicap ? ' RQTH' : ''}, solde CPF ${s.soldeCpf} €, coût ${s.cout} €${s.annexes ? ` + ${MONTANT_FRAIS_ANNEXES} € de frais annexes` : ''}, ${s.dureeHeures} h, certification ${s.certification}, type ${s.typeFormation ?? 'inconnu'}, OPCO ${s.opco ?? 'aucun'}`;
 
 // --- 1. Alternatives complètes ------------------------------------------------------------------------------------
 
@@ -763,6 +788,20 @@ const INVARIANTS: [string, (r: Resultat) => string[]][] = [
     },
   ],
   [
+    "deux aides déclarées alternatives (« au choix », dans un sens ou dans l'autre) ne sont jamais empilées ensemble : un fonds d'assurance formation et le CPF ne s'additionnent pas",
+    ({ scenario, aides, plan }) => {
+      // Les alternatives sont celles du catalogue évalué : le catalogue sans alternative déclarée n'en a aucune, l'invariant y est vide.
+      const alternatives = new Map(aides.map((a) => [a.id, a.alternatives]));
+      const ids = plan.financements.map((l) => l.id);
+      return ids.flatMap((x, i) =>
+        ids
+          .slice(i + 1)
+          .filter((y) => (alternatives.get(x) ?? []).includes(y) || (alternatives.get(y) ?? []).includes(x))
+          .map((y) => `${decrire(scenario)} : ${x} et ${y}`),
+      );
+    },
+  ],
+  [
     'seules des aides de catégorie cout_formation sont empilées contre le coût de la formation, les autres catégories sont présentées à part',
     ({ scenario, aides, plan }) => {
       const categorie = new Map(aides.map((a) => [a.id, a.categorie]));
@@ -810,6 +849,32 @@ describe('plan : la grille exerce les invariants', () => {
     expect(plans.some((p) => p.resteACharge > 0)).toBe(true);
     expect(plans.some((p) => p.resteACharge === 0)).toBe(true);
     expect(resultatsGrille().some((r) => r.scenario.annexes && r.plan.coutFormation === r.scenario.cout + MONTANT_FRAIS_ANNEXES)).toBe(true);
+  });
+
+  it("la grille exerce les quatre fonds d'assurance formation des non-salariés : chacun est éligible et dans le plan pour au moins un profil, les trois fonds chiffrés y sont empilés", () => {
+    const FONDS = ['faf-agefice', 'faf-fafcea', 'faf-fifpl', 'faf-fafpm'];
+    for (const id of FONDS) {
+      const eligibles = resultatsGrille().filter((r) => r.aides.some((a) => a.id === id && a.statut === 'eligible'));
+      expect(eligibles.length, `${id} éligible`).toBeGreaterThan(0);
+      expect(eligibles.some((r) => idsDuPlan(r.plan).includes(id)), `${id} dans le plan`).toBe(true);
+    }
+    // Le FIF PL n'a pas de montant : il n'est jamais empilé. Les trois autres le sont.
+    for (const id of ['faf-agefice', 'faf-fafcea', 'faf-fafpm']) {
+      expect(resultatsGrille().some((r) => r.plan.financements.some((l) => l.id === id)), `${id} empilé`).toBe(true);
+    }
+    expect(resultatsGrille().some((r) => r.plan.financements.some((l) => l.id === 'faf-fifpl'))).toBe(false);
+    // Chaque profil de dirigeant ne voit que son fonds : le statut (et le code NAF du médecin) désigne le fonds éligible.
+    const fondsEligibles = (r: Resultat): string[] => r.aides.filter((a) => FONDS.includes(a.id) && a.statut === 'eligible').map((a) => a.id);
+    const vus = (dirigeant: ProfilDirigeant): Set<string> =>
+      new Set(resultatsGrille().filter((r) => r.scenario.dirigeant === dirigeant).flatMap(fondsEligibles));
+    expect(vus('artisan')).toEqual(new Set(['faf-fafcea']));
+    expect(vus('commercant')).toEqual(new Set(['faf-agefice']));
+    expect(vus('avocat')).toEqual(new Set(['faf-fifpl']));
+    // Un médecin voit le FAF PM et, faute de critère NAF négatif, le FIF PL (limite connue, voir donnees-aides-faf.test.ts).
+    expect(vus('medecin')).toEqual(new Set(['faf-fafpm', 'faf-fifpl']));
+    // Les projets de salarié ne voient aucun de ces fonds.
+    const salaries = resultatsGrille().filter((r) => r.scenario.dirigeant === undefined && r.scenario.projet !== 'formation_dirigeant');
+    expect(salaries.flatMap(fondsEligibles)).toEqual([]);
   });
 
   it("des aides à l'employeur et des aides à la personne chiffrées du catalogue sont présentées à part, jamais empilées", () => {

@@ -1,9 +1,11 @@
 // ============================================================
 // Charte rédactionnelle SFG : jamais le tiret cadratin (U+2014), quelle que soit la production. Ce garde parcourt les données
 // que le site affiche (les 11 barèmes OPCO, la table IDCC avec ses titres et ses notes, le catalogue d'aides national et régional,
-// les portails régionaux, les suggestions d'OPCO par code NAF) et signale chaque chaîne de prose qui en contient un, avec son
+// les portails régionaux, les suggestions d'OPCO par code NAF) et signale chaque chaîne lue qui en contient un, avec son
 // chemin JSON. Le contrôle est générique : il lit toutes les chaînes, sans liste de champs à tenir à jour.
-//   - chaîne de prose : au moins un espace (les identifiants, les valeurs d'énumération et les adresses web n'en ont pas) ;
+//   - chaînes lues : toutes, sauf une adresse web seule (`https://…` sans espace) et un identifiant nu (identifiant d'aide,
+//     valeur d'énumération, date, code : lettres sans accent, chiffres, tiret, point, souligné), qui ne peut contenir aucun
+//     tiret cadratin. Un nom d'un seul mot (un mot, un tiret cadratin, un mot) est donc lu : l'absence d'espace n'exempte rien ;
 //   - ne sont pas lus : les citations entre « » (un extrait mot pour mot d'une source n'est pas une production de SFG) et
 //     les adresses web contenues dans une phrase.
 // Le contrôle est appliqué aux données embarquées puis à des copies mutées, pour prouver qu'il détecte bien ce qu'il prétend détecter.
@@ -23,6 +25,13 @@ const TIRET_CADRATIN = String.fromCharCode(0x2014);
 const CITATION = /«[^»]*»/g;
 /** Adresse web au milieu d'une phrase. */
 const ADRESSE_WEB = /https?:\/\/\S+/g;
+/** Chaîne qui est une adresse web, rien d'autre. */
+const ADRESSE_WEB_SEULE = /^https?:\/\/\S+$/;
+/** Identifiant nu : identifiant d'aide, valeur d'énumération, date, code (jamais de tiret cadratin : il n'est pas dans cette classe). */
+const IDENTIFIANT_NU = /^[A-Za-z0-9][A-Za-z0-9_.-]*$/;
+
+/** true si la garde lit la chaîne : toutes, sauf une adresse web seule et un identifiant nu. Un seul mot n'est pas exempté pour autant. */
+const estLue = (texte: string): boolean => !ADRESSE_WEB_SEULE.test(texte) && !IDENTIFIANT_NU.test(texte);
 
 interface Chaine {
   chemin: string;
@@ -38,14 +47,14 @@ function repere(element: unknown, rang: number): string {
   return String(rang);
 }
 
-/** Toutes les chaînes de prose (au moins un espace) d'une valeur JSON, avec leur chemin. */
-function chainesDeProse(valeur: unknown, chemin: string, sortie: Chaine[] = []): Chaine[] {
+/** Toutes les chaînes lues par la garde (voir `estLue`) d'une valeur JSON, avec leur chemin. */
+function chainesLues(valeur: unknown, chemin: string, sortie: Chaine[] = []): Chaine[] {
   if (typeof valeur === 'string') {
-    if (/\s/.test(valeur)) sortie.push({ chemin, texte: valeur });
+    if (estLue(valeur)) sortie.push({ chemin, texte: valeur });
   } else if (Array.isArray(valeur)) {
-    valeur.forEach((element, rang) => chainesDeProse(element, `${chemin}[${repere(element, rang)}]`, sortie));
+    valeur.forEach((element, rang) => chainesLues(element, `${chemin}[${repere(element, rang)}]`, sortie));
   } else if (valeur !== null && typeof valeur === 'object') {
-    for (const [cle, v] of Object.entries(valeur)) chainesDeProse(v, `${chemin}.${cle}`, sortie);
+    for (const [cle, v] of Object.entries(valeur)) chainesLues(v, `${chemin}.${cle}`, sortie);
   }
   return sortie;
 }
@@ -69,18 +78,18 @@ const embarquees = (): Donnees => ({
   naf: EMBEDDED_NAF,
 });
 
-/** Chaînes de prose de chaque source de données, avec leur chemin (`opcos[akto].…`, `idcc[1516].…`, `aides[nat-cpf].…`, `portails[11].…`, `naf[85].…`). */
+/** Chaînes lues de chaque source de données, avec leur chemin (`opcos[akto].…`, `idcc[1516].…`, `aides[nat-cpf].…`, `portails[11].…`, `naf[85].…`). */
 function lire(d: Donnees): Record<keyof Donnees, Chaine[]> {
   return {
-    opcos: d.opcos.flatMap((o) => chainesDeProse(o, `opcos[${o.slug}]`)),
-    idcc: Object.entries(d.idcc).flatMap(([code, e]) => chainesDeProse(e, `idcc[${code}]`)),
-    aides: d.aides.flatMap((a) => chainesDeProse(a, `aides[${a.id}]`)),
-    portails: d.portails.flatMap((p) => chainesDeProse(p, `portails[${p.region}]`)),
-    naf: d.naf.flatMap((s) => chainesDeProse(s, `naf[${s.prefixe}]`)),
+    opcos: d.opcos.flatMap((o) => chainesLues(o, `opcos[${o.slug}]`)),
+    idcc: Object.entries(d.idcc).flatMap(([code, e]) => chainesLues(e, `idcc[${code}]`)),
+    aides: d.aides.flatMap((a) => chainesLues(a, `aides[${a.id}]`)),
+    portails: d.portails.flatMap((p) => chainesLues(p, `portails[${p.region}]`)),
+    naf: d.naf.flatMap((s) => chainesLues(s, `naf[${s.prefixe}]`)),
   };
 }
 
-/** Une ligne par chaîne de prose qui contient un tiret cadratin : son chemin (vide = conforme). */
+/** Une ligne par chaîne lue qui contient un tiret cadratin : son chemin (vide = conforme). */
 function controlerCharte(d: Donnees): string[] {
   return Object.values(lire(d))
     .flat()
@@ -94,19 +103,19 @@ describe('charte SFG : aucun tiret cadratin dans les textes que le site affiche'
     expect(controlerCharte(embarquees())).toEqual([]);
   });
 
-  it('le contrôle lit chaque source : des chaînes de prose sont examinées pour chaque OPCO, convention, aide et portail', () => {
+  it('le contrôle lit chaque source : des chaînes sont examinées pour chaque OPCO, convention, aide et portail', () => {
     const d = embarquees();
     for (const o of d.opcos) {
       expect(lire({ ...d, opcos: [o] }).opcos.length, o.slug).toBeGreaterThan(20);
     }
     for (const [code, e] of Object.entries(d.idcc)) {
-      expect(chainesDeProse(e, code).length, code).toBeGreaterThanOrEqual(1);
+      expect(chainesLues(e, code).length, code).toBeGreaterThanOrEqual(1);
     }
     for (const a of d.aides) {
-      expect(chainesDeProse(a, a.id).length, a.id).toBeGreaterThan(4);
+      expect(chainesLues(a, a.id).length, a.id).toBeGreaterThan(4);
     }
     for (const p of d.portails) {
-      expect(chainesDeProse(p, p.region).length, p.region).toBeGreaterThan(1);
+      expect(chainesLues(p, p.region).length, p.region).toBeGreaterThan(1);
     }
     expect(lire(d).naf.length).toBeGreaterThan(20);
     // Les notes et les titres de la table IDCC, les barèmes, les 173 aides : plusieurs milliers de chaînes lues au total.
@@ -233,11 +242,83 @@ describe('le contrôle détecte une copie mutée', () => {
     expect(controlerCharte(copie)).toEqual(['aides[nat-cpf].description : tiret cadratin']);
   });
 
-  it('une chaîne sans espace (identifiant, énumération, adresse web seule) n\'est pas une chaîne de prose', () => {
+  it("une adresse web seule n'est pas lue, même avec un tiret cadratin : elle n'est ni signalée ni parmi les chaînes lues", () => {
     const copie = muter((d) => {
       aide(d, 'nat-cpf').sources[0].url = `https://exemple.fr/a${TIRET_CADRATIN}b`;
       d.idcc['1516'].source = `https://exemple.fr/a${TIRET_CADRATIN}b`;
     });
     expect(controlerCharte(copie)).toEqual([]);
+    // Sans l'exemption, la chaîne serait lue (puis écartée par le retrait des adresses web) : seule la liste des chaînes lues le prouve.
+    const chemins = lire(copie).aides.map((c) => c.chemin);
+    expect(chemins).not.toContain('aides[nat-cpf].sources[0].url');
+    expect(lire(copie).idcc.map((c) => c.chemin)).not.toContain('idcc[1516].source');
+  });
+
+  it("un nom d'un seul mot, sans espace (un mot, un tiret cadratin, un mot), est lu et signalé avec son chemin", () => {
+    const copie = muter((d) => {
+      aide(d, 'nat-cpf').nom = `CPF${TIRET_CADRATIN}Compte`;
+      aide(d, 'nat-cpf').conditions[0] = `Sans${TIRET_CADRATIN}condition`;
+      d.idcc['1516'].titre = `Organismes${TIRET_CADRATIN}formation`;
+      portail(d, '53').liens[0].titre = `Région${TIRET_CADRATIN}Bretagne`;
+    });
+    expect(controlerCharte(copie).sort()).toEqual(
+      [
+        'aides[nat-cpf].nom : tiret cadratin',
+        'aides[nat-cpf].conditions[0] : tiret cadratin',
+        'idcc[1516].titre : tiret cadratin',
+        'portails[53].liens[0].titre : tiret cadratin',
+      ].sort(),
+    );
+    expect(lire(copie).aides.map((c) => c.chemin)).toContain('aides[nat-cpf].nom');
+  });
+});
+
+describe('la garde lit toute chaîne sauf une adresse web seule et un identifiant nu', () => {
+  const avecTiret = (debut: string, fin: string): string => `${debut}${TIRET_CADRATIN}${fin}`;
+  /** U+00A0, construit par son code : un espace insécable n'est pas un espace ordinaire dans une chaîne. */
+  const ESPACE_INSECABLE = String.fromCharCode(0xa0);
+
+  it("un seul mot avec un tiret cadratin est lu, quels que soient ses caractères : l'absence d'espace n'exempte rien", () => {
+    for (const mot of [avecTiret('CPF', 'Compte'), avecTiret('a', 'b'), avecTiret('Région', 'Sud'), avecTiret('nat', 'cpf'), TIRET_CADRATIN]) {
+      expect(estLue(mot), mot).toBe(true);
+      expect(contientTiret(mot), mot).toBe(true);
+    }
+    // Un mot accentué est lu aussi (il n'est pas un identifiant nu) ; un mot en lettres sans accent est un identifiant nu : il ne peut
+    // pas contenir de tiret cadratin, l'exempter ne cache rien.
+    expect(estLue('Réunion')).toBe(true);
+    expect(estLue('CPF')).toBe(false);
+  });
+
+  it("une phrase est lue, avec ou sans espace insécable ; une adresse web suivie d'un mot l'est aussi", () => {
+    for (const phrase of ['Compte personnel de formation', `Plan${ESPACE_INSECABLE}de${ESPACE_INSECABLE}développement`, 'Voir https://exemple.fr/a', 'https://exemple.fr/a b']) {
+      expect(estLue(phrase), phrase).toBe(true);
+    }
+  });
+
+  it("une adresse web seule n'est pas lue, même avec un tiret cadratin dans le chemin", () => {
+    for (const adresse of ['https://exemple.fr/a', 'http://exemple.fr', `https://exemple.fr/a${TIRET_CADRATIN}b`, 'https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf']) {
+      expect(estLue(adresse), adresse).toBe(false);
+    }
+  });
+
+  it("un identifiant nu (identifiant d'aide, énumération, date, code) n'est pas lu", () => {
+    for (const identifiant of ['nat-cpf', 'faf-fifpl', 'par_heure', 'depends_on_branche', 'less_11', '11_49', '2026-10-06', '86.21', '2A', '1516', '53']) {
+      expect(estLue(identifiant), identifiant).toBe(false);
+    }
+  });
+
+  it("une chaîne vide est lue (elle n'est ni une adresse ni un identifiant), sans rien signaler", () => {
+    expect(estLue('')).toBe(true);
+    expect(contientTiret('')).toBe(false);
+  });
+
+  it('chainesLues parcourt les objets et les tableaux et rend le chemin de chaque chaîne lue seulement', () => {
+    const valeur = {
+      id: 'nat-cpf',
+      nom: avecTiret('CPF', 'Compte'),
+      url: `https://exemple.fr/a${TIRET_CADRATIN}b`,
+      conditions: ['Une phrase', 'code-2A'],
+    };
+    expect(chainesLues(valeur, 'x').map((c) => c.chemin)).toEqual(['x.nom', 'x.conditions[0]']);
   });
 });

@@ -1,7 +1,8 @@
 // ============================================================
 // Intégrité du catalogue d'aides embarqué (data/aides) : forme de chaque aide (schéma strict, aucune clé inconnue), cohérence
-// d'ensemble, fraîcheur (vérifié il y a moins de 12 mois), montants « exacts » justifiés par un extrait chiffré, code de région
-// des aides régionales et portail officiel de chacune des 18 régions.
+// d'ensemble, fraîcheur (vérifié il y a moins de 12 mois, jamais à une date future), montants « exacts » justifiés par un extrait
+// qui chiffre un montant (un nombre suivi de €, d'euros ou de %), code de région des aides régionales et portail officiel de
+// chacune des 18 régions.
 // Chaque contrôle est une fonction qui renvoie la liste des problèmes (vide = conforme) : elle est appliquée au catalogue
 // embarqué, puis à des copies mutées pour prouver qu'elle détecte bien ce qu'elle prétend détecter.
 // Les balayages du catalogue par profil et par plan sont dans donnees-aides-coherence.test.ts, les corrections de catégories
@@ -68,12 +69,30 @@ function controlerFraicheur(entrees: { id: string; derniere_verification: string
     .map((e) => `${e.id} : dernière vérification le ${e.derniere_verification} (${moisEcoules(e.derniere_verification, maintenant)} mois)`);
 }
 
-/** Aides chiffrées de confiance « exact » dont aucun extrait de source ne contient un chiffre (le solde CPF et le non chiffré n'ont pas de montant). */
+/**
+ * Entrées dont la dernière vérification est datée d'après-demain ou plus tard : une date future est une faute de frappe (2027 pour
+ * 2026), que le contrôle de fraîcheur ne voit pas (un écart négatif de mois reste « frais »). La date du lendemain (UTC) est
+ * acceptée : elle peut être celle du jour dans le fuseau de la personne qui a vérifié.
+ */
+function controlerDatesFutures(entrees: { id: string; derniere_verification: string }[], maintenant: Date): string[] {
+  const limite = new Date(maintenant.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return entrees
+    .filter((e) => e.derniere_verification > limite)
+    .map((e) => `${e.id} : dernière vérification le ${e.derniere_verification}, après le ${limite}`);
+}
+
+/** Un nombre suivi d'une unité de montant : « 5 000 € », « 42€/h », « 100 % », « 8 euros ». Un millésime (2026) ou un numéro ne suffit pas. */
+const MONTANT_CHIFFRE = /\d\s*(?:€|euros?\b|%)/i;
+
+/**
+ * Aides chiffrées de confiance « exact » dont aucun extrait de source ne chiffre un montant, c'est-à-dire ne contient un nombre
+ * suivi de €, d'euro(s) ou de % (le solde CPF et le non chiffré n'ont pas de montant).
+ */
 function controlerMontantsExacts(aides: Aide[]): string[] {
   return aides
     .filter((a) => a.confidence === 'exact' && a.montant.mode !== 'non_chiffre' && a.montant.mode !== 'solde_cpf')
-    .filter((a) => !a.sources.some((s) => /\d/.test(s.extrait)))
-    .map((a) => `${a.id} : montant « exact » sans aucun chiffre dans ses extraits`);
+    .filter((a) => !a.sources.some((s) => MONTANT_CHIFFRE.test(s.extrait)))
+    .map((a) => `${a.id} : montant « exact » sans aucun montant chiffré (nombre suivi de €, d'euros ou de %) dans ses extraits`);
 }
 
 /** Aides régionales dont les critères de région ne contiennent pas le code porté par leur identifiant. */
@@ -139,7 +158,13 @@ describe("catalogue d'aides embarqué", () => {
     expect(controlerFraicheur(entreesPortails(EMBEDDED_PORTAILS), maintenant)).toEqual([]);
   });
 
-  it('chaque montant exact est justifié par un extrait chiffré', () => {
+  it("n'a aucune dernière vérification à une date future", () => {
+    const maintenant = new Date();
+    expect(controlerDatesFutures(EMBEDDED_AIDES, maintenant)).toEqual([]);
+    expect(controlerDatesFutures(entreesPortails(EMBEDDED_PORTAILS), maintenant)).toEqual([]);
+  });
+
+  it('chaque montant exact est justifié par un extrait qui chiffre un montant (nombre suivi de €, d\'euros ou de %)', () => {
     expect(controlerMontantsExacts(EMBEDDED_AIDES)).toEqual([]);
     // Le contrôle n'est pas vide : des aides chiffrées « exact » existent.
     const exactes = EMBEDDED_AIDES.filter((a) => a.confidence === 'exact' && a.montant.mode !== 'non_chiffre' && a.montant.mode !== 'solde_cpf');
@@ -190,6 +215,7 @@ describe('les contrôles détectent une copie mutée', () => {
     expect(controlerSchema(EMBEDDED_AIDES)).toEqual([]);
     expect(controlerClesInconnues(EMBEDDED_AIDES)).toEqual([]);
     expect(controlerFraicheur(EMBEDDED_AIDES, maintenant)).toEqual([]);
+    expect(controlerDatesFutures(EMBEDDED_AIDES, maintenant)).toEqual([]);
     expect(controlerMontantsExacts(EMBEDDED_AIDES)).toEqual([]);
     expect(controlerCodeRegion(EMBEDDED_AIDES)).toEqual([]);
     expect(controlerPortails(EMBEDDED_PORTAILS)).toEqual([]);
@@ -243,14 +269,60 @@ describe('les contrôles détectent une copie mutée', () => {
         ajouts((e) => controlerFraicheur(e, maintenant), entreesPortails(EMBEDDED_PORTAILS), entreesPortails(copie)),
       ).toEqual(['portail 53 : dernière vérification le 2025-01-01 (21 mois)']);
     });
+
+    it("une date de vérification future n'est pas vue par le contrôle de fraîcheur : le contrôle des dates futures la signale", () => {
+      const copie = copieAides();
+      dans(copie, 'nat-cpf').derniere_verification = '2027-09-01'; // faute de frappe : 2027 pour 2026
+      expect(ajouts((aides) => controlerFraicheur(aides, maintenant), EMBEDDED_AIDES, copie)).toEqual([]);
+      expect(ajouts((aides) => controlerDatesFutures(aides, maintenant), EMBEDDED_AIDES, copie)).toEqual([
+        'nat-cpf : dernière vérification le 2027-09-01, après le 2026-10-08',
+      ]);
+    });
+
+    it("le jour même et le lendemain (fuseau horaire) sont acceptés, le surlendemain est signalé ; même contrôle pour les portails", () => {
+      const copie = copieAides();
+      dans(copie, 'nat-cpf').derniere_verification = '2026-10-07'; // le jour même
+      dans(copie, 'nat-rfft').derniere_verification = '2026-10-08'; // le lendemain
+      dans(copie, 'nat-clea').derniere_verification = '2026-10-09'; // le surlendemain
+      expect(ajouts((aides) => controlerDatesFutures(aides, maintenant), EMBEDDED_AIDES, copie)).toEqual([
+        'nat-clea : dernière vérification le 2026-10-09, après le 2026-10-08',
+      ]);
+      const portails = copiePortails();
+      portail(portails, '53').derniere_verification = '2027-01-01';
+      expect(
+        ajouts((e) => controlerDatesFutures(e, maintenant), entreesPortails(EMBEDDED_PORTAILS), entreesPortails(portails)),
+      ).toEqual(['portail 53 : dernière vérification le 2027-01-01, après le 2026-10-08']);
+    });
   });
 
   describe('montants exacts', () => {
+    const SANS_MONTANT = "nat-aide-unique-apprentissage : montant « exact » sans aucun montant chiffré (nombre suivi de €, d'euros ou de %) dans ses extraits";
+
     it('une aide chiffrée « exact » dont aucun extrait ne contient de chiffre est signalée', () => {
       const copie = copieAides();
       for (const s of dans(copie, 'nat-aide-unique-apprentissage').sources) s.extrait = 'Texte officiel sans montant.';
-      expect(ajouts(controlerMontantsExacts, EMBEDDED_AIDES, copie)).toEqual(['nat-aide-unique-apprentissage : montant « exact » sans aucun chiffre dans ses extraits']);
+      expect(ajouts(controlerMontantsExacts, EMBEDDED_AIDES, copie)).toEqual([SANS_MONTANT]);
     });
+
+    it("un extrait dont les seuls chiffres sont un millésime, une date ou un numéro ne justifie pas un montant « exact »", () => {
+      const copie = copieAides();
+      const extraits = [
+        'Barème 2026 validé par le conseil du 31/07/2026',
+        'Article 244 quater M du code général des impôts, version en vigueur depuis le 1er janvier 2026',
+        'Tableau n° 12 page 3 : 5 000 sans unité, 42 h',
+      ];
+      dans(copie, 'nat-aide-unique-apprentissage').sources.forEach((s, rang) => (s.extrait = extraits[rang % extraits.length]));
+      expect(ajouts(controlerMontantsExacts, EMBEDDED_AIDES, copie)).toEqual([SANS_MONTANT]);
+    });
+
+    it.each(['Montant : 5 000 €.', 'plafond de 5000€ par an', '42€/h', "Prise en charge de 8 euros par heure", 'une aide de 1 euro', 'à hauteur de 100 %', 'financé à 50% du coût'])(
+      'un extrait qui chiffre un montant (%s) justifie un montant « exact »',
+      (extrait) => {
+        const copie = copieAides();
+        dans(copie, 'nat-aide-unique-apprentissage').sources.forEach((s, rang) => (s.extrait = rang === 0 ? extrait : 'Texte sans montant 2026.'));
+        expect(ajouts(controlerMontantsExacts, EMBEDDED_AIDES, copie)).toEqual([]);
+      },
+    );
 
     it("un seul extrait chiffré suffit, et une aide non « exact », non chiffrée ou prélevée sur le solde CPF n'est pas concernée", () => {
       const copie = copieAides();

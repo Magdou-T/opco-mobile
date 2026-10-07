@@ -1,5 +1,5 @@
 // ============================================================
-// Cinq scénarios de bout en bout (le cinquième avec une variante au CPF) sur les données réelles embarquées : parcours
+// Cinq scénarios de bout en bout (le cinquième avec des variantes de Qualiopi et du CPF) sur les données réelles embarquées : parcours
 // (WizardState), calcul OPCO, profil, évaluation des aides, plan de financement, dans l'enchaînement de l'écran de résultats.
 // Les valeurs attendues sont calculées à la main à partir des données vérifiées (octobre 2026) et des pages officielles citées
 // en commentaire, avec le calcul : le test ne rejoue pas le moteur. Un écart signale une donnée ou un calcul à revoir, pas une
@@ -188,13 +188,23 @@ describe('scénarios de bout en bout (données réelles)', () => {
 
     // Variante : le même salarié chez un organisme à 90 €/h (12 600 €), avec 800 € sur son compte CPF.
     //   pédagogie : min(90 ; 60) x 140 h = 60 x 140 = 8 400 € pris en charge, reste (90 - 60) x 140 = 4 200 € ; 8 400 € < 10 000 € : le plafond annuel ne joue pas ;
-    //   plan : l'OPCO d'abord (8 400 €), puis le CPF, limité à son solde (800 €, sous le reste de 4 200 €).
+    //   plan, trois lignes empilées par ordre d'empilement : l'OPCO d'abord (8 400 €), puis le CPF, limité à son solde (800 €, sous le
+    //   reste de 4 200 €), puis l'abondement de l'employeur sur le CPF (nat-cpf-abondement-employeur), un forfait de 150 € : la
+    //   participation forfaitaire de 150 € que le salarié n'a plus à payer quand son employeur abonde son CPF
+    //   (https://www.service-public.gouv.fr/particuliers/vosdroits/F10705). Le catalogue la compte comme un financement du salarié
+    //   éligible au CPF, sans savoir si l'employeur abonde réellement ;
+    //   financé : 8 400 + 800 + 150 = 9 350 € ; reste à charge : 12 600 - 9 350 = 3 250 €.
     const cher = simuler({ ...parcours, pedagogyCostPerHour: 90, pedagogyCostTotal: 12600, soldeCpf: 800 });
     invariants(cher);
     expect(ligne(cher, 'pedagogie')).toMatchObject({ requestedAmount: 12600, fundedAmount: 8400, remainder: 4200 });
     expect(cher.funding!.budgetCapApplied).toBe(false);
-    expect(cher.plan.financements).toContainEqual(expect.objectContaining({ id: 'opco-pdc', montant: 8400 }));
-    expect(cher.plan.financements).toContainEqual(expect.objectContaining({ id: 'nat-cpf', montant: 800 }));
+    expect(cher.plan.financements).toEqual([
+      expect.objectContaining({ id: 'opco-pdc', montant: 8400 }),
+      expect.objectContaining({ id: 'nat-cpf', montant: 800 }),
+      expect.objectContaining({ id: 'nat-cpf-abondement-employeur', montant: 150 }),
+    ]);
+    expect(cher.plan.totalFinance).toBe(9350);
+    expect(cher.plan.resteACharge).toBe(3250);
   });
 
   it('2. Entreprise de 120 salariés : règle des 50 salariés', () => {
@@ -224,7 +234,11 @@ describe('scénarios de bout en bout (données réelles)', () => {
 
     // Plan : aucune ligne empilée, le coût reste entièrement à charge ; le FSE+ d'Atlas, alternative au plan de développement des
     // compétences (non cumulable), est proposé en option : 50 % x 1 400 € = 700 € (« Le FSE+ prend en charge 50 % des coûts
-    // pédagogiques », https://www.opco-atlas.fr/entreprise/beneficier-fse.html).
+    // pédagogiques », https://www.opco-atlas.fr/entreprise/beneficier-fse.html). Ces 700 € ne valent que pour une formation des
+    // thèmes que finance le FSE+ (transitions numérique, écologique et démographique, management de projet, diversité), en présence
+    // continue d'un formateur et d'au moins 3,5 h (formations internes et à distance exclues), dans la limite des fonds disponibles
+    // (page d'Atlas citée ci-dessus ; conditions de l'option fse-plus dans atlas.json) : le parcours ne précise pas le thème, l'option
+    // reste donc à confirmer auprès d'Atlas.
     expect(r.plan.coutFormation).toBe(1400);
     expect(r.plan.financements).toEqual([]);
     expect(r.plan.totalFinance).toBe(0);
@@ -280,11 +294,12 @@ describe('scénarios de bout en bout (données réelles)', () => {
   });
 
   it('5. Artisan non salarié en Bretagne', () => {
-    const r = simuler({
+    const parcours: Partial<WizardState> = {
       projetType: 'formation_dirigeant', regionCode: '53', companySize: 'less_11', statutDirigeant: 'artisan',
       microEntrepreneur: false, ageBeneficiaire: 45, formationType: 'non_certifiante', organismeQualiopi: true, durationHours: 21,
       pedagogyCostTotal: 900, pedagogyCostPerHour: 42.86,
-    });
+    };
+    const r = simuler(parcours);
     invariants(r);
     expect(visibles(r.aides, 'faf').length).toBeGreaterThan(0);
     expect(r.plan.resteACharge).toBeGreaterThanOrEqual(0);
@@ -298,7 +313,17 @@ describe('scénarios de bout en bout (données réelles)', () => {
     // Calcul à la main : FAFCEA (fonds des artisans), critères du 1er septembre 2026, formation technique (secteur Services et
     // Fabrication) : 35 €/h dans la limite de 100 h, soit 35 x 21 h = 735 € (sous les 900 € du coût de la formation).
     // https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf
-    // Depuis le 1er juillet 2026 le FAFCEA ne finance que les organismes certifiés Qualiopi (https://www.fafcea.com/) : le parcours le précise.
+    // Hypothèses de ce chiffre :
+    //   - la contribution à la formation professionnelle (CFP) de l'entreprise dépasse 85 € : avec une CFP de 85 € ou moins, le FAFCEA
+    //     plafonne la prise en charge à 600 € par an et par entreprise pour les formations à compter du 1er septembre 2026, soit 600 €
+    //     et non 735 € ici (https://www.fafcea.com/actualites/evolution-criteres-prise-en-charge-formation-2026/). Le parcours n'a
+    //     pas de champ pour la CFP : le catalogue chiffre le barème complet ;
+    //   - `microEntrepreneur: false` : le parcours le précise, mais aucun critère du FAFCEA ni d'aucune aide du catalogue n'en dépend ;
+    //     il ne change pas ce montant (une CFP de 85 € ou moins reste possible quel que soit le statut) ;
+    //   - le secteur est celui des Services et de la Fabrication, ou du Bâtiment (35 €/h, 100 h) ; l'Alimentation a son barème
+    //     (60 €/h, 54 h), d'où la confiance « depends_on_branche » de l'aide ;
+    //   - le FAFCEA ne finance que les organismes certifiés Qualiopi depuis le 1er juillet 2026 (https://www.fafcea.com/) : le parcours
+    //     le précise (`organismeQualiopi: true`), les variantes plus bas montrent ce qui change sans cette précision.
     const fafcea = r.aides.find((a) => a.id === 'faf-fafcea')!;
     expect(fafcea).toMatchObject({ statut: 'eligible', financeur: 'faf', montantEstime: 735, cumulable: true });
 
@@ -314,6 +339,29 @@ describe('scénarios de bout en bout (données réelles)', () => {
     expect(r.plan.options.map((o) => o.id)).not.toContain('faf-fafcea');
     expect(r.aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'a_verifier', raisons: ['Vérifiez que la formation est éligible au CPF'] });
     expect(idsDuPlan(r.plan)).not.toContain('nat-cpf');
+
+    // Variante : l'organisme n'est pas précisé (`organismeQualiopi: null`). Le FAFCEA exige un organisme certifié Qualiopi : sans cette
+    // information l'aide est seulement « à vérifier », et le plan, qui ne compte que les aides éligibles, n'empile rien :
+    //   financé : 0 € ; reste à charge : 900 €. C'est pourquoi le parcours de référence renseigne `organismeQualiopi: true`.
+    const inconnu = simuler({ ...parcours, organismeQualiopi: null });
+    invariants(inconnu);
+    expect(inconnu.aides.find((a) => a.id === 'faf-fafcea')).toMatchObject({
+      statut: 'a_verifier', raisons: ["Vérifiez que l'organisme de formation est certifié Qualiopi"],
+    });
+    expect(inconnu.plan.financements).toEqual([]);
+    expect(idsDuPlan(inconnu.plan)).not.toContain('faf-fafcea');
+    expect(inconnu.plan.totalFinance).toBe(0);
+    expect(inconnu.plan.resteACharge).toBe(900);
+
+    // Variante : l'organisme n'est pas certifié Qualiopi (`organismeQualiopi: false`) : le FAFCEA ne finance pas ; mêmes montants.
+    const sansQualiopi = simuler({ ...parcours, organismeQualiopi: false });
+    invariants(sansQualiopi);
+    expect(sansQualiopi.aides.find((a) => a.id === 'faf-fafcea')).toMatchObject({
+      statut: 'non_eligible', raisons: ['Organisme de formation certifié Qualiopi exigé'],
+    });
+    expect(sansQualiopi.plan.financements).toEqual([]);
+    expect(sansQualiopi.plan.totalFinance).toBe(0);
+    expect(sansQualiopi.plan.resteACharge).toBe(900);
   });
 
   it("5 bis. Artisan en Bretagne, formation RNCP éligible au CPF : le FAFCEA n'intervient qu'en cas de refus du CPF, le plan ne compte que le CPF", () => {
