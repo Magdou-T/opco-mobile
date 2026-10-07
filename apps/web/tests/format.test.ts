@@ -225,10 +225,23 @@ describe('de (élision)', () => {
 });
 
 describe('formatEuro', () => {
-  test('montant à la française', () => {
-    // Espace fine insécable entre les milliers, espace insécable avant le symbole (Intl, fr-FR).
-    assert.equal(formatEuro(6300).replace(/\s/g, ' '), '6 300 €');
-    assert.equal(formatEuro(1500.5).replace(/\s/g, ' '), '1 500,5 €');
+  const euro = (n: number) => formatEuro(n).replace(/\s/g, ' ');
+
+  test('montant à la française : espace fine insécable entre les milliers, insécable avant le symbole (Intl, fr-FR)', () => {
+    assert.equal(euro(6300), '6 300 €');
+    assert.match(formatEuro(6300), /^6 300 €$/);
+  });
+
+  test('un montant entier sans décimales, tout autre montant avec deux décimales', () => {
+    assert.equal(euro(1500.5), '1 500,50 €');
+    assert.equal(euro(15.5), '15,50 €');
+    assert.equal(euro(1431.94), '1 431,94 €');
+    assert.equal(euro(0), '0 €');
+    assert.equal(euro(0.1 + 0.2), '0,30 €');
+    // Au centime près : un reste de calcul en virgule flottante ne fait pas apparaître de décimales.
+    assert.equal(euro(1500.004), '1 500 €');
+    assert.equal(euro(99.999), '100 €');
+    assert.equal(euro(-12.5), '-12,50 €');
   });
 });
 

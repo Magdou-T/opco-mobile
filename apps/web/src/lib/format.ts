@@ -16,13 +16,18 @@ export function de(nom: string): string {
   return /^[aeiouyàâäéèêëîïôöûü]/i.test(nom) ? `d'${nom}` : `de ${nom}`;
 }
 
-/** Montant en euros, à la française (« 6 300 € »). */
+/**
+ * Montant en euros, à la française : un montant entier sans décimales (« 6 300 € »), tout autre montant avec deux
+ * (« 1 500,50 € », jamais « 1 500,5 € »), jugé au centime près (un reste de calcul en virgule flottante ne fait pas
+ * apparaître de décimales). Espace fine insécable entre les milliers et insécable avant « € » (Intl, fr-FR).
+ */
 export function formatEuro(amount: number): string {
+  const decimales = Math.round(amount * 100) % 100 === 0 ? 0 : 2;
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',
     currency: 'EUR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: decimales,
+    maximumFractionDigits: decimales,
   }).format(amount);
 }
 

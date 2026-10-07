@@ -488,7 +488,8 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
 
 Composants : `components/results/` ; logique de présentation en fonctions pures : `lib/resultats.ts` (tests :
 `tests/resultats.test.ts`). Chaque montant vient du moteur (`@opco/core`) et n'est arrondi qu'à l'affichage
-(`formatEuro`) ; un montant d'aide non éligible n'est jamais affiché.
+(`formatEuro` : un montant entier sans décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près) ; un
+montant d'aide non éligible n'est jamais affiché.
 
 - **Chargement** : `EcranResultats` est chargé à la demande par `WizardContainer` (`next/dynamic`, `ssr: false`) : le
   catalogue d'aides (environ 135 Ko gzip) et le calcul restent hors du lot initial du simulateur. Le parcours ne lui
