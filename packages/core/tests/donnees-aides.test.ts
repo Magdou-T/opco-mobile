@@ -57,6 +57,10 @@ function controlerClesInconnues(aides: Aide[]): string[] {
   ]);
 }
 
+/** Les portails sous la forme que lit `controlerFraicheur` : un libellé et une date de vérification. */
+const entreesPortails = (portails: PortailRegional[]): { id: string; derniere_verification: string }[] =>
+  portails.map((p) => ({ id: `portail ${p.region}`, derniere_verification: p.derniere_verification }));
+
 /** Entrées dont la dernière vérification remonte à 12 mois ou plus. */
 function controlerFraicheur(entrees: { id: string; derniere_verification: string }[], maintenant: Date): string[] {
   return entrees
@@ -132,7 +136,7 @@ describe("catalogue d'aides embarqué", () => {
   it('a été vérifié il y a moins de 12 mois', () => {
     const maintenant = new Date();
     expect(controlerFraicheur(EMBEDDED_AIDES, maintenant)).toEqual([]);
-    expect(controlerFraicheur(EMBEDDED_PORTAILS.map((p) => ({ id: `portail ${p.region}`, derniere_verification: p.derniere_verification })), maintenant)).toEqual([]);
+    expect(controlerFraicheur(entreesPortails(EMBEDDED_PORTAILS), maintenant)).toEqual([]);
   });
 
   it('chaque montant exact est justifié par un extrait chiffré', () => {
@@ -157,6 +161,15 @@ describe("catalogue d'aides embarqué", () => {
 // ---------------------------------------------------------------------------
 // Les contrôles détectent une copie mutée
 // ---------------------------------------------------------------------------
+
+/**
+ * Problèmes qu'une copie ajoute à ceux des données embarquées : l'état du catalogue n'altère pas la preuve que le contrôle
+ * détecte la mutation (le catalogue lui-même est jugé par les tests ci-dessus).
+ */
+function ajouts<T>(controle: (donnees: T) => string[], base: T, copie: T): string[] {
+  const connus = new Set(controle(base));
+  return controle(copie).filter((probleme) => !connus.has(probleme));
+}
 
 describe('les contrôles détectent une copie mutée', () => {
   const copieAides = (): Aide[] => structuredClone(EMBEDDED_AIDES);
@@ -189,7 +202,7 @@ describe('les contrôles détectent une copie mutée', () => {
       (dans(copie, 'nat-rfft') as unknown as Record<string, unknown>).region = '11';
       (dans(copie, 'nat-aide-unique-apprentissage').montant as unknown as Record<string, unknown>).plafon = 500;
       (dans(copie, 'nat-rfft').montant.majorations![0].criteres as Record<string, unknown>).rqht = true;
-      expect(controlerClesInconnues(copie).sort()).toEqual([
+      expect(ajouts(controlerClesInconnues, EMBEDDED_AIDES, copie).sort()).toEqual([
         'nat-aide-unique-apprentissage.montant.plafon : clé inconnue',
         'nat-cpf.criteres.age_maxi : clé inconnue',
         'nat-rfft.montant.majorations[0].criteres.rqht : clé inconnue',
@@ -201,7 +214,7 @@ describe('les contrôles détectent une copie mutée', () => {
       const copie = copieAides();
       dans(copie, 'nat-cpf').derniere_verification = '2026-02-30'; // date impossible
       (dans(copie, 'nat-rfft').criteres as Record<string, unknown>).age_maxi = 30;
-      const problemes = controlerSchema(copie);
+      const problemes = ajouts(controlerSchema, EMBEDDED_AIDES, copie);
       expect(problemes).toHaveLength(2);
       expect(problemes.filter((p) => p.startsWith('nat-cpf : derniere_verification'))).toHaveLength(1);
       expect(problemes.filter((p) => p.startsWith('nat-rfft : criteres'))).toHaveLength(1);
@@ -217,7 +230,7 @@ describe('les contrôles détectent une copie mutée', () => {
       dans(copie, 'nat-cpf').derniere_verification = '2025-10-31'; // 12 mois civils
       dans(copie, 'nat-rfft').derniere_verification = '2025-11-01'; // 11 mois civils
       dans(copie, 'nat-clea').derniere_verification = '2024-01-15'; // 33 mois
-      expect(controlerFraicheur(copie, maintenant)).toEqual([
+      expect(ajouts((aides) => controlerFraicheur(aides, maintenant), EMBEDDED_AIDES, copie)).toEqual([
         'nat-cpf : dernière vérification le 2025-10-31 (12 mois)',
         'nat-clea : dernière vérification le 2024-01-15 (33 mois)',
       ]);
@@ -226,8 +239,9 @@ describe('les contrôles détectent une copie mutée', () => {
     it("un portail dont la vérification est trop ancienne est signalé (même contrôle appliqué aux portails)", () => {
       const copie = copiePortails();
       portail(copie, '53').derniere_verification = '2025-01-01';
-      const entrees = copie.map((p) => ({ id: `portail ${p.region}`, derniere_verification: p.derniere_verification }));
-      expect(controlerFraicheur(entrees, maintenant)).toEqual(['portail 53 : dernière vérification le 2025-01-01 (21 mois)']);
+      expect(
+        ajouts((e) => controlerFraicheur(e, maintenant), entreesPortails(EMBEDDED_PORTAILS), entreesPortails(copie)),
+      ).toEqual(['portail 53 : dernière vérification le 2025-01-01 (21 mois)']);
     });
   });
 
@@ -235,7 +249,7 @@ describe('les contrôles détectent une copie mutée', () => {
     it('une aide chiffrée « exact » dont aucun extrait ne contient de chiffre est signalée', () => {
       const copie = copieAides();
       for (const s of dans(copie, 'nat-aide-unique-apprentissage').sources) s.extrait = 'Texte officiel sans montant.';
-      expect(controlerMontantsExacts(copie)).toEqual(['nat-aide-unique-apprentissage : montant « exact » sans aucun chiffre dans ses extraits']);
+      expect(ajouts(controlerMontantsExacts, EMBEDDED_AIDES, copie)).toEqual(['nat-aide-unique-apprentissage : montant « exact » sans aucun chiffre dans ses extraits']);
     });
 
     it("un seul extrait chiffré suffit, et une aide non « exact », non chiffrée ou prélevée sur le solde CPF n'est pas concernée", () => {
@@ -249,7 +263,7 @@ describe('les contrôles détectent une copie mutée', () => {
       expect(dans(copie, 'nat-cpf').montant.mode).toBe('solde_cpf');
       expect(dans(copie, 'faf-fifpl').montant.mode).toBe('non_chiffre');
       expect(dans(copie, 'faf-fafcea').confidence).not.toBe('exact');
-      expect(controlerMontantsExacts(copie)).toEqual([]);
+      expect(ajouts(controlerMontantsExacts, EMBEDDED_AIDES, copie)).toEqual([]);
     });
   });
 
@@ -258,7 +272,7 @@ describe('les contrôles détectent une copie mutée', () => {
       const copie = copieAides();
       dans(copie, 'r11-recrutup').criteres.regions = ['75'];
       delete dans(copie, 'r53-aide-financiere').criteres.regions;
-      expect(controlerCodeRegion(copie)).toEqual([
+      expect(ajouts(controlerCodeRegion, EMBEDDED_AIDES, copie)).toEqual([
         'r11-recrutup : criteres.regions ne contient pas 11',
         'r53-aide-financiere : criteres.regions ne contient pas 53',
       ]);
@@ -268,7 +282,7 @@ describe('les contrôles détectent une copie mutée', () => {
       const copie = copieAides();
       delete dans(copie, 'nat-cpf').criteres.regions;
       dans(copie, 'nat-ladom-passeport-mobilite-formation').criteres.regions = ['01', '02', '03', '04', '06'];
-      expect(controlerCodeRegion(copie)).toEqual([]);
+      expect(ajouts(controlerCodeRegion, EMBEDDED_AIDES, copie)).toEqual([]);
     });
   });
 
@@ -277,7 +291,7 @@ describe('les contrôles détectent une copie mutée', () => {
       const copie = copiePortails().filter((p) => p.region !== '53'); // Bretagne retirée
       copie.push(structuredClone(portail(copie, '11'))); // Île-de-France en double
       portail(copie, '76').nom_region = 'Occitanie-Pyrénées';
-      expect(controlerPortails(copie).sort()).toEqual(
+      expect(ajouts(controlerPortails, EMBEDDED_PORTAILS, copie).sort()).toEqual(
         [
           'portail 76 : nom « Occitanie-Pyrénées » au lieu de « Occitanie »',
           'portail 11 : 2 portails pour une même région',
@@ -290,7 +304,7 @@ describe('les contrôles détectent une copie mutée', () => {
       const copie = copiePortails();
       portail(copie, '84').liens[0].url = 'http://www.auvergnerhonealpes.fr';
       (portail(copie, '94') as unknown as { region: string }).region = '99';
-      const problemes = controlerPortails(copie);
+      const problemes = ajouts(controlerPortails, EMBEDDED_PORTAILS, copie);
       expect(problemes.filter((p) => p.startsWith('portail 84 :'))).toHaveLength(1);
       expect(problemes.filter((p) => p.startsWith('portail 99 :'))).toHaveLength(2); // schéma et région inconnue
       expect(problemes).toContain('portail 94 : région sans portail');

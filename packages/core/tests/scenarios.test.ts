@@ -304,6 +304,8 @@ describe('scénarios de bout en bout (données réelles)', () => {
     // Attente adaptée : « le plan finance quelque chose » devient « le FAFCEA figure dans le plan en option ». Le FAFCEA est déclaré
     // non cumulable (il n'intervient qu'en cas de refus du CPF pour la VAE, le bilan de compétences et les formations RNCP, mêmes
     // critères du 1er septembre 2026) : le plan le propose à comparer avec les autres financements, sans l'empiler contre le coût.
+    // Cette règle ne vise pas une formation technique non certifiante comme celle de ce parcours : le drapeau est une précaution de
+    // la donnée. S'il devient cumulable, le plan empile 735 € sur les 900 € du coût (financé 735 €, reste 165 €) et cette attente est à remplacer.
     expect(r.plan.options).toContainEqual(expect.objectContaining({ id: 'faf-fafcea', montantEstime: 735 }));
     expect(r.plan.financements.map((l) => l.id)).not.toContain('faf-fafcea');
     expect(r.plan.coutFormation).toBe(900);
