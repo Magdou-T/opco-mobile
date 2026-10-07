@@ -4122,8 +4122,12 @@
         ]
       },
       "cumul": {
-        "cumulable": false,
-        "note": "Non cumulable avec le CPF pour une même formation (les actions financées avec des droits CPF sont exclues)."
+        "cumulable": true,
+        "alternatives": [
+          "nat-cpf",
+          "nat-vae"
+        ],
+        "note": "Au choix avec le CPF (formation ou VAE) pour une même formation : les actions entreprises avec mobilisation des droits CPF sont exclues, même en cas de reste à charge."
       },
       "demarches": [
         "Télécharger sur son compte Urssaf l'attestation de contribution à la formation professionnelle et vérifier que l'AGEFICE y figure comme fonds d'assurance formation.",
@@ -4249,8 +4253,12 @@
         "libelle": "Critères 2026 : formations techniques jusqu'à 35 €/h HT dans le bâtiment et dans la fabrication et les services (60 €/h dans l'alimentation), dans la limite de 100 h par stagiaire et par an (54 h dans l'alimentation), soit 3 500 € au plus (calcul : 100 h × 35 €) ; formations transverses et de gestion spécifique métiers : 25 €/h ; autres modalités : 15 €/h. Si la CFP est inférieure ou égale à 85 € : 600 € maximum par an et par entreprise. Frais annexes : jusqu'à 200 € par stage."
       },
       "cumul": {
-        "cumulable": false,
-        "note": "Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF."
+        "cumulable": true,
+        "alternatives": [
+          "nat-cpf",
+          "nat-vae"
+        ],
+        "note": "Au choix avec le CPF (formation ou VAE). Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF."
       },
       "demarches": [
         "Vérifier que l'activité relève du FAFCEA (code NAFA) et réunir l'extrait d'inscription au registre national des entreprises de moins d'un an et l'attestation Urssaf de versement de la contribution à la formation.",
@@ -4328,6 +4336,21 @@
           "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-BAT-1-sept-2026.pdf",
           "titre": "FAFCEA – Critères de prise en charge 2026, secteur Bâtiment (1er septembre 2026)",
           "extrait": "Durée maximale (par stagiaire et par an) Coût horaire maximum (Hors TVA - non financée) Présentiel et distanciel (avec formateur) Autres modalités (cf.annexe) Technique 100h 35 € 15 €"
+        },
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
+          "extrait": "VAE comprenant l’accompagnement, le dépôt du livret 2 et le passage devant le jury Prise en charge dans le cas d’un refus de prise en charge du CPF"
+        },
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
+          "extrait": "Bilan de compétences Prise en charge dans le cas d’un refus de prise en charge du CPF"
+        },
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
+          "extrait": "Formations diplômantes et certifiantes inscrites au RNCP Prise en charge dans le cas d’un refus de prise en charge du CPF"
         }
       ],
       "derniere_verification": "2026-10-06",
@@ -4376,8 +4399,12 @@
         "libelle": "Critères 2026 : coût réel pris en charge dans la limite des plafonds de la profession ; pour la plupart des professions 300 € par jour et 900 € par an (150 € la demi-journée pour les avocats) ; 350 € par jour et 1 050 € par an pour certaines (agents commerciaux, conseil en systèmes informatiques, édition de logiciels, interprètes-traducteurs…). Formations longues (une prise en charge tous les 3 ans, sur fonds spécifiques) : 2 000 € de 70 à 89 h, 2 500 € de 90 à 109 h, 3 000 € à partir de 110 h. E-learning : 50 % des plafonds ; micro-entrepreneurs : 20 % à 100 % des plafonds selon la CFP versée."
       },
       "cumul": {
-        "cumulable": false,
-        "note": "Les formations liées au CPF sont exclues des prises en charge du FIF PL."
+        "cumulable": true,
+        "alternatives": [
+          "nat-cpf",
+          "nat-vae"
+        ],
+        "note": "Au choix avec le CPF (formation ou VAE) : le FIF PL ne fait pas de complément de prise en charge pour les formations financées par le CPF."
       },
       "demarches": [
         "Vérifier les critères et plafonds de sa profession sur fifpl.fr à partir du code NAF figurant sur l'attestation Urssaf.",
@@ -4470,6 +4497,11 @@
           "url": "https://fifpl.fr/professions-liberales/quest-ce-qui-peut-etre-pris-en-charge/",
           "titre": "FIF PL – Qu'est-ce qui peut être pris en charge ?",
           "extrait": "Je m’assure que l’organisme de formation est certifié Qualiopi. Dans le cas contraire, ma demande de financement ne pourra pas aboutir."
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/foire-aux-questions-faq/",
+          "titre": "FIF PL – Foire aux questions (FAQ)",
+          "extrait": "Ma formation est partiellement financée par le biais de mon CPF. Puis-je faire une demande au FIF PL pour la partie restant à ma charge ? Non, le FIF PL ne fait pas de complément de prise en charge pour les formations financées par le CPF."
         }
       ],
       "derniere_verification": "2026-10-06",
@@ -4625,6 +4657,9 @@
         "naf_prefixes": [
           "86.21",
           "86.22"
+        ],
+        "types_formation": [
+          "non_certifiante"
         ]
       },
       "conditions": [
@@ -4645,8 +4680,8 @@
         "libelle": "Formation suivie à titre individuel : remboursement des frais pédagogiques jusqu'à 400 € (formations terminées à partir du 31 mars 2026 ; 300 € auparavant). Formations collectives des organismes habilités par le FAF PM : prise en charge versée directement à l'organisme, dans la limite de 6 400 € par médecin pour 2026."
       },
       "cumul": {
-        "cumulable": false,
-        "note": "Les formations diplômantes relèvent du CPF et les programmes DPC de l'ANDPC ; ils ne sont pas pris en charge à titre individuel par le FAF PM."
+        "cumulable": true,
+        "note": "Les formations diplômantes ou certifiantes relèvent du CPF et les programmes DPC de l'ANDPC ; ils ne sont pas pris en charge à titre individuel par le FAF PM. L'aide n'est donc proposée que pour une formation non certifiante."
       },
       "demarches": [
         "Suivre la formation et régler l'organisme (convention, bon de commande ou devis signé).",
@@ -4689,6 +4724,16 @@
           "url": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
           "titre": "FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026",
           "extrait": "Le FAF PM peut prendre en charge tout ou partie des frais engagés , dans la limite : d’une part du forfait individuel arrêté par le Conseil de Gestion , d’autre part du budget global que le Conseil flèche pour les actions individuelles."
+        },
+        {
+          "url": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
+          "titre": "FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026",
+          "extrait": "Ne sont pas prises en charge à titre individuel par le FAF PM les actions de formation : Diplômantes ou certifiantes (DU, DIU, capacités,…)"
+        },
+        {
+          "url": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
+          "titre": "FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026",
+          "extrait": "Une partie de cette ressource sert à alimenter le CPF (Compte Personnel Formation) qui vous permet également de financer votre formation (diplômante, certifiante)."
         }
       ],
       "derniere_verification": "2026-10-06",

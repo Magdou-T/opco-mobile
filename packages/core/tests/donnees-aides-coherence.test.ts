@@ -3,7 +3,8 @@
 // par le moteur, comme le fait l'application, pour que les défauts de données qui faussent les chiffres affichés ne
 // passent plus inaperçus (aides propres à la VAE « éligibles » pour toute formation, alternatives incomplètes, solde
 // CPF compté plusieurs fois). Contrôles :
-//   1. alternatives : chaque groupe d'alternatives est complet (toute paire est déclarée), sauf deux paires justifiées ;
+//   1. alternatives : chaque groupe d'alternatives est complet (toute paire est déclarée), sauf les paires justifiées une par
+//      une (le PTP, le Pacte Région, et l'étoile du CPF et des fonds d'assurance formation des non-salariés) ;
 //   2. solde CPF : les lignes du plan prélevées sur le solde CPF ne dépassent jamais le solde ;
 //   3. POE : une seule des trois entrées de la préparation opérationnelle à l'emploi est retenue ;
 //   4. VAE : une aide propre à la VAE n'est ni éligible ni à vérifier pour une autre formation, et jamais comptée dans le
@@ -304,9 +305,56 @@ const PAIRES_VOLONTAIREMENT_NON_DECLAREES: Record<string, string> = {
     "aucune des deux n'est déclarée incompatible avec l'autre (leurs notes ne se citent pas) ; r84-pacte-region-emploi-apres-embauche, non cumulable avec l'une comme avec l'autre, les relie dans le même groupe",
 };
 
+/**
+ * true si aucun profil ne peut rendre les deux aides éligibles ensemble : leurs projets, leurs publics ou leurs statuts de
+ * dirigeant (quand les deux en exigent) n'ont aucun élément en commun.
+ */
+function jamaisEligiblesEnsemble(a: Aide, b: Aide): boolean {
+  const sansPointCommun = <T>(x: readonly T[] | undefined, y: readonly T[] | undefined): boolean =>
+    x !== undefined && y !== undefined && x.length > 0 && y.length > 0 && !x.some((valeur) => y.includes(valeur));
+  return (
+    sansPointCommun(a.projets, b.projets) ||
+    sansPointCommun(a.beneficiaires, b.beneficiaires) ||
+    sansPointCommun(a.criteres.statuts_dirigeant, b.criteres.statuts_dirigeant)
+  );
+}
+
+/**
+ * Étoile du CPF et des fonds d'assurance formation des non-salariés (FAF) : trois fonds (faf-agefice, faf-fafcea, faf-fifpl)
+ * déclarent comme alternatives les deux aides du CPF qui peuvent payer la formation d'un dirigeant, nat-cpf et nat-vae (une
+ * VAE financée par le CPF). Ils rejoignent ainsi le groupe du solde CPF (nat-cpf, nat-vae, nat-clea, nat-bilan-competences)
+ * sans être alternatives de nat-clea ni de nat-bilan-competences, ni les uns des autres : neuf paires restent non déclarées.
+ * Chacune est justifiée ici, et le test des paires justifiées le vérifie sur les données : les deux aides n'ont aucun projet,
+ * aucun public ou aucun statut de dirigeant en commun, donc aucun profil ne les rend éligibles ensemble et une déclaration
+ * n'aurait aucun effet sur le plan. Le FAF PM n'est pas dans l'étoile : il écarte les formations diplômantes ou certifiantes par
+ * le critère types_formation, sans alternative (voir donnees-aides-faf.test.ts).
+ */
+const PAIRES_ETOILE_CPF_FAF: Record<string, string> = {
+  'faf-agefice ↔ faf-fafcea':
+    "statuts de dirigeant distincts : l'AGEFICE est réservé aux commerçants, le FAFCEA aux artisans, et un profil n'a qu'un statut",
+  'faf-agefice ↔ faf-fifpl':
+    "statuts de dirigeant distincts : l'AGEFICE est réservé aux commerçants, le FIF PL aux professions libérales, et un profil n'a qu'un statut",
+  'faf-fafcea ↔ faf-fifpl':
+    "statuts de dirigeant distincts : le FAFCEA est réservé aux artisans, le FIF PL aux professions libérales, et un profil n'a qu'un statut",
+  'faf-agefice ↔ nat-clea':
+    "CléA est ouvert aux salariés et aux demandeurs d'emploi (formation d'un salarié, reconversion, recrutement), jamais au projet de formation d'un dirigeant, seul projet de l'AGEFICE",
+  'faf-fafcea ↔ nat-clea':
+    "CléA est ouvert aux salariés et aux demandeurs d'emploi (formation d'un salarié, reconversion, recrutement), jamais au projet de formation d'un dirigeant, seul projet du FAFCEA",
+  'faf-fifpl ↔ nat-clea':
+    "CléA est ouvert aux salariés et aux demandeurs d'emploi (formation d'un salarié, reconversion, recrutement), jamais au projet de formation d'un dirigeant, seul projet du FIF PL",
+  'faf-agefice ↔ nat-bilan-competences':
+    "le bilan de compétences du catalogue ne concerne que la reconversion d'un salarié ou d'un demandeur d'emploi, jamais le projet de formation d'un dirigeant, seul projet de l'AGEFICE",
+  'faf-fafcea ↔ nat-bilan-competences':
+    "le bilan de compétences du catalogue ne concerne que la reconversion d'un salarié ou d'un demandeur d'emploi, jamais le projet de formation d'un dirigeant, seul projet du FAFCEA",
+  'faf-fifpl ↔ nat-bilan-competences':
+    "le bilan de compétences du catalogue ne concerne que la reconversion d'un salarié ou d'un demandeur d'emploi, jamais le projet de formation d'un dirigeant, seul projet du FIF PL",
+};
+
 describe('alternatives : chaque groupe est complet', () => {
-  it("toute paire d'aides d'un même groupe d'alternatives est déclarée, sauf les deux paires justifiées", () => {
-    expect(pairesNonDeclarees(EMBEDDED_AIDES)).toEqual(Object.keys(PAIRES_VOLONTAIREMENT_NON_DECLAREES).sort());
+  it("toute paire d'aides d'un même groupe d'alternatives est déclarée, sauf les paires justifiées une par une", () => {
+    expect(pairesNonDeclarees(EMBEDDED_AIDES)).toEqual(
+      [...Object.keys(PAIRES_VOLONTAIREMENT_NON_DECLAREES), ...Object.keys(PAIRES_ETOILE_CPF_FAF)].sort(),
+    );
   });
 
   it('le groupe de la POE (POEI nationale, POEC, POEI de la Région Pays de la Loire) est complet', () => {
@@ -345,6 +393,53 @@ describe('alternatives : chaque groupe est complet', () => {
     expect(aide('r84-pacte-region-emploi-apres-embauche').cumul.alternatives).toEqual(
       expect.arrayContaining(['r84-pacte-region-emploi', 'r84-formations-individuelles']),
     );
+  });
+
+  it("les neuf paires de l'étoile du CPF et des fonds d'assurance formation sont justifiées une par une : aucun profil ne rend les deux aides éligibles ensemble", () => {
+    const paires = Object.entries(PAIRES_ETOILE_CPF_FAF);
+    expect(paires).toHaveLength(9);
+    for (const [paire, raison] of paires) {
+      const [x, y] = paire.split(' ↔ ');
+      expect(raison.length, paire).toBeGreaterThan(30);
+      expect(jamaisEligiblesEnsemble(aide(x), aide(y)), paire).toBe(true);
+    }
+  });
+
+  it("l'étoile est formée des trois fonds qui déclarent nat-cpf : leurs paires avec nat-clea, nat-bilan-competences et entre eux sont les seules écartées", () => {
+    const fonds = EMBEDDED_AIDES.filter((a) => (a.cumul.alternatives ?? []).includes('nat-cpf') && a.financeur === 'faf').map((a) => a.id).sort();
+    expect(fonds).toEqual(['faf-agefice', 'faf-fafcea', 'faf-fifpl']);
+    const attendues = [
+      ...fonds.flatMap((f, i) => fonds.slice(i + 1).map((g) => `${f} ↔ ${g}`)),
+      ...fonds.flatMap((f) => ['nat-bilan-competences', 'nat-clea'].map((cpf) => `${f} ↔ ${cpf}`)),
+    ];
+    expect(Object.keys(PAIRES_ETOILE_CPF_FAF).sort()).toEqual(attendues.sort());
+  });
+
+  describe('le contrôle des paires justifiées détecte deux aides qui peuvent être éligibles ensemble', () => {
+    const aidePour = (projets: Aide['projets'], beneficiaires: Aide['beneficiaires'], statuts?: Aide['criteres']['statuts_dirigeant']) =>
+      makeAide({ projets, beneficiaires, criteres: statuts ? { statuts_dirigeant: statuts } : {} });
+
+    it('projets, publics ou statuts de dirigeant sans point commun : jamais éligibles ensemble', () => {
+      expect(jamaisEligiblesEnsemble(aidePour(['formation_dirigeant'], ['dirigeant']), aidePour(['reconversion_salarie'], ['dirigeant']))).toBe(true);
+      expect(jamaisEligiblesEnsemble(aidePour(['formation_salarie'], ['salarie']), aidePour(['formation_salarie'], ['dirigeant']))).toBe(true);
+      expect(
+        jamaisEligiblesEnsemble(
+          aidePour(['formation_dirigeant'], ['dirigeant'], ['artisan']),
+          aidePour(['formation_dirigeant'], ['dirigeant'], ['commercant', 'profession_liberale']),
+        ),
+      ).toBe(true);
+    });
+
+    it("un projet, un public et un statut en commun, ou un statut exigé d'un seul côté : elles peuvent être éligibles ensemble", () => {
+      expect(jamaisEligiblesEnsemble(aidePour(['formation_dirigeant'], ['dirigeant']), aidePour(['formation_dirigeant', 'alternance'], ['dirigeant']))).toBe(false);
+      expect(
+        jamaisEligiblesEnsemble(
+          aidePour(['formation_dirigeant'], ['dirigeant'], ['artisan']),
+          aidePour(['formation_dirigeant'], ['dirigeant'], ['artisan', 'commercant']),
+        ),
+      ).toBe(false);
+      expect(jamaisEligiblesEnsemble(aidePour(['formation_dirigeant'], ['dirigeant'], ['artisan']), aidePour(['formation_dirigeant'], ['dirigeant']))).toBe(false);
+    });
   });
 
   describe('le contrôle détecte un groupe incomplet', () => {
@@ -481,6 +576,15 @@ const AIDES_VAE = [
   'r94-assegnu-vae',
 ];
 
+/**
+ * Aides limitées à d'autres types de formation que la VAE (critère `types_formation`), avec les types retenus. Le FAF PM ne prend
+ * pas en charge à titre individuel les formations « diplômantes ou certifiantes » : il ne reste que le type non certifiant
+ * (qualification, certification, CQP, habilitation, VAE et reconversion mènent à une qualification ou à une certification).
+ */
+const AIDES_LIMITEES_A_D_AUTRES_TYPES: Record<string, TrainingType[]> = {
+  'faf-fafpm': ['non_certifiante'],
+};
+
 /** Aides qui couvrent la VAE parmi d'autres objets : elles ne sont pas propres à la VAE et restent ouvertes à tout type de formation. */
 const COUVRENT_LA_VAE_PARMI_D_AUTRES_OBJETS: Record<string, string> = {
   'nat-cpf': 'compte qui finance toute formation éligible (certification, bloc de compétences, VAE, bilan de compétences, permis)',
@@ -517,9 +621,14 @@ const evaluerPourSonProfil = (a: Aide, typeFormation: TrainingType | null): Aide
 
 describe("VAE : les aides propres à la VAE ne s'appliquent qu'aux formations de type VAE", () => {
   it("les aides propres à la VAE sont exactement celles qui portent types_formation : ['vae']", () => {
-    const avecCritere = EMBEDDED_AIDES.filter((a) => a.criteres.types_formation !== undefined);
+    const avecCritere = EMBEDDED_AIDES.filter((a) => a.criteres.types_formation !== undefined && !(a.id in AIDES_LIMITEES_A_D_AUTRES_TYPES));
     expect(avecCritere.map((a) => a.id).sort()).toEqual([...AIDES_VAE].sort());
     expect(avecCritere.filter((a) => JSON.stringify(a.criteres.types_formation) !== '["vae"]').map((a) => a.id)).toEqual([]);
+  });
+
+  it("les autres aides qui portent types_formation sont celles dont les sources limitent la prise en charge à un type de formation", () => {
+    const avecCritere = EMBEDDED_AIDES.filter((a) => a.criteres.types_formation !== undefined && !AIDES_VAE.includes(a.id));
+    expect(Object.fromEntries(avecCritere.map((a) => [a.id, a.criteres.types_formation]))).toEqual(AIDES_LIMITEES_A_D_AUTRES_TYPES);
   });
 
   it('toute aide dont le nom évoque la VAE est propre à la VAE', () => {

@@ -13,7 +13,9 @@
 //     qui paient une dépense de la personne et non la formation (permis, transport, hébergement, restauration, équipement,
 //     mobilité, fonds social, aides aux apprentis), recatégorise en « aide_employeur » les aides versées à une entreprise
 //     ou à une structure qui ne paient pas la formation elle-même, réserve les aides propres à la VAE au type de formation
-//     « vae » (critère types_formation), passe en « non_chiffre » le pourcentage de l'aide au permis de la Région
+//     « vae » (critère types_formation), rend cumulables les quatre fonds d'assurance formation des non-salariés dont la
+//     seule restriction porte sur le CPF (AGEFICE, FAFCEA et FIF PL au choix avec le CPF ; FAF PM limité aux formations non
+//     certifiantes), passe en « non_chiffre » le pourcentage de l'aide au permis de la Région
 //     Hauts-de-France (il porte sur le contrat d'enseignement à la conduite, pas sur la formation) et corrige trois montants
 //     (majoration RQTH du RFFT, deux aides versées sur une période qui n'est pas la durée de la formation). Chaque
 //     correction vérifie l'état attendu de l'aide avant de la modifier : si l'aide a disparu ou a changé, le script
@@ -54,9 +56,11 @@ const CLES_LIEN = new Set(['titre', 'url', 'type']);
 //     nationale est déjà au choix avec la POEI nationale ;
 //   - solde CPF : nat-cpf, nat-vae, nat-clea et nat-bilan-competences prélèvent sur le même solde de droits CPF (les trois
 //     dernières déclarent déjà nat-cpf).
-// Deux paires restent volontairement non déclarées (justifiées dans le test de cohérence) : nat-ptp et nat-ptp-remuneration
-// (même dispositif, cumulables) ; r84-pacte-region-emploi et r84-formations-individuelles (aucune des deux n'est déclarée
-// incompatible avec l'autre).
+// Des paires restent volontairement non déclarées (justifiées une à une dans le test de cohérence) : nat-ptp et
+// nat-ptp-remuneration (même dispositif, cumulables) ; r84-pacte-region-emploi et r84-formations-individuelles (aucune des
+// deux n'est déclarée incompatible avec l'autre) ; neuf paires de l'étoile du CPF et des fonds d'assurance formation (les
+// fonds déclarent nat-cpf et nat-vae par la table CORRECTIONS ci-dessous, sans être alternatives de nat-clea, de
+// nat-bilan-competences ni les uns des autres : ces aides ne peuvent jamais être éligibles ensemble).
 const ALTERNATIVES_CONNUES = [
   {
     paire: ['nat-poei', 'r52-poei-region'],
@@ -348,6 +352,26 @@ const aidePropreALaVae = (id, motif) => ({
   },
 });
 
+// Fonds d'assurance formation des non-salariés dont la seule restriction de cumul porte sur le CPF (AGEFICE, FAFCEA, FIF PL) :
+// l'aide devient cumulable et au choix avec les deux aides du CPF qui peuvent payer la formation d'un dirigeant, nat-cpf et
+// nat-vae (une VAE financée par le CPF) ; le plan ne retient alors que la mieux chiffrée des deux. L'abondement de l'employeur
+// (nat-cpf-abondement-employeur) n'est pas déclaré : un dirigeant non salarié n'a pas d'employeur et cette aide ne vise que les
+// salariés ; CléA et le bilan de compétences ne concernent pas non plus un dirigeant. `sources` : extraits mot pour mot des pages
+// officielles qui justifient la règle de cumul, ajoutés à la fin des sources de l'aide quand la recherche ne la citait pas.
+const fondsAuChoixAvecLeCpf = ({ id, motif, noteAvant, noteApres, sources }) => ({
+  id,
+  motif,
+  condition: (aide) =>
+    aide.categorie === 'cout_formation' &&
+    aide.cumul.cumulable === false &&
+    aide.cumul.alternatives === undefined &&
+    aide.cumul.note === noteAvant,
+  appliquer: (aide) => {
+    aide.cumul = { cumulable: true, alternatives: ['nat-cpf', 'nat-vae'], note: noteApres };
+    aide.sources.push(...sources);
+  },
+});
+
 // Majoration dont les critères sont exactement `criteres` (ex. { rqth: true }).
 const trouverMajoration = (aide, criteres) =>
   (aide.montant.majorations ?? []).find((m) => JSON.stringify(m.criteres) === JSON.stringify(criteres));
@@ -410,6 +434,90 @@ const CORRECTIONS = [
   aidePropreALaVae('r28-vae-demandeurs-emploi', "accompagnement méthodologique à la VAE des demandeurs d'emploi (Région Normandie) : propre à la VAE"),
   aidePropreALaVae('r93-pass-vae', 'Pass VAE de la Région Sud (accompagnement, modules manquants, formations obligatoires du parcours VAE) : propre à la VAE'),
   aidePropreALaVae('r94-assegnu-vae', "Assegnu VAE : accompagnement méthodologique d'une VAE : propre à la VAE"),
+
+  // Fonds d'assurance formation des non-salariés (tâche 21) : leurs sources n'écartent que les formations financées par le
+  // CPF, pas les autres financements. Déclarés non cumulables, ils n'étaient jamais empilés dans le plan de financement.
+  fondsAuChoixAvecLeCpf({
+    id: 'faf-agefice',
+    motif: "n'exclut que les actions entreprises avec mobilisation des droits CPF : cumulable, au choix avec le CPF (nat-cpf, nat-vae)",
+    noteAvant: 'Non cumulable avec le CPF pour une même formation (les actions financées avec des droits CPF sont exclues).',
+    noteApres:
+      'Au choix avec le CPF (formation ou VAE) pour une même formation : les actions entreprises avec mobilisation des droits CPF sont exclues, même en cas de reste à charge.',
+    sources: [],
+  }),
+  fondsAuChoixAvecLeCpf({
+    id: 'faf-fafcea',
+    motif: "n'intervient qu'en cas de refus du CPF pour la VAE, le bilan de compétences et les formations RNCP : cumulable, au choix avec le CPF (nat-cpf, nat-vae)",
+    noteAvant: "Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF.",
+    noteApres:
+      "Au choix avec le CPF (formation ou VAE). Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF.",
+    sources: [
+      {
+        url: 'https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf',
+        titre: 'FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)',
+        extrait: 'VAE comprenant l’accompagnement, le dépôt du livret 2 et le passage devant le jury Prise en charge dans le cas d’un refus de prise en charge du CPF',
+      },
+      {
+        url: 'https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf',
+        titre: 'FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)',
+        extrait: 'Bilan de compétences Prise en charge dans le cas d’un refus de prise en charge du CPF',
+      },
+      {
+        url: 'https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf',
+        titre: 'FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)',
+        extrait: 'Formations diplômantes et certifiantes inscrites au RNCP Prise en charge dans le cas d’un refus de prise en charge du CPF',
+      },
+    ],
+  }),
+  fondsAuChoixAvecLeCpf({
+    id: 'faf-fifpl',
+    motif: 'ne complète pas les formations financées par le CPF : cumulable, au choix avec le CPF (nat-cpf, nat-vae)',
+    noteAvant: 'Les formations liées au CPF sont exclues des prises en charge du FIF PL.',
+    noteApres:
+      'Au choix avec le CPF (formation ou VAE) : le FIF PL ne fait pas de complément de prise en charge pour les formations financées par le CPF.',
+    sources: [
+      {
+        url: 'https://fifpl.fr/professions-liberales/foire-aux-questions-faq/',
+        titre: 'FIF PL – Foire aux questions (FAQ)',
+        extrait:
+          'Ma formation est partiellement financée par le biais de mon CPF. Puis-je faire une demande au FIF PL pour la partie restant à ma charge ? Non, le FIF PL ne fait pas de complément de prise en charge pour les formations financées par le CPF.',
+      },
+    ],
+  }),
+  {
+    id: 'faf-fafpm',
+    motif:
+      "ne prend pas en charge à titre individuel les formations diplômantes ou certifiantes, qui relèvent du CPF : cumulable, limité aux formations non certifiantes (types_formation), sans alternative",
+    condition: (aide) =>
+      aide.categorie === 'cout_formation' &&
+      aide.cumul.cumulable === false &&
+      aide.cumul.alternatives === undefined &&
+      aide.cumul.note ===
+        "Les formations diplômantes relèvent du CPF et les programmes DPC de l'ANDPC ; ils ne sont pas pris en charge à titre individuel par le FAF PM." &&
+      aide.criteres.types_formation === undefined,
+    appliquer: (aide) => {
+      aide.cumul = {
+        cumulable: true,
+        note: "Les formations diplômantes ou certifiantes relèvent du CPF et les programmes DPC de l'ANDPC ; ils ne sont pas pris en charge à titre individuel par le FAF PM. L'aide n'est donc proposée que pour une formation non certifiante.",
+      };
+      aide.criteres.types_formation = ['non_certifiante'];
+      const url = 'https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/';
+      const titre = 'FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026';
+      aide.sources.push(
+        {
+          url,
+          titre,
+          extrait: 'Ne sont pas prises en charge à titre individuel par le FAF PM les actions de formation : Diplômantes ou certifiantes (DU, DIU, capacités,…)',
+        },
+        {
+          url,
+          titre,
+          extrait:
+            'Une partie de cette ressource sert à alimenter le CPF (Compte Personnel Formation) qui vous permet également de financer votre formation (diplômante, certifiante).',
+        },
+      );
+    },
+  },
 
   // Montants : le moteur calcule `par_mois` au prorata de la durée de la formation (valeur × min(duree_max_mois, durée en
   // heures / 151,67)) et applique le plafond d'une majoration comme un total.

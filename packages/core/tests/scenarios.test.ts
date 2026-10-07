@@ -1,6 +1,6 @@
 // ============================================================
-// Cinq scénarios de bout en bout sur les données réelles embarquées : parcours (WizardState), calcul OPCO, profil, évaluation
-// des aides, plan de financement, dans l'enchaînement de l'écran de résultats.
+// Cinq scénarios de bout en bout (le cinquième avec une variante au CPF) sur les données réelles embarquées : parcours
+// (WizardState), calcul OPCO, profil, évaluation des aides, plan de financement, dans l'enchaînement de l'écran de résultats.
 // Les valeurs attendues sont calculées à la main à partir des données vérifiées (octobre 2026) et des pages officielles citées
 // en commentaire, avec le calcul : le test ne rejoue pas le moteur. Un écart signale une donnée ou un calcul à revoir, pas une
 // attente à recopier. Les grilles de profils et les balayages du catalogue sont dans donnees-aides-coherence.test.ts.
@@ -300,14 +300,69 @@ describe('scénarios de bout en bout (données réelles)', () => {
     // https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf
     // Depuis le 1er juillet 2026 le FAFCEA ne finance que les organismes certifiés Qualiopi (https://www.fafcea.com/) : le parcours le précise.
     const fafcea = r.aides.find((a) => a.id === 'faf-fafcea')!;
-    expect(fafcea).toMatchObject({ statut: 'eligible', financeur: 'faf', montantEstime: 735 });
-    // Attente adaptée : « le plan finance quelque chose » devient « le FAFCEA figure dans le plan en option ». Le FAFCEA est déclaré
-    // non cumulable (il n'intervient qu'en cas de refus du CPF pour la VAE, le bilan de compétences et les formations RNCP, mêmes
-    // critères du 1er septembre 2026) : le plan le propose à comparer avec les autres financements, sans l'empiler contre le coût.
-    // Cette règle ne vise pas une formation technique non certifiante comme celle de ce parcours : le drapeau est une précaution de
-    // la donnée. S'il devient cumulable, le plan empile 735 € sur les 900 € du coût (financé 735 €, reste 165 €) et cette attente est à remplacer.
-    expect(r.plan.options).toContainEqual(expect.objectContaining({ id: 'faf-fafcea', montantEstime: 735 }));
-    expect(r.plan.financements.map((l) => l.id)).not.toContain('faf-fafcea');
+    expect(fafcea).toMatchObject({ statut: 'eligible', financeur: 'faf', montantEstime: 735, cumulable: true });
+
+    // Plan : le FAFCEA est le seul financement de l'artisan. Sa seule restriction de cumul porte sur le CPF (pour la VAE, le bilan de
+    // compétences et les formations RNCP, il n'intervient qu'en cas de refus du CPF) : elle ne vise pas cette formation technique non
+    // certifiante, et le plan l'empile contre le coût de la formation.
+    //   financé : 735 € (la ligne du FAFCEA) ; reste à charge : 900 - 735 = 165 €.
+    // Le CPF n'est pas compté : l'éligibilité de la formation au CPF est inconnue, l'aide est seulement « à vérifier ».
     expect(r.plan.coutFormation).toBe(900);
+    expect(r.plan.financements).toEqual([expect.objectContaining({ id: 'faf-fafcea', montant: 735, confidence: 'depends_on_branche' })]);
+    expect(r.plan.totalFinance).toBe(735);
+    expect(r.plan.resteACharge).toBe(165);
+    expect(r.plan.options.map((o) => o.id)).not.toContain('faf-fafcea');
+    expect(r.aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'a_verifier', raisons: ['Vérifiez que la formation est éligible au CPF'] });
+    expect(idsDuPlan(r.plan)).not.toContain('nat-cpf');
+  });
+
+  it('5 bis. Artisan en Bretagne, formation RNCP éligible au CPF : le FAFCEA et le CPF sont au choix, jamais additionnés', () => {
+    // Formation certifiante RNCP de 140 h à 4 200 € (30 €/h), éligible au CPF, organisme Qualiopi. Pour une formation RNCP, le
+    // FAFCEA n'intervient qu'en cas de refus du CPF : le plan ne retient qu'un des deux, le mieux chiffré, et propose l'autre au choix.
+    const parcours: Partial<WizardState> = {
+      projetType: 'formation_dirigeant', regionCode: '53', companySize: 'less_11', statutDirigeant: 'artisan', microEntrepreneur: false,
+      ageBeneficiaire: 45, formationType: 'certification', certificationLevel: 'rncp', niveauFormationVise: 5, eligibleCpf: true,
+      organismeQualiopi: true, durationHours: 140, pedagogyCostTotal: 4200, pedagogyCostPerHour: 30,
+    };
+    const nomFafcea = aideParId.get('faf-fafcea')!.nom;
+    const nomCpf = aideParId.get('nat-cpf')!.nom;
+
+    // Calcul à la main du FAFCEA (critères du 1er septembre 2026) : 35 €/h dans la limite de 100 h par stagiaire et par an, soit
+    // au plus 100 x 35 = 3 500 € ; 35 x 140 h = 4 900 € est ramené à 3 500 €, sous les 4 200 € du coût : 3 500 €.
+    // Calcul à la main du CPF : le solde du titulaire (plafond de 5 000 € non atteint, sous les 4 200 € du coût).
+
+    // Solde CPF de 800 € : le FAFCEA (3 500 €) est mieux chiffré que le CPF (800 €).
+    //   financé : 3 500 € (le FAFCEA seul) ; reste à charge : 4 200 - 3 500 = 700 €. Additionnés, les deux feraient 4 300 €, soit
+    //   plus que le coût : le plan afficherait 4 200 € financés et aucun reste à charge.
+    const faible = simuler({ ...parcours, soldeCpf: 800 });
+    invariants(faible);
+    expect(faible.aides.find((a) => a.id === 'faf-fafcea')).toMatchObject({ statut: 'eligible', montantEstime: 3500 });
+    expect(faible.aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'eligible', montantEstime: 800 });
+    expect(faible.plan.financements).toEqual([expect.objectContaining({ id: 'faf-fafcea', montant: 3500 })]);
+    expect(faible.plan.options).toContainEqual(
+      expect.objectContaining({ id: 'nat-cpf', montantEstime: 800, raison: `Au choix avec « ${nomFafcea} »` }),
+    );
+    expect(faible.plan.totalFinance).toBe(3500);
+    expect(faible.plan.resteACharge).toBe(700);
+
+    // Solde CPF de 3 900 € : le CPF (3 900 €) est mieux chiffré que le FAFCEA (3 500 €).
+    //   financé : 3 900 € (le CPF seul) ; reste à charge : 4 200 - 3 900 = 300 €. Additionnés : 7 400 €, ramenés au coût de 4 200 €.
+    const fort = simuler({ ...parcours, soldeCpf: 3900 });
+    invariants(fort);
+    expect(fort.aides.find((a) => a.id === 'faf-fafcea')).toMatchObject({ statut: 'eligible', montantEstime: 3500 });
+    expect(fort.aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'eligible', montantEstime: 3900 });
+    expect(fort.plan.financements).toEqual([expect.objectContaining({ id: 'nat-cpf', montant: 3900 })]);
+    expect(fort.plan.options).toContainEqual(
+      expect.objectContaining({ id: 'faf-fafcea', montantEstime: 3500, raison: `Au choix avec « ${nomCpf} »` }),
+    );
+    expect(fort.plan.totalFinance).toBe(3900);
+    expect(fort.plan.resteACharge).toBe(300);
+
+    // Dans les deux cas : une seule des deux aides est dans le plan chiffré, l'autre est une option, jamais les deux à la fois.
+    for (const r of [faible, fort]) {
+      expect(r.plan.financements.filter((l) => l.id === 'nat-cpf' || l.id === 'faf-fafcea')).toHaveLength(1);
+      expect(r.plan.options.filter((o) => o.id === 'nat-cpf' || o.id === 'faf-fafcea')).toHaveLength(1);
+      expect(r.plan.coutFormation).toBe(4200);
+    }
   });
 });
