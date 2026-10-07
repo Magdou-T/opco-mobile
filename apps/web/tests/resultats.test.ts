@@ -3,7 +3,17 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { EMBEDDED_AIDES, EMBEDDED_PORTAILS, PROJET_LABELS, REGIONS, createInitialWizardState } from '@opco/core';
-import type { AideEvaluee, AlerteOpco, Financeur, LignePlan, PlanFinancement, ProjetType, WizardState } from '@opco/core';
+import type {
+  AideEvaluee,
+  AlerteOpco,
+  Confidence,
+  Financeur,
+  FundingLine,
+  LignePlan,
+  PlanFinancement,
+  ProjetType,
+  WizardState,
+} from '@opco/core';
 import { INSECABLE } from '../src/lib/format';
 import { coutsDeFormation } from '../src/lib/parcours';
 import { etiquettesDeSituation } from '../src/lib/situation';
@@ -11,6 +21,8 @@ import {
   aidesNonEligiblesAffichees,
   calculer,
   cartesDuPlan,
+  chapeauDetailOpco,
+  confianceDOption,
   descriptionBarre,
   encadreSansFinancement,
   enRegion,
@@ -20,12 +32,14 @@ import {
   fondsEpuisesSurLePlan,
   groupesAidesVisibles,
   libellePart,
+  lignesDuDetail,
   montantAffiche,
   nommerAides,
   partFinancee,
   partsBarre,
   rappelsAucunFinancement,
   replierIdcc,
+  sansMontantEstime,
   sourcesDeLAide,
 } from '../src/lib/resultats';
 import type { PartBarre } from '../src/lib/resultats';
@@ -784,6 +798,99 @@ describe('encadré du bandeau quand aucun financement de la formation n’est ch
     assert.ok(sansFinancement >= 500, `seulement ${sansFinancement} états sans financement chiffré`);
     // Les tirages passent par au moins quatre des variantes (options, aides selon dossier, services seuls…).
     assert.ok(vus.size >= 4, `seulement ${vus.size} textes distincts : ${[...vus].join(' | ')}`);
+  });
+});
+
+describe("chapeau du détail de l'estimation OPCO (chapeauDetailOpco)", () => {
+  const poste = (over: Partial<FundingLine> & Pick<FundingLine, 'poste'>): FundingLine => ({
+    label: over.poste,
+    requestedAmount: 1000,
+    fundedAmount: 1000,
+    remainder: 0,
+    confidence: 'exact',
+    sourceUrl: 'https://exemple.fr',
+    ...over,
+  });
+  const SALAIRES =
+    "Le calcul de l'OPCO poste par poste. Le plan ci-dessus ne retient que les postes de la formation : salaires et transport y figurent parmi les aides versées à l'employeur.";
+  const SIMPLE = "Le calcul de l'OPCO poste par poste, avec la règle et la source de chaque montant.";
+
+  test('scénario 1 : salaires financés, le chapeau dit où ils figurent dans le plan', () => {
+    const { funding } = calculer(etat(SCENARIOS.akto), DATE);
+    assert.ok(funding);
+    assert.equal(chapeauDetailOpco(funding), SALAIRES);
+  });
+
+  test('scénario 2 (120 salariés, plan fermé) : aucun tableau, aucun chapeau « poste par poste »', () => {
+    const { funding } = calculer(etat(SCENARIOS.grande), DATE);
+    assert.ok(funding?.pdcFerme);
+    assert.equal(chapeauDetailOpco(funding), null);
+  });
+
+  test('pédagogie seule : le chapeau simple ; aucune ligne affichable : pas de chapeau', () => {
+    assert.equal(chapeauDetailOpco({ pdcFerme: false, lines: [poste({ poste: 'pedagogie' })] }), SIMPLE);
+    // Transport demandé mais non financé : rien à signaler hors formation.
+    assert.equal(
+      chapeauDetailOpco({ pdcFerme: false, lines: [poste({ poste: 'pedagogie' }), poste({ poste: 'transport', fundedAmount: 0, remainder: 1000 })] }),
+      SIMPLE,
+    );
+    assert.equal(chapeauDetailOpco({ pdcFerme: false, lines: [poste({ poste: 'pedagogie', requestedAmount: 0, fundedAmount: 0 })] }), null);
+    assert.equal(chapeauDetailOpco({ pdcFerme: true, lines: [poste({ poste: 'pedagogie' })] }), null);
+  });
+
+  test('lignes du tableau : un montant demandé ou financé, ou une règle sans montant estimé (selon branche, 0 €)', () => {
+    const lignes = [
+      poste({ poste: 'pedagogie' }),
+      poste({ poste: 'salaires', requestedAmount: 0, fundedAmount: 0 }),
+      poste({ poste: 'transport', requestedAmount: 0, fundedAmount: 0, confidence: 'depends_on_branche' }),
+      poste({ poste: 'hebergement', requestedAmount: 0, fundedAmount: 0, confidence: 'estimated' }),
+    ];
+    assert.deepEqual(lignesDuDetail({ lines: lignes }).map((l) => l.poste), ['pedagogie', 'transport']);
+    assert.equal(sansMontantEstime(lignes[2]), true);
+    assert.equal(sansMontantEstime(poste({ poste: 'pedagogie', fundedAmount: 0, confidence: 'estimated' })), false);
+    assert.equal(sansMontantEstime(poste({ poste: 'pedagogie', fundedAmount: 10, confidence: 'depends_on_branche' })), false);
+  });
+});
+
+describe('fiabilité du montant d’une option au choix (confianceDOption)', () => {
+  const option = (id: string, montantEstime: number | null) => ({ id, nom: id, financeurNom: 'F', montantEstime, raison: 'r' });
+  const dispositif = (id: string, confidence: Confidence) => ({ id, confidence });
+
+  test('dispositif de l’OPCO (« opco-<id> ») : sa fiabilité ; aide du catalogue : la sienne', () => {
+    const aides = [aide({ id: 'nat-cpf', confidence: 'estimated' })];
+    const dispositifs = [dispositif('espace-formation', 'depends_on_branche')];
+    assert.equal(confianceDOption(option('opco-espace-formation', 4200), aides, dispositifs), 'depends_on_branche');
+    assert.equal(confianceDOption(option('nat-cpf', 800), aides, dispositifs), 'estimated');
+    // L'aide du catalogue l'emporte sur un dispositif homonyme.
+    assert.equal(confianceDOption(option('nat-cpf', 800), aides, [dispositif('nat-cpf', 'exact')]), 'estimated');
+  });
+
+  test('sans montant à qualifier (selon dossier, nul) ou sans source connue : aucune étiquette', () => {
+    const aides = [aide({ id: 'a', confidence: 'exact' })];
+    assert.equal(confianceDOption(option('a', null), aides, []), null);
+    assert.equal(confianceDOption(option('a', 0), aides, []), null);
+    assert.equal(confianceDOption(option('inconnue', 500), aides, []), null);
+    assert.equal(confianceDOption(option('opco-absent', 500), aides, [dispositif('autre', 'exact')]), null);
+  });
+
+  test('scénarios 1 et 2 : chaque option chiffrée a la fiabilité de sa source (Espace Formation, campusAtlas…)', () => {
+    let chiffrees = 0;
+    for (const nom of ['akto', 'grande']) {
+      const { plan: p, aidesEvaluees, funding } = calculer(etat(SCENARIOS[nom]), DATE);
+      const dispositifs = funding?.dispositifsComplementaires ?? [];
+      for (const o of p.options) {
+        const c = confianceDOption(o, aidesEvaluees, dispositifs);
+        if (o.montantEstime != null && o.montantEstime > 0) {
+          chiffrees++;
+          const source = aidesEvaluees.find((a) => a.id === o.id) ?? dispositifs.find((d) => `opco-${d.id}` === o.id);
+          assert.ok(source, `${nom} : ${o.id} sans source`);
+          assert.equal(c, source.confidence, `${nom} : ${o.id}`);
+        } else {
+          assert.equal(c, null, `${nom} : ${o.id}`);
+        }
+      }
+    }
+    assert.ok(chiffrees >= 2, `seulement ${chiffrees} options chiffrées`);
   });
 });
 

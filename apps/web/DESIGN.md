@@ -582,7 +582,7 @@ n'est jamais affiché.
 | État et France Travail | `etat`, `france_travail` | `orange` | #1A1A1A, 4,59:1 |
 | Europe | `europe` | `nuit` | blanc, 19,14:1 |
 | Autres | `transitions_pro`, `agefiph`, `fiscal`, `autre` | `filet-fort` | blanc, 3,54:1 |
-| Reste à charge | | hachures orange doux sur blanc, bord orange foncé | |
+| Reste à charge | | rayures orange foncé de 2 px sur blanc (5,16:1 ; l'orange doux d'avant était à 1,12:1), bord orange foncé | |
 
 - **Barre empilée** (`partsBarre`) : une part par famille (lignes additionnées, dans l'ordre d'empilement), puis le
   reste à charge ; pourcentages entiers dont la somme vaut exactement 100 (plus fort reste), largeurs proportionnelles
@@ -596,7 +596,10 @@ n'est jamais affiché.
   formation » ; c'est la seule carte à total. Les autres cartes (options au choix, aides versées à l'employeur, revenus
   et aides à la personne, avantages fiscaux et sociaux, montant selon dossier, services gratuits) : en-tête à pastille
   d'icône turquoise et phrase d'aide, aucune somme, aucune carte vide (`cartesDuPlan`). La raison d'une option (« Au
-  choix avec « X » ») reste du texte, sans lien.
+  choix avec « X » ») reste du texte, sans lien. Une option chiffrée porte la fiabilité de sa source, comme une ligne du
+  plan (`confianceDOption` : l'aide du catalogue, sinon le dispositif de l'OPCO, « Selon branche » pour Espace
+  Formation d'AKTO ou campusAtlas), avec « estimation à confirmer auprès du financeur » quand elle n'est pas exacte ;
+  une option sans montant n'en porte pas.
 - **Aides par financeur** (`groupesAidesVisibles`) : groupées par financeur du catalogue, dans l'ordre de la liste
   évaluée. Titre : libellé de la famille pour CPF, État, Europe, OPCO, France Travail, Transitions Pro, Agefiph,
   Fiscalité (même titre d'une simulation à l'autre) ; nom propre commun pour Région, Département, fonds d'assurance
@@ -609,8 +612,11 @@ n'est jamais affiché.
   nom de l'aide (`nommerAides`). Aides non éligibles : repliées, nom et raisons, jamais de montant ; celles d'un autre
   projet, public, région ou type de formation ne sont jamais affichées.
 - **Détail de l'estimation OPCO** (`FundingBreakdown`) : total de tous les postes (le plan ne retient que ceux de la
-  formation, le chapeau le dit quand salaires ou transport sont financés) ; tableau Poste / Financé / Reste, « Demandé »
-  et la source passant dans la colonne du poste sous 640 px ; ligne non chiffrée : « à confirmer », reste « - », règle
+  formation, le chapeau le dit quand salaires ou transport sont financés) ; chapeau « poste par poste » seulement
+  avec le tableau des postes (`chapeauDetailOpco` : ni plan fermé, ni tableau vide) ; tableau (`DetailParPoste`,
+  lignes `lignesDuDetail`) Poste / Demandé / Financé / Reste / Source ; sous 640 px, « Demandé », « Reste » et la source
+  passent dans la colonne du poste (deux colonnes : à trois, le tableau débordait de sa carte de 42 px à 320 px et de
+  3 px à 375 px) ; ligne non chiffrée : « à confirmer », reste « - », règle
   sous le poste ; détail du calcul d'un poste dépliable (`aria-expanded`, `aria-controls`), toujours dans la page :
   replié, il reste imprimé (`hidden print:table-row`) ; listes de plus de 6 conventions collectives repliées
   (`replierIdcc`) ; 50 salariés et plus : `Callout` avertissement (barème général ou de la branche ; choisir sa branche à
@@ -627,8 +633,8 @@ n'est jamais affiché.
   `min-w-0 [overflow-wrap:anywhere]`) : `break-words` ne réduit pas la largeur minimale d'un élément flexible, celle de
   son mot le plus long, et la carte d'aide (`overflow-hidden`) rognait « servicenouvelleschances@laregion.fr » ou
   « (financeurs.moncompteformation.gouv.fr) » à 320 px (WCAG 1.4.10). Contrôle : chaque nœud de texte rendu est contenu
-  dans l'ancêtre le plus proche qui rogne et dans la fenêtre, tous les détails ouverts (0 sur 2 458 à 320 et 375 px,
-  cinq scénarios) ; seul le tableau de l'OPCO défile encore horizontalement à 320 px, dans son propre conteneur.
+  dans l'ancêtre le plus proche qui rogne et dans la fenêtre, tous les détails ouverts (0 sur 2 464 à 320 et 375 px,
+  cinq scénarios, aucun défilement horizontal, tableau de l'OPCO compris).
 - **Mouvement** : apparition douce du bandeau et des cartes (`.apparition`, délais échelonnés), barre qui se dévoile
   (`.devoilement`), trait `.mark` qui se déploie ; tout s'arrête sous `prefers-reduced-motion`.
 - **Impression** : section 7 ; détail des aides, liste des non éligibles et listes de conventions repliées imprimés en
@@ -870,5 +876,13 @@ emplois : elles expliquent une règle.
 | `#5E9F92` | `#FFFFFF` | page 404 : rail et jalons (décor, aucune exigence) | 3,07:1 | - | repère |
 | `#7A8C88` | `#FFFFFF` | page 404 : jalon manquant en tirets (décor) | 3,54:1 | - | repère |
 | `#5F6E6A` | `#FFFFFF` | abréviation définie : trait pointillé (texte discret), décor du soulignement | 5,35:1 | - | repère |
+| `#C43F13` | `#FFFFFF` | résultats : rayures du reste à charge (orange foncé) contre le blanc de la barre | 5,16:1 | 3,00:1 | conforme |
+| `#FDF0EA` | `#FFFFFF` | repère : anciennes hachures orange doux du reste à charge (d'où l'orange foncé) | 1,12:1 | - | repère |
+| `#44514E` | `#F3F7F6` | résultats : étiquette « Selon branche » d'une option chiffrée (texte doux sur lin-soft) | 7,68:1 | 4,50:1 | conforme |
+| `#3E6860` | `#EDF5F2` | résultats : étiquette « Exact » d'une option chiffrée | 5,65:1 | 4,50:1 | conforme |
+| `#BC1723` | `#FBEDEE` | résultats : étiquette « Estimé » d'une option chiffrée | 5,62:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#FFFFFF` | résultats : « estimation à confirmer auprès du financeur » sous une option (texte discret sur blanc) | 5,35:1 | 4,50:1 | conforme |
+| `#44514E` | `#FFFFFF` | résultats : « Calcul en cours… » dans l'attente du chargement (texte doux sur blanc) | 8,29:1 | 4,50:1 | conforme |
+| `#44514E` | `#FBEDEE` | résultats : texte de l'écran d'échec du chargement (corps de Callout alerte) | 7,28:1 | 4,50:1 | conforme |
 
-157 couples (dont 16 repères), aucun sous son seuil.
+165 couples (dont 17 repères), aucun sous son seuil.

@@ -9,7 +9,7 @@ import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { dateFr, moisAnneeFr, typo } from '@/lib/format';
-import { calculer, fondsEpuisesSurLePlan } from '@/lib/resultats';
+import { calculer, chapeauDetailOpco, fondsEpuisesSurLePlan } from '@/lib/resultats';
 import { AidesList } from './AidesList';
 import { EnTeteResultats, ID_TITRE_RESULTATS, focaliserTitreResultats } from './EtatsResultats';
 import type { ProprietesEcranResultats } from './EtatsResultats';
@@ -47,10 +47,8 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
     return { ...calculer(state, jour), aujourdhui: jour };
   }, [state]);
 
-  // Salaires et transport de l'OPCO : aides à l'employeur dans le plan, postes du calcul dans le détail de l'OPCO.
-  const postesHorsFormation = funding?.lines.some(
-    (l) => (l.poste === 'salaires' || l.poste === 'transport') && l.fundedAmount > 0,
-  );
+  // Chapeau du détail de l'OPCO : seulement avec le tableau des postes (jamais quand le plan est fermé).
+  const chapeauOpco = funding ? chapeauDetailOpco(funding) : null;
 
   return (
     <div className="space-y-12 sm:space-y-14">
@@ -62,6 +60,7 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
           plan={plan}
           aides={aidesEvaluees}
           fondsEpuises={funding ? { opco: funding.opcoName, branches: fondsEpuisesSurLePlan(plan, funding.alertes) } : null}
+          dispositifs={funding?.dispositifsComplementaires ?? []}
           avecPortail={portail != null}
           apresBandeau={
             <NoteOpco
@@ -85,11 +84,7 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
             id="titre-detail-opco"
             surtitre={typo(`Votre OPCO : ${funding.opcoName}`)}
             titre="Détail de l'estimation OPCO"
-            chapeau={typo(
-              postesHorsFormation
-                ? "Le calcul de l'OPCO poste par poste. Le plan ci-dessus ne retient que les postes de la formation : salaires et transport y figurent parmi les aides versées à l'employeur."
-                : "Le calcul de l'OPCO poste par poste, avec la règle et la source de chaque montant.",
-            )}
+            chapeau={chapeauOpco ? typo(chapeauOpco) : undefined}
           />
           <FundingBreakdown result={funding} />
         </section>

@@ -45,11 +45,12 @@ export const ICONE_FINANCEUR: Record<Financeur, IconName> = {
 export const BORD_SEGMENT = 'shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--encre)_35%,transparent)]';
 
 /**
- * Reste à charge : hachures orange doux sur blanc, bord orange foncé plein (5,16:1 sur blanc), comme le chiffre « Reste à
- * charge » ; jamais une couleur de financeur.
+ * Reste à charge : rayures orange foncé de 2 px sur blanc (5,16:1 contre le blanc qui les sépare et qui entoure la
+ * barre ; l'orange doux d'avant, à 1,12:1, ne se voyait pas), bord orange foncé plein, comme le chiffre « Reste à
+ * charge » ; jamais une couleur de financeur ni un aplat (l'orange plein est celui de l'État et de France Travail).
  */
 export const SEGMENT_RESTE =
-  'bg-[repeating-linear-gradient(135deg,var(--orange-soft)_0_5px,var(--papier)_5px_10px)] shadow-[inset_0_0_0_1px_var(--orange-deep)]';
+  'bg-[repeating-linear-gradient(135deg,var(--orange-deep)_0_2px,var(--papier)_2px_6px)] shadow-[inset_0_0_0_1px_var(--orange-deep)]';
 
 /** Garde les couleurs de la barre et des pastilles à l'impression (fonds omis par défaut par les navigateurs). */
 export const COULEURS_IMPRIMEES = '[print-color-adjust:exact] [-webkit-print-color-adjust:exact]';

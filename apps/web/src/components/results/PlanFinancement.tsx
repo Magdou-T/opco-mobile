@@ -1,12 +1,12 @@
 import type { CSSProperties, ReactNode } from 'react';
-import type { AideEvaluee, Confidence, LignePlan, OptionPlan, PlanFinancement } from '@opco/core';
+import type { AideEvaluee, Confidence, DispositifEligible, LignePlan, OptionPlan, PlanFinancement } from '@opco/core';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { formatEuro, texteDonnees, typo } from '@/lib/format';
-import { cartesDuPlan, etatEnTete, financeurDeLigne } from '@/lib/resultats';
+import { cartesDuPlan, confianceDOption, etatEnTete, financeurDeLigne } from '@/lib/resultats';
 import type { CartePlan } from '@/lib/resultats';
 import { BandeauSynthese } from './BandeauSynthese';
 import type { FondsEpuises } from './BandeauSynthese';
@@ -22,6 +22,7 @@ import { PastilleFinanceur } from './Financeur';
 export function PlanFinancementCard({
   plan,
   aides,
+  dispositifs = [],
   fondsEpuises = null,
   avecPortail = false,
   apresBandeau,
@@ -30,6 +31,8 @@ export function PlanFinancementCard({
   plan: PlanFinancement;
   /** Aides évaluées : elles donnent le financeur (donc la couleur) de chaque ligne du plan. */
   aides: readonly AideEvaluee[];
+  /** Dispositifs de l'OPCO : la fiabilité d'une option « opco-<dispositif> » est la leur (`confianceDOption`). */
+  dispositifs?: readonly DispositifEligible[];
   /** Fonds épuisés signalés par l'OPCO (`fondsEpuisesSurLePlan`) : dit à côté du montant financé. */
   fondsEpuises?: FondsEpuises | null;
   /** Les portails officiels de la région figurent plus bas sur l'écran. */
@@ -52,7 +55,14 @@ export function PlanFinancementCard({
       />
       {apresBandeau}
       {cartesDuPlan(plan).map((carte, i) => (
-        <CarteDuPlan key={carte} carte={carte} plan={plan} aides={aides} style={delai(120 + i * 70)} />
+        <CarteDuPlan
+          key={carte}
+          carte={carte}
+          plan={plan}
+          aides={aides}
+          dispositifs={dispositifs}
+          style={delai(120 + i * 70)}
+        />
       ))}
     </div>
   );
@@ -105,11 +115,13 @@ function CarteDuPlan({
   carte,
   plan,
   aides,
+  dispositifs,
   style,
 }: {
   carte: CartePlan;
   plan: PlanFinancement;
   aides: readonly AideEvaluee[];
+  dispositifs: readonly DispositifEligible[];
   style: CSSProperties;
 }) {
   const { titre, icone, aide } = CARTES[carte];
@@ -131,13 +143,23 @@ function CarteDuPlan({
             <p className="mt-1 text-sm leading-relaxed text-texte-doux">{typo(aide)}</p>
           </div>
         </header>
-        <ContenuDeCarte carte={carte} plan={plan} aides={aides} />
+        <ContenuDeCarte carte={carte} plan={plan} aides={aides} dispositifs={dispositifs} />
       </Card>
     </section>
   );
 }
 
-function ContenuDeCarte({ carte, plan, aides }: { carte: CartePlan; plan: PlanFinancement; aides: readonly AideEvaluee[] }) {
+function ContenuDeCarte({
+  carte,
+  plan,
+  aides,
+  dispositifs,
+}: {
+  carte: CartePlan;
+  plan: PlanFinancement;
+  aides: readonly AideEvaluee[];
+  dispositifs: readonly DispositifEligible[];
+}) {
   switch (carte) {
     case 'financements':
       return <PileDesFinancements plan={plan} aides={aides} />;
@@ -145,7 +167,7 @@ function ContenuDeCarte({ carte, plan, aides }: { carte: CartePlan; plan: PlanFi
       return (
         <Lignes>
           {plan.options.map((o) => (
-            <LigneOption key={o.id} option={o} aides={aides} />
+            <LigneOption key={o.id} option={o} aides={aides} dispositifs={dispositifs} />
           ))}
         </Lignes>
       );
@@ -263,16 +285,26 @@ function LignesChiffrees({ lignes, aides }: { lignes: LignePlan[]; aides: readon
 }
 
 /**
- * Option au choix : montant (ou « montant selon dossier »), financeur et raison. La raison « Au choix avec « X » » nomme
+ * Option au choix : montant (ou « montant selon dossier »), financeur, fiabilité du montant comme sur les lignes du plan
+ * (`confianceDOption` : celle de l'aide ou du dispositif de l'OPCO) et raison. La raison « Au choix avec « X » » nomme
  * une aide qui peut ne figurer dans aucune liste (coût déjà couvert, solde CPF épuisé) : texte simple, sans lien.
  */
-function LigneOption({ option, aides }: { option: OptionPlan; aides: readonly AideEvaluee[] }) {
+function LigneOption({
+  option,
+  aides,
+  dispositifs,
+}: {
+  option: OptionPlan;
+  aides: readonly AideEvaluee[];
+  dispositifs: readonly DispositifEligible[];
+}) {
   const montant = option.montantEstime;
+  const confidence = confianceDOption(option, aides, dispositifs) ?? undefined;
   return (
     <li className="flex items-start gap-4 px-5 py-4 break-inside-avoid sm:px-6">
       <PastilleFinanceur financeur={financeurDeLigne(option.id, aides)} taille="petite" className="mt-0.5" />
       <div className="min-w-0 flex-1">
-        <Identite nom={option.nom} financeurNom={option.financeurNom} />
+        <Identite nom={option.nom} financeurNom={option.financeurNom} confidence={confidence} />
         <p className="mt-1.5 text-sm leading-snug text-texte-discret">{texteDonnees(option.raison)}</p>
       </div>
       {montant != null && montant > 0 ? (

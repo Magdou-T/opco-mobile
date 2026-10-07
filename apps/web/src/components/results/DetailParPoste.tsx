@@ -9,6 +9,7 @@ import { cx } from '@/lib/cx';
 import { INSECABLE, de, formatEuro, texteDonnees } from '@/lib/format';
 import { sansMontantEstime } from '@/lib/resultats';
 import { BadgeEstimation } from './BadgeEstimation';
+import { TEXTE_SOUPLE } from './classes';
 
 /** En-tête de colonne : Inter 600 en petites majuscules, texte discret (5,35:1 sur blanc, 4,95:1 sur lin-soft). */
 const EN_TETE = 'px-4 py-3 text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase sm:px-6';
@@ -20,8 +21,9 @@ function regleDeLigne(line: FundingLine, opcoName: string): string {
 
 /**
  * Tableau « Détail par poste » de l'estimation de l'OPCO (`lignes` : `lignesDuDetail`). Sous 640 px, les colonnes
- * « Demandé » et « Source » passent dans la colonne du poste ; la règle d'une ligne non chiffrée y est aussi, pour que la
- * colonne étroite « Financé » ne s'allonge pas sur huit lignes.
+ * « Demandé », « Reste » et « Source » passent dans la colonne du poste (le tableau tient en deux colonnes : à trois, il
+ * débordait de sa carte de 42 px à 320 px et de 3 px à 375 px) ; la règle d'une ligne non chiffrée y est aussi, pour que
+ * la colonne étroite « Financé » ne s'allonge pas sur huit lignes.
  */
 export function DetailParPoste({
   result,
@@ -69,7 +71,7 @@ export function DetailParPoste({
               <th scope="col" className={cx(EN_TETE, 'text-right')}>
                 Financé
               </th>
-              <th scope="col" className={cx(EN_TETE, 'text-right')}>
+              <th scope="col" className={cx(EN_TETE, 'hidden text-right sm:table-cell')}>
                 Reste
               </th>
               <th scope="col" className={cx(EN_TETE, 'hidden text-center sm:table-cell print:hidden')}>
@@ -110,7 +112,7 @@ export function DetailParPoste({
                             />
                           </button>
                         )}
-                        <span>{line.label}</span>
+                        <span className={TEXTE_SOUPLE}>{line.label}</span>
                       </div>
                       {/* Une adresse dans une note ne doit pas fixer la largeur de la colonne. */}
                       <div className={cx('space-y-1.5 [overflow-wrap:anywhere]', detaillee && 'sm:pl-6')}>
@@ -130,6 +132,9 @@ export function DetailParPoste({
                         <p className="text-xs text-texte-discret sm:hidden">
                           Demandé&nbsp;: {line.requestedAmount > 0 ? formatEuro(line.requestedAmount) : '-'}
                         </p>
+                        <p className="text-xs text-texte-discret sm:hidden">
+                          Reste&nbsp;: {!sansMontant && line.remainder > 0 ? formatEuro(line.remainder) : '-'}
+                        </p>
                         <div className="sm:hidden print:hidden" onClick={(e) => e.stopPropagation()}>
                           <SourceBadge url={line.sourceUrl} />
                         </div>
@@ -145,7 +150,7 @@ export function DetailParPoste({
                         <span className="amount text-turquoise-deep">{formatEuro(line.fundedAmount)}</span>
                       )}
                     </td>
-                    <td className="amount px-4 py-4 text-right whitespace-nowrap text-texte-doux sm:px-6">
+                    <td className="amount hidden px-4 py-4 text-right whitespace-nowrap text-texte-doux sm:table-cell sm:px-6">
                       {/* Ligne non chiffrée : jamais son coût complet présenté comme un reste. */}
                       {!sansMontant && line.remainder > 0 ? formatEuro(line.remainder) : '-'}
                     </td>
@@ -180,14 +185,19 @@ export function DetailParPoste({
           </tbody>
           <tfoot className="border-t border-filet bg-lin-soft font-semibold text-texte">
             <tr>
-              <td className="px-4 py-4 sm:px-6">Total</td>
+              <td className="px-4 py-4 sm:px-6">
+                Total
+                <span className="mt-0.5 block text-xs font-normal text-texte-discret sm:hidden">
+                  Reste&nbsp;: {montantConnu && result.totalRemainder > 0 ? formatEuro(result.totalRemainder) : '-'}
+                </span>
+              </td>
               <td className="amount hidden px-4 py-4 text-right sm:table-cell sm:px-6">
                 {formatEuro(result.totalRequested)}
               </td>
               <td className="amount px-4 py-4 text-right whitespace-nowrap text-turquoise-deep sm:px-6">
                 {montantConnu ? formatEuro(result.totalFunded) : '-'}
               </td>
-              <td className="amount px-4 py-4 text-right whitespace-nowrap sm:px-6">
+              <td className="amount hidden px-4 py-4 text-right whitespace-nowrap sm:table-cell sm:px-6">
                 {montantConnu && result.totalRemainder > 0 ? formatEuro(result.totalRemainder) : '-'}
               </td>
               <td className="hidden sm:table-cell print:hidden"></td>

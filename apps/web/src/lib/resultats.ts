@@ -20,9 +20,12 @@ import {
 import type {
   AideEvaluee,
   AlerteOpco,
+  Confidence,
+  DispositifEligible,
   Financeur,
   FundingLine,
   FundingResult,
+  OptionPlan,
   PlanFinancement,
   SourceAide,
   WizardState,
@@ -468,6 +471,39 @@ export function sansMontantEstime(line: Pick<FundingLine, 'confidence' | 'funded
 /** Lignes du détail par poste : un montant demandé ou financé, ou une règle sans montant estimé. */
 export function lignesDuDetail(result: Pick<FundingResult, 'lines'>): FundingLine[] {
   return result.lines.filter((l) => l.requestedAmount > 0 || l.fundedAmount > 0 || sansMontantEstime(l));
+}
+
+/**
+ * Chapeau de la section « Détail de l'estimation OPCO » : il annonce le calcul poste par poste, donc seulement quand le
+ * tableau des postes s'affiche (ni plan fermé aux entreprises de 50 salariés et plus, ni aucune ligne affichable) ; il dit
+ * où figurent les salaires et le transport quand l'OPCO les finance (aides versées à l'employeur dans le plan).
+ */
+export function chapeauDetailOpco(result: Pick<FundingResult, 'pdcFerme' | 'lines'>): string | null {
+  if (result.pdcFerme || lignesDuDetail(result).length === 0) return null;
+  const postesHorsFormation = result.lines.some(
+    (l) => (l.poste === 'salaires' || l.poste === 'transport') && l.fundedAmount > 0,
+  );
+  return postesHorsFormation
+    ? "Le calcul de l'OPCO poste par poste. Le plan ci-dessus ne retient que les postes de la formation : salaires et transport y figurent parmi les aides versées à l'employeur."
+    : "Le calcul de l'OPCO poste par poste, avec la règle et la source de chaque montant.";
+}
+
+// --- Options au choix ---------------------------------------------------------------------------------------------
+
+/**
+ * Fiabilité du montant d'une option au choix, comme sur les lignes du plan : celle de l'aide du catalogue qui porte son
+ * identifiant, sinon celle du dispositif de l'OPCO (option « opco-<dispositif> » : Espace Formation d'AKTO, campusAtlas
+ * d'ATLAS…). Null quand l'option n'a pas de montant à qualifier (montant selon dossier, nul) ou que sa source manque.
+ */
+export function confianceDOption(
+  option: Pick<OptionPlan, 'id' | 'montantEstime'>,
+  aides: readonly Pick<AideEvaluee, 'id' | 'confidence'>[],
+  dispositifs: readonly Pick<DispositifEligible, 'id' | 'confidence'>[],
+): Confidence | null {
+  if (option.montantEstime == null || !(option.montantEstime > 0)) return null;
+  const aide = aides.find((a) => a.id === option.id);
+  if (aide) return aide.confidence;
+  return dispositifs.find((d) => `opco-${d.id}` === option.id)?.confidence ?? null;
 }
 
 // --- Listes de conventions collectives ----------------------------------------------------------------------------
