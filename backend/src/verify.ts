@@ -106,7 +106,8 @@ export function summarizeDiff(diff: OpcoDiff): string {
 /**
  * Avis consultatif d'un modèle Opus récent sur les écarts détectés
  * (mode live uniquement — gaté derrière ANTHROPIC_API_KEY).
- * Ne modifie JAMAIS les données : retourne un texte pour le rapport.
+ * Ne modifie JAMAIS les données : retourne un texte pour le rapport, qui rappelle le motif d'arrêt du modèle
+ * (stop_reason) et dit quand l'avis est tronqué ou vide.
  */
 export async function reviewDiffsWithModel(diffs: OpcoDiff[]): Promise<string> {
   if (!hasApiKey()) {
@@ -120,15 +121,24 @@ export async function reviewDiffsWithModel(diffs: OpcoDiff[]): Promise<string> {
   const client = new Anthropic();
   const response = await client.messages.create({
     model: getVerifyModel(),
-    max_tokens: 4_000,
+    // La réflexion adaptative et le texte de l'avis se partagent max_tokens : 4 000 pouvaient être épuisés avant le
+    // premier mot de l'avis. 16 000 reste sous la limite des requêtes sans flux (environ 21 000 pour un délai de 10 min).
+    max_tokens: 16_000,
     thinking: { type: 'adaptive' },
+    // Une ligne par écart suffit : l'effort par défaut de ce modèle (medium) réfléchit plus que nécessaire.
+    output_config: { effort: 'low' },
     system:
       "Tu es un auditeur de données de financement OPCO. On te donne des écarts détectés entre le dataset publié et les montants extraits des sites officiels. Pour chaque écart, indique en une ligne s'il est plausible (évolution tarifaire normale) ou suspect (erreur d'extraction probable, ordre de grandeur incohérent, citation qui ne justifie pas le montant). Réponds en français, format liste compacte. Tu ne proposes JAMAIS de montant de remplacement.",
     messages: [{ role: 'user', content: JSON.stringify(interesting, null, 2) }],
   });
 
-  return response.content
+  const avis = response.content
     .filter((b): b is Extract<typeof b, { type: 'text' }> => b.type === 'text')
     .map((b) => b.text)
-    .join('\n');
+    .join('\n')
+    .trim();
+  const arret = `stop_reason=${response.stop_reason}`;
+  if (!avis) return `[verify] Aucun texte dans la réponse du modèle (${arret}).`;
+  if (response.stop_reason === 'max_tokens') return `${avis}\n[verify] Avis tronqué : le modèle a atteint max_tokens (${arret}).`;
+  return `${avis}\n[verify] ${arret}`;
 }
