@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { cx } from '@/lib/cx';
 
 /**
@@ -7,11 +6,14 @@ import { cx } from '@/lib/cx';
  * gardent un contraste suffisant sur l'encre (turquoise 5,55:1, orange 4,98:1), seule la typographie du nom passe en
  * clair sur fond sombre (`fond="sombre"`). La hauteur est fixée, la largeur suit le ratio : le logo ne se déforme pas.
  * Au survol du lien qui l'entoure, un reflet balaie le logo (masqué par le logo lui-même).
+ *
+ * Un simple <img> aux dimensions explicites : l'export statique ne transforme pas les images (images.unoptimized), et
+ * next/image ajouterait son code client à chaque page pour rien.
  */
 export interface LogoProps {
   /** Fond sur lequel le logo est posé. */
   fond?: 'clair' | 'sombre';
-  /** Taille : compacte (en-tête mobile) ou normale. */
+  /** Taille : compacte (en-tête sous 1 024 px, 36 px) ou normale (40 px). */
   taille?: 'compacte' | 'normale';
   className?: string;
 }
@@ -24,22 +26,23 @@ export function Logo({ fond = 'clair', taille = 'normale', className }: LogoProp
   return (
     <span className={cx('inline-flex items-center', compacte ? 'gap-2.5' : 'gap-3', className)}>
       <span className="relative block shrink-0">
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element -- export statique sans optimisation d'image (voir ci-dessus) */}
+        <img
           src="/logo-sfg.png"
           alt="SFG Développement"
           width={426}
           height={224}
-          unoptimized
-          loading="eager"
-          className={cx('block w-auto', compacte ? 'h-8' : 'h-10')}
+          decoding="async"
+          className={cx('block w-auto', compacte ? 'h-9' : 'h-10')}
         />
         <span aria-hidden="true" className="logo-reflet" style={MASQUE} />
       </span>
       <span aria-hidden="true" className={cx('w-px self-stretch', sombre ? 'bg-white/25' : 'bg-filet')} />
       <span
         className={cx(
-          'font-display leading-none font-bold tracking-[-0.02em]',
-          compacte ? 'text-[0.9375rem]' : 'text-[1.0625rem]',
+          'font-display leading-none font-bold whitespace-nowrap tracking-[-0.02em]',
+          // Sous 400 px, le nom se resserre avec la largeur (15 px dès 366 px) pour tenir à côté du bouton Menu.
+          compacte ? 'text-[min(0.9375rem,4.1vw)]' : 'text-[1.0625rem]',
           sombre ? 'text-white' : 'text-texte',
         )}
       >

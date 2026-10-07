@@ -9,7 +9,9 @@ import type { IconName } from './Icon';
  * <a> (adresse externe, ouverte dans un nouvel onglet et annoncée comme telle ; mailto: et tel:).
  *
  * - primary : orange foncé plein, texte blanc (5,16:1), balayage au survol ; l'action principale d'un écran.
- * - secondary : contour turquoise foncé (6,26:1 sur blanc) ; l'action d'accompagnement.
+ * - secondary : contour 2 px du turquoise de marque (3,07:1 sur blanc), libellé turquoise foncé (6,26:1) ; le contour
+ *   fonce au survol. L'action d'accompagnement. Sur une bande lin-soft, le contour tombe à 2,84:1 : le libellé suffit
+ *   à identifier le bouton (WCAG 1.4.11 n'exige pas son contour), mais préférer le fond blanc.
  * - ghost : lien d'action sans fond, orange foncé ; pour une suite de lecture (« Toutes les fiches »).
  * - inverse : pilule blanche, texte orange foncé ; sur une surface orange, turquoise ou nuit.
  *
@@ -43,7 +45,8 @@ const BASE =
 
 const VARIANTES: Record<ButtonVariant, string> = {
   primary: 'reflet bg-orange-deep text-white shadow-douce hover:bg-orange-deeper disabled:bg-orange-deep',
-  secondary: 'border-2 border-turquoise-deep text-turquoise-deep hover:bg-turquoise-soft disabled:bg-transparent',
+  secondary:
+    'border-2 border-turquoise text-turquoise-deep hover:border-turquoise-deep hover:bg-turquoise-soft disabled:bg-transparent',
   ghost: 'text-orange-deep decoration-2 underline-offset-[0.3em] hover:underline',
   inverse: 'bg-white text-orange-deep shadow-douce hover:bg-orange-soft disabled:bg-white',
 };

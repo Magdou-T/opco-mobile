@@ -47,7 +47,8 @@
   /* Anneau de focus : orange fonce sur fond clair, redefini sur les surfaces sombres */
   --focus: var(--orange-deep);
 
-  /* Hauteur de l'en-tete collant (une ligne sous 1024 px, deux lignes au-dela) */
+  /* Hauteur de la ligne collante de l'en-tete, filet compris : 65 px sous 1024 px, 73 px au-dela (la seconde ligne de
+     navigation, de 1024 a 1279 px, defile avec la page et ne compte pas) */
   --hauteur-entete: 4.0625rem;
 
   /* Alias historiques : les composants anterieurs (fiches, guides, simulateur, resultats) gardent leurs noms de
@@ -70,7 +71,7 @@
 }
 @media (min-width: 64rem) {
   :root {
-    --hauteur-entete: 7.625rem;
+    --hauteur-entete: 4.5625rem;
   }
 }
 
@@ -95,7 +96,8 @@
   --shadow-etiquette: 0 12px 28px -8px rgb(90 24 0 / 0.24);
 
   /* Echelle typographique fluide (detail dans DESIGN.md) */
-  --text-affiche: clamp(2.5rem, 1.55rem + 2.75vw, 3.75rem);
+  /* 36 px a 320, 40 px de 375 a 553, puis +2,75vw jusqu'a 60 px a 1280 : le mot surligne (insecable) tient a 320 px */
+  --text-affiche: clamp(2.25rem, max(min(0.796rem + 7.27vw, 2.5rem), 1.55rem + 2.75vw), 3.75rem);
   --text-affiche--line-height: 1.04;
   --text-affiche--letter-spacing: -0.035em;
   --text-titre: clamp(1.75rem, 1.25rem + 1.6vw, 2.5rem);
@@ -270,8 +272,9 @@
     background: currentColor;
   }
 
-  /* Signature : surlignage vert clair derriere un mot ou un chiffre cle, droit et cale sur la ligne de base.
-     `isolation` garde le surlignage visible quel que soit le fond du parent. */
+  /* Signature : un trait vert clair arrondi pose sur la ligne de base, sous un mot ou un chiffre cle (le souligne du film
+     de marque), qui se deploie de gauche a droite. Le texte garde sa couleur ; le trait ne passe que sous le bas des
+     lettres (#1A1A1A sur vert clair : 10,37:1). `isolation` garde le trait visible quel que soit le fond du parent. */
   .mark {
     position: relative;
     isolation: isolate;
@@ -281,11 +284,23 @@
     content: "";
     position: absolute;
     z-index: -1;
-    inset: 0.16em -0.12em 0.02em -0.12em;
-    border-radius: 0.18em;
+    inset: 70% -0.05em 4%;
+    border-radius: 999px;
     background: var(--vert-clair);
     transform-origin: left center;
     animation: surligner 0.7s var(--ease-sortie) 0.3s both;
+  }
+  /* Sur une surface sombre, un trait clair passerait sous un texte clair : le surlignage reprend l'aplat plein, texte
+     fonce (10,37:1). `.mark.text-ink` : emploi herite de l'ecran de resultats (montant sur carte sombre), meme rendu,
+     a retirer avec W5. */
+  :is(.surface-nuit, .surface-encre, .surface-turquoise, .surface-orange) .mark,
+  .mark.text-ink {
+    color: var(--texte);
+  }
+  :is(.surface-nuit, .surface-encre, .surface-turquoise, .surface-orange) .mark::before,
+  .mark.text-ink::before {
+    inset: 0.16em -0.12em 0.02em;
+    border-radius: 0.18em;
   }
 
   /* Filet de section (ancien filet double) : filet simple teinte, ponctue d'un trait orange */
@@ -534,8 +549,14 @@
   :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre) {
     border: 1px solid var(--filet);
   }
+  /* Le trait est un fond, que l'impression omet par defaut : il devient un soulignement de texte, toujours imprime. */
   .mark::before {
-    background: var(--lin);
+    display: none;
+  }
+  .mark {
+    text-decoration: underline var(--turquoise) 0.1em;
+    text-underline-offset: 0.12em;
+    text-decoration-skip-ink: none;
   }
   .decor {
     display: none !important;

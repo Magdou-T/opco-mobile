@@ -26,7 +26,7 @@ Chaque rapport est calculé par script (formule WCAG 2.x). Tableau complet en an
 | `orange-deeper` | `#A93510` | Survol des boutons pleins (blanc 6,55:1). |
 | `orange-soft` | `#FDF0EA` | Fond doux orangé (orange-deep dessus 4,63:1). |
 | `orange-clair` | `#F56A31` | Orange **sur fond sombre uniquement** (5,72:1 sur encre). |
-| `turquoise` | `#5E9F92` | Identité : aplats, barres, points, graphismes. Pas de texte (3,07:1 sur blanc). |
+| `turquoise` | `#5E9F92` | Identité, partout où un contraste non textuel suffit : aplats, rails, jalons (numéro #1A1A1A, 5,68:1), points, contour du bouton secondaire (3,07:1 sur blanc). Pas de texte. |
 | `turquoise-deep` | `#3E6860` | Texte, icônes et confirmations turquoise : 6,26:1 sur blanc, 5,34:1 sur lin. |
 | `turquoise-soft` | `#EDF5F2` | Fond doux turquoise. |
 | `or` | `#F9B233` | Mise en valeur ponctuelle, anneau de focus sur fond sombre. Jamais de texte sur blanc. |
@@ -49,7 +49,9 @@ Chaque rapport est calculé par script (formule WCAG 2.x). Tableau complet en an
 Règles qui en découlent :
 - texte orange-deep sur blanc ou lin-soft, **jamais sur lin** (4,41:1) ;
 - sur un dégradé, texte **blanc plein** : à 90 % d'opacité il tombe sous 4,5:1 sur le point le plus clair ;
-- le turquoise, l'orange identité et l'or ne portent jamais de texte : on prend la variante `-deep` ou du texte foncé.
+- le turquoise, l'orange identité et l'or ne portent jamais de texte : on prend la variante `-deep` ou du texte foncé ;
+- le turquoise de marque se montre : dès qu'un élément non textuel n'exige que 3:1 (contour, jalon, rail, point), il
+  prend `turquoise`, pas `turquoise-deep` ; le turquoise foncé reste au texte et aux icônes porteuses de sens.
 
 ### Alias historiques
 
@@ -89,7 +91,7 @@ disparaîtront au fil des restylages (tâches W4, W5, D3).
 
 | Classe | Valeur | 375 px | 768 px | 1280 px | Emploi |
 |---|---|---|---|---|---|
-| `text-affiche` | `clamp(2.5rem, 1.55rem + 2.75vw, 3.75rem)`, interligne 1,04, interlettrage -0,035em | 40 | 46 | 60 | titre d'accueil |
+| `text-affiche` | `clamp(2.25rem, max(min(0.796rem + 7.27vw, 2.5rem), 1.55rem + 2.75vw), 3.75rem)`, interligne 1,04, interlettrage -0,035em ; 36 px à 320 px, pour que le mot surligné (insécable) tienne | 40 | 46 | 60 | titre d'accueil |
 | `text-titre` | `clamp(1.75rem, 1.25rem + 1.6vw, 2.5rem)`, interligne 1,1, interlettrage -0,025em | 28 | 32 | 40 | titre de section |
 | `text-xl` / `text-2xl` | 20 / 24 px (l'interlettrage -0,02em vient de `SectionTitle taille="sous-section"`, pas de l'utilitaire) | 20 | 24 | 24 | sous-section, titre de carte |
 | `text-chapeau` | `clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem)`, interligne 1,6 | 17 | 18 | 19 | chapeau sous un titre |
@@ -113,8 +115,10 @@ Chiffres clés : classe `.amount` (Montserrat 700, chiffres tabulaires, interlet
 - Rythme vertical des sections : `py-16 md:py-20`. Alterner fond blanc et bande `bg-lin-soft` bordée de `border-filet/70`.
 - Grilles : 1 colonne sous 640 px, 2 à partir de `sm`, 3 ou 4 à partir de `lg` / `xl`. Écart `gap-4` pour des cartes,
   `gap-8` à `gap-14` entre colonnes de texte.
-- En-tête collant : 65 px sous 1 024 px, 122 px au-delà (variable `--hauteur-entete`, qui règle aussi le décalage des
-  ancres). Un élément collant d'une page se place à `top: calc(var(--hauteur-entete) + 1.5rem)`.
+- En-tête collant : une seule ligne collante, 65 px sous 1 024 px et 73 px au-delà, filet compris (variable
+  `--hauteur-entete`, qui règle aussi le décalage des ancres) ; de 1 024 à 1 279 px, la seconde ligne de navigation
+  défile avec la page et ne compte pas. Un élément collant d'une page se place à
+  `top: calc(var(--hauteur-entete) + 1.5rem)` (classe `.sommaire-collant`).
 
 ## 5. Primitives
 
@@ -128,7 +132,7 @@ Pilule. Rend un `<button>` sans `href`, un lien Next pour une adresse interne, u
 
 | Prop | Valeurs | Défaut |
 |---|---|---|
-| `variant` | `primary` (orange-deep plein, balayage au survol), `secondary` (contour turquoise-deep), `ghost` (lien d'action), `inverse` (pilule blanche sur surface colorée) | `primary` |
+| `variant` | `primary` (orange-deep plein, balayage au survol), `secondary` (contour 2 px turquoise de marque, libellé turquoise-deep, contour foncé au survol ; à poser sur blanc : sur lin-soft le contour tombe à 2,84:1, le libellé suffit alors à identifier le bouton), `ghost` (lien d'action), `inverse` (pilule blanche sur surface colorée) | `primary` |
 | `size` | `sm` 36 px (zones denses sur grand écran), `md` 44 px, `lg` 48 px | `md` |
 | `fleche` | flèche après le libellé, qui glisse au survol | |
 | `icone` | nom d'icône avant le libellé | |
@@ -213,8 +217,10 @@ seule un sens. Taille par classe (`size-5` par défaut). Pas de bibliothèque d'
 ### `Logo` (`components/site/Logo.tsx`)
 
 Logo SFG + filet + « financementOPCO » (OPCO en orange-deep, ou orange-clair avec `fond="sombre"`). `taille`
-`compacte` (32 px, en-tête mobile) ou `normale` (40 px). Au survol du lien qui l'entoure, un reflet balaie le logo
-(masque = le logo lui-même). Le fichier n'est jamais recoloré : ses couleurs restent lisibles sur l'encre (5,55:1 et 4,98:1).
+`compacte` (36 px, en-tête sous 1 024 px ; le nom se resserre avec la largeur sous 366 px pour tenir à côté du bouton
+Menu) ou `normale` (40 px). Un simple `<img>` aux dimensions explicites (l'export ne transforme pas les images :
+`next/image` n'ajouterait que son code client). Au survol du lien qui l'entoure, un reflet balaie le logo (masque = le
+logo lui-même). Le fichier n'est jamais recoloré : ses couleurs restent lisibles sur l'encre (5,55:1 et 4,98:1).
 
 ### Classes signatures (`globals.css`)
 
@@ -224,7 +230,7 @@ Logo SFG + filet + « financementOPCO » (OPCO en orange-deep, ou orange-clair a
 | `.marginalia` | même famille en texte-discret, 11 px : en-têtes de tableau, libellés de champ |
 | `.amount` | chiffres clés Montserrat 700 tabulaires |
 | `.stamp` | étiquette en pilule, point et bord dans la couleur du texte (`text-*`) |
-| `.mark` | surlignage vert clair droit, derrière un mot ou un chiffre ; s'anime à l'affichage |
+| `.mark` | trait vert clair arrondi posé sur la ligne de base, sous un mot ou un chiffre (le souligné du film de marque) ; se déploie à l'affichage ; aplat plein et texte foncé sur une surface sombre ; souligné de texte à l'impression |
 | `.rule-double` | filet de section teinté, ponctué d'un trait orange de 40 px |
 | `.lien` | lien dans un texte : orange-deep souligné ; vert clair sur fond sombre, blanc sur dégradé |
 | `.lien-etendu` | lien qui couvre sa carte (focus autour d'une carte claire, à l'intérieur d'une carte en dégradé) |
@@ -234,8 +240,9 @@ Logo SFG + filet + « financementOPCO » (OPCO en orange-deep, ou orange-clair a
 | `.apparition` | apparition douce (délai par la variable `--delai`) |
 | `.reflet` | balayage lumineux au survol (bouton primaire) |
 
-Rail et jalons : voir la section « Comment ça marche » de `app/page.tsx` (rail de 4 à 6 px, jalons ronds turquoise-deep
-cerclés de la couleur du fond). La progression du simulateur le reprend (section 14).
+Rail et jalons : voir la section « Comment ça marche » de `app/page.tsx` (rail de 4 à 6 px au turquoise de marque,
+jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La progression du simulateur le reprend
+(section 14).
 
 ## 6. Dégradés et icônes
 
@@ -244,7 +251,8 @@ cerclés de la couleur du fond). La progression du simulateur le reprend (sectio
   `#D04415 → #C43F13 → #B03911`, nuit `#183530 → #0F1E1B → #0A1513`. Le turquoise lumineux
   `#70B2A5 → #5E9F92 → #4D8B7F` reste un décor.
 - Un dégradé marque une zone d'accent courte : hero, bande d'appel à l'action, récapitulatif d'un résultat. Jamais
-  derrière un long texte, jamais deux zones en dégradé côte à côte.
+  derrière un long texte, jamais deux zones en dégradé côte à côte (ni à moins d'un écran l'une de l'autre : la tuile
+  « Vous ne connaissez pas votre OPCO » qui précède la bande orange de l'accueil est teintée, flèche orange).
 - Icônes dans une pastille `size-11 rounded-2xl` : `bg-turquoise-soft text-turquoise-deep` (identité),
   `bg-orange-soft text-orange-deep` pour l'élément qui ouvre une suite d'actions.
 
@@ -270,10 +278,19 @@ cerclés de la couleur du fond). La progression du simulateur le reprend (sectio
 
 ## 8. En-tête et pied de page
 
-- En-tête (`components/site/SiteHeader.tsx`) : blanc, collant, filet fin. Grand écran : logo et bouton principal, puis
-  la navigation sur une seconde ligne (pilule lin et point orange sur la page active, `aria-current="page"`). Petit
-  écran : bouton « Menu » (`aria-expanded`, `aria-controls`), fermeture par Échap, par un clic hors du menu ou sur un
-  lien, focus rendu au bouton. Le bouton principal s'efface sur la page du simulateur.
+- En-tête (`components/site/SiteHeader.tsx`, composant serveur) : blanc, collant, filet fin. Seules la page active et
+  le menu mobile s'exécutent dans le navigateur (`NavigationClient.tsx` : `LiensNavigation`, `HorsDuSimulateur`,
+  `MenuMobile`) ; le logo, les icônes et le bouton sont rendus par le serveur et passés tout faits.
+  - À partir de 1 280 px : **une seule ligne** de 72 px : logo, navigation (libellés courts de 14 px : Simulateur,
+    Comprendre les OPCO, Obligations, Former sans budget, Les 11 OPCO, Contact), bouton principal. Le conteneur passe à
+    `max-w-7xl` : la ligne demande environ 1 200 px, et 1 217 px restent à 1 280 px avec une barre de défilement.
+  - De 1 024 à 1 279 px : la ligne collante garde le logo et le bouton ; la navigation suit sur une seconde ligne, hors
+    de l'en-tête collant, qui défile avec la page.
+  - Sous 1 024 px : logo compact (36 px) et bouton « Menu » (`aria-expanded`, `aria-controls` ; icône seule sous 400 px,
+    « Menu » restant son nom accessible). Le panneau se ferme par Échap (focus rendu au bouton), par un clic sur le
+    voile, par un lien (focus rendu au bouton), dès que le focus le quitte (Tab après le dernier lien, Maj+Tab avant le
+    bouton : rien ne reste caché sous le panneau) et à chaque changement de page.
+  - Page active : pilule lin et point orange, `aria-current="page"`. Le bouton principal s'efface sur le simulateur.
 - Pied de page (`components/site/SiteFooter.tsx`) : surface encre, filet tricolore turquoise / or / orange (les trois
   soulignés du slogan de marque), logo en version claire, liens, date des critères dérivée des données des OPCO.
 
@@ -288,7 +305,12 @@ cerclés de la couleur du fond). La progression du simulateur le reprend (sectio
 - Apostrophes droites dans le code (`'`, `&apos;` en JSX), accents complets, espaces insécables avant « : ; ? ! » quand
   le rendu le demande.
 - Aucune affirmation nouvelle : un chiffre affiché vient des données (`@opco/core`) ou d'une source citée. Un exemple
-  est étiqueté « Exemple » et ses montants dits fictifs.
+  est étiqueté « Exemple » et ses montants dits fictifs, une fois ; il ne porte ni étiquette de fiabilité ni lien de
+  source (une étiquette « Exact » sur un montant inventé affaiblirait les vraies).
+- Une idée, une fois par page. Sur l'accueil : le récapitulatif imprimable et « poste par poste » à l'étape 3,
+  « cinq minutes » dans la bande d'appel (une phrase), l'identification par SIREN à l'étape 1 et sur la tuile de qui ne
+  connaît pas son OPCO. Une étiquette flottante ne répète pas le texte voisin : l'accueil n'en garde que là où elle
+  apporte une information (les domaines de formation).
 
 ## 10. À ne pas faire
 
@@ -303,6 +325,11 @@ cerclés de la couleur du fond). La progression du simulateur le reprend (sectio
 - Une marge `scroll-mt-*` sur une cible d'ancre pour « passer sous l'en-tête » : `scroll-padding-top` de `html` compte
   déjà l'en-tête, la marge s'y ajoute (l'ancre atterrit trop bas).
 - Un sélecteur CSS accroché à un texte (`nav[aria-label="…"]`) : une classe.
+- Une étiquette de fiabilité ou « Source officielle » sur un montant d'exemple.
+- Un élément qui n'est pas de la liste dans une liste (`ul` des 11 OPCO suivie de la tuile d'appel : la tuile est
+  hors de la liste, la grille les range ensemble grâce à `contents`).
+- Un composant client pour du rendu statique : seuls l'état et les événements justifient `'use client'`, et un
+  composant serveur peut passer au client des éléments déjà rendus (icônes, bouton).
 
 ## 11. Liste de contrôle d'un nouvel écran
 
@@ -354,6 +381,7 @@ contrôlées à part par `packages/core/tests/charte-sfg.test.ts` (tiret cadrati
 |---|---|---|---|
 | Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 12 emplois hérités (page contact, liste et fiches OPCO, écran de résultats, formulaire de contact, guides ; le parcours du simulateur n'en a plus depuis W4). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | W5 (résultats), D3 (fiches, guides, contact), puis suppression de la règle |
 | `section[id].scroll-mt-24 { scroll-margin-top: 0 }` | `globals.css` | Les sections des guides (`GuideSection`) portent encore `scroll-mt-24`. | D3 (restylage des guides) |
+| `.mark.text-ink` (aplat plein, texte encre) | `globals.css` | Le montant de la carte sombre de l'écran de résultats (`FundingBreakdown`) est surligné ainsi ; le trait de base passerait sous un texte encre sur fond encre. | W5 (écran de résultats) |
 
 ## 14. Parcours du simulateur
 
@@ -411,7 +439,7 @@ emplois : elles expliquent une règle.
 | `#C43F13` | `#FDF0EA` | Étiquette orange, Button inverse au survol, CumulBadge additif | 4,63:1 | 4,50:1 | conforme |
 | `#FFFFFF` | `#E84E1B` | repère : blanc sur orange identité (interdit pour du texte) | 3,79:1 | - | repère |
 | `#1A1A1A` | `#E84E1B` | repère : #1A1A1A sur orange identité | 4,59:1 | - | repère |
-| `#3E6860` | `#FFFFFF` | Button secondary, .surtitre, icônes (turquoise-deep, valid) sur blanc | 6,26:1 | 4,50:1 | conforme |
+| `#3E6860` | `#FFFFFF` | libellé du Button secondary, .surtitre, icônes (turquoise-deep, valid) sur blanc | 6,26:1 | 4,50:1 | conforme |
 | `#3E6860` | `#F3F7F6` | .surtitre sur bande lin-soft | 5,80:1 | 4,50:1 | conforme |
 | `#3E6860` | `#E6EFEC` | turquoise-deep sur lin | 5,34:1 | 4,50:1 | conforme |
 | `#3E6860` | `#EDF5F2` | Étiquette turquoise, ConfidenceBadge exact, CertitudeBadge confirmé ou fiable, survol secondary | 5,65:1 | 4,50:1 | conforme |
@@ -474,7 +502,15 @@ emplois : elles expliquent une règle.
 | `#FFFFFF` | `#A03B17` | Etiquette surFondSombre : encre 25 % sur le point le plus clair de surface-orange (#D04415) | 6,70:1 | 4,50:1 | conforme |
 | `#FFFFFF` | `#162F2B` | Etiquette surFondSombre : encre 25 % sur le point le plus clair de surface-nuit (#183530) | 14,23:1 | 4,50:1 | conforme |
 | `#FFFFFF` | `#D5572C` | repère : ancienne Etiquette surFondSombre (blanc 10 %) sur #D04415 | 4,02:1 | - | repère |
-| `#3E6860` | `#FFFFFF` | contour du Button secondary | 6,26:1 | 3,00:1 | conforme |
+| `#5E9F92` | `#FFFFFF` | contour 2 px du Button secondary (turquoise de marque) sur blanc | 3,07:1 | 3,00:1 | conforme |
+| `#3E6860` | `#FFFFFF` | contour du Button secondary au survol (turquoise-deep) | 6,26:1 | 3,00:1 | conforme |
+| `#3E6860` | `#EDF5F2` | libellé du Button secondary au survol (turquoise-deep sur turquoise-soft) | 5,65:1 | 4,50:1 | conforme |
+| `#5E9F92` | `#F3F7F6` | repère : contour du Button secondary posé sur lin-soft (le libellé identifie le bouton) | 2,84:1 | - | repère |
+| `#1A1A1A` | `#5E9F92` | accueil, jalons des étapes : numéro #1A1A1A sur disque turquoise | 5,68:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#FFFFFF` | .mark : la part des lettres au-dessus du trait, sur blanc | 17,40:1 | 4,50:1 | conforme |
+| `#7A8C88` | `#FFFFFF` | contour du bouton Menu (filet-fort plein) | 3,54:1 | 3,00:1 | conforme |
+| `#C43F13` | `#F3F7F6` | tuile teintée « Vous ne connaissez pas votre OPCO » : flèche orange-deep sur lin-soft | 4,78:1 | 3,00:1 | conforme |
+| `#44514E` | `#F3F7F6` | tuile teintée : texte-doux sur lin-soft | 7,68:1 | 4,50:1 | conforme |
 | `#44514E` | `#FBEDEE` | AlertesOpco : texte ink-soft sur alert-soft | 7,28:1 | 4,50:1 | conforme |
 | `#C43F13` | `#FBEDEE` | AlertesOpco : lien « Voir la source » cobalt sur alert-soft | 4,54:1 | 4,50:1 | conforme |
 | `#44514E` | `#E6F2EF` | contact : ink-soft sur marker-soft | 7,23:1 | 4,50:1 | conforme |
@@ -496,4 +532,4 @@ emplois : elles expliquent une règle.
 | `#7A8C88` | `#F3F7F6` | simulateur, jalon à venir : contour filet-fort sur le panneau lin-soft | 3,28:1 | 3,00:1 | conforme |
 | `#1A1A1A` | `#FBEDEE` | simulateur, recherche d'entreprise impossible : message sur rouge-soft | 15,29:1 | 4,50:1 | conforme |
 
-100 couples (dont 10 repères), aucun sous son seuil.
+108 couples (dont 11 repères), aucun sous son seuil.

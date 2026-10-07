@@ -47,8 +47,10 @@ export function SiteFooter() {
         <span className="flex-1 bg-orange" />
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 md:py-14 lg:grid-cols-[1.5fr_1fr_1fr]">
-        <div className="sm:col-span-2 lg:col-span-1">
+      {/* Les deux listes de liens côte à côte dès le téléphone : le pied garde ses cibles de 44 px sans s'étirer sur
+          plus d'un écran. */}
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-4 py-12 sm:px-6 md:py-14 lg:grid-cols-[1.5fr_1fr_1fr] lg:gap-10">
+        <div className="col-span-2 lg:col-span-1">
           <Link href="/" className="-m-1.5 inline-block rounded-xl p-1.5">
             <Logo fond="sombre" />
           </Link>
