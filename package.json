@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "test": "npm run test --workspace @opco/core",
-    "typecheck": "npm run typecheck --workspace @opco/core"
+    "typecheck": "npm run typecheck --workspace @opco/core",
+    "check:charte": "node scripts/check-charte-sfg.mjs"
   }
 }

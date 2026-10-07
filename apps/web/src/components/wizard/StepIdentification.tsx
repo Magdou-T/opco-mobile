@@ -181,7 +181,7 @@ function CarteOpco({
               <ChoiceButton
                 key={candidat.opcoSlug}
                 label={nomOpco(candidat.opcoSlug)}
-                sublabel={texteFr(candidat.idccs.map((i) => `IDCC ${i.idcc} — ${i.titre}`).join(' · '))}
+                sublabel={texteFr(candidat.idccs.map((i) => `IDCC ${i.idcc} : ${i.titre}`).join(' · '))}
                 selected={state.detectedOpcoSlug === candidat.opcoSlug}
                 onClick={() => choisirCandidat(candidat)}
               />
@@ -461,7 +461,7 @@ export function StepIdentification({ state, updateState }: Props) {
                     >
                       <span className="block font-medium text-ink">{entreprise.nom}</span>
                       <span className="mt-0.5 block text-xs text-ink-soft">
-                        {['SIREN ' + entreprise.siren, lieu].filter(Boolean).join(' — ')}
+                        {['SIREN ' + entreprise.siren, lieu].filter(Boolean).join(' · ')}
                       </span>
                       {entreprise.idccs.length > 0 && (
                         <span className="mt-0.5 block text-xs font-medium text-valid">

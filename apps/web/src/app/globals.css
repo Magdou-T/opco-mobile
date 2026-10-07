@@ -1,37 +1,137 @@
 @import "tailwindcss";
 
 /* ============================================================
-   financementOPCO, un service SFG Developpement. Design tokens.
-   Concept : dossier administratif annote.
-   Charte SFG : orange #E84E1B, vert clair #A3D1C8,
-   turquoise #5E9F92, rouge #BC1723, or #F9B233.
-   Typographie : Montserrat (titres), Inter (texte).
+   financementOPCO, un service SFG Developpement : jetons de design.
+   Sources : charte SFG (couleurs, Montserrat / Inter, regles de redaction)
+   et langage visuel de l'animation de marque (octobre 2026).
+   Guide d'emploi, echelle typographique et tableau des contrastes :
+   apps/web/DESIGN.md. Chaque rapport cite ici est calcule par script
+   (formule WCAG 2.x). Aucun bleu, aucun violet, aucune police mono.
    ============================================================ */
 
 :root {
-  --paper: #faf9f6;
-  --paper-deep: #f1efe9;
-  --ink: #1d1a17;
-  --ink-soft: #55504a;
-  --ink-faint: #948e86;
-  /* Orange primaire SFG (anciennement cobalt) */
-  --cobalt: #e84e1b;
-  --cobalt-soft: #fce9e2;
-  /* Surface sombre chaude (anciennement navy, le bleu est proscrit) */
-  --navy: #2b211b;
-  /* Vert clair SFG : le surligneur */
-  --marker: #a3d1c8;
-  --marker-soft: #e6f2ef;
-  /* Turquoise SFG fonce pour les confirmations */
-  --valid: #44786c;
-  --valid-soft: #e6f1ee;
-  /* Rouge SFG pour les alertes */
-  --alert: #bc1723;
-  --alert-soft: #f9e7e8;
-  --rule: #ddd9cf;
+  /* Charte SFG */
+  --orange: #e84e1b; /* identite : aplats et graphismes ; texte blanc dessus 3,79:1, donc jamais de texte courant */
+  --orange-deep: #c43f13; /* action : boutons pleins, liens, focus ; blanc dessus 5,16:1 */
+  --orange-deeper: #a93510; /* survol des boutons pleins ; blanc dessus 6,55:1 */
+  --orange-soft: #fdf0ea; /* fond doux ; orange fonce dessus 4,63:1 */
+  --orange-clair: #f56a31; /* orange sur fond sombre uniquement ; 5,72:1 sur encre */
+  --turquoise: #5e9f92; /* identite : aplats et graphismes ; 3,07:1 sur blanc, pas de texte */
+  --turquoise-deep: #3e6860; /* texte, icones, confirmation ; 6,26:1 sur blanc, 5,34:1 sur lin */
+  --turquoise-soft: #edf5f2;
+  --or: #f9b233; /* mise en valeur ponctuelle, focus sur fond sombre */
+  --or-soft: #fef4de;
+  --rouge: #bc1723; /* alertes ; 6,39:1 sur blanc */
+  --rouge-soft: #fbedee;
+  --vert-clair: #a3d1c8; /* surlignage et aplats doux */
+  --vert-clair-soft: #e6f2ef;
+
+  /* Neutres teintes de turquoise */
+  --encre: #0f1e1b;
+  --nuit: #08110f;
+  --papier: #ffffff;
+  --lin: #e6efec;
+  --lin-soft: #f3f7f6;
+  --texte: #1a1a1a; /* 17,40:1 sur blanc */
+  --texte-doux: #44514e; /* 8,29:1 sur blanc, 7,08:1 sur lin */
+  --texte-discret: #5f6e6a; /* 5,35:1 sur blanc, 4,95:1 sur lin-soft, 4,57:1 sur lin */
+  --filet: #d7e2de; /* filet decoratif (separations, cartes) */
+  --filet-fort: #7a8c88; /* bord d'un element d'interface ; 3,54:1 sur blanc */
+
+  /* Couleurs relevees sur le logo (reference, le fichier n'est jamais recolore) */
+  --logo-turquoise: #5e9e91;
+  --logo-orange: #db6848;
+
+  /* Anneau de focus : orange fonce sur fond clair, redefini sur les surfaces sombres */
+  --focus: var(--orange-deep);
+
+  /* Hauteur de l'en-tete collant (une ligne sous 1024 px, deux lignes au-dela) */
+  --hauteur-entete: 4.0625rem;
+
+  /* Alias historiques : les composants anterieurs (fiches, guides, simulateur, resultats) gardent leurs noms de
+     classes et adoptent la charte. A remplacer par les noms SFG au fil des restylages (voir DESIGN.md). */
+  --paper: var(--papier);
+  --paper-deep: var(--lin-soft);
+  --ink: var(--texte);
+  --ink-soft: var(--texte-doux);
+  --ink-faint: var(--texte-discret);
+  --cobalt: var(--orange-deep);
+  --cobalt-soft: var(--orange-soft);
+  --navy: var(--encre);
+  --marker: var(--vert-clair);
+  --marker-soft: var(--vert-clair-soft);
+  --valid: var(--turquoise-deep);
+  --valid-soft: var(--turquoise-soft);
+  --alert: var(--rouge);
+  --alert-soft: var(--rouge-soft);
+  --rule: var(--filet);
+}
+@media (min-width: 64rem) {
+  :root {
+    --hauteur-entete: 7.625rem;
+  }
+}
+
+/* La palette Tailwind par defaut est retiree : seules les couleurs SFG existent (une classe de la palette par defaut,
+   bleue ou autre, ne produit aucune regle). La police mono et la serif sont retirees du theme. */
+@theme {
+  --color-*: initial;
+  --color-white: #fff;
+  --color-black: #000;
+  --font-mono: initial;
+  --font-serif: initial;
+
+  /* Rayons : `rounded` seul (composants anterieurs) passe a 12 px */
+  --radius: 0.75rem;
+  --radius-champ: 0.75rem;
+  --radius-carte: 1.25rem;
+  --radius-panneau: 1.75rem;
+
+  /* Ombres douces, teintees d'encre (jamais d'ombre dure decalee) */
+  --shadow-douce: 0 1px 2px rgb(15 30 27 / 0.05), 0 8px 24px -14px rgb(15 30 27 / 0.2);
+  --shadow-flottante: 0 22px 44px -20px rgb(15 30 27 / 0.32), 0 2px 6px rgb(15 30 27 / 0.06);
+  --shadow-etiquette: 0 12px 28px -8px rgb(90 24 0 / 0.24);
+
+  /* Echelle typographique fluide (detail dans DESIGN.md) */
+  --text-affiche: clamp(2.5rem, 1.55rem + 2.75vw, 3.75rem);
+  --text-affiche--line-height: 1.04;
+  --text-affiche--letter-spacing: -0.035em;
+  --text-titre: clamp(1.75rem, 1.25rem + 1.6vw, 2.5rem);
+  --text-titre--line-height: 1.1;
+  --text-titre--letter-spacing: -0.025em;
+  --text-chapeau: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-chapeau--line-height: 1.6;
+
+  --ease-sortie: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 @theme inline {
+  --color-orange: var(--orange);
+  --color-orange-deep: var(--orange-deep);
+  --color-orange-deeper: var(--orange-deeper);
+  --color-orange-soft: var(--orange-soft);
+  --color-orange-clair: var(--orange-clair);
+  --color-turquoise: var(--turquoise);
+  --color-turquoise-deep: var(--turquoise-deep);
+  --color-turquoise-soft: var(--turquoise-soft);
+  --color-or: var(--or);
+  --color-or-soft: var(--or-soft);
+  --color-rouge: var(--rouge);
+  --color-rouge-soft: var(--rouge-soft);
+  --color-vert-clair: var(--vert-clair);
+  --color-vert-clair-soft: var(--vert-clair-soft);
+  --color-encre: var(--encre);
+  --color-nuit: var(--nuit);
+  --color-papier: var(--papier);
+  --color-lin: var(--lin);
+  --color-lin-soft: var(--lin-soft);
+  --color-texte: var(--texte);
+  --color-texte-doux: var(--texte-doux);
+  --color-texte-discret: var(--texte-discret);
+  --color-filet: var(--filet);
+  --color-filet-fort: var(--filet-fort);
+
+  /* Alias historiques (meme valeurs que ci-dessus) */
   --color-paper: var(--paper);
   --color-paper-deep: var(--paper-deep);
   --color-ink: var(--ink);
@@ -47,103 +147,354 @@
   --color-alert: var(--alert);
   --color-alert-soft: var(--alert-soft);
   --color-rule: var(--rule);
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-montserrat), var(--font-inter), sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --font-sans: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-montserrat), "Segoe UI", system-ui, sans-serif;
 }
 
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-inter), system-ui, sans-serif;
+@layer base {
+  html {
+    /* Ancres et sommaires : la cible ne passe pas sous l'en-tete collant */
+    scroll-padding-top: calc(var(--hauteur-entete) + 1rem);
+  }
+  body {
+    background: var(--papier);
+    color: var(--texte);
+    font-family: var(--font-sans);
+  }
+  :where(h1, h2, h3, h4) {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  :where(p, li, dd, figcaption) {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--vert-clair);
+    color: var(--texte);
+  }
+  /* Focus visible partout : anneau orange fonce de 3 px, decale de 2 px (couleur redefinie sur fond sombre) */
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
 }
 
-/* Montants : mono tabulaire, toujours */
-.amount {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+@layer components {
+  /* Surtitre de section : Inter majuscules espacees, turquoise fonce, point orange */
+  .surtitre {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--turquoise-deep);
+  }
+  .surtitre::before {
+    content: "";
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--orange);
+  }
+
+  /* Libelle de marge (ancien eyebrow mono) : meme famille que le surtitre, en texte discret */
+  .marginalia {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--texte-discret);
+  }
+
+  /* Chiffres cles : Montserrat 700, chiffres tabulaires */
+  .amount {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.01em;
+  }
+
+  /* Etiquette de fiabilite (ancien tampon) : pilule avec point de couleur ; la couleur vient de la classe text-* */
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.125rem 0.625rem 0.125rem 0.5rem;
+    border: 1px solid color-mix(in oklab, currentColor 26%, transparent);
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+  }
+  .stamp::before {
+    content: "";
+    flex: none;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  /* Signature : surlignage vert clair derriere un mot ou un chiffre cle, droit et cale sur la ligne de base.
+     `isolation` garde le surlignage visible quel que soit le fond du parent. */
+  .mark {
+    position: relative;
+    isolation: isolate;
+    white-space: nowrap;
+  }
+  .mark::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0.16em -0.12em 0.02em -0.12em;
+    border-radius: 0.18em;
+    background: var(--vert-clair);
+    transform-origin: left center;
+    animation: surligner 0.7s var(--ease-sortie) 0.3s both;
+  }
+
+  /* Filet de section (ancien filet double) : filet simple teinte, ponctue d'un trait orange */
+  .rule-double {
+    position: relative;
+    border-top: 1px solid var(--filet);
+  }
+  .rule-double::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 2.5rem;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--orange);
+  }
+
+  /* Lien dans un texte */
+  .lien {
+    color: var(--orange-deep);
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in oklab, currentColor 45%, transparent);
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.15s ease;
+  }
+  .lien:hover {
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+  }
+
+  /* Lien qui couvre toute sa carte (carte cliquable accessible : le nom du lien reste le titre) */
+  .lien-etendu::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--rayon-carte, 1.25rem);
+  }
+  .lien-etendu:focus-visible {
+    outline: none;
+  }
+  .lien-etendu:focus-visible::after {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* Surfaces en degrade (zones d'accent seulement, jamais derriere un long texte) : texte clair, focus adapte.
+     Chaque degrade est calibre pour que le texte blanc atteigne 4,5:1 sur son point le plus clair. */
+  .surface-turquoise {
+    background: radial-gradient(120% 120% at 85% 0%, #477a70 0%, var(--turquoise-deep) 48%, #335850 100%);
+    color: #fff;
+    --focus: #fff;
+  }
+  .surface-orange {
+    background: radial-gradient(120% 140% at 88% 0%, #d04415 0%, var(--orange-deep) 50%, #b03911 100%);
+    color: #fff;
+    --focus: #fff;
+  }
+  .surface-nuit {
+    background: radial-gradient(120% 95% at 28% 0%, #183530 0%, var(--encre) 52%, #0a1513 100%);
+    color: #f2f6f5;
+    --focus: var(--or);
+  }
+  .surface-encre {
+    background: var(--encre);
+    color: #f2f6f5;
+    --focus: var(--or);
+  }
+  /* Aplat de marque (turquoise lumineux de l'animation) : decor uniquement, aucun texte pose directement dessus */
+  .aplat-turquoise {
+    background: radial-gradient(115% 90% at 72% 26%, #70b2a5 0%, var(--turquoise) 46%, #4d8b7f 100%);
+  }
+  :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre) .surtitre {
+    color: #fff;
+  }
+  :is(.surface-nuit, .surface-encre) .surtitre {
+    color: var(--vert-clair);
+  }
+  :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre) .surtitre::before {
+    background: currentColor;
+  }
+  :is(.surface-turquoise, .surface-orange) .lien {
+    color: #fff;
+  }
+  :is(.surface-nuit, .surface-encre) .lien {
+    color: var(--vert-clair);
+  }
+
+  /* Balayage au survol des boutons (le reflet de l'animation de marque) */
+  .reflet {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .reflet::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.3) 50%, transparent 65%);
+    transform: translateX(-120%);
+  }
+  .reflet:hover::after {
+    transform: translateX(120%);
+    transition: transform 0.75s var(--ease-sortie);
+  }
+  .reflet:disabled::after {
+    display: none;
+  }
+
+  /* Reflet qui balaye le logo au survol (masque = le logo lui-meme, le fichier n'est pas recolore) */
+  .logo-reflet {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 42%, rgb(255 255 255 / 0.85) 50%, transparent 58%) no-repeat;
+    background-size: 320% 100%;
+    background-position: 100% 0;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+  }
+  a:hover .logo-reflet,
+  a:focus-visible .logo-reflet {
+    animation: reflet-logo 0.9s var(--ease-sortie);
+  }
+
+  /* Apparition douce au chargement (delai reglable par --delai) */
+  .apparition {
+    animation: apparaitre 0.6s var(--ease-sortie) var(--delai, 0ms) both;
+  }
+
+  /* En-tete collant : une ombre apparait des que la page defile (sans JavaScript, si le navigateur le permet) */
+  @supports (animation-timeline: scroll()) {
+    .entete-site {
+      animation: entete-ombre linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 96px;
+    }
+  }
 }
 
-/* Signature : trait de surligneur derriere les chiffres cles */
-.mark {
-  position: relative;
-  white-space: nowrap;
+@keyframes surligner {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
-.mark::before {
-  content: "";
-  position: absolute;
-  inset: 0.08em -0.18em -0.02em -0.18em;
-  background: var(--marker);
-  transform: skew(-8deg) rotate(-0.6deg);
-  z-index: -1;
-  border-radius: 0.08em;
+@keyframes apparaitre {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-
-/* Signature : tampon de fiabilite */
-.stamp {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3em;
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.5rem;
-  border: 1.5px solid currentColor;
-  border-radius: 3px;
-  transform: rotate(-1.2deg);
-  white-space: nowrap;
+@keyframes reflet-logo {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
 }
-
-/* Libelle de marge (eyebrow administratif) */
-.marginalia {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
+@keyframes entete-ombre {
+  from {
+    box-shadow: 0 0 0 0 rgb(15 30 27 / 0);
+  }
+  to {
+    box-shadow: 0 12px 28px -20px rgb(15 30 27 / 0.45);
+  }
 }
 
-/* Filet double facon bulletin officiel */
-.rule-double {
-  border-top: 1px solid var(--ink);
-  position: relative;
+/* Alias historique border-ink : les bords « encre » des composants anterieurs (filets sous les en-tetes de page,
+   cartes, boutons secondaires) deviennent le filet fort teinte (3,54:1 sur blanc, encore un contour valable pour un
+   bouton) au lieu d'un trait quasi noir. Regle hors couche : elle passe devant l'utilitaire genere, qu'aucun element
+   ne combine avec une autre couleur de bord. Ne pas employer border-ink dans un nouveau code (voir DESIGN.md). */
+.border-ink,
+.hover\:border-ink:hover {
+  border-color: var(--filet-fort);
 }
-.rule-double::after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 0;
-  right: 0;
-  border-top: 1px solid var(--rule);
+.border-ink.bg-navy {
+  border-color: var(--encre);
 }
-
-/* Focus visible propre partout */
-:focus-visible {
-  outline: 2px solid var(--cobalt);
-  outline-offset: 2px;
-  border-radius: 2px;
+/* Sommaire collant des guides (composant anterieur, `sticky top-8`) : il se cale sous l'en-tete collant au lieu de
+   glisser dessous. A retirer quand les guides adopteront les primitives (tache D3). */
+nav[aria-label="Sommaire"] > .sticky {
+  top: calc(var(--hauteur-entete) + 1.5rem);
 }
 
+/* Mouvement reduit : aucune animation ni transition, etat final immediat */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
+  }
+  .reflet::after,
+  .logo-reflet {
+    display: none;
   }
 }
 
+/* Impression : fond blanc, texte fonce, ni degrade ni ombre */
 @media print {
   body {
     background: #fff;
+    color: #000;
+  }
+  :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre, .aplat-turquoise),
+  :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre) * {
+    background: transparent !important;
+    color: var(--texte) !important;
+    box-shadow: none !important;
+  }
+  :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre) {
+    border: 1px solid var(--filet);
   }
   .mark::before {
-    background: #eee;
+    background: var(--lin);
+  }
+  .decor {
+    display: none !important;
   }
 }
