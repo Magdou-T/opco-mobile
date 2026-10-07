@@ -602,4 +602,9 @@
   .decor {
     display: none !important;
   }
+  /* Blocs repliables (precisions, branches, listes de conventions des fiches OPCO) : leur contenu s'imprime meme
+     replie, la ou le navigateur expose ::details-content (la fiche les ouvre aussi par script avant l'impression). */
+  details::details-content {
+    content-visibility: visible;
+  }
 }
