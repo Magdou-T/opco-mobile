@@ -55,21 +55,22 @@ Règles qui en découlent :
 
 ### Alias historiques
 
-Les composants écrits avant cette charte (fiches, guides, simulateur, résultats, environ 5 000 lignes) gardent leurs
-noms de classes ; ces noms pointent désormais vers les valeurs SFG. **Ne pas les employer dans un nouveau code** : ils
-disparaîtront au fil des restylages (tâches W4, W5, D3).
+Les composants écrits avant cette charte gardaient leurs noms de classes, qui pointent vers les valeurs SFG. **Ne pas
+les employer dans un nouveau code.** Depuis D3, plus aucun fichier de `apps/web/src` n'emploie ces alias de couleur (ni
+`border-ink`, dont la règle est retirée) ; leurs définitions restent dans `globals.css` jusqu'à leur suppression (dette,
+section 13).
 
 | Alias | Devient | Remarque |
 |---|---|---|
 | `paper` | `papier` (blanc) | |
-| `paper-deep` | `lin-soft` | aussi utilisé en `var(--paper-deep)` dans d'anciennes ombres |
-| `ink` | `texte` (`#1A1A1A`) | `border-ink` est rendu en `filet-fort` (règle dédiée dans globals.css) |
+| `paper-deep` | `lin-soft` | |
+| `ink` | `texte` (`#1A1A1A`) | la règle `border-ink` (rendue en `filet-fort`) est retirée depuis D3 |
 | `ink-soft` | `texte-doux` | |
 | `ink-faint` | `texte-discret` | |
 | `cobalt` | `orange-deep` | texte, liens, boutons pleins |
 | `cobalt-soft` | `orange-soft` | |
-| `navy` | `encre` | une carte `bg-navy border-ink` garde un bord invisible |
-| `marker` | `vert-clair` | aussi `var(--marker)` dans d'anciennes ombres |
+| `navy` | `encre` | |
+| `marker` | `vert-clair` | |
 | `marker-soft` | `vert-clair-soft` | |
 | `valid` | `turquoise-deep` | |
 | `valid-soft` | `turquoise-soft` | |
@@ -222,12 +223,37 @@ Menu) ou `normale` (40 px). Un simple `<img>` aux dimensions explicites (l'expor
 `next/image` n'ajouterait que son code client). Au survol du lien qui l'entoure, un reflet balaie le logo (masque = le
 logo lui-même). Le fichier n'est jamais recoloré : ses couleurs restent lisibles sur l'encre (5,55:1 et 4,98:1).
 
+### `Sommaire` (`components/site/Sommaire.tsx`)
+
+Sommaire d'une page longue (fiches OPCO, guides), composant client : `entrees` (`id` de la section visée, `libelle`,
+`compte` facultatif en pastille rouge), `etiquette` (nom de la navigation), `numerote` (« 01 », « 02 » des guides).
+Sous 1 024 px, bloc replié `<details>` en tête du contenu (cibles de 44 px) ; à partir de 1 024 px, colonne
+`.sommaire-collant` où la section à l'écran est signalée (pilule lin, point orange, `aria-current="location"`). Les
+liens suivent l'ancre de façon native (sans JavaScript aussi) ; avec lui, le bloc se referme avant le défilement et le
+focus passe au titre de la section. Section 16.
+
+### `TitreDeSection` (`components/site/TitreDeSection.tsx`)
+
+Titre `h2` des pages de contenu (fiches, guides) : Montserrat 700 de 28 à 32 px, focalisable par programme (le sommaire
+y pose le focus), chapeau facultatif ; la section porte au-dessus son filet `.rule-double`. Plus mesuré que
+`SectionTitle` en taille `section` (40 px à 1 280 px), qui reste celui de l'accueil.
+
+### `BandeAppel` (`components/site/BandeAppel.tsx`)
+
+Bande d'appel à l'action de fin de page, sur toute la largeur : `surface-orange`, rail et jalons décoratifs à partir de
+768 px, `h2` (`id` relié par `aria-labelledby`), phrase facultative en blanc plein, `Button` inverse. Une par page :
+l'accueil (« Cinq minutes pour chiffrer votre projet ») et chaque guide.
+
+```tsx
+<BandeAppel id="titre-appel" titre="Cinq minutes pour chiffrer votre projet" libelle="Trouver mes financements" />
+```
+
 ### Classes signatures (`globals.css`)
 
 | Classe | Rendu |
 |---|---|
 | `.surtitre` | Inter 600, 12 px, majuscules espacées 0,2em, turquoise-deep, point orange |
-| `.marginalia` | même famille en texte-discret, 11 px : en-têtes de tableau, libellés de champ |
+| `.marginalia` | même famille en texte-discret, 11 px : classe héritée, encore employée par le parcours du simulateur ; les pages de D3 et l'accueil écrivent les utilitaires (`text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase`) |
 | `.amount` | chiffres clés Montserrat 700 tabulaires |
 | `.stamp` | étiquette en pilule, point et bord dans la couleur du texte (`text-*`) |
 | `.mark` | trait vert clair arrondi posé sur la ligne de base, sous un mot ou un chiffre (le souligné du film de marque) ; se déploie à l'affichage ; aplat plein et texte foncé sur une surface sombre ; souligné de texte à l'impression |
@@ -404,9 +430,8 @@ barre horizontale).
 
 | Élément | Où | Pourquoi il reste | À retirer par |
 |---|---|---|---|
-| Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 7 emplois hérités (page contact, liste et fiches OPCO, formulaire de contact, guides ; ni le parcours du simulateur ni l'écran de résultats n'en ont plus depuis W4 et W5). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | D3 (fiches, guides, contact), puis suppression de la règle |
-| `section[id].scroll-mt-24 { scroll-margin-top: 0 }` | `globals.css` | Les sections des guides (`GuideSection`) portent encore `scroll-mt-24`. | D3 (restylage des guides) |
-| `transition-colors` ou `transition-all` sur un élément focalisable (règle de la section 7) | `components/site/ContactForm.tsx:146` (bouton d'envoi : l'anneau glisse depuis le blanc du libellé), `app/opco/page.tsx:30` (`transition-all`) | Composants hérités, pas encore restylés : l'utilitaire anime aussi `outline-color`, l'anneau de focus glisse depuis la couleur du texte. Les autres emplois de `apps/web/src` sont sur des éléments sans anneau (pastilles et jalons décoratifs). `SourceBadge` et `FundingBreakdown` écrivent la liste depuis W5. | D3 (contact, liste et fiches des OPCO) : écrire la liste, `transition-[color,background-color,border-color]` |
+| Définitions des alias de couleur historiques (`--paper`, `--ink`, `--cobalt`, `--navy`, `--marker`, `--valid`, `--alert`, `--rule`… et leurs `--color-*`) | `globals.css` (`:root`, `@theme inline`) | Plus aucun emploi dans `apps/web/src` depuis D3 (fiches, liste, guides, contact) ; la règle `.border-ink` et `section[id].scroll-mt-24` sont retirées, comme les `transition-colors` et `transition-all` du formulaire de contact et des cartes de la liste des OPCO. | Fin du chantier : supprimer les définitions et le tableau « Alias historiques » (section 2) |
+| Classe `.marginalia` | `globals.css` ; `components/ui/forms.tsx` (`RegionPicker`), `components/wizard/StepIdentification.tsx` | Libellés du parcours du simulateur (W4), hors du périmètre de D3. | Prochain passage sur le parcours : utilitaires, puis suppression de la classe |
 | Espaces ordinaires à l'intérieur des guillemets d'un extrait cité (« Organismes de formation ») | textes des données et du moteur | `typo()` ne touche jamais une citation (mot pour mot) : un « » » peut commencer une ligne sur téléphone. | à trancher : insécables autour des guillemets dans les données (`@opco/core`) |
 
 ## 14. Parcours du simulateur
@@ -573,6 +598,75 @@ affiché.
 - **Impression** : section 7 ; détail des aides, liste des non éligibles et listes de conventions repliées imprimés en
   entier (`hidden print:block`), boutons masqués, cartes d'aide non coupées (`break-inside-avoid`).
 
+## 16. Fiches OPCO, liste des OPCO, guides, contact et page 404
+
+Pages de référence et de lecture. Logique de présentation en fonctions pures : `lib/fiche.ts` (tests :
+`tests/fiche.test.ts`), `lib/contact.ts` (`tests/contact.test.ts`), `lib/typographie.ts` (`tests/typographie.test.ts`).
+Composants des fiches : `components/opco/`.
+
+- **Gabarit** : en-tête de page blanc bordé d'un filet (surtitre, `h1` en `text-affiche` avec au plus un `.mark`,
+  chapeau) ; corps en grille `grid-cols-1`, colonne de contenu `min-w-0` (un tableau large ne fait plus déborder la
+  page) ; à partir de 1 024 px, `Sommaire` collant à gauche (13,5 rem) ; sections séparées de 64 px, chacune sous son
+  filet `.rule-double`, titrée par `TitreDeSection`.
+- **Fiche OPCO, ordre** : fil d'Ariane, nom, nom complet, « Barèmes vérifiés le JJ/MM/AAAA » (étiquette turquoise),
+  « Estimer pour cet OPCO » (primaire) et « Site d'AKTO » (secondaire, nouvel onglet annoncé), une phrase qui dit comment
+  retrouver l'OPCO dans le simulateur (il n'est pas présélectionné), carte teintée « Secteurs couverts » ; encadré des
+  alertes (type et nombre, lien vers la liste) ; barème général du plan de développement des compétences (PDC) ; selon
+  la taille de l'entreprise ; barèmes par branche professionnelle ; alertes publiées (`AlertesOpco`, partagé avec l'écran
+  de résultats, inchangé) ; financements complémentaires ; alternance, CPF et VAE ; en pratique. Une section sans
+  contenu n'existe pas, ni son lien de sommaire (`sectionsDeLaFiche`). Les secteurs restent une phrase : ce texte libre
+  ne se découpe pas sans erreur en étiquettes (chez OPCO Santé, « sanitaire, social et médico-social privé à but non
+  lucratif » est un seul secteur).
+- **Barème poste par poste** (`Bareme.tsx`, `lignesDuBareme`) : deux présentations rendues par le serveur. À partir de
+  768 px, un tableau à disposition fixe (poste en titre de ligne, montant en Montserrat 20 px et son étiquette de
+  fiabilité, précision, source) dans une carte `overflow-clip` et non `overflow-hidden`, pour que l'en-tête de colonnes
+  colle sous l'en-tête du site (`top: var(--hauteur-entete)`) ; les liens et blocs du corps portent
+  `scroll-margin-top: 3rem` pour s'arrêter sous cet en-tête quand le focus les ramène par le haut (seule exception à la
+  section 10 : c'est l'en-tête du tableau, non celui du site, qui les masquerait). Sous 768 px, une carte par poste :
+  poste et étiquette, montant en 24 px, règle en une phrase (`premierePhrase`), « Voir la précision » (`<details>`, nom
+  complété par le poste pour les lecteurs d'écran), source. Aucun défilement horizontal. Montants par `formatEuro`
+  (« 14,50 €/h »).
+- **Montant absent et légende** : « non publié », « incluse dans le plafond horaire », « sans montant fixe », ou un renvoi
+  à la précision qui cite ce qui est visible : « montant précisé dans la colonne Précision » dans le tableau,
+  « montant précisé ci-dessous » dans les cartes. La légende, une par présentation, n'explique que les libellés affichés
+  dans le barème général et ceux des branches (`legendeDuBareme`).
+- **Branches** (`Branche.tsx`) : une carte `<details>` par branche, repliée ; son ancre est l'identifiant de la branche,
+  et `OuvertureDesDetails` l'ouvre quand l'adresse la vise. Résumé en grille (un `<summary>` n'admet que du texte courant
+  et un titre) : chevron en pastille turquoise doux, nom en `h3`, conventions collectives (citées jusqu'à trois, comptées
+  au-delà), fiabilité, une étiquette rouge par type d'alerte qui vise la branche (`alertesDeLaBranche` : un code IDCC en
+  commun ; une alerte sans code reste dans la liste générale). Contenu : ces alertes (extrait mot pour mot), note,
+  source, postes de la branche, barème dégressif, budget, tailles ; plus de 6 codes IDCC repliés (`ListeIdcc`).
+- **Dispositifs** : légende des seules règles de cumul présentes ; carte : nom et `CumulBadge`, montant en turquoise
+  foncé (`montantDuDispositif`), description, public, tailles et conventions concernées, conditions à coches, démarche
+  en étapes numérotées (`etapesDeDemarche` : coupe à « ; » et à « puis », jamais dans une citation ni une parenthèse ; une
+  démarche d'une seule étape reste une phrase), précision, fiabilité et source.
+- **Textes des données** : `TexteDonnees` (`texteDonnees` : dates, montants et typographie, hors citations). Les textes
+  « A | B | C » (`specificites`, `points_cles_maximisation`) s'affichent en liste (`elementsDeTexte`, objets `FreeText`
+  compris, jamais « [object Object] ») ; une adresse web longue passe à la ligne (`[overflow-wrap:anywhere]`). Un sigle
+  est défini à sa première occurrence dans chaque texte (`<abbr title>`, `definirAbreviations`) seulement s'il a été
+  vérifié sur la page officielle de l'OPCO (`ABREVIATIONS_PAR_OPCO` : DAF chez Uniformation ; SSSMS, HP, SPSTI et
+  « hors CC » chez OPCO Santé). BETIC (ATLAS) n'est pas défini : les pages de critères d'ATLAS consultées le 07/10/2026 ne l'emploient pas.
+- **Impression** : en-tête, sommaire, boutons et « Voir la précision » masqués ; tous les `<details>` ouverts (script
+  `beforeprint` d'`OuvertureDesDetails` et, sans script, `details::details-content { content-visibility: visible }`) ;
+  ni ombre ni dégradé. À la largeur d'une page A4 (moins de 768 px), le barème s'imprime en cartes.
+- **Liste des OPCO** : 12 cases (11 cartes triées par `trierParNom`, article élidé ignoré : L'Opcommerce se range à O,
+  puis la tuile teintée « Vous ne connaissez pas votre OPCO »), `ul` en `contents` ; carte : nom (lien étendu), nom
+  complet, extrait des secteurs (110 caractères), « Vérifié le JJ/MM/AAAA », « Voir la fiche » (décoratif : le nom du
+  lien est celui de l'OPCO).
+- **Guides** (`Guide.tsx`) : texte courant mesuré à 34 rem (66 à 69 caractères par ligne pleine en Inter 16 px, mesurés
+  dans Chrome), tableaux et cartes sur toute la colonne ; numéro de section en jalon turquoise ; encadrés en `Callout`
+  (information, avertissement, confirmation) ; sources en `.lien`, nouvel onglet annoncé ; tableau « Ce que finance un
+  OPCO » empilé en cartes sous 640 px (en-tête repris devant chaque cellule par `data-label`) ; `typoDesEnfants` pose les
+  espaces insécables des textes écrits dans le JSX (nombre et unité, « : ») sans changer un mot ; `BandeAppel` en fin
+  de page, la même que l'accueil.
+- **Contact** : formulaire en carte, champs au dessin du simulateur (`FieldLabel`, contour filet-fort), erreurs entre le
+  libellé et le champ (`aria-invalid`, `aria-describedby`, zone `aria-live`) quand on quitte le champ ou à l'envoi,
+  focus sur le premier champ à corriger ; même lien `mailto` qu'avant (`lienMailto` : destinataire, objet, corps), le
+  bouton dit ce qui se passe (« Ouvrir ma messagerie ») ; carte SFG Développement (logo, domaines de formation aux
+  couleurs de la charte, adresse e-mail).
+- **Page 404** (`app/not-found.tsx`) : dans le gabarit du site, un message court, trois liens (simulateur, liste des
+  OPCO, accueil) et le rail de la marque au jalon manquant (décor) ; l'export produit `out/404.html`.
+
 ## Annexe : tableau des contrastes
 
 Généré par script à partir des valeurs des jetons (formule WCAG 2.x, opacités mélangées au fond comme le fait le
@@ -602,7 +696,6 @@ emplois : elles expliquent une règle.
 | `#3E6860` | `#F3F7F6` | .surtitre sur bande lin-soft | 5,80:1 | 4,50:1 | conforme |
 | `#3E6860` | `#E6EFEC` | turquoise-deep sur lin | 5,34:1 | 4,50:1 | conforme |
 | `#3E6860` | `#EDF5F2` | Étiquette turquoise, ConfidenceBadge exact, CertitudeBadge confirmé ou fiable, survol secondary | 5,65:1 | 4,50:1 | conforme |
-| `#3E6860` | `#E6F2EF` | marginalia !text-valid sur marker-soft (contact) | 5,46:1 | 4,50:1 | conforme |
 | `#FFFFFF` | `#3E6860` | pastille Callout info / confirmation, jalon d'étape faite du simulateur au survol | 6,26:1 | 4,50:1 | conforme |
 | `#5E9F92` | `#FFFFFF` | repère : turquoise de marque sur blanc (graphismes seulement) | 3,07:1 | - | repère |
 | `#BC1723` | `#FFFFFF` | rouge (alert) sur blanc | 6,39:1 | 4,50:1 | conforme |
@@ -672,11 +765,6 @@ emplois : elles expliquent une règle.
 | `#44514E` | `#F3F7F6` | tuile teintée : texte-doux sur lin-soft | 7,68:1 | 4,50:1 | conforme |
 | `#44514E` | `#FBEDEE` | AlertesOpco : texte ink-soft sur alert-soft | 7,28:1 | 4,50:1 | conforme |
 | `#C43F13` | `#FBEDEE` | AlertesOpco : lien « Voir la source » cobalt sur alert-soft | 4,54:1 | 4,50:1 | conforme |
-| `#44514E` | `#E6F2EF` | contact : ink-soft sur marker-soft | 7,23:1 | 4,50:1 | conforme |
-| `#0F1E1B` | `#FDF0EA` | Callout info des guides : navy sur cobalt-soft | 15,41:1 | 4,50:1 | conforme |
-| `#273330` | `#FDF0EA` | Callout info des guides : navy à 90 % sur cobalt-soft | 11,75:1 | 4,50:1 | conforme |
-| `#50766F` | `#EDF5F2` | Callout ok des guides : valid à 90 % sur valid-soft | 4,55:1 | 4,50:1 | conforme |
-| `#C22C37` | `#FBEDEE` | Callout warn des guides : alert à 90 % sur alert-soft | 4,97:1 | 4,50:1 | conforme |
 | `#9FA5A4` | `#0F1E1B` | FundingBreakdown : paper 60 % sur navy | 6,87:1 | 4,50:1 | conforme |
 | `#B7BCBB` | `#0F1E1B` | FundingBreakdown : paper 70 % sur navy | 8,94:1 | 4,50:1 | conforme |
 | `#C3C7C6` | `#0F1E1B` | FundingBreakdown : paper 75 % sur navy | 10,07:1 | 4,50:1 | conforme |
@@ -715,5 +803,35 @@ emplois : elles expliquent une règle.
 | `#5F6E6A` | `#F3F9F7` | résultats : ligne du tableau survolée (vert clair doux à 50 %) : texte discret | 5,02:1 | 4,50:1 | conforme |
 | `#3E6860` | `#F3F9F7` | résultats : montant financé d'une ligne survolée | 5,88:1 | 4,50:1 | conforme |
 | `#1A1A1A` | `#5E9F92` | résultats : numéro d'une démarche (disque turquoise) | 5,68:1 | 4,50:1 | conforme |
+| `#44514E` | `#FFFFFF` | sommaire (fiches, guides) : entrées inactives | 8,29:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#E6EFEC` | sommaire : section à l'écran (pilule lin) | 14,85:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#E6EFEC` | sommaire des guides : numéro de la section à l'écran (texte discret sur lin) | 4,57:1 | 4,50:1 | conforme |
+| `#BC1723` | `#FBEDEE` | sommaire de fiche : nombre d'alertes (rouge sur rouge doux) | 5,62:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#F3F7F6` | barème : en-tête de colonne collant (texte discret sur lin-soft) | 4,95:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#FFFFFF` | barème : libellé d'un montant absent (« non publié »), précision complète | 5,35:1 | 4,50:1 | conforme |
+| `#C43F13` | `#FFFFFF` | barème : « Voir la précision », liste repliée des conventions collectives | 5,16:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#F3F7F6` | barème : légende (libellé) sur lin-soft | 16,12:1 | 4,50:1 | conforme |
+| `#44514E` | `#F3F7F6` | barème : légende (explication), règles de cumul | 7,68:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#E6F2EF` | barème dégressif : titre et taux sur vert-clair doux | 15,18:1 | 4,50:1 | conforme |
+| `#44514E` | `#E6F2EF` | barème dégressif : phrase et libellés de tranche | 7,23:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#F3F7F6` | résumé de branche survolé : conventions collectives | 4,95:1 | 4,50:1 | conforme |
+| `#C43F13` | `#F3F7F6` | résumé de branche survolé : anneau de focus intérieur | 4,78:1 | 3,00:1 | conforme |
+| `#C43F13` | `#FFFFFF` | résumé de branche : anneau de focus intérieur sur blanc | 5,16:1 | 3,00:1 | conforme |
+| `#3E6860` | `#EDF5F2` | résumé de branche : chevron (pastille turquoise doux), icônes Alternance, CPF et VAE | 5,65:1 | 3,00:1 | conforme |
+| `#BC1723` | `#FFFFFF` | encadré des alertes : pastilles de type (rouge sur blanc) | 6,39:1 | 4,50:1 | conforme |
+| `#3E6860` | `#FFFFFF` | dispositif : montant (turquoise foncé sur blanc) | 6,26:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#5E9F92` | dispositif : numéro d'étape de la démarche ; guides : numéro de section (jalon turquoise) | 5,68:1 | 4,50:1 | conforme |
+| `#3E6860` | `#FFFFFF` | coches des conditions et des points clés (icônes porteuses de sens) | 6,26:1 | 3,00:1 | conforme |
+| `#3E6860` | `#EDF5F2` | coches de « Maximiser la prise en charge » sur turquoise doux | 5,65:1 | 3,00:1 | conforme |
+| `#3E6860` | `#F3F7F6` | puces de « À savoir » (encadré information, lin-soft) | 5,80:1 | 3,00:1 | conforme |
+| `#44514E` | `#F3F7F6` | carte « Secteurs couverts » (teintée) : texte des secteurs | 7,68:1 | 4,50:1 | conforme |
+| `#3E6860` | `#F3F7F6` | carte « Secteurs couverts » : surtitre | 5,80:1 | 4,50:1 | conforme |
+| `#C43F13` | `#F3F7F6` | contact : lien e-mail de la carte SFG Développement (teintée) | 4,78:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#F3F7F6` | contact : libellé « Par e-mail » sur la carte teintée | 4,95:1 | 4,50:1 | conforme |
+| `#7A8C88` | `#FFFFFF` | contact : contour des champs (filet-fort) | 3,54:1 | 3,00:1 | conforme |
+| `#BC1723` | `#FFFFFF` | contact : message d'erreur d'un champ | 6,39:1 | 4,50:1 | conforme |
+| `#5E9F92` | `#FFFFFF` | page 404 : rail et jalons (décor, aucune exigence) | 3,07:1 | - | repère |
+| `#7A8C88` | `#FFFFFF` | page 404 : jalon manquant en tirets (décor) | 3,54:1 | - | repère |
+| `#5F6E6A` | `#FFFFFF` | abréviation définie : trait pointillé (texte discret), décor du soulignement | 5,35:1 | - | repère |
 
-133 couples (dont 13 repères), aucun sous son seuil.
+157 couples (dont 16 repères), aucun sous son seuil.
