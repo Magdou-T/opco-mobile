@@ -348,34 +348,54 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
 9. Aucune affirmation qui devance le produit. À vérifier avant la mise en ligne : **sections de l'accueil qui dépendent
    de l'écran de résultats (W5)**. « Ce que le simulateur recherche » annonce que le simulateur passe en revue un
    catalogue d'aides publiques et vérifie la situation au regard de chacune ; au commit 411792c, le parcours n'appelle
-   que le moteur des barèmes OPCO (`EMBEDDED_AIDES` n'est pas encore employé par le site). W5 rend la phrase vraie ; la
-   revue finale contrôle que l'écran de résultats affiche bien ces aides, sinon la phrase est reformulée.
+   que le moteur des barèmes OPCO : `EMBEDDED_AIDES` n'est employé ni par le parcours ni par l'écran de résultats (seul
+   l'accueil le lit, pour n'afficher que les familles de financeurs présentes au catalogue). W5 rend la phrase vraie ;
+   la revue finale contrôle que l'écran de résultats affiche bien ces aides, sinon la phrase est reformulée.
 
 ## 12. Garde de charte
 
 `npm run check:charte` (script `scripts/check-charte-sfg.mjs`, Node seul) parcourt `apps/web/src/**/*.{ts,tsx,css}` et
 signale, avec fichier, ligne et colonne (code de sortie 1 en cas de problème) :
 
-- le tiret cadratin et ses variantes (U+2014, la barre horizontale U+2015, U+2E3A, U+2E3B, U+FE58), écrits tels quels,
-  en entité HTML (`&mdash;`, `&horbar;`, `&#8212;`, `&#x2014;`), en échappement JavaScript (`\u{2014}` et sa forme
-  courte à quatre chiffres) ou CSS (`\2014`) ;
+- le tiret cadratin et ses variantes (U+2014, la barre horizontale U+2015, U+2E3A, U+2E3B, la forme verticale U+FE31,
+  U+FE58), écrits tels quels, en entité HTML (`&mdash;`, `&horbar;`, `&#8212;`, `&#x2014;`), en échappement JavaScript
+  (`\u{2014}` et sa forme courte à quatre chiffres, qui n'en prend jamais un cinquième : suivie de `0`, elle donne un
+  tiret puis 0) ou CSS (`\2014`, `\2E3A`, `\FE58`…, de quatre à six chiffres) ;
 - le bleu et le violet (teinte TSL de 190 à 320 degrés) : classes de la palette retirée sur les 49 utilitaires de
   couleur de Tailwind 4 (`bg-`, `drop-shadow-`, `inset-ring-`, `text-shadow-`, `mask-*-from-`…), variables
   `--color-blue…`, fonctions `rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, `color()` (séparateurs
-  virgule, espace, barre ou souligné des valeurs arbitraires), hexadécimaux et couleurs nommées CSS (`blue`, `navy`,
-  `rebeccapurple`…) **dans un contexte de couleur** : déclaration ou objet de style, attribut `fill`, `stroke`, `color`,
-  valeur arbitraire `[…]`, argument d'un dégradé ou de `color-mix()`, chaîne qui n'est qu'un hexadécimal (sauf ancre :
-  `href="#bad"` n'est pas une couleur). Un gris (chroma OKLCH inférieure à 0,01) n'est pas signalé ;
-- la police mono : `font-mono`, `monospace`, IBM Plex et les familles mono connues, les balises `<code>`, `<pre>`,
-  `<kbd>`, `<samp>`, `<tt>` ;
-- les émojis : tout pictogramme Unicode (propriétés `Extended_Pictographic` et `Emoji_Presentation`, sélecteur U+FE0F),
-  sauf les signes typographiques tolérés sans sélecteur : ✓ ⚠ ↗ ▸ ▾ © ® ™ (ils s'affichent en glyphes de texte).
+  virgule, espace, barre ou souligné, souligné compris devant la fonction dans une valeur arbitraire :
+  `shadow-[0_0_0_2px_rgb(59_130_246)]` ; les trois composantes de couleur sont lues et l'alpha est ignoré, même
+  calculé : `rgb(59 130 246 / var(--opacite))`), hexadécimaux et couleurs nommées CSS (`blue`, `navy`,
+  `rebeccapurple`…) **dans un contexte de couleur** : déclaration ou objet de style, attribut `fill`, `stroke`,
+  `color`, valeur arbitraire `[…]`, argument d'un dégradé ou de `color-mix()`, chaîne qui n'est qu'un hexadécimal (sauf
+  ancre affectée ou comparée : `href="#bad"`, `location.hash === '#bad'` ne sont pas des couleurs). Un gris (chroma
+  OKLCH inférieure à 0,01) n'est pas signalé ;
+- la police mono : `font-mono`, `monospace`, IBM Plex et, partout, les familles mono dont le nom ne désigne rien
+  d'autre (SF Mono, Fira Code, JetBrains Mono, Source Code Pro, Cascadia, Lucida Console, Inconsolata, Iosevka,
+  Monaspace, toute famille « … Mono ») ; Monaco, Menlo, Consolas, Courier et Hack seulement dans un contexte de police
+  (déclaration `font-family`, `font` ou `--font-*`, propriété `fontFamily`, classe `font-[…]`), pour que « Menlo Park »
+  ou la principauté de Monaco passent dans un texte ; les balises `<code>`, `<pre>`, `<kbd>`, `<samp>`, `<tt>` hors des
+  commentaires (une balise citée en commentaire n'est pas rendue) ;
+- les émojis, écrits tels quels, en entité HTML numérique (`&#127881;`, `&#x1F389;`), en échappement JavaScript
+  (`\u{1F389}`, paire de substitution) ou CSS (`\1F389`) : tout pictogramme Unicode (propriétés
+  `Extended_Pictographic` et `Emoji_Presentation`, sélecteur U+FE0F), sauf les signes typographiques tolérés sans
+  sélecteur, sous toutes ces écritures : ✓ ⚠ ↗ ▸ ▾ © ® ™ (ils s'affichent en glyphes de texte).
 
-`node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 112 cas (chaque règle a une violation et un jumeau
-propre). Limites : la garde lit le texte source, pas le rendu ; une couleur calculée à l'exécution (variable,
-concaténation, donnée), un hexadécimal sans contexte de couleur (commentaire, texte courant), une police mono sous un nom
-inconnu, une image ou une icône bleue lui échappent. Les données de `packages/core` (barèmes, table IDCC, aides) sont
-contrôlées à part par `packages/core/tests/charte-sfg.test.ts` (tiret cadratin et barre horizontale).
+La règle vaut pour le texte du dépôt, pas seulement pour l'affichage : un code qui retire le tiret d'une donnée en
+l'écrivant en clair dans une expression régulière est signalé, et une forme échappée l'est aussi. Construire le
+caractère : `t.replaceAll(String.fromCharCode(0x2014), ', ')` ou `new RegExp(String.fromCharCode(0x2014), 'g')` ; de
+même `String.fromCodePoint()` pour un émoji qu'un code doit reconnaître.
+
+`node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 178 cas : chaque règle a une violation et un
+jumeau propre, et quatre contrôles portent sur les positions et l'extrait signalés. Les 67 mutants de la garde (copies
+du script dont une règle est retirée ou faussée) font tous échouer cet autotest. Limites : la garde lit le texte
+source, pas le rendu ; une couleur calculée à l'exécution (variable, concaténation, donnée, composante en `var()` ou
+`calc()`), un hexadécimal sans contexte de couleur (commentaire, texte courant), une couleur encodée dans une image SVG
+en data URI (`fill='%233b82f6'`), une police mono sous un nom inconnu ou un nom ambigu rangé dans une constante, un
+émoji en entité nommée (`&hearts;`), une image ou une icône bleue lui échappent. Les données de `packages/core`
+(barèmes, table IDCC, aides) sont contrôlées à part par `packages/core/tests/charte-sfg.test.ts` (tiret cadratin et
+barre horizontale).
 
 ## 13. Dette connue
 
@@ -384,6 +404,7 @@ contrôlées à part par `packages/core/tests/charte-sfg.test.ts` (tiret cadrati
 | Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 12 emplois hérités (page contact, liste et fiches OPCO, écran de résultats, formulaire de contact, guides ; le parcours du simulateur n'en a plus depuis W4). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | W5 (résultats), D3 (fiches, guides, contact), puis suppression de la règle |
 | `section[id].scroll-mt-24 { scroll-margin-top: 0 }` | `globals.css` | Les sections des guides (`GuideSection`) portent encore `scroll-mt-24`. | D3 (restylage des guides) |
 | `.mark.text-ink` (aplat plein, texte encre) | `globals.css` | Le montant de la carte sombre de l'écran de résultats (`FundingBreakdown`) est surligné ainsi ; le trait de base passerait sous un texte encre sur fond encre. | W5 (écran de résultats) |
+| `transition-colors` ou `transition-all` sur un élément focalisable (règle de la section 7) | `components/site/ContactForm.tsx:146` (bouton d'envoi : l'anneau glisse depuis le blanc du libellé), `components/ui/SourceBadge.tsx:14`, `components/results/FundingBreakdown.tsx:416`, `app/opco/page.tsx:30` (`transition-all`) | Composants hérités, pas encore restylés : l'utilitaire anime aussi `outline-color`, l'anneau de focus glisse depuis la couleur du texte. Les autres emplois de `apps/web/src` sont sur des éléments sans anneau (pastilles et jalons décoratifs, ligne de tableau non focalisable). | D3 (contact, liste et fiches des OPCO), W5 (écran de résultats) : écrire la liste, `transition-[color,background-color,border-color]` |
 
 ## 14. Parcours du simulateur
 
