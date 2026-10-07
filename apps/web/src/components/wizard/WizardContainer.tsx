@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { useReserveBarreCollante } from '@/hooks/useReserveBarreCollante';
 import { useWizard } from '@/hooks/useWizard';
 import { cx } from '@/lib/cx';
 import { ETAPES, enumeration } from '@/lib/etapes';
@@ -40,9 +41,6 @@ const EcranResultats = dynamic(
       .catch(() => EchecChargementResultats),
   { ssr: false, loading: () => <ChargementResultats /> },
 );
-
-/** Air réservé en plus de la barre collante : l'anneau de focus (3 px, décalé de 2 px) d'un contrôle reste entier. */
-const AIR_AU_DESSUS_DE_LA_BARRE = 8;
 
 /**
  * « Suivant » tant que l'étape est incomplète : annoncé comme indisponible (aria-disabled) mais toujours atteignable au
@@ -92,35 +90,12 @@ export function WizardContainer() {
     document.getElementById(showResults ? ID_TITRE_RESULTATS : ID_TITRE_ETAPE)?.focus({ preventScroll: true });
   }, [currentStepIndex, showResults]);
 
-  // Barre de navigation collée au bas de l'écran (sous 1 024 px, hors récapitulatif) : sa hauteur réelle est réservée
-  // au bas de la zone de défilement (`scroll-padding-bottom` de html), pour qu'un contrôle qui reçoit le focus ne passe
-  // jamais dessous (WCAG 2.2, critère 2.4.11). Mesurée à chaque changement de taille de la barre (phrase d'aide qui
-  // s'allonge, zone de sécurité, texte agrandi), jamais écrite en dur ; retirée dès que la barre n'est plus collante
-  // (1 024 px et plus, récapitulatif, résultats) et au démontage.
+  // Barre de navigation collée au bas de l'écran (sous 1 024 px, hors récapitulatif) : sa hauteur est réservée au bas de
+  // la zone de défilement, le focus qui y entre ne fait pas sauter la page, et un champ que la barre ou une erreur
+  // viendrait masquer remonte au-dessus d'elle (useReserveBarreCollante, DESIGN.md section 14).
   const barre = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const element = barre.current;
-    if (!element) return;
-    const racine = document.documentElement;
-    const reserver = () => {
-      if (getComputedStyle(element).position === 'sticky') {
-        const hauteur = Math.ceil(element.getBoundingClientRect().height) + AIR_AU_DESSUS_DE_LA_BARRE;
-        racine.style.setProperty('scroll-padding-bottom', `${hauteur}px`);
-      } else {
-        racine.style.removeProperty('scroll-padding-bottom');
-      }
-    };
-    reserver();
-    const observateur = new ResizeObserver(reserver);
-    observateur.observe(element);
-    const grandEcran = window.matchMedia('(min-width: 64rem)');
-    grandEcran.addEventListener('change', reserver);
-    return () => {
-      observateur.disconnect();
-      grandEcran.removeEventListener('change', reserver);
-      racine.style.removeProperty('scroll-padding-bottom');
-    };
-  }, [showResults, derniereEtape]);
+  const contenu = useRef<HTMLDivElement>(null);
+  useReserveBarreCollante(barre, contenu, `${showResults}-${derniereEtape}`);
 
   // Résultats : l'écran chargé à la demande calcule tout à partir de l'état (aucune donnée ne lui est passée) et pose le
   // focus sur son titre à son montage ; le cadre suit l'écran affiché, pour ramener son haut à la vue.
@@ -142,7 +117,7 @@ export function WizardContainer() {
       <ProgressBar currentStepIndex={currentStepIndex} state={state} onStepClick={goToStep} />
 
       <Card as="section" aria-labelledby={ID_TITRE_ETAPE} padding="none" className="mt-5 sm:mt-6">
-        <div className="px-4 pt-6 pb-8 sm:px-8 sm:pt-8 lg:px-10 lg:pt-10">
+        <div ref={contenu} className="px-4 pt-6 pb-8 sm:px-8 sm:pt-8 lg:px-10 lg:pt-10">
           {currentStep.key === 'projet' && <StepProjet state={state} updateState={updateState} />}
           {currentStep.key === 'identification' && <StepIdentification state={state} updateState={updateState} />}
           {currentStep.key === 'situation' && (
@@ -170,12 +145,13 @@ export function WizardContainer() {
 
         {/* Navigation : barre collée en bas de l'écran sous 1 024 px (cibles de 44 px), en pied de carte au-delà ; son
             ombre vers le haut est teintée d'encre (jeton --encre, aucune couleur écrite en dur). Sa hauteur est réservée
-            au défilement tant qu'elle colle (effet plus haut). Au récapitulatif, qui se lit avant de calculer, la barre
-            reste en pied de carte et les boutons s'empilent. */}
+            au défilement tant qu'elle colle (crochet plus haut) ; `barre-collante` donne à ses contrôles la marge de
+            défilement négative qui annule cette réserve (globals.css). Au récapitulatif, qui se lit avant de calculer,
+            la barre reste en pied de carte et les boutons s'empilent. */}
         <div
           ref={barre}
           className={cx(
-            'rounded-b-carte border-t border-filet bg-white px-4 sm:px-8 lg:px-10 lg:py-6 print:hidden',
+            'barre-collante rounded-b-carte border-t border-filet bg-white px-4 sm:px-8 lg:px-10 lg:py-6 print:hidden',
             derniereEtape
               ? 'py-5'
               : 'sticky bottom-0 z-10 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-14px_28px_-24px_color-mix(in_srgb,var(--encre)_45%,transparent)] lg:static lg:shadow-none',

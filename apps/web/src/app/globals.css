@@ -160,6 +160,9 @@
   html {
     /* Ancres et sommaires : la cible ne passe pas sous l'en-tete collant */
     scroll-padding-top: calc(var(--hauteur-entete) + 1rem);
+    /* Reserve du bas : chaque element collant en bas de l'ecran pose sa propre variable (aujourd'hui la seule barre de
+       navigation du simulateur, useReserveBarreCollante) ; un second s'ajouterait dans un max(), sans effacer celle-ci. */
+    scroll-padding-bottom: var(--reserve-barre-simulateur, 0px);
   }
   body {
     background: var(--papier);
@@ -447,6 +450,13 @@
   /* Barre empilee de l'ecran de resultats : elle se devoile de gauche a droite, sans deformer ses bouts arrondis */
   .devoilement {
     animation: devoiler 0.9s var(--ease-sortie) 0.25s both;
+  }
+
+  /* Controles de la barre collante du simulateur : leur marge de defilement annule la reserve du bas. Sans elle, le
+     focus qui entre dans la barre collee (ou en sort) faisait defiler la page jusqu'a la position statique de la barre
+     (250 a 370 px) ; la barre etant visible, rien n'est masque. */
+  .barre-collante :is(a, button, input, select, textarea, [tabindex]) {
+    scroll-margin-bottom: calc(-1 * var(--reserve-barre-simulateur, 0px));
   }
 
   /* Sommaire collant des guides (Guide.tsx) : il se cale sous l'en-tete collant au lieu de glisser dessous. */

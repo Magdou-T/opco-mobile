@@ -433,12 +433,20 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   lin), et un texte dit ce qui manque (« Pour continuer, indiquez la région et la taille de l'entreprise. »), relié par
   `aria-describedby`. Sous 1 024 px la barre colle au bas de l'écran (cibles de 44 px) ; au récapitulatif, qui se lit
   avant de calculer, elle reste en pied de carte et ses boutons s'empilent.
-- **Barre collante et focus** (WCAG 2.2, critère 2.4.11) : tant que la barre colle, sa hauteur réelle, mesurée par un
-  `ResizeObserver` (phrase d'aide qui s'allonge, zone de sécurité iOS, texte agrandi) et augmentée de 8 px pour
-  l'anneau de focus, est réservée au bas de la zone de défilement : `scroll-padding-bottom` posé sur `html` par
-  `WizardContainer`. Un contrôle qui reçoit le focus s'arrête au-dessus d'elle, jamais dessous. La réserve est retirée
-  dès que la barre ne colle plus (1 024 px et plus, récapitulatif, résultats) et au démontage. Aucune hauteur écrite en
-  dur ; tout autre élément collant en bas de l'écran réserve sa hauteur de la même façon.
+- **Barre collante et focus** (WCAG 2.2, critère 2.4.11 ; crochet `hooks/useReserveBarreCollante.ts`, fonctions pures
+  `lib/barreCollante.ts`) : tant que la barre colle, sa hauteur réelle, mesurée par un `ResizeObserver` (phrase d'aide
+  qui s'allonge, zone de sécurité iOS, texte agrandi) et augmentée de 8 px pour l'anneau de focus, est posée dans la
+  variable `--reserve-barre-simulateur` de `html`. `globals.css` en tire `scroll-padding-bottom` (un contrôle qui reçoit
+  le focus s'arrête au-dessus de la barre, jamais dessous) et, en négatif, le `scroll-margin-bottom` des contrôles de la
+  barre (classe `barre-collante`) : le focus qui entre dans la barre collée ou en sort ne fait plus défiler la page
+  jusqu'à la position statique de la barre (avant : 248 à 370 px de saut). Quand la barre grandit ou que le contenu de
+  l'étape change de taille (erreur affichée au-dessus d'un champ pendant la frappe), le contrôle qui a le focus, si son
+  bas dépasse le haut de la barre moins 8 px, remonte au-dessus d'elle (`scrollIntoView({ block: 'nearest' })`, qui
+  respecte la réserve). La variable est retirée dès que la barre ne colle plus (1 024 px et plus, récapitulatif,
+  résultats) et au démontage. Aucune hauteur écrite en dur. Un autre élément collant en bas de l'écran poserait sa
+  propre variable, réunie à celle-ci dans un `max()` : retirer l'une n'efface jamais l'autre. Vérifié dans Chrome
+  (DevTools, vraies touches, 375 × 812 et 320 × 568) ; Safari et iOS ne sont pas testables ici, en particulier la marge
+  de défilement négative.
 - **Choix** : `ChoiceButton` en carte (indicateur rond, coche, contour et fond orange quand il est choisi,
   `aria-pressed`) ; `OuiNonChoix` en groupe segmenté de pilules ; `CheckboxRow` en carte. « Je ne sais pas » (et
   « Ne sait pas » d'une liste) est une réponse que le parcours retient à part (`useWizard`, `repondre`) : la valeur
