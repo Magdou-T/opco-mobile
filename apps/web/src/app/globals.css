@@ -459,7 +459,8 @@
     scroll-margin-bottom: calc(-1 * var(--reserve-barre-simulateur, 0px));
   }
 
-  /* Sommaire collant des guides (Guide.tsx) : il se cale sous l'en-tete collant au lieu de glisser dessous. */
+  /* Sommaire collant des guides et des fiches OPCO (Sommaire.tsx) : il se cale sous l'en-tete collant au lieu de
+     glisser dessous. */
   .sommaire-collant {
     position: sticky;
     top: calc(var(--hauteur-entete) + 1.5rem);
@@ -515,30 +516,6 @@
   }
   to {
     box-shadow: 0 12px 28px -20px rgb(15 30 27 / 0.45);
-  }
-}
-
-/* Alias historique border-ink : les bords « encre » des composants anterieurs (filets sous les en-tetes de page,
-   cartes, boutons secondaires) deviennent le filet fort teinte (3,54:1 sur blanc, encore un contour valable pour un
-   bouton) au lieu d'un trait quasi noir. Dans la couche utilities, apres les utilitaires generes : la regle l'emporte
-   sur le border-ink du theme mais plus sur une variante (hover:, focus:). Dette : a retirer quand les emplois restants
-   auront migre (W4, W5, D3 ; voir DESIGN.md). Ne pas employer border-ink dans un nouveau code. */
-@layer utilities {
-  .border-ink {
-    border-color: var(--filet-fort);
-  }
-  @media (hover: hover) {
-    .hover\:border-ink:hover {
-      border-color: var(--filet-fort);
-    }
-  }
-  .border-ink.bg-navy {
-    border-color: var(--encre);
-  }
-  /* Sections des guides (`scroll-mt-24` herite de Guide.tsx) : le scroll-padding-top de html compte deja l'en-tete ;
-     cette marge s'y ajoutait et posait l'ancre 112 px sous l'en-tete. A retirer avec le restylage des guides (D3). */
-  section[id].scroll-mt-24 {
-    scroll-margin-top: 0;
   }
 }
 

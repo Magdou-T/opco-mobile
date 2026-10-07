@@ -8,6 +8,9 @@ import {
   Source,
   GuideCta,
 } from '@/components/site/Guide';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { typo } from '@/lib/format';
 
 export const metadata: Metadata = {
   title: 'Se former sans toucher au budget formation : actions collectives, CPF, FSE+',
@@ -109,32 +112,29 @@ export default function FormerSansBudgetPage() {
         </GuideSection>
 
         <GuideSection id="actions-collectives" number="02" title="Les actions collectives, OPCO par OPCO">
-          <div className="space-y-4">
+          <ul className="space-y-3">
             {ACTIONS_COLLECTIVES.map((a) => (
-              <div key={a.opco} className="rounded border border-rule bg-white p-5">
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h3 className="font-display font-bold text-ink">
-                    {a.opco}, {a.dispositif}
-                  </h3>
-                  <Link
-                    href={`/opco/${a.slug}`}
-                    className="text-xs font-semibold text-cobalt hover:underline"
-                  >
-                    Voir la fiche {a.opco} →
-                  </Link>
+              <Card as="li" key={a.opco} padding="md" className="break-inside-avoid">
+                <h3 className="text-lg leading-snug font-bold text-texte">
+                  {a.opco}, {a.dispositif}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-texte-doux">{typo(a.detail)}</p>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-filet pt-3 text-sm">
+                  <span className="min-w-0 [overflow-wrap:anywhere]">
+                    <Source href={a.url}>{a.url.replace('https://', '')}</Source>
+                  </span>
+                  <Button href={`/opco/${a.slug}/`} variant="ghost" fleche>
+                    Voir la fiche {a.opco}
+                  </Button>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed">{a.detail}</p>
-                <p className="mt-2 text-xs">
-                  <Source href={a.url}>{a.url.replace('https://', '')}</Source>
-                </p>
-              </div>
+              </Card>
             ))}
-          </div>
-          <p className="text-sm text-ink-faint">
+          </ul>
+          <p className="text-sm text-texte-discret">
             Les autres OPCO (AFDAS, Constructys, OPCO 2i, OPCO Mobilités, OPCO Santé,
             Uniformation) ont leurs propres dispositifs, souvent sous d&apos;autres formes
             (catalogues de formations clés en main, fonds conventionnels de branche) :
-            retrouvez-les sur <Link href="/opco" className="text-cobalt underline">les fiches OPCO</Link>.
+            retrouvez-les sur <Link href="/opco/" className="lien">les fiches OPCO</Link>.
             Les règles d&apos;éligibilité (taille, quotas) varient par OPCO et par année budgétaire.
           </p>
         </GuideSection>
@@ -167,7 +167,7 @@ export default function FormerSansBudgetPage() {
               sur des certifications prioritaires, voir la fiche de votre OPCO.
             </li>
           </ul>
-          <p className="text-sm">
+          <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://www.moncompteformation.gouv.fr/">
               moncompteformation.gouv.fr
@@ -200,34 +200,34 @@ export default function FormerSansBudgetPage() {
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <Link href="/opco/atlas" className="font-semibold text-cobalt underline">ATLAS</Link>{' '}:
+              <Link href="/opco/atlas/" className="lien">ATLAS</Link>{' '}:
               opération ouverte, sous réserve des fonds disponibles : FSE+ à 50 % des coûts
               pédagogiques (500 000 € au maximum par entreprise), demande à déposer avant le
               début de la formation et au plus tard le 15 décembre 2027.
             </li>
             <li>
-              <Link href="/opco/akto" className="font-semibold text-cobalt underline">AKTO</Link>,{' '}
-              <Link href="/opco/opco-ep" className="font-semibold text-cobalt underline">OPCO EP</Link> et{' '}
-              <Link href="/opco/ocapiat" className="font-semibold text-cobalt underline">OCAPIAT</Link>{' '}:
+              <Link href="/opco/akto/" className="lien">AKTO</Link>,{' '}
+              <Link href="/opco/opco-ep/" className="lien">OPCO EP</Link> et{' '}
+              <Link href="/opco/ocapiat/" className="lien">OCAPIAT</Link>{' '}:
               dispositifs 2025-2026 clos (dépôts jusqu&apos;au 6 avril 2026 chez OPCO EP, jusqu&apos;au
               13 mars 2026 chez OCAPIAT).
             </li>
             <li>
-              <Link href="/opco/opco2i" className="font-semibold text-cobalt underline">OPCO 2i</Link>,{' '}
-              <Link href="/opco/constructys" className="font-semibold text-cobalt underline">Constructys</Link>,{' '}
-              <Link href="/opco/opco-sante" className="font-semibold text-cobalt underline">OPCO Santé</Link> et{' '}
-              <Link href="/opco/afdas" className="font-semibold text-cobalt underline">AFDAS</Link>{' '}:
+              <Link href="/opco/opco2i/" className="lien">OPCO 2i</Link>,{' '}
+              <Link href="/opco/constructys/" className="lien">Constructys</Link>,{' '}
+              <Link href="/opco/opco-sante/" className="lien">OPCO Santé</Link> et{' '}
+              <Link href="/opco/afdas/" className="lien">AFDAS</Link>{' '}:
               opérations 2025 terminées ou fonds épuisés, aucune opération 2026 confirmée.
             </li>
             <li>
-              <Link href="/opco/opco-mobilites" className="font-semibold text-cobalt underline">OPCO Mobilités</Link>,{' '}
-              <Link href="/opco/uniformation" className="font-semibold text-cobalt underline">Uniformation</Link> et{' '}
-              <Link href="/opco/opcommerce" className="font-semibold text-cobalt underline">L&apos;Opcommerce</Link>{' '}:
+              <Link href="/opco/opco-mobilites/" className="lien">OPCO Mobilités</Link>,{' '}
+              <Link href="/opco/uniformation/" className="lien">Uniformation</Link> et{' '}
+              <Link href="/opco/opcommerce/" className="lien">L&apos;Opcommerce</Link>{' '}:
               aucune opération ouverte confirmée à ce jour (pour OPCO Mobilités, à vérifier auprès
               de son conseiller).
             </li>
           </ul>
-          <p className="text-sm">
+          <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://fse.gouv.fr/les-appels-a-projets/investir-dans-les-competences-pour-accompagner-les-mutations-economiques-0">
               fse.gouv.fr
@@ -307,14 +307,14 @@ export default function FormerSansBudgetPage() {
             </li>
           </ul>
         </GuideSection>
-
-        <GuideCta
-          title="Combinez les dispositifs pour votre projet"
-          text="Le simulateur estime la prise en charge de votre OPCO sur le plan de développement des compétences ; les fiches OPCO recensent les actions collectives disponibles."
-          href="/simulateur"
-          label="Estimer mon financement"
-        />
       </GuideBody>
+
+      <GuideCta
+        title="Combinez les dispositifs pour votre projet"
+        text="Le simulateur estime la prise en charge de votre OPCO sur le plan de développement des compétences ; les fiches OPCO recensent les actions collectives disponibles."
+        href="/simulateur/"
+        label="Estimer mon financement"
+      />
     </main>
   );
 }

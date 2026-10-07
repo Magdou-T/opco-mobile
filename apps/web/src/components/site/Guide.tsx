@@ -1,30 +1,33 @@
-import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { BandeAppel } from '@/components/site/BandeAppel';
+import { Sommaire } from '@/components/site/Sommaire';
+import { TitreDeSection } from '@/components/site/TitreDeSection';
+import { Callout as Encadre } from '@/components/ui/Callout';
+import type { CalloutTone } from '@/components/ui/Callout';
+import { typo } from '@/lib/format';
+import { typoDesEnfants } from '@/lib/typographie';
 
-/* Blocs éditoriaux partagés par les pages guide */
+/* Blocs éditoriaux partagés par les guides (comprendre-les-opco, obligations, former-sans-budget). Les textes sont ceux
+   des pages, vérifiés contre leurs sources (W7) : ces composants ne fixent que la mise en page. Voir DESIGN.md,
+   section 16. */
 
-export function GuideHero({
-  eyebrow,
-  title,
-  lead,
-}: {
-  eyebrow: string;
-  title: ReactNode;
-  lead: string;
-}) {
+export function GuideHero({ eyebrow, title, lead }: { eyebrow: string; title: ReactNode; lead: string }) {
   return (
-    <header className="border-b border-ink">
-      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 md:py-16">
-        <p className="marginalia mb-3">{eyebrow}</p>
-        <h1 className="font-display text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
-          {title}
-        </h1>
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-soft">{lead}</p>
+    <header className="border-b border-filet/70">
+      <div className="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 md:pt-14 md:pb-16">
+        <p className="surtitre">{eyebrow}</p>
+        <h1 className="mt-5 max-w-4xl text-affiche font-bold text-texte">{typoDesEnfants(title)}</h1>
+        <p className="mt-6 max-w-2xl text-chapeau text-texte-doux">{typo(lead)}</p>
       </div>
     </header>
   );
 }
 
+/**
+ * Section numérotée d'un guide : jalon turquoise au numéro #1A1A1A (5,68:1), titre `h2` focalisable (le sommaire y
+ * pose le focus), texte courant mesuré (34 rem : 65 à 70 caractères par ligne pleine en Inter 16 px, mesuré dans
+ * Chrome), puces turquoise. Les tableaux et les cartes gardent toute la largeur de la colonne.
+ */
 export function GuideSection({
   id,
   number,
@@ -36,21 +39,36 @@ export function GuideSection({
   title: string;
   children: ReactNode;
 }) {
+  const idTitre = `titre-${id}`;
   return (
-    <section id={id} className="scroll-mt-24">
-      <div className="rule-double pt-6">
-        <div className="flex items-baseline gap-4">
-          <span className="amount text-sm font-semibold text-cobalt">{number}</span>
-          <h2 className="font-display text-2xl font-bold tracking-tight">{title}</h2>
+    <section id={id} aria-labelledby={idTitre} className="rule-double pt-6">
+      <div className="flex items-start gap-4">
+        <span
+          aria-hidden="true"
+          className="amount mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-turquoise text-sm text-texte sm:size-11"
+        >
+          {number}
+        </span>
+        <div className="min-w-0 flex-1 pt-0.5">
+          <TitreDeSection id={idTitre} titre={typo(title)} />
         </div>
       </div>
-      <div className="mt-5 space-y-4 text-[15px] leading-relaxed text-ink-soft [&_strong]:text-ink">
-        {children}
+      <div className="mt-6 space-y-5 text-base leading-relaxed text-texte-doux marker:text-turquoise [&_strong]:font-semibold [&_strong]:text-texte [&>p]:max-w-[34rem] [&>ul]:max-w-[34rem]">
+        {/* Les textes des pages gardent leurs mots ; seules leurs espaces deviennent insécables là où la typographie
+            française le demande (nombre et unité, « : »). */}
+        {typoDesEnfants(children)}
       </div>
     </section>
   );
 }
 
+const TONS: Record<'info' | 'warn' | 'ok', CalloutTone> = {
+  info: 'info',
+  warn: 'avertissement',
+  ok: 'confirmation',
+};
+
+/** Encadré « À savoir » d'un guide : le `Callout` du site (information, avertissement, confirmation). */
 export function Callout({
   tone = 'info',
   title,
@@ -60,89 +78,37 @@ export function Callout({
   title: string;
   children: ReactNode;
 }) {
-  const tones = {
-    info: 'border-cobalt/40 bg-cobalt-soft text-navy',
-    warn: 'border-alert/40 bg-alert-soft text-alert',
-    ok: 'border-valid/40 bg-valid-soft text-valid',
-  };
   return (
-    <div className={`rounded border p-4 ${tones[tone]}`}>
-      <div className="font-display text-sm font-bold">{title}</div>
-      <div className="mt-1.5 text-sm leading-relaxed opacity-90">{children}</div>
-    </div>
+    <Encadre tone={TONS[tone]} titre={typo(title)} className="max-w-[40rem]">
+      {children}
+    </Encadre>
   );
 }
 
+/** Lien vers une source officielle : lien orange foncé souligné, nouvel onglet annoncé aux lecteurs d'écran. */
 export function Source({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-cobalt underline decoration-cobalt/40 underline-offset-2 hover:decoration-cobalt"
-    >
+    <a href={href} target="_blank" rel="noopener noreferrer" className="lien">
       {children}
+      <span className="sr-only"> (nouvel onglet)</span>
     </a>
   );
 }
 
-export function GuideCta({
-  title,
-  text,
-  href,
-  label,
-}: {
-  title: string;
-  text: string;
-  href: string;
-  label: string;
-}) {
-  return (
-    <div className="mt-12 rounded border border-ink bg-navy p-6 text-paper md:p-8">
-      <h2 className="font-display text-xl font-bold">{title}</h2>
-      <p className="mt-2 max-w-xl text-sm text-paper/70">{text}</p>
-      <Link
-        href={href}
-        className="mt-5 inline-block rounded bg-marker px-5 py-3 text-sm font-bold text-ink transition-transform hover:-translate-y-0.5"
-      >
-        {label}
-      </Link>
-    </div>
-  );
+/** Bande d'appel finale d'un guide : la même que celle de l'accueil (`BandeAppel`), sur toute la largeur. */
+export function GuideCta({ title, text, href, label }: { title: string; text: string; href: string; label: string }) {
+  return <BandeAppel id="titre-appel-guide" titre={title} texte={typo(text)} href={href} libelle={label} />;
 }
 
-/** Sommaire latéral collant */
-export function GuideToc({ items }: { items: { id: string; label: string }[] }) {
+/**
+ * Corps d'un guide : sommaire (colonne collante à partir de 1 024 px, bloc replié en dessous) et colonne de lecture.
+ * `min-w-0` et une grille à une colonne sous 1 024 px : un tableau large ne fait plus déborder la page.
+ */
+export function GuideBody({ toc, children }: { toc: { id: string; label: string }[]; children: ReactNode }) {
   return (
-    <nav aria-label="Sommaire" className="hidden lg:block">
-      <div className="sommaire-collant rounded border border-rule bg-white p-4">
-        <div className="marginalia mb-3">Sommaire</div>
-        <ol className="space-y-2 text-sm">
-          {items.map((item, i) => (
-            <li key={item.id}>
-              <a href={`#${item.id}`} className="flex gap-2 text-ink-soft hover:text-cobalt">
-                <span className="amount text-xs text-ink-faint">{String(i + 1).padStart(2, '0')}</span>
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </nav>
-  );
-}
-
-export function GuideBody({
-  toc,
-  children,
-}: {
-  toc: { id: string; label: string }[];
-  children: ReactNode;
-}) {
-  return (
-    <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[230px_minmax(0,1fr)]">
-      <GuideToc items={toc} />
-      <div className="max-w-3xl space-y-12">{children}</div>
+    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12 lg:py-14">
+      <Sommaire entrees={toc.map((t) => ({ id: t.id, libelle: typo(t.label) }))} etiquette="Sommaire du guide" numerote />
+      <div className="min-w-0 space-y-16">{children}</div>
     </div>
   );
 }

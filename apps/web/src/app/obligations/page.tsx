@@ -8,6 +8,13 @@ import {
   Source,
   GuideCta,
 } from '@/components/site/Guide';
+import { cx } from '@/lib/cx';
+
+/* Tableau des taux : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft), contribution en
+   titre de ligne, taux en chiffres clés Montserrat tabulaires. */
+const EN_TETE = 'px-4 py-3 text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase sm:px-5';
+const CONTRIBUTION = 'px-4 py-3.5 text-left leading-snug font-medium text-texte sm:px-5';
+const TAUX = 'amount px-4 py-3.5 text-right text-base whitespace-nowrap text-texte sm:px-5';
 
 export const metadata: Metadata = {
   title: 'Obligations formation des entreprises en 2026',
@@ -47,53 +54,53 @@ export default function ObligationsPage() {
             répartit entre OPCO, Caisse des dépôts (CPF), associations Transitions Pro, État et
             Régions.
           </p>
-          <div className="overflow-x-auto">
-            <table className="w-full border border-rule bg-white text-sm">
-              <thead className="bg-paper-deep">
+          <div className="overflow-clip rounded-carte border border-filet bg-white shadow-douce">
+            <table className="w-full text-sm">
+              <thead className="bg-lin-soft">
                 <tr>
-                  <th className="marginalia border-b border-rule px-4 py-3 text-left">Contribution</th>
-                  <th className="marginalia border-b border-rule px-4 py-3 text-right">Taux 2026</th>
+                  <th scope="col" className={cx(EN_TETE, 'text-left')}>Contribution</th>
+                  <th scope="col" className={cx(EN_TETE, 'text-right')}>Taux 2026</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-rule">
-                <tr>
-                  <td className="px-4 py-3">Formation professionnelle, moins de 11 salariés</td>
-                  <td className="amount px-4 py-3 text-right font-semibold">0,55 %</td>
+              <tbody className="divide-y divide-filet">
+                <tr className="align-top">
+                  <th scope="row" className={CONTRIBUTION}>Formation professionnelle, moins de 11 salariés</th>
+                  <td className={TAUX}>0,55 %</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3">Formation professionnelle, 11 salariés et plus</td>
-                  <td className="amount px-4 py-3 text-right font-semibold">1 %</td>
+                <tr className="align-top">
+                  <th scope="row" className={CONTRIBUTION}>Formation professionnelle, 11 salariés et plus</th>
+                  <td className={TAUX}>1 %</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3">
+                <tr className="align-top">
+                  <th scope="row" className={CONTRIBUTION}>
                     Taxe d&apos;apprentissage, cas général
-                    <span className="block text-xs text-ink-faint">
+                    <span className="mt-0.5 block text-xs font-normal text-texte-discret">
                       part principale 0,59 % (DSN) + solde 0,09 % (affecté via SOLTéA)
                     </span>
-                  </td>
-                  <td className="amount px-4 py-3 text-right font-semibold">0,68 %</td>
+                  </th>
+                  <td className={TAUX}>0,68 %</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3">Taxe d&apos;apprentissage, Alsace-Moselle (pas de solde)</td>
-                  <td className="amount px-4 py-3 text-right font-semibold">0,44 %</td>
+                <tr className="align-top">
+                  <th scope="row" className={CONTRIBUTION}>Taxe d&apos;apprentissage, Alsace-Moselle (pas de solde)</th>
+                  <td className={TAUX}>0,44 %</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3">CPF-CDD (sur la masse salariale des CDD)</td>
-                  <td className="amount px-4 py-3 text-right font-semibold">1 %</td>
+                <tr className="align-top">
+                  <th scope="row" className={CONTRIBUTION}>CPF-CDD (sur la masse salariale des CDD)</th>
+                  <td className={TAUX}>1 %</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3">
+                <tr className="align-top">
+                  <th scope="row" className={CONTRIBUTION}>
                     Contribution supplémentaire à l&apos;apprentissage
-                    <span className="block text-xs text-ink-faint">
+                    <span className="mt-0.5 block text-xs font-normal text-texte-discret">
                       entreprises de 250 salariés et plus sous le seuil de 5 % d&apos;alternants
                     </span>
-                  </td>
-                  <td className="amount px-4 py-3 text-right font-semibold">0,05 à 0,60 %</td>
+                  </th>
+                  <td className={TAUX}>0,05 à 0,60 %</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <p className="text-sm">
+          <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://entreprendre.service-public.gouv.fr/vosdroits/F22570">
               service-public.gouv.fr (CFP)
@@ -155,7 +162,7 @@ export default function ObligationsPage() {
               information sur le CPF et la VAE.
             </li>
           </ul>
-          <p className="text-sm">
+          <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://www.akto.fr/lentretien-professionnel-evolue-pour-devenir-lentretien-de-parcours-professionnel/">
               AKTO
@@ -176,19 +183,23 @@ export default function ObligationsPage() {
             Dans les entreprises de <strong>50 salariés et plus</strong>, si un salarié
             n&apos;a pas bénéficié des entretiens obligatoires <strong>et</strong>{' '}d&apos;au
             moins une formation non obligatoire sur la période de référence, l&apos;employeur
-            doit verser un <strong>abondement correctif de 3 000 €</strong>{' '}sur son CPF, via la
+            doit verser un <strong>abondement correctif de <span className="amount mark">3 000 €</span></strong>{' '}sur son CPF, via la
             Caisse des dépôts.
           </p>
           <p>
             La Cour de cassation a confirmé le 21 janvier 2026 que les deux conditions de
             l&apos;article L.6323-13 sont <strong>cumulatives</strong>{' '}: l&apos;absence
-            d&apos;entretiens seule ne déclenche pas l&apos;abondement, mais elle reste une
-            faute susceptible d&apos;engager la responsabilité de l&apos;employeur.
+            d&apos;entretiens seule ne déclenche pas l&apos;abondement, mais l&apos;employeur qui
+            n&apos;organise pas les entretiens obligatoires peut être sanctionné.
           </p>
-          <p className="text-sm">
+          <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://entreprendre.service-public.gouv.fr/actualites/A18781">
               service-public.gouv.fr
+            </Source>
+            {' · '}
+            <Source href="https://www.service-public.gouv.fr/particuliers/vosdroits/F32040">
+              service-public.gouv.fr (fiche F32040)
             </Source>
             {' · '}
             <Source href="https://financeurs.moncompteformation.gouv.fr/espace-public/aide/comment-attribuer-des-droits-correctifs">
@@ -227,18 +238,18 @@ export default function ObligationsPage() {
           <Callout tone="ok" title="Ordre des vérifications">
             Avant de payer une formation sur fonds propres, vérifiez dans l&apos;ordre : les
             fonds mutualisés (si &lt; 50 salariés), les fonds conventionnels de votre branche,
-            les <Link href="/former-sans-budget" className="font-semibold underline">actions collectives de votre OPCO</Link>,
+            les <Link href="/former-sans-budget/" className="lien">actions collectives de votre OPCO</Link>,
             le CPF du salarié, et les cofinancements FSE+ lorsque votre OPCO en propose.
           </Callout>
         </GuideSection>
-
-        <GuideCta
-          title="Vérifiez ce que votre OPCO peut prendre en charge"
-          text="Le simulateur applique les barèmes 2026 de votre OPCO à votre projet de formation et signale les plafonds applicables."
-          href="/simulateur"
-          label="Lancer le simulateur"
-        />
       </GuideBody>
+
+      <GuideCta
+        title="Vérifiez ce que votre OPCO peut prendre en charge"
+        text="Le simulateur applique les barèmes 2026 de votre OPCO à votre projet de formation et signale les plafonds applicables."
+        href="/simulateur/"
+        label="Lancer le simulateur"
+      />
     </main>
   );
 }

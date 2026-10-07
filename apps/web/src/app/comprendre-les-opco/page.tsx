@@ -8,6 +8,15 @@ import {
   Source,
   GuideCta,
 } from '@/components/site/Guide';
+import { Etiquette } from '@/components/ui/Etiquette';
+
+/* Tableau des financements : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft) ; sous 640 px,
+   une carte par ligne, l'en-tête de colonne repris devant chaque cellule. */
+const EN_TETE = 'px-4 py-3 text-left text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase sm:px-5';
+const LIGNE = 'align-top max-sm:block max-sm:px-4 max-sm:py-4';
+const TITRE_LIGNE = 'px-4 py-3.5 text-left leading-snug font-semibold text-texte sm:px-5 max-sm:block max-sm:p-0';
+const CELLULE =
+  'px-4 py-3.5 leading-relaxed text-texte-doux sm:px-5 max-sm:mt-2 max-sm:block max-sm:p-0 max-sm:before:block max-sm:before:text-xs max-sm:before:font-semibold max-sm:before:tracking-[0.12em] max-sm:before:text-texte-discret max-sm:before:uppercase max-sm:before:content-[attr(data-label)]';
 
 export const metadata: Metadata = {
   title: 'Comprendre les OPCO : rôle, rattachement, financements',
@@ -30,8 +39,7 @@ export default function ComprendreLesOpcoPage() {
         eyebrow="Guide nº 1 · mis à jour octobre 2026"
         title={
           <>
-            Les OPCO, mode d&apos;emploi :
-            <br />
+            Les OPCO, mode d&apos;emploi&nbsp;:<br />
             qui finance quoi, <span className="mark">pour qui</span>
           </>
         }
@@ -66,7 +74,7 @@ export default function ComprendreLesOpcoPage() {
               <strong>moins de 50 salariés</strong>.
             </li>
           </ul>
-          <p className="text-sm">
+          <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://www.francecompetences.fr/fiche-ruf/le-soutien-au-plan-de-developpement-des-competences-des-entreprises/">
               France compétences
@@ -98,47 +106,48 @@ export default function ComprendreLesOpcoPage() {
           <Callout tone="info" title="Trouver son OPCO avec le simulateur">
             Notre simulateur identifie votre OPCO à partir du nom ou du SIREN de votre
             entreprise, via la base officielle des conventions collectives.{' '}
-            <Link href="/simulateur" className="font-semibold underline">
+            <Link href="/simulateur/" className="lien">
               Essayer maintenant →
             </Link>
           </Callout>
         </GuideSection>
 
         <GuideSection id="financements" number="03" title="Ce que finance un OPCO">
-          <div className="overflow-x-auto">
-            <table className="w-full border border-rule bg-white text-sm">
-              <thead className="bg-paper-deep">
+          {/* Sous 640 px, chaque ligne devient une carte (en-têtes repris devant chaque cellule) : aucun défilement. */}
+          <div className="overflow-clip rounded-carte border border-filet bg-white shadow-douce">
+            <table className="w-full text-sm max-sm:block">
+              <thead className="bg-lin-soft max-sm:sr-only">
                 <tr>
-                  <th className="marginalia border-b border-rule px-4 py-3 text-left">Dispositif</th>
-                  <th className="marginalia border-b border-rule px-4 py-3 text-left">Pour qui</th>
-                  <th className="marginalia border-b border-rule px-4 py-3 text-left">Ce qui est pris en charge</th>
+                  <th scope="col" className={EN_TETE}>Dispositif</th>
+                  <th scope="col" className={EN_TETE}>Pour qui</th>
+                  <th scope="col" className={EN_TETE}>Ce qui est pris en charge</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-rule">
-                <tr>
-                  <td className="px-4 py-3 font-medium text-ink">Plan de développement des compétences</td>
-                  <td className="px-4 py-3">Entreprises &lt; 50 salariés</td>
-                  <td className="px-4 py-3">Coûts pédagogiques, parfois salaires et frais annexes, selon les barèmes de branche</td>
+              <tbody className="divide-y divide-filet max-sm:block">
+                <tr className={LIGNE}>
+                  <th scope="row" className={TITRE_LIGNE}>Plan de développement des compétences</th>
+                  <td data-label="Pour qui" className={CELLULE}>Entreprises &lt; 50 salariés</td>
+                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Coûts pédagogiques, parfois salaires et frais annexes, selon les barèmes de branche</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3 font-medium text-ink">Contrat d&apos;apprentissage</td>
-                  <td className="px-4 py-3">Toutes tailles</td>
-                  <td className="px-4 py-3">Coût de formation du CFA au niveau « NPEC » fixé par la branche (révision 2026 de France compétences : valeur de référence plafonnée à 11 000 € pour les niveaux 5 à 7, modulable jusqu&apos;à 20 % en plus ou en moins par la branche, sans descendre sous 4 000 €)</td>
+                <tr className={LIGNE}>
+                  <th scope="row" className={TITRE_LIGNE}>Contrat d&apos;apprentissage</th>
+                  <td data-label="Pour qui" className={CELLULE}>Toutes tailles</td>
+                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Coût de formation du CFA au niveau « NPEC » fixé par la branche (révision 2026 de France compétences : valeur de référence plafonnée à 11 000 € pour les niveaux 5 à 7, modulable jusqu&apos;à 20 % en plus ou en moins par la branche, sans descendre sous 4 000 €)</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3 font-medium text-ink">Contrat de professionnalisation</td>
-                  <td className="px-4 py-3">Toutes tailles</td>
-                  <td className="px-4 py-3">Forfait horaire fixé par la branche (9,15 €/h à défaut d&apos;accord)</td>
+                <tr className={LIGNE}>
+                  <th scope="row" className={TITRE_LIGNE}>Contrat de professionnalisation</th>
+                  <td data-label="Pour qui" className={CELLULE}>Toutes tailles</td>
+                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Forfait horaire fixé par la branche (9,15 €/h à défaut d&apos;accord)</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3 font-medium text-ink">Période de reconversion <span className="stamp ml-1 text-cobalt">Nouveau 2026</span></td>
-                  <td className="px-4 py-3">Tous salariés, toutes tailles</td>
-                  <td className="px-4 py-3">9,15 €/h à défaut d&apos;accord de branche, montant moyen de prise en charge par OPCO fixé à 5 000 € (art. D.6332-90)</td>
+                <tr className={LIGNE}>
+                  <th scope="row" className={TITRE_LIGNE}>Période de reconversion <Etiquette tone="orange" className="ml-1 align-middle">Nouveau 2026</Etiquette></th>
+                  <td data-label="Pour qui" className={CELLULE}>Tous salariés, toutes tailles</td>
+                  <td data-label="Ce qui est pris en charge" className={CELLULE}>9,15 €/h à défaut d&apos;accord de branche, montant moyen de prise en charge par OPCO fixé à 5 000 € (art. D.6332-90)</td>
                 </tr>
-                <tr>
-                  <td className="px-4 py-3 font-medium text-ink">VAE, bilan de compétences, AFEST, tutorat</td>
-                  <td className="px-4 py-3">Selon OPCO et branche</td>
-                  <td className="px-4 py-3">Forfaits propres à chaque OPCO (voir nos fiches)</td>
+                <tr className={LIGNE}>
+                  <th scope="row" className={TITRE_LIGNE}>VAE, bilan de compétences, AFEST, tutorat</th>
+                  <td data-label="Pour qui" className={CELLULE}>Selon OPCO et branche</td>
+                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Forfaits propres à chaque OPCO (voir nos fiches)</td>
                 </tr>
               </tbody>
             </table>
@@ -163,8 +172,8 @@ export default function ComprendreLesOpcoPage() {
           </p>
           <p>
             L&apos;écart est réel : pour 2024, France compétences mesure un reste à charge moyen de{' '}
-            <strong>38 %</strong>{' '}du coût d&apos;une formation soutenue par les OPCO, contre{' '}
-            <strong>67 %</strong>{' '}dans les entreprises de plus de 50 salariés.{' '}
+            <strong className="amount">38 %</strong>{' '}du coût d&apos;une formation soutenue par les OPCO, contre{' '}
+            <strong className="amount">67 %</strong>{' '}dans les entreprises de plus de 50 salariés.{' '}
             <Source href="https://www.francecompetences.fr/fiche-ruf/le-soutien-au-plan-de-developpement-des-competences-des-entreprises/">
               France compétences
             </Source>
@@ -182,7 +191,7 @@ export default function ComprendreLesOpcoPage() {
             <li>
               <strong>Les dispositifs fléchés</strong> : alternance, période de reconversion et,
               selon votre OPCO, actions collectives et cofinancements FSE+, voir notre guide{' '}
-              <Link href="/former-sans-budget" className="font-semibold text-cobalt underline">
+              <Link href="/former-sans-budget/" className="lien">
                 Se former sans budget
               </Link>.
             </li>
@@ -202,7 +211,7 @@ export default function ComprendreLesOpcoPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong>Financement OPCO</strong> : à défaut d&apos;accord de branche, forfait de{' '}
-              <strong>9,15 €/heure</strong> ; le montant moyen de prise en charge par OPCO est
+              <strong className="amount">9,15 €/heure</strong> ; le montant moyen de prise en charge par OPCO est
               fixé à 5 000 € (art. D.6332-90). Le CPF du salarié peut être mobilisé avec son
               accord.
             </li>
@@ -214,7 +223,7 @@ export default function ComprendreLesOpcoPage() {
             </li>
             <li>Les Pro-A signées avant 2026 continuent de produire leurs effets.</li>
           </ul>
-          <p className="text-sm">
+          <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://entreprendre.service-public.gouv.fr/actualites/A18798">
               service-public.gouv.fr
@@ -233,14 +242,14 @@ export default function ComprendreLesOpcoPage() {
             </Source>
           </p>
         </GuideSection>
-
-        <GuideCta
-          title="Passez de la théorie aux chiffres"
-          text="Identifiez votre OPCO et obtenez une estimation détaillée de la prise en charge de votre projet de formation, poste par poste."
-          href="/simulateur"
-          label="Estimer mon financement"
-        />
       </GuideBody>
+
+      <GuideCta
+        title="Passez de la théorie aux chiffres"
+        text="Identifiez votre OPCO et obtenez une estimation détaillée de la prise en charge de votre projet de formation, poste par poste."
+        href="/simulateur/"
+        label="Estimer mon financement"
+      />
     </main>
   );
 }

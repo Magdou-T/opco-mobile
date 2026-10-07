@@ -6,6 +6,7 @@ import type { Financeur } from '@opco/core';
 import { cx } from '@/lib/cx';
 import { extrait } from '@/lib/extrait';
 import { typo } from '@/lib/format';
+import { BandeAppel } from '@/components/site/BandeAppel';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
@@ -175,7 +176,9 @@ function ApercuPlan() {
         <div className="relative px-5 pt-7 pb-16 sm:px-10 sm:pt-10 sm:pb-20">
           <div className="apparition rounded-carte bg-white p-5 shadow-flottante sm:p-6" style={delai(120)}>
             <div className="flex items-center justify-between gap-3">
-              <p className="marginalia">Plan de financement</p>
+              <p className="text-[0.6875rem] leading-[1.4] font-semibold tracking-[0.12em] text-texte-discret uppercase">
+                Plan de financement
+              </p>
               <Etiquette tone="or">Exemple</Etiquette>
             </div>
             <p className="mt-2 font-display text-lg leading-snug font-semibold text-texte">
@@ -428,26 +431,7 @@ export default function Home() {
       </section>
 
       {/* ================= APPEL À L'ACTION ================= */}
-      <section aria-labelledby="titre-appel" className="surface-orange relative overflow-hidden">
-        <div aria-hidden="true" className="decor pointer-events-none absolute inset-y-0 right-0 hidden w-[42%] md:block">
-          <span className="absolute top-1/2 right-[-3rem] left-0 h-1.5 -translate-y-1/2 rounded-full bg-white/20" />
-          {[12, 46, 80].map((x) => (
-            <span
-              key={x}
-              className="absolute top-1/2 size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white/70 bg-orange-deep"
-              style={{ left: `${x}%` }}
-            />
-          ))}
-        </div>
-        <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-12 sm:px-6 md:flex-row md:items-center md:justify-between md:py-14">
-          <h2 id="titre-appel" className="max-w-xl text-titre font-bold">
-            Cinq minutes pour chiffrer votre projet
-          </h2>
-          <Button href="/simulateur" variant="inverse" size="lg" fleche pleineLargeur="mobile" className="shrink-0">
-            Trouver mes financements
-          </Button>
-        </div>
-      </section>
+      <BandeAppel id="titre-appel" titre="Cinq minutes pour chiffrer votre projet" libelle="Trouver mes financements" />
 
       {/* ================= CONTACT ================= */}
       <section aria-labelledby="titre-contact">
