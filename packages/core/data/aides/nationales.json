@@ -4214,7 +4214,7 @@
         "fin": null
       },
       "statut": "actif",
-      "confidence": "exact"
+      "confidence": "estimated"
     },
     {
       "id": "faf-fafcea",
@@ -4250,7 +4250,29 @@
         "base": null,
         "plafond": 3500,
         "duree_max_mois": null,
-        "libelle": "Critères 2026 : formations techniques jusqu'à 35 €/h HT dans le bâtiment et dans la fabrication et les services (60 €/h dans l'alimentation), dans la limite de 100 h par stagiaire et par an (54 h dans l'alimentation), soit 3 500 € au plus (calcul : 100 h × 35 €) ; formations transverses et de gestion spécifique métiers : 25 €/h ; autres modalités : 15 €/h. Si la CFP est inférieure ou égale à 85 € : 600 € maximum par an et par entreprise. Frais annexes : jusqu'à 200 € par stage."
+        "libelle": "Critères 2026 : formations techniques jusqu'à 35 €/h HT dans le bâtiment et dans la fabrication et les services (60 €/h dans l'alimentation), dans la limite de 100 h par stagiaire et par an (54 h dans l'alimentation), soit 3 500 € au plus (calcul : 100 h × 35 €) ; formations transverses et de gestion spécifique métiers : 25 €/h ; autres modalités : 15 €/h. Si la CFP est inférieure ou égale à 85 € : 600 € maximum par an et par entreprise. Frais annexes : jusqu'à 200 € par stage.",
+        "majorations": [
+          {
+            "criteres": {
+              "types_formation": [
+                "vae",
+                "certification"
+              ]
+            },
+            "valeur": null,
+            "libelle": "VAE ou formation certifiante : le FAFCEA intervient seulement en cas de refus de prise en charge par le CPF. VAE (accompagnement, livret 2 et jury) : 24 h au plus, dans la limite de 50 €/h. Formation diplômante ou certifiante inscrite au RNCP : 7 500 € par action dans la limite de 30 €/h, après avis des commissions techniques et validation par le Conseil d'Administration."
+          },
+          {
+            "criteres": {
+              "certifications": [
+                "rncp",
+                "diplome"
+              ]
+            },
+            "valeur": null,
+            "libelle": "Formation diplômante ou certifiante inscrite au RNCP : le FAFCEA intervient seulement en cas de refus de prise en charge par le CPF, à hauteur de 7 500 € par action dans la limite de 30 €/h, après avis des commissions techniques et validation par le Conseil d'Administration."
+          }
+        ]
       },
       "cumul": {
         "cumulable": true,
@@ -4258,7 +4280,7 @@
           "nat-cpf",
           "nat-vae"
         ],
-        "note": "Au choix avec le CPF (formation ou VAE). Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF."
+        "note": "Au choix avec le CPF (formation ou VAE), jamais additionnés. Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF : pour la VAE et les formations RNCP, son montant n'est donc pas compté dans le plan. Le simulateur ne distingue pas le bilan de compétences : n'y comptez pas le FAFCEA."
       },
       "demarches": [
         "Vérifier que l'activité relève du FAFCEA (code NAFA) et réunir l'extrait d'inscription au registre national des entreprises de moins d'un an et l'attestation Urssaf de versement de la contribution à la formation.",
@@ -4340,7 +4362,7 @@
         {
           "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
           "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
-          "extrait": "VAE comprenant l’accompagnement, le dépôt du livret 2 et le passage devant le jury Prise en charge dans le cas d’un refus de prise en charge du CPF"
+          "extrait": "VAE comprenant l’accompagnement, le dépôt du livret 2 et le passage devant le jury Prise en charge dans le cas d’un refus de prise en charge du CPF plafonnée à 24h dans la limite d’un coût horaire maximum de 50€"
         },
         {
           "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
@@ -4350,7 +4372,7 @@
         {
           "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
           "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
-          "extrait": "Formations diplômantes et certifiantes inscrites au RNCP Prise en charge dans le cas d’un refus de prise en charge du CPF"
+          "extrait": "Formations diplômantes et certifiantes inscrites au RNCP Prise en charge dans le cas d’un refus de prise en charge du CPF à hauteur de 7 500€ par action dans la limite d’un coût horaire maximum de 30€, après avis des commissions techniques et validation par le Conseil d’Administration"
         }
       ],
       "derniere_verification": "2026-10-06",
@@ -4378,7 +4400,15 @@
         "statuts_dirigeant": [
           "profession_liberale"
         ],
-        "qualiopi_requis": true
+        "qualiopi_requis": true,
+        "types_formation": [
+          "non_certifiante",
+          "qualification",
+          "certification",
+          "vae",
+          "cqp",
+          "habilitation"
+        ]
       },
       "conditions": [
         "Professionnel libéral ou micro-entrepreneur installé et en exercice, à jour de ses cotisations Urssaf (les médecins relèvent du FAF PM)",
@@ -4502,6 +4532,11 @@
           "url": "https://fifpl.fr/professions-liberales/foire-aux-questions-faq/",
           "titre": "FIF PL – Foire aux questions (FAQ)",
           "extrait": "Ma formation est partiellement financée par le biais de mon CPF. Puis-je faire une demande au FIF PL pour la partie restant à ma charge ? Non, le FIF PL ne fait pas de complément de prise en charge pour les formations financées par le CPF."
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/quest-ce-qui-peut-etre-pris-en-charge/",
+          "titre": "FIF PL – Qu'est-ce qui peut être pris en charge ?",
+          "extrait": "Ce qui n’est pas pris en charge Les bilans de compétences et les reconversions professionnelles"
         }
       ],
       "derniere_verification": "2026-10-06",

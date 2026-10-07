@@ -15,7 +15,9 @@
 //     ou à une structure qui ne paient pas la formation elle-même, réserve les aides propres à la VAE au type de formation
 //     « vae » (critère types_formation), rend cumulables les quatre fonds d'assurance formation des non-salariés dont la
 //     seule restriction porte sur le CPF (AGEFICE, FAFCEA et FIF PL au choix avec le CPF ; FAF PM limité aux formations non
-//     certifiantes), passe en « non_chiffre » le pourcentage de l'aide au permis de la Région
+//     certifiantes), fait du FAFCEA un repli après refus du CPF pour la VAE et les formations RNCP (deux majorations sans
+//     valeur : montant selon dossier), exclut les reconversions du FIF PL (critère types_formation), passe l'AGEFICE en
+//     estimation (enveloppe selon la contribution versée), passe en « non_chiffre » le pourcentage de l'aide au permis de la Région
 //     Hauts-de-France (il porte sur le contrat d'enseignement à la conduite, pas sur la formation) et corrige trois montants
 //     (majoration RQTH du RFFT, deux aides versées sur une période qui n'est pas la durée de la formation). Chaque
 //     correction vérifie l'état attendu de l'aide avant de la modifier : si l'aide a disparu ou a changé, le script
@@ -450,12 +452,13 @@ const CORRECTIONS = [
     motif: "n'intervient qu'en cas de refus du CPF pour la VAE, le bilan de compétences et les formations RNCP : cumulable, au choix avec le CPF (nat-cpf, nat-vae)",
     noteAvant: "Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF.",
     noteApres:
-      "Au choix avec le CPF (formation ou VAE). Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF.",
+      "Au choix avec le CPF (formation ou VAE), jamais additionnés. Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF : pour la VAE et les formations RNCP, son montant n'est donc pas compté dans le plan. Le simulateur ne distingue pas le bilan de compétences : n'y comptez pas le FAFCEA.",
     sources: [
       {
         url: 'https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf',
         titre: 'FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)',
-        extrait: 'VAE comprenant l’accompagnement, le dépôt du livret 2 et le passage devant le jury Prise en charge dans le cas d’un refus de prise en charge du CPF',
+        extrait:
+          'VAE comprenant l’accompagnement, le dépôt du livret 2 et le passage devant le jury Prise en charge dans le cas d’un refus de prise en charge du CPF plafonnée à 24h dans la limite d’un coût horaire maximum de 50€',
       },
       {
         url: 'https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf',
@@ -465,7 +468,8 @@ const CORRECTIONS = [
       {
         url: 'https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf',
         titre: 'FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)',
-        extrait: 'Formations diplômantes et certifiantes inscrites au RNCP Prise en charge dans le cas d’un refus de prise en charge du CPF',
+        extrait:
+          'Formations diplômantes et certifiantes inscrites au RNCP Prise en charge dans le cas d’un refus de prise en charge du CPF à hauteur de 7 500€ par action dans la limite d’un coût horaire maximum de 30€, après avis des commissions techniques et validation par le Conseil d’Administration',
       },
     ],
   }),
@@ -516,6 +520,81 @@ const CORRECTIONS = [
             'Une partie de cette ressource sert à alimenter le CPF (Compte Personnel Formation) qui vous permet également de financer votre formation (diplômante, certifiante).',
         },
       );
+    },
+  },
+
+  // Revue de la tâche 21 : ce que les sources des fonds permettent de chiffrer, et ce qu'elles écartent.
+  // FAFCEA : les critères de prise en charge ont une ligne propre pour la VAE (« ... plafonnée à 24h dans la limite d’un coût
+  // horaire maximum de 50€ »), pour le bilan de compétences et pour les formations RNCP (« ... à hauteur de 7 500€ par action dans
+  // la limite d’un coût horaire maximum de 30€, après avis des commissions techniques et validation par le Conseil
+  // d’Administration »), toutes précédées de « Prise en charge dans le cas d’un refus de prise en charge du CPF » : un repli, au
+  // montant propre, jamais le tarif de la formation technique (35 €/h, 100 h). Deux majorations sans valeur (première
+  // majoration remplie gagnante) laissent le FAFCEA « selon dossier » : le plan ne l'empile pas. Le bilan de compétences n'a ni
+  // type de formation ni niveau de certification propre dans le parcours : il ne peut pas être reconnu.
+  {
+    id: 'faf-fafcea',
+    motif:
+      "VAE et formations RNCP : prise en charge seulement en cas de refus du CPF, avec des plafonds propres (VAE : 24 h et 50 €/h ; RNCP : 7 500 € par action et 30 €/h, après avis des commissions techniques) : deux majorations sans valeur, le montant n'est pas compté dans le plan (le bilan de compétences, sans type de formation ni niveau de certification propre, n'est pas reconnu)",
+    condition: (aide) =>
+      aide.categorie === 'cout_formation' &&
+      aide.montant.mode === 'par_heure' &&
+      aide.montant.valeur === 35 &&
+      aide.montant.plafond === 3500 &&
+      aide.montant.majorations === undefined &&
+      aide.cumul.alternatives?.join() === 'nat-cpf,nat-vae',
+    appliquer: (aide) => {
+      aide.montant.majorations = [
+        {
+          criteres: { types_formation: ['vae', 'certification'] },
+          valeur: null,
+          libelle:
+            "VAE ou formation certifiante : le FAFCEA intervient seulement en cas de refus de prise en charge par le CPF. VAE (accompagnement, livret 2 et jury) : 24 h au plus, dans la limite de 50 €/h. Formation diplômante ou certifiante inscrite au RNCP : 7 500 € par action dans la limite de 30 €/h, après avis des commissions techniques et validation par le Conseil d'Administration.",
+        },
+        {
+          criteres: { certifications: ['rncp', 'diplome'] },
+          valeur: null,
+          libelle:
+            "Formation diplômante ou certifiante inscrite au RNCP : le FAFCEA intervient seulement en cas de refus de prise en charge par le CPF, à hauteur de 7 500 € par action dans la limite de 30 €/h, après avis des commissions techniques et validation par le Conseil d'Administration.",
+        },
+      ];
+    },
+  },
+  // FIF PL : la page « Qu'est-ce qui peut être pris en charge ? » exclut « les bilans de compétences et les reconversions
+  // professionnelles ». Le parcours n'a pas de type « bilan » : seule la reconversion est exclue, par le critère types_formation
+  // (tous les types du parcours sauf la reconversion, comme le FAF PM). Le FIF PL reste proposé à un médecin (les critères n'ont
+  // pas de code NAF négatif) : limite documentée dans donnees-aides-faf.test.ts.
+  {
+    id: 'faf-fifpl',
+    motif:
+      "ne prend pas en charge les reconversions professionnelles : types_formation = tous les types du parcours sauf la reconversion (les bilans de compétences ne sont pas désignables)",
+    condition: (aide) =>
+      aide.categorie === 'cout_formation' &&
+      aide.criteres.types_formation === undefined &&
+      aide.criteres.statuts_dirigeant?.join() === 'profession_liberale',
+    appliquer: (aide) => {
+      aide.criteres.types_formation = ['non_certifiante', 'qualification', 'certification', 'vae', 'cqp', 'habilitation'];
+      aide.sources.push({
+        url: 'https://fifpl.fr/professions-liberales/quest-ce-qui-peut-etre-pris-en-charge/',
+        titre: "FIF PL – Qu'est-ce qui peut être pris en charge ?",
+        extrait: 'Ce qui n’est pas pris en charge Les bilans de compétences et les reconversions professionnelles',
+      });
+    },
+  },
+  // AGEFICE : l'enveloppe annuelle est de 3 000 € avec une CFP d'au moins 7 € et de 600 € au-dessous (page « Les plafonds
+  // financiers pour l'année 2026 »), à 42 €/h en présentiel : le plan, qui compte désormais le fonds, chiffre la première tranche.
+  // Le montant est une estimation, pas un montant exact.
+  {
+    id: 'faf-agefice',
+    motif:
+      "l'enveloppe annuelle dépend de la contribution versée (3 000 € avec une CFP d'au moins 7 €, 600 € au-dessous) et du mode de formation (42 €/h en présentiel) : le montant chiffré est une estimation",
+    condition: (aide) =>
+      aide.categorie === 'cout_formation' &&
+      aide.confidence === 'exact' &&
+      aide.montant.mode === 'par_heure' &&
+      aide.montant.valeur === 42 &&
+      aide.montant.plafond === 3000,
+    appliquer: (aide) => {
+      aide.confidence = 'estimated';
     },
   },
 

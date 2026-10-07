@@ -316,53 +316,89 @@ describe('scénarios de bout en bout (données réelles)', () => {
     expect(idsDuPlan(r.plan)).not.toContain('nat-cpf');
   });
 
-  it('5 bis. Artisan en Bretagne, formation RNCP éligible au CPF : le FAFCEA et le CPF sont au choix, jamais additionnés', () => {
-    // Formation certifiante RNCP de 140 h à 4 200 € (30 €/h), éligible au CPF, organisme Qualiopi. Pour une formation RNCP, le
-    // FAFCEA n'intervient qu'en cas de refus du CPF : le plan ne retient qu'un des deux, le mieux chiffré, et propose l'autre au choix.
+  it("5 bis. Artisan en Bretagne, formation RNCP éligible au CPF : le FAFCEA n'intervient qu'en cas de refus du CPF, le plan ne compte que le CPF", () => {
+    // Formation certifiante RNCP de 140 h à 4 200 € (30 €/h), éligible au CPF, organisme Qualiopi.
+    // Critères du FAFCEA du 1er septembre 2026 (https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf), ligne
+    // « Formations diplômantes et certifiantes inscrites au RNCP » : « Prise en charge dans le cas d’un refus de prise en charge du CPF
+    // à hauteur de 7 500€ par action dans la limite d’un coût horaire maximum de 30€, après avis des commissions techniques et validation
+    // par le Conseil d’Administration ». Le FAFCEA n'est donc qu'un repli après un refus du CPF, et son montant dépend de l'avis des
+    // commissions techniques : le plan le liste sans le compter. Il ne reprend pas le tarif de la formation technique (35 €/h, soit
+    // 35 x 100 h = 3 500 € au plus), qui ne vaut pas pour une formation RNCP.
+    // Le CPF, lui, est le droit du titulaire : son solde, plafond de 5 000 € non atteint.
     const parcours: Partial<WizardState> = {
       projetType: 'formation_dirigeant', regionCode: '53', companySize: 'less_11', statutDirigeant: 'artisan', microEntrepreneur: false,
       ageBeneficiaire: 45, formationType: 'certification', certificationLevel: 'rncp', niveauFormationVise: 5, eligibleCpf: true,
       organismeQualiopi: true, durationHours: 140, pedagogyCostTotal: 4200, pedagogyCostPerHour: 30,
     };
-    const nomFafcea = aideParId.get('faf-fafcea')!.nom;
     const nomCpf = aideParId.get('nat-cpf')!.nom;
+    const fafceaDe = (r: Resultat) => r.aides.find((a) => a.id === 'faf-fafcea');
+    const cpfDe = (r: Resultat) => r.aides.find((a) => a.id === 'nat-cpf');
 
-    // Calcul à la main du FAFCEA (critères du 1er septembre 2026) : 35 €/h dans la limite de 100 h par stagiaire et par an, soit
-    // au plus 100 x 35 = 3 500 € ; 35 x 140 h = 4 900 € est ramené à 3 500 €, sous les 4 200 € du coût : 3 500 €.
-    // Calcul à la main du CPF : le solde du titulaire (plafond de 5 000 € non atteint, sous les 4 200 € du coût).
-
-    // Solde CPF de 800 € : le FAFCEA (3 500 €) est mieux chiffré que le CPF (800 €).
-    //   financé : 3 500 € (le FAFCEA seul) ; reste à charge : 4 200 - 3 500 = 700 €. Additionnés, les deux feraient 4 300 €, soit
-    //   plus que le coût : le plan afficherait 4 200 € financés et aucun reste à charge.
+    // Solde CPF de 800 € : le CPF finance 800 € (sous les 4 200 € du coût) ; le FAFCEA, sans montant, est une option au choix.
+    //   financé : 800 € ; reste à charge : 4 200 - 800 = 3 400 €.
     const faible = simuler({ ...parcours, soldeCpf: 800 });
     invariants(faible);
-    expect(faible.aides.find((a) => a.id === 'faf-fafcea')).toMatchObject({ statut: 'eligible', montantEstime: 3500 });
-    expect(faible.aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'eligible', montantEstime: 800 });
-    expect(faible.plan.financements).toEqual([expect.objectContaining({ id: 'faf-fafcea', montant: 3500 })]);
+    expect(fafceaDe(faible)).toMatchObject({ statut: 'eligible', montantEstime: null });
+    expect(fafceaDe(faible)!.libelleMontant).toContain('seulement en cas de refus de prise en charge par le CPF');
+    expect(cpfDe(faible)).toMatchObject({ statut: 'eligible', montantEstime: 800 });
+    expect(faible.plan.financements).toEqual([expect.objectContaining({ id: 'nat-cpf', montant: 800 })]);
     expect(faible.plan.options).toContainEqual(
-      expect.objectContaining({ id: 'nat-cpf', montantEstime: 800, raison: `Au choix avec « ${nomFafcea} »` }),
+      expect.objectContaining({ id: 'faf-fafcea', montantEstime: null, raison: `Au choix avec « ${nomCpf} »` }),
     );
-    expect(faible.plan.totalFinance).toBe(3500);
-    expect(faible.plan.resteACharge).toBe(700);
+    expect(faible.plan.totalFinance).toBe(800);
+    expect(faible.plan.resteACharge).toBe(3400);
 
-    // Solde CPF de 3 900 € : le CPF (3 900 €) est mieux chiffré que le FAFCEA (3 500 €).
-    //   financé : 3 900 € (le CPF seul) ; reste à charge : 4 200 - 3 900 = 300 €. Additionnés : 7 400 €, ramenés au coût de 4 200 €.
+    // Solde CPF de 3 900 € : le CPF finance 3 900 € (sous le plafond de 5 000 € et sous le coût) ; le FAFCEA reste une option sans montant.
+    //   financé : 3 900 € ; reste à charge : 4 200 - 3 900 = 300 €.
     const fort = simuler({ ...parcours, soldeCpf: 3900 });
     invariants(fort);
-    expect(fort.aides.find((a) => a.id === 'faf-fafcea')).toMatchObject({ statut: 'eligible', montantEstime: 3500 });
-    expect(fort.aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'eligible', montantEstime: 3900 });
+    expect(fafceaDe(fort)).toMatchObject({ statut: 'eligible', montantEstime: null });
+    expect(cpfDe(fort)).toMatchObject({ statut: 'eligible', montantEstime: 3900 });
     expect(fort.plan.financements).toEqual([expect.objectContaining({ id: 'nat-cpf', montant: 3900 })]);
     expect(fort.plan.options).toContainEqual(
-      expect.objectContaining({ id: 'faf-fafcea', montantEstime: 3500, raison: `Au choix avec « ${nomCpf} »` }),
+      expect.objectContaining({ id: 'faf-fafcea', montantEstime: null, raison: `Au choix avec « ${nomCpf} »` }),
     );
     expect(fort.plan.totalFinance).toBe(3900);
     expect(fort.plan.resteACharge).toBe(300);
 
-    // Dans les deux cas : une seule des deux aides est dans le plan chiffré, l'autre est une option, jamais les deux à la fois.
+    // Dans les deux cas : le FAFCEA n'est jamais dans les lignes chiffrées, il est une option, et rien ne dépasse le coût.
     for (const r of [faible, fort]) {
-      expect(r.plan.financements.filter((l) => l.id === 'nat-cpf' || l.id === 'faf-fafcea')).toHaveLength(1);
-      expect(r.plan.options.filter((o) => o.id === 'nat-cpf' || o.id === 'faf-fafcea')).toHaveLength(1);
+      expect(r.plan.financements.map((l) => l.id)).not.toContain('faf-fafcea');
+      expect(r.plan.options.filter((o) => o.id === 'faf-fafcea')).toHaveLength(1);
+      expect(r.plan.nonChiffrees.map((a) => a.id)).not.toContain('faf-fafcea');
       expect(r.plan.coutFormation).toBe(4200);
     }
+
+    // Solde CPF de 0 € : le CPF ne peut rien financer (son montant est nul : il n'apparaît dans aucune liste) ; le FAFCEA, repli après
+    // refus, reste proposé au choix avec lui, sans montant. financé : 0 € ; reste à charge : 4 200 €.
+    const vide = simuler({ ...parcours, soldeCpf: 0 });
+    invariants(vide);
+    expect(cpfDe(vide)).toMatchObject({ statut: 'eligible', montantEstime: 0 });
+    expect(vide.plan.financements).toEqual([]);
+    expect(vide.plan.options).toContainEqual(expect.objectContaining({ id: 'faf-fafcea', montantEstime: null }));
+    expect(vide.plan.totalFinance).toBe(0);
+    expect(vide.plan.resteACharge).toBe(4200);
+
+    // Solde CPF inconnu : ni le CPF ni le FAFCEA ne sont chiffrés, rien n'est déduit (financé 0 €, reste 4 200 €) ; le CPF est
+    // listé parmi les aides sans montant et le FAFCEA reste une option.
+    const inconnu = simuler(parcours);
+    invariants(inconnu);
+    expect(inconnu.plan.financements).toEqual([]);
+    expect(inconnu.plan.nonChiffrees.map((a) => a.id)).toContain('nat-cpf');
+    expect(inconnu.plan.options).toContainEqual(expect.objectContaining({ id: 'faf-fafcea', montantEstime: null }));
+    expect(inconnu.plan.totalFinance).toBe(0);
+    expect(inconnu.plan.resteACharge).toBe(4200);
+
+    // Formation non éligible au CPF (le CPF est refusé) : le FAFCEA devient le seul financeur possible, mais son montant dépend du
+    // dossier : il est listé parmi les aides sans montant, jamais compté. financé : 0 € ; reste à charge : 4 200 €.
+    const refuse = simuler({ ...parcours, eligibleCpf: false, soldeCpf: 800 });
+    invariants(refuse);
+    expect(cpfDe(refuse)).toMatchObject({ statut: 'non_eligible' });
+    expect(fafceaDe(refuse)).toMatchObject({ statut: 'eligible', montantEstime: null });
+    expect(refuse.plan.financements).toEqual([]);
+    expect(refuse.plan.nonChiffrees.map((a) => a.id)).toContain('faf-fafcea');
+    expect(refuse.plan.options.map((o) => o.id)).not.toContain('faf-fafcea');
+    expect(refuse.plan.totalFinance).toBe(0);
+    expect(refuse.plan.resteACharge).toBe(4200);
   });
 });

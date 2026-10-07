@@ -579,10 +579,13 @@ const AIDES_VAE = [
 /**
  * Aides limitées à d'autres types de formation que la VAE (critère `types_formation`), avec les types retenus. Le FAF PM ne prend
  * pas en charge à titre individuel les formations « diplômantes ou certifiantes » : il ne reste que le type non certifiant
- * (qualification, certification, CQP, habilitation, VAE et reconversion mènent à une qualification ou à une certification).
+ * (qualification, certification, CQP, habilitation, VAE et reconversion mènent à une qualification ou à une certification). Le
+ * FIF PL ne prend pas en charge « les bilans de compétences et les reconversions professionnelles » (page « Qu'est-ce qui peut être
+ * pris en charge ? ») : tous les types de formation du parcours sauf la reconversion (le parcours n'a pas de type « bilan »).
  */
 const AIDES_LIMITEES_A_D_AUTRES_TYPES: Record<string, TrainingType[]> = {
   'faf-fafpm': ['non_certifiante'],
+  'faf-fifpl': ['non_certifiante', 'qualification', 'certification', 'vae', 'cqp', 'habilitation'],
 };
 
 /** Aides qui couvrent la VAE parmi d'autres objets : elles ne sont pas propres à la VAE et restent ouvertes à tout type de formation. */
