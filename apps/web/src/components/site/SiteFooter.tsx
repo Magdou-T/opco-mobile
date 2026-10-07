@@ -33,8 +33,9 @@ const SOURCES = [
   { href: 'https://www.moncompteformation.gouv.fr', label: 'Mon Compte Formation' },
 ];
 
+/* Transition limitée à la couleur du texte : l'anneau de focus apparaît d'emblée en or, sans fondu depuis le blanc. */
 const LIEN =
-  'inline-flex min-h-11 items-center gap-1.5 text-white/80 underline-offset-4 transition-colors hover:text-white hover:underline lg:min-h-0 lg:py-1';
+  'inline-flex min-h-11 items-center gap-1.5 text-white/80 underline-offset-4 transition-[color] hover:text-white hover:underline lg:min-h-0 lg:py-1';
 
 export function SiteFooter() {
   return (

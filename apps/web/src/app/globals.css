@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Le guide de design cite des classes interdites en exemple : il ne doit pas produire de regles. */
+@source not "../../DESIGN.md";
 
 /* ============================================================
    financementOPCO, un service SFG Developpement : jetons de design.
@@ -178,6 +180,28 @@
     outline: 3px solid var(--focus);
     outline-offset: 2px;
   }
+  /* Controles natifs (case a cocher, bouton radio, curseur, barre de progression) : l'orange d'action au lieu du bleu
+     du navigateur ; case cochee 5,16:1 sur blanc, 4,63:1 sur orange-soft. */
+  :root {
+    accent-color: var(--orange-deep);
+  }
+  /* Texte d'exemple des champs : texte-discret (5,35:1 sur blanc) au lieu du gris de Tailwind (#1A1A1A a 50 %, 3,36:1). */
+  ::placeholder {
+    color: var(--texte-discret);
+    opacity: 1;
+  }
+  /* Champ prerempli par le navigateur : Chrome le teinte en bleu clair. Une ombre interieure le recouvre du
+     vert tres doux de la charte, le texte reste #1A1A1A (15,18:1). Les champs ne portent pas d'ombre utilitaire : rien
+     ne passe devant cette regle de base. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--texte);
+    caret-color: var(--texte);
+    box-shadow: 0 0 0 1000px var(--vert-clair-soft) inset;
+  }
 }
 
 @layer components {
@@ -300,7 +324,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: var(--rayon-carte, 1.25rem);
+    border-radius: var(--radius-carte);
   }
   .lien-etendu:focus-visible {
     outline: none;
@@ -308,6 +332,12 @@
   .lien-etendu:focus-visible::after {
     outline: 3px solid var(--focus);
     outline-offset: 2px;
+  }
+  /* Dans une surface en degrade, l'anneau se dessine a l'interieur de la carte : la couleur de focus de la surface y est
+     calibree (blanc 4,65:1 au moins, or 7,19:1 au moins). Dehors, il tomberait sur le fond de la section (blanc sur
+     lin-soft : 1,08:1 ; or sur blanc : 1,84:1). Les cartes claires remettent --focus a l'orange fonce (Card.tsx). */
+  :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre) .lien-etendu:focus-visible::after {
+    outline-offset: -6px;
   }
 
   /* Surfaces en degrade (zones d'accent seulement, jamais derriere un long texte) : texte clair, focus adapte.
@@ -396,6 +426,12 @@
     animation: apparaitre 0.6s var(--ease-sortie) var(--delai, 0ms) both;
   }
 
+  /* Sommaire collant des guides (Guide.tsx) : il se cale sous l'en-tete collant au lieu de glisser dessous. */
+  .sommaire-collant {
+    position: sticky;
+    top: calc(var(--hauteur-entete) + 1.5rem);
+  }
+
   /* En-tete collant : une ombre apparait des que la page defile (sans JavaScript, si le navigateur le permet) */
   @supports (animation-timeline: scroll()) {
     .entete-site {
@@ -443,19 +479,26 @@
 
 /* Alias historique border-ink : les bords « encre » des composants anterieurs (filets sous les en-tetes de page,
    cartes, boutons secondaires) deviennent le filet fort teinte (3,54:1 sur blanc, encore un contour valable pour un
-   bouton) au lieu d'un trait quasi noir. Regle hors couche : elle passe devant l'utilitaire genere, qu'aucun element
-   ne combine avec une autre couleur de bord. Ne pas employer border-ink dans un nouveau code (voir DESIGN.md). */
-.border-ink,
-.hover\:border-ink:hover {
-  border-color: var(--filet-fort);
-}
-.border-ink.bg-navy {
-  border-color: var(--encre);
-}
-/* Sommaire collant des guides (composant anterieur, `sticky top-8`) : il se cale sous l'en-tete collant au lieu de
-   glisser dessous. A retirer quand les guides adopteront les primitives (tache D3). */
-nav[aria-label="Sommaire"] > .sticky {
-  top: calc(var(--hauteur-entete) + 1.5rem);
+   bouton) au lieu d'un trait quasi noir. Dans la couche utilities, apres les utilitaires generes : la regle l'emporte
+   sur le border-ink du theme mais plus sur une variante (hover:, focus:). Dette : a retirer quand les emplois restants
+   auront migre (W4, W5, D3 ; voir DESIGN.md). Ne pas employer border-ink dans un nouveau code. */
+@layer utilities {
+  .border-ink {
+    border-color: var(--filet-fort);
+  }
+  @media (hover: hover) {
+    .hover\:border-ink:hover {
+      border-color: var(--filet-fort);
+    }
+  }
+  .border-ink.bg-navy {
+    border-color: var(--encre);
+  }
+  /* Sections des guides (`scroll-mt-24` herite de Guide.tsx) : le scroll-padding-top de html compte deja l'en-tete ;
+     cette marge s'y ajoutait et posait l'ancre 112 px sous l'en-tete. A retirer avec le restylage des guides (D3). */
+  section[id].scroll-mt-24 {
+    scroll-margin-top: 0;
+  }
 }
 
 /* Mouvement reduit : aucune animation ni transition, etat final immediat */

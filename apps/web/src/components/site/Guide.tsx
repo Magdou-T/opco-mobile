@@ -115,7 +115,7 @@ export function GuideCta({
 export function GuideToc({ items }: { items: { id: string; label: string }[] }) {
   return (
     <nav aria-label="Sommaire" className="hidden lg:block">
-      <div className="sticky top-8 rounded border border-rule bg-white p-4">
+      <div className="sommaire-collant rounded border border-rule bg-white p-4">
         <div className="marginalia mb-3">Sommaire</div>
         <ol className="space-y-2 text-sm">
           {items.map((item, i) => (

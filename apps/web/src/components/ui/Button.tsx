@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
+import { cx } from '@/lib/cx';
 import { Icon } from './Icon';
 import type { IconName } from './Icon';
 
@@ -36,8 +37,6 @@ export type ButtonAsLink = ButtonBase &
 export type ButtonAsButton = ButtonBase &
   Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'children'> & { href?: undefined };
 export type ButtonProps = ButtonAsLink | ButtonAsButton;
-
-const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
 const BASE =
   'group inline-flex items-center justify-center gap-2 rounded-full text-center font-semibold leading-tight transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0';

@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react';
+import { cx } from '@/lib/cx';
 
 /**
  * Carte du site (rayon 20 px).
@@ -9,6 +10,8 @@ import type { HTMLAttributes, ReactNode } from 'react';
  *
  * Carte cliquable : `interactive` (soulèvement au survol) et, à l'intérieur, un lien portant la classe `lien-etendu`
  * dont le nom est le titre de la carte : toute la carte devient cliquable sans imbriquer de contenu dans le lien.
+ * L'anneau de focus entoure une carte claire ; dans une carte en dégradé, il se dessine à l'intérieur (globals.css).
+ * Une carte claire remet la couleur de focus à l'orange foncé, même posée sur une surface sombre.
  * Voir apps/web/DESIGN.md (Primitives).
  */
 export type CardTone = 'plain' | 'teintee' | 'turquoise' | 'orange' | 'nuit';
@@ -22,11 +25,9 @@ export interface CardProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode;
 }
 
-const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
-
 const TONS: Record<CardTone, string> = {
-  plain: 'border border-filet bg-white shadow-douce',
-  teintee: 'border border-filet/60 bg-lin-soft',
+  plain: 'border border-filet bg-white shadow-douce [--focus:var(--orange-deep)]',
+  teintee: 'border border-filet/60 bg-lin-soft [--focus:var(--orange-deep)]',
   turquoise: 'surface-turquoise shadow-flottante',
   orange: 'surface-orange shadow-flottante',
   nuit: 'surface-nuit shadow-flottante',

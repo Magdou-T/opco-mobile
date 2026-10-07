@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { cx } from '@/lib/cx';
 import { Icon } from './Icon';
 import type { IconName } from './Icon';
 
@@ -26,8 +27,6 @@ export interface CalloutProps {
   className?: string;
   children: ReactNode;
 }
-
-const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
 const TONS: Record<CalloutTone, { surface: string; pastille: string; icone: IconName; prefixe: string }> = {
   info: {

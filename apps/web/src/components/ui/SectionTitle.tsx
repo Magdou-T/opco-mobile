@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { cx } from '@/lib/cx';
 
 /**
  * Titre de section : surtitre (Inter majuscules espacées, point orange), titre Montserrat 700 à interlettrage serré et
@@ -23,8 +24,6 @@ export interface SectionTitleProps {
   titreFocusable?: boolean;
   className?: string;
 }
-
-const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
 const TAILLES = {
   affiche: 'text-affiche',

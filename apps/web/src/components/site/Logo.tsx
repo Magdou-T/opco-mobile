@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { cx } from '@/lib/cx';
 
 /**
  * Logo SFG Développement suivi du nom du service, « financementOPCO » en Montserrat (OPCO en orange), séparés par un
@@ -14,8 +15,6 @@ export interface LogoProps {
   taille?: 'compacte' | 'normale';
   className?: string;
 }
-
-const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
 const MASQUE = { maskImage: 'url(/logo-sfg.png)', WebkitMaskImage: 'url(/logo-sfg.png)' } as const;
 

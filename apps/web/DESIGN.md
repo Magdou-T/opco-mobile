@@ -79,8 +79,10 @@ disparaîtront au fil des restylages (tâches W4, W5, D3).
 
 - **Montserrat** 700 (titres, chiffres clés) et 600 (sous-titres, nom de formation). Pas de 800 : les classes
   `font-extrabold` des pages anciennes s'affichent en 700, seul poids chargé au-dessus.
-- **Inter** 400 (texte), 500 et 600 (libellés d'interface, boutons, étiquettes).
-- Aucune autre famille : `font-mono` et `font-serif` sont retirés du thème, IBM Plex Mono n'est plus chargée.
+- **Inter** 400 (texte), 500 et 600 (libellés d'interface, boutons, étiquettes). Le gras d'Inter (`<strong>`,
+  `font-bold` sur du texte courant) s'affiche avec la graisse 600, la plus forte chargée : il n'y a pas d'Inter 700.
+- Aucune autre famille : `font-mono` et `font-serif` sont retirés du thème, IBM Plex Mono n'est plus chargée. Les balises
+  `<code>`, `<pre>`, `<kbd>` et `<samp>` prendraient la police mono du navigateur : ne pas les employer.
 - Les titres `h1` à `h4` prennent Montserrat par défaut, avec `text-wrap: balance` ; les paragraphes, `text-wrap: pretty`.
 
 Échelle (tailles fluides, `clamp`) :
@@ -89,7 +91,7 @@ disparaîtront au fil des restylages (tâches W4, W5, D3).
 |---|---|---|---|---|---|
 | `text-affiche` | `clamp(2.5rem, 1.55rem + 2.75vw, 3.75rem)`, interligne 1,04, interlettrage -0,035em | 40 | 46 | 60 | titre d'accueil |
 | `text-titre` | `clamp(1.75rem, 1.25rem + 1.6vw, 2.5rem)`, interligne 1,1, interlettrage -0,025em | 28 | 32 | 40 | titre de section |
-| `text-xl` / `text-2xl` | 20 / 24 px, interlettrage -0,02em | 20 | 24 | 24 | sous-section, titre de carte |
+| `text-xl` / `text-2xl` | 20 / 24 px (l'interlettrage -0,02em vient de `SectionTitle taille="sous-section"`, pas de l'utilitaire) | 20 | 24 | 24 | sous-section, titre de carte |
 | `text-chapeau` | `clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem)`, interligne 1,6 | 17 | 18 | 19 | chapeau sous un titre |
 | `text-base` | 16 px, interligne 1,6 | | | | texte courant |
 | `text-sm` | 14 px | | | | texte de carte, légendes |
@@ -116,7 +118,8 @@ Chiffres clés : classe `.amount` (Montserrat 700, chiffres tabulaires, interlet
 
 ## 5. Primitives
 
-Toutes sont typées, sans dépendance, utilisables dans un composant serveur ; seul l'en-tête est un composant client.
+Toutes sont typées, sans dépendance, utilisables dans un composant serveur. Pour assembler des classes, `cx` de
+`@/lib/cx` (une seule copie, à importer plutôt qu'à recopier).
 
 ### `Button` (`components/ui/Button.tsx`)
 
@@ -144,7 +147,10 @@ Une seule action `primary` par zone. Le libellé dit ce qui se passe (« Estimer
 
 `tone` : `plain` (blanc, filet, ombre douce), `teintee` (lin-soft), `turquoise`, `orange`, `nuit` (dégradés à texte
 blanc). `padding` : `none`, `sm`, `md`, `lg`. `as` : `div`, `article`, `section`, `aside`, `li`. Carte cliquable :
-`interactive` et, dedans, un lien `lien-etendu` qui porte le titre :
+`interactive` et, dedans, un lien `lien-etendu` qui porte le titre. L'anneau de focus entoure une carte claire
+(orange foncé, décalé de 2 px) ; dans une carte en dégradé, il se dessine à 3 px à l'intérieur du bord, sur le dégradé,
+là où la couleur de focus de la surface est lisible (dehors, un anneau blanc tombait sur le fond de la section). Une
+carte claire remet `--focus` à l'orange foncé, même posée sur une surface sombre :
 
 ```tsx
 <Card as="li" interactive padding="none" className="group">
@@ -160,7 +166,9 @@ blanc). `padding` : `none`, `sm`, `md`, `lg`. `as` : `div`, `article`, `section`
 
 Pilule avec point de couleur : `tone` `neutre`, `orange`, `turquoise`, `or`, `rouge`, `vert-clair` ; `variante`
 `douce` (fond teinté) ou `flottante` (pilule blanche à ombre orangée, posée sur un aplat) ; `surFondSombre` pour les
-surfaces sombres. Le texte porte le sens, le point reste décoratif.
+surfaces sombres (fond encre à 25 %, texte blanc : 6,70:1 au moins sur le point le plus clair de chaque dégradé) ;
+`as` : `span` (défaut) ou `li` ; `style` pour un délai d'apparition (`--delai`). Le texte porte le sens, le point reste
+décoratif.
 
 ```tsx
 <Etiquette tone="or">Exemple</Etiquette>
@@ -173,7 +181,9 @@ turquoise, `estimated` en rouge, `depends_on_branche` en neutre.
 ### `SectionTitle` (`components/ui/SectionTitle.tsx`)
 
 Surtitre, titre, chapeau. `as` fixe le niveau (`h1`, `h2`, `h3`), `taille` le rôle visuel (`affiche`, `section`,
-`sous-section`) : les deux sont indépendants. `id` pour un `aria-labelledby` de section.
+`sous-section`) : les deux sont indépendants. `id` pour un `aria-labelledby` de section. `align` : `start` (défaut) ou
+`center`. `surFondSombre` : chapeau en blanc plein sur une surface sombre. `titreFocusable` : le titre reçoit le focus
+par programme (`tabIndex={-1}`), par exemple à chaque étape du simulateur.
 
 ```tsx
 <section aria-labelledby="titre-etapes">
@@ -184,8 +194,9 @@ Surtitre, titre, chapeau. `as` fixe le niveau (`h1`, `h2`, `h3`), `taille` le r�
 
 ### `Callout` (`components/ui/Callout.tsx`)
 
-`tone` : `info`, `confirmation`, `avertissement`, `alerte`, avec `titre` facultatif. Un préfixe réservé aux lecteurs
-d'écran annonce le ton (« Alerte : »). Contenu statique : pas de `role="alert"`.
+`tone` : `info`, `confirmation`, `avertissement`, `alerte`, avec `titre` facultatif. `icone` remplace l'icône du ton ;
+`as` : `div` (défaut) ou `aside`. Un préfixe réservé aux lecteurs d'écran annonce le ton (« Alerte : »). Contenu
+statique : pas de `role="alert"`.
 
 ```tsx
 <Callout tone="avertissement" titre="Fonds épuisés pour votre branche">Vérifiez la source avant de déposer.</Callout>
@@ -215,7 +226,8 @@ Logo SFG + filet + « financementOPCO » (OPCO en orange-deep, ou orange-clair a
 | `.mark` | surlignage vert clair droit, derrière un mot ou un chiffre ; s'anime à l'affichage |
 | `.rule-double` | filet de section teinté, ponctué d'un trait orange de 40 px |
 | `.lien` | lien dans un texte : orange-deep souligné ; vert clair sur fond sombre, blanc sur dégradé |
-| `.lien-etendu` | lien qui couvre sa carte (focus dessiné autour de la carte) |
+| `.lien-etendu` | lien qui couvre sa carte (focus autour d'une carte claire, à l'intérieur d'une carte en dégradé) |
+| `.sommaire-collant` | sommaire collant sous l'en-tête (`top` : hauteur de l'en-tête + 1,5 rem) |
 | `.surface-turquoise`, `.surface-orange`, `.surface-nuit`, `.surface-encre` | surfaces sombres, texte clair, focus adapté |
 | `.aplat-turquoise` | turquoise lumineux de la marque, **décor seul** (aucun texte posé dessus) |
 | `.apparition` | apparition douce (délai par la variable `--delai`) |
@@ -240,7 +252,15 @@ cerclés de la couleur du fond). À reprendre pour la progression du simulateur.
 - Mouvement sobre : apparition douce au chargement (0,6 s), surlignage qui se déploie, balayage au survol du bouton
   primaire et du logo, flèche qui glisse. Sous `prefers-reduced-motion: reduce`, tout s'arrête (état final immédiat).
 - Focus visible partout : anneau de 3 px décalé de 2 px, orange-deep sur fond clair, or sur encre et nuit, blanc sur
-  les dégradés turquoise et orange (`--focus` par surface). Ne jamais retirer `outline` sans le remplacer.
+  les dégradés turquoise et orange (`--focus` par surface). L'anneau est mesuré contre le fond **sur lequel il se
+  dessine** : autour d'un bouton posé sur la bande orange, c'est la bande ; autour d'une carte en dégradé, ce serait le
+  fond de la section (blanc sur lin-soft : 1,08:1), d'où l'anneau dessiné à l'intérieur de ces cartes. Ne jamais
+  retirer `outline` sans le remplacer, et ne pas mettre `transition-colors` sur un élément focalisable (l'utilitaire
+  anime aussi `outline-color` : l'anneau glisse depuis la couleur du texte) ; écrire la liste,
+  `transition-[color,background-color,border-color]`.
+- Contrôles natifs : `accent-color` orange-deep sur `:root` (cases, boutons radio, curseurs : jamais le bleu du
+  navigateur) ; texte d'exemple des champs en texte-discret (5,35:1) ; champ prérempli par le navigateur recouvert de
+  vert-clair-soft (le bleu clair de Chrome disparaît), texte #1A1A1A.
 - Cibles tactiles d'au moins 44 px sous 1 024 px (boutons `md`, liens du menu 48 px, liens du pied de page 44 px).
 - Hiérarchie : un seul `h1` par page ; `SectionTitle` avec `id` et `aria-labelledby` sur la section.
 - Lien d'évitement « Aller au contenu » en tête de page (cible `#contenu`).
@@ -279,6 +299,9 @@ cerclés de la couleur du fond). À reprendre pour la progression du simulateur.
   visibilité sur un élément enveloppe.
 - Recolorer, déformer ou redessiner le logo.
 - Les alias historiques (`cobalt`, `ink`, `paper`…) dans un nouveau code.
+- Une marge `scroll-mt-*` sur une cible d'ancre pour « passer sous l'en-tête » : `scroll-padding-top` de `html` compte
+  déjà l'en-tête, la marge s'y ajoute (l'ancre atterrit trop bas).
+- Un sélecteur CSS accroché à un texte (`nav[aria-label="…"]`) : une classe.
 
 ## 11. Liste de contrôle d'un nouvel écran
 
@@ -292,6 +315,11 @@ cerclés de la couleur du fond). À reprendre pour la progression du simulateur.
 6. Navigation au clavier : ordre logique, focus visible sur chaque élément, menus fermables par Échap.
 7. Mouvement coupé sous `prefers-reduced-motion`, impression lisible.
 8. Textes relus selon la section 9 ; `npm run check:charte` au vert.
+9. Aucune affirmation qui devance le produit. À vérifier avant la mise en ligne : **sections de l'accueil qui dépendent
+   de l'écran de résultats (W5)**. « Ce que le simulateur recherche » annonce que le simulateur passe en revue un
+   catalogue d'aides publiques et vérifie la situation au regard de chacune ; au commit 411792c, le parcours n'appelle
+   que le moteur des barèmes OPCO (`EMBEDDED_AIDES` n'est pas encore employé par le site). W5 rend la phrase vraie ; la
+   revue finale contrôle que l'écran de résultats affiche bien ces aides, sinon la phrase est reformulée.
 
 ## 12. Garde de charte
 
@@ -299,6 +327,14 @@ cerclés de la couleur du fond). À reprendre pour la progression du simulateur.
 signale, avec fichier, ligne et colonne : le tiret cadratin, les classes et couleurs bleues ou violettes (teinte de 190
 à 320 degrés), `font-mono` et IBM Plex, les émojis (U+1F000 à U+1FAFF). Code de sortie 1 en cas de problème.
 `node scripts/check-charte-sfg.mjs --self-test` vérifie le garde lui-même sur des cas fautifs et propres.
+
+## 13. Dette connue
+
+| Élément | Où | Pourquoi il reste | À retirer par |
+|---|---|---|---|
+| Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 12 emplois hérités (page contact, liste et fiches OPCO, écran de résultats, formulaire de contact, guides ; ceux du simulateur partent avec W4). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | W5 (résultats), D3 (fiches, guides, contact), puis suppression de la règle |
+| `section[id].scroll-mt-24 { scroll-margin-top: 0 }` | `globals.css` | Les sections des guides (`GuideSection`) portent encore `scroll-mt-24`. | D3 (restylage des guides) |
+| Copies locales de `cx` | `forms.tsx`, `ProgressBar.tsx` | Fichiers du simulateur en cours de travail (W4). | W4 : importer `@/lib/cx` |
 
 ## Annexe : tableau des contrastes
 
@@ -371,9 +407,23 @@ emplois : elles expliquent une règle.
 | `#7A8C88` | `#FFFFFF` | filet-fort : contour d'élément d'interface, border-ink historique | 3,54:1 | 3,00:1 | conforme |
 | `#C43F13` | `#FFFFFF` | anneau de focus orange-deep sur blanc | 5,16:1 | 3,00:1 | conforme |
 | `#C43F13` | `#E6EFEC` | anneau de focus orange-deep sur lin | 4,41:1 | 3,00:1 | conforme |
-| `#F9B233` | `#0F1E1B` | anneau de focus or sur encre (pied, Card nuit) | 9,37:1 | 3,00:1 | conforme |
-| `#FFFFFF` | `#C43F13` | anneau de focus blanc sur bande orange | 5,16:1 | 3,00:1 | conforme |
-| `#FFFFFF` | `#477A70` | anneau de focus blanc sur Card turquoise | 4,90:1 | 3,00:1 | conforme |
+| `#F9B233` | `#0F1E1B` | anneau de focus or sur encre (pied de page) | 9,37:1 | 3,00:1 | conforme |
+| `#FFFFFF` | `#D04415` | anneau de focus blanc autour du Button inverse, sur le point le plus clair de la bande orange | 4,65:1 | 3,00:1 | conforme |
+| `#FFFFFF` | `#477A70` | anneau de focus blanc dessiné à l'intérieur d'une Card turquoise (point le plus clair) | 4,90:1 | 3,00:1 | conforme |
+| `#FFFFFF` | `#D04415` | anneau de focus blanc dessiné à l'intérieur d'une Card orange (point le plus clair) | 4,65:1 | 3,00:1 | conforme |
+| `#F9B233` | `#183530` | anneau de focus or dessiné à l'intérieur d'une Card nuit (point le plus clair) | 7,19:1 | 3,00:1 | conforme |
+| `#C43F13` | `#F3F7F6` | anneau de focus orange-deep autour d'une carte claire, sur bande lin-soft | 4,78:1 | 3,00:1 | conforme |
+| `#FFFFFF` | `#F3F7F6` | repère : ancien anneau blanc autour de la tuile turquoise, dessiné sur la bande lin-soft | 1,08:1 | - | repère |
+| `#F9B233` | `#FFFFFF` | repère : anneau or autour d'une Card nuit posée sur blanc (d'où l'anneau intérieur) | 1,84:1 | - | repère |
+| `#5F6E6A` | `#FFFFFF` | texte d'exemple (placeholder) des champs | 5,35:1 | 4,50:1 | conforme |
+| `#8C8C8C` | `#FFFFFF` | repère : ancien texte d'exemple (#1A1A1A à 50 %, défaut de Tailwind) | 3,36:1 | - | repère |
+| `#C43F13` | `#FFFFFF` | case cochée, bouton radio (`accent-color` orange-deep) sur blanc | 5,16:1 | 3,00:1 | conforme |
+| `#C43F13` | `#FDF0EA` | case cochée sur le fond orange-soft d'un choix sélectionné | 4,63:1 | 3,00:1 | conforme |
+| `#1A1A1A` | `#E6F2EF` | champ prérempli par le navigateur : texte sur vert-clair-soft | 15,18:1 | 4,50:1 | conforme |
+| `#FFFFFF` | `#39635B` | Etiquette surFondSombre : encre 25 % sur le point le plus clair de surface-turquoise (#477A70) | 6,75:1 | 4,50:1 | conforme |
+| `#FFFFFF` | `#A03B17` | Etiquette surFondSombre : encre 25 % sur le point le plus clair de surface-orange (#D04415) | 6,70:1 | 4,50:1 | conforme |
+| `#FFFFFF` | `#162F2B` | Etiquette surFondSombre : encre 25 % sur le point le plus clair de surface-nuit (#183530) | 14,23:1 | 4,50:1 | conforme |
+| `#FFFFFF` | `#D5572C` | repère : ancienne Etiquette surFondSombre (blanc 10 %) sur #D04415 | 4,02:1 | - | repère |
 | `#3E6860` | `#FFFFFF` | contour du Button secondary | 6,26:1 | 3,00:1 | conforme |
 | `#44514E` | `#FBEDEE` | AlertesOpco : texte ink-soft sur alert-soft | 7,28:1 | 4,50:1 | conforme |
 | `#C43F13` | `#FBEDEE` | AlertesOpco : lien « Voir la source » cobalt sur alert-soft | 4,54:1 | 4,50:1 | conforme |
@@ -389,4 +439,4 @@ emplois : elles expliquent une règle.
 | `#CFD2D1` | `#0F1E1B` | FundingBreakdown : paper 80 % sur navy | 11,29:1 | 4,50:1 | conforme |
 | `#1A1A1A` | `#A3D1C8` | CertitudeBadge à confirmer, ProgressBar étape en cours : ink sur marker | 10,37:1 | 4,50:1 | conforme |
 
-79 couples, aucun sous son seuil.
+93 couples (dont 9 repères), aucun sous son seuil.
