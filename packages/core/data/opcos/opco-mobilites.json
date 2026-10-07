@@ -22,56 +22,56 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "La page du plan de développement des compétences ne fixe pas de plafond horaire : les coûts pédagogiques sont pris en charge dans la limite du budget annuel de l'entreprise. À confirmer : les guides pratiques 2026 par branche (version du 01/10/2026) n'ont pas pu être téléchargés, site officiel injoignable le 06/10 (d'éventuels plafonds horaires par branche n'ont pas pu être vérifiés). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "La page du plan de développement des compétences ne fixe pas de plafond horaire : les coûts pédagogiques sont pris en charge dans la limite du budget annuel de l'entreprise. À confirmer : les guides pratiques 2026 par branche (version du 01/10/2026) n'étaient pas consultables lors de la vérification, site officiel inaccessible le 06/10 (d'éventuels plafonds horaires par branche n'ont pas été vérifiés). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "cout_horaire_intra": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Pas de plafond horaire publié sur la page PDC. À confirmer : les guides pratiques 2026 par branche (version du 01/10/2026) n'ont pas pu être téléchargés, site officiel injoignable le 06/10. (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Pas de plafond horaire publié sur la page PDC. À confirmer : les guides pratiques 2026 par branche (version du 01/10/2026) n'étaient pas consultables lors de la vérification, site officiel inaccessible le 06/10. (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "cout_horaire_metier": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Pas de plafond horaire sur les fonds légaux ; certaines branches financent des actions sur fonds conventionnels à un taux horaire (ex. services de l'automobile, ProPulsion : 65 € HT/h maintenance, 75 € HT/h carrosserie). À confirmer : les guides pratiques 2026 par branche (version du 01/10/2026) n'ont pas pu être téléchargés, site officiel injoignable le 06/10. Extrait : « Lot 1 – Maintenance véhicules légers : 65 € HT / heure » (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Pas de plafond horaire sur les fonds légaux ; certaines branches financent des actions sur fonds conventionnels à un taux horaire (ex. services de l'automobile, ProPulsion : 65 € HT/h maintenance, 75 € HT/h carrosserie). À confirmer : les guides pratiques 2026 par branche (version du 01/10/2026) n'étaient pas consultables lors de la vérification, site officiel inaccessible le 06/10. Extrait : « Lot 1 – Maintenance véhicules légers : 65 € HT / heure » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "prise_en_charge_salaires": {
     "value": 0,
     "confidence": "exact",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Les fonds légaux du plan de développement des moins de 50 salariés ne financent pas les salaires. Les rémunérations ne sont remboursées que sur versements volontaires ou sur certains fonds conventionnels de branche (ex. transports urbains). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Les fonds légaux du plan de développement des moins de 50 salariés ne financent pas les salaires. Les rémunérations ne sont remboursées que sur versements volontaires ou sur certains fonds conventionnels de branche (ex. transports urbains). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
   "frais_transport": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Frais annexes exclus du budget PDC légal ; remboursés seulement sur versements volontaires (frais réels ou simplifiés) ou sur certains fonds de branche. Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Frais annexes exclus du budget PDC légal ; remboursés seulement sur versements volontaires (frais réels ou simplifiés) ou sur certains fonds de branche. Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "frais_hebergement": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Frais annexes exclus du budget PDC légal (fonds de branche transports urbains : 170 € la nuit à Paris, 140 € en province). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Frais annexes exclus du budget PDC légal (fonds de branche transports urbains : 170 € la nuit à Paris, 140 € en province). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "frais_restauration": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Frais annexes exclus du budget PDC légal (fonds de branche transports urbains : 35 € par repas). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Frais annexes exclus du budget PDC légal (fonds de branche transports urbains : 35 € par repas). Extrait : « L’ entreprise bénéficie d’un plafond exprimé en euros HT qui lui permet de financer les coûts pédagogiques (hors frais annexes et hors coûts salariaux) des formations suivies par ses salariés dans la limite d’un montant déterminé en fonction de l’effectif de l’entreprise. » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Pas de forfait en pourcentage. (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Pas de forfait en pourcentage. (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "budget_annuel_max": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.opcomobilites.fr/dispositifs-formation/le-plan-de-developpement-des-competences/",
-    "note": "Budget annuel par entreprise de moins de 50 salariés fonction de l'effectif, porté par plafonds_par_taille : 1 500 € (moins de 11), 1 800 € (11 à moins de 20), 2 100 € (20 à moins de 30), 2 400 € (30 à moins de 40), 2 700 € (40 à moins de 50), coûts pédagogiques uniquement, dans la limite des fonds disponibles ; pas de budget légal à partir de 50 salariés. Les montants de 2 900 à 4 300 € relevés en juillet sont erronés. Extraits : « Version janvier 2026 applicable aux demandes de prise en charge reçues à compter du 01/01/2026 et dont l'action débute en 2026. » ; « Budget alloué dans la limite des fonds OPCO disponibles au moment de l'instruction » ; « Taille de l'entreprise Budget alloué Moins de 11 salariés 1 500 € De 11 à moins de 20 salariés 1 800 € De 20 à moins de 30 salariés 2 100 € De 30 à moins de 40 salariés 2 400 € De 40 à moins de 50 salariés 2 700 € » (vérifié le 2026-10-06 ; page officielle lue via le proxy translate.goog, accès direct au site impossible)."
+    "note": "Budget annuel par entreprise de moins de 50 salariés fonction de l'effectif, détaillé par taille d'entreprise : 1 500 € (moins de 11), 1 800 € (11 à moins de 20), 2 100 € (20 à moins de 30), 2 400 € (30 à moins de 40), 2 700 € (40 à moins de 50), coûts pédagogiques uniquement, dans la limite des fonds disponibles ; pas de budget légal à partir de 50 salariés. Les montants de 2 900 à 4 300 € relevés en juillet sont erronés. Extraits : « Version janvier 2026 applicable aux demandes de prise en charge reçues à compter du 01/01/2026 et dont l'action débute en 2026. » ; « Budget alloué dans la limite des fonds OPCO disponibles au moment de l'instruction » ; « Taille de l'entreprise Budget alloué Moins de 11 salariés 1 500 € De 11 à moins de 20 salariés 1 800 € De 20 à moins de 30 salariés 2 100 € De 30 à moins de 40 salariés 2 400 € De 40 à moins de 50 salariés 2 700 € » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "budget_annuel_portee": "pedagogie",
   "budget_annuel_description": "Plan de développement des compétences 2026 (moins de 50 salariés) : budget annuel en euros HT selon l'effectif — 1 500 € (moins de 11 salariés), 1 800 € (11 à moins de 20), 2 100 € (20 à moins de 30), 2 400 € (30 à moins de 40), 2 700 € (40 à moins de 50) — pour les seuls coûts pédagogiques (hors frais annexes et salaires), dans la limite des fonds disponibles. Formation d'au moins 1 h. Demandes au plus tard le 31/12/2026.",
@@ -127,7 +127,7 @@
   "vae_details": "VAE et bilan de compétences finançables dans le plan de développement des compétences (dans la limite du budget annuel) et via la période de reconversion (9,15 € HT/h à défaut de montant de branche, 5 000 € en moyenne maximum par stagiaire).",
   "limite_dossiers_an": "Pas de limite de dossiers publiée : dans la limite du budget annuel et des fonds disponibles (transport routier, AFEST et parcours : 3 parcours par entreprise).",
   "guides_pratiques": {
-    "note": "Guides pratiques 2026 par branche mis à jour le 01/10/2026 (fichiers « _01102026.pdf ») ; non téléchargeables le 06/10/2026 (site officiel injoignable, le proxy ne relaie pas les PDF) : contenu non vérifié.",
+    "note": "Guides pratiques 2026 par branche mis à jour le 01/10/2026 (fichiers « _01102026.pdf ») ; non consultables lors de la vérification du 06/10/2026 (site officiel inaccessible, la copie de la page officielle utilisée ne donne pas accès aux PDF) : contenu non vérifié.",
     "branches": [
       "Ferroviaire",
       "Manutention ferroviaire",

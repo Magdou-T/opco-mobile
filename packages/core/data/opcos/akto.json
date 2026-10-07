@@ -71,7 +71,7 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "« et emploie moins de 11 salariés, elle dispose d’un budget annuel de 2 500€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » ; « et emploie 11 à 49 salariés, elle dispose d’un budget annuel de 4 000€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » Montant selon l'effectif et la branche (voir plafonds_par_taille et variantes) ; outre-mer : 5 000 € / 7 000 €. (vérifié le 2026-10-05)"
+    "note": "« et emploie moins de 11 salariés, elle dispose d’un budget annuel de 2 500€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » ; « et emploie 11 à 49 salariés, elle dispose d’un budget annuel de 4 000€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » Montant selon l'effectif et la branche (voir le détail par taille d'entreprise et les variantes de branche) ; outre-mer : 5 000 € / 7 000 €. (vérifié le 2026-10-05)"
   },
   "budget_annuel_portee": "global",
   "budget_annuel_description": "Barème par défaut (interprofession) : budget annuel de 2 500 € (moins de 11 salariés) et 4 000 € (11 à 49 salariés) en hexagone, 5 000 € et 7 000 € en outre-mer, pour les formations hors Espace Formation, dans la limite des fonds disponibles. Chaque branche fixe ses propres budgets ; à l'automne 2026, l'enveloppe PDC est épuisée dans plusieurs branches (voir variantes).",
@@ -181,7 +181,7 @@
       ],
       "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
       "confidence": "exact",
-      "note": "« Seules les formations dont les thématiques ne figurent pas sur Espace Formation peuvent être prises en charge au titre du plan de développement des compétences. » ; « Entreprises de moins de 11 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 2 000 € » IDCC indiqué sur la page générale AKTO : « Hôtels, cafés, restaurants IDCC 1979 ». Budgets 11-49 : 3 000 € jusqu'à 25 salariés, 6 000 € de 26 à 49 (valeur prudente retenue : 3 000 €). (vérifié le 2026-10-05)",
+      "note": "« Seules les formations dont les thématiques ne figurent pas sur Espace Formation peuvent être prises en charge au titre du plan de développement des compétences. » ; « Entreprises de moins de 11 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 2 000 € » IDCC indiqué sur la page générale AKTO : « Hôtels, cafés, restaurants IDCC 1979 ». Budgets 11-49 : 3 000 € jusqu'à 25 salariés, 6 000 € de 26 à 49 (estimation prudente : 3 000 €). (vérifié le 2026-10-05)",
       "cout_horaire_inter": {
         "value": 25,
         "confidence": "exact",
@@ -223,7 +223,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
-        "note": "« Entreprises de moins de 11 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 2 000 € » ; « Entreprises de 11 à 25 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 3 000 € » ; « Entreprises de 26 à 49 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 6 000 € » Selon l'effectif : voir plafonds_par_taille. (vérifié le 2026-10-05)"
+        "note": "« Entreprises de moins de 11 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 2 000 € » ; « Entreprises de 11 à 25 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 3 000 € » ; « Entreprises de 26 à 49 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 6 000 € » Selon l'effectif : voir le détail par taille d'entreprise de la branche. (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "HCR, moins de 50 salariés : budget annuel de coûts pédagogiques de 2 000 € (moins de 11), 3 000 € (11 à 25) et 6 000 € (26 à 49) pour les seules formations dont la thématique n'existe pas sur Espace Formation ; Espace Formation : coûts pris en charge en totalité ; AFEST : budget complémentaire de 3 600 €. 50 salariés et plus : 80 % de la contribution conventionnelle (coûts pédagogiques + frais annexes).",
@@ -379,7 +379,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
-        "note": "« Si votre entreprise emploie moins de 11 salariés, vous disposez d’un budget annuel de 4 000€ réservé à la prise en charge des actions de formation que vous mobilisez au point 2 » ; « Si votre entreprise emploie entre 11 et 49 salariés, vous disposez d’un budget annuel de 9 000€ » Selon l'effectif : voir plafonds_par_taille. (vérifié le 2026-10-05)"
+        "note": "« Si votre entreprise emploie moins de 11 salariés, vous disposez d’un budget annuel de 4 000€ réservé à la prise en charge des actions de formation que vous mobilisez au point 2 » ; « Si votre entreprise emploie entre 11 et 49 salariés, vous disposez d’un budget annuel de 9 000€ » Selon l'effectif : voir le détail par taille d'entreprise de la branche. (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "global",
       "budget_annuel_description": "Restauration rapide : budget annuel de 4 000 € (moins de 11 salariés) ou 9 000 € (11 à 49) pour les formations hors Espace Formation, les frais annexes, l'abondement CPF et la VAE ; AFEST : budget séparé de 3 600 € ; TFP de branche hors budget.",
@@ -585,7 +585,7 @@
         "value": 0,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
-        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée : plafond horaire mis à 0 € pour qu'aucun financement ne soit simulé hors Espace Formation (barèmes 2026 pour mémoire dans budget_annuel_max). (vérifié le 2026-10-05)"
+        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée : plafond horaire mis à 0 € pour qu'aucun financement ne soit simulé hors Espace Formation (barèmes 2026 à titre indicatif : voir le budget annuel). (vérifié le 2026-10-05)"
       },
       "cout_horaire_metier": {
         "value": 0,
@@ -604,7 +604,7 @@
         "value": 0,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
-        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée (critères 2026 pour mémoire : commerces de gros 6 000 €/an, quincaillerie 8 000 €, déchet 3 000 € / 5 000 €, autoroutes 4 000 € / 8 000 €, travail du bois 6 000 € / 10 000 €). (vérifié le 2026-10-05)"
+        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée (critères 2026 à titre indicatif : commerces de gros 6 000 €/an, quincaillerie 8 000 €, déchet 3 000 € / 5 000 €, autoroutes 4 000 € / 8 000 €, travail du bois 6 000 € / 10 000 €). (vérifié le 2026-10-05)"
       },
       "budget_annuel_description": "Enveloppe PDC 2026 intégralement engagée : AKTO demande de ne plus déposer de nouveaux dossiers pour 2026 (hors Espace Formation). Seules restent possibles, selon la branche, les actions collectives d'Espace Formation, la mobilité ultramarine et les autres dispositifs (alternance, période de reconversion). Nouveaux critères attendus pour 2027.",
       "plafonds_par_taille": [

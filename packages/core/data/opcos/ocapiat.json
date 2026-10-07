@@ -44,7 +44,7 @@
     "value": 12,
     "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Uniquement pour les salariés de 50 ans et plus (Boost Compétences, Soutien aux filières, offre régionale TPE-PME, parcours certifiants), remboursement plafonné au montant du coût pédagogique pris en charge (demandes reçues depuis le 01/05/2026). Aucune prise en charge du salaire pour les moins de 50 ans ni pour Compétences d'avenir. Mode selon_accord retenu car l'âge du salarié n'est pas connu du calcul. Secteur pêche : régime distinct (voir variante). Extrait : « Prise en charge du salaire limitée à 12 €/h HT en faveur des salariés de 50 ans et plus - Remboursement du salaire plafonné au montant engagé pour le coût pédagogique » (vérifié le 2026-10-05)."
+    "note": "Uniquement pour les salariés de 50 ans et plus (Boost Compétences, Soutien aux filières, offre régionale TPE-PME, parcours certifiants), remboursement plafonné au montant du coût pédagogique pris en charge (demandes reçues depuis le 01/05/2026). Aucune prise en charge du salaire pour les moins de 50 ans ni pour Compétences d'avenir. Le montant est affiché comme dépendant de l'accord de branche, car l'âge du salarié n'est pas connu pour l'estimation. Secteur pêche : régime distinct (voir variante). Extrait : « Prise en charge du salaire limitée à 12 €/h HT en faveur des salariés de 50 ans et plus - Remboursement du salaire plafonné au montant engagé pour le coût pédagogique » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
@@ -283,7 +283,7 @@
       "publics": null,
       "confidence": "estimated",
       "source_url": "https://www.ocapiat.fr/parcours-certifiants/",
-      "note": "« Les coûts pédagogiques de l’action de formation : prise en charge dans la limite d’un plafond horaire de 40 €/heure et d’un plafond par stagiaire de 8 000 €. » Le texte fixe des plafonds sans préciser de pourcentage : le taux de 100 % (dans la limite de ces plafonds) est une hypothèse de calcul. (vérifié le 2026-10-06)"
+      "note": "« Les coûts pédagogiques de l’action de formation : prise en charge dans la limite d’un plafond horaire de 40 €/heure et d’un plafond par stagiaire de 8 000 €. » Le texte fixe des plafonds sans préciser de pourcentage : le taux de 100 % (dans la limite de ces plafonds) est une hypothèse retenue pour l'estimation. (vérifié le 2026-10-06)"
     },
     {
       "id": "formations-internes",

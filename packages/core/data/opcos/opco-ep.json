@@ -38,7 +38,7 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "Plafond horaire des CQP et certifications (hors plafond annuel), défini par chaque branche (ex. 15 € HT/h en coiffure et en boulangerie, 20 € HT/h en pharmacie d'officine, 9,15 € HT/h en immobilier). Le taux des formations cœur de métier non certifiantes est indiqué dans la note de cout_horaire_inter de chaque branche. Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
+    "note": "Plafond horaire des CQP et certifications (hors plafond annuel), défini par chaque branche (ex. 15 € HT/h en coiffure et en boulangerie, 20 € HT/h en pharmacie d'officine, 9,15 € HT/h en immobilier). Le taux des formations cœur de métier non certifiantes est indiqué dans la note du plafond horaire inter-entreprises de chaque branche. Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires": {
     "value": null,
@@ -275,7 +275,7 @@
         "value": 15,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
-        "note": "CQP Manager un salon de coiffure et certification cheveux spécifiques (hors plafond), ainsi que la formation de tuteur associée : 15 € HT/h (217 h maximum pour la certification). Les autres formations, métier compris, sont à 25 € HT/h (voir cout_horaire_inter). Extrait : « CQP Manager un salon de coiffure (Hors plafond) … Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
+        "note": "CQP Manager un salon de coiffure et certification cheveux spécifiques (hors plafond), ainsi que la formation de tuteur associée : 15 € HT/h (217 h maximum pour la certification). Les autres formations, métier compris, sont à 25 € HT/h (voir le plafond horaire inter-entreprises). Extrait : « CQP Manager un salon de coiffure (Hors plafond) … Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
       },
       "prise_en_charge_salaires": {
         "value": 0,
@@ -306,7 +306,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
-        "note": "Plafond fonction de l'effectif, porté par plafonds_par_taille : 2 100 € HT (1 à 2 salariés, valeur retenue pour les moins de 11 salariés), 6 300 € HT (3 à 6), 10 500 € HT (7 à 10) ; à partir de 11 salariés, limite de 35 h de formation par an et par salarié à 30 € HT/h au lieu d'un montant fixe. Extrait : « de 1 à 2 salariés : 2 100 € HT/an » (vérifié le 2026-10-05)."
+        "note": "Plafond fonction de l'effectif, détaillé par taille d'entreprise : 2 100 € HT (1 à 2 salariés, valeur retenue pour les moins de 11 salariés), 6 300 € HT (3 à 6), 10 500 € HT (7 à 10) ; à partir de 11 salariés, limite de 35 h de formation par an et par salarié à 30 € HT/h au lieu d'un montant fixe. Extrait : « de 1 à 2 salariés : 2 100 € HT/an » (vérifié le 2026-10-05)."
       },
       "budget_annuel_description": "Coiffure 2026 : 2 100 € HT/an (1 à 2 salariés), 6 300 € HT/an (3 à 6), 10 500 € HT/an (7 à 10) ; à partir de 11 salariés, 35 h de formation par an et par salarié à 30 € HT/h (au-delà de 50 salariés sur fonds conventionnels). Présentiel 4 h minimum et 7 h maximum par jour.",
       "plafonds_par_taille": [
@@ -359,7 +359,7 @@
         "value": 15,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
-        "note": "CQP Tourier (300 h maximum) et Brevet de maîtrise Boulanger (400 h maximum), hors plafond : 15 € HT/h. Les actions métier courantes sont à 30-50 € HT/h (voir cout_horaire_inter). Extrait : « CQP Tourier (hors plafond) Durée maximale de prise en charge : 300 h Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
+        "note": "CQP Tourier (300 h maximum) et Brevet de maîtrise Boulanger (400 h maximum), hors plafond : 15 € HT/h. Les actions métier courantes sont à 30-50 € HT/h (voir le plafond horaire inter-entreprises). Extrait : « CQP Tourier (hors plafond) Durée maximale de prise en charge : 300 h Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
       },
       "prise_en_charge_salaires": {
         "value": 0,
@@ -390,7 +390,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
-        "note": "Plafond annuel de 3 500 € HT par entreprise de moins de 50 salariés, porté par plafonds_par_taille ; aucun barème publié pour les 50 salariés et plus. Extrait : « Moins de 50 salariés : 3 500 € HT » (vérifié le 2026-10-05)."
+        "note": "Plafond annuel de 3 500 € HT par entreprise de moins de 50 salariés (voir le détail par taille d'entreprise de la branche) ; aucun barème publié pour les 50 salariés et plus. Extrait : « Moins de 50 salariés : 3 500 € HT » (vérifié le 2026-10-05)."
       },
       "budget_annuel_description": "Boulangerie 2026 : 3 500 € HT par an pour les moins de 50 salariés, 14 h maximum par action, formation en présentiel uniquement (ni distanciel ni AFEST), actions de moins de 140 h étalées sur 3 mois maximum. Budget PDC-50 contraint.",
       "plafonds_par_taille": [
@@ -449,7 +449,7 @@
         "value": 12,
         "confidence": "estimated",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
-        "note": "12 € HT/h uniquement pour les entreprises de moins de 11 salariés (taux nul à partir de 11 salariés : plafonds_par_taille). Extrait : « Frais de salaire : 12 € HT/h (pour les entreprises de moins de 11 salariés exclusivement) » (vérifié le 2026-10-05)."
+        "note": "12 € HT/h uniquement pour les entreprises de moins de 11 salariés (taux nul à partir de 11 salariés : voir le détail par taille d'entreprise de la branche). Extrait : « Frais de salaire : 12 € HT/h (pour les entreprises de moins de 11 salariés exclusivement) » (vérifié le 2026-10-05)."
       },
       "prise_en_charge_salaires_mode": "euro_par_heure",
       "frais_transport": {
@@ -622,7 +622,7 @@
         "value": 12,
         "confidence": "estimated",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
-        "note": "12 € HT/h uniquement pour les moins de 11 salariés, formations hors des locaux et sur le temps de travail (taux nul à partir de 11 salariés : plafonds_par_taille). Extrait : « 12 € HT/h pour les frais de salaire uniquement pour les entreprises de moins de 11 salariés, dans le cadre de formations hors des locaux de l’entreprise et sur le temps de travail. » (vérifié le 2026-10-05)."
+        "note": "12 € HT/h uniquement pour les moins de 11 salariés, formations hors des locaux et sur le temps de travail (taux nul à partir de 11 salariés : voir le détail par taille d'entreprise de la branche). Extrait : « 12 € HT/h pour les frais de salaire uniquement pour les entreprises de moins de 11 salariés, dans le cadre de formations hors des locaux de l’entreprise et sur le temps de travail. » (vérifié le 2026-10-05)."
       },
       "prise_en_charge_salaires_mode": "euro_par_heure",
       "frais_transport": {
@@ -703,7 +703,7 @@
         "value": 9.15,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
-        "note": "Liste de formations hors plafond (CQP négociateur immobilier, CQP AABI, titres de gestionnaire et de manager en immobilier, licences et masters de spécialisation, BTS Professions immobilières) : 9,15 € HT/h. Les formations obligatoires et réglementaires sont à 40 € HT/h (voir cout_horaire_inter) : l'estimation est donc prudente pour une habilitation. Extrait : « Liste de formations hors plafond Gestionnaire d'affaires immobilières … CQP négociateur immobilier CQP AABI Licences et Masters spécialisation en immobilier BTS Professions immobilières Coûts pédagogiques : 9,15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
+        "note": "Liste de formations hors plafond (CQP négociateur immobilier, CQP AABI, titres de gestionnaire et de manager en immobilier, licences et masters de spécialisation, BTS Professions immobilières) : 9,15 € HT/h. Les formations obligatoires et réglementaires sont à 40 € HT/h (voir le plafond horaire inter-entreprises) : l'estimation est donc prudente pour une habilitation. Extrait : « Liste de formations hors plafond Gestionnaire d'affaires immobilières … CQP négociateur immobilier CQP AABI Licences et Masters spécialisation en immobilier BTS Professions immobilières Coûts pédagogiques : 9,15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
       },
       "prise_en_charge_salaires": {
         "value": 0,
@@ -734,7 +734,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
-        "note": "Plafond fonction de l'effectif, porté par plafonds_par_taille : 2 500 € HT sous 11 salariés, 4 500 € HT de 11 à 50 salariés, 100 % de la cotisation conventionnelle au-delà de 50 salariés. Extrait : « Moins de 11 salariés : 2 500 € HT » (vérifié le 2026-10-05)."
+        "note": "Plafond fonction de l'effectif, détaillé par taille d'entreprise : 2 500 € HT sous 11 salariés, 4 500 € HT de 11 à 50 salariés, 100 % de la cotisation conventionnelle au-delà de 50 salariés. Extrait : « Moins de 11 salariés : 2 500 € HT » (vérifié le 2026-10-05)."
       },
       "budget_annuel_description": "Immobilier 2026 : 2 500 € HT/an (moins de 11 salariés), 4 500 € HT/an (11 à 50 salariés), 100 % de la cotisation conventionnelle au-delà de 50 salariés. Pas de salaires ni de frais annexes.",
       "plafonds_par_taille": [

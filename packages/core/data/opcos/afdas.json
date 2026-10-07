@@ -69,7 +69,7 @@
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.afdas.com/actualites/entreprise/criteres-de-financements-2026-ce-qui-change-pour-les-entreprises.html",
-    "note": "« ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » Plafond selon l'effectif (voir plafonds_par_taille) ; aucun fonds mutualisé à partir de 50 salariés. (vérifié le 2026-10-05)"
+    "note": "« ➜ 1 100€ HT pour les entreprises de moins de 11 salariés ➜ 1 800€ HT pour les entreprises de 11 à 49 salariés » Plafond selon l'effectif (voir le détail par taille d'entreprise) ; aucun fonds mutualisé à partir de 50 salariés. (vérifié le 2026-10-05)"
   },
   "budget_annuel_portee": "pedagogie",
   "budget_annuel_description": "Plafond annuel 2026 des coûts pédagogiques : 1 100 € HT (moins de 11 salariés) et 1 800 € HT (11 à 49 salariés), avec un barème de 40 € HT/h/stagiaire, dans la limite des fonds disponibles. VAE, bilan de compétences et formations santé-sécurité des membres du CSE sont imputés sur ce plafond. À partir de 50 salariés : pas de fonds mutualisés (plans conventionnels de branche ou versement volontaire).",
@@ -201,7 +201,7 @@
         "value": null,
         "confidence": "estimated",
         "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/sport.html",
-        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Salariés : dans la limite d’un plafond individuel par structure de 300% de la contribution sans être inférieur à 4 000 € ou 8 500 € si le parcours vise un titre inscrit au RNCP » (vérifié le 2026-10-05)"
+        "note": "Montant selon l'effectif : voir le détail par taille d'entreprise de la branche. « Salariés : dans la limite d’un plafond individuel par structure de 300% de la contribution sans être inférieur à 4 000 € ou 8 500 € si le parcours vise un titre inscrit au RNCP » (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "Estimation : somme du plafond légal et du minimum du plan conventionnel de la branche (moins de 50 salariés ; à partir de 50 salariés, minimum du plan conventionnel seul). Sport : plafond légal PDC (1 100 € / 1 800 € HT, moins de 50 salariés) complété par l'enveloppe « actions individuelles » du plan conventionnel (300 % de la contribution, au moins 4 000 €, 8 500 € pour un titre RNCP), financée à 32 € HT/h jusqu'à 70 h puis 10 € HT/h (niveau 5 maximum) ou 12 € HT/h (niveau 6 et plus) ; frais annexes non financés. Catalogue sport et actions collectives financés hors plafond.",
@@ -273,7 +273,7 @@
         "value": null,
         "confidence": "estimated",
         "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/spectacle-vivant.html",
-        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés : 1 200€ + 100% de la contribution nette N-1 sans être inférieur à 1 400 € » (vérifié le 2026-10-05)"
+        "note": "Montant selon l'effectif : voir le détail par taille d'entreprise de la branche. « Entreprises de moins de 11 salariés : 1 200€ + 100% de la contribution nette N-1 sans être inférieur à 1 400 € » (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "Estimation : somme du plafond légal et du minimum du plan conventionnel de la branche (moins de 50 salariés ; à partir de 50 salariés, minimum du plan conventionnel seul). Spectacle vivant : plafond légal PDC (moins de 50 salariés) + plan conventionnel (1 200 € + 100 % de la contribution nette N-1, au moins 1 400 € pour les moins de 11 salariés et 2 000 € pour les 11-49). Hors plafond : formation « gestion des risques sonores », VHSS et transition écologique (offres retenues), CCP « Inspection d'ensembles démontables ».",
@@ -327,7 +327,7 @@
         "value": null,
         "confidence": "estimated",
         "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/audiovisuel-et-production-cinematographique.html",
-        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 3 600 € HT » (vérifié le 2026-10-05)"
+        "note": "Montant selon l'effectif : voir le détail par taille d'entreprise de la branche. « Entreprises de moins de 11 salariés 3 600 € HT » (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "Estimation : somme du plafond légal et du minimum du plan conventionnel de la branche (moins de 50 salariés ; à partir de 50 salariés, minimum du plan conventionnel seul). Audiovisuel et production cinématographique : plafond légal PDC (moins de 50 salariés) + plan conventionnel (3 600 € HT pour les moins de 11 salariés ; 200 % de la contribution, au moins 5 000 € HT, de 11 à moins de 300 salariés). Hors plafond : certifications de branche (CQP, TFP), certifications interbranches, catalogues VHSS et transitions écologiques, VAE jusqu'à 3 000 € par parcours.",
@@ -375,7 +375,7 @@
         "value": null,
         "confidence": "estimated",
         "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/publicite.html",
-        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 2 500 € HT » (vérifié le 2026-10-05)"
+        "note": "Montant selon l'effectif : voir le détail par taille d'entreprise de la branche. « Entreprises de moins de 11 salariés 2 500 € HT » (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "Estimation : somme du plafond légal et du minimum du plan conventionnel de la branche (moins de 50 salariés ; à partir de 50 salariés, minimum du plan conventionnel seul). Publicité : plafond légal PDC (moins de 50 salariés) + plan conventionnel (2 500 € HT pour les moins de 11 salariés ; 130 % de la contribution, au moins 3 000 €, pour les 11-49 ; 130 % au-delà). Le plan finance aussi le reste à charge des contrats de professionnalisation (5 € HT/h, 11 salariés et plus). Hors plafond : aide tutorale de 100 €/mois (10 mois, plus de 11 salariés), VAE, offres VHSS.",
@@ -423,7 +423,7 @@
         "value": null,
         "confidence": "estimated",
         "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/hotellerie-de-plein-air-hpa.html",
-        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 1 500 € HT » (vérifié le 2026-10-05)"
+        "note": "Montant selon l'effectif : voir le détail par taille d'entreprise de la branche. « Entreprises de moins de 11 salariés 1 500 € HT » (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "Estimation : somme du plafond légal et du minimum du plan conventionnel de la branche (moins de 50 salariés ; à partir de 50 salariés, minimum du plan conventionnel seul). Hôtellerie de plein air : plafond légal PDC (moins de 50 salariés) + plan conventionnel (1 500 € HT moins de 11 salariés, 3 000 € HT de 11 à 49, 100 % de la contribution N-1 avec un minimum de 3 000 € au-delà). Hors plafond : projets collectifs et actions camping qualité validés en commission, frais de jury CQP, VAE jusqu'à 3 000 €.",
@@ -471,7 +471,7 @@
         "value": null,
         "confidence": "estimated",
         "source_url": "https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/le-financement-de-la-formation-avec-le-fonds-conventionnel-des-branches-professionnelles/espaces-de-loisirs-dattraction-et-culturels.html",
-        "note": "Montant selon l'effectif : voir plafonds_par_taille de la variante. « Entreprises de moins de 11 salariés 2 900 € HT » (vérifié le 2026-10-05)"
+        "note": "Montant selon l'effectif : voir le détail par taille d'entreprise de la branche. « Entreprises de moins de 11 salariés 2 900 € HT » (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "Estimation : somme du plafond légal et du minimum du plan conventionnel de la branche (moins de 50 salariés ; à partir de 50 salariés, minimum du plan conventionnel seul). Espaces de loisirs, d'attractions et culturels : plafond légal PDC (moins de 50 salariés) + plan conventionnel (2 900 € HT moins de 11 salariés ; 1 700 € HT + 200 % de la part plan de formation de la contribution de 11 à 49 ; 200 % au-delà). Hors plafond : actions collectives nationales, offres VHSS et transitions écologiques, VAE jusqu'à 3 000 €, aide tutorale de 3 000 € pour certains contrats de professionnalisation.",

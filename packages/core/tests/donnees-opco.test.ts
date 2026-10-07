@@ -195,6 +195,68 @@ function controlerBudgetsParDemande(opcos: OpcoData[]): string[] {
   return problemes;
 }
 
+/**
+ * Jargon interne que le visiteur ne doit pas lire : les notes des barèmes s'affichent telles quelles sur les fiches OPCO et à
+ * l'écran de résultats. Sont proscrits les noms de champs des données (plafonds_par_taille, cout_horaire_inter…), le mot
+ * « null », le vocabulaire de traçabilité (proxy translate.goog, site injoignable, documents qui « n'ont pas pu être
+ * téléchargés ») et les remarques de calcul interne (« valeur prudente retenue », « hypothèse de calcul »).
+ */
+const APOSTROPHE_COURBE = String.fromCharCode(0x2019);
+const JARGON_INTERNE: RegExp[] = [
+  /\b(?:plafonds_par_taille|variantes_branche|dispositifs_complementaires|selon_accord|confidence)\b/gi,
+  /\b(?:cout_horaire|budget_annuel|quota_horaire|prise_en_charge|frais)_\w+/gi,
+  /\bnull\b/gi,
+  /translate\.goog|\bproxy\b|filtre IDCC|injoignable/gi,
+  new RegExp(`n['${APOSTROPHE_COURBE}]ont pas pu|pas pu être`, 'gi'),
+  /valeur prudente retenue|hypothèse de calcul/gi,
+];
+
+/** Repère d'un élément de tableau dans un chemin : son identifiant (dispositif), sa taille, sinon son rang. */
+function repere(element: unknown, rang: number): string {
+  const { id, taille } = (element ?? {}) as { id?: unknown; taille?: unknown };
+  if (typeof id === 'string') return id;
+  if (typeof taille === 'string') return taille;
+  return String(rang);
+}
+
+/**
+ * Chaînes de prose d'un OPCO (barème par défaut, puis chaque variante de branche) avec leur chemin : toute chaîne qui contient
+ * au moins un espace, hors champs `extrait` (citations mot pour mot des alertes). Les valeurs d'énumération (« selon_accord »,
+ * « exact »), les identifiants et les URL n'ont pas d'espace : elles ne sont jamais lues.
+ */
+function chainesDeProse(o: OpcoData): { chemin: string; texte: string }[] {
+  const chaines: { chemin: string; texte: string }[] = [];
+  const parcourir = (valeur: unknown, chemin: string, cle: string): void => {
+    if (typeof valeur === 'string') {
+      if (cle !== 'extrait' && /\s/.test(valeur)) chaines.push({ chemin, texte: valeur });
+    } else if (Array.isArray(valeur)) {
+      valeur.forEach((element, rang) => parcourir(element, `${chemin}[${repere(element, rang)}]`, cle));
+    } else if (valeur && typeof valeur === 'object') {
+      for (const [k, v] of Object.entries(valeur)) parcourir(v, `${chemin}.${k}`, k);
+    }
+  };
+  const { variantes_branche: variantes, ...bareme } = o;
+  parcourir(bareme, o.slug, '');
+  for (const v of variantes ?? []) parcourir(v, `${o.slug}[${v.id}]`, '');
+  return chaines;
+}
+
+/**
+ * Toute chaîne de prose qui contient du jargon interne, avec son chemin et le jargon trouvé. Les citations « … » d'une note
+ * sont la source mot pour mot : elles ne sont pas lues (un extrait peut contenir « n'ont pas pu être engagés » ou « proxy »).
+ */
+function controlerJargon(opcos: OpcoData[]): string[] {
+  const problemes: string[] = [];
+  for (const o of opcos) {
+    for (const { chemin, texte } of chainesDeProse(o)) {
+      const lu = texte.replace(/«[^»]*»/g, ' ');
+      const trouves = new Set(JARGON_INTERNE.flatMap((motif) => [...lu.matchAll(motif)].map((m) => m[0])));
+      for (const jargon of trouves) problemes.push(`${chemin} : contient « ${jargon} »`);
+    }
+  }
+  return problemes;
+}
+
 const par = (slug: string): OpcoData => {
   const o = EMBEDDED_OPCOS.find((x) => x.slug === slug);
   if (!o) throw new Error(`OPCO introuvable : ${slug}`);
@@ -247,6 +309,11 @@ describe('barèmes OPCO embarqués', () => {
 
   it('un plafond « par demande » n\'est pas un budget annuel « exact »', () => {
     expect(controlerBudgetsParDemande(EMBEDDED_OPCOS)).toEqual([]);
+  });
+
+  it('aucune chaîne de prose des 11 OPCO ne contient de jargon interne (noms de champs, « null », proxy, « n\'ont pas pu »…) : le site les affiche telles quelles', () => {
+    expect(EMBEDDED_OPCOS).toHaveLength(11);
+    expect(controlerJargon(EMBEDDED_OPCOS)).toEqual([]);
   });
 
   it('une enveloppe 50+ est toujours décrite', () => {
@@ -303,6 +370,7 @@ describe('les contrôles détectent une copie mutée', () => {
     expect(controlerPlafondsHoraires(EMBEDDED_OPCOS)).toEqual([]);
     expect(controlerUniteRestauration(EMBEDDED_OPCOS)).toEqual([]);
     expect(controlerBudgetsParDemande(EMBEDDED_OPCOS)).toEqual([]);
+    expect(controlerJargon(EMBEDDED_OPCOS)).toEqual([]);
   });
 
   describe('valeurs « exact »', () => {
@@ -507,6 +575,168 @@ describe('les contrôles détectent une copie mutée', () => {
       expect(controlerBudgetsParDemande(copie)).toEqual([
         'uniformation[alisfa].budget_annuel_max : montant « par demande/dossier/stagiaire » présenté comme budget annuel « exact »',
       ]);
+    });
+  });
+
+  describe('jargon interne dans les notes', () => {
+    it('un nom de champ réinjecté dans une note de barème est signalé, avec son chemin', () => {
+      const copie = muter((opcos) => {
+        const budget = dans(opcos, 'akto').budget_annuel_max;
+        budget.note = `${budget.note} Selon l'effectif : voir plafonds_par_taille.`;
+      });
+      expect(controlerJargon(copie)).toEqual(['akto.budget_annuel_max.note : contient « plafonds_par_taille »']);
+    });
+
+    it('« null » réinjecté dans une note de dispositif est signalé, avec son chemin', () => {
+      const copie = muter((opcos) => {
+        const dispositif = dans(opcos, 'atlas').dispositifs_complementaires!.find((d) => d.id === 'bonus-transition-ecologique-betic')!;
+        dispositif.note = `${dispositif.note} Montant laissé à null.`;
+      });
+      expect(controlerJargon(copie)).toEqual(['atlas.dispositifs_complementaires[bonus-transition-ecologique-betic].note : contient « null »']);
+    });
+
+    it('translate.goog réinjecté dans une note de variante est signalé, avec son chemin', () => {
+      const copie = muter((opcos) => {
+        const variante = varianteDans(opcos, 'afdas', 'sport');
+        variante.note = `${variante.note} Page lue via translate.goog.`;
+      });
+      expect(controlerJargon(copie)).toEqual(['afdas[sport].note : contient « translate.goog »']);
+    });
+
+    it('plusieurs jargons dans une même note sont tous signalés', () => {
+      const copie = muter((opcos) => {
+        dans(opcos, 'opco-mobilites').cout_horaire_inter.note = 'Site injoignable, page lue via le proxy translate.goog.';
+      });
+      expect(controlerJargon(copie)).toEqual([
+        'opco-mobilites.cout_horaire_inter.note : contient « injoignable »',
+        'opco-mobilites.cout_horaire_inter.note : contient « proxy »',
+        'opco-mobilites.cout_horaire_inter.note : contient « translate.goog »',
+      ]);
+    });
+
+    it('chaque jargon de la liste est reconnu, majuscules comprises', () => {
+      const jargons: [string, string][] = [
+        ['voir plafonds_par_taille', 'plafonds_par_taille'],
+        ['voir cout_horaire_inter', 'cout_horaire_inter'],
+        ['voir budget_annuel_max', 'budget_annuel_max'],
+        ['voir quota_horaire_max', 'quota_horaire_max'],
+        ['voir prise_en_charge_salaires', 'prise_en_charge_salaires'],
+        ['voir frais_hebergement', 'frais_hebergement'],
+        ['voir variantes_branche', 'variantes_branche'],
+        ['voir dispositifs_complementaires', 'dispositifs_complementaires'],
+        ['mode selon_accord', 'selon_accord'],
+        ['la confidence est exacte', 'confidence'],
+        ['montant laissé à null', 'null'],
+        ['Montant Null', 'Null'],
+        ['page lue via translate.goog', 'translate.goog'],
+        ['page lue via le proxy', 'proxy'],
+        ['filtre IDCC à appliquer', 'filtre IDCC'],
+        ['site officiel injoignable', 'injoignable'],
+        ["les guides n'ont pas pu être téléchargés", "n'ont pas pu"],
+        [`les guides n${APOSTROPHE_COURBE}ont pas pu être téléchargés`, `n${APOSTROPHE_COURBE}ont pas pu`],
+        ["les guides n'avaient pas pu être lus", 'pas pu être'],
+        ['valeur prudente retenue', 'valeur prudente retenue'],
+        ['hypothèse de calcul', 'hypothèse de calcul'],
+      ];
+      for (const [texte, attendu] of jargons) {
+        const copie = muter((opcos) => {
+          dans(opcos, 'akto').specificites = texte;
+        });
+        expect(controlerJargon(copie), texte).toEqual([`akto.specificites : contient « ${attendu} »`]);
+      }
+    });
+
+    it('les mots français proches du jargon ne sont pas signalés (frais, confiance, proximité, nullité, budget annuel…)', () => {
+      const copie = muter((opcos) => {
+        dans(opcos, 'akto').specificites =
+          'Frais de repas et d\'hébergement, confiance du financeur, accès de proximité, nullité de la demande, budget annuel, prise en charge des salaires, plafonds par taille, variantes de branche.';
+      });
+      expect(controlerJargon(copie)).toEqual([]);
+    });
+
+    it('chaque zone de prose est lue (conditions, démarches, descriptions, alertes, textes libres, listes), avec son chemin', () => {
+      const zones: [string, (opcos: OpcoData[]) => void, string][] = [
+        [
+          'une condition de dispositif',
+          (o) => { dans(o, 'akto').dispositifs_complementaires![0].conditions[0] = 'Respecter le quota_horaire_max.'; },
+          'akto.dispositifs_complementaires[espace-formation].conditions[0] : contient « quota_horaire_max »',
+        ],
+        [
+          'une démarche de dispositif',
+          (o) => { dans(o, 'akto').dispositifs_complementaires![0].demarches = 'Montant laissé à null.'; },
+          'akto.dispositifs_complementaires[espace-formation].demarches : contient « null »',
+        ],
+        [
+          'la description du budget annuel',
+          (o) => { dans(o, 'akto').budget_annuel_description = 'Voir budget_annuel_max.'; },
+          'akto.budget_annuel_description : contient « budget_annuel_max »',
+        ],
+        [
+          'les spécificités',
+          (o) => { dans(o, 'akto').specificites = 'Mode selon_accord retenu.'; },
+          'akto.specificites : contient « selon_accord »',
+        ],
+        [
+          'les points clés de maximisation',
+          (o) => { dans(o, 'akto').points_cles_maximisation = 'Voir frais_transport.'; },
+          'akto.points_cles_maximisation : contient « frais_transport »',
+        ],
+        [
+          'la description d\'un plafond par taille',
+          (o) => { dans(o, 'akto').plafonds_par_taille!.find((p) => p.taille === 'less_11')!.description = 'Moins de 11 salariés : valeur prudente retenue.'; },
+          'akto.plafonds_par_taille[less_11].description : contient « valeur prudente retenue »',
+        ],
+        [
+          'la description d\'un plafond par taille de variante',
+          (o) => { varianteDans(o, 'akto', 'hcr').plafonds_par_taille!.find((p) => p.taille === '50_299')!.description = 'Hypothèse de calcul : 80 %.'; },
+          'akto[hcr].plafonds_par_taille[50_299].description : contient « Hypothèse de calcul »',
+        ],
+        [
+          'le périmètre d\'une alerte',
+          (o) => { dans(o, 'akto').alertes![0].branche = 'Organismes de formation (site officiel injoignable)'; },
+          'akto.alertes[0].branche : contient « injoignable »',
+        ],
+        [
+          'un texte libre en objet',
+          (o) => { (dans(o, 'opco-ep').alternance_apprentissage as Record<string, unknown>).description = 'Page lue via un proxy.'; },
+          'opco-ep.alternance_apprentissage.description : contient « proxy »',
+        ],
+        [
+          'un élément d\'une liste de textes',
+          (o) => { dans(o, 'akto').profils_candidats[0] = 'Salariés (voir variantes_branche)'; },
+          'akto.profils_candidats[0] : contient « variantes_branche »',
+        ],
+      ];
+      for (const [zone, muterZone, attendu] of zones) {
+        const copie = muter(muterZone);
+        expect(controlerJargon(copie), zone).toEqual([attendu]);
+      }
+    });
+
+    it('une valeur d\'énumération (« selon_accord ») et une URL ne sont pas signalées, même quand elles portent un mot du jargon', () => {
+      expect(JSON.stringify(EMBEDDED_OPCOS)).toContain('"prise_en_charge_salaires_mode":"selon_accord"'); // les énumérations existent dans les données
+      const copie = muter((opcos) => {
+        const variante = varianteDans(opcos, 'akto', 'hcr');
+        variante.prise_en_charge_salaires_mode = 'selon_accord';
+        variante.cout_horaire_inter!.source_url = 'https://www-opco--mobilites-fr.translate.goog/plan-de-developpement-des-competences?proxy=null';
+      });
+      expect(controlerJargon(copie)).toEqual([]);
+    });
+
+    it('un extrait cité qui contient par hasard un mot du jargon n\'est pas signalé (champ extrait d\'une alerte, citation « … » d\'une note)', () => {
+      const copie = muter((opcos) => {
+        const akto = dans(opcos, 'akto');
+        akto.alertes![0].extrait = `${akto.alertes![0].extrait} Le proxy de la plateforme est injoignable (valeur null).`;
+        akto.budget_annuel_max.note = `${akto.budget_annuel_max.note} « Le proxy ne relaie pas ce fichier : plafonds_par_taille null. »`;
+      });
+      expect(controlerJargon(copie)).toEqual([]);
+    });
+
+    it('le jargon placé hors des citations d\'une note qui en contient est signalé : seules les citations « … » sont exemptes', () => {
+      const copie = muter((opcos) => {
+        dans(opcos, 'akto').budget_annuel_max.note = "« Un extrait cité. » Selon l'effectif : voir plafonds_par_taille. « Un autre extrait. »";
+      });
+      expect(controlerJargon(copie)).toEqual(['akto.budget_annuel_max.note : contient « plafonds_par_taille »']);
     });
   });
 });

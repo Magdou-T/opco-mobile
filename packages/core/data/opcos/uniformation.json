@@ -20,19 +20,19 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (plafond horaire selon la durée : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_intra": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (plafond horaire selon la durée : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_metier": {
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (cout_horaire_seuils : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (plafond horaire selon la durée : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_seuils": [
     {

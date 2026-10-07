@@ -79,7 +79,7 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
-    "note": "Budget annuel Compétences+ global (formation + salaires + frais annexes), différent selon la taille (voir plafonds_par_taille) et la branche. Barème par défaut (entreprises sans convention collective) : 1 500 € (moins de 11 salariés) et 2 500 € (11 à 49 salariés). « Dernière mise à jour le 10/07/26 » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 1 500 €, comprenant → L’action de formation, → Salaires : 13 €/h, » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 2 500 €, comprenant → L’action de formation, → Salaires : 13 €/h » (vérifié le 2026-10-05)"
+    "note": "Budget annuel Compétences+ global (formation + salaires + frais annexes), différent selon la taille (voir le détail par taille d'entreprise) et la branche. Barème par défaut (entreprises sans convention collective) : 1 500 € (moins de 11 salariés) et 2 500 € (11 à 49 salariés). « Dernière mise à jour le 10/07/26 » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 1 500 €, comprenant → L’action de formation, → Salaires : 13 €/h, » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 2 500 €, comprenant → L’action de formation, → Salaires : 13 €/h » (vérifié le 2026-10-05)"
   },
   "budget_annuel_portee": "global",
   "budget_annuel_description": "Dispositif Compétences+ (entreprises de moins de 50 salariés) : budget annuel global (formation + salaires + frais annexes) fixé par chaque branche. Barème par défaut (entreprises sans convention collective, critères au 10/07/2026) : 1 500 € (moins de 11 salariés) et 2 500 € (11 à 49 salariés). Exemples 2026 : alimentaire non spécialisé 3 000/3 500 €, prédominance alimentaire 2 500/5 000 €, alimentaire spécialisé 2 000/3 500 €, CDNA 2 500/3 300 € (pédagogie seule), optique 2 000/5 400 €, bureau et numérique 3 000 €.",
@@ -241,7 +241,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.lopcommerce.com/media/ze0haai0/cpc_commerce_detail_alimentaire_non_specialise.pdf",
-        "note": "Budget annuel global selon la taille : 3 000 € (moins de 11 salariés), 3 500 € (11 à 49) ; voir plafonds_par_taille. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 3 000 €, comprenant → Les coûts pédagogiques → Les Salaires à 13 €/h → Frais annexes : pas de prise en charge. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 3 500 €, comprenant → Les coûts pédagogiques → Les Salaires à 13 €/h » (vérifié le 2026-10-05)"
+        "note": "Budget annuel global selon la taille : 3 000 € (moins de 11 salariés), 3 500 € (11 à 49) ; voir le détail par taille d'entreprise de la branche. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 3 000 €, comprenant → Les coûts pédagogiques → Les Salaires à 13 €/h → Frais annexes : pas de prise en charge. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 3 500 €, comprenant → Les coûts pédagogiques → Les Salaires à 13 €/h » (vérifié le 2026-10-05)"
       },
       "budget_annuel_description": "Commerce de détail alimentaire non spécialisé (IDCC 1505), critères 2026 : 3 000 €/an (moins de 11 salariés), 3 500 €/an (11-49), coûts pédagogiques et salaires à 13 €/h, sans frais annexes ; Click&Form 100 % dans la limite de 5 inscriptions par an.",
       "plafonds_par_taille": [
@@ -313,7 +313,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.lopcommerce.com/media/shbkyxa1/cpc_predom.pdf",
-        "note": "Budget annuel global selon la taille : 2 500 € (moins de 11 salariés), 5 000 € (11 à 49) ; voir plafonds_par_taille. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2 500 € comprenant : → L’action de formation → Salaires : 13 €/h → Frais annexes : pas de prise en charge. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 5 000€ comprenant : → L’action de formation, → Salaires : 13 €/h → Frais annexes : pas de prise en charge. » (vérifié le 2026-10-05)"
+        "note": "Budget annuel global selon la taille : 2 500 € (moins de 11 salariés), 5 000 € (11 à 49) ; voir le détail par taille d'entreprise de la branche. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2 500 € comprenant : → L’action de formation → Salaires : 13 €/h → Frais annexes : pas de prise en charge. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 5 000€ comprenant : → L’action de formation, → Salaires : 13 €/h → Frais annexes : pas de prise en charge. » (vérifié le 2026-10-05)"
       },
       "budget_annuel_description": "Commerce à prédominance alimentaire (IDCC 2216), critères au 28/09/2026 : 2 500 €/an (moins de 11 salariés), 5 000 €/an (11-49), action de formation et salaires à 13 €/h, sans frais annexes.",
       "plafonds_par_taille": [
@@ -385,7 +385,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.lopcommerce.com/media/r5rkmbmi/cpc_metiers_commerce_detail_alimentaire_specialise.pdf",
-        "note": "Budget annuel global selon la taille : 2 000 € (moins de 11 salariés), 3 500 € (11 à 49) ; voir plafonds_par_taille. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2 000 €, comprenant » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 3 500 €, comprenant » (vérifié le 2026-10-05)"
+        "note": "Budget annuel global selon la taille : 2 000 € (moins de 11 salariés), 3 500 € (11 à 49) ; voir le détail par taille d'entreprise de la branche. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2 000 €, comprenant » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 3 500 €, comprenant » (vérifié le 2026-10-05)"
       },
       "budget_annuel_description": "Métiers du commerce de détail alimentaire spécialisé (IDCC 3237), critères 2026 : 2 000 €/an (moins de 11 salariés), 3 500 €/an (11-49), coûts pédagogiques et salaires à 13 €/h, sans frais annexes ; Click&Form 100 % dans la limite de 3 inscriptions par an.",
       "plafonds_par_taille": [
@@ -457,7 +457,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.lopcommerce.com/media/0fddqg4x/cpc_cdna.pdf",
-        "note": "Budget annuel selon la taille : 2 500 € (moins de 11 salariés), 3 300 € (11 à 49), coûts pédagogiques uniquement ; voir plafonds_par_taille. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2 500 €, comprenant uniquement la prise en charge des coûts pédagogiques au réel. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 3 300 €, comprenant uniquement la prise en charge des coûts pédagogiques au réel. » (vérifié le 2026-10-05)"
+        "note": "Budget annuel selon la taille : 2 500 € (moins de 11 salariés), 3 300 € (11 à 49), coûts pédagogiques uniquement ; voir le détail par taille d'entreprise de la branche. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2 500 €, comprenant uniquement la prise en charge des coûts pédagogiques au réel. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 3 300 €, comprenant uniquement la prise en charge des coûts pédagogiques au réel. » (vérifié le 2026-10-05)"
       },
       "budget_annuel_description": "Commerces de détail non alimentaires (IDCC 1517), critères au 17/09/2026 : 2 500 €/an (moins de 11 salariés), 3 300 €/an (11-49), coûts pédagogiques au réel uniquement.",
       "plafonds_par_taille": [
@@ -541,7 +541,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.lopcommerce.com/media/3zpn01ky/cpc_optique_lunetterie.pdf",
-        "note": "Budget annuel global selon la taille : 2 000 € (moins de 11 salariés), 5 400 € (11 à 49) ; voir plafonds_par_taille. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2.000 €, comprenant → L’action de formation, plafonné à 40 €/h/stagiaire → Salaires plafonnés, conformément au décret n° 2018-1342, à 14,50 €/h → Frais annexes : pas de prise en charge. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 5.400€, comprenant → L’action de formation, plafonné à 40 €/h/stagiaire » (vérifié le 2026-10-05)"
+        "note": "Budget annuel global selon la taille : 2 000 € (moins de 11 salariés), 5 400 € (11 à 49) ; voir le détail par taille d'entreprise de la branche. « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT MOINS DE 11 SALARIES Budget annuel : 2.000 €, comprenant → L’action de formation, plafonné à 40 €/h/stagiaire → Salaires plafonnés, conformément au décret n° 2018-1342, à 14,50 €/h → Frais annexes : pas de prise en charge. » « PRISE EN CHARGE POUR LES ENTREPRISES EMPLOYANT DE 11 A 49 SALARIES Budget annuel : 5.400€, comprenant → L’action de formation, plafonné à 40 €/h/stagiaire » (vérifié le 2026-10-05)"
       },
       "budget_annuel_description": "Optique-lunetterie de détail (IDCC 1431), critères au 21/09/2026 : 2 000 €/an (moins de 11 salariés), 5 400 €/an (11-49), formation plafonnée à 40 €/h/stagiaire, salaires 14,50 €/h, sans frais annexes ; un dépassement par an sur accord préalable ; fonds DPC complémentaire (245 € par stagiaire, 35 €/h).",
       "plafonds_par_taille": [

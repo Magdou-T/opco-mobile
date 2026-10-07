@@ -20,7 +20,7 @@
     "value": 19,
     "confidence": "exact",
     "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-    "note": "« Entreprises de 11 à moins de 50 salariés ▪ Plafond de 19 € HT / heure / stagiaire. » ; « le Conseil d’administration a décidé de réduire le plafond horaire de financement de 24 € à 19 € pour toutes les demandes de financement reçues à partir du 1er juin 2026. » Barème par défaut = Bâtiment : 19 € HT/h de 11 à moins de 300 salariés (demandes reçues depuis le 1er juin 2026, 24 € auparavant) ; 24 € HT/h pour les moins de 11 salariés (voir plafonds_par_taille). TP : 32 €/h ; Négoce : 30 €/h (voir variantes). (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+    "note": "« Entreprises de 11 à moins de 50 salariés ▪ Plafond de 19 € HT / heure / stagiaire. » ; « le Conseil d’administration a décidé de réduire le plafond horaire de financement de 24 € à 19 € pour toutes les demandes de financement reçues à partir du 1er juin 2026. » Barème par défaut = Bâtiment : 19 € HT/h de 11 à moins de 300 salariés (demandes reçues depuis le 1er juin 2026, 24 € auparavant) ; 24 € HT/h pour les moins de 11 salariés (voir le détail par taille d'entreprise). TP : 32 €/h ; Négoce : 30 €/h (voir les variantes de branche). (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
   },
   "cout_horaire_intra": {
     "value": null,
@@ -162,7 +162,7 @@
         "2614",
         "3212"
       ],
-      "note": "« Coût pédagogique : plafond : 32 € HT / heure / stagiaire (hors budget annuel entreprise). » Montant laissé à null car réservé aux TP (filtre IDCC à appliquer). (fiche Modalites_TP_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/TP-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+      "note": "« Coût pédagogique : plafond : 32 € HT / heure / stagiaire (hors budget annuel entreprise). » Montant non chiffré ici : il dépend de la convention collective (IDCC) de l'entreprise, ce dispositif étant réservé aux TP. (fiche Modalites_TP_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/TP-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
     },
     {
       "id": "cpf-coconstruit-tp",
@@ -390,7 +390,7 @@
         "3204",
         "5633"
       ],
-      "note": "« plafond de 125 € HT / heure / groupe ; » ; « maximum de 5 000 € HT / an / entreprise. » Montant laissé à null car réservé au Bâtiment (filtre IDCC à appliquer). (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+      "note": "« plafond de 125 € HT / heure / groupe ; » ; « maximum de 5 000 € HT / an / entreprise. » Montant non chiffré ici : il dépend de la convention collective (IDCC) de l'entreprise, ce dispositif étant réservé au Bâtiment. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
     }
   ],
   "variantes_branche": [
@@ -482,7 +482,7 @@
         "value": 19,
         "confidence": "exact",
         "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-        "note": "« Entreprises de 11 à moins de 50 salariés ▪ Plafond de 19 € HT / heure / stagiaire. » 24 € HT/h pour les moins de 11 salariés (voir plafonds_par_taille). (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+        "note": "« Entreprises de 11 à moins de 50 salariés ▪ Plafond de 19 € HT / heure / stagiaire. » 24 € HT/h pour les moins de 11 salariés (voir le détail par taille d'entreprise de la branche). (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
       },
       "cout_horaire_metier": {
         "value": 19,
@@ -669,7 +669,7 @@
         "value": null,
         "confidence": "exact",
         "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-        "note": "« Entreprises de moins de 11 salariés 2 000 € HT. Entreprises de 11 à moins de 50 salariés 6 000 € HT. » Selon l'effectif : voir plafonds_par_taille. (fiche Modalites_Negoce_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/NEGOCE-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+        "note": "« Entreprises de moins de 11 salariés 2 000 € HT. Entreprises de 11 à moins de 50 salariés 6 000 € HT. » Selon l'effectif : voir le détail par taille d'entreprise de la branche. (fiche Modalites_Negoce_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/NEGOCE-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
       "budget_annuel_description": "Négoce des matériaux de construction : budget annuel de coûts pédagogiques de 2 000 € HT (moins de 11 salariés) ou 6 000 € HT (11 à 49), 30 € HT/h ; VAE et bilan de compétences 2 000 € HT ; périodes de reconversion visant un CQP du Négoce : 19 €/h depuis le 1er juillet 2026.",
