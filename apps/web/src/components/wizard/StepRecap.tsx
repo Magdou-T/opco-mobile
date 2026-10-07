@@ -3,17 +3,21 @@
 import {
   CONTRACT_TYPE_LABELS,
   COMPANY_SIZE_LABELS,
+  REGIONS,
   TRAINING_TYPE_LABELS,
   TRAINING_MODE_LABELS,
   EMBEDDED_OPCO_LIST,
   getEmbeddedOpcoBySlug,
   resolveVarianteBranche,
 } from '@opco/core';
-import type { WizardState, WizardStep } from '@opco/core';
+import type { WizardState } from '@opco/core';
+import type { EtapeSite } from '@/lib/etapes';
+import { ouvreBudgetOpco } from '@/lib/entreprise';
+import { formatEuro } from '@/lib/format';
 
 interface Props {
   state: WizardState;
-  onEdit: (step: WizardStep) => void;
+  onEdit: (step: EtapeSite) => void;
 }
 
 function Section({ title, onEdit, children }: { title: string; onEdit: () => void; children: React.ReactNode }) {
@@ -24,6 +28,7 @@ function Section({ title, onEdit, children }: { title: string; onEdit: () => voi
         <button
           type="button"
           onClick={onEdit}
+          aria-label={`Modifier la section ${title}`}
           className="text-sm text-cobalt hover:text-navy font-medium"
         >
           Modifier
@@ -47,13 +52,17 @@ export function StepRecap({ state, onEdit }: Props) {
   const opcoSlug = state.selectedOpcoSlug || state.detectedOpcoSlug;
   const opco = opcoSlug ? EMBEDDED_OPCO_LIST.find(o => o.slug === opcoSlug) : null;
   const fullOpco = opcoSlug ? getEmbeddedOpcoBySlug(opcoSlug) : null;
-  // Barème de branche appliqué par le moteur : choix manuel, sinon variante qui couvre l'IDCC détecté.
+  // Barème de branche appliqué par le moteur : choix manuel, sinon variante qui couvre l'IDCC détecté, sinon barème général
+  // (la ligne n'existe que pour un OPCO qui a des barèmes par branche).
   const variante = fullOpco ? resolveVarianteBranche(fullOpco, state) : null;
-  const brancheNom = variante
-    ? variante.id === state.selectedBrancheId
-      ? variante.branche_nom
-      : `${variante.branche_nom} (détecté d'après l'IDCC ${state.detectedIdcc})`
-    : null;
+  const aDesVariantes = (fullOpco?.variantes_branche?.length ?? 0) > 0;
+  const brancheNom = !aDesVariantes
+    ? null
+    : variante
+      ? variante.id === state.selectedBrancheId
+        ? variante.branche_nom
+        : `${variante.branche_nom} (détecté d'après l'IDCC ${state.detectedIdcc})`
+      : 'Barème général';
 
   return (
     <div className="space-y-6">
@@ -66,20 +75,26 @@ export function StepRecap({ state, onEdit }: Props) {
         </p>
       </div>
 
-      {/* OPCO */}
-      <Section title="OPCO" onEdit={() => onEdit('identification')}>
-        <Item label="OPCO" value={opco?.name} />
-        <Item label="Secteurs" value={opco?.secteurs} />
-        {brancheNom && <Item label="Accord de branche" value={brancheNom} />}
+      {/* Entreprise */}
+      <Section title="Entreprise" onEdit={() => onEdit('identification')}>
         {state.detectedCompanyName && (
-          <Item label="Entreprise" value={`${state.detectedCompanyName} (${state.sirenNumber})`} />
+          <Item label="Entreprise" value={`${state.detectedCompanyName} (SIREN ${state.sirenNumber})`} />
+        )}
+        <Item label="OPCO" value={opco?.name} />
+        {brancheNom && <Item label="Accord de branche" value={brancheNom} />}
+        <Item label="Région" value={state.regionCode ? REGIONS[state.regionCode] : null} />
+        <Item label="Taille" value={state.companySize ? COMPANY_SIZE_LABELS[state.companySize] : null} />
+        {state.effectif != null && (
+          <Item label="Effectif exact" value={`${state.effectif} ${state.effectif > 1 ? 'salariés' : 'salarié'}`} />
+        )}
+        {ouvreBudgetOpco(state.projetType) && state.budgetDejaConsomme != null && (
+          <Item label="Budget déjà consommé" value={formatEuro(state.budgetDejaConsomme)} />
         )}
       </Section>
 
-      {/* Situation pro */}
-      <Section title="Situation professionnelle" onEdit={() => onEdit('situation')}>
+      {/* Bénéficiaire */}
+      <Section title="Bénéficiaire" onEdit={() => onEdit('situation')}>
         <Item label="Contrat" value={state.contractType ? CONTRACT_TYPE_LABELS[state.contractType] : null} />
-        <Item label="Taille entreprise" value={state.companySize ? COMPANY_SIZE_LABELS[state.companySize] : null} />
         <Item label="Ancienneté" value={state.anciennete_mois ? `${state.anciennete_mois} mois` : null} />
         {state.isHandicap && <Item label="Handicap" value="Oui (RQTH)" />}
         {state.isReconversion && <Item label="Reconversion" value="Oui" />}

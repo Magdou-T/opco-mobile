@@ -1,18 +1,18 @@
 'use client';
 
-import { WIZARD_STEPS } from '@opco/core';
-import type { WizardStep } from '@opco/core';
+import { ETAPES } from '@/lib/etapes';
+import type { EtapeSite } from '@/lib/etapes';
 
 interface ProgressBarProps {
   currentStepIndex: number;
-  onStepClick?: (step: WizardStep) => void;
+  onStepClick?: (step: EtapeSite) => void;
 }
 
 export function ProgressBar({ currentStepIndex, onStepClick }: ProgressBarProps) {
   return (
     <nav aria-label="Progression" className="w-full">
       <ol className="flex w-full items-center">
-        {WIZARD_STEPS.map((step, index) => {
+        {ETAPES.map((step, index) => {
           const isCurrent = index === currentStepIndex;
           const isPast = index < currentStepIndex;
           const isClickable = isPast && onStepClick;
@@ -41,9 +41,9 @@ export function ProgressBar({ currentStepIndex, onStepClick }: ProgressBarProps)
                         : 'border-rule bg-white text-ink-faint'
                     }`}
                   >
-                    {isPast ? '✓' : step.icon}
+                    {isPast ? '✓' : index + 1}
                   </div>
-                  {index < WIZARD_STEPS.length - 1 && (
+                  {index < ETAPES.length - 1 && (
                     <div className={`h-px flex-1 ${isPast ? 'bg-ink' : 'bg-rule'}`} />
                   )}
                 </div>

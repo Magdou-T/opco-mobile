@@ -1,15 +1,18 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { WIZARD_STEPS, createInitialWizardState } from '@opco/core';
-import type { WizardState, WizardStep } from '@opco/core';
+import { createInitialWizardState } from '@opco/core';
+import type { WizardState } from '@opco/core';
+import { ETAPES } from '@/lib/etapes';
+import type { EtapeSite } from '@/lib/etapes';
+import { opcoRequis } from '@/lib/entreprise';
 
 export function useWizard() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [state, setState] = useState<WizardState>(createInitialWizardState);
   const [showResults, setShowResults] = useState(false);
 
-  const currentStep = WIZARD_STEPS[currentStepIndex];
+  const currentStep = ETAPES[currentStepIndex];
 
   const updateState = useCallback((updates: Partial<WizardState>) => {
     setState(prev => ({ ...prev, ...updates }));
@@ -18,9 +21,14 @@ export function useWizard() {
   const canGoNext = useCallback((): boolean => {
     switch (currentStep.key) {
       case 'identification':
-        return !!(state.selectedOpcoSlug || state.detectedOpcoSlug);
+        // OPCO choisi ou détecté (facultatif pour « former le dirigeant »), région et taille de l'entreprise.
+        return (
+          (!opcoRequis(state.projetType) || !!(state.selectedOpcoSlug || state.detectedOpcoSlug)) &&
+          state.regionCode != null &&
+          state.companySize != null
+        );
       case 'situation':
-        return !!(state.contractType && state.companySize);
+        return !!state.contractType;
       case 'formation':
         return !!(state.durationHours && state.pedagogyCostTotal && state.trainingMode);
       case 'frais':
@@ -33,10 +41,10 @@ export function useWizard() {
   }, [currentStep.key, state]);
 
   const goNext = useCallback(() => {
-    if (currentStepIndex < WIZARD_STEPS.length - 1) {
+    if (currentStepIndex < ETAPES.length - 1) {
       // Skip frais step if training is distance-only
       const nextIndex = currentStepIndex + 1;
-      if (WIZARD_STEPS[nextIndex].key === 'frais' && state.trainingMode === 'distance') {
+      if (ETAPES[nextIndex].key === 'frais' && state.trainingMode === 'distance') {
         setCurrentStepIndex(nextIndex + 1);
       } else {
         setCurrentStepIndex(nextIndex);
@@ -48,7 +56,7 @@ export function useWizard() {
     if (currentStepIndex > 0) {
       const prevIndex = currentStepIndex - 1;
       // Skip frais step going backwards if training is distance
-      if (WIZARD_STEPS[prevIndex].key === 'frais' && state.trainingMode === 'distance') {
+      if (ETAPES[prevIndex].key === 'frais' && state.trainingMode === 'distance') {
         setCurrentStepIndex(prevIndex - 1);
       } else {
         setCurrentStepIndex(prevIndex);
@@ -56,8 +64,8 @@ export function useWizard() {
     }
   }, [currentStepIndex, state.trainingMode]);
 
-  const goToStep = useCallback((step: WizardStep) => {
-    const index = WIZARD_STEPS.findIndex(s => s.key === step);
+  const goToStep = useCallback((step: EtapeSite) => {
+    const index = ETAPES.findIndex(s => s.key === step);
     if (index >= 0) {
       setCurrentStepIndex(index);
       setShowResults(false);
