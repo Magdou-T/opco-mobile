@@ -488,8 +488,9 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
 
 Composants : `components/results/` ; logique de présentation en fonctions pures : `lib/resultats.ts` (tests :
 `tests/resultats.test.ts`). Chaque montant vient du moteur (`@opco/core`) et n'est arrondi qu'à l'affichage
-(`formatEuro` : un montant entier sans décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près) ; un
-montant d'aide non éligible n'est jamais affiché.
+(`formatEuro` : un montant entier sans décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
+compris dans les textes du moteur (voir « Textes des données » plus bas) ; un montant d'aide non éligible n'est jamais
+affiché.
 
 - **Chargement** : `EcranResultats` est chargé à la demande par `WizardContainer` (`next/dynamic`, `ssr: false`) : le
   catalogue d'aides (environ 135 Ko gzip) et le calcul restent hors du lot initial du simulateur. Le parcours ne lui
@@ -560,8 +561,12 @@ montant d'aide non éligible n'est jamais affiché.
   et la source passant dans la colonne du poste sous 640 px ; ligne non chiffrée : « à confirmer », reste « - », règle
   sous le poste ; listes de plus de 6 conventions collectives repliées (`replierIdcc`) ; 50 salariés et plus : `Callout`
   avertissement (barème général ou de la branche ; choisir sa branche à l'étape Entreprise).
-- **Textes des données** : `texteDonnees` (dates JJ/MM/AAAA et `typo` : insécables avant « : ; ? ! », entre un nombre
-  et son unité, entre les milliers), jamais à l'intérieur d'un extrait cité. Une adresse web longue passe à la ligne
+- **Textes des données** : `texteDonnees` (dates JJ/MM/AAAA, montants et `typo` : insécables avant « : ; ? ! », entre
+  un nombre et son unité, entre les milliers), jamais à l'intérieur d'un extrait cité. Le moteur écrit les montants de
+  ses textes de calcul à l'anglaise (« 840.00 € », « 42.86 €/h », « 12600.00 € » : détail du calcul, notes de poste,
+  points d'attention) ; `montantsFr` les réécrit par `formatEuro` (« 840 € », « 42,86 €/h », « 12 600 € »). Un montant
+  déjà écrit à la française reste tel quel ; un nombre ambigu (« 2.000 € », point de milliers d'une citation, ou nombre
+  collé à un autre) n'est pas réinterprété. Une adresse web longue passe à la ligne
   (`break-words` ; `[overflow-wrap:anywhere]` dans le tableau, pour que la largeur des colonnes n'en dépende pas).
 - **Mouvement** : apparition douce du bandeau et des cartes (`.apparition`, délais échelonnés), barre qui se dévoile
   (`.devoilement`), trait `.mark` qui se déploie ; tout s'arrête sous `prefers-reduced-motion`.

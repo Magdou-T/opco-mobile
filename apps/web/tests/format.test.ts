@@ -2,8 +2,21 @@
 // de barème en une phrase (fiche OPCO sur écran étroit).
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '@opco/core';
-import { INSECABLE, de, formatEuro, moisAnneeFr, premierePhrase, texteDonnees, texteFr, typo } from '../src/lib/format';
+import { EMBEDDED_AIDES, EMBEDDED_OPCOS, calculateFunding, createInitialWizardState, type WizardState } from '@opco/core';
+import {
+  INSECABLE,
+  de,
+  formatEuro,
+  moisAnneeFr,
+  montantsFr,
+  premierePhrase,
+  texteDonnees,
+  texteFr,
+  typo,
+} from '../src/lib/format';
+
+/** Espace fine insécable (U+202F), écrite par son code : séparateur des milliers de `formatEuro` (Intl, fr-FR). */
+const FINE = String.fromCharCode(0x202f);
 
 /** Toutes les chaînes des données (OPCO et aides), parcourues récursivement. */
 function chainesDesDonnees(): string[] {
@@ -229,7 +242,7 @@ describe('formatEuro', () => {
 
   test('montant à la française : espace fine insécable entre les milliers, insécable avant le symbole (Intl, fr-FR)', () => {
     assert.equal(euro(6300), '6 300 €');
-    assert.match(formatEuro(6300), /^6 300 €$/);
+    assert.equal(formatEuro(6300), `6${FINE}300${INSECABLE}€`);
   });
 
   test('un montant entier sans décimales, tout autre montant avec deux décimales', () => {
@@ -339,5 +352,126 @@ describe('texteDonnees', () => {
       texteDonnees('Ouvert jusqu\'au 2026-12-31 : 5 000 € (« avant le 2026-06-30 : 3 000 € »)'),
       `Ouvert jusqu'au 31/12/2026${nb}: 5${nb}000${nb}€ (« avant le 2026-06-30 : 3 000 € »)`,
     );
+  });
+
+  test('montants du moteur écrits par formatEuro, hors extraits cités', () => {
+    const nb = INSECABLE;
+    assert.equal(
+      texteDonnees('Reste à charge : 60.06 € (« plafond de 1500.00 € »)'),
+      `Reste à charge${nb}: 60,06${nb}€ (« plafond de 1500.00 € »)`,
+    );
+    assert.equal(texteDonnees('Calcul : 40 €/h × 21 h = 840.00 €'), `Calcul${nb}: 40${nb}€/h × 21${nb}h = 840${nb}€`);
+  });
+});
+
+describe('montantsFr', () => {
+  /** Espaces insécables (fine ou non) lues comme des espaces ordinaires, pour écrire les attendus lisiblement. */
+  const lisible = (s: string) => s.replace(/\s/g, ' ');
+
+  test('montants écrits par le moteur : réécrits par formatEuro, entier sans décimales, tout autre à deux décimales', () => {
+    assert.equal(lisible(montantsFr('Calcul : 40 €/h × 21 h = 840.00 €')), 'Calcul : 40 €/h × 21 h = 840 €');
+    assert.equal(
+      lisible(montantsFr('Votre coût horaire : 42.86 €/h × 21 h = 900.06 €')),
+      'Votre coût horaire : 42,86 €/h × 21 h = 900,06 €',
+    );
+    assert.equal(
+      lisible(montantsFr('Le montant calculé (12600.00 €) dépasse ce plafond → ramené à 0.00 €')),
+      'Le montant calculé (12 600 €) dépasse ce plafond → ramené à 0 €',
+    );
+    assert.equal(
+      lisible(montantsFr('Budget déjà consommé (1500 €) déduit du plafond annuel (6300 €) : enveloppe restante 4800 €.')),
+      'Budget déjà consommé (1 500 €) déduit du plafond annuel (6 300 €) : enveloppe restante 4 800 €.',
+    );
+    assert.equal(lisible(montantsFr('Forfait : 15.5 € par repas, 0.66€')), 'Forfait : 15,50 € par repas, 0,66 €');
+    // Espace insécable avant « € » (texte copié d'une page web) : même lecture.
+    assert.equal(lisible(montantsFr(`plafond de 1500${INSECABLE}€`)), 'plafond de 1 500 €');
+    // Écriture exacte de formatEuro : espace fine insécable entre les milliers, insécable avant « € ».
+    assert.equal(montantsFr('reste 1431.94 €'), `reste ${formatEuro(1431.94)}`);
+  });
+
+  test('un montant déjà écrit à la française reste tel quel', () => {
+    const textes = ['1 500 €', '1 500,50 €', '9,15 €/h', '50 000 € HT', `5${INSECABLE}000${INSECABLE}€`, '0,5 €', '1,5 M€', '50 k€'];
+    for (const texte of [...textes, 'IDCC 1702', '35 h et 50 %']) assert.equal(montantsFr(texte), texte, texte);
+  });
+
+  test("un nombre ambigu n'est pas réinterprété", () => {
+    // Point séparateur de milliers (forme des citations de source) : jamais lu comme une décimale.
+    assert.equal(montantsFr('montant de 2.000€ maximum'), 'montant de 2.000€ maximum');
+    assert.equal(montantsFr('plafonné à 12.500 € par an'), 'plafonné à 12.500 € par an');
+    // Deux nombres voisins : le second n'est ni un groupe de milliers du premier, ni un montant à réécrire.
+    assert.equal(montantsFr('en 2026 1500 €'), 'en 2026 1500 €');
+    // Zéro en tête ou quatre décimales : nombre écrit par le moteur, arrondi au centime.
+    assert.equal(lisible(montantsFr('0.125 €/h et 1.0625 €')), '0,13 €/h et 1,06 €');
+  });
+
+  test('montants tirés au hasard (graine fixe), écrits comme le moteur : même valeur au centime, idempotente', () => {
+    // mulberry32 : tirages indépendants et reproductibles.
+    let graine = 41;
+    const hasard = (n: number) => {
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+    };
+    /** Montants écrits à la française (« 12 600 € », « 0,66 € ») : leur valeur en centimes. */
+    const centimes = (texte: string) =>
+      [...texte.matchAll(/(\d{1,3}(?:\s\d{3})*)(?:,(\d{2}))?\s€/g)].map(
+        (m) => Number(m[1].replace(/\s/g, '')) * 100 + Number(m[2] ?? 0),
+      );
+    const enCentimes = (ecrit: string) => Math.round(Number(ecrit) * 100);
+    for (let i = 0; i < 2000; i++) {
+      const taux = String(hasard(20_000) / 100);
+      const heures = 1 + hasard(400);
+      const calcul = (Number(taux) * heures).toFixed(2);
+      const reste = (hasard(2_000_000) + (hasard(4) === 0 ? 0 : hasard(100) / 100)).toFixed(2);
+      const plafond = String(hasard(100_000));
+      const texte = `Calcul : ${taux} €/h × ${heures} h = ${calcul} € ; reste ${reste} € (plafond ${plafond}€)`;
+      const sortie = montantsFr(texte);
+      assert.deepEqual(centimes(sortie), [taux, calcul, reste, plafond].map(enCentimes), texte);
+      assert.ok(!/\d\.\d/.test(sortie), sortie);
+      assert.equal(montantsFr(sortie), sortie);
+    }
+  });
+
+  test('textes du moteur, tous OPCO et branches : plus aucun montant à point décimal ni à quatre chiffres collés', () => {
+    const etats: Partial<WizardState>[] = [
+      {
+        companySize: 'less_11', durationHours: 21, pedagogyCostTotal: 900, pedagogyCostPerHour: 42.86, trainingDays: 3,
+        needsTransport: true, needsAccommodation: true, accommodationNights: 2, accommodationCostPerNight: 95.5,
+        needsMeals: true, mealCostPerDay: 18.5, budgetDejaConsomme: 1500,
+      },
+      {
+        companySize: '11_49', durationHours: 140, pedagogyCostTotal: 12600, pedagogyCostPerHour: 90,
+        formationType: 'certification', certificationLevel: 'rncp',
+      },
+      { companySize: '50_299', durationHours: 35, pedagogyCostTotal: 1400, pedagogyCostPerHour: 40 },
+      {
+        companySize: 'less_11', durationHours: 7, pedagogyCostTotal: 350, pedagogyCostPerHour: 50, trainingDays: 1,
+        needsMeals: true, mealCostPerDay: 9,
+      },
+    ];
+    let textes = 0;
+    let reecrits = 0;
+    for (const opco of EMBEDDED_OPCOS) {
+      for (const idcc of [null, ...(opco.variantes_branche ?? []).map((v) => v.idcc[0] ?? null)]) {
+        for (const etat of etats) {
+          const resultat = calculateFunding(opco, {
+            ...createInitialWizardState(),
+            trainingMode: 'presentiel',
+            selectedOpcoSlug: opco.slug,
+            detectedIdcc: idcc,
+            ...etat,
+          });
+          const ecrits = [...resultat.lines.flatMap((l) => [l.note ?? '', ...(l.details ?? [])]), ...resultat.warnings];
+          for (const texte of ecrits) {
+            textes++;
+            if (montantsFr(texte) !== texte) reecrits++;
+            const sortie = texteDonnees(texte);
+            assert.ok(!/\d\.\d+\s?€|\d{4,}\s?€/.test(sortie), sortie);
+          }
+        }
+      }
+    }
+    assert.ok(textes > 2000 && reecrits > 1000, `${textes} textes, ${reecrits} réécrits`);
   });
 });

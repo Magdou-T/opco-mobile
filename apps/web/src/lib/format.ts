@@ -102,9 +102,33 @@ export function typo(s: string): string {
   );
 }
 
-/** Texte des données prêt à l'affichage : dates au format JJ/MM/AAAA et typographie française, hors extraits cités. */
+/**
+ * Montant écrit par le moteur dans ses textes de calcul : nombre à point décimal ou sans séparateur de milliers, suivi
+ * de « € » avec ou sans espace (« 840.00 € », « 42.86 €/h », « 1500 € »). Ce qui précède le nombre n'est ni un chiffre,
+ * ni un point, ni une virgule, ni un chiffre suivi d'une espace (ordinaire, insécable ou fine : `\s`) : un montant déjà
+ * écrit à la française (« 1 500 € », « 9,15 € ») n'est jamais lu par morceaux.
+ */
+const MONTANT_DU_MOTEUR = /(?<![\d.,])(?<!\d\s)(\d+(?:\.\d+)?)\s?€/g;
+/** « 2.000 € », « 12.500 € » : point séparateur de milliers (forme des citations de source), jamais lu comme décimale. */
+const MILLIERS_A_POINT = /^[1-9]\d{0,2}(?:\.\d{3})+$/;
+
+/**
+ * Montants en euros d'un texte du moteur réécrits par `formatEuro` : « 840.00 € » devient « 840 € », « 42.86 €/h »
+ * devient « 42,86 €/h », « 12600.00 € » devient « 12 600 € ». Un montant déjà écrit à la française reste tel quel ; un
+ * nombre ambigu (point de milliers, ou nombre collé à un autre) n'est pas réinterprété.
+ */
+export function montantsFr(s: string): string {
+  return s.replace(MONTANT_DU_MOTEUR, (montant: string, nombre: string) =>
+    MILLIERS_A_POINT.test(nombre) ? montant : formatEuro(Number(nombre)),
+  );
+}
+
+/**
+ * Texte des données ou du moteur prêt à l'affichage : dates au format JJ/MM/AAAA, montants écrits par `formatEuro` et
+ * typographie française, hors extraits cités.
+ */
 export function texteDonnees(s: string): string {
-  return typo(texteFr(s));
+  return typo(horsCitations(s, (morceau) => montantsFr(datesFr(morceau))));
 }
 
 const MOIS = [
