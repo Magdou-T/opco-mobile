@@ -2,20 +2,12 @@
 // (calculs détaillés en commentaire) ; les tirages au hasard ont une graine fixe.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  EMBEDDED_AIDES,
-  EMBEDDED_PORTAILS,
-  calculateFunding,
-  construirePlan,
-  createInitialWizardState,
-  evaluerAides,
-  getEmbeddedOpcoBySlug,
-  profilDepuisWizard,
-} from '@opco/core';
-import type { AideEvaluee, AlerteOpco, Financeur, LignePlan, PlanFinancement, WizardState } from '@opco/core';
+import { EMBEDDED_AIDES, EMBEDDED_PORTAILS, createInitialWizardState } from '@opco/core';
+import type { AideEvaluee, AlerteOpco, Financeur, LignePlan, PlanFinancement, ProjetType, WizardState } from '@opco/core';
 import { INSECABLE } from '../src/lib/format';
 import {
   aidesNonEligiblesAffichees,
+  calculer,
   cartesDuPlan,
   descriptionBarre,
   enRegion,
@@ -89,23 +81,20 @@ const ligne = (id: string, financeurNom: string, montant: number): LignePlan => 
   confidence: 'exact',
 });
 
-/**
- * Les cinq scénarios de la consigne, passés par le moteur comme le fait l'écran de résultats (date d'évaluation fixe :
- * le résultat ne dépend pas du jour du test). Plan de développement des compétences de l'OPCO pour les seuls projets
- * salariés.
- */
+/** Date du jour fixe : le résultat ne dépend pas du jour du test. */
 const DATE = '2026-10-07';
+
+/** État du parcours d'un scénario : état de départ, formation en présentiel, réponses du scénario. */
+const etat = (over: Partial<WizardState>): WizardState => ({
+  ...createInitialWizardState(),
+  trainingMode: 'presentiel',
+  ...over,
+});
+
+/** Un scénario passé par le calcul de l'écran de résultats (`calculer`, le code de l'écran). */
 function simuler(over: Partial<WizardState>) {
-  const state: WizardState = { ...createInitialWizardState(), trainingMode: 'presentiel', ...over };
-  const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const opco = slug ? getEmbeddedOpcoBySlug(slug) : undefined;
-  const projet = state.projetType ?? 'formation_salarie';
-  const etat = !state.trainingDays && state.durationHours ? { ...state, trainingDays: Math.ceil(state.durationHours / 7) } : state;
-  const funding =
-    opco && (projet === 'formation_salarie' || projet === 'reconversion_salarie') ? calculateFunding(opco, etat) : null;
-  const profil = profilDepuisWizard(etat, slug);
-  const aides = evaluerAides(EMBEDDED_AIDES, profil, DATE);
-  return { aides, plan: construirePlan(funding, aides, profil) };
+  const { aidesEvaluees, plan } = calculer(etat(over), DATE);
+  return { aides: aidesEvaluees, plan };
 }
 
 const SCENARIOS: Record<string, Partial<WizardState>> = {
@@ -148,6 +137,83 @@ const TOUS_LES_FINANCEURS: Financeur[] = [
   'etat', 'region', 'departement', 'france_travail', 'transitions_pro', 'agefiph', 'europe', 'cpf', 'opco', 'faf', 'fiscal',
   'branche', 'autre',
 ];
+
+describe("calcul de l'écran (calculer)", () => {
+  const TOUS_LES_PROJETS: ProjetType[] = [
+    'formation_salarie',
+    'reconversion_salarie',
+    'recrutement_demandeur_emploi',
+    'alternance',
+    'formation_dirigeant',
+  ];
+
+  test("plan de développement des compétences de l'OPCO pour former ou reconvertir un salarié seulement, même avec un OPCO connu", () => {
+    const attendu: Record<ProjetType, boolean> = {
+      formation_salarie: true,
+      reconversion_salarie: true,
+      recrutement_demandeur_emploi: false,
+      alternance: false,
+      formation_dirigeant: false,
+    };
+    for (const projet of TOUS_LES_PROJETS) {
+      const r = calculer(etat({ ...SCENARIOS.akto, projetType: projet, statutDirigeant: 'assimile_salarie' }), DATE);
+      assert.equal(r.opco?.slug, 'akto', projet);
+      assert.equal(r.funding != null, attendu[projet], projet);
+      assert.equal(r.plan.financements.some((l) => l.id === 'opco-pdc'), attendu[projet], projet);
+    }
+    // Scénarios 3 et 4 (demandeur d'emploi, alternance) : AKTO est connu, son plan n'est pas calculé.
+    for (const nom of ['demandeur', 'apprenti']) {
+      const r = calculer(etat(SCENARIOS[nom]), DATE);
+      assert.ok(r.opco, nom);
+      assert.equal(r.funding, null, nom);
+    }
+  });
+
+  test('projet non choisi : celui de « former un salarié »', () => {
+    const r = calculer(etat({ ...SCENARIOS.akto, projetType: null }), DATE);
+    assert.equal(r.projet, 'formation_salarie');
+    assert.ok(r.funding);
+  });
+
+  test("OPCO retenu : le choix de l'utilisateur, sinon celui détecté ; aucun : aucun calcul de l'OPCO", () => {
+    const base = { ...SCENARIOS.akto, selectedOpcoSlug: null };
+    assert.equal(calculer(etat({ ...base, selectedOpcoSlug: 'atlas', detectedOpcoSlug: 'akto' }), DATE).funding?.opcoName, 'ATLAS');
+    assert.equal(calculer(etat({ ...base, detectedOpcoSlug: 'akto' }), DATE).funding?.opcoName, 'AKTO');
+    const sans = calculer(etat(base), DATE);
+    assert.equal(sans.opco, undefined);
+    assert.equal(sans.funding, null);
+  });
+
+  test('jours de formation non saisis : 7 heures par jour, comme une saisie de ce nombre de jours', () => {
+    // Repas à 20 € par jour : 140 h font 20 jours, donc 400 € de repas comptés par l'OPCO et par le profil des aides.
+    const repas = { ...SCENARIOS.akto, needsMeals: true, mealCostPerDay: 20 };
+    const deduit = calculer(etat(repas), DATE);
+    const saisi = calculer(etat({ ...repas, trainingDays: 20 }), DATE);
+    assert.equal(deduit.profil.coutFraisAnnexes, 400);
+    assert.deepEqual(deduit.funding, saisi.funding);
+    assert.deepEqual(deduit.plan, saisi.plan);
+  });
+
+  test("date de référence des aides : le début de formation s'il est futur, sinon la date du jour", () => {
+    // L'aide exceptionnelle à l'apprentissage (PME, niveau 5) prend fin le 31/12/2026.
+    const id = 'nat-aide-exceptionnelle-apprentissage-pme-niveau5';
+    const apprenti = { ...SCENARIOS.apprenti, niveauFormationVise: 5 as const };
+    const statut = (debut: string | null, jour: string) =>
+      calculer(etat({ ...apprenti, dateDebutFormation: debut }), jour).aidesEvaluees.find((a) => a.id === id);
+    assert.notEqual(statut(null, DATE)?.statut, 'non_eligible');
+    const futur = statut('2027-03', DATE);
+    assert.equal(futur?.statut, 'non_eligible');
+    assert.ok(futur?.raisons.some((r) => r.includes('terminé le 31/12/2026')), futur?.raisons.join(' | '));
+    // Un début déjà passé ne compte pas : la date du jour fait référence.
+    assert.notEqual(statut('2026-01', DATE)?.statut, 'non_eligible');
+  });
+
+  test("portail officiel de la région de l'entreprise ; aucun sans région", () => {
+    assert.equal(calculer(etat(SCENARIOS.akto), DATE).portail?.region, '11');
+    assert.equal(calculer(etat(SCENARIOS.artisan), DATE).portail?.nom_region, 'Bretagne');
+    assert.equal(calculer(etat({ ...SCENARIOS.akto, regionCode: null }), DATE).portail, null);
+  });
+});
 
 describe('familles de couleur', () => {
   test('chaque financeur a sa famille (table fixée dans DESIGN.md, section 15)', () => {
@@ -562,11 +628,9 @@ describe("fonds épuisés signalés par l'OPCO", () => {
   });
 
   test('scénario 1 : AKTO signale la branche « Organismes de formation » épuisée, et le plan compte son PDC', () => {
-    const parcours = SCENARIOS.akto;
-    const opco = getEmbeddedOpcoBySlug('akto')!;
-    const etat: WizardState = { ...createInitialWizardState(), trainingMode: 'presentiel', ...parcours, trainingDays: 20 };
-    const alertes = calculateFunding(opco, etat).alertes;
-    assert.deepEqual(fondsEpuisesSurLePlan(simuler(parcours).plan, alertes), ['Organismes de formation']);
+    const { plan: p, funding } = calculer(etat(SCENARIOS.akto), DATE);
+    assert.ok(funding);
+    assert.deepEqual(fondsEpuisesSurLePlan(p, funding.alertes), ['Organismes de formation']);
   });
 
   test("seulement quand le plan compte le plan de développement des compétences ; branches sans doublon", () => {

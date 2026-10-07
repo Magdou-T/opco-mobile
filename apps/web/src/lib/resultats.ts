@@ -1,12 +1,60 @@
 // ============================================================
-// Écran « Votre plan de financement » : logique de présentation, en fonctions pures (tests : tests/resultats.test.ts).
-// Les montants viennent du moteur (@opco/core) ; ces fonctions les classent, les regroupent et calculent les parts de la
-// barre empilée, sans jamais en inventer. Couleurs et emplois : apps/web/DESIGN.md, section 15.
+// Écran « Votre plan de financement » : calcul et logique de présentation, en fonctions pures (tests :
+// tests/resultats.test.ts). Les montants viennent du moteur (@opco/core) ; ces fonctions les classent, les regroupent et
+// calculent les parts de la barre empilée, sans jamais en inventer. Couleurs et emplois : apps/web/DESIGN.md, section 15.
+// Ce module importe le catalogue d'aides : seuls les composants de l'écran, chargé à la demande, l'importent (jamais le
+// lot initial du simulateur).
 // ============================================================
 
-import { FINANCEUR_LABELS } from '@opco/core';
-import type { AideEvaluee, AlerteOpco, Financeur, PlanFinancement, SourceAide } from '@opco/core';
+import {
+  EMBEDDED_AIDES,
+  EMBEDDED_PORTAILS,
+  FINANCEUR_LABELS,
+  calculateFunding,
+  construirePlan,
+  dateDeReference,
+  evaluerAides,
+  getEmbeddedOpcoBySlug,
+  profilDepuisWizard,
+} from '@opco/core';
+import type {
+  AideEvaluee,
+  AlerteOpco,
+  Financeur,
+  FundingLine,
+  FundingResult,
+  PlanFinancement,
+  SourceAide,
+  WizardState,
+} from '@opco/core';
+import { ouvreBudgetOpco } from './entreprise';
 import { INSECABLE, formatEuro, horsCitations } from './format';
+
+// --- Calcul -------------------------------------------------------------------------------------------------------
+
+/**
+ * Calcul de l'écran de résultats, dérivation pure de l'état du parcours. `aujourdhui` (AAAA-MM-JJ) est la date du jour,
+ * lue par l'écran (jamais dans @opco/core) : référence de validité des aides, sauf début de formation futur.
+ * - OPCO retenu : le choix de l'utilisateur, sinon celui détecté (même règle que useWizard.getEffectiveOpcoSlug).
+ * - Jours de formation non saisis : 7 heures par jour.
+ * - Le plan de développement des compétences de l'OPCO ne finance que les projets salariés (former un salarié,
+ *   reconversion : `ouvreBudgetOpco`) ; le dirigeant, l'alternance et le recrutement d'un demandeur d'emploi passent par
+ *   les aides, même avec un OPCO connu. Projet non choisi : « former un salarié ».
+ */
+export function calculer(state: WizardState, aujourdhui: string) {
+  const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
+  const opco = slug ? getEmbeddedOpcoBySlug(slug) : undefined;
+  const effectiveState =
+    !state.trainingDays && state.durationHours ? { ...state, trainingDays: Math.ceil(state.durationHours / 7) } : state;
+  const projet = effectiveState.projetType ?? 'formation_salarie';
+  const avecPdc = opco != null && ouvreBudgetOpco(projet);
+  const funding = avecPdc ? calculateFunding(opco, effectiveState) : null;
+  const profil = profilDepuisWizard(effectiveState, slug);
+  const aidesEvaluees = evaluerAides(EMBEDDED_AIDES, profil, dateDeReference(effectiveState.dateDebutFormation, aujourdhui));
+  const plan = construirePlan(funding, aidesEvaluees, profil);
+  const portail = EMBEDDED_PORTAILS.find((p) => p.region === profil.regionEntreprise) ?? null;
+  return { opco, projet, funding, profil, aidesEvaluees, plan, portail };
+}
 
 /** Famille de couleur d'un financeur : segment de la barre empilée, pastille des lignes du plan et des groupes d'aides. */
 export type FamilleCouleur = 'opco' | 'faf' | 'cpf' | 'region' | 'etat' | 'europe' | 'autre';
@@ -358,6 +406,22 @@ export function fondsEpuisesSurLePlan(
 ): string[] {
   if (!plan.financements.some((l) => l.id === 'opco-pdc')) return [];
   return [...new Set(alertes.filter((a) => a.type === 'fonds_epuises').map((a) => a.branche))];
+}
+
+// --- Détail de l'estimation OPCO ----------------------------------------------------------------------------------
+
+/**
+ * Ligne dont le moteur ne chiffre rien : l'OPCO ne publie pas de barème pour ce poste (confiance « selon branche » et
+ * 0 € financé). Elle s'affiche avec sa règle seule, jamais avec « 0 € » : un montant nul n'est montré que s'il est publié
+ * comme tel.
+ */
+export function sansMontantEstime(line: Pick<FundingLine, 'confidence' | 'fundedAmount'>): boolean {
+  return line.confidence === 'depends_on_branche' && line.fundedAmount === 0;
+}
+
+/** Lignes du détail par poste : un montant demandé ou financé, ou une règle sans montant estimé. */
+export function lignesDuDetail(result: Pick<FundingResult, 'lines'>): FundingLine[] {
+  return result.lines.filter((l) => l.requestedAmount > 0 || l.fundedAmount > 0 || sansMontantEstime(l));
 }
 
 // --- Listes de conventions collectives ----------------------------------------------------------------------------

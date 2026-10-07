@@ -1,19 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import {
-  EMBEDDED_AIDES,
-  EMBEDDED_OPCOS,
-  EMBEDDED_PORTAILS,
-  PROJET_LABELS,
-  REGIONS,
-  calculateFunding,
-  construirePlan,
-  dateDeReference,
-  evaluerAides,
-  getEmbeddedOpcoBySlug,
-  profilDepuisWizard,
-} from '@opco/core';
+import { EMBEDDED_OPCOS, PROJET_LABELS, REGIONS } from '@opco/core';
 import type { WizardState } from '@opco/core';
 import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
@@ -22,7 +10,7 @@ import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { dateFr, moisAnneeFr, typo } from '@/lib/format';
-import { fondsEpuisesSurLePlan } from '@/lib/resultats';
+import { calculer, fondsEpuisesSurLePlan } from '@/lib/resultats';
 import { AidesList } from './AidesList';
 import { ID_TITRE_RESULTATS, TitreResultats, focaliserTitreResultats } from './EtatsResultats';
 import type { ProprietesEcranResultats } from './EtatsResultats';
@@ -49,34 +37,16 @@ const VERIFICATION_OPCO = EMBEDDED_OPCOS.reduce(
   '',
 );
 
-function calculer(state: WizardState) {
-  // OPCO retenu : le choix de l'utilisateur, sinon celui détecté (même règle que useWizard.getEffectiveOpcoSlug).
-  const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
-  const opco = slug ? getEmbeddedOpcoBySlug(slug) : undefined;
-  const effectiveState =
-    !state.trainingDays && state.durationHours ? { ...state, trainingDays: Math.ceil(state.durationHours / 7) } : state;
-  const projet = effectiveState.projetType ?? 'formation_salarie';
-  // Le plan de développement des compétences de l'OPCO ne finance que les projets salariés (former un salarié,
-  // reconversion) ; le dirigeant, l'alternance et le recrutement d'un demandeur d'emploi passent par les aides.
-  const avecPdc = opco != null && ouvreBudgetOpco(projet);
-  const funding = avecPdc ? calculateFunding(opco, effectiveState) : null;
-  const profil = profilDepuisWizard(effectiveState, slug);
-  const aujourdhui = aujourdhuiLocal();
-  const aidesEvaluees = evaluerAides(EMBEDDED_AIDES, profil, dateDeReference(effectiveState.dateDebutFormation, aujourdhui));
-  const plan = construirePlan(funding, aidesEvaluees, profil);
-  const portail = EMBEDDED_PORTAILS.find((p) => p.region === profil.regionEntreprise) ?? null;
-  return { opco, projet, funding, profil, aidesEvaluees, plan, portail, aujourdhui };
-}
-
 export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResultats) {
   // Le titre n'existait pas quand le parcours a affiché les résultats (code chargé à la demande) : l'écran pose le focus
   // sur son titre dès son montage.
   useEffect(focaliserTitreResultats, []);
 
-  const { opco, projet, funding, profil, aidesEvaluees, plan, portail, aujourdhui } = useMemo(
-    () => calculer(state),
-    [state],
-  );
+  // Calcul (lib/resultats.ts) : dérivation pure de l'état, à la date du jour lue ici.
+  const { opco, projet, funding, profil, aidesEvaluees, plan, portail, aujourdhui } = useMemo(() => {
+    const jour = aujourdhuiLocal();
+    return { ...calculer(state, jour), aujourdhui: jour };
+  }, [state]);
 
   const situation = [
     PROJET_LABELS[projet].label,

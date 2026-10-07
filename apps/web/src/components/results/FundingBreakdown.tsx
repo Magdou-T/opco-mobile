@@ -1,23 +1,17 @@
-'use client';
-
-import { Fragment, useState } from 'react';
-import type { Confidence, DispositifEligible, FundingLine, FundingResult } from '@opco/core';
+import type { Confidence, FundingResult } from '@opco/core';
 import { AlertesOpco } from '@/components/ui/AlertesOpco';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
-import { CumulBadge } from '@/components/ui/CumulBadge';
 import { Icon } from '@/components/ui/Icon';
-import { SourceBadge } from '@/components/ui/SourceBadge';
-import { cx } from '@/lib/cx';
 import { de, formatEuro, texteDonnees } from '@/lib/format';
-import { replierIdcc } from '@/lib/resultats';
+import { lignesDuDetail, sansMontantEstime } from '@/lib/resultats';
+import { BadgeEstimation } from './BadgeEstimation';
+import { DetailParPoste } from './DetailParPoste';
+import { DispositifsOpco } from './DispositifsOpco';
 
 interface Props {
   result: FundingResult;
 }
-
-/** En-tête de colonne : Inter 600 en petites majuscules, texte discret (5,35:1 sur blanc, 4,95:1 sur lin-soft). */
-const EN_TETE = 'px-4 py-3 text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase sm:px-6';
 
 function getOverallConfidence(items: { confidence: Confidence }[]): Confidence {
   if (items.some((l) => l.confidence === 'depends_on_branche')) return 'depends_on_branche';
@@ -26,85 +20,13 @@ function getOverallConfidence(items: { confidence: Confidence }[]): Confidence {
 }
 
 /**
- * Ligne dont le moteur ne chiffre rien : l'OPCO ne publie pas de barème pour ce poste (confiance « selon branche »
- * et 0 € financé). Elle s'affiche avec sa règle seule, jamais avec « 0 € » : un montant nul n'est montré que
- * s'il est publié comme tel.
+ * Détail de l'estimation de l'OPCO : carte du total de tous ses postes (le plan ne retient que ceux de la formation),
+ * alertes de l'OPCO, détail par poste (`DetailParPoste`), plafond annuel, points d'attention, financements
+ * complémentaires (`DispositifsOpco`), démarches, conditions et prochaines étapes.
  */
-function sansMontantEstime(line: FundingLine): boolean {
-  return line.confidence === 'depends_on_branche' && line.fundedAmount === 0;
-}
-
-/** Libellé de la règle d'une ligne sans montant estimé. */
-function regleDeLigne(line: FundingLine, opcoName: string): string {
-  return line.note ?? `Montant à confirmer auprès ${de(opcoName)}`;
-}
-
-/**
- * Mention d'un montant qui n'est pas exact (une ligne « exact » n'en porte aucune) : pilule à point de couleur qui peut
- * passer à la ligne (texte rouge sur rouge doux 5,62:1 ; texte doux sur lin-soft 7,68:1).
- */
-function BadgeEstimation({ confidence, opcoName }: { confidence: Confidence; opcoName: string }) {
-  if (confidence === 'exact') return null;
-  const estimated = confidence === 'estimated';
-  return (
-    <span
-      className={cx(
-        'inline-flex items-start gap-1.5 rounded-2xl border py-0.5 pr-2.5 pl-2 text-xs leading-5 font-semibold',
-        estimated ? 'border-rouge/25 bg-rouge-soft text-rouge' : 'border-filet bg-lin-soft text-texte-doux',
-      )}
-    >
-      <span aria-hidden="true" className="mt-[0.4rem] size-[7px] shrink-0 rounded-full bg-current" />
-      {estimated ? `estimation à confirmer auprès ${de(opcoName)}` : 'dépend de votre accord de branche'}
-    </span>
-  );
-}
-
-/** Dispositif dont un montant est calculable pour cette formation (un montant nul n'est pas un montant publié). */
-function montantDuDispositif(d: DispositifEligible): number | null {
-  return d.montantEstime != null && d.montantEstime > 0 ? d.montantEstime : null;
-}
-
-/**
- * Texte des données dont les listes de plus de 6 codes de convention collective sont repliées (« 12 conventions
- * collectives », dépliable) ; dates et typographie à la française hors extraits cités.
- */
-function TexteAvecConventions({ texte }: { texte: string }) {
-  return (
-    <>
-      {replierIdcc(texte).map((m, i) =>
-        m.genre === 'texte' ? <Fragment key={i}>{texteDonnees(m.valeur)}</Fragment> : <ListeIdcc key={i} codes={m.codes} />,
-      )}
-    </>
-  );
-}
-
-function ListeIdcc({ codes }: { codes: string[] }) {
-  const [ouvert, setOuvert] = useState(false);
-  return (
-    <>
-      <button
-        type="button"
-        aria-expanded={ouvert}
-        onClick={() => setOuvert((v) => !v)}
-        className="inline font-semibold text-orange-deep underline decoration-1 underline-offset-2 print:hidden"
-      >
-        {codes.length}&nbsp;conventions collectives
-      </button>
-      {/* À l'impression, la liste reprend sa forme d'origine (« IDCC 0112, … »), sans le bouton. */}
-      <span className={cx(ouvert ? 'inline' : 'hidden', 'print:inline')}>
-        <span className="print:hidden">&nbsp;: </span>IDCC {codes.join(', ')}
-      </span>
-    </>
-  );
-}
-
 export function FundingBreakdown({ result }: Props) {
-  const [expandedLines, setExpandedLines] = useState<Set<number>>(new Set());
-
   const { opcoName } = result;
-  const visibleLines = result.lines.filter(
-    (l) => l.requestedAmount > 0 || l.fundedAmount > 0 || sansMontantEstime(l),
-  );
+  const visibleLines = lignesDuDetail(result);
   const lignesChiffrees = visibleLines.filter((l) => !sansMontantEstime(l));
   const lignesFinancees = result.lines.filter((l) => l.fundedAmount > 0);
   // Un montant est connu dès qu'une ligne est chiffrée ; sinon le total affiché serait un « 0 € » inventé.
@@ -125,18 +47,6 @@ export function FundingBreakdown({ result }: Props) {
   const prochainesEtapes = result.nextSteps.filter(
     (s) => !s.url.startsWith('mailto:') || result.opcoEmail.trim() !== '',
   );
-
-  const toggleLine = (index: number) => {
-    setExpandedLines((prev) => {
-      const next = new Set(prev);
-      if (next.has(index)) {
-        next.delete(index);
-      } else {
-        next.add(index);
-      }
-      return next;
-    });
-  };
 
   return (
     // Les textes des données citent parfois une adresse web entière : elle passe à la ligne plutôt que d'élargir la page.
@@ -215,154 +125,9 @@ export function FundingBreakdown({ result }: Props) {
       {/* Alertes publiées par l'OPCO pour l'entreprise */}
       <AlertesOpco alertes={result.alertes} opcoName={opcoName} id="alertes-opco" />
 
-      {/* Détail par poste (sans objet quand le plan est fermé : aucun montant n'est estimé). Sous 640 px, les colonnes
-          « Demandé » et « Source » passent dans la colonne du poste ; la règle d'une ligne non chiffrée y est aussi, pour
-          que la colonne étroite « Financé » ne s'allonge pas sur huit lignes. */}
+      {/* Détail par poste (sans objet quand le plan est fermé : aucun montant n'est estimé). */}
       {!result.pdcFerme && visibleLines.length > 0 && (
-        <Card padding="none" className="overflow-hidden">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-filet px-5 py-4 sm:px-6">
-            <h3 className="text-lg leading-snug font-bold text-texte">Détail par poste</h3>
-            {visibleLines.some((l) => l.details?.length) && (
-              <p className="text-xs text-texte-discret print:hidden">Ouvrez une ligne pour le calcul complet</p>
-            )}
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-lin-soft">
-                <tr>
-                  <th scope="col" className={cx(EN_TETE, 'text-left')}>
-                    Poste
-                  </th>
-                  <th scope="col" className={cx(EN_TETE, 'hidden text-right sm:table-cell')}>
-                    Demandé
-                  </th>
-                  <th scope="col" className={cx(EN_TETE, 'text-right')}>
-                    Financé
-                  </th>
-                  <th scope="col" className={cx(EN_TETE, 'text-right')}>
-                    Reste
-                  </th>
-                  <th scope="col" className={cx(EN_TETE, 'hidden text-center sm:table-cell print:hidden')}>
-                    Source
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-filet">
-                {visibleLines.map((line, i) => {
-                  const detaillee = !!line.details?.length;
-                  const ouverte = expandedLines.has(i);
-                  const sansMontant = sansMontantEstime(line);
-                  return (
-                    <Fragment key={`${line.poste}-${i}`}>
-                      <tr
-                        data-poste={line.poste}
-                        className={cx(
-                          'align-top transition-[background-color] hover:bg-vert-clair-soft/50',
-                          detaillee && 'cursor-pointer',
-                        )}
-                        onClick={() => detaillee && toggleLine(i)}
-                      >
-                        <td className="px-4 py-4 sm:px-6">
-                          <div className="flex items-start gap-1.5 font-semibold text-texte">
-                            {detaillee && (
-                              <button
-                                type="button"
-                                aria-expanded={ouverte}
-                                aria-label={`Calcul détaillé : ${line.label}`}
-                                className="-my-1 -ml-1.5 grid size-7 shrink-0 place-items-center rounded-full text-texte-discret hover:text-orange-deep print:hidden"
-                              >
-                                <Icon
-                                  name="chevron"
-                                  className={cx('size-4 transition-transform duration-200', ouverte && 'rotate-90')}
-                                  strokeWidth={2}
-                                />
-                              </button>
-                            )}
-                            <span>{line.label}</span>
-                          </div>
-                          {/* Une adresse dans une note ne doit pas fixer la largeur de la colonne. */}
-                          <div className={cx('space-y-1.5 [overflow-wrap:anywhere]', detaillee && 'sm:pl-6')}>
-                            {!sansMontant && line.note && (
-                              <p className="mt-1 text-xs leading-relaxed text-texte-discret">{texteDonnees(line.note)}</p>
-                            )}
-                            {sansMontant && (
-                              <p className="mt-1 text-xs leading-relaxed text-texte-doux">
-                                {texteDonnees(regleDeLigne(line, opcoName))}
-                              </p>
-                            )}
-                            {line.confidence !== 'exact' && (
-                              <div>
-                                <BadgeEstimation confidence={line.confidence} opcoName={opcoName} />
-                              </div>
-                            )}
-                            <p className="text-xs text-texte-discret sm:hidden">
-                              Demandé&nbsp;: {line.requestedAmount > 0 ? formatEuro(line.requestedAmount) : '-'}
-                            </p>
-                            <div className="sm:hidden print:hidden" onClick={(e) => e.stopPropagation()}>
-                              <SourceBadge url={line.sourceUrl} />
-                            </div>
-                          </div>
-                        </td>
-                        <td className="amount hidden px-4 py-4 text-right text-texte-doux sm:table-cell sm:px-6">
-                          {line.requestedAmount > 0 ? formatEuro(line.requestedAmount) : '-'}
-                        </td>
-                        <td className="px-4 py-4 text-right whitespace-nowrap sm:px-6">
-                          {sansMontant ? (
-                            <span className="text-xs text-texte-doux">à confirmer</span>
-                          ) : (
-                            <span className="amount text-turquoise-deep">{formatEuro(line.fundedAmount)}</span>
-                          )}
-                        </td>
-                        <td className="amount px-4 py-4 text-right whitespace-nowrap text-texte-doux sm:px-6">
-                          {/* Ligne non chiffrée : jamais son coût complet présenté comme un reste. */}
-                          {!sansMontant && line.remainder > 0 ? formatEuro(line.remainder) : '-'}
-                        </td>
-                        <td
-                          className="hidden px-4 py-4 text-center sm:table-cell sm:px-6 print:hidden"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <SourceBadge url={line.sourceUrl} />
-                        </td>
-                      </tr>
-                      {ouverte && detaillee && (
-                        <tr>
-                          <td colSpan={5} className="bg-lin-soft/60 px-4 py-4 [overflow-wrap:anywhere] sm:px-6">
-                            <p className="text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase">
-                              Détail du calcul
-                            </p>
-                            <ul className="mt-2 space-y-1.5">
-                              {line.details?.map((detail, j) => (
-                                <li key={j} className="flex items-start gap-2.5 text-xs leading-relaxed text-texte-doux">
-                                  <span aria-hidden="true" className="mt-[0.55em] size-1.5 shrink-0 rounded-full bg-turquoise" />
-                                  <span>{texteDonnees(detail)}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </td>
-                        </tr>
-                      )}
-                    </Fragment>
-                  );
-                })}
-              </tbody>
-              <tfoot className="border-t border-filet bg-lin-soft font-semibold text-texte">
-                <tr>
-                  <td className="px-4 py-4 sm:px-6">Total</td>
-                  <td className="amount hidden px-4 py-4 text-right sm:table-cell sm:px-6">
-                    {formatEuro(result.totalRequested)}
-                  </td>
-                  <td className="amount px-4 py-4 text-right whitespace-nowrap text-turquoise-deep sm:px-6">
-                    {montantConnu ? formatEuro(result.totalFunded) : '-'}
-                  </td>
-                  <td className="amount px-4 py-4 text-right whitespace-nowrap sm:px-6">
-                    {montantConnu && result.totalRemainder > 0 ? formatEuro(result.totalRemainder) : '-'}
-                  </td>
-                  <td className="hidden sm:table-cell print:hidden"></td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-        </Card>
+        <DetailParPoste result={result} lignes={visibleLines} montantConnu={montantConnu} />
       )}
 
       {/* Plafond budgétaire */}
@@ -390,65 +155,7 @@ export function FundingBreakdown({ result }: Props) {
       )}
 
       {/* Dispositifs complémentaires */}
-      {dispositifs.length > 0 && (
-        <Card as="section" aria-labelledby="titre-dispositifs-opco" padding="md">
-          <h3 id="titre-dispositifs-opco" className="text-lg leading-snug font-bold text-texte">
-            Financements complémentaires {de(opcoName)}
-          </h3>
-          <p className="mt-1 text-sm leading-relaxed text-texte-doux">
-            Dispositifs {de(opcoName)}{' '}accessibles à votre entreprise. L&apos;étiquette dit comment chacun se combine
-            avec le plan de développement des compétences&nbsp;; un montant n&apos;est donné que s&apos;il est calculable
-            pour votre formation.
-          </p>
-          <ul className="mt-5 space-y-3">
-            {dispositifs.map((d) => {
-              const montant = montantDuDispositif(d);
-              return (
-                <li key={d.id} className="rounded-2xl border border-filet bg-lin-soft/50 p-4 break-inside-avoid sm:p-5">
-                  <div className="flex flex-wrap items-start justify-between gap-2">
-                    <h4 className="leading-snug font-semibold text-texte">{texteDonnees(d.nom)}</h4>
-                    <CumulBadge cumul={d.cumul} />
-                  </div>
-                  {montant != null && (
-                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-                      <span className="amount text-lg text-turquoise-deep">{formatEuro(montant)}</span>
-                      <span className="text-xs text-texte-discret">estimé pour votre formation</span>
-                      <BadgeEstimation confidence={d.confidence} opcoName={opcoName} />
-                    </div>
-                  )}
-                  <p className="mt-2 text-sm leading-relaxed text-texte-doux">{texteDonnees(d.description)}</p>
-                  {d.publics && (
-                    <p className="mt-1 text-xs leading-relaxed text-texte-discret">
-                      Public visé&nbsp;: {texteDonnees(d.publics)}
-                    </p>
-                  )}
-                  {d.conditions.length > 0 && (
-                    <ul className="mt-2 space-y-1">
-                      {d.conditions.map((c, j) => (
-                        <li key={j} className="flex items-start gap-2 text-xs leading-relaxed text-texte-doux">
-                          <Icon name="coche" className="mt-px size-3.5 shrink-0 text-turquoise-deep" strokeWidth={2} />
-                          <span>
-                            <TexteAvecConventions texte={c} />
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {d.demarches && (
-                    <p className="mt-2 text-sm leading-relaxed text-texte-doux">
-                      <span className="font-semibold text-texte">Démarche&nbsp;:</span> {texteDonnees(d.demarches)}
-                    </p>
-                  )}
-                  {d.note && <p className="mt-2 text-xs leading-relaxed text-texte-discret">{texteDonnees(d.note)}</p>}
-                  <div className="mt-3 print:hidden">
-                    <SourceBadge url={d.sourceUrl} />
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </Card>
-      )}
+      {dispositifs.length > 0 && <DispositifsOpco dispositifs={dispositifs} opcoName={opcoName} />}
 
       {/* Démarches (celles du moteur : adaptées quand le plan est fermé) */}
       {result.demarches.length > 0 && (

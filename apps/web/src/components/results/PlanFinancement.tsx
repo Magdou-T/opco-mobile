@@ -1,38 +1,24 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { AideEvaluee, Confidence, LignePlan, OptionPlan, PlanFinancement } from '@opco/core';
-import { Button } from '@/components/ui/Button';
-import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { formatEuro, texteDonnees, typo } from '@/lib/format';
-import {
-  cartesDuPlan,
-  descriptionBarre,
-  etatEnTete,
-  financeurDeLigne,
-  libellePart,
-  partFinancee,
-  partsBarre,
-  rappelsAucunFinancement,
-} from '@/lib/resultats';
-import type { CartePlan, EtatEnTete, PartBarre } from '@/lib/resultats';
-import { BORD_SEGMENT, COULEURS_FAMILLE, COULEURS_IMPRIMEES, PastilleFinanceur, SEGMENT_RESTE } from './Financeur';
+import { cartesDuPlan, etatEnTete, financeurDeLigne } from '@/lib/resultats';
+import type { CartePlan } from '@/lib/resultats';
+import { BandeauSynthese } from './BandeauSynthese';
+import type { FondsEpuises } from './BandeauSynthese';
+import { PastilleFinanceur } from './Financeur';
 
 /**
- * Plan de financement : bandeau de synthèse (coût, financé, reste à charge, barre empilée par famille de financeurs),
- * puis une carte par catégorie (financement de la formation en pile, options, aides à l'employeur, revenus et aides à la
- * personne, avantages fiscaux et sociaux, montant selon dossier, services gratuits). Chaque montant est celui du moteur,
- * arrondi à l'affichage seulement ; une carte vide n'est pas rendue. Règles de présentation : `lib/resultats.ts`.
+ * Plan de financement : bandeau de synthèse (coût, financé, reste à charge, barre empilée par famille de financeurs :
+ * `BandeauSynthese`), puis une carte par catégorie (financement de la formation en pile, options, aides à l'employeur,
+ * revenus et aides à la personne, avantages fiscaux et sociaux, montant selon dossier, services gratuits). Chaque montant
+ * est celui du moteur, arrondi à l'affichage seulement ; une carte vide n'est pas rendue. Règles de présentation :
+ * `lib/resultats.ts`.
  */
-/** L'OPCO signale épuisée l'enveloppe de branches dont le plan compte le plan de développement des compétences. */
-export interface FondsEpuises {
-  opco: string;
-  branches: string[];
-}
-
 export function PlanFinancementCard({
   plan,
   aides,
@@ -69,230 +55,6 @@ export function PlanFinancementCard({
 }
 
 const delai = (ms: number) => ({ '--delai': `${ms}ms` }) as CSSProperties;
-
-// --- Bandeau de synthèse ------------------------------------------------------------------------------------------
-
-function BandeauSynthese({
-  plan,
-  aides,
-  etat,
-  fondsEpuises,
-  onModifierFormation,
-}: {
-  plan: PlanFinancement;
-  aides: readonly AideEvaluee[];
-  etat: EtatEnTete;
-  fondsEpuises: FondsEpuises | null;
-  onModifierFormation?: () => void;
-}) {
-  return (
-    <div className="apparition overflow-hidden rounded-panneau border border-filet bg-white shadow-douce">
-      {/* Les trois soulignés du slogan de marque, en filet (comme le pied de page) */}
-      <div aria-hidden="true" className="decor flex h-1.5">
-        <span className="flex-1 bg-turquoise" />
-        <span className="flex-1 bg-or" />
-        <span className="flex-1 bg-orange" />
-      </div>
-      <div className="p-5 sm:p-8">
-        {etat === 'cout_inconnu' && <CoutInconnu onModifierFormation={onModifierFormation} />}
-        {etat === 'aucun_financement_chiffre' && <AucunFinancementChiffre plan={plan} />}
-        {etat === 'plan_chiffre' && (
-          <PlanChiffre plan={plan} parts={partsBarre(plan, aides)} fondsEpuises={fondsEpuises} />
-        )}
-      </div>
-    </div>
-  );
-}
-
-function CoutInconnu({ onModifierFormation }: { onModifierFormation?: () => void }) {
-  return (
-    <div className="space-y-4">
-      <Callout tone="info" titre="Coût de la formation non renseigné">
-        Renseignez le coût de la formation pour calculer le reste à charge.
-      </Callout>
-      {onModifierFormation && (
-        <div className="print:hidden">
-          <Button variant="secondary" icone="crayon" onClick={onModifierFormation}>
-            Indiquer le coût
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/**
- * Aucun financement de la formation n'est chiffré (alternance, demandeur d'emploi, entreprise de 50 salariés et plus…) :
- * jamais « Financé 0 € » ni « Reste à charge » égal au coût présenté comme un résultat. Le coût reste visible, un encadré
- * dit pourquoi, et des liens mènent aux cartes qui portent les aides identifiées.
- */
-function AucunFinancementChiffre({ plan }: { plan: PlanFinancement }) {
-  const rappels = rappelsAucunFinancement(plan);
-  const optionsChiffrees = plan.options.some((o) => o.montantEstime != null && o.montantEstime > 0);
-  return (
-    <div>
-      <dl className="grid sm:grid-cols-3">
-        <Chiffre libelle="Coût de la formation" valeur={formatEuro(plan.coutFormation)} />
-      </dl>
-      <Callout tone="info" className="mt-5">
-        {optionsChiffrees ? (
-          <>
-            Aucun financement cumulable n&apos;est chiffré pour cette formation&nbsp;: les options au choix ont un montant,
-            à comparer, et les autres financeurs fixent le montant après étude du dossier.
-          </>
-        ) : (
-          <>
-            Aucun financement de la formation n&apos;est chiffrable à ce stade&nbsp;: les financeurs fixent le montant
-            après étude du dossier. Voici les aides identifiées.
-          </>
-        )}
-      </Callout>
-      {rappels.length > 0 && (
-        <ul className="mt-4 flex flex-wrap gap-2 print:hidden">
-          {rappels.map((r) => (
-            <li key={r.carte}>
-              <a
-                href={`#carte-${r.carte}`}
-                className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-orange/30 bg-orange-soft px-4 text-sm font-semibold text-orange-deep transition-[border-color] hover:border-orange-deep lg:min-h-9"
-              >
-                {r.libelle}
-                <Icon name="chevron" className="size-4 rotate-90" />
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
-function PlanChiffre({
-  plan,
-  parts,
-  fondsEpuises,
-}: {
-  plan: PlanFinancement;
-  parts: PartBarre[];
-  fondsEpuises: FondsEpuises | null;
-}) {
-  const part = partFinancee(parts);
-  return (
-    <div>
-      <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-3">
-        <Chiffre libelle="Coût de la formation" valeur={formatEuro(plan.coutFormation)} />
-        <Chiffre
-          libelle="Financé"
-          valeur={<span className="mark">{formatEuro(plan.totalFinance)}</span>}
-          detail={part ? `soit ${part}` : undefined}
-          grand
-        />
-        <Chiffre
-          libelle="Reste à charge"
-          valeur={formatEuro(plan.resteACharge)}
-          couleur="text-orange-deep"
-          detail={plan.resteACharge > 0 ? undefined : 'La formation est entièrement couverte.'}
-        />
-      </dl>
-      <BarreEmpilee parts={parts} cout={plan.coutFormation} />
-      {fondsEpuises && fondsEpuises.branches.length > 0 && (
-        <Callout tone="avertissement" titre={`Fonds épuisés selon ${fondsEpuises.opco}`} className="mt-6">
-          {fondsEpuises.opco} signale que l&apos;enveloppe du plan de développement des compétences est épuisée pour{' '}
-          {fondsEpuises.branches.length > 1 ? 'les branches' : 'la branche'}{' '}
-          {fondsEpuises.branches.map((b, i) => (
-            <span key={b}>
-              {i > 0 && ', '}«&nbsp;{texteDonnees(b)}&nbsp;»
-            </span>
-          ))}
-          &nbsp;: la prise en charge peut être refusée.{' '}
-          <a href="#alertes-opco" className="lien">
-            Voir les alertes de l&apos;OPCO
-          </a>
-        </Callout>
-      )}
-      <p className="mt-6 flex items-start gap-2.5 text-sm leading-relaxed text-texte-doux">
-        <Icon name="info" className="mt-0.5 size-4 shrink-0 text-turquoise-deep" />
-        <span>
-          Financements cumulables empilés sans jamais dépasser le coût de la formation. Les aides «&nbsp;à
-          vérifier&nbsp;» ne sont pas comptées.
-        </span>
-      </p>
-    </div>
-  );
-}
-
-/**
- * Chiffre clé (Montserrat 700, chiffres tabulaires). Sous 640 px, une ligne : libellé à gauche, montant à droite, et la
- * précision dessous, alignée à droite ; au-delà, trois colonnes, montant puis précision sous le libellé.
- */
-function Chiffre({
-  libelle,
-  valeur,
-  detail,
-  grand = false,
-  couleur = 'text-texte',
-}: {
-  libelle: string;
-  valeur: ReactNode;
-  detail?: string;
-  grand?: boolean;
-  couleur?: string;
-}) {
-  return (
-    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 border-b border-filet pb-4 last:border-b-0 last:pb-0 sm:block sm:border-b-0 sm:pb-0">
-      <dt className="text-sm font-semibold text-texte-doux">{libelle}</dt>
-      <dd
-        className={cx(
-          'amount text-right leading-tight sm:mt-2 sm:text-left',
-          couleur,
-          grand ? 'text-[2rem] sm:text-[2.625rem]' : 'text-2xl sm:text-[2rem]',
-        )}
-      >
-        {valeur}
-      </dd>
-      {detail && (
-        <dd className="col-span-2 mt-1.5 text-right text-xs font-medium text-texte-discret sm:text-left sm:text-sm">
-          {detail}
-        </dd>
-      )}
-    </div>
-  );
-}
-
-/**
- * Barre horizontale empilée : une part par famille de financeurs puis le reste à charge (hachures). Jamais seule porteuse
- * d'information : son nom accessible (role="img") et la légende écrite donnent chaque part avec son libellé ; les
- * largeurs suivent les montants (au moins 6 px pour une part minuscule).
- */
-function BarreEmpilee({ parts, cout }: { parts: PartBarre[]; cout: number }) {
-  if (parts.length === 0) return null;
-  return (
-    <figure className={cx('mt-7', COULEURS_IMPRIMEES)}>
-      <div role="img" aria-label={descriptionBarre(parts, cout)} className="devoilement flex h-4 gap-0.5 sm:h-5">
-        {parts.map((p) => (
-          <span
-            key={p.cle}
-            className={cx('h-full min-w-1.5 first:rounded-l-full last:rounded-r-full', classeDePart(p))}
-            style={{ flexGrow: Math.round(p.montant * 100), flexBasis: 0 }}
-          />
-        ))}
-      </div>
-      <figcaption className="mt-3.5">
-        <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-          {parts.map((p) => (
-            <li key={p.cle} className="inline-flex items-center gap-2">
-              <span aria-hidden="true" className={cx('size-3 shrink-0 rounded-[0.25rem]', classeDePart(p))} />
-              <span className="font-semibold text-texte">{typo(p.libelle)}</span>
-              <span className="text-texte-doux tabular-nums">{libellePart(p)}</span>
-            </li>
-          ))}
-        </ul>
-      </figcaption>
-    </figure>
-  );
-}
-
-const classeDePart = (p: PartBarre): string =>
-  p.cle === 'reste' ? SEGMENT_RESTE : cx(COULEURS_FAMILLE[p.cle].fond, BORD_SEGMENT);
 
 // --- Cartes du plan -----------------------------------------------------------------------------------------------
 
