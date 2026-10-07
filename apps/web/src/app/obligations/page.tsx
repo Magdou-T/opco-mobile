@@ -12,13 +12,13 @@ import {
 export const metadata: Metadata = {
   title: 'Obligations formation des entreprises en 2026',
   description:
-    'CUFPA, taxe d’apprentissage, entretien de parcours professionnel, abondement correctif de 3 000 € : ce que votre entreprise doit verser et organiser en 2026, taux exacts et sources officielles.',
+    "CUFPA, taxe d'apprentissage, entretien de parcours professionnel, abondement correctif de 3 000 € : ce que votre entreprise doit verser et organiser en 2026, taux exacts et sources officielles.",
 };
 
 const TOC = [
   { id: 'contributions', label: 'Ce que votre entreprise verse' },
-  { id: 'former', label: 'L’obligation de former' },
-  { id: 'entretiens', label: 'L’entretien de parcours professionnel' },
+  { id: 'former', label: "L'obligation de former" },
+  { id: 'entretiens', label: "L'entretien de parcours professionnel" },
   { id: 'sanctions', label: 'La sanction : 3 000 € par salarié' },
   { id: 'budget', label: 'Légal, volontaire, conventionnel' },
 ];
@@ -32,10 +32,10 @@ export default function ObligationsPage() {
           <>
             Votre entreprise paie déjà.
             <br />
-            Autant <span className="mark">le savoir</span>.
+            Voici <span className="mark">où va l&apos;argent</span>.
           </>
         }
-        lead="Contribution formation, taxe d'apprentissage, entretiens obligatoires : le système repose sur des versements que toutes les entreprises font déjà. Ne pas activer les droits en face, c'est payer deux fois."
+        lead="Contribution formation, taxe d'apprentissage, entretiens obligatoires : le système repose sur des versements que toutes les entreprises font déjà. Selon votre taille, ils ouvrent des droits à demander."
       />
 
       <GuideBody toc={TOC}>
@@ -88,7 +88,7 @@ export default function ObligationsPage() {
                       entreprises de 250 salariés et plus sous le seuil de 5 % d&apos;alternants
                     </span>
                   </td>
-                  <td className="amount px-4 py-3 text-right font-semibold">0,05 – 0,60 %</td>
+                  <td className="amount px-4 py-3 text-right font-semibold">0,05 à 0,60 %</td>
                 </tr>
               </tbody>
             </table>
@@ -106,12 +106,17 @@ export default function ObligationsPage() {
             <Source href="https://www.urssaf.fr/accueil/employeur/cotisations/liste-cotisations/taxe-apprentissage-csa.html">
               Urssaf (CSA)
             </Source>
+            {' · '}
+            <Source href="https://www.akto.fr/breve/nouveau-taux-applicable-pour-la-contribution-legale-des-entreprises-de-travail-temporaire/">
+              AKTO (travail temporaire)
+            </Source>
           </p>
           <Callout tone="info" title="Des majorations sectorielles existent">
-            Travail temporaire (1 % au minimum, plus une contribution conventionnelle d&apos;au
-            moins 0,30 %), BTP, intermittents du spectacle (2 % et plus) : certaines branches
-            prévoient des contributions conventionnelles supplémentaires, gérées par l&apos;OPCO,
-            elles ouvrent souvent des droits additionnels.
+            Travail temporaire (contribution légale de droit commun, 0,55 % ou 1 % selon
+            l&apos;effectif, plus une contribution conventionnelle d&apos;au moins 0,30 %), BTP,
+            intermittents du spectacle (2 % et plus) : certaines branches prévoient des
+            contributions conventionnelles supplémentaires, gérées par l&apos;OPCO, elles ouvrent
+            souvent des droits additionnels.
           </Callout>
         </GuideSection>
 
@@ -137,9 +142,9 @@ export default function ObligationsPage() {
             La loi n° 2025-989 du 24 octobre 2025 l&apos;a remplacé par{' '}
             <strong>l&apos;entretien de parcours professionnel (EPP)</strong>. Les entreprises
             qu&apos;aucun accord d&apos;entreprise ou de branche ne lie sur la périodicité des
-            entretiens appliquent directement les nouvelles règles. Les accords existants
-            devaient être révisés : le nouvel article L.6315-1 s&apos;applique à eux à compter
-            du <strong>1er octobre 2026</strong>.
+            entretiens appliquent directement les nouvelles règles depuis le 26 octobre 2025.
+            Les accords existants devaient être révisés : le nouvel article L.6315-1
+            s&apos;applique à eux à compter du <strong>1er octobre 2026</strong>.
           </Callout>
           <ul className="list-disc space-y-2 pl-5">
             <li>Premier entretien <strong>dans l&apos;année suivant l&apos;embauche</strong> ;</li>
@@ -202,8 +207,16 @@ export default function ObligationsPage() {
             </li>
             <li>
               <strong>Les versements volontaires</strong>{' '}à l&apos;OPCO sont contractuels,
-              tracés sur un compte dédié, non mutualisés, et mobilisables librement pour les
-              formations de l&apos;entreprise.
+              tracés sur un compte dédié, non mutualisés, et mobilisables pour les formations de
+              l&apos;entreprise selon la convention passée avec l&apos;OPCO (frais de gestion
+              possibles).{' '}
+              <Source href="https://www.opco-sante.fr/employeur/le-fonctionnement-de-la-formation-professionnelle/">
+                OPCO Santé
+              </Source>
+              {' · '}
+              <Source href="https://code.travail.gouv.fr/code-du-travail/r6332-19">
+                art. R.6332-19
+              </Source>
             </li>
             <li>
               <strong>Les contributions conventionnelles</strong>, fixées par accord de branche,
@@ -211,7 +224,7 @@ export default function ObligationsPage() {
               toutes les tailles d&apos;entreprise.
             </li>
           </ul>
-          <Callout tone="ok" title="Le réflexe qui change tout">
+          <Callout tone="ok" title="Ordre des vérifications">
             Avant de payer une formation sur fonds propres, vérifiez dans l&apos;ordre : les
             fonds mutualisés (si &lt; 50 salariés), les fonds conventionnels de votre branche,
             les <Link href="/former-sans-budget" className="font-semibold underline">actions collectives de votre OPCO</Link>,

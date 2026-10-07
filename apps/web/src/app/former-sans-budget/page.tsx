@@ -21,7 +21,7 @@ const TOC = [
   { id: 'cpf', label: 'Le CPF du salarié' },
   { id: 'fse', label: 'Le cofinancement FSE+' },
   { id: 'reconversion', label: 'Période de reconversion & PTP' },
-  { id: 'disparus', label: 'Ce qui n’existe plus' },
+  { id: 'disparus', label: "Ce qui n'existe plus" },
 ];
 
 const ACTIONS_COLLECTIVES = [
@@ -80,7 +80,7 @@ export default function FormerSansBudgetPage() {
             au budget formation
           </>
         }
-        lead="Les OPCO achètent eux-mêmes des formations et les offrent à leurs adhérents : ces « actions collectives » ne consomment généralement pas l'enveloppe annuelle de votre entreprise. Le CPF du salarié et, selon l'OPCO, le cofinancement FSE+ peuvent compléter ces catalogues."
+        lead="Les OPCO achètent eux-mêmes des formations et les proposent à leurs adhérents : ces « actions collectives » ne consomment généralement pas l'enveloppe annuelle de votre entreprise. Le CPF du salarié et, selon l'OPCO, le cofinancement FSE+ peuvent compléter ces catalogues."
       />
 
       <GuideBody toc={TOC}>
@@ -94,14 +94,14 @@ export default function FormerSansBudgetPage() {
             ou conventionnels : les <strong>actions collectives</strong>.
           </p>
           <p>
-            Concrètement : les coûts pédagogiques sont réglés directement par l&apos;OPCO
-            (souvent à 100 %), l&apos;entreprise n&apos;avance en général rien (la réforme de la
-            TVA des OPCO du 1er octobre 2026 limite la subrogation de paiement selon l&apos;OPCO :
-            voir sa fiche), et <strong>son enveloppe annuelle reste généralement intacte</strong>{' '}
-            pour d&apos;autres projets. Les places sont limitées par des quotas et par les fonds
-            disponibles, les catalogues s&apos;épuisent en cours d&apos;année.
+            Les coûts pédagogiques sont réglés directement par l&apos;OPCO (souvent à 100 %),
+            l&apos;entreprise n&apos;avance rien (la réforme de la TVA des OPCO du 1er octobre 2026
+            limite la subrogation de paiement selon l&apos;OPCO : voir sa fiche), et{' '}
+            <strong>son enveloppe annuelle reste intacte</strong>{' '}pour d&apos;autres projets,
+            selon l&apos;OPCO et la branche. Les places sont limitées par des quotas et par les
+            fonds disponibles, les catalogues s&apos;épuisent en cours d&apos;année.
           </p>
-          <Callout tone="ok" title="Le bon réflexe">
+          <Callout tone="ok" title="Le catalogue d'abord">
             Consultez le catalogue d&apos;actions collectives de votre OPCO <strong>en début
             d&apos;année</strong>, avant de chercher un organisme par vous-même : si la
             formation y figure, elle est souvent prise en charge sans entamer votre budget.
@@ -148,12 +148,13 @@ export default function FormerSansBudgetPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong>Participation forfaitaire</strong> : depuis le 2 avril 2026, le salarié paie
-              150 € sur chaque formation CPF, <strong>sauf si l&apos;employeur abonde</strong>{' '}
-              son compte. Le projet de loi de finances 2027 prévoit, pour les formations validées
-              depuis le 2 octobre 2026, un complément pouvant atteindre 200 € ; il ne
-              s&apos;appliquerait pas à la plupart des formations cofinancées par un tiers, dès lors
-              que le cofinancement atteint au moins 150 € (mesure non encore adoptée au 6 octobre
-              2026).
+              150 € sur chaque formation CPF,{' '}
+              <strong>sauf si l&apos;employeur cofinance la formation par un abondement</strong>.
+              Le projet de loi de finances 2027, présenté le 1er octobre 2026 et non adopté au
+              6 octobre 2026, prévoit un complément pouvant atteindre 200 € pour les formations
+              validées depuis le 2 octobre 2026. Les secteurs prioritaires et la plupart des
+              formations cofinancées par un tiers à hauteur d&apos;au moins 150 € en seraient
+              exonérés.
             </li>
             <li>
               <strong>Abondements employeur</strong> : versés via le portail des financeurs
@@ -162,7 +163,7 @@ export default function FormerSansBudgetPage() {
               mutualisés.
             </li>
             <li>
-              Certains OPCO et branches proposent des <strong>abondements automatiques</strong>{' '}
+              Certains OPCO et branches proposent des <strong>abondements conventionnels</strong>{' '}
               sur des certifications prioritaires, voir la fiche de votre OPCO.
             </li>
           </ul>
@@ -200,9 +201,9 @@ export default function FormerSansBudgetPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <Link href="/opco/atlas" className="font-semibold text-cobalt underline">ATLAS</Link>{' '}:
-              opération ouverte, FSE+ à 50 % des coûts pédagogiques (500 000 € au maximum par
-              entreprise), demande à déposer avant le début de la formation et au plus tard le
-              15 décembre 2027.
+              opération ouverte, sous réserve des fonds disponibles : FSE+ à 50 % des coûts
+              pédagogiques (500 000 € au maximum par entreprise), demande à déposer avant le
+              début de la formation et au plus tard le 15 décembre 2027.
             </li>
             <li>
               <Link href="/opco/akto" className="font-semibold text-cobalt underline">AKTO</Link>,{' '}
@@ -222,7 +223,7 @@ export default function FormerSansBudgetPage() {
               <Link href="/opco/opco-mobilites" className="font-semibold text-cobalt underline">OPCO Mobilités</Link>,{' '}
               <Link href="/opco/uniformation" className="font-semibold text-cobalt underline">Uniformation</Link> et{' '}
               <Link href="/opco/opcommerce" className="font-semibold text-cobalt underline">L&apos;Opcommerce</Link>{' '}:
-              aucune opération 2026 confirmée à ce jour (pour OPCO Mobilités, à vérifier auprès
+              aucune opération ouverte confirmée à ce jour (pour OPCO Mobilités, à vérifier auprès
               de son conseiller).
             </li>
           </ul>
@@ -239,22 +240,40 @@ export default function FormerSansBudgetPage() {
             <Source href="https://www.opcoep.fr/fonds-social-europeen">OPCO EP</Source>
             {' · '}
             <Source href="https://www.ocapiat.fr/fse-une-aide-financiere-pour-former-vos-salaries/">OCAPIAT</Source>
+            {' · '}
+            <Source href="https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-subventions-pour-elargir-vos-capacites-de-financement/fonds-social-europeen-fse-2025.html">
+              Afdas
+            </Source>
+            {' · '}
+            <Source href="https://www.opco2i.fr/formation-et-financement/subventions/fse-fond-social-europeen/">OPCO 2i</Source>
+            {' · '}
+            <Source href="https://www.constructys.fr/fse">Constructys</Source>
+            {' · '}
+            <Source href="https://www.opco-sante.fr/actualites/le-fse-une-opportunite-a-ne-pas-manquer-pour-financer-vos-projets-rh-et-formation/">
+              OPCO Santé
+            </Source>
           </p>
         </GuideSection>
 
-        <GuideSection id="reconversion" number="05" title="Reconversions : deux voies qui ne touchent pas votre budget">
+        <GuideSection id="reconversion" number="05" title="Reconversions : deux voies qui ne consomment pas votre enveloppe formation">
           <ul className="list-disc space-y-3 pl-5">
             <li>
               <strong>La période de reconversion</strong>{' '}(depuis février 2026) : financée par
               l&apos;OPCO sur une enveloppe dédiée, dans la limite de la dotation de France
-              compétences, 9,15 €/h à défaut d&apos;accord de branche, montant moyen fixé à 5 000 €,
-              dossier à déposer 30 jours calendaires avant le début de la période.{' '}
+              compétences, 9,15 €/h à défaut d&apos;accord de branche, montant moyen de prise en
+              charge par OPCO fixé à 5 000 € (art. D.6332-90), dossier complet adressé à
+              l&apos;OPCO dans les 30 jours calendaires qui précèdent le début de la période de
+              reconversion.{' '}
               <Source href="https://entreprendre.service-public.gouv.fr/actualites/A18798">
                 service-public.gouv.fr
               </Source>
               {' · '}
               <Source href="https://code.travail.gouv.fr/code-du-travail/l6332-3">
                 art. L.6332-3
+              </Source>
+              {' · '}
+              <Source href="https://code.travail.gouv.fr/code-du-travail/d6332-90">
+                art. D.6332-90
               </Source>
             </li>
             <li>
@@ -265,6 +284,10 @@ export default function FormerSansBudgetPage() {
               l&apos;entreprise.{' '}
               <Source href="https://www.transitionspro.fr/nos-dispositifs/projet-de-transition-professionnelle/">
                 transitionspro.fr
+              </Source>
+              {' · '}
+              <Source href="https://code.travail.gouv.fr/code-du-travail/d6323-18-4">
+                art. D.6323-18-4
               </Source>
             </li>
           </ul>

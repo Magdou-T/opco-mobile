@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: 'Comprendre les OPCO : rôle, rattachement, financements',
   description:
-    'Qui sont les 11 opérateurs de compétences, comment votre entreprise est rattachée au sien, et ce qu’ils peuvent financer en 2026 : plan de développement des compétences, alternance, période de reconversion, VAE.',
+    "Qui sont les 11 opérateurs de compétences, comment votre entreprise est rattachée au sien, et ce qu'ils peuvent financer en 2026 : plan de développement des compétences, alternance, période de reconversion, VAE.",
 };
 
 const TOC = [
@@ -43,17 +43,18 @@ export default function ComprendreLesOpcoPage() {
           <p>
             Les <strong>opérateurs de compétences (OPCO)</strong>{' '}sont 11 organismes paritaires
             agréés par l&apos;État, créés par la loi du 5 septembre 2018 « pour la liberté de
-            choisir son avenir professionnel ». Ils ont remplacé les anciens OPCA, avec une
-            différence majeure : depuis 2022, <strong>ils ne collectent plus les
-            cotisations</strong>, c&apos;est l&apos;Urssaf (ou la MSA) qui s&apos;en charge, avant
-            reversement à France compétences qui répartit les fonds.
+            choisir son avenir professionnel ». Ils ont remplacé les anciens OPCA. Depuis 2022,{' '}
+            <strong>ils ne collectent plus les contributions légales</strong>{' '}: c&apos;est
+            l&apos;Urssaf (ou la MSA) qui s&apos;en charge, avant reversement à France compétences
+            qui répartit les fonds.
           </p>
-          <p>Leurs missions principales (art. L.6332-1 du Code du travail) :</p>
+          <p>Leurs missions principales (art. L.6332-1 et L.6332-17 du Code du travail) :</p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong>Financer l&apos;alternance</strong>{' '}: contrats d&apos;apprentissage (aux
-              niveaux de prise en charge « NPEC » fixés par les branches), contrats de
-              professionnalisation et, depuis février 2026, la période de reconversion.
+              <strong>Financer l&apos;alternance et la reconversion</strong>{' '}: contrats
+              d&apos;apprentissage (aux niveaux de prise en charge « NPEC » fixés par les
+              branches), contrats de professionnalisation et, depuis février 2026, la période de
+              reconversion.
             </li>
             <li>
               <strong>Appuyer les branches professionnelles</strong> : construction des
@@ -78,6 +79,10 @@ export default function ComprendreLesOpcoPage() {
             <Source href="https://code.travail.gouv.fr/code-du-travail/l6332-1">
               Code du travail, art. L.6332-1
             </Source>
+            {' · '}
+            <Source href="https://code.travail.gouv.fr/code-du-travail/l6332-17">
+              art. L.6332-17
+            </Source>
           </p>
         </GuideSection>
 
@@ -86,8 +91,9 @@ export default function ComprendreLesOpcoPage() {
             Le rattachement dépend <strong>exclusivement de la convention collective</strong>{' '}
             appliquée par l&apos;entreprise, identifiée par son code <strong>IDCC</strong>, pas
             du code NAF/APE. En règle générale, une entreprise ne relève que d&apos;un seul
-            OPCO. Le code IDCC figure sur le bulletin de paie ; à défaut de convention
-            collective, le rattachement se fait selon l&apos;activité principale.
+            OPCO. Le bulletin de paie indique la convention collective applicable, souvent avec
+            son code IDCC ; à défaut de convention collective, le rattachement se fait selon
+            l&apos;activité principale.
           </p>
           <Callout tone="info" title="Trouver son OPCO avec le simulateur">
             Notre simulateur identifie votre OPCO à partir du nom ou du SIREN de votre
@@ -127,7 +133,7 @@ export default function ComprendreLesOpcoPage() {
                 <tr>
                   <td className="px-4 py-3 font-medium text-ink">Période de reconversion <span className="stamp ml-1 text-cobalt">Nouveau 2026</span></td>
                   <td className="px-4 py-3">Tous salariés, toutes tailles</td>
-                  <td className="px-4 py-3">9,15 €/h à défaut d&apos;accord de branche, montant moyen fixé à 5 000 €</td>
+                  <td className="px-4 py-3">9,15 €/h à défaut d&apos;accord de branche, montant moyen de prise en charge par OPCO fixé à 5 000 € (art. D.6332-90)</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-medium text-ink">VAE, bilan de compétences, AFEST, tutorat</td>
@@ -147,7 +153,7 @@ export default function ComprendreLesOpcoPage() {
           </Callout>
         </GuideSection>
 
-        <GuideSection id="moins-50" number="04" title="La règle des 50 salariés, la plus importante">
+        <GuideSection id="moins-50" number="04" title="La règle des 50 salariés">
           <p>
             Depuis la loi de 2018, les fonds mutualisés du plan de développement des compétences
             sont <strong>réservés aux entreprises de moins de 50 salariés</strong>{' '}
@@ -196,13 +202,15 @@ export default function ComprendreLesOpcoPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong>Financement OPCO</strong> : à défaut d&apos;accord de branche, forfait de{' '}
-              <strong>9,15 €/heure</strong> ; le montant moyen de prise en charge est fixé à
-              5 000 €. Le CPF du salarié peut être mobilisé avec son accord.
+              <strong>9,15 €/heure</strong> ; le montant moyen de prise en charge par OPCO est
+              fixé à 5 000 € (art. D.6332-90). Le CPF du salarié peut être mobilisé avec son
+              accord.
             </li>
             <li>
               <strong>Procédure</strong>{' '}: accord écrit entre salarié et employeur, dossier
-              complet adressé à l&apos;OPCO au moins <strong>30 jours calendaires avant</strong>{' '}
-              le début de la période de reconversion.
+              complet adressé à l&apos;OPCO{' '}
+              <strong>dans les 30 jours calendaires qui précèdent</strong>{' '}le début de la
+              période de reconversion.
             </li>
             <li>Les Pro-A signées avant 2026 continuent de produire leurs effets.</li>
           </ul>
@@ -214,6 +222,14 @@ export default function ComprendreLesOpcoPage() {
             {' · '}
             <Source href="https://www.service-public.gouv.fr/particuliers/vosdroits/F13516">
               fiche F13516
+            </Source>
+            {' · '}
+            <Source href="https://code.travail.gouv.fr/code-du-travail/d6332-90">
+              art. D.6332-90
+            </Source>
+            {' · '}
+            <Source href="https://code.travail.gouv.fr/code-du-travail/r6324-1">
+              art. R.6324-1
             </Source>
           </p>
         </GuideSection>
