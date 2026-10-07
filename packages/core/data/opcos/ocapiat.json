@@ -44,14 +44,14 @@
     "value": 12,
     "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Uniquement pour les salariés de 50 ans et plus (Boost Compétences, Soutien aux filières, offre régionale TPE-PME, parcours certifiants), remboursement plafonné au montant du coût pédagogique pris en charge (demandes reçues depuis le 01/05/2026). Aucune prise en charge du salaire pour les moins de 50 ans ni pour Compétences d'avenir. Le montant est affiché comme dépendant de l'accord de branche, car l'âge du salarié n'est pas connu pour l'estimation. Secteur pêche : régime distinct (voir variante). Extrait : « Prise en charge du salaire limitée à 12 €/h HT en faveur des salariés de 50 ans et plus - Remboursement du salaire plafonné au montant engagé pour le coût pédagogique » (vérifié le 2026-10-05)."
+    "note": "Uniquement pour les salariés de 50 ans et plus (Boost Compétences, Soutien aux filières, offre régionale TPE-PME, parcours certifiants), remboursement plafonné au montant du coût pédagogique pris en charge (demandes reçues depuis le 01/05/2026). Aucune prise en charge du salaire pour les moins de 50 ans ni pour Compétences d'avenir. Dans l'estimation, le montant est indiqué comme dépendant de l'accord de branche, car l'âge du salarié n'est pas connu du simulateur. Secteur pêche : régime distinct (voir les barèmes par branche). Extrait : « Prise en charge du salaire limitée à 12 €/h HT en faveur des salariés de 50 ans et plus - Remboursement du salaire plafonné au montant engagé pour le coût pédagogique » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.ocapiat.fr/wp-content/uploads/Regles-de-prise-en-charge-2026.pdf",
-    "note": "Pas de prise en charge des frais annexes dans le plan de développement des moins de 50 salariés, sauf pour les salariés des DROM (et Antilles-Guyane) suivant une formation de l'offre régionale hors de leur territoire (barème administrateurs OPCO). Secteur pêche : barème propre (voir variante). Extrait : « Frais annexes (déplacement, restauration, hébergement) des salariés des DROM suivant une formation de l’offre régionale TPE-PME en métropole par défaut de présence d’organisme sur ces territoires spécifiques » (vérifié le 2026-10-05)."
+    "note": "Pas de prise en charge des frais annexes dans le plan de développement des moins de 50 salariés, sauf pour les salariés des DROM (et Antilles-Guyane) suivant une formation de l'offre régionale hors de leur territoire (barème administrateurs OPCO). Secteur pêche : barème propre (voir les barèmes par branche). Extrait : « Frais annexes (déplacement, restauration, hébergement) des salariés des DROM suivant une formation de l’offre régionale TPE-PME en métropole par défaut de présence d’organisme sur ces territoires spécifiques » (vérifié le 2026-10-05)."
   },
   "frais_hebergement": {
     "value": null,

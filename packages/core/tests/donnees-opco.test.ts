@@ -195,13 +195,16 @@ function controlerBudgetsParDemande(opcos: OpcoData[]): string[] {
   return problemes;
 }
 
+const APOSTROPHE_COURBE = String.fromCharCode(0x2019);
+
 /**
  * Jargon interne que le visiteur ne doit pas lire : les notes des barèmes s'affichent telles quelles sur les fiches OPCO et à
  * l'écran de résultats. Sont proscrits les noms de champs des données (plafonds_par_taille, cout_horaire_inter…), le mot
  * « null », le vocabulaire de traçabilité (proxy translate.goog, site injoignable, documents qui « n'ont pas pu être
- * téléchargés ») et les remarques de calcul interne (« valeur prudente retenue », « hypothèse de calcul »).
+ * téléchargés »), les remarques de calcul interne (« valeur prudente retenue », « hypothèse de calcul ») et le vocabulaire
+ * du moteur de calcul (« le moteur applique », « non modélisé », « modélisables ») : le site parle du « simulateur » et de
+ * l'« estimation ». « moteur » et « modélis… » sont lus comme des mots entiers (« automoteur » n'est pas signalé).
  */
-const APOSTROPHE_COURBE = String.fromCharCode(0x2019);
 const JARGON_INTERNE: RegExp[] = [
   /\b(?:plafonds_par_taille|variantes_branche|dispositifs_complementaires|selon_accord|confidence)\b/gi,
   /\b(?:cout_horaire|budget_annuel|quota_horaire|prise_en_charge|frais)_\w+/gi,
@@ -209,6 +212,7 @@ const JARGON_INTERNE: RegExp[] = [
   /translate\.goog|\bproxy\b|filtre IDCC|injoignable/gi,
   new RegExp(`n['${APOSTROPHE_COURBE}]ont pas pu|pas pu être`, 'gi'),
   /valeur prudente retenue|hypothèse de calcul/gi,
+  /(?<![\p{L}])(?:moteur|mod[ée]lis\p{L}*)(?![\p{L}])/giu,
 ];
 
 /** Repère d'un élément de tableau dans un chemin : son identifiant (dispositif), sa taille, sinon son rang. */
@@ -311,7 +315,7 @@ describe('barèmes OPCO embarqués', () => {
     expect(controlerBudgetsParDemande(EMBEDDED_OPCOS)).toEqual([]);
   });
 
-  it('aucune chaîne de prose des 11 OPCO ne contient de jargon interne (noms de champs, « null », proxy, « n\'ont pas pu »…) : le site les affiche telles quelles', () => {
+  it('aucune chaîne de prose des 11 OPCO ne contient de jargon interne (noms de champs, « null », proxy, « n\'ont pas pu », « moteur », « modélisé »…) : le site les affiche telles quelles', () => {
     expect(EMBEDDED_OPCOS).toHaveLength(11);
     expect(controlerJargon(EMBEDDED_OPCOS)).toEqual([]);
   });
@@ -637,6 +641,11 @@ describe('les contrôles détectent une copie mutée', () => {
         ["les guides n'avaient pas pu être lus", 'pas pu être'],
         ['valeur prudente retenue', 'valeur prudente retenue'],
         ['hypothèse de calcul', 'hypothèse de calcul'],
+        ['le moteur applique ce taux', 'moteur'],
+        ['Le Moteur applique ce taux', 'Moteur'],
+        ['plafond non modélisé', 'modélisé'],
+        ['plafond non modelisé', 'modelisé'],
+        ['cas non modélisables par le barème', 'modélisables'],
       ];
       for (const [texte, attendu] of jargons) {
         const copie = muter((opcos) => {
@@ -646,10 +655,36 @@ describe('les contrôles détectent une copie mutée', () => {
       }
     });
 
-    it('les mots français proches du jargon ne sont pas signalés (frais, confiance, proximité, nullité, budget annuel…)', () => {
+    it('les mots français proches du jargon ne sont pas signalés (frais, confiance, proximité, nullité, budget annuel, automoteur, modalités…)', () => {
       const copie = muter((opcos) => {
         dans(opcos, 'akto').specificites =
-          'Frais de repas et d\'hébergement, confiance du financeur, accès de proximité, nullité de la demande, budget annuel, prise en charge des salaires, plafonds par taille, variantes de branche.';
+          'Frais de repas et d\'hébergement, confiance du financeur, accès de proximité, nullité de la demande, budget annuel, prise en charge des salaires, plafonds par taille, variantes de branche, bateaux automoteurs, modalités de prise en charge, modèle de convention.';
+      });
+      expect(controlerJargon(copie)).toEqual([]);
+    });
+
+    it('« le moteur applique » réinjecté dans une note est signalé, avec son chemin', () => {
+      const copie = muter((opcos) => {
+        const metier = dans(opcos, 'opco2i').cout_horaire_metier;
+        metier.note = `${metier.note} Estimation : le moteur applique 30 €/h.`;
+      });
+      expect(controlerJargon(copie)).toEqual(['opco2i.cout_horaire_metier.note : contient « moteur »']);
+    });
+
+    it('« non modélisé » réinjecté dans la description d\'une taille d\'entreprise est signalé, avec son chemin', () => {
+      const copie = muter((opcos) => {
+        const taille = dans(opcos, 'opco2i').plafonds_par_taille!.find((p) => p.taille === 'less_11')!;
+        taille.description = `${taille.description} Plafond non modélisé.`;
+      });
+      expect(controlerJargon(copie)).toEqual(['opco2i.plafonds_par_taille[less_11].description : contient « modélisé »']);
+    });
+
+    it('un extrait cité qui contient par hasard « moteur » ou « modélisé » n\'est pas signalé (citation « … » d\'une note, champ extrait d\'une alerte)', () => {
+      const copie = muter((opcos) => {
+        const metier = dans(opcos, 'opco2i').cout_horaire_metier;
+        metier.note = `${metier.note} « Le moteur de recherche du site ne couvre pas les accords non modélisés. »`;
+        const akto = dans(opcos, 'akto');
+        akto.alertes![0].extrait = `${akto.alertes![0].extrait} Le moteur de recherche est en panne.`;
       });
       expect(controlerJargon(copie)).toEqual([]);
     });

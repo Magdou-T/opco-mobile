@@ -26,7 +26,7 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "Aucun barème interprofessionnel : chaque branche fixe ses coûts horaires (formations transverses le plus souvent 25 € HT/h, formations métier de 20 à 100 € HT/h selon la branche). Sélectionnez votre branche (variantes ci-dessous ou page critères de financement). Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
+    "note": "Aucun barème interprofessionnel : chaque branche fixe ses coûts horaires (formations transverses le plus souvent 25 € HT/h, formations métier de 20 à 100 € HT/h selon la branche). Sélectionnez votre branche (voir les barèmes par branche ci-dessous ou page critères de financement). Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
   },
   "cout_horaire_intra": {
     "value": null,
@@ -38,7 +38,7 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.opcoep.fr/criteres-de-financement",
-    "note": "Plafond horaire des CQP et certifications (hors plafond annuel), défini par chaque branche (ex. 15 € HT/h en coiffure et en boulangerie, 20 € HT/h en pharmacie d'officine, 9,15 € HT/h en immobilier). Le taux des formations cœur de métier non certifiantes est indiqué dans la note du plafond horaire inter-entreprises de chaque branche. Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
+    "note": "Plafond horaire des CQP et certifications (hors plafond annuel), défini par chaque branche (ex. 15 € HT/h en coiffure et en boulangerie, 20 € HT/h en pharmacie d'officine, 9,15 € HT/h en immobilier). Le taux des formations cœur de métier non certifiantes est indiqué dans la précision de la ligne Coût pédagogique inter-entreprises de chaque branche. Extrait : « Les barèmes et priorités de financement sont proposés par la Section Paritaire Professionnelle de votre branche et validés par le Conseil d'administration d'Opco EP. » (vérifié le 2026-10-05)."
   },
   "prise_en_charge_salaires": {
     "value": null,
@@ -121,7 +121,7 @@
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "50 salariés et plus : pas de fonds légaux mutualisés ; actions financées sur les fonds conventionnels de la branche et/ou les versements volontaires (certaines branches publient une enveloppe, voir variantes). Catalogue Sélexion fermé aux 50 salariés et plus depuis le 01/09/2026."
+      "description": "50 salariés et plus : pas de fonds légaux mutualisés ; actions financées sur les fonds conventionnels de la branche et/ou les versements volontaires (certaines branches publient une enveloppe, voir les barèmes par branche). Catalogue Sélexion fermé aux 50 salariés et plus depuis le 01/09/2026."
     },
     {
       "taille": "300_plus",
@@ -275,7 +275,7 @@
         "value": 15,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
-        "note": "CQP Manager un salon de coiffure et certification cheveux spécifiques (hors plafond), ainsi que la formation de tuteur associée : 15 € HT/h (217 h maximum pour la certification). Les autres formations, métier compris, sont à 25 € HT/h (voir le plafond horaire inter-entreprises). Extrait : « CQP Manager un salon de coiffure (Hors plafond) … Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
+        "note": "CQP Manager un salon de coiffure et certification cheveux spécifiques (hors plafond), ainsi que la formation de tuteur associée : 15 € HT/h (217 h maximum pour la certification). Les autres formations, métier compris, sont à 25 € HT/h (voir la ligne Coût pédagogique inter-entreprises). Extrait : « CQP Manager un salon de coiffure (Hors plafond) … Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
       },
       "prise_en_charge_salaires": {
         "value": 0,
@@ -353,13 +353,13 @@
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
-        "note": "Formations transverses socle (RH, management, comptabilité, bureautique, langues), 14 h maximum. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier (14 h maximum par action), supérieurs à ce taux transverse que le moteur applique aux formations non certifiantes : fabrication 50 € HT/h ; vente et communication, gestion, transition écologique 40 € HT/h ; hygiène et sécurité 30 € HT/h. Extrait du taux cœur de métier : « Techniques de fabrication, préparation et de transformation Durée maximale de prise en charge : 14 h Coût pédagogique : 50 € HT/h » (vérifié le 2026-10-05)."
+        "note": "Formations transverses socle (RH, management, comptabilité, bureautique, langues), 14 h maximum. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier (14 h maximum par action), supérieurs à ce taux transverse que le simulateur applique aux formations non certifiantes : fabrication 50 € HT/h ; vente et communication, gestion, transition écologique 40 € HT/h ; hygiène et sécurité 30 € HT/h. Extrait du taux cœur de métier : « Techniques de fabrication, préparation et de transformation Durée maximale de prise en charge : 14 h Coût pédagogique : 50 € HT/h » (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 15,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=208",
-        "note": "CQP Tourier (300 h maximum) et Brevet de maîtrise Boulanger (400 h maximum), hors plafond : 15 € HT/h. Les actions métier courantes sont à 30-50 € HT/h (voir le plafond horaire inter-entreprises). Extrait : « CQP Tourier (hors plafond) Durée maximale de prise en charge : 300 h Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
+        "note": "CQP Tourier (300 h maximum) et Brevet de maîtrise Boulanger (400 h maximum), hors plafond : 15 € HT/h. Les actions métier courantes sont à 30-50 € HT/h (voir la ligne Coût pédagogique inter-entreprises). Extrait : « CQP Tourier (hors plafond) Durée maximale de prise en charge : 300 h Coût pédagogique : 15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
       },
       "prise_en_charge_salaires": {
         "value": 0,
@@ -437,7 +437,7 @@
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=175",
-        "note": "Formations transverses (socle et autres), 28 h maximum ; FOAD 100 % : 20 € HT/h dans la limite de 10 h. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier (actualisation des connaissances, 28 h maximum) : 40 € HT/h, supérieur à ce taux transverse que le moteur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Durée maximale de prise en charge : 28 h Coût pédagogique : 40 € HT/h » (vérifié le 2026-10-05)."
+        "note": "Formations transverses (socle et autres), 28 h maximum ; FOAD 100 % : 20 € HT/h dans la limite de 10 h. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier (actualisation des connaissances, 28 h maximum) : 40 € HT/h, supérieur à ce taux transverse que le simulateur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Durée maximale de prise en charge : 28 h Coût pédagogique : 40 € HT/h » (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 20,
@@ -524,7 +524,7 @@
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=204",
-        "note": "Formations transverses socle (comptabilité, management, RH, bureautique, anglais), 28 h maximum ; autres transverses 25 à 40 € HT/h ; FOAD 100 % : 10 € HT/h dans la limite de 14 h. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier (35 h maximum) : 50 € HT/h (60 € HT/h pour les manipulateurs radio), supérieur à ce taux transverse que le moteur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Durée maximale de prise en charge : 35 h Coût pédagogique : 50 € HT/h » (vérifié le 2026-10-05)."
+        "note": "Formations transverses socle (comptabilité, management, RH, bureautique, anglais), 28 h maximum ; autres transverses 25 à 40 € HT/h ; FOAD 100 % : 10 € HT/h dans la limite de 14 h. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier (35 h maximum) : 50 € HT/h (60 € HT/h pour les manipulateurs radio), supérieur à ce taux transverse que le simulateur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Durée maximale de prise en charge : 35 h Coût pédagogique : 50 € HT/h » (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 15,
@@ -610,7 +610,7 @@
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=205",
-        "note": "Formations transverses (socle et autres), 28 h maximum ; secourisme, AFGSU, SSIAP 21 h ; FOAD 100 % : 9,15 € HT/h dans la limite de 14 h. Extrait : « Coût pédagogique : 25 € HT/h » Taux des actions métier (actualisation des connaissances, gestion du risque infectieux, modules administratif, ODF et paro-implantologie) : 30 € HT/h, supérieur à ce taux transverse que le moteur applique aux formations non certifiantes ; actions réservées aux entreprises de moins de 11 salariés. Extrait du taux métier : « Durée maximale de prise en charge : 28 h Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
+        "note": "Formations transverses (socle et autres), 28 h maximum ; secourisme, AFGSU, SSIAP 21 h ; FOAD 100 % : 9,15 € HT/h dans la limite de 14 h. Extrait : « Coût pédagogique : 25 € HT/h » Taux des actions métier (actualisation des connaissances, gestion du risque infectieux, modules administratif, ODF et paro-implantologie) : 30 € HT/h, supérieur à ce taux transverse que le simulateur applique aux formations non certifiantes ; actions réservées aux entreprises de moins de 11 salariés. Extrait du taux métier : « Durée maximale de prise en charge : 28 h Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 20,
@@ -697,13 +697,13 @@
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
-        "note": "Formations transverses (socles et autres) et formations spécifiques aux résidences de tourisme. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier : 30 € HT/h (gestion locative, copropriété, transaction, droit, numérique...) et 40 € HT/h pour les formations obligatoires et réglementaires (déontologie, TRACFIN, discrimination), supérieurs à ce taux transverse que le moteur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Formations cœur de métiers … Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
+        "note": "Formations transverses (socles et autres) et formations spécifiques aux résidences de tourisme. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier : 30 € HT/h (gestion locative, copropriété, transaction, droit, numérique...) et 40 € HT/h pour les formations obligatoires et réglementaires (déontologie, TRACFIN, discrimination), supérieurs à ce taux transverse que le simulateur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Formations cœur de métiers … Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 9.15,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
-        "note": "Liste de formations hors plafond (CQP négociateur immobilier, CQP AABI, titres de gestionnaire et de manager en immobilier, licences et masters de spécialisation, BTS Professions immobilières) : 9,15 € HT/h. Les formations obligatoires et réglementaires sont à 40 € HT/h (voir le plafond horaire inter-entreprises) : l'estimation est donc prudente pour une habilitation. Extrait : « Liste de formations hors plafond Gestionnaire d'affaires immobilières … CQP négociateur immobilier CQP AABI Licences et Masters spécialisation en immobilier BTS Professions immobilières Coûts pédagogiques : 9,15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
+        "note": "Liste de formations hors plafond (CQP négociateur immobilier, CQP AABI, titres de gestionnaire et de manager en immobilier, licences et masters de spécialisation, BTS Professions immobilières) : 9,15 € HT/h. Les formations obligatoires et réglementaires sont à 40 € HT/h (voir la ligne Coût pédagogique inter-entreprises) : l'estimation est donc prudente pour une habilitation. Extrait : « Liste de formations hors plafond Gestionnaire d'affaires immobilières … CQP négociateur immobilier CQP AABI Licences et Masters spécialisation en immobilier BTS Professions immobilières Coûts pédagogiques : 9,15 € HT/h » (vérifié le 2026-10-05 ; relu en ligne le 2026-10-06)."
       },
       "prise_en_charge_salaires": {
         "value": 0,

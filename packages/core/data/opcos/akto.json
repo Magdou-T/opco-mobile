@@ -21,7 +21,7 @@
     "value": 30,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "« Coûts pédagogiques : coûts réels, plafonnés à 30€/heure de formation/salarié formé » Barème par défaut = interprofession (entreprises sans convention collective, IDCC 5017, 17671, 1311, Mayotte, Saint-Martin, Saint-Barthélemy, Saint-Pierre-et-Miquelon), en hexagone ; outre-mer : 40 €/h. Chaque branche fixe ses propres plafonds (voir variantes). (vérifié le 2026-10-05)"
+    "note": "« Coûts pédagogiques : coûts réels, plafonnés à 30€/heure de formation/salarié formé » Barème par défaut = interprofession (entreprises sans convention collective, IDCC 5017, 17671, 1311, Mayotte, Saint-Martin, Saint-Barthélemy, Saint-Pierre-et-Miquelon), en hexagone ; outre-mer : 40 €/h. Chaque branche fixe ses propres plafonds (voir les barèmes par branche). (vérifié le 2026-10-05)"
   },
   "cout_horaire_intra": {
     "value": null,
@@ -74,7 +74,7 @@
     "note": "« et emploie moins de 11 salariés, elle dispose d’un budget annuel de 2 500€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » ; « et emploie 11 à 49 salariés, elle dispose d’un budget annuel de 4 000€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » Montant selon l'effectif et la branche (voir le détail par taille d'entreprise et les variantes de branche) ; outre-mer : 5 000 € / 7 000 €. (vérifié le 2026-10-05)"
   },
   "budget_annuel_portee": "global",
-  "budget_annuel_description": "Barème par défaut (interprofession) : budget annuel de 2 500 € (moins de 11 salariés) et 4 000 € (11 à 49 salariés) en hexagone, 5 000 € et 7 000 € en outre-mer, pour les formations hors Espace Formation, dans la limite des fonds disponibles. Chaque branche fixe ses propres budgets ; à l'automne 2026, l'enveloppe PDC est épuisée dans plusieurs branches (voir variantes).",
+  "budget_annuel_description": "Barème par défaut (interprofession) : budget annuel de 2 500 € (moins de 11 salariés) et 4 000 € (11 à 49 salariés) en hexagone, 5 000 € et 7 000 € en outre-mer, pour les formations hors Espace Formation, dans la limite des fonds disponibles. Chaque branche fixe ses propres budgets ; à l'automne 2026, l'enveloppe PDC est épuisée dans plusieurs branches (voir les barèmes par branche).",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
   "profils_candidats": [
@@ -585,7 +585,7 @@
         "value": 0,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
-        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée : plafond horaire mis à 0 € pour qu'aucun financement ne soit simulé hors Espace Formation (barèmes 2026 à titre indicatif : voir le budget annuel). (vérifié le 2026-10-05)"
+        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée : plafond horaire mis à 0 € pour qu'aucun financement ne soit estimé hors Espace Formation (barèmes 2026 à titre indicatif : voir le budget annuel). (vérifié le 2026-10-05)"
       },
       "cout_horaire_metier": {
         "value": 0,

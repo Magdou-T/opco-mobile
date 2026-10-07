@@ -50,7 +50,7 @@
     "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
-    "note": "Règle générale 2026 (fonds légaux) : 13 €/h seulement pour les entreprises de moins de 11 salariés et si le salarié est remplacé ; aucune prise en charge pour les 11 à 49 salariés. Valeur non appliquée par défaut car conditionnelle ; selon la branche, de « pas de prise en charge » au coût réel. « Rémunération : forfait de 13 €/h uniquement pour les entreprises de moins de 11 salariés en cas de remplacement du collaborateur. » (vérifié le 2026-10-05)"
+    "note": "Règle générale 2026 (fonds légaux) : 13 €/h seulement pour les entreprises de moins de 11 salariés et si le salarié est remplacé ; aucune prise en charge pour les 11 à 49 salariés. Valeur non prise en compte dans l'estimation car conditionnelle ; selon la branche, de « pas de prise en charge » au coût réel. « Rémunération : forfait de 13 €/h uniquement pour les entreprises de moins de 11 salariés en cas de remplacement du collaborateur. » (vérifié le 2026-10-05)"
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
@@ -368,7 +368,7 @@
         "value": null,
         "confidence": "depends_on_branche",
         "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
-        "note": "13 €/h uniquement pour les structures de moins de 11 salariés avec remplacement ; non appliqué par défaut. « Rémunération : prise en charge pour les structures de moins de 11 salariés à hauteur de 13€/heure avec obligation de remplacement » (vérifié le 2026-10-05)"
+        "note": "13 €/h uniquement pour les structures de moins de 11 salariés avec remplacement ; non pris en compte dans l'estimation. « Rémunération : prise en charge pour les structures de moins de 11 salariés à hauteur de 13€/heure avec obligation de remplacement » (vérifié le 2026-10-05)"
       },
       "prise_en_charge_salaires_mode": "selon_accord",
       "budget_annuel_max": {

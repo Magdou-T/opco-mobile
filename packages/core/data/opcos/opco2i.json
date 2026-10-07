@@ -32,7 +32,7 @@
     "value": 30,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "30 €/h pour les formations métiers (CQP, certifications) ; formations réglementaires et habilitations : 20 €/h. Estimation : le moteur applique 30 €/h aux CQP, certifications et habilitations, alors que les habilitations relèvent de la « formation réglementaire » plafonnée à 20 €/h. « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-10-05)"
+    "note": "30 €/h pour les formations métiers (CQP, certifications) ; formations réglementaires et habilitations : 20 €/h. Estimation : le simulateur applique 30 €/h aux CQP, certifications et habilitations, alors que les habilitations relèvent de la « formation réglementaire » plafonnée à 20 €/h. « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-10-05)"
   },
   "prise_en_charge_salaires": {
     "value": null,
