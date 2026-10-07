@@ -1,0 +1,92 @@
+# ============================================================
+# Intégration continue : vérifie le dépôt, construit le site et conserve l'archive à déposer sur l'hébergement.
+#
+# Quand : à chaque pull request vers main, à chaque push sur main, et à la demande (onglet Actions, « Run workflow »).
+#
+# Ce que le job « verifier » fait, dans cet ordre :
+#   1. vérification de types du core, du backend, de l'app mobile et du site ;
+#   2. lint du site, garde de charte SFG (puis son autotest) et tests du site ;
+#   3. tests du core et du backend ;
+#   4. build du site : export statique dans apps/web/out ;
+#   5. dépôt de apps/web/out en artefact « site-hostinger », conservé 30 jours. include-hidden-files est
+#      indispensable : sans lui, le .htaccess serait exclu de l'artefact.
+#
+# Le build télécharge les polices Google (Montserrat, Inter) : le réseau du runner suffit. Aucun secret n'est utilisé.
+# Ce workflow ne publie rien : le dépôt sur Hostinger se fait à la main (docs/deploiement-site.md).
+#
+# Des tests du core comparent la date du jour à la dernière vérification de chaque OPCO, de chaque aide et de chaque
+# portail : ils échouent à partir de 12 mois d'écart (octobre 2027 pour les vérifications d'octobre 2026). C'est le
+# rappel de la revue annuelle des données, décrite dans docs/donnees-aides.md.
+# ============================================================
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck core
+        run: npm run typecheck --workspace @opco/core
+
+      - name: Typecheck backend
+        run: npm run typecheck --workspace @opco/backend
+
+      - name: Typecheck app mobile
+        run: npx tsc --noEmit
+        working-directory: apps/mobile
+
+      - name: Typecheck site
+        run: npx tsc --noEmit
+        working-directory: apps/web
+
+      - name: Lint du site
+        run: npm run lint --workspace web
+
+      - name: Garde de charte SFG
+        run: npm run check:charte
+
+      - name: Autotest de la garde de charte
+        run: node scripts/check-charte-sfg.mjs --self-test
+
+      - name: Tests du site
+        run: npm run test:web
+
+      - name: Tests core
+        run: npm test --workspace @opco/core
+
+      - name: Tests backend
+        run: npm test --workspace @opco/backend
+
+      - name: Build du site (export statique)
+        run: npm run build --workspace web
+
+      - name: Archive du site (artefact site-hostinger)
+        uses: actions/upload-artifact@v7
+        with:
+          name: site-hostinger
+          path: apps/web/out
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

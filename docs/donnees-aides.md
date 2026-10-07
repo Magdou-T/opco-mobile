@@ -50,7 +50,7 @@ Le site (`apps/web`) embarque les données de `packages/core/data` au moment de 
 1. Modifier les fichiers JSON de `packages/core/data/**` (barème d'un OPCO, table IDCC, aide, portail), en suivant les règles ci-dessus.
 2. Lancer les tests du core (`cd packages/core && npx vitest run`) et le contrôle des liens (`cd backend && npm run check-sources`).
 3. Reconstruire le site : `npm run build --workspace web` écrit l'export statique dans `apps/web/out/`.
-4. Redéposer le contenu de `apps/web/out/` sur l'hébergement (Hostinger). Le guide de déploiement du site n'est pas encore écrit : la procédure de dépôt y sera décrite.
+4. Redéposer le contenu de `apps/web/out/` sur l'hébergement (Hostinger) : l'archive, le dépôt et la liste de contrôle sont décrits dans `docs/deploiement-site.md`.
 
 ## Mise à jour automatique
 

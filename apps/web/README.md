@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Site financementOPCO
 
-## Getting Started
+Site de SFG Développement qui aide une entreprise à trouver ce qui peut financer une formation : un simulateur en six étapes (OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe), les fiches des 11 OPCO, trois guides (comprendre les OPCO, obligations des entreprises, former sans consommer son budget) et une page de contact.
 
-First, run the development server:
+C'est un export statique Next.js 16 (App Router, React 19, Tailwind 4) : `next build` écrit dans `out/` des fichiers qu'un hébergement Apache sert tels quels, sans Node ni base de données.
+
+## Commandes
+
+Depuis la racine du dépôt (npm workspaces) :
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev --workspace web      # serveur de développement, http://localhost:3000
+npm run build --workspace web    # export statique dans apps/web/out
+npm run lint --workspace web
+npm run test:web                 # tests du site (node:test)
+npm run check:charte             # garde de charte SFG sur apps/web/src
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Depuis `apps/web`, `npm run dev`, `npm run build` et `npm run lint` font la même chose. Le build télécharge les polices Montserrat et Inter : il demande une connexion Internet. `npm run start` est refusé par Next sur un export statique ; pour voir `out/`, le servir avec un serveur de fichiers (`npx serve@latest out`, la commande que Next indique).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+La documentation de la version de Next installée est dans `node_modules/next/dist/docs/`, à la racine du dépôt. `AGENTS.md` demande de la lire avant de coder : cette version a des changements incompatibles avec les précédentes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Organisation
 
-## Learn More
+- `src/app` : les pages (accueil, `simulateur/`, `opco/` et `opco/[slug]/`, `comprendre-les-opco/`, `obligations/`, `former-sans-budget/`, `contact/`), la page 404, `sitemap.ts` et `robots.ts`, ainsi que `layout.tsx` et `globals.css`, où vivent les jetons de design.
+- `src/components` : `ui/` (primitives), `site/` (en-tête, pied de page, éléments des guides), `wizard/` (les six étapes du simulateur), `results/` (l'écran « Votre plan de financement »), `opco/` (fiches des OPCO).
+- `src/hooks` : l'état du parcours (`useWizard`), la recherche d'entreprise (`useSirenLookup`) et la place réservée à la barre de navigation collante du simulateur.
+- `src/lib` : les fonctions pures du site (étapes, saisie, calcul de l'écran de résultats, formats), testées dans `tests/`.
+- `public/` : `logo-sfg.png` et le `.htaccess` d'Apache, copiés tels quels dans `out/`.
 
-To learn more about Next.js, take a look at the following resources:
+## Lien avec @opco/core
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Le moteur de calcul et les données (barèmes des OPCO, table IDCC, catalogue d'aides, portails régionaux) viennent de `@opco/core` (`packages/core`). Ils sont compilés dans le site au moment du build : une modification des données n'apparaît en ligne qu'après un nouveau build et un nouveau dépôt.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Au moment de l'usage, le navigateur n'appelle qu'une API, la recherche d'entreprise de l'État (`recherche-entreprises.api.gouv.fr`). Le site n'appelle jamais `api.francecompetences.fr`, dont la réutilisation demande une licence : il renvoie seulement, par un lien, vers l'outil officiel « Quel est mon OPCO ».
 
-## Deploy on Vercel
+## Design
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`DESIGN.md` décrit le système de design SFG : jetons de couleur, typographie, primitives, contrastes mesurés et interdits. `npm run check:charte` applique ces interdits (tiret cadratin, bleu, violet, police mono, émojis) au code de `src/`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Publier
+
+Le dépôt sur Hostinger (archive, `.htaccess`, liste de contrôle, limites connues) est décrit dans `docs/deploiement-site.md`. Le workflow `.github/workflows/ci.yml` construit le site à chaque pull request et à chaque push sur `main`, et conserve `out/` comme artefact `site-hostinger`.
