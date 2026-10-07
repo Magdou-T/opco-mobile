@@ -1,25 +1,21 @@
 # ============================================================
 # Mise à jour planifiée du dataset OPCO (pipeline auto-correctif).
 #
-# SÉCURITÉ — clé API :
-#   ANTHROPIC_API_KEY est un SECRET CI (Settings > Secrets and variables >
-#   Actions > New repository secret). Elle n'est JAMAIS embarquée dans
-#   l'app mobile ni commitée : l'app ne télécharge que les JSON publiés
-#   dans datasets/ et vérifie leur sha256 via manifest.json.
+# Sécurité de la clé API : ANTHROPIC_API_KEY est un SECRET CI (Settings > Secrets and
+# variables > Actions). Elle n'est JAMAIS embarquée dans l'app ni commitée.
 #
 # Comportement :
-#   - hebdomadaire (cron) + déclenchement manuel (workflow_dispatch)
-#   - exécute le pipeline --live (scrape réel + extraction IA)
-#   - si AUCUN changement à revoir : commit direct de datasets/
-#   - si needsReview non vide : ouvre une PR pour revue humaine
-#     (les changements hors seuil ne sont de toute façon PAS publiés :
-#     le garde-fou de validate.ts les a déjà ramenés à l'ancienne valeur)
+#   - hebdomadaire (cron) et déclenchement manuel ;
+#   - tests et typecheck du core et du backend, puis contrôle des liens sources
+#     (rapport déposé en artefact du run, sans faire échouer le workflow) ;
+#   - si le secret existe : pipeline --live (scrape + IA), puis commit direct ou PR de revue ;
+#   - si le secret manque : avertissement explicite, sans échec.
 # ============================================================
 name: Update OPCO dataset
 
 on:
   schedule:
-    - cron: '0 6 * * 1' # tous les lundis 06:00 UTC
+    - cron: '0 6 * * 1' # tous les lundis à 06:00 UTC
   workflow_dispatch: {}
 
 permissions:
@@ -29,12 +25,16 @@ permissions:
 jobs:
   update-dataset:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      # Un secret ne peut pas être testé directement dans un « if » d'étape : on le convertit en booléen.
+      HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -42,26 +42,54 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Tests core
+        run: npm test
+
+      - name: Typecheck core (les gardes de types des données ne sont vérifiées que par tsc)
+        run: npx tsc --noEmit -p packages/core
+
       - name: Typecheck backend
         run: npm run typecheck --workspace @opco/backend
 
       - name: Tests backend
         run: npm test --workspace @opco/backend
 
+      - name: Contrôle des liens sources
+        run: npm run check-sources --workspace @opco/backend
+        continue-on-error: true
+
+      - name: Rapport des liens
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rapport-liens
+          path: |
+            backend/out/liens.md
+            backend/out/liens.json
+          if-no-files-found: ignore
+
+      - name: Secret absent
+        if: env.HAS_ANTHROPIC_KEY != 'true'
+        run: |
+          echo "::warning::Secret ANTHROPIC_API_KEY absent : la vérification IA des barèmes est ignorée (Settings > Secrets and variables > Actions)."
+
       - name: Rebuild sources (depuis packages/core/data/opcos)
+        if: env.HAS_ANTHROPIC_KEY == 'true'
         run: npm run build-sources --workspace @opco/backend
 
       - name: Run pipeline (live)
+        if: env.HAS_ANTHROPIC_KEY == 'true'
         env:
-          # Secret CI — jamais dans le code ni dans l'app.
+          # Secret CI, jamais dans le code ni dans l'app.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          # Optionnel : surcharger les modèles / le seuil de variation.
+          # Optionnel : surcharger les modèles ou le seuil de variation.
           # EXTRACT_MODEL: claude-haiku-4-5
-          # VERIFY_MODEL: claude-opus-4-8
+          # VERIFY_MODEL: claude-opus-5-5
           # MAX_DELTA_PCT: '50'
         run: npm run live --workspace @opco/backend
 
       - name: Count needsReview
+        if: env.HAS_ANTHROPIC_KEY == 'true'
         id: review
         run: |
           count=$(node -p "try { JSON.parse(require('fs').readFileSync('backend/out/report.json','utf8')).needsReview.length } catch (e) { 0 }")
@@ -69,7 +97,7 @@ jobs:
           echo "needsReview = $count"
 
       - name: Commit dataset (aucune revue requise)
-        if: steps.review.outputs.count == '0'
+        if: env.HAS_ANTHROPIC_KEY == 'true' && steps.review.outputs.count == '0'
         run: |
           git config user.name "opco-funding-bot"
           git config user.email "opco-funding-bot@users.noreply.github.com"
@@ -82,19 +110,19 @@ jobs:
           fi
 
       - name: Create PR (changements à revoir)
-        if: steps.review.outputs.count != '0'
-        uses: peter-evans/create-pull-request@v6
+        if: env.HAS_ANTHROPIC_KEY == 'true' && steps.review.outputs.count != '0'
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: bot/opco-dataset-update
           title: 'Dataset OPCO : changements à revoir manuellement'
           commit-message: 'chore(datasets): mise à jour automatique (needsReview non vide)'
           body: |
             Le pipeline hebdomadaire a détecté des variations dépassant `MAX_DELTA_PCT`
-            (ou des montants sans valeur de référence). Ces changements n'ont **pas**
-            été auto-publiés : `latest.json` conserve les anciennes valeurs.
+            (ou des montants sans valeur de référence). Ces changements n'ont pas été
+            publiés automatiquement : `latest.json` conserve les anciennes valeurs.
 
-            Détail complet : `backend/out/report.json` (champ `needsReview`)
-            et le changelog du `datasets/manifest.json`.
+            Détail complet : `backend/out/report.json` (champ `needsReview`) et le
+            changelog de `datasets/manifest.json`.
           add-paths: |
             datasets/
             backend/out/report.json

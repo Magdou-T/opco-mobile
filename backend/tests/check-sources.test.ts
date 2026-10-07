@@ -102,7 +102,7 @@ describe('collecterUrls', () => {
     expect(urls.get('https://demo.fr/naf')).toEqual(['naf:47.source']);
   });
 
-  it('regroupe les usages d’une adresse partagée, sans doublon, et ignore ce qui n’est pas une adresse web', () => {
+  it("regroupe les usages d'une adresse partagée, sans doublon, et ignore ce qui n'est pas une adresse web", () => {
     const idcc = {
       '0001': { idcc: '0001', titre: 'A', opco: 'akto', statut: 'actif', source: 'https://legi.gouv.fr/arrete', note: 'voir https://legi.gouv.fr/arrete' },
       '0002': { idcc: '0002', titre: 'B', opco: 'akto', statut: 'actif', source: 'https://legi.gouv.fr/arrete' },
@@ -114,7 +114,7 @@ describe('collecterUrls', () => {
     expect(urls.get('https://legi.gouv.fr/arrete')).toEqual(['idcc:0001.source', 'idcc:0001.note', 'idcc:0002.source']);
   });
 
-  it('ne déclare qu’une fois un usage quand le même texte cite deux fois la même adresse', () => {
+  it("ne déclare qu'une fois un usage quand le même texte cite deux fois la même adresse", () => {
     const idcc = {
       '0001': { idcc: '0001', titre: 'A', opco: 'akto', statut: 'actif', note: 'Voir https://a.fr/x puis (source : https://a.fr/x).', source: 'https://legi.gouv.fr/arrete' },
     } as unknown as IdccTable;
@@ -166,7 +166,7 @@ describe('motifIgnore (licence France compétences)', () => {
     expect(motifIgnore('http://api.francecompetences.fr:8443/x')).not.toBeNull();
   });
 
-  it('laisse passer les pages web ordinaires, dont celle de l’outil officiel, et les adresses illisibles', () => {
+  it("laisse passer les pages web ordinaires, dont celle de l'outil officiel, et les adresses illisibles", () => {
     expect(motifIgnore('https://quel-est-mon-opco.francecompetences.fr/')).toBeNull();
     expect(motifIgnore('https://www.francecompetences.fr/reguler-le-marche/mon-cep/')).toBeNull();
     expect(motifIgnore('https://exemple.fr/api.francecompetences.fr')).toBeNull();
@@ -216,7 +216,7 @@ describe('verifierUrls', () => {
     expect(r[0].erreur).toBeUndefined();
   });
 
-  it('conserve l’ordre des liens même quand les réponses arrivent dans le désordre', async () => {
+  it("conserve l'ordre des liens même quand les réponses arrivent dans le désordre", async () => {
     const faux = (async (url: string) => {
       const rang = Number(new URL(url).pathname.slice(1));
       await attendre((5 - rang) * 8);
@@ -430,7 +430,7 @@ describe('rapportMarkdown', () => {
     expect(rapport).not.toMatch(EMOJI);
   });
 
-  it('écrit « Aucun. » à la place d’un tableau vide', () => {
+  it("écrit « Aucun. » à la place d'un tableau vide", () => {
     const propre = rapportMarkdown([{ url: 'https://ok.fr', statut: 200, etat: 'ok', utilisePar: ['x'] }], '07/10/2026');
     expect(propre).toContain('1 lien : 1 OK, 0 à vérifier, 0 cassé, 0 ignoré.');
     expect(propre.match(/^Aucun\.$/gm)).toHaveLength(3);

@@ -9,9 +9,9 @@
 //   depends_on_branche si le site renvoie à un accord de branche,
 //   NE JAMAIS inventer de montant.
 //
-// Modèles (configurables par env, IDs actuels issus de la skill claude-api) :
-//   EXTRACT_MODEL (défaut claude-haiku-4-5)  — extraction structurée
-//   VERIFY_MODEL  (défaut claude-opus-4-8)   — raisonnement sur les écarts
+// Modèles (configurables par env ; identifiants confirmés avec la skill claude-api le 07/10/2026) :
+//   EXTRACT_MODEL (défaut claude-haiku-4-5) : extraction structurée
+//   VERIFY_MODEL  (défaut claude-opus-5-5)  : raisonnement sur les écarts
 // ============================================================
 
 import Anthropic from '@anthropic-ai/sdk';
@@ -21,7 +21,7 @@ import { z } from 'zod/v4';
 import { NUMERIC_FIELDS, type ExtractionResult, type ScrapeResult } from './types';
 
 export const DEFAULT_EXTRACT_MODEL = 'claude-haiku-4-5';
-export const DEFAULT_VERIFY_MODEL = 'claude-opus-4-8';
+export const DEFAULT_VERIFY_MODEL = 'claude-opus-5-5';
 
 export function getExtractModel(): string {
   return process.env.EXTRACT_MODEL || DEFAULT_EXTRACT_MODEL;
