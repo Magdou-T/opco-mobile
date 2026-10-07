@@ -74,7 +74,7 @@
     "note": "Budget annuel par entreprise de moins de 50 salariés fonction de l'effectif, détaillé par taille d'entreprise : 1 500 € (moins de 11), 1 800 € (11 à moins de 20), 2 100 € (20 à moins de 30), 2 400 € (30 à moins de 40), 2 700 € (40 à moins de 50), coûts pédagogiques uniquement, dans la limite des fonds disponibles ; pas de budget légal à partir de 50 salariés. Les montants de 2 900 à 4 300 € relevés en juillet sont erronés. Extraits : « Version janvier 2026 applicable aux demandes de prise en charge reçues à compter du 01/01/2026 et dont l'action débute en 2026. » ; « Budget alloué dans la limite des fonds OPCO disponibles au moment de l'instruction » ; « Taille de l'entreprise Budget alloué Moins de 11 salariés 1 500 € De 11 à moins de 20 salariés 1 800 € De 20 à moins de 30 salariés 2 100 € De 30 à moins de 40 salariés 2 400 € De 40 à moins de 50 salariés 2 700 € » (vérifié le 2026-10-06 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification)."
   },
   "budget_annuel_portee": "pedagogie",
-  "budget_annuel_description": "Plan de développement des compétences 2026 (moins de 50 salariés) : budget annuel en euros HT selon l'effectif — 1 500 € (moins de 11 salariés), 1 800 € (11 à moins de 20), 2 100 € (20 à moins de 30), 2 400 € (30 à moins de 40), 2 700 € (40 à moins de 50) — pour les seuls coûts pédagogiques (hors frais annexes et salaires), dans la limite des fonds disponibles. Formation d'au moins 1 h. Demandes au plus tard le 31/12/2026.",
+  "budget_annuel_description": "Plan de développement des compétences 2026 (moins de 50 salariés) : budget annuel en euros HT selon l'effectif, soit 1 500 € (moins de 11 salariés), 1 800 € (11 à moins de 20), 2 100 € (20 à moins de 30), 2 400 € (30 à moins de 40), 2 700 € (40 à moins de 50), pour les seuls coûts pédagogiques (hors frais annexes et salaires), dans la limite des fonds disponibles. Formation d'au moins 1 h. Demandes au plus tard le 31/12/2026.",
   "quota_horaire_min": 1,
   "quota_horaire_max": null,
   "plafonds_par_taille": [
@@ -90,7 +90,7 @@
       "cout_horaire_max": null,
       "budget_annuel_max": 1800,
       "quota_horaire_max": null,
-      "description": "11 à 49 salariés : budget annuel progressif — 1 800 € HT de 11 à moins de 20 salariés (valeur retenue, la plus prudente), 2 100 € de 20 à moins de 30, 2 400 € de 30 à moins de 40, 2 700 € de 40 à moins de 50 — coûts pédagogiques uniquement. Extraits : « De 11 à moins de 20 salariés 1 800 € » ; « De 20 à moins de 30 salariés 2 100 € » ; « De 30 à moins de 40 salariés 2 400 € » ; « De 40 à moins de 50 salariés 2 700 € »."
+      "description": "11 à 49 salariés : budget annuel progressif, soit 1 800 € HT de 11 à moins de 20 salariés (valeur retenue, la plus prudente), 2 100 € de 20 à moins de 30, 2 400 € de 30 à moins de 40, 2 700 € de 40 à moins de 50, coûts pédagogiques uniquement. Extraits : « De 11 à moins de 20 salariés 1 800 € » ; « De 20 à moins de 30 salariés 2 100 € » ; « De 30 à moins de 40 salariés 2 400 € » ; « De 40 à moins de 50 salariés 2 700 € »."
     },
     {
       "taille": "50_299",

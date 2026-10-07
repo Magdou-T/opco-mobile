@@ -928,7 +928,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
 
   // ---- 7. Conditions, démarches & next steps ----
   const dispositifPrincipal = pdcFerme
-    ? 'Plan de développement des compétences — fonds mutualisés non accessibles (50 salariés et plus)'
+    ? 'Plan de développement des compétences : fonds mutualisés non accessibles (50 salariés et plus)'
     : enveloppeGrande
       ? 'Plan de développement des compétences (fonds conventionnels ou volontaires, 50 salariés et plus)'
       : 'Plan de développement des compétences (fonds mutualisés OPCO)';

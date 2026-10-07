@@ -13,7 +13,7 @@ import { evaluerAides } from '../src/aides/evaluer';
 import { profilDepuisWizard } from '../src/aides/profil';
 import type { AideEvaluee, Financeur } from '../src/aides/types';
 import { EMBEDDED_AIDES, getEmbeddedOpcoBySlug } from '../src/data';
-import { createInitialWizardState, type PosteFinancement, type WizardState } from '../src/types';
+import { ALERTE_OPCO_LABELS, createInitialWizardState, type PosteFinancement, type WizardState } from '../src/types';
 
 /**
  * Date d'évaluation fixe : le résultat ne dépend pas du jour où les tests s'exécutent. Certaines aides ont une période de
@@ -21,6 +21,9 @@ import { createInitialWizardState, type PosteFinancement, type WizardState } fro
  * faits à la main sur les données d'octobre 2026 ne vaudraient plus après cette échéance.
  */
 const DATE = '2026-10-07';
+
+/** U+2014, construit par son code : le tiret cadratin ne figure pas dans ce fichier (charte SFG). */
+const TIRET_CADRATIN = String.fromCharCode(0x2014);
 
 const aideParId = new Map(EMBEDDED_AIDES.map((a) => [a.id, a]));
 const centimes = (n: number): number => Math.round(n * 100);
@@ -57,9 +60,54 @@ function idsDuPlan(plan: PlanFinancement): string[] {
   ];
 }
 
+/**
+ * Tout texte que le résultat d'un scénario met sous les yeux de l'utilisateur, avec son origine : estimation de l'OPCO
+ * (dispositif principal, libellés et détails des lignes, messages, conditions, démarches, alertes, dispositifs complémentaires,
+ * étapes, paiement), aides évaluées (noms, descriptions, raisons, conditions, libellés de montant, notes de cumul, démarches,
+ * titres des sources) et plan (noms des lignes et des options, raisons). L'extrait d'une alerte et celui d'une source sont des
+ * citations mot pour mot, affichées entre « » : ils ne sont pas repris.
+ */
+function textesAffiches(r: Resultat): { origine: string; texte: string }[] {
+  const textes: { origine: string; texte: string }[] = [];
+  const ajouter = (origine: string, ...valeurs: (string | null | undefined)[]) => {
+    for (const texte of valeurs) if (texte) textes.push({ origine, texte });
+  };
+  const { funding, aides, plan } = r;
+  if (funding) {
+    ajouter('funding.dispositifPrincipal', funding.dispositifPrincipal);
+    for (const l of funding.lines) ajouter(`funding.lines[${l.poste}]`, l.label, l.note, ...(l.details ?? []));
+    ajouter('funding.warnings', ...funding.warnings);
+    ajouter('funding.conditions', ...funding.conditions);
+    ajouter('funding.demarches', ...funding.demarches);
+    for (const a of funding.alertes) ajouter(`funding.alertes[${a.branche}]`, a.branche, ALERTE_OPCO_LABELS[a.type]);
+    for (const d of funding.dispositifsComplementaires) {
+      ajouter(`funding.dispositifsComplementaires[${d.id}]`, d.nom, d.description, ...d.conditions, d.demarches, d.publics, d.note);
+    }
+    ajouter('funding.nextSteps', ...funding.nextSteps.map((s) => s.label));
+    ajouter('funding.paiement', funding.modePaiement, funding.delaiValidation);
+  }
+  for (const a of aides) {
+    ajouter(
+      `aides[${a.id}]`,
+      a.nom, a.financeurNom, a.description, ...a.raisons, ...a.conditions, a.libelleMontant, a.noteCumul, ...a.demarches,
+      ...a.sources.map((s) => s.titre),
+    );
+  }
+  for (const l of [...plan.financements, ...plan.aidesEmployeur, ...plan.remunerations, ...plan.avantagesFiscauxSociaux]) {
+    ajouter(`plan[${l.id}]`, l.nom, l.financeurNom);
+  }
+  for (const o of plan.options) ajouter(`plan.options[${o.id}]`, o.nom, o.financeurNom, o.raison);
+  return textes;
+}
+
 /** Invariants communs à tous les scénarios. */
 function invariants(r: Resultat) {
   const { plan, aides, profil } = r;
+
+  // Charte SFG : aucun texte affiché à l'utilisateur ne contient de tiret cadratin (U+2014).
+  const textes = textesAffiches(r);
+  expect(textes.length).toBeGreaterThan(100); // le contrôle n'est pas vide
+  expect(textes.filter(({ texte }) => texte.includes(TIRET_CADRATIN)).map(({ origine }) => origine)).toEqual([]);
 
   // Le financé et le reste à charge redonnent le coût de la formation au centime ; le reste n'est jamais négatif.
   expect(centimes(plan.totalFinance + plan.resteACharge)).toBe(centimes(plan.coutFormation));
@@ -107,8 +155,9 @@ describe('scénarios de bout en bout (données réelles)', () => {
     invariants(r);
 
     // Calcul à la main : barème AKTO « Organismes de formation » (IDCC 1516), page
-    // https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/ : coûts pédagogiques plafonnés à 60 €/h, rémunération au
-    // forfait de 15 €/h, plafond annuel de 10 000 € par entreprise pour les coûts pédagogiques.
+    // https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/ : coûts pédagogiques plafonnés à 60 €/h (même plafond pour
+    // toutes les formations hors Espace Formation, donc pour une certification), rémunération au forfait de 15 €/h, plafond annuel de
+    // 10 000 € par entreprise pour les coûts pédagogiques.
     //   pédagogie : min(30 €/h ; 60 €/h) x 140 h = 30 x 140 = 4 200 €, sous le plafond annuel de 10 000 € : pris en charge en entier, reste 0 ;
     //   salaires : 15 €/h x 140 h = 2 100 €, versés hors plafond annuel (aide à l'employeur, présentée à part) ;
     //   total estimé par l'OPCO : 4 200 + 2 100 = 6 300 €.
@@ -166,7 +215,9 @@ describe('scénarios de bout en bout (données réelles)', () => {
     expect(r.funding!.totalRequested).toBe(1400);
     expect(r.funding!.totalFunded).toBe(0);
     expect(r.funding!.totalRemainder).toBe(1400);
-    expect(r.funding!.dispositifPrincipal).toContain('non accessibles');
+    expect(r.funding!.dispositifPrincipal).toBe(
+      'Plan de développement des compétences : fonds mutualisés non accessibles (50 salariés et plus)',
+    );
     // Messages du moteur pour une entreprise de 50 salariés ou plus (textes réels de warnings[0] et de demarches[0]).
     expect(r.funding!.warnings.join(' ')).toMatch(/réservés aux entreprises de moins de 50 salariés \(art\. L\. 6332-17 du code du travail\)/);
     expect(r.funding!.demarches[0]).toMatch(/^Votre entreprise compte 50 salariés ou plus : /);
