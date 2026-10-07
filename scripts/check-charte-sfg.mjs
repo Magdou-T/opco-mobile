@@ -3,32 +3,44 @@
 // Garde de la charte SFG pour le site (apps/web/src) : Node seul, sans dependance.
 //
 // Signale, avec fichier, ligne et colonne :
-//   (a) le tiret cadratin et ses variantes : U+2014, U+2015 (barre horizontale), U+2E3A, U+2E3B, U+FE58, ecrits tels
-//       quels ou sous forme d'entite HTML (&mdash; &horbar; &#8212; &#x2014;), d'echappement JavaScript (\u2014,
-//       \u{2014}) ou CSS (\2014) ;
+//   (a) le tiret cadratin et ses variantes : U+2014, U+2015 (barre horizontale), U+2E3A, U+2E3B, U+FE31 (forme
+//       verticale), U+FE58, ecrits tels quels ou sous forme d'entite HTML (&mdash; &horbar; &#8212; &#x2014;),
+//       d'echappement JavaScript (\u{2014} et la forme courte a quatre chiffres, suivie ou non d'un chiffre) ou CSS
+//       (\2014, de quatre a six chiffres) ;
 //   (b) les couleurs bleues ou violettes (teinte TSL comprise entre 190 et 320 degres, gris exclus) :
 //       - classes Tailwind de la palette retiree (blue, indigo, violet, purple, fuchsia, sky) sur chacun des 49
 //         utilitaires de couleur de Tailwind 4 (bg, text, border-*, ring, inset-ring, shadow, inset-shadow,
 //         drop-shadow, text-shadow, mask-*-from/to, etc.) et variables --color-blue... ;
 //       - fonctions de couleur : rgb(), hsl(), hwb(), lab(), lch(), oklab(), oklch(), color(), separateurs virgule,
-//         espace, barre ou souligne (valeurs arbitraires Tailwind : bg-[rgb(59_130_246)]) ;
+//         espace, barre ou souligne, souligne admis devant (valeurs arbitraires Tailwind : bg-[rgb(59_130_246)],
+//         shadow-[0_0_0_2px_rgb(59_130_246)]) ; les trois composantes de couleur sont lues, l'alpha est ignore meme
+//         calcule (rgb(59 130 246 / var(--a)), calc() et var() imbriques a toute profondeur) ;
 //       - hexadecimal et couleurs nommees CSS (blue, navy, rebeccapurple...) dans un contexte de couleur : declaration
 //         CSS ou objet de style, attribut fill / stroke / color, valeur arbitraire Tailwind [...], argument d'un
 //         degrade ou de color-mix() ; une chaine qui n'est qu'un hexadecimal compte aussi, sauf comme ancre (href,
-//         id, querySelector) : #bad ou #decade dans un lien ne sont pas des couleurs ;
+//         id, hash, querySelector...), affectee ou comparee (=, ===, !==) : #bad ou #decade dans un lien, ou
+//         location.hash === '#bad', ne sont pas des couleurs ;
 //       - est un gris toute couleur dont la chroma OKLCH est inferieure a 0,01 (moins de la moitie d'un ecart
 //         perceptible) : un gris bleute tres pale comme #F8F9FB n'est pas signale, #F0F8FF (aliceblue) l'est ;
-//   (c) la police mono : font-mono, monospace (font-family, font-[monospace]), IBM Plex et les familles mono connues
-//       (Courier, Consolas, Menlo, SF Mono, Fira Code, JetBrains Mono, Source Code Pro, Cascadia, Inconsolata,
-//       * Mono), et les balises <code>, <pre>, <kbd>, <samp>, <tt> que le navigateur rend en mono ;
-//   (d) les emojis : tout pictogramme (proprietes Unicode Extended_Pictographic et Emoji_Presentation, plage U+1F000 a
-//       U+1FAFF, selecteur U+FE0F, touche U+20E3), sauf les signes typographiques toleres sans selecteur U+FE0F :
-//       coche U+2713, attention U+26A0, fleche U+2197, triangles U+25B8 et U+25BE, (c) U+00A9, (r) U+00AE, TM U+2122.
+//   (c) la police mono : font-mono, monospace (font-family, font-[monospace]), IBM Plex ; partout, les familles mono
+//       dont le nom ne designe rien d'autre (SF Mono, Fira Code, JetBrains Mono, Source Code Pro, Cascadia, Lucida
+//       Console, Inconsolata, Iosevka, Monaspace, Anonymous Pro, * Mono) ; dans un contexte de police seulement
+//       (declaration font-family, font ou --font-*, propriete fontFamily, classe font-[...]), celles dont le nom est
+//       aussi un mot courant (Monaco, Menlo, Consolas, Courier, Hack) ; hors commentaires, les balises <code>, <pre>,
+//       <kbd>, <samp>, <tt> que le navigateur rend en mono ;
+//   (d) les emojis, ecrits tels quels, en entite HTML numerique (&#127881; &#x1F389;), en echappement JavaScript
+//       (\u{1F389}, paire de substitution) ou CSS (\1F389) : tout pictogramme (proprietes Unicode
+//       Extended_Pictographic et Emoji_Presentation, plage U+1F000 a U+1FAFF, selecteur U+FE0F, touche U+20E3), sauf
+//       les signes typographiques toleres sans selecteur U+FE0F : coche U+2713, attention U+26A0, fleche U+2197,
+//       triangles U+25B8 et U+25BE, (c) U+00A9, (r) U+00AE, TM U+2122.
 //
 // Limites connues : la garde lit le texte source, pas le rendu. Une couleur construite a l'execution (variable,
-// concatenation, valeur venue des donnees), un hexadecimal sans contexte de couleur (commentaire, texte), une police
-// mono chargee par un nom inconnu, une image ou une icone bleue echappent au controle. Les donnees de packages/core
-// sont controlees par packages/core/tests/charte-sfg.test.ts.
+// concatenation, valeur venue des donnees), un hexadecimal sans contexte de couleur (commentaire, texte), une couleur
+// encodee dans une image SVG en data URI (%233b82f6), une police mono chargee par un nom inconnu ou dont le nom ambigu
+// est range dans une constante, un emoji en entite nommee (&hearts;), une image ou une icone bleue echappent au
+// controle. A l'inverse, un tiret ou un emoji ecrit dans le code qui le traite (une expression reguliere qui retire le
+// tiret d'une donnee) est signale : le construire par String.fromCharCode(0x2014) ou String.fromCodePoint(). Les
+// donnees de packages/core sont controlees par packages/core/tests/charte-sfg.test.ts.
 //
 // Usage : node scripts/check-charte-sfg.mjs [--self-test]
 // Code de sortie 1 s'il y a au moins une violation (ou un ecart dans l'autotest).
@@ -50,16 +62,19 @@ const CHROMA_GRIS = 0.01;
 // ------------------------------------------------------------
 // (a) Tiret cadratin et variantes
 // ------------------------------------------------------------
-const TIRETS = /[\u2014\u2015\u2E3A\u2E3B\uFE58]/g;
-const CODES_TIRET = '2014|2015|2[eE]3[aAbB]|[fF][eE]58';
+const TIRETS = /[\u2014\u2015\u2E3A\u2E3B\uFE31\uFE58]/g;
+const CODES_TIRET = '2014|2015|2[eE]3[aAbB]|[fF][eE]31|[fF][eE]58';
 const TIRETS_ECRITS = new RegExp(
   [
     '&(?:mdash|horbar);',
-    '&#0*(?:8212|8213|11834|11835|65112);',
+    '&#0*(?:8212|8213|11834|11835|65073|65112);',
     `&#[xX]0*(?:${CODES_TIRET});`,
-    `\\\\u(?:${CODES_TIRET})(?![0-9a-fA-F])`,
+    // \u prend exactement quatre chiffres (un cinquieme chiffre est un caractere a part), \u{...} est borne par ses
+    // accolades.
+    `\\\\u(?:${CODES_TIRET})`,
     `\\\\u\\{0*(?:${CODES_TIRET})\\}`,
-    '\\\\0{0,2}201[45](?![0-9a-fA-F])',
+    // CSS : un chiffre qui suit prolonge l'echappement jusqu'a six chiffres (\20140 est U+20140), pas au-dela.
+    `\\\\(?:00(?:${CODES_TIRET})|0?(?:${CODES_TIRET})(?![0-9a-fA-F]))`,
   ].join('|'),
   'g',
 );
@@ -99,8 +114,21 @@ const CLASSE_BLEUE = new RegExp(
 const VARIABLE_BLEUE = new RegExp(`--color-(?:${FAMILLES_BLEUES})(?![a-z])`, 'g');
 // Le souligne separe les mots dans les valeurs arbitraires Tailwind (shadow-[0_0_0_2px_#7c3aed]) : il reste admis autour.
 const HEX = /(?<![0-9A-Za-z&#-])#([0-9a-fA-F]{3,8})(?![0-9A-Za-z-])/g;
-// Fonctions de couleur : rgb() rgba() hsl() hsla() hwb() lab() lch() oklab() oklch() color(), sans parenthese imbriquee.
-const FONCTION = /(?<![\w.-])(rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(([^()]*)\)/gi;
+// Fonctions de couleur : rgb() rgba() hsl() hsla() hwb() lab() lch() oklab() oklch() color(). Le souligne reste admis
+// devant dans une valeur arbitraire Tailwind (shadow-[0_0_0_2px_rgb(59_130_246)], verifie dans analyser()) ; une
+// lettre, un chiffre, un point, un dollar ou un tiret devant en font un identifiant (toRgb(), theme.rgb()). L'argument
+// est lu par argumentDe(), var() et calc() imbriques compris.
+const FONCTION = /(?<![A-Za-z0-9.$-])(rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/gi;
+
+/** Texte entre une parenthese ouvrante (`debut` : l'index qui la suit) et sa fermante, ou null faute de fermante. */
+function argumentDe(texte, debut) {
+  let profondeur = 1;
+  for (let i = debut; i < texte.length; i++) {
+    if (texte[i] === '(') profondeur += 1;
+    else if (texte[i] === ')' && --profondeur === 0) return texte.slice(debut, i);
+  }
+  return null;
+}
 
 // Couleurs nommees CSS (CSS Color 4), avec leur valeur ; seules les bleues ou violettes sont recherchees.
 const NOMMEES = {
@@ -171,8 +199,8 @@ const ATTRIBUT = /(?:^|[^\w-])(?:fill|stroke|color|stop-?[cC]olor|flood-?[cC]olo
 const ARBITRAIRE = /\[[^\]\s"'`]*$/;
 /** Argument d'un degrade, de color-mix(), light-dark() ou drop-shadow() encore ouvert (un niveau de parentheses). */
 const ARGUMENT = /(?:color-mix|light-dark|(?:repeating-)?(?:linear|radial|conic)-gradient|drop-shadow)\((?:[^()]|\([^()]*\))*$/;
-/** Une chaine "#abc" employee comme ancre ou selecteur, pas comme couleur. */
-const ANCRE = /(?:(?:^|[^\w-])(?:href|to|id|htmlFor|for|name|hash|target|aria-[\w-]+|xlinkHref|xlink:href)\s*[=:]\s*\{?\s*|(?:querySelector(?:All)?|getElementById|closest|matches|scrollIntoView|push|replace|scrollTo|startsWith|endsWith|includes)\(\s*)$/;
+/** Une chaine "#abc" employee comme ancre ou selecteur, pas comme couleur : affectee ou comparee (===, !==, ==, !=). */
+const ANCRE = /(?:(?:^|[^\w-])(?:href|to|id|htmlFor|for|name|hash|target|aria-[\w-]+|xlinkHref|xlink:href)\s*(?:[!=]==?|[=:])\s*\{?\s*|(?:querySelector(?:All)?|getElementById|closest|matches|scrollIntoView|push|replace|scrollTo|startsWith|endsWith|includes)\(\s*)$/;
 
 function enContexteDeCouleur(texte, debut, fin, chaineSeule) {
   const avant = texte.slice(Math.max(0, debut - 400), debut);
@@ -297,7 +325,10 @@ function lire(jeton, cent = 100) {
   }
 }
 
-/** sRGB 0-255 d'une fonction de couleur, ou null si elle ne se calcule pas (var(), syntaxe relative, espace inconnu). */
+/**
+ * sRGB 0-255 d'une fonction de couleur, ou null si elle ne se calcule pas (var() ou calc() dans une composante, syntaxe
+ * relative, espace inconnu). Seules les trois composantes de couleur sont lues : l'alpha, meme calcule, est ignore.
+ */
 function fonctionVersRvb(nom, args) {
   const j = args.trim().split(/[\s,_/]+/).filter(Boolean);
   if (j.length < 3 || /^from$/i.test(j[0])) return null;
@@ -355,22 +386,62 @@ const MONO = new RegExp(
     '(?<![\\w-])Plex(?![\\w])',
     'plex-mono',
     '(?<![\\w-])(?:ui-)?monospace(?![\\w-])',
-    'Courier(?: New)?',
-    'Consolas',
-    'Menlo',
+    // Familles mono dont le nom ne designe rien d'autre : signalees partout (import de next/font compris).
     'SF ?Mono',
     'SFMono',
     'Fira[ _](?:Code|Mono)',
     'JetBrains[ _]Mono',
     'Source[ _]Code[ _]Pro',
     'Cascadia[ _](?:Code|Mono)',
-    'Lucida[ _]Console',
+    'Lucida[ _](?:Console|Sans[ _]Typewriter)',
     'Inconsolata',
-    '(?<![\\w-])[A-Z][A-Za-z]*[ _]Mono(?![\\w-])',
+    'Iosevka',
+    'Monaspace',
+    'Anonymous[ _]Pro',
+    // Andale Mono, DejaVu Sans Mono, Liberation Mono, Roboto Mono, Space Mono... ; souligne admis devant
+    // (font-[Inter,_DejaVu_Sans_Mono]).
+    '(?<![A-Za-z0-9-])[A-Z][A-Za-z]*[ _]Mono(?![\\w-])',
   ].join('|'),
   'g',
 );
+// Familles mono dont le nom est aussi un mot courant (Monaco, Menlo Park, courier) : signalees seulement dans un
+// contexte de police, en majuscules ou minuscules.
+const FAMILLE_MONO = /(?<![A-Za-z0-9-])(?:Monaco|Menlo|Consolas|Courier(?:[ _]New)?|Hack)(?![A-Za-z0-9-])/gi;
+/**
+ * Contexte de police, teste sur le texte qui precede le nom : declaration font-family, font ou --font-* (CSS, objet de
+ * style, attribut, ctx.font =) dont la valeur n'est pas encore close, ou classe font-[...] encore ouverte.
+ */
+const CONTEXTE_POLICE = /(?:^|[^\w-])(?:(?:font-family|fontFamily|font|--font[\w-]*)\s*[:=]\s*\{?[^;:{}<>=]*|font-\[[^\]\s]*)$/;
+// Balises que le navigateur rend en mono ; cherchees hors des commentaires (voir sansCommentaires).
 const BALISE_MONO = /<(?:code|pre|kbd|samp|tt)(?=[\s>/])/g;
+
+// Le texte dont les commentaires (// et /* */ de JavaScript, /* */ de CSS, {/* */} de JSX) sont remplaces par des
+// espaces : memes index, donc memes lignes et colonnes. Les chaines sont sautees (un // ou un /* dans une chaine
+// n'ouvre pas de commentaire) et un // precede de deux-points est une adresse (https://), pas un commentaire.
+function sansCommentaires(texte) {
+  const sortie = texte.split('');
+  let i = 0;
+  while (i < texte.length) {
+    const c = texte[i];
+    if (c === '/' && texte[i + 1] === '*') {
+      const fin = texte.indexOf('*/', i + 2);
+      const borne = fin === -1 ? texte.length : fin + 2;
+      sortie.fill(' ', i, borne);
+      i = borne;
+    } else if (c === '/' && texte[i + 1] === '/' && texte[i - 1] !== ':') {
+      const fin = texte.indexOf('\n', i);
+      const borne = fin === -1 ? texte.length : fin;
+      sortie.fill(' ', i, borne);
+      i = borne;
+    } else if (c === '"' || c === "'" || c === '`') {
+      // Chaine : jusqu'au meme guillemet non echappe ; ' et " s'arretent aussi a la fin de la ligne.
+      let k = i + 1;
+      while (k < texte.length && texte[k] !== c && (c === '`' || texte[k] !== '\n')) k += texte[k] === '\\' ? 2 : 1;
+      i = k + 1;
+    } else i += 1;
+  }
+  return sortie.join('');
+}
 
 // ------------------------------------------------------------
 // (d) Emojis
@@ -379,6 +450,37 @@ const PICTO = '[\\p{Extended_Pictographic}\\p{Emoji_Presentation}\\u{1F000}-\\u{
 const EMOJI = new RegExp(`[\\u{1F1E6}-\\u{1F1FF}]{2}|${PICTO}\\uFE0F?(?:\\u200D${PICTO}\\uFE0F?)*|[\\uFE0F\\u20E3]+`, 'gu');
 /** Signes typographiques toleres quand ils ne portent pas le selecteur d'emoji U+FE0F. */
 const TOLERES = new Set(['\u2713', '\u26A0', '\u2197', '\u25B8', '\u25BE', '\u00A9', '\u00AE', '\u2122']);
+// Ecritures d'un caractere, decodees avant la recherche des emojis : entite HTML numerique (&#127881; &#x1F389;),
+// echappement JavaScript (\u{1F389}, \uD83C\uDF89 : chaque moitie de la paire est decodee et la paire se reforme) ou
+// CSS (\1F389, et le blanc qui peut le terminer).
+const ECRITURE = /&#(?:[xX]([0-9a-fA-F]{1,6})|(\d{1,7}));|\\u\{([0-9a-fA-F]{1,6})\}|\\u([0-9a-fA-F]{4})|\\([0-9a-fA-F]{1,6})\s?/g;
+
+/**
+ * Le texte, ses ecritures de caracteres decodees (`decode`), et pour chaque unite du texte decode l'index de son
+ * ecriture dans le texte d'origine (`origine`, qui finit par la longueur du texte d'origine).
+ */
+function decoder(texte) {
+  const morceaux = [];
+  const origine = [];
+  let curseur = 0;
+  const recopier = (fin) => {
+    morceaux.push(texte.slice(curseur, fin));
+    for (let i = curseur; i < fin; i++) origine.push(i);
+  };
+  for (const m of texte.matchAll(ECRITURE)) {
+    const [, hexa, decimal, accolades, court, css] = m;
+    const code = decimal === undefined ? parseInt(hexa ?? accolades ?? court ?? css, 16) : parseInt(decimal, 10);
+    if (code > 0x10ffff) continue;
+    recopier(m.index);
+    const caractere = String.fromCodePoint(code);
+    morceaux.push(caractere);
+    for (let k = 0; k < caractere.length; k++) origine.push(m.index);
+    curseur = m.index + m[0].length;
+  }
+  recopier(texte.length);
+  origine.push(texte.length);
+  return { decode: morceaux.join(''), origine };
+}
 
 const codes = (s) => [...s].map((c) => `U+${c.codePointAt(0).toString(16).toUpperCase()}`).join(' ');
 
@@ -415,11 +517,16 @@ export function analyser(texte) {
     }
   }
   for (const m of texte.matchAll(FONCTION)) {
-    const rvb = fonctionVersRvb(m[1], m[2]);
+    // Un souligne devant ne separe des mots que dans une valeur arbitraire Tailwind ouverte ; ailleurs (to_rgb), c'est
+    // un identifiant.
+    if (texte[m.index - 1] === '_' && !ARBITRAIRE.test(texte.slice(Math.max(0, m.index - 400), m.index))) continue;
+    const args = argumentDe(texte, m.index + m[0].length);
+    if (args === null) continue;
+    const rvb = fonctionVersRvb(m[1], args);
     if (!rvb) continue;
     const h = teinte(...rvb);
     const nom = m[1].toLowerCase().replace(/a$/, '').replace(/^hsl$/, 'hsl').replace(/^color$/, 'color()');
-    if (dansLaPlage(h)) noter(`bleu ou violet (${nom}, teinte ${Math.round(h)} degres)`, m.index, m[0]);
+    if (dansLaPlage(h)) noter(`bleu ou violet (${nom}, teinte ${Math.round(h)} degres)`, m.index, `${m[0]}${args})`);
   }
   for (const m of texte.matchAll(NOMMEE)) {
     if (!enContexteDeCouleur(texte, m.index, m.index + m[0].length, false)) continue;
@@ -428,11 +535,19 @@ export function analyser(texte) {
   }
 
   for (const m of texte.matchAll(MONO)) noter('police mono', m.index, m[0]);
-  for (const m of texte.matchAll(BALISE_MONO)) noter('police mono', m.index, `${m[0]}> (rendu en mono par le navigateur)`);
+  for (const m of texte.matchAll(FAMILLE_MONO)) {
+    if (CONTEXTE_POLICE.test(texte.slice(Math.max(0, m.index - 400), m.index))) noter('police mono', m.index, m[0]);
+  }
+  for (const m of sansCommentaires(texte).matchAll(BALISE_MONO)) {
+    noter('police mono', m.index, `${m[0]}> (rendu en mono par le navigateur)`);
+  }
 
-  for (const m of texte.matchAll(EMOJI)) {
+  const { decode, origine } = decoder(texte);
+  for (const m of decode.matchAll(EMOJI)) {
     if (TOLERES.has(m[0])) continue;
-    noter('emoji', m.index, codes(m[0]));
+    const debut = origine[m.index];
+    const ecrit = texte.slice(debut, origine[m.index + m[0].length]);
+    noter('emoji', debut, ecrit === m[0] ? codes(m[0]) : `${codes(m[0])} (${ecrit})`);
   }
 
   return violations.sort((a, b) => a.index - b.index).map(({ index, ...v }) => v);
@@ -483,7 +598,21 @@ function autotest() {
     ['<p>A &#X02015; B &horbar; C</p>', ['tiret cadratin', 'tiret cadratin']],
     ["const s = 'A \\u2014 B';", ['tiret cadratin']],
     ["{'\\u{2014}'}", ['tiret cadratin']],
+    // \u prend exactement quatre chiffres : le caractere qui suit, hexadecimal ou non, ne prolonge pas l'echappement
+    ["const code = '\\u20140';", ['tiret cadratin']],
+    ["const annees = '2020\\u20142026';", ['tiret cadratin']],
+    ["const s = 'avant\\u2014apres';", ['tiret cadratin']],
+    ["const s = 'A\\u2014g';", ['tiret cadratin']],
     ['content: "\\2014";', ['tiret cadratin']],
+    // echappement CSS de chaque code du tiret, en majuscules ou minuscules ; au sixieme chiffre l'echappement s'arrete
+    ['content: "\\2015";', ['tiret cadratin']],
+    ['content: "\\2E3A" "\\2e3b";', ['tiret cadratin', 'tiret cadratin']],
+    ['content: "\\FE31" "\\fe58";', ['tiret cadratin', 'tiret cadratin']],
+    ['content: "\\02014 " "\\0020140";', ['tiret cadratin', 'tiret cadratin']],
+    // U+FE31 (tiret cadratin vertical) en clair, en entites decimale et hexadecimale, en echappements court et long
+    ['Un titre \u{FE31} vertical', ['tiret cadratin']],
+    ['<p>A &#65073; B &#xFE31; C</p>', ['tiret cadratin', 'tiret cadratin']],
+    ["const s = 'A \\uFE31 B \\u{fe31} C';", ['tiret cadratin', 'tiret cadratin']],
     // (b) classes Tailwind, toutes racines de couleur de Tailwind 4
     ['<p className="text-blue-600">', ['bleu ou violet (classe Tailwind)']],
     ['className="hover:bg-indigo-50 ring-violet-400/50"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
@@ -501,6 +630,9 @@ function autotest() {
     ["const BLEU = '#3b82f6';", ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
     ["const fond = 'linear-gradient(#fff, #7c3aed)';", ['bleu ou violet (couleur #7c3aed, teinte 262 degres)']],
     ['color: #F0F8FF;', ['bleu ou violet (couleur #F0F8FF, teinte 208 degres)']],
+    // une comparaison n'exclut que sur une propriete d'ancre (hash, href, id...)
+    ['fill: #bad;', ['bleu ou violet (couleur #bad, teinte 260 degres)']],
+    ["if (couleur === '#3b82f6') teinter();", ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
     // (b) fonctions de couleur, toutes syntaxes
     ['background: rgb(124, 58, 237);', ['bleu ou violet (rgb, teinte 262 degres)']],
     ['color: rgba(14 165 233 / 0.5)', ['bleu ou violet (rgb, teinte 199 degres)']],
@@ -516,6 +648,16 @@ function autotest() {
     ['color: lch(50% 60 280);', ['bleu ou violet (lch, teinte 221 degres)']],
     ['color: lab(40 30 -70);', ['bleu ou violet (lab, teinte 237 degres)']],
     ['color: color(display-p3 0.2 0.3 0.9);', ['bleu ou violet (color(), teinte 230 degres)']],
+    // (b) fonction apres un souligne (valeur arbitraire Tailwind), alpha en var() ou calc() imbriques
+    ['shadow-[0_0_0_2px_rgb(59_130_246)]', ['bleu ou violet (rgb, teinte 217 degres)']],
+    ['shadow-[0_8px_30px_rgb(59,130,246,0.5)]', ['bleu ou violet (rgb, teinte 217 degres)']],
+    ['drop-shadow-[0_4px_8px_hsl(220_90%_56%)]', ['bleu ou violet (hsl, teinte 220 degres)']],
+    ['background: rgb(59 130 246 / var(--opacite));', ['bleu ou violet (rgb, teinte 217 degres)']],
+    ['color: hsl(250 80% 50% / calc(1 - var(--x)));', ['bleu ou violet (hsl, teinte 250 degres)']],
+    ['shadow-[0_8px_30px_rgb(30,64,175,0.12)]', ['bleu ou violet (rgb, teinte 226 degres)']],
+    ['shadow-[0_0_0_2px_rgb(124_58_237)]', ['bleu ou violet (rgb, teinte 262 degres)']],
+    ['background: rgb(26 26 126 / var(--opacite));', ['bleu ou violet (rgb, teinte 240 degres)']],
+    ['color: hsl(262 83% 58% / calc(1 - var(--x)));', ['bleu ou violet (hsl, teinte 262 degres)']],
     // (b) couleurs nommees en contexte de couleur
     ['color: blue;', ['bleu ou violet (couleur nommee blue, teinte 240 degres)']],
     ['style={{ color: "purple" }}', ['bleu ou violet (couleur nommee purple, teinte 300 degres)']],
@@ -534,8 +676,25 @@ function autotest() {
     ['className="font-[monospace]"', ['police mono']],
     ["style={{ fontFamily: 'Courier New' }}", ['police mono']],
     ["import { Geist_Mono } from 'next/font/google';", ['police mono']],
+    // familles mono dont le nom est aussi un mot courant : dans un contexte de police (declaration, objet, classe...)
+    ['font-family: Monaco;', ['police mono']],
+    ['font-family: Menlo, consolas, "Courier New";', ['police mono', 'police mono', 'police mono']],
+    ["style={{ fontFamily: 'Monaco' }}", ['police mono']],
+    ["className=\"font-[Monaco] md:font-['Courier_New']\"", ['police mono', 'police mono']],
+    ['ctx.font = "12px Menlo";', ['police mono']],
+    ['<text fontFamily={"Consolas"}>', ['police mono']],
+    ['font: 12px/1.5 Hack; --font-code: Monaco;', ['police mono', 'police mono']],
+    // familles mono sans ambiguite, partout ; souligne admis devant (valeur arbitraire Tailwind)
+    ['font-family: Iosevka, "Anonymous Pro", "Lucida Sans Typewriter", "Monaspace Neon";', ['police mono', 'police mono', 'police mono', 'police mono']],
+    ['className="font-[Inter,_DejaVu_Sans_Mono]"', ['police mono']],
     ['<code>SIREN</code>', ['police mono']],
     ['<pre className="x">', ['police mono']],
+    // une balise dans une chaine ou du JSX reel reste signalee, pres d'un commentaire ou d'une adresse comprise
+    ["const html = '<code>SIREN</code>'; // exemple", ['police mono']],
+    ["const s = '// <pre>';", ['police mono']],
+    ['<a href="https://x.fr">lien</a> <kbd>Ctrl</kbd>', ['police mono']],
+    ['<p>Voir https://x.fr et <code>x</code></p>', ['police mono']],
+    ['/* fin */ <pre>', ['police mono']],
     // (d) emojis
     ['Bravo \u{1F389} !', ['emoji']],
     ['Super \u{1F44D}', ['emoji']],
@@ -549,13 +708,24 @@ function autotest() {
     ['Note 1\uFE0F\u20E3', ['emoji']],
     ['France \u{1F1EB}\u{1F1F7}', ['emoji']],
     ['Equipe \u{1F468}\u200D\u{1F469}\u200D\u{1F467}', ['emoji']],
+    // (d) emoji en echappement JavaScript (accolades, paire de substitution), en entite HTML ou en echappement CSS
+    ["const s = 'Bravo \\u{1F389}';", ['emoji']],
+    ["const s = 'Bravo \\uD83C\\uDF89';", ['emoji']],
+    ['<p>Bravo &#127881; et &#x1F389;</p>', ['emoji', 'emoji']],
+    ['content: "\\1F389";', ['emoji']],
+    ['<p>Coche &#x2713;&#xFE0F; fleche \\u2197\\uFE0F</p>', ['emoji', 'emoji']],
   ];
   const propres = [
     // (a)
     'Un dossier, deux phrases ; une virgule ou deux points : rien a signaler.',
     'De 0,05 \u2013 0,60 % (tiret demi-cadratin admis)',
     '<p>A &ndash; B &#8211; C &#x2013; D</p>',
-    "const s = 'A \\u2013 B'; const code = '\\u20140';",
+    "const s = 'A \\u2013 B';",
+    // en CSS, les chiffres qui suivent prolongent l'echappement (jusqu'a six) : \20140 est U+20140, pas un tiret
+    'content: "\\20140";',
+    'content: "\\2013" "\\FE32" "\\2E3C" "\\0201400";',
+    // U+FE32, forme verticale du demi-cadratin : admise comme lui
+    "Formes verticales du demi-cadratin : \u{FE32} &#65074; &#xFE32; '\\uFE32'",
     // (b) classes et variables du projet
     'className="bg-orange-deep text-white hover:bg-orange-deeper"',
     'className="text-turquoise-deep bg-turquoise-soft border-filet"',
@@ -575,6 +745,9 @@ function autotest() {
     'const id = "#face";',
     '// IDCC #1486, voir le ticket #123',
     'a[href="#bad"] { text-decoration: underline; }',
+    "if (location.hash === '#bad') ouvrir();",
+    "if (hash !== '#abc') fermer();",
+    "if (e.target.hash == '#abd' || lien.href != '#bad') suivre();",
     // (b) fonctions de couleur hors du bleu, gris
     'color: rgb(232, 78, 27); background: rgba(0, 0, 0, 0.1); color: hsl(15 82% 51%);',
     'className="bg-[rgb(232_78_27)] text-[hsl(15_82%_51%)]"',
@@ -583,6 +756,14 @@ function autotest() {
     'color: oklch(0.65 0.07 180); background: oklch(0.98 0.003 250);',
     'color: oklab(0.6 0.1 0.08); color: lch(60% 40 40); color: lab(55 40 40);',
     'color: color(display-p3 0.9 0.3 0.1); color: rgb(from var(--x) r g b); color: oklch(var(--l) 0.2 260);',
+    'shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
+    'shadow-[0_0_0_2px_rgb(232_78_27)]',
+    'background: rgb(26 26 26 / var(--opacite));',
+    'color: hsl(14 83% 51% / calc(1 - var(--x)));',
+    // fonctions homonymes dans un identifiant (lettre, chiffre, point, dollar ou tiret devant) : pas des couleurs CSS
+    'toRgb(59, 130, 246); theme.rgb(59, 130, 246); $rgb(59, 130, 246); x-rgb(59, 130, 246); a2hsl(220, 90%, 56%);',
+    // un souligne devant ne vaut separateur que dans une valeur arbitraire Tailwind ouverte
+    'const c = to_rgb(59, 130, 246); const d = hex_hsl(220, 90%, 56%);',
     // (b) couleurs nommees hors contexte ou hors du bleu
     '<p>Le violet et le bleu ne font plus partie de la charte.</p>',
     "const tone = 'violet'; const indigo = 2;",
@@ -594,6 +775,15 @@ function autotest() {
     'Le Plexiglas est complexe ; Monoprix ; un mono-entreprise.',
     "<p>Un code postal</p> const code = '75001';",
     '<span className="font-display">',
+    // balises citees en commentaire (JavaScript, CSS, JSX) : de la documentation, pas du rendu
+    '/* un bloc <pre> en commentaire */',
+    'const x = 1; // la balise <code> est proscrite',
+    '{/* <kbd>Ctrl</kbd> */}',
+    '/* sur\n deux lignes : <samp> */ .x { color: red; }',
+    // un nom de famille mono hors d'un contexte de police : un lieu, un mot
+    '<p>Menlo Park, Monaco, Consolas : des noms de lieu ; un Courier, un Hack.</p>',
+    "const lieu = { fontFamily: 'Inter', ville: 'Monaco' };",
+    '<p style={{ fontFamily: "Inter" }}>Menlo Park</p> <text fontFamily="Inter" aria-label="Consolas">',
     // (d)
     'Une demande complexe, un dossier complexe.',
     'Signes typographiques tol\u00e9r\u00e9s : \u2713 \u26A0 \u2197 \u25B8 \u25BE',
@@ -601,6 +791,11 @@ function autotest() {
     'Fl\u00e8ches \u2192 \u2190 \u00b7 puces \u2022',
     'const lien = `IDCC ${i.idcc} \u00b7 ${i.titre}`;',
     '&#8217; et &#x2019;',
+    // ecritures qui ne donnent pas d'emoji, ou un signe tolere sans selecteur U+FE0F
+    "<p>&#169; SFG &#xA9; &#x2713; &#8599; &#x25B8;</p> const e = '\\u00e9'; const f = '\\u{2197}';",
+    'content: "\\2713" "\\25BE";',
+    // ecritures hors de l'Unicode (au-dela de U+10FFFF) : laissees telles quelles, sans erreur
+    "&#9999999; &#x110000; '\\u{110000}'",
   ];
 
   let ecarts = 0;
@@ -619,20 +814,30 @@ function autotest() {
       console.log(`ECART (faux positif) : ${JSON.stringify(texte)}\n  obtenu : ${JSON.stringify(trouves.map((v) => `${v.type} ${v.extrait}`))}`);
     }
   }
-  // Numerotation des lignes et colonnes sur un texte de plusieurs lignes, et declaration CSS sur plusieurs lignes.
-  const multi = analyser('ligne propre\r\nfont-mono ici\nfin \u2014 la\n.x {\n  background: linear-gradient(\n    #3b82f6 0%,\n    #fff 100%\n  );\n}');
-  const positions = multi.map((v) => `${v.ligne}:${v.colonne}`).join(' ');
-  if (positions !== '2:1 3:5 6:5') {
-    ecarts += 1;
-    console.log(`ECART (positions) : attendu "2:1 3:5 6:5", obtenu "${positions}"`);
+  // Controles de detail : lignes et colonnes sur un texte de plusieurs lignes (dont une declaration CSS repartie sur
+  // plusieurs lignes), d'emojis decodes et de balises voisines d'un commentaire ; extrait d'une fonction de couleur lu
+  // jusqu'a sa parenthese fermante.
+  const positions = (texte) => analyser(texte).map((v) => `${v.ligne}:${v.colonne}`).join(' ');
+  const extraits = (texte) => analyser(texte).map((v) => v.extrait).join(' ');
+  const controles = [
+    ['positions', positions('ligne propre\r\nfont-mono ici\nfin \u2014 la\n.x {\n  background: linear-gradient(\n    #3b82f6 0%,\n    #fff 100%\n  );\n}'), '2:1 3:5 6:5'],
+    ['extrait', extraits('color: hsl(250 80% 50% / calc(1 - var(--x)));'), 'hsl(250 80% 50% / calc(1 - var(--x)))'],
+    ['positions des emojis decodes', positions('ok &#127881;\n  \\u{1F44D} et \\uD83C\\uDF89'), '1:4 2:3 2:16'],
+    ['positions des balises hors commentaire', positions('/* <pre> */ <code>\n// <kbd>\nx <samp>'), '1:13 3:3'],
+  ];
+  for (const [nom, obtenu, attendu] of controles) {
+    if (obtenu !== attendu) {
+      ecarts += 1;
+      console.log(`ECART (${nom}) : attendu "${attendu}", obtenu "${obtenu}"`);
+    }
   }
 
-  const total = fautifs.length + propres.length + 1;
+  const total = fautifs.length + propres.length + controles.length;
   if (ecarts > 0) {
     console.log(`\nAutotest de la garde de charte : ${ecarts} ecart(s) sur ${total} cas.`);
     return 1;
   }
-  console.log(`Autotest de la garde de charte : ${total} cas, tous conformes (${fautifs.length} violations detectees, ${propres.length} textes propres non signales, positions exactes).`);
+  console.log(`Autotest de la garde de charte : ${total} cas, tous conformes (${fautifs.length} violations detectees, ${propres.length} textes propres non signales, ${controles.length} controles de position et d'extrait exacts).`);
   return 0;
 }
 
