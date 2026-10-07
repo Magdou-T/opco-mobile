@@ -3,9 +3,11 @@ import { AlertesOpco } from '@/components/ui/AlertesOpco';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
+import { cx } from '@/lib/cx';
 import { de, formatEuro, texteDonnees } from '@/lib/format';
 import { lignesDuDetail, sansMontantEstime } from '@/lib/resultats';
 import { BadgeEstimation } from './BadgeEstimation';
+import { TEXTE_SOUPLE } from './classes';
 import { DetailParPoste } from './DetailParPoste';
 import { DispositifsOpco } from './DispositifsOpco';
 
@@ -147,7 +149,7 @@ export function FundingBreakdown({ result }: Props) {
             {result.warnings.map((w, i) => (
               <li key={i} className="flex gap-2.5">
                 <span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-texte-doux" />
-                <span>{texteDonnees(w)}</span>
+                <span className={TEXTE_SOUPLE}>{texteDonnees(w)}</span>
               </li>
             ))}
           </ul>
@@ -172,7 +174,7 @@ export function FundingBreakdown({ result }: Props) {
                 >
                   {i + 1}
                 </span>
-                <span className="pt-0.5">{texteDonnees(etape)}</span>
+                <span className={cx('pt-0.5', TEXTE_SOUPLE)}>{texteDonnees(etape)}</span>
               </li>
             ))}
           </ol>
@@ -189,7 +191,7 @@ export function FundingBreakdown({ result }: Props) {
             {result.conditions.map((c, i) => (
               <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-texte-doux">
                 <Icon name="coche" className="mt-0.5 size-4 shrink-0 text-turquoise-deep" strokeWidth={2} />
-                <span>{texteDonnees(c)}</span>
+                <span className={TEXTE_SOUPLE}>{texteDonnees(c)}</span>
               </li>
             ))}
           </ul>
@@ -216,7 +218,7 @@ export function FundingBreakdown({ result }: Props) {
                     name={step.url.startsWith('mailto:') ? 'courriel' : 'lien-externe'}
                     className="size-5 shrink-0 text-orange-deep"
                   />
-                  <span>{texteDonnees(step.label)}</span>
+                  <span className={TEXTE_SOUPLE}>{texteDonnees(step.label)}</span>
                   {externe && <span className="sr-only"> (nouvel onglet)</span>}
                 </a>
               );

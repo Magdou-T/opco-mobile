@@ -11,8 +11,12 @@ import type { DispositifComplementaire } from '@opco/core';
  */
 export const INSECABLE = String.fromCharCode(0xa0);
 
-/** « de » devant un nom, élidé devant une voyelle : « d'AKTO », « d'OPCO 2i », « de Constructys ». */
+/**
+ * « de » devant un nom, élidé devant une voyelle : « d'AKTO », « d'OPCO 2i », « de Constructys ». L'article élidé qui
+ * ouvre un nom passe en minuscule : « de l'Opcommerce », pas « de L'Opcommerce ».
+ */
 export function de(nom: string): string {
+  if (/^L['’]/.test(nom)) return `de l${nom.slice(1)}`;
   return /^[aeiouyàâäéèêëîïôöûü]/i.test(nom) ? `d'${nom}` : `de ${nom}`;
 }
 

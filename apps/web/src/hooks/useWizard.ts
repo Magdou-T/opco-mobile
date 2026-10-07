@@ -5,7 +5,7 @@ import { createInitialWizardState } from '@opco/core';
 import type { WizardState } from '@opco/core';
 import { ETAPES, champsManquants, indexPrecedent, indexSuivant } from '@/lib/etapes';
 import type { EtapeSite } from '@/lib/etapes';
-import { reponsesInconnuesApres } from '@/lib/parcours';
+import { coutsDeFormation, reponsesInconnuesApres } from '@/lib/parcours';
 import type { QuestionAvecInconnu } from '@/lib/parcours';
 
 /** Aucune réponse « Je ne sais pas » (état de départ et nouvelle simulation). */
@@ -71,15 +71,9 @@ export function useWizard() {
     return state.selectedOpcoSlug || state.detectedOpcoSlug;
   }, [state.selectedOpcoSlug, state.detectedOpcoSlug]);
 
-  // Coût horaire recalculé quand le coût total ou la durée change.
+  // Coût horaire recalculé quand le coût total ou la durée change, sans arrondi (coutsDeFormation).
   const updateFormationCosts = useCallback((total: number | null, hours: number | null) => {
-    const perHour = total && hours && hours > 0 ? Math.round((total / hours) * 100) / 100 : null;
-    setState((prev) => ({
-      ...prev,
-      pedagogyCostTotal: total,
-      durationHours: hours,
-      pedagogyCostPerHour: perHour,
-    }));
+    setState((prev) => ({ ...prev, ...coutsDeFormation(total, hours) }));
   }, []);
 
   return {

@@ -228,12 +228,21 @@ describe('de (élision)', () => {
       OCAPIAT: "d'OCAPIAT",
       Uniformation: "d'Uniformation",
       Constructys: 'de Constructys',
-      "L'Opcommerce": "de L'Opcommerce",
+      "L'Opcommerce": "de l'Opcommerce",
     };
     for (const opco of EMBEDDED_OPCOS) {
       assert.ok(opco.name in attendu, `OPCO non prévu par le test : ${opco.name}`);
       assert.equal(de(opco.name), attendu[opco.name]);
     }
+  });
+
+  test("l'article élidé d'un nom (« L'Opcommerce ») passe en minuscule après « de », apostrophe gardée", () => {
+    assert.equal(de("L'Opcommerce"), "de l'Opcommerce");
+    assert.equal(de('L’Agence'), 'de l’Agence');
+    // Un nom qui commence seulement par un L reste tel quel.
+    assert.equal(de('Lyon'), 'de Lyon');
+    assert.equal(de('LISA'), 'de LISA');
+    assert.equal(de("l'Opcommerce"), "de l'Opcommerce");
   });
 });
 

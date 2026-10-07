@@ -12,6 +12,7 @@ import { cx } from '@/lib/cx';
 import { dateFr, formatEuro, texteDonnees, typo } from '@/lib/format';
 import { montantAffiche, nommerAides, sourcesDeLAide } from '@/lib/resultats';
 import type { MontantAffiche } from '@/lib/resultats';
+import { TEXTE_SOUPLE } from './classes';
 
 /**
  * Carte d'une aide éligible ou à vérifier (une aide non éligible n'a jamais de carte ni de montant) : statut écrit dans
@@ -63,7 +64,7 @@ export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: Read
               {aide.raisons.map((r, i) => (
                 <li key={i} className="flex gap-2.5">
                   <span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-texte-doux" />
-                  <span>{texteDonnees(r)}</span>
+                  <span className={TEXTE_SOUPLE}>{texteDonnees(r)}</span>
                 </li>
               ))}
             </ul>
@@ -73,7 +74,7 @@ export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: Read
         {cumul && (
           <p className="mt-4 flex items-start gap-2.5 text-sm leading-relaxed text-texte-doux">
             <Icon name="virage" className="mt-0.5 size-4 shrink-0 text-turquoise-deep" />
-            <span>
+            <span className={TEXTE_SOUPLE}>
               <span className="font-semibold text-texte">Cumul&nbsp;:</span> {texte(cumul)}
             </span>
           </p>
@@ -103,7 +104,7 @@ export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: Read
                     {aide.conditions.map((c, i) => (
                       <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-texte-doux">
                         <Icon name="coche" className="mt-0.5 size-4 shrink-0 text-turquoise-deep" strokeWidth={2} />
-                        <span>{texte(c)}</span>
+                        <span className={TEXTE_SOUPLE}>{texte(c)}</span>
                       </li>
                     ))}
                   </ul>
@@ -121,7 +122,7 @@ export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: Read
                         >
                           {i + 1}
                         </span>
-                        <span className="pt-0.5">{texte(d)}</span>
+                        <span className={cx('pt-0.5', TEXTE_SOUPLE)}>{texte(d)}</span>
                       </li>
                     ))}
                   </ol>
@@ -141,7 +142,7 @@ export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: Read
                     {pages.map((p) => (
                       <li key={p.url} className="flex items-start gap-2.5 text-sm leading-snug">
                         <Icon name="lien-externe" className="mt-0.5 size-4 shrink-0 text-orange-deep" />
-                        <a href={p.url} target="_blank" rel="noopener noreferrer" className="lien">
+                        <a href={p.url} target="_blank" rel="noopener noreferrer" className={cx('lien', TEXTE_SOUPLE)}>
                           {typo(p.titre)}
                           <span className="sr-only"> (nouvel onglet)</span>
                         </a>
@@ -163,14 +164,9 @@ export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: Read
             <span>{sites.length > 1 ? 'Sources' : 'Source'}&nbsp;:</span>
             <ul className="flex flex-wrap items-center gap-x-3 gap-y-1">
               {sites.map((s) => (
-                <li key={s.site}>
-                  <a
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={s.titre}
-                    className="lien inline-flex items-center gap-1"
-                  >
+                <li key={s.site} className={TEXTE_SOUPLE}>
+                  {/* Titre de la page dans le nom accessible seulement : un `title` le ferait lire deux fois. */}
+                  <a href={s.url} target="_blank" rel="noopener noreferrer" className="lien inline-flex items-center gap-1">
                     {s.site}
                     <Icon name="lien-externe" className="size-3 shrink-0" />
                     <span className="sr-only"> ({s.titre}, nouvel onglet)</span>

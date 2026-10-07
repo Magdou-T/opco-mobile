@@ -4,9 +4,11 @@ import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import {
   ChargementResultats,
+  ContexteResultats,
   EchecChargementResultats,
   ID_TITRE_RESULTATS,
 } from '@/components/results/EtatsResultats';
+import type { ProprietesEcranResultats } from '@/components/results/EtatsResultats';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
@@ -30,17 +32,36 @@ const ID_AIDE_SUIVANT = 'aide-suivant';
 export { ID_TITRE_RESULTATS };
 
 /**
- * Écran de résultats chargé à la demande : le calcul et le catalogue d'aides (environ 135 Ko gzip) ne pèsent pas sur le
- * lot initial du simulateur. Pendant le chargement, un squelette porte déjà le titre focalisable ; si le code ne se
- * charge pas (réseau coupé), un message permet de réessayer sans perdre les réponses.
+ * Lot de l'écran de résultats : le calcul et le catalogue d'aides (environ 135 Ko gzip) ne pèsent pas sur le lot initial
+ * du simulateur. Une seule fonction de chargement, appelée par `next/dynamic` au premier affichage et, plus tôt, par le
+ * préchargement du récapitulatif.
  */
-const EcranResultats = dynamic(
+const chargerEcranResultats = () => import('@/components/results/EcranResultats');
+
+/**
+ * Écran de résultats chargé à la demande. Pendant le chargement, l'attente affiche déjà l'en-tête réel (titre
+ * focalisable, actions, étiquettes de la situation : `ContexteResultats`) et un squelette du bandeau ; si le code ne se
+ * charge pas (réseau coupé), l'écran d'échec le dit et propose de recharger la page, réponses perdues.
+ */
+const EcranResultats = dynamic<ProprietesEcranResultats>(
   () =>
-    import('@/components/results/EcranResultats')
+    chargerEcranResultats()
       .then((module) => module.EcranResultats)
       .catch(() => EchecChargementResultats),
   { ssr: false, loading: () => <ChargementResultats /> },
 );
+
+/**
+ * Préchargement du lot dès l'étape Récapitulatif, une seule fois par page : au clic sur « Trouver mes financements », il
+ * est déjà là, même si la connexion a été coupée entre-temps. Un échec est absorbé ici : au clic, `next/dynamic` refait
+ * l'appel et, s'il échoue encore, affiche l'écran d'échec.
+ */
+let prechargementLance = false;
+function prechargerEcranResultats() {
+  if (prechargementLance) return;
+  prechargementLance = true;
+  chargerEcranResultats().catch(() => undefined);
+}
 
 /**
  * « Suivant » tant que l'étape est incomplète : annoncé comme indisponible (aria-disabled) mais toujours atteignable au
@@ -97,12 +118,22 @@ export function WizardContainer() {
   const contenu = useRef<HTMLDivElement>(null);
   useReserveBarreCollante(barre, contenu, `${showResults}-${derniereEtape}`);
 
+  // Récapitulatif : le lot de l'écran de résultats se charge dès maintenant (prechargerEcranResultats).
+  const auRecapitulatif = currentStep.key === 'recap' && !showResults;
+  useEffect(() => {
+    if (auRecapitulatif) prechargerEcranResultats();
+  }, [auRecapitulatif]);
+
   // Résultats : l'écran chargé à la demande calcule tout à partir de l'état (aucune donnée ne lui est passée) et pose le
-  // focus sur son titre à son montage ; le cadre suit l'écran affiché, pour ramener son haut à la vue.
+  // focus sur son titre à son montage ; le cadre suit l'écran affiché, pour ramener son haut à la vue. Les mêmes
+  // propriétés passent par `ContexteResultats` à l'attente du chargement, qui affiche l'en-tête réel.
   if (showResults) {
+    const proprietes: ProprietesEcranResultats = { state, onEdit: goToStep, onReset: reset };
     return (
       <div ref={cadre}>
-        <EcranResultats state={state} onEdit={goToStep} onReset={reset} />
+        <ContexteResultats value={proprietes}>
+          <EcranResultats {...proprietes} />
+        </ContexteResultats>
       </div>
     );
   }

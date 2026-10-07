@@ -11,6 +11,7 @@ import { texteDonnees, typo } from '@/lib/format';
 import { aidesNonEligiblesAffichees, groupesAidesVisibles } from '@/lib/resultats';
 import type { GroupeAides } from '@/lib/resultats';
 import { AideCard } from './AideCard';
+import { TEXTE_SOUPLE } from './classes';
 import { PastilleFinanceur } from './Financeur';
 
 /**
@@ -121,7 +122,7 @@ function AidesNonEligibles({ aides }: { aides: AideEvaluee[] }) {
               {a.raisons.map((r, i) => (
                 <li key={i} className="flex gap-2.5 text-sm leading-relaxed text-texte-doux">
                   <span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-filet-fort" />
-                  <span>{texteDonnees(r)}</span>
+                  <span className={TEXTE_SOUPLE}>{texteDonnees(r)}</span>
                 </li>
               ))}
             </ul>

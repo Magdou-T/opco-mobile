@@ -23,6 +23,7 @@ export function PlanFinancementCard({
   plan,
   aides,
   fondsEpuises = null,
+  avecPortail = false,
   apresBandeau,
   onModifierFormation,
 }: {
@@ -31,6 +32,8 @@ export function PlanFinancementCard({
   aides: readonly AideEvaluee[];
   /** Fonds épuisés signalés par l'OPCO (`fondsEpuisesSurLePlan`) : dit à côté du montant financé. */
   fondsEpuises?: FondsEpuises | null;
+  /** Les portails officiels de la région figurent plus bas sur l'écran. */
+  avecPortail?: boolean;
   /** Note posée juste après le bandeau (par exemple « Aucun OPCO renseigné ») : les chiffres restent en tête. */
   apresBandeau?: ReactNode;
   /** Retour à l'étape Formation, proposé quand le coût n'est pas renseigné. */
@@ -44,6 +47,7 @@ export function PlanFinancementCard({
         aides={aides}
         etat={etat}
         fondsEpuises={fondsEpuises}
+        avecPortail={avecPortail}
         onModifierFormation={onModifierFormation}
       />
       {apresBandeau}

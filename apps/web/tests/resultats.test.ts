@@ -2,14 +2,17 @@
 // (calculs détaillés en commentaire) ; les tirages au hasard ont une graine fixe.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { EMBEDDED_AIDES, EMBEDDED_PORTAILS, createInitialWizardState } from '@opco/core';
+import { EMBEDDED_AIDES, EMBEDDED_PORTAILS, PROJET_LABELS, REGIONS, createInitialWizardState } from '@opco/core';
 import type { AideEvaluee, AlerteOpco, Financeur, LignePlan, PlanFinancement, ProjetType, WizardState } from '@opco/core';
 import { INSECABLE } from '../src/lib/format';
+import { coutsDeFormation } from '../src/lib/parcours';
+import { etiquettesDeSituation } from '../src/lib/situation';
 import {
   aidesNonEligiblesAffichees,
   calculer,
   cartesDuPlan,
   descriptionBarre,
+  encadreSansFinancement,
   enRegion,
   etatEnTete,
   familleCouleur,
@@ -117,8 +120,9 @@ const SCENARIOS: Record<string, Partial<WizardState>> = {
   },
   artisan: {
     projetType: 'formation_dirigeant', regionCode: '53', companySize: 'less_11', statutDirigeant: 'artisan',
-    microEntrepreneur: false, ageBeneficiaire: 45, formationType: 'non_certifiante', organismeQualiopi: true, durationHours: 21,
-    pedagogyCostTotal: 900, pedagogyCostPerHour: 42.86,
+    microEntrepreneur: false, ageBeneficiaire: 45, formationType: 'non_certifiante', organismeQualiopi: true,
+    // Coût horaire tel que le parcours le pose (coutsDeFormation : 900 € sur 21 h, sans arrondi).
+    ...coutsDeFormation(900, 21),
   },
 };
 
@@ -212,6 +216,51 @@ describe("calcul de l'écran (calculer)", () => {
     assert.equal(calculer(etat(SCENARIOS.akto), DATE).portail?.region, '11');
     assert.equal(calculer(etat(SCENARIOS.artisan), DATE).portail?.nom_region, 'Bretagne');
     assert.equal(calculer(etat({ ...SCENARIOS.akto, regionCode: null }), DATE).portail, null);
+  });
+});
+
+describe("étiquettes de la situation en tête de l'écran (etiquettesDeSituation, lot initial)", () => {
+  test('les cinq scénarios', () => {
+    const attendu: Record<string, string[]> = {
+      akto: ['Former un salarié', 'AKTO', 'Île-de-France', '140 h'],
+      grande: ['Former un salarié', 'ATLAS', 'Auvergne-Rhône-Alpes', '35 h'],
+      demandeur: ["Recruter et former un demandeur d'emploi", 'AKTO', 'Occitanie', '280 h'],
+      apprenti: ['Recruter en alternance', 'AKTO', 'Hauts-de-France', '800 h'],
+      artisan: ['Former le dirigeant', 'Bretagne', '21 h'],
+    };
+    for (const [nom, parcours] of Object.entries(SCENARIOS)) assert.deepEqual(etiquettesDeSituation(etat(parcours)), attendu[nom], nom);
+  });
+
+  test('projet non choisi : « Former un salarié » ; OPCO choisi, sinon détecté ; région inconnue ou durée vide : rien', () => {
+    // Code de région que le moteur ne reconnaît pas (estCodeRegion) : ni étiquette ni portail.
+    const perime = '99' as WizardState['regionCode'];
+    assert.deepEqual(etiquettesDeSituation(etat({ selectedOpcoSlug: 'atlas', detectedOpcoSlug: 'akto' })), ['Former un salarié', 'ATLAS']);
+    assert.deepEqual(etiquettesDeSituation(etat({ detectedOpcoSlug: 'akto', regionCode: perime })), ['Former un salarié', 'AKTO']);
+    assert.deepEqual(etiquettesDeSituation(etat({ selectedOpcoSlug: 'inconnu', durationHours: 0 })), ['Former un salarié']);
+  });
+
+  test('400 états tirés au hasard (graine 5) : mêmes projet, OPCO et région que le calcul de l’écran', () => {
+    const hasard = generateur(5);
+    const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
+    const projets: (ProjetType | null)[] = [null, 'formation_salarie', 'reconversion_salarie', 'recrutement_demandeur_emploi', 'alternance', 'formation_dirigeant'];
+    for (let i = 0; i < 400; i++) {
+      const state = etat({
+        projetType: un(projets),
+        selectedOpcoSlug: un([null, 'akto', 'atlas', 'opcommerce', 'inconnu']),
+        detectedOpcoSlug: un([null, 'uniformation', 'afdas']),
+        regionCode: un([null, '11', '53', '04', '99'] as WizardState['regionCode'][]),
+        durationHours: un([null, 0, 21, 140]),
+        pedagogyCostTotal: 1000,
+      });
+      const r = calculer(state, DATE);
+      const attendu = [
+        PROJET_LABELS[r.projet].label,
+        r.opco?.name,
+        r.profil.regionEntreprise ? REGIONS[r.profil.regionEntreprise] : null,
+        state.durationHours ? `${state.durationHours} h` : null,
+      ].filter((e): e is string => !!e);
+      assert.deepEqual(etiquettesDeSituation(state), attendu, JSON.stringify(state));
+    }
   });
 });
 
@@ -614,6 +663,127 @@ describe('cartes du plan', () => {
       ['1 aide au montant selon dossier', "2 aides versées à l'employeur", '1 revenu ou aide à la personne'],
     );
     assert.deepEqual(rappelsAucunFinancement(plan({ coutFormation: 10 })), []);
+  });
+});
+
+describe('encadré du bandeau quand aucun financement de la formation n’est chiffré (encadreSansFinancement)', () => {
+  const espaces = (s: string) => s.replace(/\s/g, ' ');
+  const option = (id: string, montantEstime: number | null) => ({ id, nom: id, financeurNom: 'F', montantEstime, raison: 'r' });
+
+  test('scénario 3 (demandeur d’emploi) : aides au montant selon dossier, rappels vers leurs cartes', () => {
+    const { texte, rappels } = encadreSansFinancement(simuler(SCENARIOS.demandeur).plan, true);
+    assert.equal(
+      espaces(texte),
+      "Aucun financement de la formation n'est chiffrable à ce stade : les financeurs fixent le montant après étude du dossier. Voici les aides identifiées.",
+    );
+    assert.deepEqual(rappels.map((r) => r.carte), ['non-chiffrees', 'personne']);
+  });
+
+  test('scénario 2 (120 salariés) : options au choix chiffrées et aides au montant selon dossier', () => {
+    const { texte } = encadreSansFinancement(simuler(SCENARIOS.grande).plan, true);
+    assert.equal(
+      espaces(texte),
+      "Aucun financement cumulable n'est chiffré pour cette formation : les options au choix ont un montant, à comparer, et les autres financeurs fixent le montant après étude du dossier.",
+    );
+  });
+
+  test('dirigeant assimilé salarié en Île-de-France, 900 € : seul le conseil en évolution professionnelle suit, aucun financeur annoncé', () => {
+    const { plan: p } = simuler({
+      projetType: 'formation_dirigeant', regionCode: '11', companySize: 'less_11', statutDirigeant: 'assimile_salarie',
+      ageBeneficiaire: 45, formationType: 'non_certifiante', organismeQualiopi: true, ...coutsDeFormation(900, 21),
+    });
+    assert.equal(etatEnTete(p), 'aucun_financement_chiffre');
+    assert.deepEqual(cartesDuPlan(p), ['services']);
+    const { texte, rappels } = encadreSansFinancement(p, true);
+    assert.equal(
+      espaces(texte),
+      "Aucun financement de la formation n'est chiffrable et aucune autre aide à montant n'a été identifiée pour cette " +
+        "situation. Seuls des services gratuits sont proposés ci-dessous. Interrogez l'OPCO ou le fonds d'assurance " +
+        'formation compétent, et consultez les portails officiels de la région en bas de page.',
+    );
+    assert.deepEqual(rappels, []);
+  });
+
+  test('options chiffrées sans aide au montant selon dossier : aucun « autres financeurs »', () => {
+    const p = plan({ coutFormation: 1000, resteACharge: 1000, options: [option('a', 400)], servicesGratuits: [aide({ id: 's' })] });
+    assert.equal(
+      espaces(encadreSansFinancement(p, true).texte),
+      "Aucun financement cumulable n'est chiffré pour cette formation : les options au choix ont un montant, à comparer.",
+    );
+    // Une option sans montant est au montant selon dossier : la suite de la phrase redevient vraie.
+    const avecDossier = { ...p, options: [option('a', 400), option('b', null)] };
+    assert.match(encadreSansFinancement(avecDossier, true).texte, /les autres financeurs fixent le montant après étude du dossier\.$/);
+  });
+
+  test("aides versées à l'employeur seules : aucune « étude du dossier », elles ne réduisent pas le prix", () => {
+    const p = plan({ coutFormation: 1000, resteACharge: 1000, aidesEmployeur: [ligne('e', 'E', 300)] });
+    const { texte, rappels } = encadreSansFinancement(p, true);
+    assert.equal(
+      espaces(texte),
+      "Aucun financement de la formation n'est chiffrable pour cette situation. Voici les aides identifiées, qui ne réduisent pas le prix de la formation.",
+    );
+    assert.deepEqual(rappels.map((r) => r.libelle), ["1 aide versée à l'employeur"]);
+  });
+
+  test('aucune aide à montant : services gratuits dits seulement quand ils sont seuls ; portails seulement quand ils existent', () => {
+    const optionsSansMontant = plan({ coutFormation: 1000, resteACharge: 1000, options: [option('o', null)], servicesGratuits: [aide({ id: 's' })] });
+    const texte = encadreSansFinancement(optionsSansMontant, true).texte;
+    assert.ok(!texte.includes('Seuls des services gratuits'), texte);
+    assert.ok(!texte.includes('Voici les aides identifiées'), texte);
+    const rien = encadreSansFinancement(plan({ coutFormation: 1000, resteACharge: 1000 }), false);
+    assert.equal(
+      espaces(rien.texte),
+      "Aucun financement de la formation n'est chiffrable et aucune autre aide à montant n'a été identifiée pour cette " +
+        "situation. Interrogez l'OPCO ou le fonds d'assurance formation compétent.",
+    );
+  });
+
+  test('1 500 états tirés au hasard (graine 19) : le texte ne cite que ce qui suit à l’écran', () => {
+    const hasard = generateur(19);
+    const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
+    const PROJETS: ProjetType[] = ['formation_salarie', 'reconversion_salarie', 'recrutement_demandeur_emploi', 'alternance', 'formation_dirigeant'];
+    const OPCOS = ['akto', 'atlas', 'afdas', 'constructys', 'ocapiat', 'opco-ep', 'opco-mobilites', 'opco-sante', 'opco2i', 'opcommerce', 'uniformation'];
+    const REGIONS_CODES = EMBEDDED_PORTAILS.map((p) => p.region);
+    const vus = new Set<string>();
+    let sansFinancement = 0;
+    for (let i = 0; i < 1500; i++) {
+      const projet = un(PROJETS);
+      const heures = un([7, 21, 35, 140, 280, 800]);
+      const over: Partial<WizardState> = {
+        projetType: projet,
+        selectedOpcoSlug: projet === 'formation_dirigeant' && hasard(2) === 0 ? null : un(OPCOS),
+        regionCode: un(REGIONS_CODES),
+        companySize: un(['less_11', '11_49', '50_299', '300_plus'] as const),
+        ageBeneficiaire: un([19, 28, 45, 58]),
+        formationType: un(['non_certifiante', 'qualification', 'certification', 'cqp'] as const),
+        eligibleCpf: un([null, true, false]),
+        organismeQualiopi: un([null, true, false]),
+        contractType: projet === 'alternance' ? 'alternance' : un(['cdi', 'cdd'] as const),
+        typeAlternance: un(['apprentissage', 'professionnalisation'] as const),
+        inscritFranceTravail: un([true, false]),
+        statutDirigeant: un(['artisan', 'commercant', 'profession_liberale', 'assimile_salarie'] as const),
+        soldeCpf: un([null, 0, 800]),
+        ...coutsDeFormation(un([300, 900, 1400, 3500, 7000]), heures),
+      };
+      const { plan: p, portail } = calculer(etat(over), DATE);
+      if (etatEnTete(p) !== 'aucun_financement_chiffre') continue;
+      sansFinancement++;
+      const { texte, rappels } = encadreSansFinancement(p, portail != null);
+      const cartes = cartesDuPlan(p);
+      const selonDossier = p.nonChiffrees.length > 0 || p.options.some((o) => o.montantEstime == null);
+      const optionsChiffrees = p.options.some((o) => o.montantEstime != null && o.montantEstime > 0);
+      const contexte = `${JSON.stringify(over)} : ${texte}`;
+      assert.deepEqual(rappels, rappelsAucunFinancement(p), contexte);
+      assert.equal(texte.includes('Voici les aides identifiées'), !optionsChiffrees && rappels.length > 0, contexte);
+      assert.equal(texte.includes('après étude du dossier'), selonDossier && (optionsChiffrees || rappels.length > 0), contexte);
+      assert.equal(texte.includes('Seuls des services gratuits'), cartes.length > 0 && cartes.every((c) => c === 'services'), contexte);
+      assert.equal(texte.includes('les portails officiels de la région'), !optionsChiffrees && rappels.length === 0 && portail != null, contexte);
+      assert.ok(!/ [:;?!]/.test(texte), `espace ordinaire avant une ponctuation haute : ${texte}`);
+      vus.add(texte);
+    }
+    assert.ok(sansFinancement >= 500, `seulement ${sansFinancement} états sans financement chiffré`);
+    // Les tirages passent par au moins quatre des variantes (options, aides selon dossier, services seuls…).
+    assert.ok(vus.size >= 4, `seulement ${vus.size} textes distincts : ${[...vus].join(' | ')}`);
   });
 });
 

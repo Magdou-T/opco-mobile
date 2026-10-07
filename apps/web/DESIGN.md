@@ -448,11 +448,11 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
 - **En-tête d'étape** (`EnTeteEtape`) : `SectionTitle` (surtitre « Étape n sur 6 », `h2` focalisable par programme,
   chapeau). À chaque changement d'écran, le haut de l'écran revient à la vue s'il en était sorti et le focus passe à
   son titre : titre de l'étape ; à l'affichage des résultats, titre de l'écran de résultats (`h2` « Votre plan de
-  financement », `ID_TITRE_RESULTATS`) ; au retour par « Modifier mes informations » ou « Revenir au récapitulatif »,
-  titre « Récapitulatif » (seul `showResults` change : l'effet en dépend aussi) ; après « Nouvelle simulation », titre de
-  l'étape Projet. L'écran de résultats est chargé à la demande : son titre n'existe pas quand `showResults` passe à vrai.
-  Le squelette d'attente porte le même titre focalisable (le parcours y pose le focus), puis l'écran, comme l'écran
-  d'échec du chargement, pose le focus sur son propre titre à son montage (section 15).
+  financement », `ID_TITRE_RESULTATS`) ; au retour par « Modifier mes informations », titre « Récapitulatif » (seul
+  `showResults` change : l'effet en dépend aussi) ; après « Nouvelle simulation », titre de l'étape Projet. L'écran de
+  résultats est chargé à la demande : son titre peut ne pas exister quand `showResults` passe à vrai. L'attente du
+  chargement affiche l'en-tête réel de l'écran, titre focalisable compris (le parcours y pose le focus), puis l'écran,
+  comme l'écran d'échec du chargement, pose le focus sur son propre titre à son montage (section 15).
 - **Navigation** : `Button` secondary « Retour » (flèche seule sous 640 px, nom gardé) et primary « Suivant ». Tant que
   l'étape est incomplète, « Suivant » reste atteignable au clavier mais porte `aria-disabled`, grisé (texte-discret sur
   lin), et un texte dit ce qui manque (« Pour continuer, indiquez la région et la taille de l'entreprise. »), relié par
@@ -491,6 +491,10 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   milliers par trois (« 1.500,50 ») ; « € » ou « euros » final accepté dans un montant (`euros`), refusé ailleurs. Toute
   ambiguïté est refusée avec son explication, jamais devinée : « 1.500 » ou « 1,500 » (« Pour 1 500 €, écrivez 1500 ou
   1 500 ; la virgule sert aux centimes. »), « 1 5 00 », un nombre trop grand, une virgule dans un champ entier.
+- **Coût horaire** (`coutsDeFormation`, `lib/parcours.ts`) : le coût total divisé par la durée, jamais arrondi dans
+  l'état ; le moteur le multiplie par la durée, et arrondi au centime il faisait financer 4 250,40 € pour 4 250 €
+  demandés (30,36 €/h × 140 h). L'affichage l'arrondit (`formatEuro` : « 30,36 €/h ») ; le dépassement du plafond
+  indicatif se juge au centime affiché (`depassePlafondHoraire` : jamais « 30 €/h dépasse le plafond de 30 €/h »).
 - **Champs masqués** : un champ que l'écran ne montre plus revient à vide, car le moteur et le profil des aides lisent
   tout l'état : questions d'un autre statut et budget déjà consommé d'un projet qui n'ouvre pas le budget de l'OPCO
   (`etatDepuisProjet`), besoins de frais et nombre de jours quand l'étape Frais est sautée (`etatDepuisModeFormation`).
@@ -501,28 +505,42 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   aux saisies refusées et à l'échec de la recherche d'entreprise.
 - **Récapitulatif** : une `Card` par étape (pastille d'icône, `h3`, « Modifier ») ; une valeur absente s'écrit
   « Non renseigné » en texte-discret, jamais un tiret ; une réponse « Je ne sais pas » ou « Ne sait pas » s'écrit telle
-  quelle. Libellés propres à la section : « Objectif » (section Projet), « Intitulé » (nom de la formation).
+  quelle. Libellés propres à la section : « Objectif » (section Projet), « Intitulé » (nom de la formation). Le lot de
+  l'écran de résultats s'y précharge (section 15).
 - **Limite connue** : un dirigeant « assimilé salarié » dont l'entreprise relève d'un OPCO peut relever du plan de
   développement des compétences de sa branche (Afdas : « dirigeants salariés » ; Uniformation : « dirigeants bénévoles
   dans certaines branches ») ; le projet « Former le dirigeant » n'affiche pourtant ni plafond horaire ni budget OPCO,
   et l'écran de résultats ne calcule ce plan que pour les projets salariés (former, reconvertir : `ouvreBudgetOpco`,
-  le `avecPdc` de l'écran). Une note le dit au dirigeant (« Aucun OPCO renseigné » ou « OPCO non compté pour un
+  dans `calculer`, `lib/resultats.ts`). Une note le dit au dirigeant (« Aucun OPCO renseigné » ou « OPCO non compté pour un
   dirigeant », avec le cas de l'assimilé salarié). Hors périmètre.
 
 ## 15. Écran de résultats (« Votre plan de financement »)
 
-Composants : `components/results/` ; logique de présentation en fonctions pures : `lib/resultats.ts` (tests :
-`tests/resultats.test.ts`). Chaque montant vient du moteur (`@opco/core`) et n'est arrondi qu'à l'affichage
-(`formatEuro` : un montant entier sans décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
-compris dans les textes du moteur (voir « Textes des données » plus bas) ; un montant d'aide non éligible n'est jamais
-affiché.
+Composants : `components/results/` (`EcranResultats` ; `PlanFinancement`, `BandeauSynthese`, `BarreEmpilee` ;
+`AidesList`, `AideCard` ; `FundingBreakdown`, `DetailParPoste`, `DispositifsOpco`, `BadgeEstimation` ;
+`PortailsRegionaux`, `Financeur` ; `EtatsResultats`, seul du lot initial). Calcul (`calculer`) et logique de
+présentation en fonctions pures : `lib/resultats.ts` ; étiquettes de la situation : `lib/situation.ts`, sans le
+catalogue (tests : `tests/resultats.test.ts`). Chaque montant vient du moteur (`@opco/core`) et n'est arrondi qu'à
+l'affichage (`formatEuro` : un montant entier sans décimales, tout autre avec deux, « 1 500,50 € », jugé au centime
+près), y compris dans les textes du moteur (voir « Textes des données » plus bas) ; un montant d'aide non éligible
+n'est jamais affiché.
 
 - **Chargement** : `EcranResultats` est chargé à la demande par `WizardContainer` (`next/dynamic`, `ssr: false`) : le
   catalogue d'aides (environ 135 Ko gzip) et le calcul restent hors du lot initial du simulateur. Le parcours ne lui
-  passe que l'état et deux actions ; le calcul est une dérivation pure de l'état (`useMemo`), la date du jour est lue
-  dans le composant, jamais dans `@opco/core`. Squelette d'attente (`ChargementResultats` : `aria-busy`, « Calcul en
-  cours… », même titre focalisable, hauteur du bandeau) ; échec du chargement (`EchecChargementResultats` : `Callout`
-  alerte, « Réessayer » recharge le code sans perdre les réponses).
+  passe que l'état et deux actions ; le calcul est une dérivation pure de l'état (`calculer`, en `useMemo`), la date du
+  jour est lue dans le composant, jamais dans `@opco/core`. Le lot est préchargé dès l'étape Récapitulatif
+  (`prechargerEcranResultats` : la même fonction de chargement que `next/dynamic`, une fois par page, échec absorbé) :
+  une coupure de connexion après le récapitulatif ne l'empêche plus de s'afficher.
+- **Attente** (`ChargementResultats`) : l'en-tête réel de l'écran (`EnTeteResultats` : titre focalisable, actions,
+  étiquettes de la situation), puis un squelette du bandeau seul (`aria-busy`, « Calcul en cours… », filet tricolore).
+  `next/dynamic` ne passe aucune propriété à son composant d'attente : le parcours les lui donne par `ContexteResultats`.
+  Le bandeau ne bouge plus à l'arrivée de l'écran (scénario 1, haut du bandeau : 728 puis 728 px à 375 px de large, au
+  lieu de 585 puis 728 ; 563 puis 563 px à 1 280 px, au lieu de 514 puis 563).
+- **Échec du chargement** (`EchecChargementResultats`) : le chargeur de Turbopack garde la promesse d'un lot qui a
+  échoué, un nouvel essai sans recharger la page n'émet aucune requête ; les réponses ne sont enregistrées nulle part
+  (certaines sont sensibles : âge, handicap), recharger les efface. L'écran le dit (`Callout` alerte « L'écran de
+  résultats n'a pas pu se charger » : connexion peut-être coupée, recharger la page, réponses à saisir de nouveau) et
+  ne propose qu'un bouton, « Recharger la page » (`window.location.reload()`) ; le focus va à son titre.
 - **Ordre** : titre `h2` et actions (Modifier, Imprimer : libellés courts sous 640 px, nom accessible complet),
   étiquettes de la situation (projet, OPCO, région, durée), bandeau de synthèse, note sur l'OPCO s'il y a lieu, cartes
   du plan, aides par financeur (`h2`), détail de l'estimation OPCO (`h2`), portails de la région (`h2`), mention,
@@ -533,14 +551,23 @@ affiché.
   dégradé turquoise), et le bandeau porte plus qu'une accroche (chiffres, barre, légende, alerte) : section 6, un
   dégradé ne passe pas derrière un long contenu. Trois chiffres en Montserrat 700 tabulaires : Coût de la formation,
   **Financé** (le plus grand), Reste à charge (orange foncé) ; sous Financé, la part du coût (`partFinancee` : jamais
-  « 100 % » avec un reste, jamais « 0 % » avec un financement). Sous 640 px, une ligne par chiffre.
+  « 100 % » avec un reste, jamais « 0 % » avec un financement). Sous 640 px, une ligne par chiffre. Aucune phrase sous
+  un reste à charge nul : ce n'est qu'une estimation, que l'OPCO peut refuser (fonds épuisés, étude du dossier).
+- **Promesses** : aucune phrase plus forte que le moteur (« entièrement », « garanti », « assuré », « vous
+  obtiendrez »…) dans le bandeau, les cartes, les aides et le détail de l'OPCO ; le moteur écrit lui-même « intégralement
+  pris en charge » dans le détail du calcul d'un poste sous son plafond (texte de `@opco/core`, non modifié ici).
 - **`.mark`** : le trait de base vert clair (le souligné du film de marque) sous le seul chiffre Financé, sur fond
   blanc. L'aplat plein ne sert plus sur cet écran (plus de carte sombre) : la règle héritée `.mark.text-ink` est
   retirée de `globals.css`.
 - **États du bandeau** (`etatEnTete`) : coût inconnu (`Callout` « Coût de la formation non renseigné », bouton
-  « Indiquer le coût », jamais « 0 € ») ; aucun financement chiffré (coût seul, `Callout` qui le dit, liens vers les
-  cartes Montant selon dossier, Aides versées à l'employeur et Revenus et aides à la personne, placées en tête ;
-  variante quand des options au choix ont un montant) ; plan chiffré (chiffres, barre, légende). Fonds épuisés
+  « Indiquer le coût », jamais « 0 € ») ; aucun financement chiffré (coût seul, `Callout`, liens vers les cartes Montant
+  selon dossier, Aides versées à l'employeur et Revenus et aides à la personne, placées en tête) ; plan chiffré
+  (chiffres, barre, légende). L'encadré sans financement chiffré ne cite que ce qui suit (`encadreSansFinancement`) :
+  des options au choix chiffrées, « à comparer » ; sinon les aides identifiées (« Voici les aides identifiées »,
+  l'étude du dossier n'étant citée que pour des aides au montant selon dossier) ; sinon aucune autre aide à montant
+  (dirigeant assimilé salarié, par exemple) : il le dit, renvoie à l'OPCO ou au fonds d'assurance formation compétent et
+  aux portails de la région, et précise « Seuls des services gratuits sont proposés ci-dessous » quand c'est le cas.
+  Fonds épuisés
   signalés par l'OPCO alors que le plan compte son plan de développement des compétences (`fondsEpuisesSurLePlan`) :
   `Callout` avertissement sous la barre, lien vers les alertes de l'OPCO (`#alertes-opco`).
 - **Familles de couleur** (`familleCouleur`) : pastille ronde des lignes et des groupes, part de la barre, pastille de
@@ -584,19 +611,29 @@ affiché.
 - **Détail de l'estimation OPCO** (`FundingBreakdown`) : total de tous les postes (le plan ne retient que ceux de la
   formation, le chapeau le dit quand salaires ou transport sont financés) ; tableau Poste / Financé / Reste, « Demandé »
   et la source passant dans la colonne du poste sous 640 px ; ligne non chiffrée : « à confirmer », reste « - », règle
-  sous le poste ; listes de plus de 6 conventions collectives repliées (`replierIdcc`) ; 50 salariés et plus : `Callout`
-  avertissement (barème général ou de la branche ; choisir sa branche à l'étape Entreprise).
+  sous le poste ; détail du calcul d'un poste dépliable (`aria-expanded`, `aria-controls`), toujours dans la page :
+  replié, il reste imprimé (`hidden print:table-row`) ; listes de plus de 6 conventions collectives repliées
+  (`replierIdcc`) ; 50 salariés et plus : `Callout` avertissement (barème général ou de la branche ; choisir sa branche à
+  l'étape Entreprise).
 - **Textes des données** : `texteDonnees` (dates JJ/MM/AAAA, montants et `typo` : insécables avant « : ; ? ! », entre
   un nombre et son unité, entre les milliers), jamais à l'intérieur d'un extrait cité. Le moteur écrit les montants de
   ses textes de calcul à l'anglaise (« 840.00 € », « 42.86 €/h », « 12600.00 € » : détail du calcul, notes de poste,
   points d'attention) ; `montantsFr` les réécrit par `formatEuro` (« 840 € », « 42,86 €/h », « 12 600 € »). Un montant
   déjà écrit à la française reste tel quel ; un nombre ambigu (« 2.000 € », point de milliers d'une citation, ou nombre
   collé à un autre) n'est pas réinterprété. Une adresse web longue passe à la ligne
-  (`break-words` ; `[overflow-wrap:anywhere]` dans le tableau, pour que la largeur des colonnes n'en dépende pas).
+  (`break-words` ; `[overflow-wrap:anywhere]` dans le tableau, pour que la largeur des colonnes n'en dépende pas). Le
+  texte d'un élément flexible (puce ou icône suivie d'un texte : conditions, démarches, raisons, points d'attention,
+  pages citées, sites sources, prochaines étapes) porte `TEXTE_SOUPLE` (`components/results/classes.ts` :
+  `min-w-0 [overflow-wrap:anywhere]`) : `break-words` ne réduit pas la largeur minimale d'un élément flexible, celle de
+  son mot le plus long, et la carte d'aide (`overflow-hidden`) rognait « servicenouvelleschances@laregion.fr » ou
+  « (financeurs.moncompteformation.gouv.fr) » à 320 px (WCAG 1.4.10). Contrôle : chaque nœud de texte rendu est contenu
+  dans l'ancêtre le plus proche qui rogne et dans la fenêtre, tous les détails ouverts (0 sur 2 458 à 320 et 375 px,
+  cinq scénarios) ; seul le tableau de l'OPCO défile encore horizontalement à 320 px, dans son propre conteneur.
 - **Mouvement** : apparition douce du bandeau et des cartes (`.apparition`, délais échelonnés), barre qui se dévoile
   (`.devoilement`), trait `.mark` qui se déploie ; tout s'arrête sous `prefers-reduced-motion`.
 - **Impression** : section 7 ; détail des aides, liste des non éligibles et listes de conventions repliées imprimés en
-  entier (`hidden print:block`), boutons masqués, cartes d'aide non coupées (`break-inside-avoid`).
+  entier (`hidden print:block`), détail du calcul des postes de l'OPCO aussi (`hidden print:table-row`), boutons
+  masqués, cartes d'aide non coupées (`break-inside-avoid`).
 
 ## 16. Fiches OPCO, liste des OPCO, guides, contact et page 404
 

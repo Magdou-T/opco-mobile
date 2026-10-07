@@ -1,4 +1,5 @@
 import type { Confidence } from '@opco/core';
+import { INSECABLE } from '@/lib/format';
 
 interface ConfidenceBadgeProps {
   confidence: Confidence;
@@ -23,7 +24,7 @@ const CONFIDENCE_CONFIG: Record<Confidence, { label: string; className: string; 
   depends_on_branche: {
     label: 'Selon branche',
     className: 'text-texte-doux bg-lin-soft',
-    title: 'Pas de barème unique publié : le montant dépend de votre branche ou de votre dossier',
+    title: `Pas de barème unique publié${INSECABLE}: le montant dépend de votre branche ou de votre dossier`,
   },
 };
 

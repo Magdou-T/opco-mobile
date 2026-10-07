@@ -393,6 +393,52 @@ export function rappelsAucunFinancement(plan: PlanFinancement): Rappel[] {
   }).filter((r) => r.nombre > 0);
 }
 
+/** Encadré du bandeau quand aucun financement de la formation n'est chiffré : texte et liens vers les cartes. */
+export interface EncadreSansFinancement {
+  texte: string;
+  rappels: Rappel[];
+}
+
+/**
+ * Encadré du bandeau quand aucun financement de la formation n'est chiffré (`aucun_financement_chiffre`). Il ne cite que
+ * ce qui suit à l'écran :
+ * - des options au choix chiffrées : elles ont un montant, à comparer ; « les autres financeurs fixent le montant après
+ *   étude du dossier » seulement si une aide ou une option est au montant selon dossier ;
+ * - sinon des aides identifiées (montant selon dossier, aides versées à l'employeur, revenus et aides à la personne) :
+ *   « Voici les aides identifiées », avec les liens vers leurs cartes (`rappels`) ; l'étude du dossier n'est citée que
+ *   pour des aides au montant selon dossier, sinon le texte dit qu'elles ne réduisent pas le prix de la formation ;
+ * - sinon aucune autre aide à montant : le dire, renvoyer à l'OPCO ou au fonds d'assurance formation et aux portails
+ *   de la région quand ils existent (`avecPortail`), et préciser quand seuls des services gratuits suivent.
+ */
+export function encadreSansFinancement(plan: PlanFinancement, avecPortail: boolean): EncadreSansFinancement {
+  const rappels = rappelsAucunFinancement(plan);
+  const optionsChiffrees = plan.options.some((o) => o.montantEstime != null && o.montantEstime > 0);
+  const selonDossier = plan.nonChiffrees.length > 0 || plan.options.some((o) => o.montantEstime == null);
+  if (optionsChiffrees) {
+    const suite = selonDossier ? ', et les autres financeurs fixent le montant après étude du dossier' : '';
+    return {
+      texte: `Aucun financement cumulable n'est chiffré pour cette formation${INSECABLE}: les options au choix ont un montant, à comparer${suite}.`,
+      rappels,
+    };
+  }
+  if (rappels.length > 0) {
+    return {
+      texte: selonDossier
+        ? `Aucun financement de la formation n'est chiffrable à ce stade${INSECABLE}: les financeurs fixent le montant après étude du dossier. Voici les aides identifiées.`
+        : "Aucun financement de la formation n'est chiffrable pour cette situation. Voici les aides identifiées, qui ne réduisent pas le prix de la formation.",
+      rappels,
+    };
+  }
+  const cartes = cartesDuPlan(plan);
+  const servicesSeuls = cartes.length > 0 && cartes.every((c) => c === 'services');
+  const phrases = [
+    "Aucun financement de la formation n'est chiffrable et aucune autre aide à montant n'a été identifiée pour cette situation.",
+    servicesSeuls ? 'Seuls des services gratuits sont proposés ci-dessous.' : null,
+    `Interrogez l'OPCO ou le fonds d'assurance formation compétent${avecPortail ? ', et consultez les portails officiels de la région en bas de page' : ''}.`,
+  ];
+  return { texte: phrases.filter((p): p is string => p != null).join(' '), rappels };
+}
+
 // --- Alertes de l'OPCO --------------------------------------------------------------------------------------------
 
 /**

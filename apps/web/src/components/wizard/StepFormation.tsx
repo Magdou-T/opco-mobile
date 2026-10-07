@@ -16,7 +16,7 @@ import { Icon } from '@/components/ui/Icon';
 import { ChoiceButton, ChoiceGroup, NumberField, OuiNonChoix, SelectField, TextField } from '@/components/ui/forms';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { de, formatEuro } from '@/lib/format';
-import { etatDepuisModeFormation, plafondHoraireIndicatif } from '@/lib/parcours';
+import { depassePlafondHoraire, etatDepuisModeFormation, plafondHoraireIndicatif } from '@/lib/parcours';
 import type { QuestionAvecInconnu, Repondre } from '@/lib/parcours';
 import { EnTeteEtape } from './EnTeteEtape';
 
@@ -57,7 +57,7 @@ export function StepFormation({ state, updateState, updateFormationCosts, repons
   const plafond = ouvreBudgetOpco(state.projetType) ? plafondHoraireIndicatif(opco, state) : null;
   const coutHoraire = state.pedagogyCostPerHour != null && state.pedagogyCostPerHour > 0 ? state.pedagogyCostPerHour : null;
   const enveloppeEpuisee = plafond === 0;
-  const depasse = plafond != null && plafond > 0 && coutHoraire != null && coutHoraire > plafond;
+  const depasse = depassePlafondHoraire(coutHoraire, plafond);
 
   return (
     <div className="space-y-8">

@@ -35,12 +35,15 @@ import {
   QUESTIONS_AVEC_INCONNU,
   QUESTIONS_COMMUNES,
   QUESTIONS_PAR_STATUT,
+  coutsDeFormation,
+  depassePlafondHoraire,
   etatDepuisModeFormation,
   etatDepuisProjet,
   plafondHoraireIndicatif,
   reponsesInconnuesApres,
 } from '../src/lib/parcours';
 import type { QuestionAvecInconnu } from '../src/lib/parcours';
+import { texteDonnees } from '../src/lib/format';
 
 /** Champs de l'app mobile que le site ne pose plus : ils restent à leur valeur initiale. */
 const CHAMPS_NON_POSES = ['isReconversion', 'isSortieChomage'];
@@ -606,5 +609,94 @@ describe('plafond horaire indicatif (plafondHoraireIndicatif)', () => {
         }
       }
     }
+  });
+});
+
+describe('coût horaire de la formation (coutsDeFormation, saisie de la durée et du coût total)', () => {
+  /** Montant au centime : les montants du moteur sont des nombres à virgule flottante. */
+  const centimes = (montant: number) => Math.round(montant * 100);
+  /** Salarié en CDI d'un organisme de formation (AKTO, IDCC 1516 : plafond de 60 €/h), formation certifiante. */
+  const salarieAkto = (total: number, heures: number): WizardState =>
+    etat({
+      projetType: 'formation_salarie',
+      selectedOpcoSlug: 'akto',
+      detectedIdcc: '1516',
+      regionCode: '11',
+      companySize: 'less_11',
+      contractType: 'cdi',
+      formationType: 'certification',
+      trainingMode: 'presentiel',
+      ...coutsDeFormation(total, heures),
+    });
+
+  test('le coût horaire est le coût total divisé par la durée, sans arrondi ; rien sans total ni durée', () => {
+    assert.deepEqual(coutsDeFormation(4250, 140), {
+      pedagogyCostTotal: 4250,
+      durationHours: 140,
+      pedagogyCostPerHour: 4250 / 140,
+    });
+    assert.equal(coutsDeFormation(4200, 140).pedagogyCostPerHour, 30);
+    assert.deepEqual(coutsDeFormation(null, 140), { pedagogyCostTotal: null, durationHours: 140, pedagogyCostPerHour: null });
+    assert.deepEqual(coutsDeFormation(4250, null), { pedagogyCostTotal: 4250, durationHours: null, pedagogyCostPerHour: null });
+    assert.equal(coutsDeFormation(4250, 0).pedagogyCostPerHour, null);
+    assert.equal(coutsDeFormation(0, 140).pedagogyCostPerHour, null);
+  });
+
+  test("4 250 € sur 140 h : l'OPCO finance 4 250 €, pas 4 250,40 € (30,36 €/h × 140 h), et le total tous postes vaut 6 350 €", () => {
+    const r = calculateFunding(opco('akto'), salarieAkto(4250, 140));
+    const pedagogie = r.lines.find((l) => l.poste === 'pedagogie');
+    assert.ok(pedagogie);
+    assert.equal(centimes(pedagogie.requestedAmount), 425000);
+    assert.equal(centimes(pedagogie.fundedAmount), 425000);
+    assert.ok(centimes(pedagogie.remainder) === 0, `reste ${pedagogie.remainder}`);
+    // Salaires : 15 €/h × 140 h = 2 100 €.
+    assert.equal(centimes(r.totalFunded), 635000);
+    // Le détail du calcul garde un coût horaire arrondi à l'affichage (formatEuro, par texteDonnees).
+    const details = (pedagogie.details ?? []).map((d) => texteDonnees(d).replace(/\s/g, ' '));
+    assert.ok(details.includes('Votre coût horaire : 30,36 €/h × 140 h = 4 250 €'), details.join(' | '));
+  });
+
+  test('900 € sur 21 h : financé 900 €, pas 900,06 € (42,86 €/h × 21 h)', () => {
+    const pedagogie = calculateFunding(opco('akto'), salarieAkto(900, 21)).lines.find((l) => l.poste === 'pedagogie');
+    assert.ok(pedagogie);
+    assert.equal(centimes(pedagogie.fundedAmount), 90000);
+    assert.equal(centimes(pedagogie.requestedAmount), 90000);
+  });
+
+  test('500 coûts tirés au hasard (graine 47) : sous le plafond horaire, la pédagogie est financée au centime près du coût demandé', () => {
+    // mulberry32 : tirages reproductibles.
+    let graine = 47;
+    const hasard = (n: number) => {
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+    };
+    let verifies = 0;
+    for (let i = 0; i < 500; i++) {
+      const heures = 1 + hasard(400);
+      // Coût horaire sous le plafond de 60 €/h, total au centime.
+      const total = (1 + hasard(heures * 5999)) / 100;
+      const r = calculateFunding(opco('akto'), salarieAkto(total, heures));
+      const pedagogie = r.lines.find((l) => l.poste === 'pedagogie');
+      assert.ok(pedagogie);
+      // Un plafond annuel appliqué réduit légitimement le financement : ces tirages ne prouvent rien ici.
+      if (r.budgetCapApplied) continue;
+      assert.equal(centimes(pedagogie.fundedAmount), centimes(total), `${total} € sur ${heures} h`);
+      verifies++;
+    }
+    assert.ok(verifies >= 300, `seulement ${verifies} tirages sans plafond annuel`);
+  });
+
+  test("dépassement du plafond indicatif jugé au centime affiché : jamais « 30 €/h dépasse le plafond de 30 €/h »", () => {
+    // 4 200,50 € sur 140 h : 30,0036 €/h, affiché 30 €/h.
+    assert.equal(depassePlafondHoraire(4200.5 / 140, 30), false);
+    assert.equal(depassePlafondHoraire(30.006, 30), true);
+    assert.equal(depassePlafondHoraire(31, 30), true);
+    assert.equal(depassePlafondHoraire(30, 30), false);
+    // Sans coût horaire, sans plafond publié ou enveloppe épuisée (0) : pas d'encadré de dépassement.
+    assert.equal(depassePlafondHoraire(null, 30), false);
+    assert.equal(depassePlafondHoraire(45, null), false);
+    assert.equal(depassePlafondHoraire(45, 0), false);
   });
 });

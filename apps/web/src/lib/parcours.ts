@@ -95,6 +95,29 @@ export function reponsesInconnuesApres(
   return apres;
 }
 
+/**
+ * Saisie de la durée ou du coût total : le coût horaire suit (null tant que l'un des deux manque). Il n'est jamais
+ * arrondi : le moteur le multiplie par la durée, et 30,36 €/h (4 250 € sur 140 h arrondis au centime) donnaient
+ * 4 250,40 € financés pour 4 250 € demandés. L'affichage l'arrondit (`formatEuro`).
+ */
+export function coutsDeFormation(
+  total: number | null,
+  heures: number | null,
+): Pick<WizardState, 'pedagogyCostTotal' | 'durationHours' | 'pedagogyCostPerHour'> {
+  const parHeure = total && heures && heures > 0 ? total / heures : null;
+  return { pedagogyCostTotal: total, durationHours: heures, pedagogyCostPerHour: parHeure };
+}
+
+/**
+ * Le coût horaire dépasse le plafond indicatif publié (un plafond de 0 signale une enveloppe épuisée, dite à part).
+ * Comparaison au centime, comme l'affichage : 30,0036 €/h s'affiche 30 €/h et ne « dépasse » pas un plafond de 30 €/h.
+ */
+export function depassePlafondHoraire(coutHoraire: number | null, plafond: number | null): boolean {
+  return (
+    plafond != null && plafond > 0 && coutHoraire != null && Math.round(coutHoraire * 100) > Math.round(plafond * 100)
+  );
+}
+
 /** Types de formation qui relèvent du plafond horaire des formations certifiantes (`cout_horaire_metier`). */
 const TYPES_CERTIFIANTS: readonly TrainingType[] = ['cqp', 'certification', 'habilitation'];
 

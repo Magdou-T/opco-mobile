@@ -1,18 +1,17 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { EMBEDDED_OPCOS, PROJET_LABELS, REGIONS } from '@opco/core';
+import { EMBEDDED_OPCOS } from '@opco/core';
 import type { WizardState } from '@opco/core';
 import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
-import { Etiquette } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { dateFr, moisAnneeFr, typo } from '@/lib/format';
 import { calculer, fondsEpuisesSurLePlan } from '@/lib/resultats';
 import { AidesList } from './AidesList';
-import { ID_TITRE_RESULTATS, TitreResultats, focaliserTitreResultats } from './EtatsResultats';
+import { EnTeteResultats, ID_TITRE_RESULTATS, focaliserTitreResultats } from './EtatsResultats';
 import type { ProprietesEcranResultats } from './EtatsResultats';
 import { FundingBreakdown } from './FundingBreakdown';
 import { PlanFinancementCard } from './PlanFinancement';
@@ -43,17 +42,10 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
   useEffect(focaliserTitreResultats, []);
 
   // Calcul (lib/resultats.ts) : dérivation pure de l'état, à la date du jour lue ici.
-  const { opco, projet, funding, profil, aidesEvaluees, plan, portail, aujourdhui } = useMemo(() => {
+  const { opco, projet, funding, aidesEvaluees, plan, portail, aujourdhui } = useMemo(() => {
     const jour = aujourdhuiLocal();
     return { ...calculer(state, jour), aujourdhui: jour };
   }, [state]);
-
-  const situation = [
-    PROJET_LABELS[projet].label,
-    opco?.name,
-    profil.regionEntreprise ? REGIONS[profil.regionEntreprise] : null,
-    state.durationHours ? `${state.durationHours} h` : null,
-  ].filter((e): e is string => !!e);
 
   // Salaires et transport de l'OPCO : aides à l'employeur dans le plan, postes du calcul dans le détail de l'OPCO.
   const postesHorsFormation = funding?.lines.some(
@@ -63,33 +55,14 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
   return (
     <div className="space-y-12 sm:space-y-14">
       <section aria-labelledby={ID_TITRE_RESULTATS} className="space-y-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <TitreResultats chapeau={state.formationNom ? typo(`Formation : ${state.formationNom}`) : undefined} />
-          {/* Sous 640 px, libellés courts sur une ligne (le nom accessible reste complet) : le bandeau monte d'autant. */}
-          <div className="-ml-1 flex flex-wrap gap-x-5 print:hidden sm:ml-0 sm:shrink-0">
-            <Button variant="ghost" icone="crayon" onClick={() => onEdit('recap')}>
-              Modifier<span className="max-sm:sr-only"> mes informations</span>
-            </Button>
-            <Button variant="ghost" icone="document" onClick={() => window.print()}>
-              Imprimer<span className="max-sm:sr-only"> / PDF</span>
-            </Button>
-          </div>
-        </div>
-
-        {situation.length > 0 && (
-          <ul aria-label="Votre situation" className="flex flex-wrap gap-2">
-            {situation.map((e) => (
-              <Etiquette key={e} as="li">
-                {typo(e)}
-              </Etiquette>
-            ))}
-          </ul>
-        )}
+        {/* Même en-tête que l'attente du chargement (EtatsResultats.tsx) : rien ne bouge quand l'écran arrive. */}
+        <EnTeteResultats state={state} onEdit={onEdit} />
 
         <PlanFinancementCard
           plan={plan}
           aides={aidesEvaluees}
           fondsEpuises={funding ? { opco: funding.opcoName, branches: fondsEpuisesSurLePlan(plan, funding.alertes) } : null}
+          avecPortail={portail != null}
           apresBandeau={
             <NoteOpco
               projet={projet}

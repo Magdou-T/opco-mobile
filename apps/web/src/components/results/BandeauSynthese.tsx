@@ -5,7 +5,7 @@ import { Callout } from '@/components/ui/Callout';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { formatEuro, texteDonnees } from '@/lib/format';
-import { partFinancee, partsBarre, rappelsAucunFinancement } from '@/lib/resultats';
+import { encadreSansFinancement, partFinancee, partsBarre } from '@/lib/resultats';
 import type { EtatEnTete, PartBarre } from '@/lib/resultats';
 import { BarreEmpilee } from './BarreEmpilee';
 
@@ -24,12 +24,15 @@ export function BandeauSynthese({
   aides,
   etat,
   fondsEpuises,
+  avecPortail,
   onModifierFormation,
 }: {
   plan: PlanFinancement;
   aides: readonly AideEvaluee[];
   etat: EtatEnTete;
   fondsEpuises: FondsEpuises | null;
+  /** Les portails officiels de la région figurent plus bas : l'encadré sans financement chiffré peut y renvoyer. */
+  avecPortail: boolean;
   onModifierFormation?: () => void;
 }) {
   return (
@@ -42,7 +45,7 @@ export function BandeauSynthese({
       </div>
       <div className="p-5 sm:p-8">
         {etat === 'cout_inconnu' && <CoutInconnu onModifierFormation={onModifierFormation} />}
-        {etat === 'aucun_financement_chiffre' && <AucunFinancementChiffre plan={plan} />}
+        {etat === 'aucun_financement_chiffre' && <AucunFinancementChiffre plan={plan} avecPortail={avecPortail} />}
         {etat === 'plan_chiffre' && (
           <PlanChiffre plan={plan} parts={partsBarre(plan, aides)} fondsEpuises={fondsEpuises} />
         )}
@@ -71,28 +74,18 @@ function CoutInconnu({ onModifierFormation }: { onModifierFormation?: () => void
 /**
  * Aucun financement de la formation n'est chiffré (alternance, demandeur d'emploi, entreprise de 50 salariés et plus…) :
  * jamais « Financé 0 € » ni « Reste à charge » égal au coût présenté comme un résultat. Le coût reste visible, un encadré
- * dit pourquoi, et des liens mènent aux cartes qui portent les aides identifiées.
+ * dit pourquoi en ne citant que ce qui suit (`encadreSansFinancement`), et des liens mènent aux cartes qui portent les
+ * aides identifiées.
  */
-function AucunFinancementChiffre({ plan }: { plan: PlanFinancement }) {
-  const rappels = rappelsAucunFinancement(plan);
-  const optionsChiffrees = plan.options.some((o) => o.montantEstime != null && o.montantEstime > 0);
+function AucunFinancementChiffre({ plan, avecPortail }: { plan: PlanFinancement; avecPortail: boolean }) {
+  const { texte, rappels } = encadreSansFinancement(plan, avecPortail);
   return (
     <div>
       <dl className="grid sm:grid-cols-3">
         <Chiffre libelle="Coût de la formation" valeur={formatEuro(plan.coutFormation)} />
       </dl>
       <Callout tone="info" className="mt-5">
-        {optionsChiffrees ? (
-          <>
-            Aucun financement cumulable n&apos;est chiffré pour cette formation&nbsp;: les options au choix ont un montant,
-            à comparer, et les autres financeurs fixent le montant après étude du dossier.
-          </>
-        ) : (
-          <>
-            Aucun financement de la formation n&apos;est chiffrable à ce stade&nbsp;: les financeurs fixent le montant
-            après étude du dossier. Voici les aides identifiées.
-          </>
-        )}
+        {texte}
       </Callout>
       {rappels.length > 0 && (
         <ul className="mt-4 flex flex-wrap gap-2 print:hidden">
@@ -133,12 +126,9 @@ function PlanChiffre({
           detail={part ? `soit ${part}` : undefined}
           grand
         />
-        <Chiffre
-          libelle="Reste à charge"
-          valeur={formatEuro(plan.resteACharge)}
-          couleur="text-orange-deep"
-          detail={plan.resteACharge > 0 ? undefined : 'La formation est entièrement couverte.'}
-        />
+        {/* Aucune phrase de couverture sous un reste nul : c'est une estimation, et la prise en charge peut être refusée
+            (fonds épuisés, étude du dossier). Le chiffre suffit. */}
+        <Chiffre libelle="Reste à charge" valeur={formatEuro(plan.resteACharge)} couleur="text-orange-deep" />
       </dl>
       <BarreEmpilee parts={parts} cout={plan.coutFormation} />
       {fondsEpuises && fondsEpuises.branches.length > 0 && (

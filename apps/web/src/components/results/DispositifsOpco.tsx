@@ -10,6 +10,7 @@ import { cx } from '@/lib/cx';
 import { de, formatEuro, texteDonnees } from '@/lib/format';
 import { replierIdcc } from '@/lib/resultats';
 import { BadgeEstimation } from './BadgeEstimation';
+import { TEXTE_SOUPLE } from './classes';
 
 /** Dispositif dont un montant est calculable pour cette formation (un montant nul n'est pas un montant publié). */
 function montantDuDispositif(d: DispositifEligible): number | null {
@@ -93,7 +94,7 @@ export function DispositifsOpco({ dispositifs, opcoName }: { dispositifs: Dispos
                   {d.conditions.map((c, j) => (
                     <li key={j} className="flex items-start gap-2 text-xs leading-relaxed text-texte-doux">
                       <Icon name="coche" className="mt-px size-3.5 shrink-0 text-turquoise-deep" strokeWidth={2} />
-                      <span>
+                      <span className={TEXTE_SOUPLE}>
                         <TexteAvecConventions texte={c} />
                       </span>
                     </li>

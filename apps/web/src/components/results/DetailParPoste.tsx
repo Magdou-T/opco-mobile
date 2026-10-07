@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { SourceBadge } from '@/components/ui/SourceBadge';
 import { cx } from '@/lib/cx';
-import { de, formatEuro, texteDonnees } from '@/lib/format';
+import { INSECABLE, de, formatEuro, texteDonnees } from '@/lib/format';
 import { sansMontantEstime } from '@/lib/resultats';
 import { BadgeEstimation } from './BadgeEstimation';
 
@@ -82,6 +82,7 @@ export function DetailParPoste({
               const detaillee = !!line.details?.length;
               const ouverte = expandedLines.has(i);
               const sansMontant = sansMontantEstime(line);
+              const idDetail = `detail-poste-${line.poste}-${i}`;
               return (
                 <Fragment key={`${line.poste}-${i}`}>
                   <tr
@@ -98,7 +99,8 @@ export function DetailParPoste({
                           <button
                             type="button"
                             aria-expanded={ouverte}
-                            aria-label={`Calcul détaillé : ${line.label}`}
+                            aria-controls={idDetail}
+                            aria-label={`Calcul détaillé${INSECABLE}: ${line.label}`}
                             className="-my-1 -ml-1.5 grid size-7 shrink-0 place-items-center rounded-full text-texte-discret hover:text-orange-deep print:hidden"
                           >
                             <Icon
@@ -154,8 +156,9 @@ export function DetailParPoste({
                       <SourceBadge url={line.sourceUrl} />
                     </td>
                   </tr>
-                  {ouverte && detaillee && (
-                    <tr>
+                  {/* Le détail du calcul reste dans la page, replié : l'impression le montre toujours. */}
+                  {detaillee && (
+                    <tr id={idDetail} className={ouverte ? undefined : 'hidden print:table-row'}>
                       <td colSpan={5} className="bg-lin-soft/60 px-4 py-4 [overflow-wrap:anywhere] sm:px-6">
                         <p className="text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase">
                           Détail du calcul
