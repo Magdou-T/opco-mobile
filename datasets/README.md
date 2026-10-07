@@ -1,6 +1,6 @@
-# `datasets/` — dataset publié & consommé par l'app
+# `datasets/` : dataset publié & consommé par l'app
 
-Ce dossier contient le **dataset OPCO versionné** que l'application mobile télécharge au démarrage. C'est ici un **exemple/seed** généré depuis les données embarquées (`packages/core/data/opcos/`) ; en production, le **backend** (`backend/`) régénère ces fichiers automatiquement (même format) à chaque exécution du cron.
+Ce dossier contient le **dataset OPCO versionné** que l'application mobile télécharge au démarrage. C'est ici un **exemple/seed** généré depuis les données embarquées (`packages/core/data/opcos/`). Le **backend** (`backend/`) peut régénérer ces fichiers (même format) avec son pipeline IA, désactivé par défaut aujourd'hui : voir `docs/donnees-aides.md`, section « Mise à jour automatique ». Le site web ne lit pas ce dossier.
 
 ## Fichiers
 
