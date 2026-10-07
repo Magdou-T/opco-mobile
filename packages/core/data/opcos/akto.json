@@ -96,7 +96,7 @@
   "vae_possible": true,
   "vae_details": "Interprofession : VAE et bilans de compétences plafonnés à 1 500 €. HCR : 2 000 € (certifications de la branche) ou 1 500 € (autres RNCP), pour 24 h d'accompagnement. Organismes de formation : pas de prise en charge.",
   "limite_dossiers_an": "Dans la limite du budget annuel par entreprise fixé par la branche et des fonds disponibles",
-  "specificites": "Règles de prise en charge propres à chaque branche (une vingtaine) | Espace Formation : coûts pédagogiques pris en charge à 100 % pour les moins de 50 salariés, en général sans déduction du budget annuel | Automne 2026 : enveloppe PDC épuisée dans 10 branches (commerces de gros et textile hors Espace Formation, organismes de formation, déchet, autoroutes, quincaillerie, eau, travail du bois, exploitations forestières, enseignement privé non lucratif) | FSE+ terminé (avril 2026) | Réforme TVA au 1er octobre 2026",
+  "specificites": "Règles de prise en charge propres à chaque branche (une vingtaine) | Espace Formation : coûts pédagogiques pris en charge à 100 % pour les moins de 50 salariés, en général sans déduction du budget annuel | Automne 2026 : enveloppe PDC épuisée dans 10 branches (commerces de gros et textile hors Espace Formation, organismes de formation, déchet, autoroutes, quincaillerie, eau, travail du bois, exploitations forestières, enseignement privé non lucratif) | FSE+ : dépôts clos depuis le 1er juillet 2026 (actions accordées réalisables jusqu'au 30/11/2026) | Réforme TVA au 1er octobre 2026",
   "points_cles_maximisation": "Privilégier Espace Formation (100 % des coûts pédagogiques, hors budget annuel dans la plupart des branches) | Vérifier la page « règles de prise en charge » de votre branche et l'état de son enveloppe | Déposer 30 jours avant le démarrage | Organismes de formation : plan conventionnel (10 000 €/an) en relais du PDC épuisé | AFEST : 20 €/h (formateur interne) ou 25 €/h (prestataire)",
   "plafonds_par_taille": [
     {
@@ -775,9 +775,9 @@
       "type": "dispositif_termine",
       "branche": "Toutes branches : FSE+ AKTO",
       "idcc": [],
-      "source_url": "https://www.akto.fr/entreprise/financer-une-formation/cofinancement/",
-      "extrait": "L’objectif est d’accompagner 17 000 bénéficiaires jusqu’au 29 avril 2026.",
-      "verifie_le": "2026-10-05"
+      "source_url": "https://www.akto.fr/beneficier-dune-aide-du-fse-en-2025-comment-faire/",
+      "extrait": "Au regard des dossiers déjà validés et en cours d’instruction par nos services, les dépôts sont clos à compter du 1er juillet 2026 au matin.",
+      "verifie_le": "2026-10-07"
     },
     {
       "type": "changement_paiement",

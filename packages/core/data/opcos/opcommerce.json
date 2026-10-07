@@ -20,10 +20,10 @@
   ],
   "types_formations_source": "https://www.lopcommerce.com/entreprise/former-mes-salaries/plan-de-developpement-des-competences/",
   "click_and_form": {
-    "description": "Plateforme de plus de 1 000 formations sélectionnées et à tarifs négociés par L'Opcommerce, accessible à toutes les entreprises. Pour les moins de 50 salariés, les modalités de prise en charge sont fixées par chaque branche : 100 % des coûts pédagogiques dans la limite d'un quota d'inscriptions (ex. entreprises sans convention collective : 2 par an ; commerce de détail alimentaire non spécialisé : 5 ; commerce de détail alimentaire spécialisé : 3), ou financement sur le budget Compétences+ (ex. commerces de détail non alimentaires, optique, prédominance alimentaire).",
+    "description": "Plateforme proposant un catalogue de formations sélectionnées (435 à la réouverture pour la saison 2026) et à tarifs négociés par L'Opcommerce, accessible à toutes les entreprises. Pour les moins de 50 salariés, les modalités de prise en charge sont fixées par chaque branche : 100 % des coûts pédagogiques dans la limite d'un quota d'inscriptions (ex. entreprises sans convention collective : 2 par an ; commerce de détail alimentaire non spécialisé : 5 ; commerce de détail alimentaire spécialisé : 3), ou financement sur le budget Compétences+ (ex. commerces de détail non alimentaires, optique, prédominance alimentaire).",
     "limite": "Quota d'inscriptions annuel fixé par branche (1 à 5 par an selon les grilles publiées en octobre 2026)",
-    "source_url": "https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf",
-    "note": "« Click&Form est une plateforme Internet proposant plus de 1 000 formations sélectionnées par l’Opcommerce. Les modalités de prise en charge sont précisées par chaque branche professionnelle. » (vérifié le 2026-10-05)"
+    "source_url": "https://www.lopcommerce.com/entreprise/former-mes-salaries/plan-de-developpement-des-competences/",
+    "note": "« Click&Form est une plateforme Internet proposant plus de 1 000 formations sélectionnées par l’Opcommerce. Les modalités de prise en charge sont précisées par chaque branche professionnelle. » (vérifié le 2026-10-05). Pour la saison 2026, l'actualité de réouverture annonce « 435 formations sélectionnées pour vous » (https://www.lopcommerce.com/lopcommerce/actualites/reouverture-de-clickform-plus-de-400-formations-accessibles-en-un-clic/, vérifié le 2026-10-07) : le site retient ce chiffre. Quotas par branche : critères de prise en charge (https://www.lopcommerce.com/media/bqymkcgh/cpc_spp_commerce.pdf)."
   },
   "cout_horaire_inter": {
     "value": null,
@@ -144,7 +144,7 @@
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": null,
-      "description": "Catalogue de plus de 1 000 formations à tarifs négociés. Moins de 50 salariés : selon la branche, prise en charge à 100 % des coûts pédagogiques dans la limite d'un quota annuel d'inscriptions (ex. entreprises sans convention collective : 2 par an ; commerce de détail alimentaire non spécialisé : 5 ; commerce de détail alimentaire spécialisé : 3) ou financement sur le budget Compétences+ (ex. commerces de détail non alimentaires, optique, prédominance alimentaire).",
+      "description": "Catalogue de formations sélectionnées à tarifs négociés (435 à la réouverture pour la saison 2026). Moins de 50 salariés : selon la branche, prise en charge à 100 % des coûts pédagogiques dans la limite d'un quota annuel d'inscriptions (ex. entreprises sans convention collective : 2 par an ; commerce de détail alimentaire non spécialisé : 5 ; commerce de détail alimentaire spécialisé : 3) ou financement sur le budget Compétences+ (ex. commerces de détail non alimentaires, optique, prédominance alimentaire).",
       "conditions": [
         "Formation choisie dans le catalogue Click&Form",
         "Quota d'inscriptions par an fixé par la branche (1 à 5 selon les grilles publiées en octobre 2026)",
