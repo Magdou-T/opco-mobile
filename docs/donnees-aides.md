@@ -38,31 +38,66 @@ Le format exact est défini par `packages/core/src/aides/types.ts` et validé pa
 |---|---|---|
 | OK | Réponse 2xx ou 3xx. | Rien. Si le site redirige vers une autre adresse de façon durable, mettre l'adresse à jour. |
 | Cassé | 404, 410, autre erreur 4xx ou 5xx, nom d'hôte inconnu, certificat refusé, délai de connexion dépassé. | Ouvrir l'adresse dans un navigateur, éventuellement depuis un autre réseau : un délai dépassé peut venir du réseau qui lance le contrôle. Si la page a disparu, trouver la nouvelle adresse officielle, vérifier que l'extrait cité y figure toujours mot pour mot, corriger le fichier JSON, relancer. Sans page de remplacement, le montant n'a plus de source : passer l'aide en `a_confirmer` (règle 2). |
-| À vérifier | 401, 403, 429, 503, connexion coupée par le serveur ou réponse hors protocole HTTP. Ce sont en général des protections anti-robots : Légifrance, par exemple, répond 403 aux requêtes automatiques. | Ouvrir l'adresse dans un navigateur. Le contrôle ne les compte pas comme cassées. |
-| Ignoré | Adresses de `api.francecompetences.fr`. | Jamais contactées, redirections comprises (règle 4). Une page web ordinaire du même organisme, comme l'outil « Quel est mon OPCO », est vérifiée normalement. |
+| À vérifier | 401, 403, 429, 503, connexion coupée ou fermée par le serveur sans réponse, ou réponse hors protocole HTTP. Ce sont en général des protections anti-robots : Légifrance, par exemple, répond 403 aux requêtes automatiques. | Ouvrir l'adresse dans un navigateur. Le contrôle ne les compte pas comme cassées. |
+| Ignoré | Adresses de `api.francecompetences.fr` et de ses sous-domaines, quelle que soit l'écriture du nom (majuscules, point final, port, identifiants). | Jamais contactées, redirections comprises (règle 4). Une page web ordinaire du même organisme, comme l'outil « Quel est mon OPCO », est vérifiée normalement. |
 
-Le contrôle envoie au plus deux requêtes à la fois vers un même site et ne télécharge pas le contenu des pages (le corps de la réponse est annulé dès les en-têtes).
+Le contrôle envoie au plus deux requêtes à la fois vers un même site et ne télécharge pas le contenu des pages (le corps de la réponse est annulé dès les en-têtes). Une erreur réseau ou une réponse 5xx est retentée une fois ; une boucle de redirections ou un certificat refusé ne l'est pas, car l'échec se reproduirait à l'identique.
+
+## Mettre à jour les données du site
+
+Le site (`apps/web`) embarque les données de `packages/core/data` au moment de son build. Aucun workflow ne les met à jour, et le site ne lit jamais `datasets/`. Une correction n'est visible en ligne qu'après ces quatre étapes :
+
+1. Modifier les fichiers JSON de `packages/core/data/**` (barème d'un OPCO, table IDCC, aide, portail), en suivant les règles ci-dessus.
+2. Lancer les tests du core (`cd packages/core && npx vitest run`) et le contrôle des liens (`cd backend && npm run check-sources`).
+3. Reconstruire le site : `npm run build --workspace web` écrit l'export statique dans `apps/web/out/`.
+4. Redéposer le contenu de `apps/web/out/` sur l'hébergement (Hostinger). Le guide de déploiement du site n'est pas encore écrit : la procédure de dépôt y sera décrite.
 
 ## Mise à jour automatique
 
 Le workflow `.github/workflows/update-dataset.yml` s'exécute chaque lundi à 06:00 UTC et à la demande (onglet Actions, « Run workflow »).
 
-1. Il lance les tests et le typecheck du core et du backend, puis le contrôle des liens. Le rapport est joint au run (artefact `rapport-liens`) ; un lien cassé ne fait pas échouer le run.
-2. Le pipeline d'extraction par IA ne tourne que si le secret `ANTHROPIC_API_KEY` existe (Settings > Secrets and variables > Actions). Sans lui, le run se termine en succès avec un avertissement.
-3. Avec le secret, le pipeline met à jour `datasets/` : commit direct si rien n'est à revoir, sinon pull request de revue. Les modèles par défaut sont `claude-haiku-4-5` (extraction) et `claude-opus-5-5` (revue des écarts) ; les variables `EXTRACT_MODEL` et `VERIFY_MODEL` les remplacent.
+### Ce qu'il fait aujourd'hui
+
+1. Il lance les tests et le typecheck du core et du backend.
+2. Il lance le contrôle des liens. Le rapport est ajouté au résumé du run et joint au run (artefact `rapports`). Si le contrôle échoue (lien cassé, ou contrôle interrompu), un avertissement apparaît dans le run, qui reste vert.
+
+Il ne modifie aucune donnée : une anomalie se corrige à la main, comme décrit dans « Contrôler les liens ».
 
 GitHub désactive un workflow planifié après 60 jours sans activité dans un dépôt public : le réactiver depuis l'onglet Actions si besoin.
+
+### Le pipeline IA : désactivé par défaut
+
+Le pipeline (`npm run live --workspace @opco/backend`) lit les pages des 11 OPCO, fait extraire les montants par Claude, les compare à `datasets/latest.json`, puis réécrit `datasets/` : commit direct si rien n'est à revoir, sinon pull request de revue. Les modèles par défaut sont `claude-haiku-4-5` (extraction) et `claude-opus-5-5` (avis sur les écarts) ; les variables `EXTRACT_MODEL` et `VERIFY_MODEL` les remplacent. Le rapport du pipeline, `report.json`, est joint au run dans l'artefact `rapports`.
+
+Il met à jour le dataset des applications mobiles, pas le site : le site embarque `packages/core/data` à son build et ne lit jamais `datasets/`.
+
+Ses étapes ne tournent que si le secret `ANTHROPIC_API_KEY` ET la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent (Settings > Secrets and variables > Actions, onglets Secrets et Variables). Quand l'une des deux manque, le run affiche une note qui dit laquelle. Ajouter le secret seul ne déclenche donc aucune étape payante.
+
+Il reste désactivé pour deux raisons :
+
+- Sa base de départ, `datasets/latest.json` (version 3, juin 2026), est rejetée par la validation actuelle : les plafonds de Constructys y ont des tailles en double (`less_11` et `11_49`). Activé, il paierait chaque lundi l'extraction et l'avis du modèle, puis échouerait à la validation sans rien publier. Le dry-run ne le montre pas : il part des données embarquées.
+- Il ne republie que les barèmes (`{version, generatedAt, opcos}`). Une version qu'il publierait n'aurait ni aides, ni table IDCC, ni suggestions NAF, ni portails.
+
+Pour l'activer, dans cet ordre :
+
+1. Réaliser la tâche « dataset v4 » du plan `docs/superpowers/plans/2026-10-05-aides-financements.md` (tâche 19) : réécrire le script de publication, étendre `backend/src/publish.ts` et `backend/src/run.ts` aux nouvelles sections, puis générer et publier la version 4 (voir « Publier vers les applications installées »).
+2. Créer la variable de dépôt `PIPELINE_LIVE` (valeur `true`) et le secret `ANTHROPIC_API_KEY`.
+3. Lancer le workflow à la main une première fois et lire son résultat avant de le laisser tourner chaque lundi.
 
 ## Revue complète (au moins une fois par an, idéalement en janvier et en septembre)
 
 1. Relancer les recherches selon le protocole `docs/recherche-aides/2026-10/PROTOCOLE.md` (un agent par groupe de régions, un par thème national), puis la double vérification (`CONSIGNE-VERIFICATION.md`). Les fichiers `<recherche>.verifie.json` et les rapports `verification-*.md` de la campagne d'octobre 2026 sont archivés dans `docs/recherche-aides/2026-10/` comme modèle ; une nouvelle campagne va dans `docs/recherche-aides/<AAAA-MM>/`.
-2. `node scripts/integrer-recherches.mjs docs/recherche-aides/<AAAA-MM>` (le script refuse toute recherche sans version vérifiée), puis lire `rapport-integration.md`. **Revoir la table `CORRECTIONS` du script** : elle consigne les corrections décidées après la campagne d'octobre 2026 (catégories des aides à la personne, majoration RQTH du RFFT, forfaits). Chaque correction vérifie l'état attendu de l'aide et arrête l'intégration si la nouvelle recherche a changé les données : supprimer ou adapter la correction, ne jamais la forcer.
+2. Depuis la racine du dépôt : `node scripts/integrer-recherches.mjs docs/recherche-aides/<AAAA-MM>` (le script refuse toute recherche sans version vérifiée), puis lire `rapport-integration.md`. **Revoir la table `CORRECTIONS` du script** : elle consigne les corrections décidées après la campagne d'octobre 2026 (catégories des aides à la personne, majoration RQTH du RFFT, forfaits, et cumul des fonds d'assurance formation des non-salariés avec le CPF : AGEFICE, FAFCEA et FIF PL au choix avec le CPF, FAF PM limité aux formations non certifiantes). Chaque correction vérifie l'état attendu de l'aide et arrête l'intégration si la nouvelle recherche a changé les données : supprimer ou adapter la correction, ne jamais la forcer.
 3. Tests (core, backend) et contrôle des liens.
 
 ## Publier vers les applications installées
 
-1. `DATASET_CHANGELOG="…" node scripts/build-example-dataset.mjs` (incrémente la version).
+Facultatif : le site n'en dépend pas. Publier met à jour les applications mobiles déjà installées, donc seulement sur décision explicite.
+
+Le script `scripts/build-example-dataset.mjs` n'écrit aujourd'hui que `{version, generatedAt, opcos}`, soit les 11 barèmes des OPCO. Utilisé tel quel, il ne produit ni aides, ni table IDCC, ni suggestions NAF, ni portails : ce n'est pas la version 4 décrite dans la spécification. La tâche « dataset v4 » (plan `docs/superpowers/plans/2026-10-05-aides-financements.md`, tâche 19) doit d'abord le réécrire. Ensuite, depuis la racine du dépôt :
+
+1. Générer le dataset (la version s'incrémente ; `DATASET_CHANGELOG` est le texte du journal des changements) :
+   - bash : `DATASET_CHANGELOG="…" node scripts/build-example-dataset.mjs`
+   - PowerShell : `$env:DATASET_CHANGELOG = "…"; node scripts/build-example-dataset.mjs`, puis `Remove-Item Env:DATASET_CHANGELOG` (la variable reste définie dans la session).
 2. Mettre `EMBEDDED_DATASET_VERSION` et `EMBEDDED_DATASET_DATE` (`apps/mobile/src/lib/dataset-sync.ts`) à la même version et date.
 3. Commit puis push sur `main` : les apps téléchargent `datasets/latest.json` (empreinte SHA-256 vérifiée) au prochain « Vérifier les mises à jour ».
-
-Le site (`apps/web`) embarque les données au moment de son build : après une mise à jour des fichiers JSON, un nouveau build suffit.

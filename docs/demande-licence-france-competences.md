@@ -3,7 +3,7 @@
 **Avant l'envoi (cette section n'est pas à copier dans le message) :**
 
 - Remplacer `[Nom, fonction]` par le nom et la fonction du signataire.
-- L'adresse du destinataire est celle que France compétences indique pour toute demande de licence de réutilisation de ses tables de correspondance. La confirmer sur francecompetences.fr (page « Contactez-nous ») avant d'écrire.
+- L'adresse du destinataire (`affaires-juridiques@francecompetences.fr`) est reprise du brouillon d'origine et n'est confirmée par aucune page officielle. La confirmer avant l'envoi, sur francecompetences.fr (page « Contactez-nous »), et corriger la ligne « À » si elle diffère.
 - France compétences publie la table SIRET-OPCO sur data.gouv.fr sous Licence Ouverte 2.0 (dernière mise à jour le 24/09/2026). Le paragraphe qui commence par « Nous avons relevé » demande si l'usage prévu entre dans cette licence. Le supprimer pour ne demander que la licence gratuite de l'article R. 6123-35.
 - Tant que la licence n'est pas accordée, le service n'appelle ni l'API ni les tables de France compétences : le niveau de certitude « confirmé » reste inutilisé et l'utilisateur est renvoyé vers l'outil officiel « Quel est mon OPCO ».
 

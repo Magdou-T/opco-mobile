@@ -1,6 +1,6 @@
-# Financement OPCO — V2 mobile (APK autonome, auto-mise à jour & auto-correction)
+# Financement OPCO : V2 mobile (APK autonome, auto-mise à jour & auto-correction)
 
-Application mobile Android qui estime ce qu'un OPCO peut financer pour une formation. Reprend le moteur de la V1 web (`../opco-funding`), fonctionne **hors-ligne**, et dont les **montants se mettent à jour régulièrement** et **s'autocorrigent** via un pipeline IA.
+Application mobile Android qui estime ce qu'un OPCO peut financer pour une formation. Reprend le moteur de la V1 web (`../opco-funding`), fonctionne **hors-ligne**, et dont les **montants peuvent se mettre à jour** et **s'autocorriger** via un pipeline IA (désactivé par défaut aujourd'hui : voir « Contrôle des liens et maintenance »).
 
 > Spécification d'origine : voir `../SPEC-APP-MOBILE-OPCO.md`.
 
@@ -8,22 +8,24 @@ Application mobile Android qui estime ce qu'un OPCO peut financer pour une forma
 
 ```
 opco-mobile/
-├── packages/core/      @opco/core — logique métier PARTAGÉE (0 dépendance UI)
-│   ├── src/            types · calculator (pur) · opco-resolver · schema (Zod) · data
-│   ├── data/opcos/     les 11 OPCO sourcés (+ idcc-opco-map.json)
-│   └── tests/          1248 tests (moteur, schéma, données, aides, scénarios)
-├── apps/mobile/        Expo / React Native — l'app, l'APK
+├── packages/core/      @opco/core : logique métier PARTAGÉE (0 dépendance UI)
+│   ├── src/            types · calculator (pur) · opco-resolver · schema (Zod) · aides (moteur) · data
+│   ├── data/           opcos/ (les 11 OPCO sourcés) · idcc/ (idcc-opco.json, naf-suggestions.json) · aides/ (catalogue, portails)
+│   └── tests/          tests du core (moteur, schéma, données, aides, scénarios)
+├── apps/mobile/        Expo / React Native : l'app, l'APK
 │   ├── src/app/        écrans (expo-router) : accueil + wizard
 │   ├── src/components/  wizard 5 étapes · FundingBreakdown · badges
 │   ├── src/lib/        dataset-sync · siren-client
 │   └── eas.json        profil "preview" → APK
-├── backend/            @opco/backend — pipeline auto-correctif (cron)
-│   ├── src/            scrape → extract(IA) → verify → correct → validate → publish
+├── apps/web/           site financementOPCO (Next.js, export statique) : données de packages/core/data embarquées au build
+├── backend/            @opco/backend : pipeline auto-correctif (IA, désactivé par défaut) et contrôle des liens
+│   ├── src/            scrape → extract(IA) → verify → correct → validate → publish · check-sources
 │   ├── sources/        opco-sources.json (URLs officielles par champ)
-│   └── tests/          52 tests (pipeline, contrôle des liens)
-├── datasets/           dataset publié & versionné (manifest + latest + vN)
-├── scripts/            build-example-dataset.mjs (seed)
-└── .github/workflows/  update-dataset.yml (cron hebdo)
+│   └── tests/          tests du pipeline et du contrôle des liens
+├── datasets/           dataset publié & versionné pour l'app mobile (manifest + latest + vN)
+├── docs/               guide de maintenance des données, brouillon de demande de licence, spécification et plan
+├── scripts/            build-example-dataset.mjs (seed), integrer-recherches.mjs (catalogue d'aides)
+└── .github/workflows/  update-dataset.yml (tests et contrôle des liens chaque lundi)
 ```
 
 Le **`packages/core` est la source de vérité** : l'app et le backend l'importent tous les deux → le schéma et le calcul ne peuvent pas diverger.
@@ -32,8 +34,8 @@ Le **`packages/core` est la source de vérité** : l'app et le backend l'importe
 
 ```bash
 npm install                         # à la racine (workspaces)
-npm test                            # tests du core (1248)
-npm run test --workspace @opco/backend   # tests backend (52)
+npm test                            # tests du core
+npm run test --workspace @opco/backend   # tests du backend
 ```
 
 ### Lancer l'app en dev
@@ -51,18 +53,22 @@ npx eas-cli build -p android --profile preview   # APK installable
 
 ### Régénérer / corriger le dataset
 ```bash
-# Seed local (sans réseau, sans IA) :
+# Seed local (sans réseau, sans IA) : écrit les 11 barèmes seulement ({version, generatedAt, opcos}),
+# sans aides, table IDCC, suggestions NAF ni portails (voir « Dataset v4 » plus bas) :
 node scripts/build-example-dataset.mjs
 
 # Pipeline auto-correctif :
 cd backend
 npm run dry-run     # cycle complet SANS réseau ni clé → publie dans datasets/_drafts/
-npm run live        # vrai scrape + IA (requiert ANTHROPIC_API_KEY) → publie dans datasets/
+npm run live        # vrai scrape + IA (requiert ANTHROPIC_API_KEY) → publie dans datasets/ ;
+                    # échoue aujourd'hui à la validation de sa base de départ (voir « Contrôle des liens et maintenance »)
 ```
 
 ## Comment ça se met à jour & s'autocorrige
 
-1. **Cron** (`.github/workflows/update-dataset.yml`, hebdo) exécute le pipeline `--live`.
+Ce mécanisme est le pipeline IA du backend. Il est **désactivé par défaut** dans le workflow hebdomadaire et met à jour le dataset de l'app mobile (`datasets/`), pas le site : voir « Contrôle des liens et maintenance » plus bas.
+
+1. **Cron** (`.github/workflows/update-dataset.yml`, hebdo) exécute le pipeline `--live` seulement si le secret `ANTHROPIC_API_KEY` et la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent.
 2. **scrape** récupère les pages officielles OPCO → **extract** (Claude) en extrait les montants au format `OpcoData` strict (jamais de montant inventé ; citation de la source obligatoire).
 3. **verify** diffe vs le dataset courant → **correct** applique les règles :
    - confirmé par la source → `value` mise à jour, `confidence='exact'`, note datée ;
@@ -121,31 +127,38 @@ Le niveau `confirme` est réservé aux données officielles de France compétenc
 
 ### Dataset v4
 
-`DatasetSchema` (`packages/core/src/schema.ts`) ajoute aux barèmes des OPCO les sections facultatives `aides`, `idcc`, `naf` et `portails` ; une application qui ne les connaît pas les ignore. Le dataset publié dans `datasets/` est pour l'instant en version 3 (barèmes des OPCO seuls). La version 4 est générée au moment de la publication (section « Publier vers les applications installées » de `docs/donnees-aides.md`) : elle met à jour les applications déjà installées, donc seulement sur décision explicite. Le site (`apps/web`) embarque les données au build.
+`DatasetSchema` (`packages/core/src/schema.ts`) ajoute aux barèmes des OPCO les sections facultatives `aides`, `idcc`, `naf` et `portails` ; une application qui ne les connaît pas les ignore. Le dataset publié dans `datasets/` est pour l'instant en version 3 (barèmes des OPCO seuls) et n'est pas régénéré.
+
+Le script `scripts/build-example-dataset.mjs` et le pipeline (`backend/src/publish.ts`) n'écrivent aujourd'hui que `{version, generatedAt, opcos}` : la procédure « Publier vers les applications installées » de `docs/donnees-aides.md` ne produit donc ni aides, ni table IDCC, ni suggestions NAF, ni portails. Les étendre est la tâche « dataset v4 » du plan (`docs/superpowers/plans/2026-10-05-aides-financements.md`, tâche 19). Elle est facultative : elle met à jour les applications déjà installées, donc seulement sur décision explicite.
+
+Le site (`apps/web`) n'est pas concerné : il embarque `packages/core/data` à son build et ne lit jamais `datasets/`.
 
 ### Contrôle des liens et maintenance
 
-- `cd backend && npm run check-sources` vérifie toutes les adresses web des données (barèmes, aides, portails, table IDCC) et écrit `backend/out/liens.md` et `backend/out/liens.json`. Les liens cassés font échouer la commande, les refus anti-robots sont listés « à vérifier », et `api.francecompetences.fr` n'est jamais contacté.
-- Le workflow hebdomadaire `.github/workflows/update-dataset.yml` lance les tests, le contrôle des liens (rapport joint au run) puis, si le secret `ANTHROPIC_API_KEY` existe, le pipeline d'extraction par IA. Sans le secret, il avertit sans échouer.
-- Le guide `docs/donnees-aides.md` décrit le format des données, les règles de sourçage, la mise à jour d'une aide, la revue complète et la publication.
+- `cd backend && npm run check-sources` vérifie toutes les adresses web des données (barèmes, aides, portails, table IDCC) et écrit `backend/out/liens.md` et `backend/out/liens.json`. Les liens cassés font échouer la commande, les refus anti-robots sont listés « à vérifier », et `api.francecompetences.fr` (sous-domaines compris) n'est jamais contacté.
+- Le workflow hebdomadaire `.github/workflows/update-dataset.yml` lance aujourd'hui les tests puis le contrôle des liens : le rapport est ajouté au résumé du run et joint au run (artefact `rapports`), et un avertissement signale un échec du contrôle sans faire échouer le run. Il ne modifie aucune donnée.
+- Le pipeline d'extraction par IA y est **désactivé par défaut**. Il met à jour le dataset de l'app mobile (`datasets/`), pas le site, et il part de `datasets/latest.json` (version 3), que la validation actuelle rejette (tailles en double dans les plafonds de Constructys) : activé, il paierait l'extraction chaque lundi puis échouerait sans rien publier. Ses étapes ne tournent que si le secret `ANTHROPIC_API_KEY` ET la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent. À n'activer qu'après la publication du dataset v4 (voir `docs/donnees-aides.md`, section « Mise à jour automatique »).
+- Les données du site se mettent à jour à la main : modifier `packages/core/data/**`, lancer les tests du core et le contrôle des liens, reconstruire le site (`apps/web`) puis le redéposer sur l'hébergement. Étapes détaillées dans `docs/donnees-aides.md`, section « Mettre à jour les données du site ».
+- Le guide `docs/donnees-aides.md` décrit le format des données, les règles de sourçage, la mise à jour d'une aide, les données du site, le workflow, la revue complète et la publication.
 
 ## Vérifications (état actuel)
 
-Résultats du 07/10/2026 :
+Mesuré au commit `fe70445` le 07/10/2026, depuis une copie propre de ce commit (`git archive`), à réactualiser. Les totaux de tests et d'adresses ne figurent que dans ce tableau.
 
 | Package | Typecheck | Tests |
 |---|---|---|
-| `@opco/core` | OK (`tsc --noEmit`) | OK : 1248 tests dans 18 fichiers (`npx vitest run`) |
+| `@opco/core` | OK (`tsc --noEmit`) | OK : 1251 tests dans 18 fichiers (`npx vitest run`) |
 | `apps/mobile` | OK (`tsc --noEmit`) | aucun test |
-| `@opco/backend` | OK (`tsc --noEmit`) | OK : 52 tests dans 2 fichiers (`npx vitest run`), dry-run du pipeline OK |
+| `@opco/backend` | OK (`tsc --noEmit`) | OK : 97 tests dans 3 fichiers (`npx vitest run`), dry-run du pipeline OK |
+| Contrôle des liens | sans objet | 675 adresses sur 127 sites, comptées hors ligne par `collecterUrls` sur les données embarquées |
 
-Contrôle des liens (`npm run check-sources`) : 675 adresses sur 127 sites. 533 répondent, 133 sont à vérifier à la main (protections anti-robots, dont 111 pages de Légifrance) et 9 sont injoignables depuis le poste qui a lancé le contrôle : 8 pages de `opcomobilites.fr`, qui répondent 200 depuis d'autres réseaux, et `meformerenregion.fr`, qui ne répond depuis aucun des réseaux testés. Aucune adresse ne renvoie 404.
+Résultat du contrôle réseau (`npm run check-sources`) du 07/10/2026, lancé depuis un poste de développement : 533 adresses répondent, 133 sont à vérifier à la main (protections anti-robots, dont 111 pages de Légifrance) et 9 sont injoignables depuis ce poste : 8 pages de `opcomobilites.fr`, qui répondent 200 depuis d'autres réseaux, et `meformerenregion.fr`, qui ne répond depuis aucun des réseaux testés. Aucune adresse ne renvoie 404. Ces chiffres varient d'un lancement et d'un réseau à l'autre.
 
 ## À configurer côté utilisateur (hors code)
 
-1. **`ANTHROPIC_API_KEY`** comme **secret GitHub Actions** (jamais dans l'app) pour le mode `--live` du pipeline hebdo.
+1. **Pipeline IA hebdomadaire** : désactivé par défaut, à n'activer qu'après la publication du dataset v4 (voir « Contrôle des liens et maintenance »). Il demande à la fois le **secret GitHub Actions** `ANTHROPIC_API_KEY` (jamais dans l'app) et la variable de dépôt `PIPELINE_LIVE` valant `true` (Settings > Secrets and variables > Actions) : le secret seul ne lance rien.
 2. **OCAPIAT** : sa source de financement est un **PDF** (non géré par le scraper minimal) → ses champs passeront en `not_found` → rétrogradation de confiance (jamais d'invention). Ajouter un parseur PDF si besoin d'extraction automatique pour cet OPCO.
-3. **Limite connue du pipeline** : la vérification hebdomadaire couvre les barèmes principaux des 11 OPCO, pas encore les `variantes_branche` (pages de branche) ni les `dispositifs_complementaires` — à étendre (voir issues).
+3. **Limite connue du pipeline** : la vérification hebdomadaire couvre les barèmes principaux des 11 OPCO, pas encore les `variantes_branche` (pages de branche) ni les `dispositifs_complementaires` : à étendre (voir issues).
 
 ## Principes non négociables
 

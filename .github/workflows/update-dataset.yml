@@ -1,15 +1,30 @@
 # ============================================================
-# Mise à jour planifiée du dataset OPCO (pipeline auto-correctif).
+# Contrôle hebdomadaire des données OPCO.
 #
-# Sécurité de la clé API : ANTHROPIC_API_KEY est un SECRET CI (Settings > Secrets and
-# variables > Actions). Elle n'est JAMAIS embarquée dans l'app ni commitée.
+# Ce que le workflow fait aujourd'hui, chaque lundi à 06:00 UTC et à la demande (onglet Actions, « Run workflow ») :
+#   1. tests et typecheck du core et du backend ;
+#   2. contrôle des liens sources : le rapport est ajouté au résumé du run et déposé en artefact (« rapports ») ; un lien
+#      cassé, ou un contrôle interrompu, produit un avertissement sans faire échouer le run.
+# Il ne modifie aucune donnée.
 #
-# Comportement :
-#   - hebdomadaire (cron) et déclenchement manuel ;
-#   - tests et typecheck du core et du backend, puis contrôle des liens sources
-#     (rapport déposé en artefact du run, sans faire échouer le workflow) ;
-#   - si le secret existe : pipeline --live (scrape + IA), puis commit direct ou PR de revue ;
-#   - si le secret manque : avertissement explicite, sans échec.
+# Pipeline IA (étapes « Rebuild sources » à « Create PR ») : désactivé par défaut.
+#   - Ce qu'il fait : lire les pages des 11 OPCO, faire extraire les montants par Claude, puis réécrire datasets/ (commit
+#     direct, ou pull request quand des écarts sont à revoir). Il met à jour le dataset des applications mobiles, pas le
+#     site : le site embarque packages/core/data à son build et ne lit jamais datasets/.
+#   - Quand il tourne : seulement si le secret ANTHROPIC_API_KEY ET la variable de dépôt PIPELINE_LIVE (valeur true)
+#     existent. Le secret seul ne suffit pas : l'ajouter ne déclenche pas une exécution payante.
+#   - Pourquoi il reste désactivé : il part de datasets/latest.json (version 3, juin 2026), que la validation actuelle
+#     rejette (tailles en double dans les plafonds de Constructys). Activé tel quel, il paierait l'extraction et l'avis du
+#     modèle, puis échouerait chaque lundi sans rien publier. Il ne republie d'ailleurs que les barèmes des OPCO, sans les
+#     aides, la table IDCC, les suggestions NAF ni les portails.
+#   - Avant de l'activer : publier le dataset v4 (tâche 19 du plan docs/superpowers/plans/2026-10-05-aides-financements.md :
+#     script de publication et pipeline étendus aux nouvelles sections), puis créer la variable et le secret.
+#
+# Données du site : elles se mettent à jour à la main (modifier packages/core/data/**, lancer les tests, reconstruire puis
+# redéposer le site). Voir docs/donnees-aides.md.
+#
+# Sécurité de la clé API : ANTHROPIC_API_KEY est un SECRET CI (Settings > Secrets and variables > Actions). Elle n'est
+# JAMAIS embarquée dans l'app ni commitée.
 # ============================================================
 name: Update OPCO dataset
 
@@ -29,6 +44,8 @@ jobs:
     env:
       # Un secret ne peut pas être testé directement dans un « if » d'étape : on le convertit en booléen.
       HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+      # Interrupteur du pipeline IA : variable de dépôt (Settings > Secrets and variables > Actions > Variables).
+      PIPELINE_LIVE: ${{ vars.PIPELINE_LIVE == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -55,30 +72,38 @@ jobs:
         run: npm test --workspace @opco/backend
 
       - name: Contrôle des liens sources
+        id: liens
         run: npm run check-sources --workspace @opco/backend
         continue-on-error: true
 
-      - name: Rapport des liens
+      - name: Rapport des liens dans le résumé du run
         if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: rapport-liens
-          path: |
-            backend/out/liens.md
-            backend/out/liens.json
-          if-no-files-found: ignore
-
-      - name: Secret absent
-        if: env.HAS_ANTHROPIC_KEY != 'true'
         run: |
-          echo "::warning::Secret ANTHROPIC_API_KEY absent : la vérification IA des barèmes est ignorée (Settings > Secrets and variables > Actions)."
+          if [ -f backend/out/liens.md ]; then
+            cat backend/out/liens.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Aucun rapport de liens à afficher : le contrôle n'a pas tourné, ou s'est arrêté avant d'écrire son rapport." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Avertissement si le contrôle des liens échoue
+        if: steps.liens.outcome == 'failure'
+        run: |
+          echo "::warning::Contrôle des liens en échec : au moins un lien cassé, ou contrôle interrompu. Détail dans le résumé du run et dans l'artefact rapports."
+
+      - name: Pipeline IA désactivé
+        if: env.HAS_ANTHROPIC_KEY != 'true' || env.PIPELINE_LIVE != 'true'
+        run: |
+          manque=""
+          if [ "$HAS_ANTHROPIC_KEY" != "true" ]; then manque="le secret ANTHROPIC_API_KEY"; fi
+          if [ "$PIPELINE_LIVE" != "true" ]; then manque="${manque:+$manque et }la variable de dépôt PIPELINE_LIVE (valeur true)"; fi
+          echo "::notice::Pipeline IA désactivé : il manque ${manque}. Il met à jour le dataset mobile datasets/, pas le site, et reste désactivé tant que le dataset v4 n'est pas publié (voir docs/donnees-aides.md, section Mise à jour automatique)."
 
       - name: Rebuild sources (depuis packages/core/data/opcos)
-        if: env.HAS_ANTHROPIC_KEY == 'true'
+        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true'
         run: npm run build-sources --workspace @opco/backend
 
       - name: Run pipeline (live)
-        if: env.HAS_ANTHROPIC_KEY == 'true'
+        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true'
         env:
           # Secret CI, jamais dans le code ni dans l'app.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -89,7 +114,7 @@ jobs:
         run: npm run live --workspace @opco/backend
 
       - name: Count needsReview
-        if: env.HAS_ANTHROPIC_KEY == 'true'
+        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true'
         id: review
         run: |
           count=$(node -p "try { JSON.parse(require('fs').readFileSync('backend/out/report.json','utf8')).needsReview.length } catch (e) { 0 }")
@@ -97,7 +122,7 @@ jobs:
           echo "needsReview = $count"
 
       - name: Commit dataset (aucune revue requise)
-        if: env.HAS_ANTHROPIC_KEY == 'true' && steps.review.outputs.count == '0'
+        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true' && steps.review.outputs.count == '0'
         run: |
           git config user.name "opco-funding-bot"
           git config user.email "opco-funding-bot@users.noreply.github.com"
@@ -110,7 +135,7 @@ jobs:
           fi
 
       - name: Create PR (changements à revoir)
-        if: env.HAS_ANTHROPIC_KEY == 'true' && steps.review.outputs.count != '0'
+        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true' && steps.review.outputs.count != '0'
         uses: peter-evans/create-pull-request@v8
         with:
           branch: bot/opco-dataset-update
@@ -121,8 +146,21 @@ jobs:
             (ou des montants sans valeur de référence). Ces changements n'ont pas été
             publiés automatiquement : `latest.json` conserve les anciennes valeurs.
 
-            Détail complet : `backend/out/report.json` (champ `needsReview`) et le
-            changelog de `datasets/manifest.json`.
+            Détail complet : le fichier `report.json` (champ `needsReview`) de l'artefact
+            `rapports` du run, et le changelog de `datasets/manifest.json`. `report.json`
+            n'est pas committé : le dossier `backend/out/` est ignoré par git.
+
+            Run : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           add-paths: |
             datasets/
+
+      - name: Rapports (contrôle des liens, et pipeline IA quand il a tourné)
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rapports
+          path: |
+            backend/out/liens.md
+            backend/out/liens.json
             backend/out/report.json
+          if-no-files-found: ignore

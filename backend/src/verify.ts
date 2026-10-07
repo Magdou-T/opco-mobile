@@ -1,5 +1,5 @@
 // ============================================================
-// VERIFY — comparaison champ par champ : dataset courant vs extraction.
+// VERIFY : comparaison champ par champ, dataset courant vs extraction.
 //
 // diffOpco() est PURE et déterministe (testée unitairement).
 // reviewDiffsWithModel() est un avis consultatif optionnel (mode live,
@@ -105,7 +105,7 @@ export function summarizeDiff(diff: OpcoDiff): string {
 
 /**
  * Avis consultatif d'un modèle Opus récent sur les écarts détectés
- * (mode live uniquement — gaté derrière ANTHROPIC_API_KEY).
+ * (mode live uniquement, gaté derrière ANTHROPIC_API_KEY).
  * Ne modifie JAMAIS les données : retourne un texte pour le rapport, qui rappelle le motif d'arrêt du modèle
  * (stop_reason) et dit quand l'avis est tronqué ou vide.
  */
