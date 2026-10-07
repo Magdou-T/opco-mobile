@@ -23,7 +23,17 @@ export type IconName =
   | 'personne'
   | 'mallette'
   | 'courriel'
-  | 'chevron';
+  | 'chevron'
+  | 'loupe'
+  | 'retour'
+  | 'crayon'
+  | 'livre'
+  | 'diplome'
+  | 'recrutement'
+  | 'virage'
+  | 'train'
+  | 'lit'
+  | 'couverts';
 
 const point = (cx: number, cy: number) => <circle cx={cx} cy={cy} r="1.1" fill="currentColor" stroke="none" />;
 
@@ -125,6 +135,67 @@ const TRACES: Record<IconName, ReactNode> = {
     </>
   ),
   chevron: <path d="m9.5 6 6 6-6 6" />,
+  loupe: (
+    <>
+      <circle cx="10.75" cy="10.75" r="6.25" />
+      <path d="m15.5 15.5 4.75 4.75" />
+    </>
+  ),
+  retour: <path d="M19.5 12h-15M10.5 6l-6 6 6 6" />,
+  crayon: (
+    <>
+      <path d="M15.6 4.4a2.05 2.05 0 0 1 2.9 0l1.1 1.1a2.05 2.05 0 0 1 0 2.9L8.9 19.1l-4.4 1.1 1.1-4.4z" />
+      <path d="m13.75 6.25 4 4" />
+    </>
+  ),
+  livre: (
+    <>
+      <path d="M12 6.5c-1.6-1.3-3.9-2-6.5-2H3.75v13.5H5.5c2.6 0 4.9.7 6.5 2 1.6-1.3 3.9-2 6.5-2h1.75V4.5H18.5c-2.6 0-4.9.7-6.5 2z" />
+      <path d="M12 6.5v13.5" />
+    </>
+  ),
+  diplome: (
+    <>
+      <path d="m2.75 9.25 9.25-4.5 9.25 4.5-9.25 4.5z" />
+      <path d="M6.5 11.1v4.4c1.4 1.3 3.4 2 5.5 2s4.1-.7 5.5-2v-4.4" />
+      <path d="M21.25 9.25v5" />
+    </>
+  ),
+  recrutement: (
+    <>
+      <circle cx="9.5" cy="8" r="3.5" />
+      <path d="M3 19.5c.8-3.4 3.4-5.25 6.5-5.25 1.6 0 3 .45 4.1 1.3" />
+      <path d="M18.5 13.5v6M15.5 16.5h6" />
+    </>
+  ),
+  virage: (
+    <>
+      <path d="M5 20.5v-6.75A4.75 4.75 0 0 1 9.75 9H19" />
+      <path d="m15 5 4 4-4 4" />
+    </>
+  ),
+  train: (
+    <>
+      <rect x="6" y="3.5" width="12" height="13.5" rx="3" />
+      <path d="M6 11h12M9.75 6.75h4.5" />
+      <path d="m8.5 20.5 1.5-3.5M15.5 20.5 14 17" />
+      {point(9, 14)}
+      {point(15, 14)}
+    </>
+  ),
+  lit: (
+    <>
+      <path d="M3.5 5.5v14M20.5 19.5v-4H3.5" />
+      <path d="M10 15.5V10h7.5a3 3 0 0 1 3 3v2.5" />
+      <circle cx="6.75" cy="12.25" r="1.75" />
+    </>
+  ),
+  couverts: (
+    <>
+      <path d="M7 3.5v17M4.5 3.5v4.75a2.5 2.5 0 0 0 5 0V3.5" />
+      <path d="M17 20.5V3.5c-2.2.8-3.25 3.1-3.25 6.25v3.5H17" />
+    </>
+  ),
 };
 
 export interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'children'> {

@@ -16,6 +16,11 @@ export interface SectionTitleProps {
   /** Sur une surface nuit, turquoise ou orange : chapeau en blanc plein (une opacité le ferait passer sous 4,5:1). */
   surFondSombre?: boolean;
   id?: string;
+  /**
+   * Le titre peut recevoir le focus par programme (tabIndex -1, hors de l'ordre de tabulation) : cible du focus quand le
+   * contenu change sous l'utilisateur, par exemple à chaque étape du simulateur.
+   */
+  titreFocusable?: boolean;
   className?: string;
 }
 
@@ -36,13 +41,18 @@ export function SectionTitle({
   align = 'start',
   surFondSombre = false,
   id,
+  titreFocusable = false,
   className,
 }: SectionTitleProps) {
   const centre = align === 'center';
   return (
     <div className={cx('max-w-3xl', centre && 'mx-auto text-center', className)}>
       {surtitre && <p className="surtitre mb-4">{surtitre}</p>}
-      <Titre id={id} className={cx('font-display font-bold', TAILLES[taille])}>
+      <Titre
+        id={id}
+        tabIndex={titreFocusable ? -1 : undefined}
+        className={cx('font-display font-bold', TAILLES[taille], titreFocusable && 'scroll-mt-32 rounded-md')}
+      >
         {titre}
       </Titre>
       {chapeau && (

@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { parseResultatRechercheEntreprises } from '@opco/core';
 import type { EntrepriseInfo } from '@opco/core';
+import { requeteRecherche } from '@/lib/recherche';
 
 // API publique de l'État (CORS ouvert) : appelée directement depuis le navigateur pour rester compatible avec un
 // hébergement 100 % statique. Aucun appel à l'API de France Compétences : seul le lien vers leur outil est permis.
@@ -56,7 +57,9 @@ export function useSirenLookup(): UseSirenLookupResult {
     }
     setHasSearched(false);
 
-    if (!query || query.trim().length < 2) {
+    // Un SIREN ou un SIRET saisi avec des séparateurs (espaces, points, tirets) ou un préfixe part en chiffres collés.
+    const requete = requeteRecherche(query);
+    if (requete.length < 2) {
       setResults([]);
       setError(null);
       setIsOffline(false);
@@ -74,7 +77,7 @@ export function useSirenLookup(): UseSirenLookupResult {
 
       try {
         const params = new URLSearchParams({
-          q: query.trim(),
+          q: requete,
           page: '1',
           per_page: '10',
         });
@@ -107,7 +110,8 @@ export function useSirenLookup(): UseSirenLookupResult {
         setError(MESSAGE_HTTP);
         setResults([]);
       } finally {
-        setLoading(false);
+        // Une requête annulée par une saisie plus récente ne coupe pas l'indicateur de la requête qui l'a remplacée.
+        if (abortRef.current === controller) setLoading(false);
       }
     }, DELAI_MS);
   }, []);

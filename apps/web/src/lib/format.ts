@@ -24,13 +24,36 @@ export function dateFr(iso: string): string {
   return m ? `${m[3]}/${m[2]}/${m[1]}` : iso;
 }
 
+const DATE_ISO = /\b(\d{4})-(\d{2})-(\d{2})\b/g;
+const datesFr = (s: string): string => s.replace(DATE_ISO, '$3/$2/$1');
+
 /**
  * Convertit les dates ISO (AAAA-MM-JJ) d'un texte d'annotation en JJ/MM/AAAA, par remplacement de chaîne (aucun fuseau
  * horaire en jeu). À appliquer à tout texte des données affiché tel quel (notes de barème, de dispositif ou de variante,
- * conditions, démarches, textes libres) ; à ne pas appliquer aux extraits cités entre « » des alertes, qui restent mot
- * pour mot.
+ * conditions, démarches, textes libres). Les extraits cités entre « » restent mot pour mot, dates comprises : seul le
+ * texte hors citation est converti (citations imbriquées comprises ; une citation non refermée court jusqu'à la fin).
  */
-export const texteFr = (s: string): string => s.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, '$3/$2/$1');
+export function texteFr(s: string): string {
+  let resultat = '';
+  let profondeur = 0;
+  let debut = 0;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '«') {
+      if (profondeur === 0) {
+        resultat += datesFr(s.slice(debut, i));
+        debut = i;
+      }
+      profondeur++;
+    } else if (s[i] === '»' && profondeur > 0) {
+      profondeur--;
+      if (profondeur === 0) {
+        resultat += s.slice(debut, i + 1);
+        debut = i + 1;
+      }
+    }
+  }
+  return resultat + (profondeur > 0 ? s.slice(debut) : datesFr(s.slice(debut)));
+}
 
 const MOIS = [
   'janvier',
@@ -69,20 +92,63 @@ const MENTION_DE_VERIFICATION = /\s*\((?:vérifié|relu)[^()]*\)\.?\s*$/;
  */
 const FIN_DE_PHRASE = /(?<!\b(?:[Ee]x|[Ee]nv|[Cc]f|[Aa]rt|[Vv]s))[.!?](?=\s+[A-ZÀ-ÖØ-Þ«(]|$)/;
 
+/** Adresse web : une phrase qui en porte une cite sa provenance. */
+const ADRESSE_WEB = /https?:\/\//;
+
+/**
+ * La phrase sans ses parenthèses de source, c'est-à-dire celles qui contiennent une adresse web (citation et lien, par
+ * exemple « (« … », https://…) ») ; les parenthèses imbriquées sont comptées, l'espace qui précède est retiré.
+ */
+function sansParenthesesDeSource(phrase: string): string {
+  let sortie = '';
+  let i = 0;
+  while (i < phrase.length) {
+    if (phrase[i] === '(') {
+      let profondeur = 0;
+      let j = i;
+      for (; j < phrase.length; j++) {
+        if (phrase[j] === '(') profondeur++;
+        else if (phrase[j] === ')' && --profondeur === 0) break;
+      }
+      if (j < phrase.length) {
+        const groupe = phrase.slice(i, j + 1);
+        if (ADRESSE_WEB.test(groupe)) sortie = sortie.replace(/\s+$/, '');
+        else sortie += groupe;
+        i = j + 1;
+        continue;
+      }
+    }
+    sortie += phrase[i];
+    i++;
+  }
+  return sortie.trim();
+}
+
 /**
  * Règle d'une annotation en une phrase, pour l'écran étroit où la colonne « Précision » est masquée. Les notes des
  * données commencent souvent par un ou plusieurs extraits cités entre « » (la source, mot pour mot) avant la règle
  * elle-même : ces extraits de tête sont sautés et la première phrase de la règle est gardée, sans la mention de fin
  * « (vérifié le … ) ». Sans règle propre (note faite de citations seules, ou suivies d'une simple parenthèse de
  * provenance « (fiche … ) »), la première citation est rendue telle quelle. Dates au format JJ/MM/AAAA.
+ *
+ * Une phrase qui porte une adresse web (http:// ou https://) est une phrase de provenance : le résumé se replie sur
+ * l'extrait cité en tête. Sans extrait de tête, la phrase est gardée sans ses parenthèses de source (une règle suivie de
+ * sa citation et de son lien) ; si l'adresse reste, le résumé est le premier extrait cité de la note.
  */
 export function premierePhrase(note: string): string {
   const texte = texteFr(note).trim();
   const sansMention = (s: string): string => s.replace(MENTION_DE_VERIFICATION, '').trim();
+  const citationDeTete = /^«[^»]*»/.exec(texte)?.[0];
   const regle = sansMention(texte.replace(CITATIONS_DE_TETE, ''));
-  if (!regle || regle.startsWith('(')) return /^«[^»]*»/.exec(texte)?.[0] ?? sansMention(texte);
+  if (!regle || regle.startsWith('(')) return citationDeTete ?? sansMention(texte);
   const fin = FIN_DE_PHRASE.exec(regle);
-  const phrase = fin ? regle.slice(0, fin.index + 1) : regle;
+  let phrase = fin ? regle.slice(0, fin.index + 1) : regle;
+  if (ADRESSE_WEB.test(phrase)) {
+    if (citationDeTete) return citationDeTete;
+    const sansSource = sansParenthesesDeSource(phrase);
+    if (!sansSource || ADRESSE_WEB.test(sansSource)) return /«[^»]*»/.exec(texte)?.[0] ?? phrase;
+    phrase = sansSource;
+  }
   // La mention de vérification emportait le point final d'une phrase unique : on le rétablit.
   return /[\p{L}\p{N}%€]$/u.test(phrase) ? `${phrase}.` : phrase;
 }

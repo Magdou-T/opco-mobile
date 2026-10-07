@@ -1,22 +1,21 @@
 import type { CertitudeOpco } from '@opco/core';
+import { Etiquette } from '@/components/ui/Etiquette';
+import type { EtiquetteTone } from '@/components/ui/Etiquette';
 
 /**
- * Libellé et couleurs de chaque niveau de certitude de l'identification de l'OPCO. Les couples texte / fond respectent
- * le contraste AA (texte vert sur fond blanc ou fond vert plein, jamais sur le vert pâle).
+ * Libellé et ton de chaque niveau de certitude de l'identification de l'OPCO, en `Etiquette` (DESIGN.md) :
+ * confirmé et fiable en turquoise foncé (5,65:1 sur turquoise doux), à confirmer en or à texte foncé (15,92:1),
+ * non identifié en neutre (7,68:1). Le texte porte le sens, la couleur ne fait que l'appuyer.
  */
-const CERTITUDES: Record<CertitudeOpco, { label: string; className: string }> = {
-  confirme: { label: 'Confirmé par la source officielle', className: 'border-valid bg-valid text-white' },
-  fiable: { label: 'Identifié via la convention collective', className: 'border-valid bg-white text-valid' },
-  a_confirmer: { label: 'À confirmer', className: 'border-marker bg-marker text-ink' },
-  inconnu: { label: 'Non identifié', className: 'border-rule bg-paper-deep text-ink-soft' },
+const CERTITUDES: Record<CertitudeOpco, { label: string; tone: EtiquetteTone }> = {
+  confirme: { label: 'Confirmé par la source officielle', tone: 'turquoise' },
+  fiable: { label: 'Identifié via la convention collective', tone: 'turquoise' },
+  a_confirmer: { label: 'À confirmer', tone: 'or' },
+  inconnu: { label: 'Non identifié', tone: 'neutre' },
 };
 
-/** Pastille du niveau de certitude de l'OPCO identifié (le texte porte le sens, la couleur ne fait que l'appuyer). */
+/** Étiquette du niveau de certitude de l'OPCO identifié. */
 export function CertitudeBadge({ certitude }: { certitude: CertitudeOpco }) {
-  const { label, className } = CERTITUDES[certitude];
-  return (
-    <span className={`inline-block rounded-full border px-3 py-1 text-xs font-semibold leading-tight ${className}`}>
-      {label}
-    </span>
-  );
+  const { label, tone } = CERTITUDES[certitude];
+  return <Etiquette tone={tone}>{label}</Etiquette>;
 }
