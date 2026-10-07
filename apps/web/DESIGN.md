@@ -269,7 +269,9 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
   `transition-[color,background-color,border-color]`.
 - Contrôles natifs : `accent-color` orange-deep sur `:root` (cases, boutons radio, curseurs : jamais le bleu du
   navigateur) ; texte d'exemple des champs en texte-discret (5,35:1) ; champ prérempli par le navigateur recouvert de
-  vert-clair-soft (le bleu clair de Chrome disparaît), texte #1A1A1A.
+  vert-clair-soft (le bleu clair de Chrome disparaît), texte #1A1A1A ; la règle est dans la couche `utilities` et plus
+  spécifique qu'un anneau `focus:ring-*` (une ombre) posé sur le champ, qui ne fait donc pas revenir le bleu ; le focus
+  reste montré par l'anneau `outline`.
 - Cibles tactiles d'au moins 44 px sous 1 024 px (boutons `md`, liens du menu 48 px, liens du pied de page 44 px).
 - Hiérarchie : un seul `h1` par page ; `SectionTitle` avec `id` et `aria-labelledby` sur la section.
 - Lien d'évitement « Aller au contenu » en tête de page (cible `#contenu`).

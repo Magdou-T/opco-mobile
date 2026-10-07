@@ -192,14 +192,20 @@
     color: var(--texte-discret);
     opacity: 1;
   }
-  /* Champ prerempli par le navigateur : Chrome le teinte en bleu clair. Une ombre interieure le recouvre du
-     vert tres doux de la charte, le texte reste #1A1A1A (15,18:1). Les champs ne portent pas d'ombre utilitaire : rien
-     ne passe devant cette regle de base. */
+}
+
+/* Champ prerempli par le navigateur : Chrome le teinte en bleu clair. Une ombre interieure le recouvre du vert tres
+   doux de la charte, le texte reste #1A1A1A (15,18:1). Dans la couche utilities, apres les utilitaires generes, et plus
+   specifique qu'eux ((0,2,1) au focus contre (0,2,0) pour focus:ring-*) : un anneau utilitaire pose au focus (une
+   ombre, formulaire de contact) ne fait plus reapparaitre le bleu ; le focus reste montre par l'anneau `outline`. */
+@layer utilities {
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   textarea:-webkit-autofill,
-  select:-webkit-autofill {
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:focus {
     -webkit-text-fill-color: var(--texte);
     caret-color: var(--texte);
     box-shadow: 0 0 0 1000px var(--vert-clair-soft) inset;
