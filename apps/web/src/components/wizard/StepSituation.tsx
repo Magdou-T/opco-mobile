@@ -25,11 +25,15 @@ import {
   NumberField,
   OuiNonChoix,
 } from '@/components/ui/forms';
+import type { QuestionAvecInconnu, Repondre } from '@/lib/parcours';
 import { EnTeteEtape } from './EnTeteEtape';
 
 interface Props {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
+  /** Questions auxquelles l'utilisateur a répondu « Je ne sais pas » (la valeur reste null). */
+  reponsesInconnues: ReadonlySet<QuestionAvecInconnu>;
+  repondre: Repondre;
 }
 
 /** Titre, introduction et libellé de l'âge selon la personne concernée par le projet. */
@@ -85,7 +89,7 @@ function RegionDeResidence({
 }
 
 /** Étape 3 : la personne concernée par le projet. Les questions et les champs obligatoires suivent le projet choisi. */
-export function StepSituation({ state, updateState }: Props) {
+export function StepSituation({ state, updateState, reponsesInconnues, repondre }: Props) {
   const projet = state.projetType ?? 'formation_salarie';
   const statut = STATUT_PAR_PROJET[projet];
   const entete = ENTETES[statut];
@@ -117,7 +121,7 @@ export function StepSituation({ state, updateState }: Props) {
               facultatif={projet !== 'reconversion_salarie'}
               value={state.anciennete_mois}
               onChange={(anciennete_mois) => updateState({ anciennete_mois })}
-              placeholder="Ex : 24"
+              placeholder="Ex&nbsp;: 24"
             />
           </>
         )}
@@ -127,7 +131,7 @@ export function StepSituation({ state, updateState }: Props) {
             <OuiNonChoix
               label="Inscrit(e) à France Travail"
               value={state.inscritFranceTravail}
-              onChange={(inscritFranceTravail) => updateState({ inscritFranceTravail })}
+              onChange={(inscritFranceTravail) => repondre('inscritFranceTravail', inscritFranceTravail)}
               required
             />
             <RegionDeResidence label="Région de résidence" state={state} updateState={updateState} />
@@ -151,7 +155,8 @@ export function StepSituation({ state, updateState }: Props) {
             <OuiNonChoix
               label="Actuellement inscrit(e) à France Travail"
               value={state.inscritFranceTravail}
-              onChange={(inscritFranceTravail) => updateState({ inscritFranceTravail })}
+              inconnu={reponsesInconnues.has('inscritFranceTravail')}
+              onChange={(inscritFranceTravail) => repondre('inscritFranceTravail', inscritFranceTravail)}
               avecInconnu
             />
             <RegionDeResidence label="Région de résidence de l'alternant" state={state} updateState={updateState} />
@@ -175,7 +180,8 @@ export function StepSituation({ state, updateState }: Props) {
             <OuiNonChoix
               label="Micro-entrepreneur"
               value={state.microEntrepreneur}
-              onChange={(microEntrepreneur) => updateState({ microEntrepreneur })}
+              inconnu={reponsesInconnues.has('microEntrepreneur')}
+              onChange={(microEntrepreneur) => repondre('microEntrepreneur', microEntrepreneur)}
               avecInconnu
             />
           </>
@@ -191,7 +197,7 @@ export function StepSituation({ state, updateState }: Props) {
           onChange={(ageBeneficiaire) => updateState({ ageBeneficiaire })}
           min={14}
           max={99}
-          placeholder="Ex : 19"
+          placeholder="Ex&nbsp;: 19"
         />
 
         <ChoiceGroup label="Diplôme le plus élevé" facultatif>
@@ -221,9 +227,10 @@ export function StepSituation({ state, updateState }: Props) {
             label="Solde CPF (€)"
             facultatif
             decimal
+            euros
             value={state.soldeCpf}
             onChange={(soldeCpf) => updateState({ soldeCpf })}
-            placeholder="Ex : 1200"
+            placeholder="Ex&nbsp;: 1200"
             helper="Consultable sur moncompteformation.gouv.fr. Sans solde, le CPF est indiqué sans montant."
           />
         )}

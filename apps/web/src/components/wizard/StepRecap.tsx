@@ -27,7 +27,8 @@ import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import type { EtapeSite } from '@/lib/etapes';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
-import { formatEuro } from '@/lib/format';
+import { INSECABLE, formatEuro } from '@/lib/format';
+import type { QuestionAvecInconnu } from '@/lib/parcours';
 import { numeroLisible } from '@/lib/recherche';
 import { EnTeteEtape } from './EnTeteEtape';
 import { ICONES_PROJET, TRANSPORT_LABELS } from './libelles';
@@ -35,14 +36,17 @@ import { ICONES_PROJET, TRANSPORT_LABELS } from './libelles';
 interface Props {
   state: WizardState;
   onEdit: (step: EtapeSite) => void;
+  /** Questions auxquelles l'utilisateur a répondu « Je ne sais pas » ou « Ne sait pas » : écrites telles quelles. */
+  reponsesInconnues: ReadonlySet<QuestionAvecInconnu>;
 }
 
 /** Ligne du récapitulatif : une valeur nulle s'affiche « Non renseigné ». */
 type Ligne = [libelle: string, valeur: ReactNode | null | undefined];
 
 const nombre = (n: number): string => new Intl.NumberFormat('fr-FR').format(n);
-const pluriel = (n: number, un: string, plusieurs: string): string => `${nombre(n)} ${n > 1 ? plusieurs : un}`;
-const ouiNon = (valeur: boolean | null): string | null => (valeur == null ? null : valeur ? 'Oui' : 'Non');
+/** Nombre et unité liés par une espace insécable (« 35 h », « 24 mois ») : l'unité ne passe jamais seule à la ligne. */
+const avecUnite = (n: number, unite: string): string => `${nombre(n)}${INSECABLE}${unite}`;
+const pluriel = (n: number, un: string, plusieurs: string): string => avecUnite(n, n > 1 ? plusieurs : un);
 
 /** Section du récapitulatif : en-tête iconifié, bouton « Modifier » qui rouvre l'étape, lignes libellé / valeur. */
 function Section({
@@ -93,10 +97,18 @@ function Section({
   );
 }
 
-/** Étape 6 : tout ce qui a été saisi, section par section, avant de lancer la recherche des financements. */
-export function StepRecap({ state, onEdit }: Props) {
+/**
+ * Étape 6 : tout ce qui a été saisi, section par section, avant de lancer la recherche des financements. Une réponse
+ * « Je ne sais pas » est écrite telle quelle ; « Non renseigné » reste réservé aux questions sans réponse.
+ */
+export function StepRecap({ state, onEdit, reponsesInconnues }: Props) {
   const projet = state.projetType ?? 'formation_salarie';
   const statut = STATUT_PAR_PROJET[projet];
+  const ouiNon = (question: QuestionAvecInconnu, valeur: boolean | null): string | null =>
+    valeur == null ? (reponsesInconnues.has(question) ? 'Je ne sais pas' : null) : valeur ? 'Oui' : 'Non';
+  /** Choix d'une liste dont l'option vide se lit « Ne sait pas ». */
+  const choix = (question: QuestionAvecInconnu, libelle: string | null): string | null =>
+    libelle ?? (reponsesInconnues.has(question) ? 'Ne sait pas' : null);
 
   // OPCO et barème de branche appliqué par le moteur : choix manuel, sinon variante qui couvre l'IDCC détecté, sinon
   // barème général (la ligne n'existe que pour un OPCO qui a des barèmes par branche).
@@ -150,39 +162,53 @@ export function StepRecap({ state, onEdit }: Props) {
     statut === 'salarie'
       ? [
           ['Contrat', state.contractType && state.contractType !== 'alternance' ? CONTRACT_TYPE_LABELS[state.contractType] : null],
-          ['Ancienneté', state.anciennete_mois != null ? `${nombre(state.anciennete_mois)} mois` : null],
+          ['Ancienneté', state.anciennete_mois != null ? avecUnite(state.anciennete_mois, 'mois') : null],
           ...communes,
           soldeCpf,
         ]
       : statut === 'demandeur_emploi'
-        ? [['Inscription à France Travail', ouiNon(state.inscritFranceTravail)], regionResidence, ...communes]
+        ? [
+            ['Inscription à France Travail', ouiNon('inscritFranceTravail', state.inscritFranceTravail)],
+            regionResidence,
+            ...communes,
+          ]
         : statut === 'alternant'
           ? [
               ["Type de contrat d'alternance", state.typeAlternance ? TYPE_ALTERNANCE_LABELS[state.typeAlternance] : null],
-              ['Inscription à France Travail', ouiNon(state.inscritFranceTravail)],
+              ['Inscription à France Travail', ouiNon('inscritFranceTravail', state.inscritFranceTravail)],
               regionResidence,
               ...communes,
             ]
           : [
               ['Statut du dirigeant', state.statutDirigeant ? STATUT_DIRIGEANT_LABELS[state.statutDirigeant] : null],
-              ['Micro-entrepreneur', ouiNon(state.microEntrepreneur)],
+              ['Micro-entrepreneur', ouiNon('microEntrepreneur', state.microEntrepreneur)],
               ...communes,
               soldeCpf,
             ];
 
   const formation: Ligne[] = [
-    ['Formation', state.formationNom],
+    // « Intitulé » : la ligne « Formation » d'une section Formation se lisait comme une formation absente.
+    ['Intitulé', state.formationNom],
     ['Type', state.formationType ? TRAINING_TYPE_LABELS[state.formationType] : null],
-    ['Certification visée', state.certificationLevel ? CERTIFICATION_LABELS[state.certificationLevel] : null],
-    ['Niveau visé', state.niveauFormationVise ? NIVEAU_CERTIFICATION_LABELS[state.niveauFormationVise] : null],
-    ['Éligible au CPF', ouiNon(state.eligibleCpf)],
+    [
+      'Certification visée',
+      choix('certificationLevel', state.certificationLevel ? CERTIFICATION_LABELS[state.certificationLevel] : null),
+    ],
+    [
+      'Niveau visé',
+      choix(
+        'niveauFormationVise',
+        state.niveauFormationVise ? NIVEAU_CERTIFICATION_LABELS[state.niveauFormationVise] : null,
+      ),
+    ],
+    ['Éligible au CPF', ouiNon('eligibleCpf', state.eligibleCpf)],
     ['Mode', state.trainingMode ? TRAINING_MODE_LABELS[state.trainingMode] : null],
-    ['Durée', state.durationHours ? `${nombre(state.durationHours)} h` : null],
+    ['Durée', state.durationHours ? avecUnite(state.durationHours, 'h') : null],
     ['Coût total HT', state.pedagogyCostTotal ? formatEuro(state.pedagogyCostTotal) : null],
     ['Coût horaire', state.pedagogyCostPerHour ? `${formatEuro(state.pedagogyCostPerHour)}/h` : null],
     ['Début prévu', saisieDepuisMois(state.dateDebutFormation) || null],
     ['Organisme', state.organismeFormation],
-    ['Organisme certifié Qualiopi', ouiNon(state.organismeQualiopi)],
+    ['Organisme certifié Qualiopi', ouiNon('organismeQualiopi', state.organismeQualiopi)],
   ];
 
   const joursEstimes = state.durationHours ? Math.ceil(state.durationHours / 7) : 0;
@@ -191,7 +217,7 @@ export function StepRecap({ state, onEdit }: Props) {
     ...(state.needsTransport
       ? ([
           ['Transport', state.transportMode ? TRANSPORT_LABELS[state.transportMode] : 'Oui'],
-          ['Distance', state.transportDistanceKm != null ? `${nombre(state.transportDistanceKm)} km` : null],
+          ['Distance', state.transportDistanceKm != null ? avecUnite(state.transportDistanceKm, 'km') : null],
         ] as Ligne[])
       : []),
     ...(state.needsAccommodation
@@ -208,7 +234,7 @@ export function StepRecap({ state, onEdit }: Props) {
       state.trainingDays
         ? pluriel(state.trainingDays, 'jour', 'jours')
         : joursEstimes > 0
-          ? `${pluriel(joursEstimes, 'jour', 'jours')} (estimation, 7 heures par jour)`
+          ? `${pluriel(joursEstimes, 'jour', 'jours')} (estimation, 7${INSECABLE}heures par jour)`
           : null,
     ],
   ];
@@ -222,11 +248,12 @@ export function StepRecap({ state, onEdit }: Props) {
       />
 
       <div className="space-y-4">
+        {/* « Objectif » plutôt que « Projet » : la ligne répétait le titre de la section. */}
         <Section
           titre="Projet"
           icone={ICONES_PROJET[projet]}
           onEdit={() => onEdit('projet')}
-          lignes={[['Projet', state.projetType ? PROJET_LABELS[state.projetType].label : null]]}
+          lignes={[['Objectif', state.projetType ? PROJET_LABELS[state.projetType].label : null]]}
         />
         <Section titre="Entreprise" icone="batiment" onEdit={() => onEdit('identification')} lignes={entreprise} />
         <Section titre="Bénéficiaire" icone="personne" onEdit={() => onEdit('situation')} lignes={beneficiaire} />

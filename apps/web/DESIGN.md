@@ -418,24 +418,56 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   frais d'une formation à distance) : contour en tirets. Sous 640 px, numéros seuls et libellé de l'étape en cours sous
   le rail ; chaque étape garde son nom complet pour les lecteurs d'écran (« Étape 2 sur 6 : Entreprise (en cours) »).
 - **En-tête d'étape** (`EnTeteEtape`) : `SectionTitle` (surtitre « Étape n sur 6 », `h2` focalisable par programme,
-  chapeau). À chaque changement d'étape, le haut du parcours revient à l'écran et le focus passe au titre.
+  chapeau). À chaque changement d'écran, le haut de l'écran revient à la vue s'il en était sorti et le focus passe à
+  son titre : titre de l'étape ; à l'affichage des résultats, titre de l'écran de résultats (`h2` « Votre estimation
+  de financement », `ID_TITRE_RESULTATS`, aussi pour « Aucun OPCO renseigné ») ; au retour par « Modifier mes
+  informations » ou « Revenir au récapitulatif », titre « Récapitulatif » (seul `showResults` change : l'effet en
+  dépend aussi) ; après « Nouvelle simulation », titre de l'étape Projet. L'écran de résultats de W5 garde la règle.
 - **Navigation** : `Button` secondary « Retour » (flèche seule sous 640 px, nom gardé) et primary « Suivant ». Tant que
   l'étape est incomplète, « Suivant » reste atteignable au clavier mais porte `aria-disabled`, grisé (texte-discret sur
   lin), et un texte dit ce qui manque (« Pour continuer, indiquez la région et la taille de l'entreprise. »), relié par
   `aria-describedby`. Sous 1 024 px la barre colle au bas de l'écran (cibles de 44 px) ; au récapitulatif, qui se lit
   avant de calculer, elle reste en pied de carte et ses boutons s'empilent.
+- **Barre collante et focus** (WCAG 2.2, critère 2.4.11) : tant que la barre colle, sa hauteur réelle, mesurée par un
+  `ResizeObserver` (phrase d'aide qui s'allonge, zone de sécurité iOS, texte agrandi) et augmentée de 8 px pour
+  l'anneau de focus, est réservée au bas de la zone de défilement : `scroll-padding-bottom` posé sur `html` par
+  `WizardContainer`. Un contrôle qui reçoit le focus s'arrête au-dessus d'elle, jamais dessous. La réserve est retirée
+  dès que la barre ne colle plus (1 024 px et plus, récapitulatif, résultats) et au démontage. Aucune hauteur écrite en
+  dur ; tout autre élément collant en bas de l'écran réserve sa hauteur de la même façon.
 - **Choix** : `ChoiceButton` en carte (indicateur rond, coche, contour et fond orange quand il est choisi,
-  `aria-pressed`) ; `OuiNonChoix` en groupe segmenté de pilules, où « Je ne sais pas » n'apparaît choisi qu'après une
-  réponse ; `CheckboxRow` en carte. Un choix facultatif se retire d'un second clic.
+  `aria-pressed`) ; `OuiNonChoix` en groupe segmenté de pilules ; `CheckboxRow` en carte. « Je ne sais pas » (et
+  « Ne sait pas » d'une liste) est une réponse que le parcours retient à part (`useWizard`, `repondre`) : la valeur
+  reste null pour le moteur, qui la lit comme inconnue, mais le choix reste affiché quand l'étape revient ; une
+  question sans réponse n'apparaît pas répondue. Une réponse remise à vide (changement de projet) perd ce choix.
+  Le diplôme, seul choix facultatif en cartes, se retire d'un second clic ; les autres choix se remplacent par un autre
+  (le barème de branche a son option « Barème général / je ne sais pas »).
+- **Largeurs étroites** : sous 360 px, les grilles de choix courts à deux colonnes (régions, modes de transport) passent
+  à une colonne et les cartes Entreprise et OPCO posent leur pastille au-dessus du titre : aucun mot n'est coupé
+  (« Guadeloupe », « Bourgogne- » ou « SFG DEVELOPPEMENT » ne tenaient plus sur leur ligne). `break-words` ne reste
+  qu'en dernier recours, pour un mot plus long que la carte.
 - **Champs** : 48 px, rayon 12 px, contour filet-fort, orange-deep au focus, rouge en erreur. Libellé Inter 600, aide
   en texte-discret et erreur en rouge avec icône, entre le libellé et le champ ; l'erreur paraît quand on quitte le
-  champ et s'annonce poliment. Les nombres se lisent à la française (`lib/saisie.ts` : espaces de milliers, virgule).
+  champ et s'annonce poliment. Les nombres se lisent à la française (`lib/saisie.ts`) : milliers collés ou groupés par
+  trois chiffres avec des espaces (insécables et fines comprises) ; décimales, dans un champ décimal, après une virgule
+  ou un point suivi d'un ou de deux chiffres ; virgule et point ensemble, le dernier est décimal et l'autre groupe les
+  milliers par trois (« 1.500,50 ») ; « € » ou « euros » final accepté dans un montant (`euros`), refusé ailleurs. Toute
+  ambiguïté est refusée avec son explication, jamais devinée : « 1.500 » ou « 1,500 » (« Pour 1 500 €, écrivez 1500 ou
+  1 500 ; la virgule sert aux centimes. »), « 1 5 00 », un nombre trop grand, une virgule dans un champ entier.
+- **Champs masqués** : un champ que l'écran ne montre plus revient à vide, car le moteur et le profil des aides lisent
+  tout l'état : questions d'un autre statut et budget déjà consommé d'un projet qui n'ouvre pas le budget de l'OPCO
+  (`etatDepuisProjet`), besoins de frais et nombre de jours quand l'étape Frais est sautée (`etatDepuisModeFormation`).
+  Audit et test : `tests/parcours.test.ts` (« aucun champ invisible ne pèse sur le résultat »).
 - **Région** (`ChampRegion`) : la région connue s'affiche avec « Modifier », qui ouvre la liste sur la région choisie ;
   un choix referme la liste et rend le focus au nom de la région.
 - **Alertes** : `Callout` avertissement pour le plafond horaire indicatif (rien n'est bloqué) ; le rouge reste réservé
   aux saisies refusées et à l'échec de la recherche d'entreprise.
 - **Récapitulatif** : une `Card` par étape (pastille d'icône, `h3`, « Modifier ») ; une valeur absente s'écrit
-  « Non renseigné » en texte-discret, jamais un tiret.
+  « Non renseigné » en texte-discret, jamais un tiret ; une réponse « Je ne sais pas » ou « Ne sait pas » s'écrit telle
+  quelle. Libellés propres à la section : « Objectif » (section Projet), « Intitulé » (nom de la formation).
+- **Limite connue** : un dirigeant « assimilé salarié » dont l'entreprise relève d'un OPCO peut relever du plan de
+  développement des compétences de sa branche (Afdas : « dirigeants salariés » ; Uniformation : « dirigeants bénévoles
+  dans certaines branches ») ; le projet « Former le dirigeant » n'affiche pourtant ni plafond horaire ni budget OPCO,
+  et l'écran de résultats prévu par W5 ne calcule ce plan que pour les projets salariés (`avecPdc`). Hors périmètre.
 
 ## Annexe : tableau des contrastes
 

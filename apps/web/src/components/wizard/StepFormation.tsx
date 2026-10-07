@@ -17,12 +17,16 @@ import { ChoiceButton, ChoiceGroup, NumberField, OuiNonChoix, SelectField, TextF
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { de, formatEuro } from '@/lib/format';
 import { etatDepuisModeFormation, plafondHoraireIndicatif } from '@/lib/parcours';
+import type { QuestionAvecInconnu, Repondre } from '@/lib/parcours';
 import { EnTeteEtape } from './EnTeteEtape';
 
 interface Props {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
   updateFormationCosts: (total: number | null, hours: number | null) => void;
+  /** Questions auxquelles l'utilisateur a répondu « Je ne sais pas » ou « Ne sait pas » (la valeur reste null). */
+  reponsesInconnues: ReadonlySet<QuestionAvecInconnu>;
+  repondre: Repondre;
 }
 
 const parHeure = (montant: number): string => `${formatEuro(montant)}/h`;
@@ -41,7 +45,7 @@ const OPTIONS_NIVEAU = [
 ];
 
 /** Étape 4 : la formation. Type, mode, durée et coût sont obligatoires ; le reste affine la recherche des aides. */
-export function StepFormation({ state, updateState, updateFormationCosts }: Props) {
+export function StepFormation({ state, updateState, updateFormationCosts, reponsesInconnues, repondre }: Props) {
   // Saisie du mois de début gardée telle quelle : l'état ne reçoit qu'un mois valide (AAAA-MM), sinon null.
   const [saisieDebut, setSaisieDebut] = useState(() => saisieDepuisMois(state.dateDebutFormation));
   const [debutQuitte, setDebutQuitte] = useState(false);
@@ -70,7 +74,7 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
           facultatif
           value={state.formationNom ?? ''}
           onChange={(formationNom) => updateState({ formationNom: formationNom || null })}
-          placeholder="Ex : Développeur web full stack"
+          placeholder="Ex&nbsp;: Développeur web full stack"
         />
 
         <ChoiceGroup
@@ -92,17 +96,18 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
         </ChoiceGroup>
 
         <div className="grid gap-x-5 gap-y-7 sm:grid-cols-2">
+          {/* « Ne sait pas » (valeur vide) est retenu comme réponse : le récapitulatif l'écrit au lieu de « Non renseigné ». */}
           <SelectField
             label="Certification visée"
             value={state.certificationLevel ?? ''}
-            onChange={(valeur) => updateState({ certificationLevel: (valeur || null) as CertificationType | null })}
+            onChange={(valeur) => repondre('certificationLevel', (valeur || null) as CertificationType | null)}
             options={OPTIONS_CERTIFICATION}
           />
           <SelectField
             label="Niveau de la certification visée"
             value={state.niveauFormationVise == null ? '' : String(state.niveauFormationVise)}
             onChange={(valeur) =>
-              updateState({ niveauFormationVise: valeur ? (Number(valeur) as NiveauCertification) : null })
+              repondre('niveauFormationVise', valeur ? (Number(valeur) as NiveauCertification) : null)
             }
             options={OPTIONS_NIVEAU}
           />
@@ -111,7 +116,8 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
         <OuiNonChoix
           label="Formation éligible au CPF"
           value={state.eligibleCpf}
-          onChange={(eligibleCpf) => updateState({ eligibleCpf })}
+          inconnu={reponsesInconnues.has('eligibleCpf')}
+          onChange={(eligibleCpf) => repondre('eligibleCpf', eligibleCpf)}
           avecInconnu
         />
       </div>
@@ -121,9 +127,9 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
           label="Mode de formation"
           required
           aide={
-            state.trainingMode === 'distance'
-              ? "Formation entièrement à distance : l'étape des frais de déplacement est sautée."
-              : undefined
+            state.trainingMode === 'distance' ? (
+              <>Formation entièrement à distance&nbsp;: l&apos;étape des frais de déplacement est sautée.</>
+            ) : undefined
           }
         >
           <div className="grid gap-2 sm:grid-cols-3">
@@ -146,17 +152,18 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
             value={state.durationHours}
             onChange={(heures) => updateFormationCosts(state.pedagogyCostTotal, heures)}
             min={1}
-            placeholder="Ex : 140"
+            placeholder="Ex&nbsp;: 140"
             largeur="pleine"
           />
           <NumberField
             label="Coût total HT (€)"
             required
             decimal
+            euros
             value={state.pedagogyCostTotal}
             onChange={(total) => updateFormationCosts(total, state.durationHours)}
             min={1}
-            placeholder="Ex : 5600"
+            placeholder="Ex&nbsp;: 5600"
             largeur="pleine"
           />
         </div>
@@ -167,13 +174,13 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
               <p className="flex items-center gap-2.5 text-sm text-texte-doux">
                 <Icon name="calculatrice" className="size-5 shrink-0 text-turquoise-deep" />
                 <span>
-                  Coût horaire calculé :{' '}
+                  Coût horaire calculé&nbsp;:{' '}
                   <span className="amount text-lg text-texte">{parHeure(coutHoraire)}</span>
                 </span>
               </p>
               {plafond != null && plafond > 0 && opco && (
                 <p className="text-sm text-texte-doux">
-                  {`Plafond indicatif ${de(opco.name)} : `}
+                  Plafond indicatif {de(opco.name)}&nbsp;:{' '}
                   <span className="font-semibold text-texte">{parHeure(plafond)}</span>
                 </p>
               )}
@@ -185,7 +192,8 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
             )}
             {enveloppeEpuisee && opco && (
               <Callout tone="avertissement" titre="Enveloppe épuisée dans le barème appliqué">
-                {`Le barème appliqué ${de(opco.name)} affiche un plafond de 0 €/h : l'enveloppe est épuisée. Sur ce barème, le coût de la formation resterait à votre charge.`}
+                Le barème appliqué {de(opco.name)} affiche un plafond de 0&nbsp;€/h&nbsp;: l&apos;enveloppe est épuisée.
+                Sur ce barème, le coût de la formation resterait à votre charge.
               </Callout>
             )}
           </div>
@@ -201,21 +209,24 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
             updateState({ dateDebutFormation: moisDepuisSaisie(saisie) });
           }}
           onBlur={() => setDebutQuitte(true)}
-          placeholder="Ex : 03/2027"
+          placeholder="Ex&nbsp;: 03/2027"
           autoComplete="off"
           largeur="courte"
           helper={
-            debutInvalide && !debutQuitte
-              ? 'Format attendu : MM/AAAA'
-              : 'Facultatif : sert à vérifier les dates de validité des aides.'
+            debutInvalide && !debutQuitte ? (
+              <>Format attendu&nbsp;: MM/AAAA</>
+            ) : (
+              <>Facultatif&nbsp;: sert à vérifier les dates de validité des aides.</>
+            )
           }
-          erreur={debutInvalide && debutQuitte ? 'Format attendu : MM/AAAA, par exemple 03/2027.' : undefined}
+          erreur={debutInvalide && debutQuitte ? <>Format attendu&nbsp;: MM/AAAA, par exemple 03/2027.</> : undefined}
         />
 
         <OuiNonChoix
           label="Organisme de formation certifié Qualiopi"
           value={state.organismeQualiopi}
-          onChange={(organismeQualiopi) => updateState({ organismeQualiopi })}
+          inconnu={reponsesInconnues.has('organismeQualiopi')}
+          onChange={(organismeQualiopi) => repondre('organismeQualiopi', organismeQualiopi)}
           avecInconnu
         />
 
@@ -224,7 +235,7 @@ export function StepFormation({ state, updateState, updateFormationCosts }: Prop
           facultatif
           value={state.organismeFormation ?? ''}
           onChange={(organismeFormation) => updateState({ organismeFormation: organismeFormation || null })}
-          placeholder="Ex : AFPA, CNAM, organisme privé"
+          placeholder="Ex&nbsp;: AFPA, CNAM, organisme privé"
         />
       </div>
     </div>

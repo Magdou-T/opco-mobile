@@ -40,7 +40,7 @@ import {
   opcoRequis,
   ouvreBudgetOpco,
 } from '@/lib/entreprise';
-import { texteFr } from '@/lib/format';
+import { INSECABLE, texteFr } from '@/lib/format';
 import { idccAffichables, numeroLisible } from '@/lib/recherche';
 import { EnTeteEtape } from './EnTeteEtape';
 
@@ -117,6 +117,12 @@ function BoutonLien({
   );
 }
 
+/**
+ * En-tête des cartes Entreprise et OPCO : pastille et titre côte à côte, la pastille au-dessus sous 360 px (à côté
+ * d'elle, un nom comme « SFG DEVELOPPEMENT » ne tenait plus sur la ligne et se coupait au milieu du mot).
+ */
+const ENTETE_DE_CARTE = 'flex flex-col items-start gap-3 min-[360px]:flex-row min-[360px]:gap-4';
+
 /** Pastille d'icône d'une carte (DESIGN.md, section 6). */
 function Pastille({ icone }: { icone: IconName }) {
   return (
@@ -138,7 +144,7 @@ function CarteEntreprise({ state, titreRef }: { state: WizardState; titreRef: Re
   ];
   return (
     <Card padding="md">
-      <div className="flex items-start gap-4">
+      <div className={ENTETE_DE_CARTE}>
         <Pastille icone="batiment" />
         <div className="min-w-0 flex-1">
           <p className="marginalia">Entreprise identifiée</p>
@@ -199,7 +205,7 @@ function CarteOpco({
 
   return (
     <Card padding="md" className="space-y-4">
-      <div className="flex items-start gap-4">
+      <div className={ENTETE_DE_CARTE}>
         <Pastille icone="bouclier" />
         <div className="min-w-0 flex-1">
           <p className="marginalia">Votre OPCO</p>
@@ -249,7 +255,7 @@ function CarteOpco({
               <ChoiceButton
                 key={candidat.opcoSlug}
                 label={nomOpco(candidat.opcoSlug)}
-                sublabel={texteFr(candidat.idccs.map((i) => `IDCC ${i.idcc} : ${i.titre}`).join(' · '))}
+                sublabel={texteFr(candidat.idccs.map((i) => `IDCC ${i.idcc}${INSECABLE}: ${i.titre}`).join(' · '))}
                 selected={state.detectedOpcoSlug === candidat.opcoSlug}
                 onClick={() => onChoisirCandidat(candidat)}
               />
@@ -308,8 +314,8 @@ function BlocBranche({
           aide={
             <>
               {opco.name}{' '}applique des barèmes différents selon la convention collective. Choisissez la vôtre pour
-              affiner l&apos;estimation ; sans choix, le barème de la convention détectée s&apos;applique, à défaut le
-              barème général.
+              affiner l&apos;estimation&nbsp;; sans choix, le barème de la convention détectée s&apos;applique, à
+              défaut le barème général.
             </>
           }
         >
@@ -484,7 +490,7 @@ export function StepIdentification({ state, updateState }: Props) {
       />
 
       <div className="space-y-6">
-        <ChoiceGroup label="Comment renseigner votre entreprise ?">
+        <ChoiceGroup label="Comment renseigner votre entreprise&nbsp;?">
           <div className="grid gap-2 sm:grid-cols-2">
             <ChoiceButton
               label="Rechercher mon entreprise"
@@ -507,7 +513,7 @@ export function StepIdentification({ state, updateState }: Props) {
               label="Nom, SIREN ou SIRET de votre entreprise"
               value={recherche}
               onChange={saisirRecherche}
-              placeholder="Ex : Carrefour ou 652 014 051"
+              placeholder="Ex&nbsp;: Carrefour ou 652 014 051"
               autoComplete="off"
               icone="loupe"
             />
@@ -614,7 +620,7 @@ export function StepIdentification({ state, updateState }: Props) {
               <OpcoPicker options={EMBEDDED_OPCO_LIST} selectedSlug={state.selectedOpcoSlug} onSelect={choisirOpco} />
               <div className="mt-2">
                 <LienOfficiel href={URL_VERIFICATION_OPCO}>
-                  Je ne connais pas mon OPCO : outil officiel France Compétences
+                  Je ne connais pas mon OPCO&nbsp;: outil officiel France Compétences
                 </LienOfficiel>
               </div>
             </ChoiceGroup>
@@ -622,7 +628,7 @@ export function StepIdentification({ state, updateState }: Props) {
               label="Code postal de l'entreprise"
               value={codePostal}
               onChange={saisirCodePostal}
-              placeholder="Ex : 69003"
+              placeholder="Ex&nbsp;: 69003"
               inputMode="numeric"
               maxLength={5}
               autoComplete="off"
@@ -655,9 +661,11 @@ export function StepIdentification({ state, updateState }: Props) {
           valeur={state.regionCode}
           onChange={choisirRegion}
           aide={
-            mode === 'recherche' && state.sirenNumber
-              ? "Région du siège de l'entreprise : modifiez-la si l'établissement concerné est ailleurs."
-              : undefined
+            mode === 'recherche' && state.sirenNumber ? (
+              <>
+                Région du siège de l&apos;entreprise&nbsp;: modifiez-la si l&apos;établissement concerné est ailleurs.
+              </>
+            ) : undefined
           }
         />
 
@@ -670,7 +678,7 @@ export function StepIdentification({ state, updateState }: Props) {
             <p className="flex items-center gap-3 rounded-champ border border-filet bg-lin-soft px-4 py-3 text-sm text-texte">
               <Icon name="calculatrice" className="size-5 shrink-0 text-turquoise-deep" />
               <span>
-                Tranche : <span className="font-semibold">{COMPANY_SIZE_LABELS[state.companySize]}</span>{' '}
+                Tranche&nbsp;: <span className="font-semibold">{COMPANY_SIZE_LABELS[state.companySize]}</span>{' '}
                 (déduite de l&apos;effectif)
               </span>
             </p>
@@ -694,8 +702,8 @@ export function StepIdentification({ state, updateState }: Props) {
           facultatif
           value={state.effectif}
           onChange={(effectif) => updateState(etatDepuisEffectif(effectif))}
-          placeholder="Ex : 42"
-          helper="Certaines aides dépendent de seuils précis (par exemple 250 salariés). Saisi, il fixe la tranche."
+          placeholder="Ex&nbsp;: 42"
+          helper="Certaines aides dépendent de seuils précis (par exemple 250&nbsp;salariés). Saisi, il fixe la tranche."
         />
       </div>
 
@@ -708,8 +716,9 @@ export function StepIdentification({ state, updateState }: Props) {
               value={state.budgetDejaConsomme}
               onChange={(budgetDejaConsomme) => updateState({ budgetDejaConsomme })}
               decimal
-              placeholder="Ex : 1500"
-              helper="Laissez vide si aucune formation financée cette année : ce montant est déduit de votre plafond annuel."
+              euros
+              placeholder="Ex&nbsp;: 1500"
+              helper="Laissez vide si aucune formation financée cette année&nbsp;: ce montant est déduit de votre plafond annuel."
             />
           )}
           {opco && <BlocBranche opco={opco} state={state} updateState={updateState} />}

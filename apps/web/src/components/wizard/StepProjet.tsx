@@ -27,7 +27,7 @@ export function StepProjet({ state, updateState }: Props) {
       <EnTeteEtape
         etape="projet"
         titre="Votre projet"
-        chapeau="Choisissez votre situation : le site recherche toutes les aides et tous les financements qui peuvent s'y appliquer."
+        chapeau="Choisissez votre situation&nbsp;: le site recherche toutes les aides et tous les financements qui peuvent s'y appliquer."
       />
 
       <div role="group" aria-labelledby={ID_TITRE_ETAPE} className="grid gap-3 sm:grid-cols-2 sm:gap-4">

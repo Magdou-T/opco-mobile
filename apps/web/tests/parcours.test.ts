@@ -4,14 +4,24 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 import {
   EMBEDDED_OPCOS,
   STATUT_PAR_PROJET,
+  calculateFunding,
   createInitialWizardState,
   getEmbeddedOpcoBySlug,
   profilDepuisWizard,
 } from '@opco/core';
-import type { OpcoData, ProjetType, TrainingMode, TrainingType, WizardState } from '@opco/core';
+import type {
+  ContractType,
+  DispositifComplementaire,
+  OpcoData,
+  ProjetType,
+  TrainingMode,
+  TrainingType,
+  WizardState,
+} from '@opco/core';
 import {
   ETAPES,
   champsManquants,
@@ -22,12 +32,15 @@ import {
 } from '../src/lib/etapes';
 import type { EtapeSite } from '../src/lib/etapes';
 import {
+  QUESTIONS_AVEC_INCONNU,
   QUESTIONS_COMMUNES,
   QUESTIONS_PAR_STATUT,
   etatDepuisModeFormation,
   etatDepuisProjet,
   plafondHoraireIndicatif,
+  reponsesInconnuesApres,
 } from '../src/lib/parcours';
+import type { QuestionAvecInconnu } from '../src/lib/parcours';
 
 /** Champs de l'app mobile que le site ne pose plus : ils restent à leur valeur initiale. */
 const CHAMPS_NON_POSES = ['isReconversion', 'isSortieChomage'];
@@ -307,6 +320,221 @@ describe('changement de projet (etatDepuisProjet)', () => {
       const encore = { ...deja, ...etatDepuisProjet(deja, p) };
       assert.deepEqual(encore, deja, p);
     }
+  });
+});
+
+describe('audit : aucun champ invisible ne pèse sur le résultat', () => {
+  /**
+   * Champs de WizardState affichés pour certains projets seulement, relevés dans les étapes (liste écrite ici,
+   * indépendamment de lib/parcours.ts) : le budget déjà consommé (étape Entreprise, projets qui ouvrent le budget de
+   * l'OPCO) et les questions propres au statut (étape Bénéficiaire). Les étapes Formation et Frais posent les mêmes
+   * questions à tous les projets ; l'étape Frais disparaît pour une formation à distance (dernier test).
+   */
+  const VISIBLES_PAR_PROJET: Record<ProjetType, (keyof WizardState)[]> = {
+    formation_salarie: ['budgetDejaConsomme', 'contractType', 'anciennete_mois', 'soldeCpf'],
+    reconversion_salarie: ['budgetDejaConsomme', 'contractType', 'anciennete_mois', 'soldeCpf'],
+    recrutement_demandeur_emploi: ['inscritFranceTravail', 'regionBeneficiaireCode'],
+    alternance: ['typeAlternance', 'inscritFranceTravail', 'regionBeneficiaireCode'],
+    formation_dirigeant: ['statutDirigeant', 'microEntrepreneur', 'soldeCpf'],
+  };
+  const CONDITIONNELS = [...new Set(Object.values(VISIBLES_PAR_PROJET).flat())];
+  const CONTRATS_SALARIE: (ContractType | null)[] = ['cdi', 'cdd', 'interim'];
+
+  /** Réponses visibles dans tous les projets (entreprise, âge, diplôme, RQTH, formation) : le calcul a de quoi travailler. */
+  const COMMUN: Partial<WizardState> = {
+    selectedOpcoSlug: 'akto',
+    regionCode: '11',
+    companySize: 'less_11',
+    ageBeneficiaire: 19,
+    niveauDiplome: 'bac',
+    isHandicap: true,
+    formationType: 'certification',
+    trainingMode: 'presentiel',
+    durationHours: 140,
+    pedagogyCostTotal: 4200,
+    pedagogyCostPerHour: 30,
+  };
+
+  /** Chaque champ conditionnel a une valeur, quel que soit le projet de départ. */
+  const toutRempli = (projetType: ProjetType): WizardState =>
+    etat({
+      ...COMMUN,
+      projetType,
+      budgetDejaConsomme: 2000,
+      contractType: projetType === 'alternance' ? 'alternance' : 'cdi',
+      anciennete_mois: 30,
+      soldeCpf: 800,
+      inscritFranceTravail: true,
+      regionBeneficiaireCode: '84',
+      typeAlternance: 'apprentissage',
+      statutDirigeant: 'artisan',
+      microEntrepreneur: false,
+    });
+
+  /** L'état d'un utilisateur parti de zéro sur `projet` qui aurait donné les réponses visibles de `avant`. */
+  const propre = (projet: ProjetType, avant: WizardState): WizardState => {
+    const visibles = Object.fromEntries(VISIBLES_PAR_PROJET[projet].map((champ) => [champ, avant[champ]]));
+    const s: WizardState = { ...etat({ ...COMMUN, projetType: projet }), ...visibles };
+    // Contrat : un contrat de salarié pour un salarié ; « alternance » découle du type de contrat d'alternance.
+    if (STATUT_PAR_PROJET[projet] === 'salarie') {
+      s.contractType = CONTRATS_SALARIE.includes(avant.contractType) ? avant.contractType : null;
+    } else {
+      s.contractType = projet === 'alternance' && s.typeAlternance ? 'alternance' : null;
+    }
+    return s;
+  };
+
+  test("garde : l'étape Entreprise n'a qu'un champ propre à certains projets, le budget déjà consommé", () => {
+    const sourceTypes = readFileSync(fileURLToPath(new URL('../../../packages/core/src/types.ts', import.meta.url)), 'utf8');
+    const bloc = sourceTypes.slice(
+      sourceTypes.indexOf('// Étape 1 : entreprise et OPCO'),
+      sourceTypes.indexOf('// Étape 2 : bénéficiaire'),
+    );
+    const champs = [...bloc.matchAll(/^ {2}(\w+)\??:/gm)].map((m) => m[1]);
+    // Affichés ou établis pour tous les projets (l'OPCO n'est que facultatif pour le dirigeant, il reste affiché).
+    const pourTous = [
+      'opcoKnown', 'selectedOpcoSlug', 'companyName', 'sirenNumber', 'siret', 'detectedOpcoSlug', 'detectedIdcc',
+      'detectedCompanyName', 'selectedBrancheId', 'opcoCertitude', 'idccEtablissements', 'idccSiege', 'regionCode',
+      'departementCode', 'codeNaf', 'trancheEffectifInsee', 'companySize', 'effectif', 'structures',
+    ];
+    assert.deepEqual([...champs].sort(), [...pourTous, 'budgetDejaConsomme'].sort());
+  });
+
+  test("le budget déjà consommé disparaît avec un projet qui ne l'affiche pas", () => {
+    for (const de of PROJETS) {
+      for (const vers of PROJETS) {
+        const avant = etat({ projetType: de, budgetDejaConsomme: 2000 });
+        const apres = { ...avant, ...etatDepuisProjet(avant, vers) };
+        const affiche = vers === 'formation_salarie' || vers === 'reconversion_salarie';
+        assert.equal(apres.budgetDejaConsomme, affiche ? 2000 : null, `${de} -> ${vers}`);
+      }
+    }
+  });
+
+  test('chaque champ conditionnel pèse sur le calcul AKTO ou sur le profil des aides (le test suivant prouve donc quelque chose)', () => {
+    const akto = opco('akto');
+    const base = toutRempli('formation_salarie');
+    for (const champ of CONDITIONNELS) {
+      const sans = { ...base, [champ]: createInitialWizardState()[champ] };
+      const pese =
+        !isDeepStrictEqual(calculateFunding(akto, base), calculateFunding(akto, sans)) ||
+        !isDeepStrictEqual(profilDepuisWizard(base, 'akto'), profilDepuisWizard(sans, 'akto'));
+      assert.ok(pese, `${champ} ne change ni le calcul ni le profil`);
+    }
+  });
+
+  test("25 transitions de projet : calcul AKTO et profil des aides égaux à ceux d'un état propre équivalent", () => {
+    const akto = opco('akto');
+    let transitions = 0;
+    for (const de of PROJETS) {
+      for (const vers of PROJETS) {
+        const avant = toutRempli(de);
+        const apres = { ...avant, ...etatDepuisProjet(avant, vers) };
+        const attendu = propre(vers, avant);
+        const contexte = `${de} -> ${vers}`;
+        assert.deepEqual(calculateFunding(akto, apres), calculateFunding(akto, attendu), contexte);
+        assert.deepEqual(profilDepuisWizard(apres, 'akto'), profilDepuisWizard(attendu, 'akto'), contexte);
+        transitions++;
+      }
+    }
+    assert.equal(transitions, 25);
+  });
+
+  test("passage à distance : les réponses de l'étape Frais, qui disparaît, ne pèsent plus sur le calcul ni sur le profil", () => {
+    const akto = opco('akto');
+    // Dispositif compté par jour de formation (aucun dans les données d'aujourd'hui) : le nombre de jours y pèserait.
+    const parJour: DispositifComplementaire = {
+      id: 'essai-par-jour',
+      nom: 'Essai par jour',
+      cumul: 'additif',
+      montant_max: 10,
+      unite: 'par_jour',
+      pourcentage_couts: null,
+      description: '',
+      conditions: [],
+      demarches: '',
+      tailles_eligibles: null,
+      publics: null,
+      confidence: 'estimated',
+      source_url: akto.url_finance_page,
+    };
+    const aktoParJour: OpcoData = { ...akto, dispositifs_complementaires: [...(akto.dispositifs_complementaires ?? []), parJour] };
+    const salarie: Partial<WizardState> = { ...COMMUN, projetType: 'formation_salarie', contractType: 'cdi' };
+    const avant = etat({
+      ...salarie,
+      needsTransport: true,
+      transportMode: 'train',
+      transportDistanceKm: 250,
+      needsAccommodation: true,
+      accommodationNights: 4,
+      accommodationCostPerNight: 90,
+      needsMeals: true,
+      mealCostPerDay: 18,
+      trainingDays: 3,
+    });
+    const apres = { ...avant, ...etatDepuisModeFormation('distance') };
+    const attendu = etat({ ...salarie, trainingMode: 'distance' });
+    // Le nombre de jours pèse bien sur un dispositif compté par jour (sinon la comparaison ne prouverait rien).
+    assert.notDeepEqual(
+      calculateFunding(aktoParJour, avant).dispositifsComplementaires,
+      calculateFunding(aktoParJour, { ...avant, trainingDays: null }).dispositifsComplementaires,
+    );
+    for (const o of [akto, aktoParJour]) {
+      assert.deepEqual(calculateFunding(o, apres), calculateFunding(o, attendu), o.dispositifs_complementaires?.at(-1)?.id);
+    }
+    assert.deepEqual(profilDepuisWizard(apres, 'akto'), profilDepuisWizard(attendu, 'akto'));
+  });
+});
+
+describe('réponses « Je ne sais pas » retenues par le site (reponsesInconnuesApres)', () => {
+  const aucune: ReadonlySet<QuestionAvecInconnu> = new Set();
+
+  test('les questions sont celles qui proposent « Je ne sais pas » ou « Ne sait pas » dans les étapes', () => {
+    assert.deepEqual(
+      [...QUESTIONS_AVEC_INCONNU].sort(),
+      ['certificationLevel', 'eligibleCpf', 'inscritFranceTravail', 'microEntrepreneur', 'niveauFormationVise', 'organismeQualiopi'],
+    );
+  });
+
+  test('« Je ne sais pas » est retenu ; une autre réponse le remplace', () => {
+    const jeNeSaisPas = reponsesInconnuesApres(aucune, { microEntrepreneur: null }, 'microEntrepreneur');
+    assert.deepEqual([...jeNeSaisPas], ['microEntrepreneur']);
+    assert.deepEqual([...reponsesInconnuesApres(jeNeSaisPas, { microEntrepreneur: true })], []);
+    assert.deepEqual([...reponsesInconnuesApres(jeNeSaisPas, { microEntrepreneur: false })], []);
+    // « Ne sait pas » dans une liste, puis un choix de la liste.
+    const certification = reponsesInconnuesApres(aucune, { certificationLevel: null }, 'certificationLevel');
+    assert.deepEqual([...certification], ['certificationLevel']);
+    assert.deepEqual([...reponsesInconnuesApres(certification, { certificationLevel: 'rncp' })], []);
+  });
+
+  test("une mise à jour qui ne touche pas la question la garde, sans créer d'ensemble neuf", () => {
+    const avant = reponsesInconnuesApres(aucune, { eligibleCpf: null }, 'eligibleCpf');
+    const apres = reponsesInconnuesApres(avant, { durationHours: 35, organismeQualiopi: true });
+    assert.equal(apres, avant);
+    assert.equal(reponsesInconnuesApres(aucune, { regionCode: '11' }), aucune);
+  });
+
+  test('un changement de projet qui remet la question à vide efface la réponse ; un projet qui la garde la garde', () => {
+    let inconnues = reponsesInconnuesApres(aucune, { microEntrepreneur: null }, 'microEntrepreneur');
+    inconnues = reponsesInconnuesApres(inconnues, { inscritFranceTravail: null }, 'inscritFranceTravail');
+    const dirigeant = etat({ projetType: 'formation_dirigeant', statutDirigeant: 'artisan' });
+    // Dirigeant -> salarié : micro-entrepreneur disparaît avec sa réponse.
+    const versSalarie = reponsesInconnuesApres(inconnues, etatDepuisProjet(dirigeant, 'formation_salarie'));
+    assert.equal(versSalarie.has('microEntrepreneur'), false);
+    // Alternant -> demandeur d'emploi : l'inscription à France Travail est posée aux deux, sa réponse reste.
+    const alternant = etat({ projetType: 'alternance', typeAlternance: 'apprentissage', contractType: 'alternance' });
+    const versDemandeur = reponsesInconnuesApres(inconnues, etatDepuisProjet(alternant, 'recrutement_demandeur_emploi'));
+    assert.equal(versDemandeur.has('inscritFranceTravail'), true);
+    // Alternant -> salarié : l'inscription n'est plus posée, sa réponse disparaît.
+    assert.equal(reponsesInconnuesApres(inconnues, etatDepuisProjet(alternant, 'formation_salarie')).has('inscritFranceTravail'), false);
+  });
+
+  test("l'ensemble reçu n'est jamais modifié", () => {
+    const avant = reponsesInconnuesApres(aucune, { eligibleCpf: null }, 'eligibleCpf');
+    reponsesInconnuesApres(avant, { eligibleCpf: true });
+    reponsesInconnuesApres(avant, { organismeQualiopi: null }, 'organismeQualiopi');
+    assert.deepEqual([...avant], ['eligibleCpf']);
+    assert.equal(aucune.size, 0);
   });
 });
 

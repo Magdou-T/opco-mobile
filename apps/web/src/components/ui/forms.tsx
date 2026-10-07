@@ -202,12 +202,14 @@ export function ChoiceButton({
 
 /**
  * Question « Oui / Non » en groupe segmenté de pilules ; avec `avecInconnu`, un troisième choix « Je ne sais pas »
- * correspond à la valeur `null`. « Je ne sais pas » n'est montré choisi qu'après une réponse de l'utilisateur : la valeur
- * reste `null` pour le moteur (qui la lit comme inconnue), mais une question sans réponse n'apparaît pas répondue.
+ * correspond à la valeur `null`. La valeur reste `null` pour le moteur (qui la lit comme inconnue) : c'est `inconnu`,
+ * retenu par le parcours (`useWizard`, `repondre`), qui dit que l'utilisateur a choisi « Je ne sais pas ». Une question
+ * sans réponse n'apparaît donc pas répondue, et une réponse « Je ne sais pas » reste choisie quand l'étape revient.
  */
 export function OuiNonChoix({
   label,
   value,
+  inconnu = false,
   onChange,
   avecInconnu,
   required,
@@ -215,12 +217,13 @@ export function OuiNonChoix({
 }: {
   label: ReactNode;
   value: boolean | null;
+  /** L'utilisateur a répondu « Je ne sais pas » (avec `avecInconnu`). */
+  inconnu?: boolean;
   onChange: (value: boolean | null) => void;
   avecInconnu?: boolean;
   required?: boolean;
   aide?: ReactNode;
 }) {
-  const [repondu, setRepondu] = useState(value !== null);
   const options: { cle: string; libelle: string; valeur: boolean | null }[] = [
     { cle: 'oui', libelle: 'Oui', valeur: true },
     { cle: 'non', libelle: 'Non', valeur: false },
@@ -230,16 +233,13 @@ export function OuiNonChoix({
     <ChoiceGroup label={label} required={required} aide={aide}>
       <div className="inline-flex max-w-full flex-wrap gap-1 rounded-3xl border border-filet-fort bg-white p-1">
         {options.map((o) => {
-          const choisi = o.valeur === null ? repondu && value === null : value === o.valeur;
+          const choisi = o.valeur === null ? inconnu && value === null : value === o.valeur;
           return (
             <button
               key={o.cle}
               type="button"
               aria-pressed={choisi}
-              onClick={() => {
-                setRepondu(true);
-                onChange(o.valeur);
-              }}
+              onClick={() => onChange(o.valeur)}
               className={cx(
                 'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-[color,background-color] lg:min-h-10',
                 choisi ? 'bg-orange-deep text-white' : 'text-texte-doux hover:bg-lin-soft hover:text-texte',
@@ -256,9 +256,10 @@ export function OuiNonChoix({
 }
 
 /**
- * Champ numérique (champ texte lu à la française : espaces de milliers, virgule décimale). `onChange` reçoit le nombre
- * saisi, ou null quand le champ est vide ou que la saisie est refusée ; le texte tapé reste affiché et l'erreur est
- * montrée quand l'utilisateur quitte le champ. Si la valeur change ailleurs (nouvelle entreprise), le texte la suit.
+ * Champ numérique (champ texte lu à la française par `lireNombre` : espaces de milliers, virgule ou point décimal suivi
+ * de deux chiffres au plus, saisie ambiguë refusée). `euros` : montant en euros, « € » final accepté. `onChange` reçoit
+ * le nombre saisi, ou null quand le champ est vide ou que la saisie est refusée ; le texte tapé reste affiché et l'erreur
+ * est montrée quand l'utilisateur quitte le champ. Si la valeur change ailleurs (nouvelle entreprise), le texte la suit.
  */
 export function NumberField({
   label,
@@ -267,6 +268,7 @@ export function NumberField({
   required,
   facultatif,
   decimal,
+  euros,
   min = 0,
   max,
   placeholder,
@@ -279,6 +281,7 @@ export function NumberField({
   required?: boolean;
   facultatif?: boolean;
   decimal?: boolean;
+  euros?: boolean;
   min?: number;
   max?: number;
   placeholder?: string;
@@ -286,7 +289,7 @@ export function NumberField({
   largeur?: LargeurChamp;
 }) {
   const id = useId();
-  const regles = { decimal, min, max };
+  const regles = { decimal, euros, min, max };
   const [texte, setTexte] = useState(() => saisieDuNombre(value));
   const [valeurVue, setValeurVue] = useState(value);
   const [quitte, setQuitte] = useState(false);
@@ -489,7 +492,8 @@ const OUTRE_MER = (code: CodeRegion) => code.startsWith('0');
 
 /**
  * Choix de la région : les 18 régions, métropole puis outre-mer. Avec `focusInitial`, le bouton de la région choisie
- * (à défaut le premier) prend le focus à l'ouverture. À placer dans un `ChoiceGroup`.
+ * (à défaut le premier) prend le focus à l'ouverture. À placer dans un `ChoiceGroup`. Une seule colonne sous 360 px :
+ * à deux colonnes, « Guadeloupe » (82 px) ou « Bourgogne- » ne tenaient plus dans le bouton et se coupaient en deux.
  */
 export function RegionPicker({
   selected,
@@ -515,7 +519,7 @@ export function RegionPicker({
       {groupes.map((g) => (
         <div key={g.titre}>
           <p className="marginalia mb-2">{g.titre}</p>
-          <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+          <div className="grid gap-2 min-[360px]:grid-cols-2 md:grid-cols-3">
             {g.regions.map(({ code, nom }) => (
               <ChoiceButton key={code} label={nom} selected={selected === code} onClick={() => onSelect(code)} compact />
             ))}

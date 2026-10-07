@@ -5,6 +5,12 @@
 
 import type { DispositifComplementaire } from '@opco/core';
 
+/**
+ * Espace insécable (U+00A0), écrite par son code : avant « : ; ? ! » et entre un nombre et son unité dans les chaînes
+ * des composants (dans le texte JSX, l'entité `&nbsp;` suffit).
+ */
+export const INSECABLE = String.fromCharCode(0xa0);
+
 /** « de » devant un nom, élidé devant une voyelle : « d'AKTO », « d'OPCO 2i », « de Constructys ». */
 export function de(nom: string): string {
   return /^[aeiouyàâäéèêëîïôöûü]/i.test(nom) ? `d'${nom}` : `de ${nom}`;

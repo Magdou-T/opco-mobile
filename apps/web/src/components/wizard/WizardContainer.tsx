@@ -8,6 +8,7 @@ import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { SectionTitle } from '@/components/ui/SectionTitle';
 import { useWizard } from '@/hooks/useWizard';
 import { cx } from '@/lib/cx';
 import { ETAPES, enumeration } from '@/lib/etapes';
@@ -21,6 +22,12 @@ import { StepSituation } from './StepSituation';
 
 /** Texte qui dit ce qui manque pour continuer ; le bouton « Suivant » s'y réfère (aria-describedby). */
 const ID_AIDE_SUIVANT = 'aide-suivant';
+
+/** Titre de l'écran de résultats : il reçoit le focus quand les résultats s'affichent (règle reprise par W5). */
+export const ID_TITRE_RESULTATS = 'titre-resultats';
+
+/** Air réservé en plus de la barre collante : l'anneau de focus (3 px, décalé de 2 px) d'un contrôle reste entier. */
+const AIR_AU_DESSUS_DE_LA_BARRE = 8;
 
 /**
  * « Suivant » tant que l'étape est incomplète : annoncé comme indisponible (aria-disabled) mais toujours atteignable au
@@ -37,7 +44,9 @@ export function WizardContainer() {
     state,
     showResults,
     manquants,
+    reponsesInconnues,
     updateState,
+    repondre,
     goNext,
     goPrev,
     goToStep,
@@ -47,21 +56,57 @@ export function WizardContainer() {
     updateFormationCosts,
   } = useWizard();
 
-  // À chaque changement d'étape : le haut du parcours revient à l'écran s'il en était sorti, et le focus passe au
-  // titre de la nouvelle étape (les lecteurs d'écran l'annoncent, la tabulation repart du début de l'étape).
+  const premiereEtape = currentStepIndex === 0;
+  const derniereEtape = currentStepIndex === ETAPES.length - 1;
+
+  // À chaque changement d'écran (étape, affichage des résultats, retour au récapitulatif) : le haut de l'écran revient
+  // à la vue s'il en était sorti, et le focus passe à son titre, celui de l'étape ou celui des résultats (les lecteurs
+  // d'écran l'annoncent, la tabulation repart du début). « Modifier mes informations » ramène à l'étape déjà affichée
+  // avant le calcul : seul `showResults` change, d'où les deux dépendances.
   const cadre = useRef<HTMLDivElement>(null);
-  const etapeAffichee = useRef(currentStepIndex);
+  const ecranAffiche = useRef({ etape: currentStepIndex, resultats: showResults });
   useEffect(() => {
-    if (etapeAffichee.current === currentStepIndex) return;
-    etapeAffichee.current = currentStepIndex;
+    const avant = ecranAffiche.current;
+    if (avant.etape === currentStepIndex && avant.resultats === showResults) return;
+    ecranAffiche.current = { etape: currentStepIndex, resultats: showResults };
     const haut = cadre.current?.getBoundingClientRect().top ?? 0;
     const entete = document.querySelector('header')?.getBoundingClientRect().bottom ?? 0;
     if (haut < entete) {
       const reduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       cadre.current?.scrollIntoView({ behavior: reduit ? 'auto' : 'smooth', block: 'start' });
     }
-    document.getElementById(ID_TITRE_ETAPE)?.focus({ preventScroll: true });
-  }, [currentStepIndex]);
+    document.getElementById(showResults ? ID_TITRE_RESULTATS : ID_TITRE_ETAPE)?.focus({ preventScroll: true });
+  }, [currentStepIndex, showResults]);
+
+  // Barre de navigation collée au bas de l'écran (sous 1 024 px, hors récapitulatif) : sa hauteur réelle est réservée
+  // au bas de la zone de défilement (`scroll-padding-bottom` de html), pour qu'un contrôle qui reçoit le focus ne passe
+  // jamais dessous (WCAG 2.2, critère 2.4.11). Mesurée à chaque changement de taille de la barre (phrase d'aide qui
+  // s'allonge, zone de sécurité, texte agrandi), jamais écrite en dur ; retirée dès que la barre n'est plus collante
+  // (1 024 px et plus, récapitulatif, résultats) et au démontage.
+  const barre = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const element = barre.current;
+    if (!element) return;
+    const racine = document.documentElement;
+    const reserver = () => {
+      if (getComputedStyle(element).position === 'sticky') {
+        const hauteur = Math.ceil(element.getBoundingClientRect().height) + AIR_AU_DESSUS_DE_LA_BARRE;
+        racine.style.setProperty('scroll-padding-bottom', `${hauteur}px`);
+      } else {
+        racine.style.removeProperty('scroll-padding-bottom');
+      }
+    };
+    reserver();
+    const observateur = new ResizeObserver(reserver);
+    observateur.observe(element);
+    const grandEcran = window.matchMedia('(min-width: 64rem)');
+    grandEcran.addEventListener('change', reserver);
+    return () => {
+      observateur.disconnect();
+      grandEcran.removeEventListener('change', reserver);
+      racine.style.removeProperty('scroll-padding-bottom');
+    };
+  }, [showResults, derniereEtape]);
 
   // Calcul du financement (dérivation pure, jamais de mise à jour de l'état pendant le rendu).
   const fundingResult = (() => {
@@ -79,9 +124,22 @@ export function WizardContainer() {
     return calculateFunding(opco, effectiveState);
   })();
 
+  // Titre de l'écran de résultats, focalisable par programme (cible du focus à l'affichage des résultats).
+  const titreResultats = (
+    <SectionTitle
+      as="h2"
+      taille="sous-section"
+      id={ID_TITRE_RESULTATS}
+      titreFocusable
+      surtitre="Résultat"
+      titre="Votre estimation de financement"
+    />
+  );
+
   if (showResults && fundingResult) {
     return (
-      <div className="space-y-6">
+      <div ref={cadre} className="space-y-6">
+        {titreResultats}
         <FundingBreakdown result={fundingResult} />
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center print:hidden">
           <Button variant="secondary" icone="crayon" onClick={() => goToStep('recap')}>
@@ -99,25 +157,26 @@ export function WizardContainer() {
   if (showResults) {
     // Aucun OPCO (projet « former le dirigeant ») : le calcul actuel ne porte que sur la prise en charge par un OPCO.
     return (
-      <Card padding="lg" className="space-y-6">
-        <Callout tone="info" titre="Aucun OPCO renseigné">
-          Ce calcul estime la prise en charge par un OPCO. Si l&apos;entreprise relève d&apos;un OPCO, indiquez-le à
-          l&apos;étape Entreprise.
-        </Callout>
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Button icone="batiment" onClick={() => goToStep('identification')}>
-            Indiquer l&apos;OPCO
-          </Button>
-          <Button variant="secondary" icone="retour" onClick={() => goToStep('recap')}>
-            Revenir au récapitulatif
-          </Button>
-        </div>
-      </Card>
+      <div ref={cadre} className="space-y-6">
+        {titreResultats}
+        <Card padding="lg" className="space-y-6">
+          <Callout tone="info" titre="Aucun OPCO renseigné">
+            Ce calcul estime la prise en charge par un OPCO. Si l&apos;entreprise relève d&apos;un OPCO, indiquez-le à
+            l&apos;étape Entreprise.
+          </Callout>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button icone="batiment" onClick={() => goToStep('identification')}>
+              Indiquer l&apos;OPCO
+            </Button>
+            <Button variant="secondary" icone="retour" onClick={() => goToStep('recap')}>
+              Revenir au récapitulatif
+            </Button>
+          </div>
+        </Card>
+      </div>
     );
   }
 
-  const premiereEtape = currentStepIndex === 0;
-  const derniereEtape = currentStepIndex === ETAPES.length - 1;
   const incomplete = manquants.length > 0;
 
   return (
@@ -131,18 +190,35 @@ export function WizardContainer() {
         <div className="px-4 pt-6 pb-8 sm:px-8 sm:pt-8 lg:px-10 lg:pt-10">
           {currentStep.key === 'projet' && <StepProjet state={state} updateState={updateState} />}
           {currentStep.key === 'identification' && <StepIdentification state={state} updateState={updateState} />}
-          {currentStep.key === 'situation' && <StepSituation state={state} updateState={updateState} />}
+          {currentStep.key === 'situation' && (
+            <StepSituation
+              state={state}
+              updateState={updateState}
+              reponsesInconnues={reponsesInconnues}
+              repondre={repondre}
+            />
+          )}
           {currentStep.key === 'formation' && (
-            <StepFormation state={state} updateState={updateState} updateFormationCosts={updateFormationCosts} />
+            <StepFormation
+              state={state}
+              updateState={updateState}
+              updateFormationCosts={updateFormationCosts}
+              reponsesInconnues={reponsesInconnues}
+              repondre={repondre}
+            />
           )}
           {currentStep.key === 'frais' && <StepFrais state={state} updateState={updateState} />}
-          {currentStep.key === 'recap' && <StepRecap state={state} onEdit={goToStep} />}
+          {currentStep.key === 'recap' && (
+            <StepRecap state={state} onEdit={goToStep} reponsesInconnues={reponsesInconnues} />
+          )}
         </div>
 
         {/* Navigation : barre collée en bas de l'écran sous 1 024 px (cibles de 44 px), en pied de carte au-delà ; son
-            ombre vers le haut est teintée d'encre (jeton --encre, aucune couleur écrite en dur). Au récapitulatif, qui se
-            lit avant de calculer, la barre reste en pied de carte et les boutons s'empilent. */}
+            ombre vers le haut est teintée d'encre (jeton --encre, aucune couleur écrite en dur). Sa hauteur est réservée
+            au défilement tant qu'elle colle (effet plus haut). Au récapitulatif, qui se lit avant de calculer, la barre
+            reste en pied de carte et les boutons s'empilent. */}
         <div
+          ref={barre}
           className={cx(
             'rounded-b-carte border-t border-filet bg-white px-4 sm:px-8 lg:px-10 lg:py-6 print:hidden',
             derniereEtape

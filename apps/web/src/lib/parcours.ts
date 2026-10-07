@@ -2,12 +2,15 @@
 // Cohérence de l'état du parcours quand le projet ou le mode de formation change, et plafond horaire indicatif de la
 // formation. Fonctions pures : ni React ni effet de bord.
 //
-// profilDepuisWizard (@opco/core) lit toutes les réponses de l'état, quel que soit le projet : une réponse donnée pour
-// un autre projet (type d'alternance, statut de dirigeant...) ne doit donc pas survivre au changement de projet.
+// profilDepuisWizard et calculateFunding (@opco/core) lisent toutes les réponses de l'état, quel que soit le projet : un
+// champ que l'écran ne montre plus (question d'un autre statut, budget déjà consommé d'un projet salarié, jours de
+// l'étape Frais sautée) ne doit donc pas survivre au changement qui l'a masqué. Audit et test :
+// tests/parcours.test.ts (« aucun champ invisible ne pèse sur le résultat »).
 // ============================================================
 
 import { STATUT_PAR_PROJET, applyVarianteBranche, createInitialWizardState, resolveVarianteBranche } from '@opco/core';
 import type { OpcoData, ProjetType, StatutBeneficiaire, TrainingMode, TrainingType, WizardState } from '@opco/core';
+import { ouvreBudgetOpco } from './entreprise';
 
 /** Questions de l'étape « Bénéficiaire » propres à un statut (le contrat d'un alternant découle de son type de contrat). */
 export const QUESTIONS_PAR_STATUT: Record<StatutBeneficiaire, readonly (keyof WizardState)[]> = {
@@ -26,7 +29,8 @@ const QUESTIONS_PROPRES = [...new Set(Object.values(QUESTIONS_PAR_STATUT).flat()
  * Mise à jour quand l'utilisateur choisit un projet. Les réponses aux questions propres à un autre statut reviennent à
  * leur valeur initiale ; les questions communes (âge, diplôme, RQTH) et celles du nouveau statut sont gardées. Le type de
  * contrat suit le statut : « alternance » n'existe que pour l'alternant, qui l'obtient en choisissant son type de
- * contrat ; un salarié ne garde jamais « alternance ».
+ * contrat ; un salarié ne garde jamais « alternance ». Le budget déjà consommé auprès de l'OPCO, que l'étape Entreprise
+ * ne montre qu'aux projets qui ouvrent ce budget (`ouvreBudgetOpco`), revient à vide pour les autres.
  */
 export function etatDepuisProjet(state: WizardState, projet: ProjetType): Partial<WizardState> {
   const statut = STATUT_PAR_PROJET[projet];
@@ -39,18 +43,56 @@ export function etatDepuisProjet(state: WizardState, projet: ProjetType): Partia
   for (const champ of QUESTIONS_PROPRES) if (!gardees.has(champ)) remettre(champ);
   if (statut === 'alternant') maj.contractType = state.typeAlternance ? 'alternance' : null;
   else if (statut === 'salarie' && state.contractType === 'alternance') maj.contractType = null;
+  if (!ouvreBudgetOpco(projet)) remettre('budgetDejaConsomme');
   return maj;
 }
 
 /**
  * Mise à jour quand l'utilisateur choisit le mode de formation. Une formation entièrement à distance saute l'étape
- * « Frais » : les besoins de déplacement, d'hébergement et de repas déjà cochés sont alors décochés (le moteur les
- * compterait sans que l'utilisateur puisse les voir). Les montants saisis restent, pour un retour au présentiel.
+ * « Frais » : les besoins de déplacement, d'hébergement et de repas déjà cochés sont alors décochés et le nombre de
+ * jours saisi revient à vide (le moteur les compterait sans que l'utilisateur puisse les voir ; sans saisie, il retient
+ * 7 heures par jour). Les montants saisis restent, pour un retour au présentiel : ils ne comptent qu'avec leur besoin.
  */
 export function etatDepuisModeFormation(mode: TrainingMode): Partial<WizardState> {
   return mode === 'distance'
-    ? { trainingMode: mode, needsTransport: false, needsAccommodation: false, needsMeals: false }
+    ? { trainingMode: mode, needsTransport: false, needsAccommodation: false, needsMeals: false, trainingDays: null }
     : { trainingMode: mode };
+}
+
+/**
+ * Questions où « Je ne sais pas » (« Ne sait pas » pour une liste) est une réponse. La valeur reste null pour le moteur,
+ * qui la lit comme inconnue ; le site retient à part que l'utilisateur l'a choisie, pour la montrer choisie quand l'étape
+ * revient et l'écrire au récapitulatif au lieu de « Non renseigné ».
+ */
+export const QUESTIONS_AVEC_INCONNU = [
+  'inscritFranceTravail',
+  'microEntrepreneur',
+  'eligibleCpf',
+  'organismeQualiopi',
+  'certificationLevel',
+  'niveauFormationVise',
+] as const satisfies readonly (keyof WizardState)[];
+export type QuestionAvecInconnu = (typeof QUESTIONS_AVEC_INCONNU)[number];
+
+/** Réponse à une question qui admet « Je ne sais pas » : `null` est cette réponse (voir `useWizard`). */
+export type Repondre = <K extends QuestionAvecInconnu>(question: K, valeur: WizardState[K]) => void;
+
+/**
+ * Réponses « Je ne sais pas » retenues après une mise à jour de l'état `maj` : toute écriture d'une de ces questions
+ * efface la sienne (nouvelle réponse, remise à vide par un changement de projet) ; `inconnue` l'ajoute (la valeur écrite
+ * est alors null). Rend l'ensemble reçu, inchangé, quand rien ne change.
+ */
+export function reponsesInconnuesApres(
+  avant: ReadonlySet<QuestionAvecInconnu>,
+  maj: Partial<WizardState>,
+  inconnue?: QuestionAvecInconnu,
+): ReadonlySet<QuestionAvecInconnu> {
+  const effacees = QUESTIONS_AVEC_INCONNU.filter((q) => q in maj && q !== inconnue && avant.has(q));
+  if (effacees.length === 0 && (inconnue == null || avant.has(inconnue))) return avant;
+  const apres = new Set(avant);
+  for (const q of effacees) apres.delete(q);
+  if (inconnue != null) apres.add(inconnue);
+  return apres;
 }
 
 /** Types de formation qui relèvent du plafond horaire des formations certifiantes (`cout_horaire_metier`). */
