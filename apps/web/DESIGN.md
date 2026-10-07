@@ -649,8 +649,9 @@ Composants des fiches : `components/opco/`.
 
 - **Gabarit** : en-tête de page blanc bordé d'un filet (surtitre, `h1` en `text-affiche` avec au plus un `.mark`,
   chapeau) ; corps en grille `grid-cols-1`, colonne de contenu `min-w-0` (un tableau large ne fait plus déborder la
-  page) ; à partir de 1 024 px, `Sommaire` collant à gauche (13,5 rem) ; sections séparées de 64 px, chacune sous son
-  filet `.rule-double`, titrée par `TitreDeSection`.
+  page) ; à partir de 1 024 px, `Sommaire` collant à gauche (13,5 rem), et à l'impression une seule colonne
+  (`print:grid-cols-1`, voir « Impression ») ; sections séparées de 64 px, chacune sous son filet `.rule-double`, titrée
+  par `TitreDeSection`.
 - **Fiche OPCO, ordre** : fil d'Ariane, nom, nom complet, « Barèmes vérifiés le JJ/MM/AAAA » (étiquette turquoise),
   « Estimer pour cet OPCO » (primaire) et « Site d'AKTO » (secondaire, nouvel onglet annoncé), une phrase qui dit comment
   retrouver l'OPCO dans le simulateur (il n'est pas présélectionné), carte teintée « Secteurs couverts » ; encadré des
@@ -668,30 +669,53 @@ Composants des fiches : `components/opco/`.
   section 10 : c'est l'en-tête du tableau, non celui du site, qui les masquerait). Sous 768 px, une carte par poste :
   poste et étiquette, montant en 24 px, règle en une phrase (`premierePhrase`), « Voir la précision » (`<details>`, nom
   complété par le poste pour les lecteurs d'écran), source. Aucun défilement horizontal. Montants par `formatEuro`
-  (« 14,50 €/h »).
+  (« 14,50 €/h »). Dans les deux présentations, « Voir la précision » ne montre que le reste de la note
+  (`restePrecision` : extraits cités qui l'ouvrent, phrases suivantes, parenthèse de source, date de vérification, dans
+  leur ordre), jamais la règle déjà affichée, et n'existe pas quand la note ne dit rien d'autre (`precisionDuPoste`,
+  `reste` nul). Testé sur les 245 notes des 11 OPCO : la règle et le reste redonnent la note, aux espaces près.
 - **Montant absent et légende** : « non publié », « incluse dans le plafond horaire », « sans montant fixe », ou un renvoi
   à la précision qui cite ce qui est visible : « montant précisé dans la colonne Précision » dans le tableau,
   « montant précisé ci-dessous » dans les cartes. La légende, une par présentation, n'explique que les libellés affichés
   dans le barème général et ceux des branches (`legendeDuBareme`).
 - **Branches** (`Branche.tsx`) : une carte `<details>` par branche, repliée ; son ancre est l'identifiant de la branche,
-  et `OuvertureDesDetails` l'ouvre quand l'adresse la vise. Résumé en grille (un `<summary>` n'admet que du texte courant
-  et un titre) : chevron en pastille turquoise doux, nom en `h3`, conventions collectives (citées jusqu'à trois, comptées
-  au-delà), fiabilité, une étiquette rouge par type d'alerte qui vise la branche (`alertesDeLaBranche` : un code IDCC en
-  commun ; une alerte sans code reste dans la liste générale). Contenu : ces alertes (extrait mot pour mot), note,
-  source, postes de la branche, barème dégressif, budget, tailles ; plus de 6 codes IDCC repliés (`ListeIdcc`).
+  et `OuvertureDesDetails` l'ouvre quand l'adresse la vise. L'ancre est lue par `decoderAncre` (`lib/ancre.ts`, module
+  sans importation, réexporté par `lib/fiche.ts`) : décodée, ou telle quelle si elle est mal encodée (`#taux-100%`,
+  `#%E0%A4%A`), jamais d'exception (un `decodeURIComponent` nu faisait tomber la fiche sur la page d'erreur de Next).
+  Résumé en grille (un `<summary>` n'admet que du texte courant et un titre) : chevron en pastille turquoise doux, nom en
+  `h3`, conventions collectives (citées jusqu'à trois, comptées au-delà), fiabilité, une étiquette rouge par type
+  d'alerte qui vise la branche (`alertesDeLaBranche` : un code IDCC en commun ; une alerte sans code reste dans la liste
+  générale) ; à l'impression, pastille masquée et résumé sur une colonne (`print:grid-cols-1`). Contenu : ces alertes
+  (extrait mot pour mot), note, source, postes de la branche, barème dégressif, budget, tailles ; plus de 6 codes IDCC
+  repliés (`ListeIdcc`).
 - **Dispositifs** : légende des seules règles de cumul présentes ; carte : nom et `CumulBadge`, montant en turquoise
   foncé (`montantDuDispositif`), description, public, tailles et conventions concernées, conditions à coches, démarche
   en étapes numérotées (`etapesDeDemarche` : coupe à « ; » et à « puis », jamais dans une citation ni une parenthèse ; une
   démarche d'une seule étape reste une phrase), précision, fiabilité et source.
 - **Textes des données** : `TexteDonnees` (`texteDonnees` : dates, montants et typographie, hors citations). Les textes
   « A | B | C » (`specificites`, `points_cles_maximisation`) s'affichent en liste (`elementsDeTexte`, objets `FreeText`
-  compris, jamais « [object Object] ») ; une adresse web longue passe à la ligne (`[overflow-wrap:anywhere]`). Un sigle
-  est défini à sa première occurrence dans chaque texte (`<abbr title>`, `definirAbreviations`) seulement s'il a été
-  vérifié sur la page officielle de l'OPCO (`ABREVIATIONS_PAR_OPCO` : DAF chez Uniformation ; SSSMS, HP, SPSTI et
-  « hors CC » chez OPCO Santé). BETIC (ATLAS) n'est pas défini : les pages de critères d'ATLAS consultées le 07/10/2026 ne l'emploient pas.
+  compris, jamais « [object Object] ») ; le séparateur est une barre entre deux espaces, le bord du texte en tenant lieu
+  (seule forme des 11 OPCO) : une barre collée à un caractère (« A|B », adresse web) reste dans le texte, deux
+  séparateurs de suite (« A | | B ») ne laissent aucun élément vide ; une adresse web longue passe à la ligne
+  (`[overflow-wrap:anywhere]`). Un sigle est défini à sa première occurrence dans chaque texte (`<abbr title>`,
+  `definirAbreviations`) seulement s'il a été vérifié sur la page officielle de l'OPCO (`ABREVIATIONS_PAR_OPCO` : DAF
+  chez Uniformation ; SSSMS, HP, SPSTI et « hors CC » chez OPCO Santé). BETIC (ATLAS) n'est pas défini : les pages de critères d'ATLAS consultées le 07/10/2026 ne l'emploient pas.
 - **Impression** : en-tête, sommaire, boutons et « Voir la précision » masqués ; tous les `<details>` ouverts (script
   `beforeprint` d'`OuvertureDesDetails` et, sans script, `details::details-content { content-visibility: visible }`) ;
-  ni ombre ni dégradé. À la largeur d'une page A4 (moins de 768 px), le barème s'imprime en cartes.
+  ni ombre ni dégradé ; chaque précision imprimée une fois (la règle, puis le reste de la note). À la largeur d'une page
+  A4 portrait (moins de 768 px), le barème s'imprime en cartes ; en paysage, en tableau. Règle : une grille dont un
+  enfant est masqué à l'impression passe à une colonne (`print:grid-cols-1` sur le corps des fiches et des guides et sur
+  le résumé des branches). Sans elle, dès 1 024 px de largeur de page (A4 paysage, environ 1 046 px), le contenu se
+  rangeait dans la colonne du sommaire masqué, large de 216 px (fiche AKTO haute de 345 611 px, légendes à un mot par
+  ligne hors de leur cadre), et, à toutes les largeurs, le titre d'une branche poussait sa ligne d'informations hors de
+  la page. Mesure (média `print`, JavaScript coupé, 17 routes de contenu et l'accueil, à 720, 1 046 et 1 123 px) :
+  aucune page ne dépasse 1,01 fois sa hauteur à 720 px (fiche AKTO : 25 198, 20 085 et 19 314 px ; `obligations` :
+  3 828, 3 843 et 3 852 px), aucune liste de définitions ne sort de son cadre, aucun texte n'est rogné ni hors de la
+  page.
+- **Limites connues** : le focus peut s'arrêter à demi masqué sous l'en-tête collant du tableau de barème (critère
+  2.4.11 satisfait, 2.4.12 non). Le HTML de `/opco/akto/` relevé par la revue de D3 pèse 840 869 octets (58 736 octets
+  en gzip), dont environ 6 Ko de double rendu du barème (tableau et cartes) : accepté ; un seul tableau mis en cartes
+  par CSS le réduirait (hors périmètre). Safari et iOS ne sont pas testés (`::details-content`, `position: sticky` sur
+  un `th`).
 - **Liste des OPCO** : 12 cases (11 cartes triées par `trierParNom`, article élidé ignoré : L'Opcommerce se range à O,
   puis la tuile teintée « Vous ne connaissez pas votre OPCO »), `ul` en `contents` ; carte : nom (lien étendu), nom
   complet, extrait des secteurs (110 caractères), « Vérifié le JJ/MM/AAAA », « Voir la fiche » (décoratif : le nom du
@@ -706,7 +730,12 @@ Composants des fiches : `components/opco/`.
   libellé et le champ (`aria-invalid`, `aria-describedby`, zone `aria-live`) quand on quitte le champ ou à l'envoi,
   focus sur le premier champ à corriger ; même lien `mailto` qu'avant (`lienMailto` : destinataire, objet, corps), le
   bouton dit ce qui se passe (« Ouvrir ma messagerie ») ; carte SFG Développement (logo, domaines de formation aux
-  couleurs de la charte, adresse e-mail).
+  couleurs de la charte, adresse e-mail). `FieldLabel` vit dans `components/ui/FieldLabel.tsx`, sans `'use client'`
+  (composant sans état) ; `forms.tsx` le réexporte : le formulaire de contact n'embarque plus les champs du simulateur
+  (`RegionPicker`, `OpcoPicker`, `NumberField`, `lib/saisie`). Liste « Sujet » à libellés courts (`LIBELLES_DES_SUJETS` :
+  « Financement OPCO », « Former mes salariés »… ; 153 px au plus en Inter 16 px, le champ en montre 162 à 320 px avec
+  une barre de défilement classique) ; la valeur choisie reste le sujet complet, si bien que l'objet et le corps du
+  message sont mot pour mot ceux d'avant (testé sujet par sujet contre 7c791cf).
 - **Page 404** (`app/not-found.tsx`) : dans le gabarit du site, un message court, trois liens (simulateur, liste des
   OPCO, accueil) et le rail de la marque au jalon manquant (décor) ; l'export produit `out/404.html`.
 
