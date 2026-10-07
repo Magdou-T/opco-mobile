@@ -473,6 +473,20 @@ describe("FAFCEA : pour la VAE et les formations RNCP, le fonds n'intervient qu'
       }
     });
 
+    it("limite connue : le bilan de compétences n'est pas reconnu, aucun type de formation ni niveau de certification du parcours ne le désigne", () => {
+      // Sa ligne des critères (« ... à hauteur de 20h minimum et dans la limite de 2000€ maximum une fois tous les 5 ans par stagiaire »)
+      // n'a donc aucune majoration : seules la condition et la note de l'aide disent qu'il n'est pris en charge qu'après un refus du CPF.
+      // Si le parcours reçoit un type « bilan de compétences », ce test échoue : ajouter alors au FAFCEA une majoration sans valeur pour
+      // ce type, avec la ligne du bilan en extrait mot pour mot (20h minimum, 2000€ maximum, une fois tous les 5 ans).
+      const noms = [
+        ...Object.keys(TRAINING_TYPE_LABELS), ...Object.values(TRAINING_TYPE_LABELS),
+        ...Object.keys(CERTIFICATION_LABELS), ...Object.values(CERTIFICATION_LABELS),
+      ];
+      expect(noms.filter((nom) => /bilan/i.test(nom))).toEqual([]);
+      expect(fafcea.conditions.some((c) => c.includes('bilan de compétences') && c.includes('refus du CPF'))).toBe(true);
+      expect(fafcea.cumul.note).toContain('Le simulateur ne distingue pas le bilan de compétences');
+    });
+
     it('les lignes VAE, bilan de compétences et formations RNCP des critères sont citées mot pour mot dans les sources, avec leurs plafonds', () => {
       const extraits = fafcea.sources.map((s) => s.extrait);
       const cite = (debut: string, ...fins: string[]) => {
