@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: 'Se former sans toucher au budget formation : actions collectives, CPF, FSE+',
   description:
-    'Actions collectives des OPCO financées à 100 %, catalogues clé en main, CPF, cofinancement FSE+, période de reconversion : tous les leviers 2026 pour former sans consommer l’enveloppe de l’entreprise.',
+    "Actions collectives des OPCO, CPF, période de reconversion, et cofinancement FSE+ quand votre OPCO en ouvre un : les leviers 2026 pour former sans consommer l'enveloppe de l'entreprise.",
 };
 
 const TOC = [
@@ -30,7 +30,7 @@ const ACTIONS_COLLECTIVES = [
     slug: 'atlas',
     dispositif: 'campusAtlas (actions collectives)',
     detail:
-      '100 % des coûts pédagogiques pris en charge, dans la limite de crédits annuels par taille (3 crédits < 11 salariés, 5 pour 11-49, 7 pour 50-299, 3 % de l’effectif au-delà). Certaines thématiques sont en accès libre au-delà des crédits (tutorat, développement durable, harcèlement sexuel, salariés BOETH). Le plan IA-tlas finance à 100 % des modules IA en 2026.',
+      "Formations clés en main choisies par chaque branche, aux critères propres : voir la fiche ATLAS. Branche des bureaux d'études (IDCC 1486) : 100 % des coûts pédagogiques pris en charge, dans la limite de crédits annuels par taille (3 crédits sous 11 salariés, 5 de 11 à 49, 7 de 50 à 299, un nombre de parcours égal à 3 % de l'effectif au-delà), et certaines thématiques en libre accès au-delà des crédits (tutorat, développement durable, harcèlement sexuel, salariés BOETH). Le plan IA-tlas finance à 100 % des modules IA pour les moins de 50 salariés (dossiers du 1er juillet au 15 décembre 2026, dans la limite des fonds disponibles).",
     url: 'https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html',
   },
   {
@@ -38,7 +38,7 @@ const ACTIONS_COLLECTIVES = [
     slug: 'akto',
     dispositif: 'Espace Formation (actions collectives)',
     detail:
-      'Les formations mobilisées via Espace Formation « ne sont pas déduites de votre budget annuel » : coûts pédagogiques entièrement pris en charge pour les moins de 50 salariés, sans limite de nombre de salariés formés.',
+      'Les formations mobilisées via Espace Formation « ne sont pas déduites de votre budget annuel » (dans la plupart des branches) : coûts pédagogiques entièrement pris en charge pour les moins de 50 salariés, dans la limite des places et des fonds disponibles.',
     url: 'https://www.akto.fr/entreprise/financer-une-formation/regles-de-prise-en-charge/',
   },
   {
@@ -46,24 +46,24 @@ const ACTIONS_COLLECTIVES = [
     slug: 'opcommerce',
     dispositif: 'Click&Form',
     detail:
-      'Catalogue d’environ 400 formations négociées (~40 % sous les prix du marché). Pour les moins de 50 salariés : 100 % des coûts pédagogiques pris en charge, dans la limite d’un quota d’inscriptions par branche (2 à 5 par an), financement distinct du plafond « Compétences+ ».',
+      "Catalogue de formations sélectionnées par l'Opcommerce, à tarifs négociés. Pour les moins de 50 salariés, la prise en charge dépend de la branche : 100 % des coûts pédagogiques dans la limite d'un quota d'inscriptions par an (de 1 à 5 selon la branche), ou financement sur le budget « Compétences+ » dans d'autres branches (commerces de détail non alimentaires, optique, prédominance alimentaire, par exemple).",
     url: 'https://clickandform.lopcommerce.com/',
   },
   {
     opco: 'OPCO EP',
     slug: 'opco-ep',
-    dispositif: 'Actions clés en main',
+    dispositif: 'Catalogue Sélexion et actions collectives de branche',
     detail:
-      'Formations définies par branche avec coûts pédagogiques (et parfois rémunération) pris en charge, sans consommer le budget de l’entreprise.',
-    url: 'https://www.opcoep.fr/',
+      "Sélexion : 36 formations sélectionnées par OPCO EP, dont les coûts pédagogiques sont financés à 100 % en 2026 pour les entreprises de moins de 50 salariés (catalogue fermé aux entreprises de 50 salariés et plus depuis le 1er septembre 2026). Certaines branches financent aussi des actions collectives clés en main hors du plafond annuel de l'entreprise (librairie, détaillants en chaussures, par exemple).",
+    url: 'https://www.opcoep.fr/entreprise/offre-de-services/selexion',
   },
   {
     opco: 'OCAPIAT',
     slug: 'ocapiat',
-    dispositif: 'Offre collective clé en main',
+    dispositif: 'Offre régionale TPE-PME',
     detail:
-      'Catalogue de formations mutualisées, particulièrement avantageux pour les entreprises de moins de 11 salariés.',
-    url: 'https://www.ocapiat.fr/',
+      "Plus de 3 500 formations courtes clés en main sélectionnées par OCAPIAT, dont les coûts pédagogiques sont financés à 100 % pour les entreprises de moins de 50 salariés, dans la limite de l'enveloppe annuelle. Le catalogue est réservé aux entreprises du champ d'OCAPIAT, avec une priorité donnée à celles de moins de 50 salariés.",
+    url: 'https://www.ocapiat.fr/catalogue-de-formations-et-financement/',
   },
 ];
 
@@ -71,7 +71,7 @@ export default function FormerSansBudgetPage() {
   return (
     <main>
       <GuideHero
-        eyebrow="Guide nº 3 · dispositifs vérifiés juillet 2026"
+        eyebrow="Guide nº 3 · dispositifs vérifiés octobre 2026"
         title={
           <>
             Se former{' '}
@@ -80,7 +80,7 @@ export default function FormerSansBudgetPage() {
             au budget formation
           </>
         }
-        lead="Les OPCO achètent eux-mêmes des formations et les offrent à leurs adhérents : ces « actions collectives » ne consomment pas l'enveloppe annuelle de votre entreprise. Ajoutez le CPF et le FSE+, et beaucoup de projets peuvent se financer à coût quasi nul."
+        lead="Les OPCO achètent eux-mêmes des formations et les offrent à leurs adhérents : ces « actions collectives » ne consomment généralement pas l'enveloppe annuelle de votre entreprise. Le CPF du salarié et, selon l'OPCO, le cofinancement FSE+ peuvent compléter ces catalogues."
       />
 
       <GuideBody toc={TOC}>
@@ -95,15 +95,16 @@ export default function FormerSansBudgetPage() {
           </p>
           <p>
             Concrètement : les coûts pédagogiques sont réglés directement par l&apos;OPCO
-            (souvent à 100 %), l&apos;entreprise n&apos;avance rien, et{' '}
-            <strong>son enveloppe annuelle reste intacte</strong>{' '}pour d&apos;autres projets.
-            Les places sont limitées par des quotas et par les fonds disponibles, les
-            catalogues s&apos;épuisent en cours d&apos;année.
+            (souvent à 100 %), l&apos;entreprise n&apos;avance en général rien (la réforme de la
+            TVA des OPCO du 1er octobre 2026 limite la subrogation de paiement selon l&apos;OPCO :
+            voir sa fiche), et <strong>son enveloppe annuelle reste généralement intacte</strong>{' '}
+            pour d&apos;autres projets. Les places sont limitées par des quotas et par les fonds
+            disponibles, les catalogues s&apos;épuisent en cours d&apos;année.
           </p>
           <Callout tone="ok" title="Le bon réflexe">
             Consultez le catalogue d&apos;actions collectives de votre OPCO <strong>en début
             d&apos;année</strong>, avant de chercher un organisme par vous-même : si la
-            formation y figure, elle ne coûtera rien à votre budget.
+            formation y figure, elle est souvent prise en charge sans entamer votre budget.
           </Callout>
         </GuideSection>
 
@@ -131,7 +132,8 @@ export default function FormerSansBudgetPage() {
           </div>
           <p className="text-sm text-ink-faint">
             Les autres OPCO (AFDAS, Constructys, OPCO 2i, OPCO Mobilités, OPCO Santé,
-            Uniformation) proposent des dispositifs équivalents sous d&apos;autres formes,
+            Uniformation) ont leurs propres dispositifs, souvent sous d&apos;autres formes
+            (catalogues de formations clés en main, fonds conventionnels de branche) :
             retrouvez-les sur <Link href="/opco" className="text-cobalt underline">les fiches OPCO</Link>.
             Les règles d&apos;éligibilité (taille, quotas) varient par OPCO et par année budgétaire.
           </p>
@@ -145,9 +147,13 @@ export default function FormerSansBudgetPage() {
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong>Participation forfaitaire</strong> : depuis mai 2024, le salarié paie un
-              ticket modérateur (~100 €, indexé) sur chaque formation CPF, <strong>sauf si
-              l&apos;employeur abonde</strong>, même d&apos;un euro symbolique.
+              <strong>Participation forfaitaire</strong> : depuis le 2 avril 2026, le salarié paie
+              150 € sur chaque formation CPF, <strong>sauf si l&apos;employeur abonde</strong>{' '}
+              son compte. Le projet de loi de finances 2027 prévoit, pour les formations validées
+              depuis le 2 octobre 2026, un complément pouvant atteindre 200 € ; il ne
+              s&apos;appliquerait pas à la plupart des formations cofinancées par un tiers, dès lors
+              que le cofinancement atteint au moins 150 € (mesure non encore adoptée au 6 octobre
+              2026).
             </li>
             <li>
               <strong>Abondements employeur</strong> : versés via le portail des financeurs
@@ -161,30 +167,78 @@ export default function FormerSansBudgetPage() {
             </li>
           </ul>
           <p className="text-sm">
-            Source :{' '}
+            Sources :{' '}
             <Source href="https://www.moncompteformation.gouv.fr/">
               moncompteformation.gouv.fr
+            </Source>
+            {' · '}
+            <Source href="https://www.service-public.gouv.fr/particuliers/actualites/A17364">
+              service-public.gouv.fr (participation forfaitaire)
+            </Source>
+            {' · '}
+            <Source href="https://www.moncompteformation.gouv.fr/espace-public/evolution-des-regles-dutilisation-du-cpf-compter-du-2-octobre-2026">
+              moncompteformation.gouv.fr (règles à compter du 2 octobre 2026)
             </Source>
           </p>
         </GuideSection>
 
         <GuideSection id="fse" number="04" title="Le cofinancement européen FSE+">
           <p>
-            La quasi-totalité des OPCO mobilise des enveloppes du{' '}
-            <strong>Fonds social européen (FSE+ 2021-2027)</strong>{' '}pour cofinancer des
-            formations sur des thématiques ciblées (numérique, transition écologique,
-            compétences de base), typiquement <strong>autour de 50 % des coûts
-            pédagogiques</strong>, parfois cumulables avec les autres prises en charge. Chez
-            OPCO EP par exemple : jusqu&apos;à 350 € par stagiaire et par jour, plafonné à
-            150 000 € par entreprise sur 2025-2026.
+            Le <strong>Fonds social européen plus (FSE+ 2021-2027)</strong>{' '}peut cofinancer,
+            par l&apos;intermédiaire des OPCO, des formations de salariés sur des thématiques
+            ciblées (transitions écologique, numérique et démographique, par exemple), jusqu&apos;à{' '}
+            <strong>50 % du coût éligible</strong>. Le reste est couvert par un versement
+            volontaire de l&apos;entreprise ou par les fonds conventionnels de la branche : le
+            FSE+ ne se cumule pas avec une autre aide publique sur les mêmes dépenses.
           </p>
+          <p>
+            Condition préalable : votre OPCO doit avoir une opération FSE+ ouverte aux demandes.
+            L&apos;appel à projets national 2026-2027, réservé aux OPCO, est clos depuis le 8 juin
+            2026, et chaque OPCO fixe ses thèmes, ses taux et ses plafonds. État des lieux au
+            6 octobre 2026, à confirmer auprès de votre conseiller :
+          </p>
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              <Link href="/opco/atlas" className="font-semibold text-cobalt underline">ATLAS</Link>{' '}:
+              opération ouverte, FSE+ à 50 % des coûts pédagogiques (500 000 € au maximum par
+              entreprise), demande à déposer avant le début de la formation et au plus tard le
+              15 décembre 2027.
+            </li>
+            <li>
+              <Link href="/opco/akto" className="font-semibold text-cobalt underline">AKTO</Link>,{' '}
+              <Link href="/opco/opco-ep" className="font-semibold text-cobalt underline">OPCO EP</Link> et{' '}
+              <Link href="/opco/ocapiat" className="font-semibold text-cobalt underline">OCAPIAT</Link>{' '}:
+              dispositifs 2025-2026 clos (dépôts jusqu&apos;au 6 avril 2026 chez OPCO EP, jusqu&apos;au
+              13 mars 2026 chez OCAPIAT).
+            </li>
+            <li>
+              <Link href="/opco/opco2i" className="font-semibold text-cobalt underline">OPCO 2i</Link>,{' '}
+              <Link href="/opco/constructys" className="font-semibold text-cobalt underline">Constructys</Link>,{' '}
+              <Link href="/opco/opco-sante" className="font-semibold text-cobalt underline">OPCO Santé</Link> et{' '}
+              <Link href="/opco/afdas" className="font-semibold text-cobalt underline">AFDAS</Link>{' '}:
+              opérations 2025 terminées ou fonds épuisés, aucune opération 2026 confirmée.
+            </li>
+            <li>
+              <Link href="/opco/opco-mobilites" className="font-semibold text-cobalt underline">OPCO Mobilités</Link>,{' '}
+              <Link href="/opco/uniformation" className="font-semibold text-cobalt underline">Uniformation</Link> et{' '}
+              <Link href="/opco/opcommerce" className="font-semibold text-cobalt underline">L&apos;Opcommerce</Link>{' '}:
+              aucune opération 2026 confirmée à ce jour (pour OPCO Mobilités, à vérifier auprès
+              de son conseiller).
+            </li>
+          </ul>
           <p className="text-sm">
             Sources :{' '}
-            <Source href="https://www.fse.gouv.fr/actualites-evenements/les-opco-pour-developper-la-formation-professionnelle">
+            <Source href="https://fse.gouv.fr/les-appels-a-projets/investir-dans-les-competences-pour-accompagner-les-mutations-economiques-0">
               fse.gouv.fr
             </Source>
             {' · '}
-            <Source href="https://www.opcoep.fr/">OPCO EP</Source>
+            <Source href="https://www.opco-atlas.fr/entreprise/beneficier-fse.html">ATLAS</Source>
+            {' · '}
+            <Source href="https://www.akto.fr/beneficier-dune-aide-du-fse-en-2025-comment-faire/">AKTO</Source>
+            {' · '}
+            <Source href="https://www.opcoep.fr/fonds-social-europeen">OPCO EP</Source>
+            {' · '}
+            <Source href="https://www.ocapiat.fr/fse-une-aide-financiere-pour-former-vos-salaries/">OCAPIAT</Source>
           </p>
         </GuideSection>
 
@@ -192,14 +246,19 @@ export default function FormerSansBudgetPage() {
           <ul className="list-disc space-y-3 pl-5">
             <li>
               <strong>La période de reconversion</strong>{' '}(depuis février 2026) : financée par
-              l&apos;OPCO sur ses fonds alternance, 9,15 €/h à défaut d&apos;accord de branche,
-              ~5 000 € en moyenne, dossier à déposer 30 jours avant.{' '}
+              l&apos;OPCO sur une enveloppe dédiée, dans la limite de la dotation de France
+              compétences, 9,15 €/h à défaut d&apos;accord de branche, montant moyen fixé à 5 000 €,
+              dossier à déposer 30 jours calendaires avant le début de la période.{' '}
               <Source href="https://entreprendre.service-public.gouv.fr/actualites/A18798">
                 service-public.gouv.fr
               </Source>
+              {' · '}
+              <Source href="https://code.travail.gouv.fr/code-du-travail/l6332-3">
+                art. L.6332-3
+              </Source>
             </li>
             <li>
-              <strong>Le projet de transition professionnelle (PTP)</strong> : à
+              <strong>Le projet de transition professionnelle (PTP)</strong>{' '}: à
               l&apos;initiative du salarié, financé par les associations{' '}
               <strong>Transitions Pro</strong>{' '}régionales (pas par l&apos;OPCO), rémunération
               maintenue à 100 % jusqu&apos;à 2 SMIC. Aucun impact sur le budget formation de
@@ -214,14 +273,14 @@ export default function FormerSansBudgetPage() {
         <GuideSection id="disparus" number="06" title="Ce qui n'existe plus en 2026">
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong>FNE-Formation</strong> : plus de nouveaux financements, les derniers
+              <strong>FNE-Formation</strong>{' '}: plus de nouveaux financements, les derniers
               accords devaient être conclus fin 2024 et le dispositif n&apos;a pas été doté
               depuis. Méfiez-vous des pages qui le présentent encore comme actif.
             </li>
             <li>
               <strong>Pro-A</strong>{' '}et <strong>Transitions collectives</strong> : absorbées par
-              la période de reconversion au 1er février 2026 (les dossiers signés avant restent
-              valables).
+              la période de reconversion au 1er février 2026 (les Pro-A signées avant 2026
+              restent valables).
             </li>
           </ul>
         </GuideSection>

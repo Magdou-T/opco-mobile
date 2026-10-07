@@ -27,7 +27,7 @@ export default function ComprendreLesOpcoPage() {
   return (
     <main>
       <GuideHero
-        eyebrow="Guide nº 1 · mis à jour juillet 2026"
+        eyebrow="Guide nº 1 · mis à jour octobre 2026"
         title={
           <>
             Les OPCO, mode d&apos;emploi :
@@ -48,10 +48,10 @@ export default function ComprendreLesOpcoPage() {
             cotisations</strong>, c&apos;est l&apos;Urssaf (ou la MSA) qui s&apos;en charge, avant
             reversement à France compétences qui répartit les fonds.
           </p>
-          <p>Leurs trois missions légales (art. L.6332-1 du Code du travail) :</p>
+          <p>Leurs missions principales (art. L.6332-1 du Code du travail) :</p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong>Financer l&apos;alternance</strong> : contrats d&apos;apprentissage (aux
+              <strong>Financer l&apos;alternance</strong>{' '}: contrats d&apos;apprentissage (aux
               niveaux de prise en charge « NPEC » fixés par les branches), contrats de
               professionnalisation et, depuis février 2026, la période de reconversion.
             </li>
@@ -74,6 +74,10 @@ export default function ComprendreLesOpcoPage() {
             <Source href="https://www.centre-inffo.fr/site-droit-formation/site-fiches-pratiques/annexes/presentation-des-11-operateurs-de-competences-opco">
               Centre Inffo
             </Source>
+            {' · '}
+            <Source href="https://code.travail.gouv.fr/code-du-travail/l6332-1">
+              Code du travail, art. L.6332-1
+            </Source>
           </p>
         </GuideSection>
 
@@ -81,11 +85,11 @@ export default function ComprendreLesOpcoPage() {
           <p>
             Le rattachement dépend <strong>exclusivement de la convention collective</strong>{' '}
             appliquée par l&apos;entreprise, identifiée par son code <strong>IDCC</strong>, pas
-            du code NAF/APE. Une entreprise ne relève que d&apos;un seul OPCO. Le code IDCC
-            figure sur le bulletin de paie ; à défaut de convention collective, le rattachement
-            se fait selon l&apos;activité principale.
+            du code NAF/APE. En règle générale, une entreprise ne relève que d&apos;un seul
+            OPCO. Le code IDCC figure sur le bulletin de paie ; à défaut de convention
+            collective, le rattachement se fait selon l&apos;activité principale.
           </p>
-          <Callout tone="info" title="Trouver son OPCO en 30 secondes">
+          <Callout tone="info" title="Trouver son OPCO avec le simulateur">
             Notre simulateur identifie votre OPCO à partir du nom ou du SIREN de votre
             entreprise, via la base officielle des conventions collectives.{' '}
             <Link href="/simulateur" className="font-semibold underline">
@@ -113,7 +117,7 @@ export default function ComprendreLesOpcoPage() {
                 <tr>
                   <td className="px-4 py-3 font-medium text-ink">Contrat d&apos;apprentissage</td>
                   <td className="px-4 py-3">Toutes tailles</td>
-                  <td className="px-4 py-3">Coût de formation du CFA au niveau « NPEC » de la branche (plancher 4 000 €, plafond 11 000 € pour les niveaux 5 à 7 depuis la révision 2026)</td>
+                  <td className="px-4 py-3">Coût de formation du CFA au niveau « NPEC » fixé par la branche (révision 2026 de France compétences : valeur de référence plafonnée à 11 000 € pour les niveaux 5 à 7, modulable jusqu&apos;à 20 % en plus ou en moins par la branche, sans descendre sous 4 000 €)</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-medium text-ink">Contrat de professionnalisation</td>
@@ -123,7 +127,7 @@ export default function ComprendreLesOpcoPage() {
                 <tr>
                   <td className="px-4 py-3 font-medium text-ink">Période de reconversion <span className="stamp ml-1 text-cobalt">Nouveau 2026</span></td>
                   <td className="px-4 py-3">Tous salariés, toutes tailles</td>
-                  <td className="px-4 py-3">9,15 €/h à défaut d&apos;accord de branche, ~5 000 € en moyenne</td>
+                  <td className="px-4 py-3">9,15 €/h à défaut d&apos;accord de branche, montant moyen fixé à 5 000 €</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-medium text-ink">VAE, bilan de compétences, AFEST, tutorat</td>
@@ -152,9 +156,9 @@ export default function ComprendreLesOpcoPage() {
             légale est un impôt affecté, pas une cagnotte récupérable.
           </p>
           <p>
-            L&apos;écart est réel : France compétences mesure un reste à charge moyen de{' '}
-            <strong>38 %</strong>{' '}pour les moins de 50 salariés, contre <strong>67 %</strong>{' '}
-            pour les autres.{' '}
+            L&apos;écart est réel : pour 2024, France compétences mesure un reste à charge moyen de{' '}
+            <strong>38 %</strong>{' '}du coût d&apos;une formation soutenue par les OPCO, contre{' '}
+            <strong>67 %</strong>{' '}dans les entreprises de plus de 50 salariés.{' '}
             <Source href="https://www.francecompetences.fr/fiche-ruf/le-soutien-au-plan-de-developpement-des-competences-des-entreprises/">
               France compétences
             </Source>
@@ -170,8 +174,8 @@ export default function ComprendreLesOpcoPage() {
               une cotisation supplémentaire qui ouvre des droits, y compris aux 50+.
             </li>
             <li>
-              <strong>Les dispositifs fléchés</strong> : alternance, période de reconversion,
-              actions collectives et cofinancements FSE+, voir notre guide{' '}
+              <strong>Les dispositifs fléchés</strong> : alternance, période de reconversion et,
+              selon votre OPCO, actions collectives et cofinancements FSE+, voir notre guide{' '}
               <Link href="/former-sans-budget" className="font-semibold text-cobalt underline">
                 Se former sans budget
               </Link>.
@@ -192,13 +196,13 @@ export default function ComprendreLesOpcoPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong>Financement OPCO</strong> : à défaut d&apos;accord de branche, forfait de{' '}
-              <strong>9,15 €/heure</strong> ; montant moyen constaté ~5 000 €. Le CPF du salarié
-              peut être mobilisé avec son accord.
+              <strong>9,15 €/heure</strong> ; le montant moyen de prise en charge est fixé à
+              5 000 €. Le CPF du salarié peut être mobilisé avec son accord.
             </li>
             <li>
-              <strong>Procédure</strong> : accord écrit entre salarié et employeur, dossier
-              déposé à l&apos;OPCO au moins <strong>30 jours avant</strong>{' '}le début de la
-              formation.
+              <strong>Procédure</strong>{' '}: accord écrit entre salarié et employeur, dossier
+              complet adressé à l&apos;OPCO au moins <strong>30 jours calendaires avant</strong>{' '}
+              le début de la période de reconversion.
             </li>
             <li>Les Pro-A signées avant 2026 continuent de produire leurs effets.</li>
           </ul>

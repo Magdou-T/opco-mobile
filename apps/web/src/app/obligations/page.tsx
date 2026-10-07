@@ -27,7 +27,7 @@ export default function ObligationsPage() {
   return (
     <main>
       <GuideHero
-        eyebrow="Guide nº 2 · taux 2026 vérifiés"
+        eyebrow="Guide nº 2 · taux vérifiés octobre 2026"
         title={
           <>
             Votre entreprise paie déjà.
@@ -39,7 +39,7 @@ export default function ObligationsPage() {
       />
 
       <GuideBody toc={TOC}>
-        <GuideSection id="contributions" number="01" title="Ce que votre entreprise verse chaque mois">
+        <GuideSection id="contributions" number="01" title="Ce que votre entreprise verse">
           <p>
             La <strong>contribution unique à la formation professionnelle et à
             l&apos;alternance (CUFPA)</strong>{' '}est collectée chaque mois par l&apos;Urssaf (ou la
@@ -108,10 +108,10 @@ export default function ObligationsPage() {
             </Source>
           </p>
           <Callout tone="info" title="Des majorations sectorielles existent">
-            Travail temporaire (1 % + 0,30 % conventionnel), BTP, intermittents du spectacle
-            (2 % et plus) : certaines branches prévoient des contributions conventionnelles
-            supplémentaires, gérées par l&apos;OPCO, elles ouvrent souvent des droits
-            additionnels.
+            Travail temporaire (1 % au minimum, plus une contribution conventionnelle d&apos;au
+            moins 0,30 %), BTP, intermittents du spectacle (2 % et plus) : certaines branches
+            prévoient des contributions conventionnelles supplémentaires, gérées par l&apos;OPCO,
+            elles ouvrent souvent des droits additionnels.
           </Callout>
         </GuideSection>
 
@@ -136,8 +136,10 @@ export default function ObligationsPage() {
           <Callout tone="warn" title="L'entretien professionnel biennal n'existe plus">
             La loi n° 2025-989 du 24 octobre 2025 l&apos;a remplacé par{' '}
             <strong>l&apos;entretien de parcours professionnel (EPP)</strong>. Les entreprises
-            sans accord spécifique ont jusqu&apos;au <strong>1er octobre 2026</strong>{' '}pour se
-            mettre en conformité.
+            qu&apos;aucun accord d&apos;entreprise ou de branche ne lie sur la périodicité des
+            entretiens appliquent directement les nouvelles règles. Les accords existants
+            devaient être révisés : le nouvel article L.6315-1 s&apos;applique à eux à compter
+            du <strong>1er octobre 2026</strong>.
           </Callout>
           <ul className="list-disc space-y-2 pl-5">
             <li>Premier entretien <strong>dans l&apos;année suivant l&apos;embauche</strong> ;</li>
@@ -157,6 +159,10 @@ export default function ObligationsPage() {
             <Source href="https://www.uniformation.fr/particulier/salaries/formation-et-financements/lentretien-professionnel-et-lentretien-de-parcours-professionnel-epp">
               Uniformation
             </Source>
+            {' · '}
+            <Source href="https://code.travail.gouv.fr/code-du-travail/l6315-1">
+              Code du travail, art. L.6315-1
+            </Source>
           </p>
         </GuideSection>
 
@@ -170,7 +176,7 @@ export default function ObligationsPage() {
           </p>
           <p>
             La Cour de cassation a confirmé le 21 janvier 2026 que les deux conditions de
-            l&apos;article L.6323-13 sont <strong>cumulatives</strong> : l&apos;absence
+            l&apos;article L.6323-13 sont <strong>cumulatives</strong>{' '}: l&apos;absence
             d&apos;entretiens seule ne déclenche pas l&apos;abondement, mais elle reste une
             faute susceptible d&apos;engager la responsabilité de l&apos;employeur.
           </p>
@@ -180,7 +186,7 @@ export default function ObligationsPage() {
               service-public.gouv.fr
             </Source>
             {' · '}
-            <Source href="https://financeurs.moncompteformation.gouv.fr/actualites/droits-correctifs-comment-verser-les-3000eu-lies-aux-obligations-des-entretiens">
+            <Source href="https://financeurs.moncompteformation.gouv.fr/espace-public/aide/comment-attribuer-des-droits-correctifs">
               Caisse des dépôts
             </Source>
           </p>
@@ -209,7 +215,7 @@ export default function ObligationsPage() {
             Avant de payer une formation sur fonds propres, vérifiez dans l&apos;ordre : les
             fonds mutualisés (si &lt; 50 salariés), les fonds conventionnels de votre branche,
             les <Link href="/former-sans-budget" className="font-semibold underline">actions collectives de votre OPCO</Link>,
-            le CPF du salarié, et les cofinancements FSE+.
+            le CPF du salarié, et les cofinancements FSE+ lorsque votre OPCO en propose.
           </Callout>
         </GuideSection>
 
