@@ -297,14 +297,11 @@
     animation: surligner 0.7s var(--ease-sortie) 0.3s both;
   }
   /* Sur une surface sombre, un trait clair passerait sous un texte clair : le surlignage reprend l'aplat plein, texte
-     fonce (10,37:1). `.mark.text-ink` : emploi herite de l'ecran de resultats (montant sur carte sombre), meme rendu,
-     a retirer avec W5. */
-  :is(.surface-nuit, .surface-encre, .surface-turquoise, .surface-orange) .mark,
-  .mark.text-ink {
+     fonce (10,37:1). */
+  :is(.surface-nuit, .surface-encre, .surface-turquoise, .surface-orange) .mark {
     color: var(--texte);
   }
-  :is(.surface-nuit, .surface-encre, .surface-turquoise, .surface-orange) .mark::before,
-  .mark.text-ink::before {
+  :is(.surface-nuit, .surface-encre, .surface-turquoise, .surface-orange) .mark::before {
     inset: 0.16em -0.12em 0.02em;
     border-radius: 0.18em;
   }
@@ -447,6 +444,11 @@
     animation: apparaitre 0.6s var(--ease-sortie) var(--delai, 0ms) both;
   }
 
+  /* Barre empilee de l'ecran de resultats : elle se devoile de gauche a droite, sans deformer ses bouts arrondis */
+  .devoilement {
+    animation: devoiler 0.9s var(--ease-sortie) 0.25s both;
+  }
+
   /* Sommaire collant des guides (Guide.tsx) : il se cale sous l'en-tete collant au lieu de glisser dessous. */
   .sommaire-collant {
     position: sticky;
@@ -479,6 +481,14 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+@keyframes devoiler {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 @keyframes reflet-logo {
@@ -554,6 +564,21 @@
   }
   :is(.surface-turquoise, .surface-orange, .surface-nuit, .surface-encre) {
     border: 1px solid var(--filet);
+  }
+  /* Cartes sans ombre, contenus deja affiches (pas d'apparition en cours sur le papier) */
+  .shadow-douce,
+  .shadow-flottante,
+  .shadow-etiquette {
+    box-shadow: none !important;
+  }
+  .apparition,
+  .devoilement {
+    animation: none !important;
+  }
+  /* Le focus (pose par programme sur un titre, celui des resultats par exemple) ne s'imprime pas */
+  :focus,
+  :focus-visible {
+    outline: none !important;
   }
   /* Le trait est un fond, que l'impression omet par defaut : il devient un soulignement de texte, toujours imprime. */
   .mark::before {

@@ -21,11 +21,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "financementOPCO : simulateur de financement formation OPCO",
+    default: "financementOPCO : tous les financements de votre formation",
     template: "%s | financementOPCO",
   },
   description:
-    "Estimez la prise en charge de votre formation par votre OPCO à partir des critères officiels 2026, comprenez vos obligations et découvrez les formations 100 % financées. Un service SFG Développement.",
+    "Trouvez les financements de votre formation : OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe. Aides éligibles, montants indicatifs et sources officielles, guides des OPCO et des obligations des entreprises. Un service SFG Développement.",
 };
 
 export default function RootLayout({

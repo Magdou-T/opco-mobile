@@ -3,7 +3,7 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '@opco/core';
-import { de, formatEuro, moisAnneeFr, premierePhrase, texteFr } from '../src/lib/format';
+import { INSECABLE, de, formatEuro, moisAnneeFr, premierePhrase, texteDonnees, texteFr, typo } from '../src/lib/format';
 
 /** Toutes les chaînes des données (OPCO et aides), parcourues récursivement. */
 function chainesDesDonnees(): string[] {
@@ -229,5 +229,102 @@ describe('formatEuro', () => {
     // Espace fine insécable entre les milliers, espace insécable avant le symbole (Intl, fr-FR).
     assert.equal(formatEuro(6300).replace(/\s/g, ' '), '6 300 €');
     assert.equal(formatEuro(1500.5).replace(/\s/g, ' '), '1 500,5 €');
+  });
+});
+
+describe('typo', () => {
+  const nb = INSECABLE;
+
+  test('espace insécable avant « : ; ? ! », entre un nombre et son unité, entre les groupes de milliers', () => {
+    assert.equal(typo('Plafond : 2 000 € par an ; 35 h ? Oui !'), `Plafond${nb}: 2${nb}000${nb}€ par an${nb}; 35${nb}h${nb}? Oui${nb}!`);
+    assert.equal(
+      typo('100 % du coût, 19 ans, 1 an, 24 mois, 5 jours, 1 jour, 7 heures, 250 km, 4 nuits, 11 salariés, 1 500 euros'),
+      `100${nb}% du coût, 19${nb}ans, 1${nb}an, 24${nb}mois, 5${nb}jours, 1${nb}jour, 7${nb}heures, 250${nb}km, 4${nb}nuits, ` +
+        `11${nb}salariés, 1${nb}500${nb}euros`,
+    );
+    assert.equal(typo('1 000 000 €'), `1${nb}000${nb}000${nb}€`);
+  });
+
+  test("un mot qui commence comme une unité n'est pas une unité", () => {
+    assert.equal(typo('3 hôtels, 2 kmz, 5 annexes, 4 heurts, 2 eurostar'), '3 hôtels, 2 kmz, 5 annexes, 4 heurts, 2 eurostar');
+    // Deux chiffres sans groupe de trois : pas de milliers.
+    assert.equal(typo('de 9 à 12 h'), `de 9 à 12${nb}h`);
+    assert.equal(typo('niveaux 3 et 4'), 'niveaux 3 et 4');
+    // Deux nombres voisins : le second, de quatre chiffres, n'est pas un groupe de milliers du premier.
+    assert.equal(typo('en 2026 1500 dossiers'), 'en 2026 1500 dossiers');
+  });
+
+  test("un extrait cité « … » n'est jamais modifié", () => {
+    assert.equal(
+      typo('Transitions Pro : « à hauteur de 2 000 euros maximum ; voir : x » ; fin'),
+      `Transitions Pro${nb}: « à hauteur de 2 000 euros maximum ; voir : x »${nb}; fin`,
+    );
+    // Citation imbriquée : tout l'extrait de premier niveau reste mot pour mot.
+    assert.equal(typo('a : « b : « c : d » e : f » g : h'), `a${nb}: « b : « c : d » e : f » g${nb}: h`);
+    // Citation non refermée : elle court jusqu'à la fin du texte.
+    assert.equal(typo('Note : « extrait 2 000 € : tronqué'), `Note${nb}: « extrait 2 000 € : tronqué`);
+    // Guillemet fermant isolé : simple caractère.
+    assert.equal(typo('a » b : c'), `a » b${nb}: c`);
+  });
+
+  test("idempotente, et seules des espaces ordinaires deviennent insécables", () => {
+    const texte = 'Montant : 1 500 € ; « cité : 2 000 € » puis 35 h ?';
+    const une = typo(texte);
+    assert.equal(typo(une), une);
+    assert.equal(une.length, texte.length);
+  });
+
+  test('sur toutes les chaînes des données : extraits intacts, plus aucune espace ordinaire avant : ; ? ! hors citation', () => {
+    let modifiees = 0;
+    for (const chaine of chainesDesDonnees()) {
+      const sortie = typo(chaine);
+      if (sortie !== chaine) modifiees++;
+      assert.equal(sortie.length, chaine.length, chaine.slice(0, 120));
+      let horsCitation = sortie;
+      for (const extrait of extraits(chaine)) {
+        assert.ok(sortie.includes(extrait), `extrait modifié : ${extrait.slice(0, 120)}`);
+        horsCitation = horsCitation.replace(extrait, '');
+      }
+      assert.ok(!/ [:;?!]/.test(horsCitation), `espace ordinaire restée avant une ponctuation : ${chaine.slice(0, 120)}`);
+      assert.ok(!/\d (?:%|€|h(?![\p{L}\p{N}]))/u.test(horsCitation), `espace ordinaire restée avant une unité : ${chaine.slice(0, 120)}`);
+    }
+    assert.ok(modifiees > 300, `seulement ${modifiees} chaînes corrigées`);
+  });
+
+  test('textes construits au hasard (graine fixe) : seules des espaces changent, jamais dans un extrait', () => {
+    // mulberry32 : tirages indépendants et reproductibles.
+    let graine = 23;
+    const hasard = (n: number) => {
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+    };
+    const morceaux = ['texte', ' ', ':', ' ;', '« ', ' »', '2 000', ' €', ' h', '35', ' ans', '?', ' !', 'heures', '%', '1 500 000'];
+    let changes = 0;
+    for (let i = 0; i < 3000; i++) {
+      let texte = '';
+      for (let k = 0; k < 12; k++) texte += morceaux[hasard(morceaux.length)];
+      const sortie = typo(texte);
+      assert.equal(sortie.length, texte.length, texte);
+      for (let j = 0; j < texte.length; j++) {
+        if (sortie[j] !== texte[j]) {
+          changes++;
+          assert.ok(texte[j] === ' ' && sortie[j] === nb, `${texte} => ${sortie}`);
+        }
+      }
+      for (const extrait of extraits(texte)) assert.ok(sortie.includes(extrait), `${texte} => ${sortie}`);
+    }
+    assert.ok(changes > 1000, `seulement ${changes} espaces changées`);
+  });
+});
+
+describe('texteDonnees', () => {
+  test('dates à la française et typographie, hors extraits cités', () => {
+    const nb = INSECABLE;
+    assert.equal(
+      texteDonnees('Ouvert jusqu\'au 2026-12-31 : 5 000 € (« avant le 2026-06-30 : 3 000 € »)'),
+      `Ouvert jusqu'au 31/12/2026${nb}: 5${nb}000${nb}€ (« avant le 2026-06-30 : 3 000 € »)`,
+    );
   });
 });

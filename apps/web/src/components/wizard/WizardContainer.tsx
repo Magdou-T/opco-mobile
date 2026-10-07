@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { calculateFunding, getEmbeddedOpcoBySlug } from '@opco/core';
-import { FundingBreakdown } from '@/components/results/FundingBreakdown';
+import dynamic from 'next/dynamic';
+import {
+  ChargementResultats,
+  EchecChargementResultats,
+  ID_TITRE_RESULTATS,
+} from '@/components/results/EtatsResultats';
 import { Button } from '@/components/ui/Button';
-import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { ProgressBar } from '@/components/ui/ProgressBar';
-import { SectionTitle } from '@/components/ui/SectionTitle';
 import { useWizard } from '@/hooks/useWizard';
 import { cx } from '@/lib/cx';
 import { ETAPES, enumeration } from '@/lib/etapes';
@@ -23,8 +25,21 @@ import { StepSituation } from './StepSituation';
 /** Texte qui dit ce qui manque pour continuer ; le bouton « Suivant » s'y réfère (aria-describedby). */
 const ID_AIDE_SUIVANT = 'aide-suivant';
 
-/** Titre de l'écran de résultats : il reçoit le focus quand les résultats s'affichent (règle reprise par W5). */
-export const ID_TITRE_RESULTATS = 'titre-resultats';
+/** Titre de l'écran de résultats : il reçoit le focus quand les résultats s'affichent (défini avec l'écran). */
+export { ID_TITRE_RESULTATS };
+
+/**
+ * Écran de résultats chargé à la demande : le calcul et le catalogue d'aides (environ 135 Ko gzip) ne pèsent pas sur le
+ * lot initial du simulateur. Pendant le chargement, un squelette porte déjà le titre focalisable ; si le code ne se
+ * charge pas (réseau coupé), un message permet de réessayer sans perdre les réponses.
+ */
+const EcranResultats = dynamic(
+  () =>
+    import('@/components/results/EcranResultats')
+      .then((module) => module.EcranResultats)
+      .catch(() => EchecChargementResultats),
+  { ssr: false, loading: () => <ChargementResultats /> },
+);
 
 /** Air réservé en plus de la barre collante : l'anneau de focus (3 px, décalé de 2 px) d'un contrôle reste entier. */
 const AIR_AU_DESSUS_DE_LA_BARRE = 8;
@@ -52,7 +67,6 @@ export function WizardContainer() {
     goToStep,
     calculate,
     reset,
-    getEffectiveOpcoSlug,
     updateFormationCosts,
   } = useWizard();
 
@@ -108,71 +122,12 @@ export function WizardContainer() {
     };
   }, [showResults, derniereEtape]);
 
-  // Calcul du financement (dérivation pure, jamais de mise à jour de l'état pendant le rendu).
-  const fundingResult = (() => {
-    if (!showResults) return null;
-    const slug = getEffectiveOpcoSlug();
-    if (!slug) return null;
-    const opco = getEmbeddedOpcoBySlug(slug);
-    if (!opco) return null;
-
-    const effectiveState =
-      !state.trainingDays && state.durationHours
-        ? { ...state, trainingDays: Math.ceil(state.durationHours / 7) }
-        : state;
-
-    return calculateFunding(opco, effectiveState);
-  })();
-
-  // Titre de l'écran de résultats, focalisable par programme (cible du focus à l'affichage des résultats).
-  const titreResultats = (
-    <SectionTitle
-      as="h2"
-      taille="sous-section"
-      id={ID_TITRE_RESULTATS}
-      titreFocusable
-      surtitre="Résultat"
-      titre="Votre estimation de financement"
-    />
-  );
-
-  if (showResults && fundingResult) {
-    return (
-      <div ref={cadre} className="space-y-6">
-        {titreResultats}
-        <FundingBreakdown result={fundingResult} />
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center print:hidden">
-          <Button variant="secondary" icone="crayon" onClick={() => goToStep('recap')}>
-            Modifier mes informations
-          </Button>
-          <Button onClick={reset}>Nouvelle simulation</Button>
-          <Button variant="secondary" icone="document" onClick={() => window.print()}>
-            Imprimer / PDF
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
+  // Résultats : l'écran chargé à la demande calcule tout à partir de l'état (aucune donnée ne lui est passée) et pose le
+  // focus sur son titre à son montage ; le cadre suit l'écran affiché, pour ramener son haut à la vue.
   if (showResults) {
-    // Aucun OPCO (projet « former le dirigeant ») : le calcul actuel ne porte que sur la prise en charge par un OPCO.
     return (
-      <div ref={cadre} className="space-y-6">
-        {titreResultats}
-        <Card padding="lg" className="space-y-6">
-          <Callout tone="info" titre="Aucun OPCO renseigné">
-            Ce calcul estime la prise en charge par un OPCO. Si l&apos;entreprise relève d&apos;un OPCO, indiquez-le à
-            l&apos;étape Entreprise.
-          </Callout>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button icone="batiment" onClick={() => goToStep('identification')}>
-              Indiquer l&apos;OPCO
-            </Button>
-            <Button variant="secondary" icone="retour" onClick={() => goToStep('recap')}>
-              Revenir au récapitulatif
-            </Button>
-          </div>
-        </Card>
+      <div ref={cadre}>
+        <EcranResultats state={state} onEdit={goToStep} onReset={reset} />
       </div>
     );
   }
@@ -260,7 +215,7 @@ export function WizardContainer() {
                     onClick={calculate}
                     className="max-sm:px-4 max-sm:text-[0.9375rem]"
                   >
-                    Calculer mon financement
+                    Trouver mes financements
                   </Button>
                 ) : (
                   <Button

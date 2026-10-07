@@ -1,26 +1,29 @@
-'use client';
-
 import type { Confidence } from '@opco/core';
 
 interface ConfidenceBadgeProps {
   confidence: Confidence;
 }
 
+/**
+ * Étiquette de fiabilité d'un montant (classe `.stamp` : pilule, point et bord dans la couleur du texte). Exact en
+ * turquoise foncé sur turquoise doux (5,65:1), Estimé en rouge sur rouge doux (5,62:1), Selon branche en texte doux sur
+ * lin-soft (7,68:1). Le texte porte le sens ; l'infobulle le précise.
+ */
 const CONFIDENCE_CONFIG: Record<Confidence, { label: string; className: string; title: string }> = {
   exact: {
     label: 'Exact',
-    className: 'text-valid bg-valid-soft',
-    title: 'Montant publié tel quel par l’OPCO, la source est jointe',
+    className: 'text-turquoise-deep bg-turquoise-soft',
+    title: 'Montant publié tel quel par le financeur, la source est jointe',
   },
   estimated: {
     label: 'Estimé',
-    className: 'text-alert bg-alert-soft',
+    className: 'text-rouge bg-rouge-soft',
     title: 'Montant reconstitué à partir de documents officiels partiels',
   },
   depends_on_branche: {
     label: 'Selon branche',
-    className: 'text-ink-soft bg-paper-deep',
-    title: 'Pas de barème national publié : dépend de votre convention collective',
+    className: 'text-texte-doux bg-lin-soft',
+    title: 'Pas de barème unique publié : le montant dépend de votre branche ou de votre dossier',
   },
 };
 

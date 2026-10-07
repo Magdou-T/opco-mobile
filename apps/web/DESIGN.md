@@ -141,7 +141,7 @@ Pilule. Rend un `<button>` sans `href`, un lien Next pour une adresse interne, u
 ```tsx
 <Button href="/simulateur" size="lg" fleche pleineLargeur="mobile">Estimer mon financement</Button>
 <Button href="/comprendre-les-opco" variant="secondary">D'abord comprendre</Button>
-<Button onClick={calculer} disabled={!pret}>Calculer mon financement</Button>
+<Button size="lg" fleche onClick={calculate}>Trouver mes financements</Button>
 <Button href="/simulateur" variant="inverse" fleche>Estimer mon financement</Button> {/* sur surface-orange */}
 ```
 
@@ -238,6 +238,7 @@ logo lui-même). Le fichier n'est jamais recoloré : ses couleurs restent lisibl
 | `.surface-turquoise`, `.surface-orange`, `.surface-nuit`, `.surface-encre` | surfaces sombres, texte clair, focus adapté |
 | `.aplat-turquoise` | turquoise lumineux de la marque, **décor seul** (aucun texte posé dessus) |
 | `.apparition` | apparition douce (délai par la variable `--delai`) |
+| `.devoilement` | la barre empilée de l'écran de résultats se dévoile de gauche à droite (`clip-path`, bouts arrondis intacts) |
 | `.reflet` | balayage lumineux au survol (bouton primaire) |
 
 Rail et jalons : voir la section « Comment ça marche » de `app/page.tsx` (rail de 4 à 6 px au turquoise de marque,
@@ -276,7 +277,9 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
 - Hiérarchie : un seul `h1` par page ; `SectionTitle` avec `id` et `aria-labelledby` sur la section.
 - Lien d'évitement « Aller au contenu » en tête de page (cible `#contenu`).
 - Impression : en-tête et pied masqués, surfaces en dégradé rendues sur fond blanc en texte foncé, décors (`.decor`)
-  retirés.
+  retirés, cartes sans ombre (`shadow-douce`, `shadow-flottante`, `shadow-etiquette`), animations d'apparition coupées,
+  anneau de focus non imprimé. Un graphique qui porte une couleur utile (barre empilée et pastilles de l'écran de
+  résultats) garde ses fonds par `[print-color-adjust:exact]` ; le reste suit le réglage du navigateur.
 
 ## 8. En-tête et pied de page
 
@@ -346,12 +349,11 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
 6. Navigation au clavier : ordre logique, focus visible sur chaque élément, menus fermables par Échap.
 7. Mouvement coupé sous `prefers-reduced-motion`, impression lisible.
 8. Textes relus selon la section 9 ; `npm run check:charte` au vert.
-9. Aucune affirmation qui devance le produit. À vérifier avant la mise en ligne : **sections de l'accueil qui dépendent
-   de l'écran de résultats (W5)**. « Ce que le simulateur recherche » annonce que le simulateur passe en revue un
-   catalogue d'aides publiques et vérifie la situation au regard de chacune ; au commit 411792c, le parcours n'appelle
-   que le moteur des barèmes OPCO : `EMBEDDED_AIDES` n'est employé ni par le parcours ni par l'écran de résultats (seul
-   l'accueil le lit, pour n'afficher que les familles de financeurs présentes au catalogue). W5 rend la phrase vraie ;
-   la revue finale contrôle que l'écran de résultats affiche bien ces aides, sinon la phrase est reformulée.
+9. Aucune affirmation qui devance le produit. Les sections de l'accueil qui décrivent l'écran de résultats (« Ce que le
+   simulateur recherche », « Lisez votre plan de financement », l'étiquette de fiabilité) ont été vérifiées phrase par
+   phrase contre cet écran (W5) : le plan de l'OPCO n'est calculé que pour former ou reconvertir un salarié, le
+   catalogue d'aides est évalué pour tout projet, chaque aide porte sa source et son étiquette de fiabilité. Toute
+   promesse nouvelle se vérifie de la même façon, contre l'écran réel.
 
 ## 12. Garde de charte
 
@@ -402,10 +404,10 @@ barre horizontale).
 
 | Élément | Où | Pourquoi il reste | À retirer par |
 |---|---|---|---|
-| Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 12 emplois hérités (page contact, liste et fiches OPCO, écran de résultats, formulaire de contact, guides ; le parcours du simulateur n'en a plus depuis W4). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | W5 (résultats), D3 (fiches, guides, contact), puis suppression de la règle |
+| Règle `.border-ink` (rendue en filet-fort), `hover:border-ink`, `.border-ink.bg-navy` | `globals.css`, couche `utilities` | 7 emplois hérités (page contact, liste et fiches OPCO, formulaire de contact, guides ; ni le parcours du simulateur ni l'écran de résultats n'en ont plus depuis W4 et W5). La règle passe après les utilitaires générés : elle ne l'emporte plus sur une variante (`hover:`, `focus:`). | D3 (fiches, guides, contact), puis suppression de la règle |
 | `section[id].scroll-mt-24 { scroll-margin-top: 0 }` | `globals.css` | Les sections des guides (`GuideSection`) portent encore `scroll-mt-24`. | D3 (restylage des guides) |
-| `.mark.text-ink` (aplat plein, texte encre) | `globals.css` | Le montant de la carte sombre de l'écran de résultats (`FundingBreakdown`) est surligné ainsi ; le trait de base passerait sous un texte encre sur fond encre. | W5 (écran de résultats) |
-| `transition-colors` ou `transition-all` sur un élément focalisable (règle de la section 7) | `components/site/ContactForm.tsx:146` (bouton d'envoi : l'anneau glisse depuis le blanc du libellé), `components/ui/SourceBadge.tsx:14`, `components/results/FundingBreakdown.tsx:416`, `app/opco/page.tsx:30` (`transition-all`) | Composants hérités, pas encore restylés : l'utilitaire anime aussi `outline-color`, l'anneau de focus glisse depuis la couleur du texte. Les autres emplois de `apps/web/src` sont sur des éléments sans anneau (pastilles et jalons décoratifs, ligne de tableau non focalisable). | D3 (contact, liste et fiches des OPCO), W5 (écran de résultats) : écrire la liste, `transition-[color,background-color,border-color]` |
+| `transition-colors` ou `transition-all` sur un élément focalisable (règle de la section 7) | `components/site/ContactForm.tsx:146` (bouton d'envoi : l'anneau glisse depuis le blanc du libellé), `app/opco/page.tsx:30` (`transition-all`) | Composants hérités, pas encore restylés : l'utilitaire anime aussi `outline-color`, l'anneau de focus glisse depuis la couleur du texte. Les autres emplois de `apps/web/src` sont sur des éléments sans anneau (pastilles et jalons décoratifs). `SourceBadge` et `FundingBreakdown` écrivent la liste depuis W5. | D3 (contact, liste et fiches des OPCO) : écrire la liste, `transition-[color,background-color,border-color]` |
+| Espaces ordinaires à l'intérieur des guillemets d'un extrait cité (« Organismes de formation ») | textes des données et du moteur | `typo()` ne touche jamais une citation (mot pour mot) : un « » » peut commencer une ligne sur téléphone. | à trancher : insécables autour des guillemets dans les données (`@opco/core`) |
 
 ## 14. Parcours du simulateur
 
@@ -420,10 +422,12 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   le rail ; chaque étape garde son nom complet pour les lecteurs d'écran (« Étape 2 sur 6 : Entreprise (en cours) »).
 - **En-tête d'étape** (`EnTeteEtape`) : `SectionTitle` (surtitre « Étape n sur 6 », `h2` focalisable par programme,
   chapeau). À chaque changement d'écran, le haut de l'écran revient à la vue s'il en était sorti et le focus passe à
-  son titre : titre de l'étape ; à l'affichage des résultats, titre de l'écran de résultats (`h2` « Votre estimation
-  de financement », `ID_TITRE_RESULTATS`, aussi pour « Aucun OPCO renseigné ») ; au retour par « Modifier mes
-  informations » ou « Revenir au récapitulatif », titre « Récapitulatif » (seul `showResults` change : l'effet en
-  dépend aussi) ; après « Nouvelle simulation », titre de l'étape Projet. L'écran de résultats de W5 garde la règle.
+  son titre : titre de l'étape ; à l'affichage des résultats, titre de l'écran de résultats (`h2` « Votre plan de
+  financement », `ID_TITRE_RESULTATS`) ; au retour par « Modifier mes informations » ou « Revenir au récapitulatif »,
+  titre « Récapitulatif » (seul `showResults` change : l'effet en dépend aussi) ; après « Nouvelle simulation », titre de
+  l'étape Projet. L'écran de résultats est chargé à la demande : son titre n'existe pas quand `showResults` passe à vrai.
+  Le squelette d'attente porte le même titre focalisable (le parcours y pose le focus), puis l'écran, comme l'écran
+  d'échec du chargement, pose le focus sur son propre titre à son montage (section 15).
 - **Navigation** : `Button` secondary « Retour » (flèche seule sous 640 px, nom gardé) et primary « Suivant ». Tant que
   l'étape est incomplète, « Suivant » reste atteignable au clavier mais porte `aria-disabled`, grisé (texte-discret sur
   lin), et un texte dit ce qui manque (« Pour continuer, indiquez la région et la taille de l'entreprise. »), relié par
@@ -468,7 +472,92 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
 - **Limite connue** : un dirigeant « assimilé salarié » dont l'entreprise relève d'un OPCO peut relever du plan de
   développement des compétences de sa branche (Afdas : « dirigeants salariés » ; Uniformation : « dirigeants bénévoles
   dans certaines branches ») ; le projet « Former le dirigeant » n'affiche pourtant ni plafond horaire ni budget OPCO,
-  et l'écran de résultats prévu par W5 ne calcule ce plan que pour les projets salariés (`avecPdc`). Hors périmètre.
+  et l'écran de résultats ne calcule ce plan que pour les projets salariés (former, reconvertir : `ouvreBudgetOpco`,
+  le `avecPdc` de l'écran). Une note le dit au dirigeant (« Aucun OPCO renseigné » ou « OPCO non compté pour un
+  dirigeant », avec le cas de l'assimilé salarié). Hors périmètre.
+
+## 15. Écran de résultats (« Votre plan de financement »)
+
+Composants : `components/results/` ; logique de présentation en fonctions pures : `lib/resultats.ts` (tests :
+`tests/resultats.test.ts`). Chaque montant vient du moteur (`@opco/core`) et n'est arrondi qu'à l'affichage
+(`formatEuro`) ; un montant d'aide non éligible n'est jamais affiché.
+
+- **Chargement** : `EcranResultats` est chargé à la demande par `WizardContainer` (`next/dynamic`, `ssr: false`) : le
+  catalogue d'aides (environ 135 Ko gzip) et le calcul restent hors du lot initial du simulateur. Le parcours ne lui
+  passe que l'état et deux actions ; le calcul est une dérivation pure de l'état (`useMemo`), la date du jour est lue
+  dans le composant, jamais dans `@opco/core`. Squelette d'attente (`ChargementResultats` : `aria-busy`, « Calcul en
+  cours… », même titre focalisable, hauteur du bandeau) ; échec du chargement (`EchecChargementResultats` : `Callout`
+  alerte, « Réessayer » recharge le code sans perdre les réponses).
+- **Ordre** : titre `h2` et actions (Modifier, Imprimer : libellés courts sous 640 px, nom accessible complet),
+  étiquettes de la situation (projet, OPCO, région, durée), bandeau de synthèse, note sur l'OPCO s'il y a lieu, cartes
+  du plan, aides par financeur (`h2`), détail de l'estimation OPCO (`h2`), portails de la région (`h2`), mention,
+  date de la simulation et actions. Aucun élément collant.
+- **Bandeau de synthèse** : carte blanche à grands chiffres (`rounded-panneau`, filet turquoise / or / orange en tête),
+  pas un dégradé : le reste à charge est en orange foncé (5,16:1 sur blanc ; moins de 2:1 sur le dégradé turquoise), la
+  barre empilée a besoin d'un fond clair pour ses couleurs de famille (le turquoise de l'OPCO se perdrait dans un
+  dégradé turquoise), et le bandeau porte plus qu'une accroche (chiffres, barre, légende, alerte) : section 6, un
+  dégradé ne passe pas derrière un long contenu. Trois chiffres en Montserrat 700 tabulaires : Coût de la formation,
+  **Financé** (le plus grand), Reste à charge (orange foncé) ; sous Financé, la part du coût (`partFinancee` : jamais
+  « 100 % » avec un reste, jamais « 0 % » avec un financement). Sous 640 px, une ligne par chiffre.
+- **`.mark`** : le trait de base vert clair (le souligné du film de marque) sous le seul chiffre Financé, sur fond
+  blanc. L'aplat plein ne sert plus sur cet écran (plus de carte sombre) : la règle héritée `.mark.text-ink` est
+  retirée de `globals.css`.
+- **États du bandeau** (`etatEnTete`) : coût inconnu (`Callout` « Coût de la formation non renseigné », bouton
+  « Indiquer le coût », jamais « 0 € ») ; aucun financement chiffré (coût seul, `Callout` qui le dit, liens vers les
+  cartes Montant selon dossier, Aides versées à l'employeur et Revenus et aides à la personne, placées en tête ;
+  variante quand des options au choix ont un montant) ; plan chiffré (chiffres, barre, légende). Fonds épuisés
+  signalés par l'OPCO alors que le plan compte son plan de développement des compétences (`fondsEpuisesSurLePlan`) :
+  `Callout` avertissement sous la barre, lien vers les alertes de l'OPCO (`#alertes-opco`).
+- **Familles de couleur** (`familleCouleur`) : pastille ronde des lignes et des groupes, part de la barre, pastille de
+  légende. L'icône posée sur la pastille est décorative (le nom du financeur est écrit) mais dépasse 3:1.
+
+| Famille | Financeurs du catalogue | Couleur | Icône |
+|---|---|---|---|
+| OPCO | `opco`, `branche` | `turquoise` | #1A1A1A, 5,68:1 |
+| Fonds d'assurance formation | `faf` (FAFCEA, AGEFICE, FIF PL, VIVÉA…) | `turquoise-deep` | blanc, 6,26:1 |
+| CPF | `cpf` | `or` | #1A1A1A, 9,48:1 |
+| Région | `region`, `departement` | `vert-clair` | #1A1A1A, 10,37:1 |
+| État et France Travail | `etat`, `france_travail` | `orange` | #1A1A1A, 4,59:1 |
+| Europe | `europe` | `nuit` | blanc, 19,14:1 |
+| Autres | `transitions_pro`, `agefiph`, `fiscal`, `autre` | `filet-fort` | blanc, 3,54:1 |
+| Reste à charge | | hachures orange doux sur blanc, bord orange foncé | |
+
+- **Barre empilée** (`partsBarre`) : une part par famille (lignes additionnées, dans l'ordre d'empilement), puis le
+  reste à charge ; pourcentages entiers dont la somme vaut exactement 100 (plus fort reste), largeurs proportionnelles
+  aux montants (6 px au moins), 2 px de blanc entre les parts. Bord intérieur encre à 35 % sur chaque part (or 3,71:1
+  et vert clair 3,41:1 contre le blanc, au lieu de 1,84:1 et 1,68:1). Jamais seule porteuse d'information :
+  `role="img"` et nom accessible complet (`descriptionBarre`), légende écrite (« AKTO 67 % », « moins de 1 % »). Libellé
+  d'une part : le nom de financeur commun à ses lignes s'il est court (« AKTO », « FAFCEA »), sinon celui de la famille.
+- **Plan en pile** : la carte « Financement de la formation » liste les lignes dans l'ordre d'empilement (pastille,
+  nom, financeur, étiquette de fiabilité, « estimation à confirmer auprès du financeur » si elle n'est pas exacte,
+  montant à droite) ; avec plusieurs lignes, un fil (`filet`) les relie jusqu'au total, « plafonné au coût de la
+  formation » ; c'est la seule carte à total. Les autres cartes (options au choix, aides versées à l'employeur, revenus
+  et aides à la personne, avantages fiscaux et sociaux, montant selon dossier, services gratuits) : en-tête à pastille
+  d'icône turquoise et phrase d'aide, aucune somme, aucune carte vide (`cartesDuPlan`). La raison d'une option (« Au
+  choix avec « X » ») reste du texte, sans lien.
+- **Aides par financeur** (`groupesAidesVisibles`) : groupées par financeur du catalogue, dans l'ordre de la liste
+  évaluée. Titre : libellé de la famille pour CPF, État, Europe, OPCO, France Travail, Transitions Pro, Agefiph,
+  Fiscalité (même titre d'une simulation à l'autre) ; nom propre commun pour Région, Département, fonds d'assurance
+  formation, branche et autres (« Région Occitanie », « FAFCEA », « Action Logement »). Carte d'aide : étiquette
+  Éligible (turquoise) ou À vérifier (or, texte foncé), montant en gros (« jusqu'à », « Montant selon dossier »,
+  « Aucun montant estimé pour ce profil »), règle de calcul, description, points à confirmer, cumul ; détail dépliable
+  (chevron, `aria-expanded`) : conditions, démarches numérotées, « Faire la demande », pages officielles citées (titre
+  complet) ; pied : fiabilité, date de vérification, un lien par site source (`sourcesDeLAide` : le catalogue cite
+  souvent dix pages d'un même site). Un identifiant technique d'aide cité par le catalogue (« nat-cpf ») devient le
+  nom de l'aide (`nommerAides`). Aides non éligibles : repliées, nom et raisons, jamais de montant ; celles d'un autre
+  projet, public, région ou type de formation ne sont jamais affichées.
+- **Détail de l'estimation OPCO** (`FundingBreakdown`) : total de tous les postes (le plan ne retient que ceux de la
+  formation, le chapeau le dit quand salaires ou transport sont financés) ; tableau Poste / Financé / Reste, « Demandé »
+  et la source passant dans la colonne du poste sous 640 px ; ligne non chiffrée : « à confirmer », reste « - », règle
+  sous le poste ; listes de plus de 6 conventions collectives repliées (`replierIdcc`) ; 50 salariés et plus : `Callout`
+  avertissement (barème général ou de la branche ; choisir sa branche à l'étape Entreprise).
+- **Textes des données** : `texteDonnees` (dates JJ/MM/AAAA et `typo` : insécables avant « : ; ? ! », entre un nombre
+  et son unité, entre les milliers), jamais à l'intérieur d'un extrait cité. Une adresse web longue passe à la ligne
+  (`break-words` ; `[overflow-wrap:anywhere]` dans le tableau, pour que la largeur des colonnes n'en dépende pas).
+- **Mouvement** : apparition douce du bandeau et des cartes (`.apparition`, délais échelonnés), barre qui se dévoile
+  (`.devoilement`), trait `.mark` qui se déploie ; tout s'arrête sous `prefers-reduced-motion`.
+- **Impression** : section 7 ; détail des aides, liste des non éligibles et listes de conventions repliées imprimés en
+  entier (`hidden print:block`), boutons masqués, cartes d'aide non coupées (`break-inside-avoid`).
 
 ## Annexe : tableau des contrastes
 
@@ -587,5 +676,30 @@ emplois : elles expliquent une règle.
 | `#5E9F92` | `#F3F7F6` | repère : turquoise de marque seul sur lin-soft (d'où le contour du jalon fait) | 2,84:1 | - | repère |
 | `#7A8C88` | `#F3F7F6` | simulateur, jalon à venir : contour filet-fort sur le panneau lin-soft | 3,28:1 | 3,00:1 | conforme |
 | `#1A1A1A` | `#FBEDEE` | simulateur, recherche d'entreprise impossible : message sur rouge-soft | 15,29:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#5E9F92` | résultats : icône d'une pastille OPCO (turquoise) | 5,68:1 | 3,00:1 | conforme |
+| `#1A1A1A` | `#F9B233` | résultats : icône d'une pastille CPF (or) | 9,48:1 | 3,00:1 | conforme |
+| `#1A1A1A` | `#A3D1C8` | résultats : icône d'une pastille Région (vert clair) | 10,37:1 | 3,00:1 | conforme |
+| `#1A1A1A` | `#E84E1B` | résultats : icône d'une pastille État et France Travail (orange) | 4,59:1 | 3,00:1 | conforme |
+| `#FFFFFF` | `#3E6860` | résultats : icône d'une pastille fonds d'assurance formation (turquoise foncé) | 6,26:1 | 3,00:1 | conforme |
+| `#FFFFFF` | `#08110F` | résultats : icône d'une pastille Europe (nuit) | 19,14:1 | 3,00:1 | conforme |
+| `#FFFFFF` | `#7A8C88` | résultats : icône d'une pastille Autres (filet fort) | 3,54:1 | 3,00:1 | conforme |
+| `#A77E2B` | `#FFFFFF` | résultats : bord d'une part or de la barre (encre 35 % sur or) contre le blanc | 3,71:1 | 3,00:1 | conforme |
+| `#6F928B` | `#FFFFFF` | résultats : bord d'une part vert clair (encre 35 % sur vert clair) contre le blanc | 3,41:1 | 3,00:1 | conforme |
+| `#427268` | `#FFFFFF` | résultats : bord d'une part turquoise (encre 35 % sur turquoise) contre le blanc | 5,47:1 | 3,00:1 | conforme |
+| `#C43F13` | `#FFFFFF` | résultats : bord de la part « reste à charge » (orange foncé) contre le blanc | 5,16:1 | 3,00:1 | conforme |
+| `#F9B233` | `#FFFFFF` | repère : part or sans bord (d'où le bord encre 35 %) | 1,84:1 | - | repère |
+| `#A3D1C8` | `#FFFFFF` | repère : part vert clair sans bord | 1,68:1 | - | repère |
+| `#C43F13` | `#FFFFFF` | résultats : chiffre « Reste à charge », reste sur les postes de l'OPCO (orange foncé) | 5,16:1 | 4,50:1 | conforme |
+| `#3E6860` | `#FFFFFF` | résultats : total de la pile, total et montants financés de l'OPCO (turquoise foncé) | 6,26:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#F3F7F6` | résultats : pied de carte d'aide (« Vérifié le », « Sources ») | 4,95:1 | 4,50:1 | conforme |
+| `#C43F13` | `#F3F7F6` | résultats : liens des sites sources en pied de carte d'aide | 4,78:1 | 4,50:1 | conforme |
+| `#C43F13` | `#FDF0EA` | résultats : liens vers les cartes mises en avant (aucun financement chiffré) | 4,63:1 | 4,50:1 | conforme |
+| `#44514E` | `#F8FAFA` | résultats : détail du calcul d'un poste (lin-soft à 60 % sur blanc) | 7,91:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#F8FAFA` | résultats : surtitre « Détail du calcul » (lin-soft à 60 % sur blanc) | 5,11:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#F9FBFB` | résultats : dispositif complémentaire (lin-soft à 50 %) : texte discret | 5,15:1 | 4,50:1 | conforme |
+| `#3E6860` | `#F9FBFB` | résultats : montant d'un dispositif complémentaire (lin-soft à 50 %) | 6,03:1 | 4,50:1 | conforme |
+| `#5F6E6A` | `#F3F9F7` | résultats : ligne du tableau survolée (vert clair doux à 50 %) : texte discret | 5,02:1 | 4,50:1 | conforme |
+| `#3E6860` | `#F3F9F7` | résultats : montant financé d'une ligne survolée | 5,88:1 | 4,50:1 | conforme |
+| `#1A1A1A` | `#5E9F92` | résultats : numéro d'une démarche (disque turquoise) | 5,68:1 | 4,50:1 | conforme |
 
-108 couples (dont 11 repères), aucun sous son seuil.
+133 couples (dont 13 repères), aucun sous son seuil.

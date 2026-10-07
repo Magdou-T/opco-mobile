@@ -5,6 +5,7 @@ import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '@opco/core';
 import type { Financeur } from '@opco/core';
 import { cx } from '@/lib/cx';
 import { extrait } from '@/lib/extrait';
+import { typo } from '@/lib/format';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
@@ -15,9 +16,9 @@ import type { IconName } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 
 export const metadata: Metadata = {
-  title: 'financementOPCO : estimez le financement de votre formation par votre OPCO',
+  title: 'financementOPCO : trouvez tous les financements de votre formation',
   description:
-    'Simulateur gratuit basé sur les critères officiels 2026 des 11 OPCO : plafonds horaires, budgets annuels, frais annexes. Plus les guides : fonctionnement des OPCO, obligations des entreprises, formations 100 % financées.',
+    'Simulateur gratuit : OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe. Les aides et financements de votre formation, avec leurs montants indicatifs et leurs sources officielles. Plus les guides : fonctionnement des OPCO, obligations des entreprises, formations 100 % financées.',
 };
 
 /* ============================================================
@@ -109,14 +110,14 @@ const ETAPES = [
   {
     titre: 'Lisez votre plan de financement',
     texte:
-      "Le calcul se lit poste par poste, chaque montant avec sa source. Le récapitulatif s'imprime pour accompagner votre demande.",
+      "Coût, financé, reste à charge : les financements s'empilent jusqu'au coût de la formation, chaque aide avec sa source. Le plan s'imprime pour accompagner votre demande.",
   },
 ];
 
 const FIABILITE = [
   {
     confidence: 'exact' as const,
-    texte: "Le montant figure tel quel sur le site officiel de l'OPCO : nous affichons la valeur et le lien vers la page source.",
+    texte: 'Le montant figure tel quel sur le site officiel du financeur : nous affichons la valeur et le lien vers la page source.',
   },
   {
     confidence: 'estimated' as const,
@@ -126,7 +127,7 @@ const FIABILITE = [
   {
     confidence: 'depends_on_branche' as const,
     texte:
-      "L'OPCO ne publie pas de barème national : le montant dépend de votre convention collective. Nous le disons plutôt que d'inventer un chiffre.",
+      "Le financeur ne publie pas de barème unique : le montant dépend de votre branche ou de votre dossier. Nous le disons plutôt que d'inventer un chiffre.",
   },
 ];
 
@@ -141,16 +142,6 @@ const DOMAINES: { label: string; tone: EtiquetteTone }[] = [
 
 /** Fiches d'OPCO montrées sur téléphone (sous 640 px) ; les autres restent dans la liste, masquées, et toutes sont sur /opco/. */
 const OPCO_SUR_TELEPHONE = 6;
-
-/** Espace insécable (U+00A0), écrit par son code. */
-const INSECABLE = String.fromCharCode(0xa0);
-
-/**
- * Typographie française des textes tirés des tableaux et des données : espace insécable avant « : ; ? ! » et entre un
- * nombre et son unité, pour qu'aucune ponctuation ni unité ne commence seule une ligne sur téléphone.
- */
-const typo = (texte: string): string =>
-  texte.replace(/ ([:;?!])/g, `${INSECABLE}$1`).replace(/(\d) (%|€|h\b)/g, `$1${INSECABLE}$2`);
 
 /** Ligne de secteurs d'une carte d'OPCO : extrait de 96 caractères au plus (`lib/extrait.ts`), typographie française. */
 const secteurs = (texte: string): string => typo(extrait(texte, 96));
@@ -243,13 +234,14 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 pb-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14 lg:pb-20">
           <div className="lg:pt-8">
             <p className="apparition max-w-xl text-chapeau text-texte-doux" style={delai(140)}>
-              Chaque année, votre entreprise verse une contribution légale à la formation professionnelle. En
-              retour, son OPCO peut financer les coûts pédagogiques, les salaires et les frais annexes d&apos;une
-              formation, à condition d&apos;en connaître les barèmes. financementOPCO les a rassemblés.
+              Chaque année, votre entreprise verse une contribution légale à la formation professionnelle. Son OPCO
+              peut en retour financer une formation, et d&apos;autres financeurs s&apos;y ajoutent&nbsp;: CPF, Région,
+              France Travail, Transitions Pro, Agefiph, Europe. financementOPCO passe en revue tous ces financements et
+              retient ceux qui correspondent à votre projet.
             </p>
             <div className="apparition mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" style={delai(220)}>
               <Button href="/simulateur" size="lg" fleche pleineLargeur="mobile">
-                Estimer mon financement
+                Trouver mes financements
               </Button>
               <Button href="/comprendre-les-opco" variant="secondary" size="lg" pleineLargeur="mobile">
                 D&apos;abord comprendre
@@ -257,7 +249,8 @@ export default function Home() {
             </div>
             <p className="apparition mt-5 flex items-start gap-2 text-sm text-texte-discret" style={delai(280)}>
               <Icon name="bouclier" className="mt-px size-[18px] shrink-0 text-turquoise" />
-              Gratuit, sans inscription. Chaque montant indique sa source officielle et son niveau de fiabilité.
+              Gratuit, sans inscription. Chaque aide est accompagnée de sa source officielle et de son niveau de
+              fiabilité&nbsp;; les estimations sont signalées.
             </p>
           </div>
 
@@ -307,7 +300,7 @@ export default function Home() {
                 <Icon name="bouclier" className="size-5" />
               </span>
               <h3 className="text-lg leading-snug font-bold tracking-[-0.015em] text-texte sm:text-xl">
-                Une étiquette de fiabilité sur chaque montant
+                Une étiquette de fiabilité sur chaque aide
               </h3>
             </div>
             <ul className="mt-6 grid gap-6 md:grid-cols-3 md:gap-8">
@@ -323,14 +316,15 @@ export default function Home() {
       </section>
 
       {/* ================= CE QUE LE SIMULATEUR RECHERCHE ================= */}
-      {/* Le chapeau annonce la revue du catalogue d'aides : l'écran de résultats (W5) doit l'afficher (DESIGN.md, 11). */}
+      {/* Chaque phrase est vérifiée contre l'écran de résultats (W5) : plan de l'OPCO pour les projets salariés, catalogue
+          d'aides évalué pour tout projet, aides groupées par financeur (DESIGN.md, sections 11 et 15). */}
       <section aria-labelledby="titre-financeurs">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20">
           <SectionTitle
             id="titre-financeurs"
             surtitre="Ce que le simulateur recherche"
             titre="Votre OPCO d'abord, puis les autres financeurs"
-            chapeau="Le simulateur part des barèmes de votre OPCO, puis passe en revue un catalogue d'aides publiques. Pour chacune, il vérifie si votre situation remplit les critères publiés."
+            chapeau="Pour former ou reconvertir un salarié, le simulateur part des barèmes de votre OPCO. Pour tout projet, il passe en revue un catalogue d'aides et de financements et vérifie, pour chacun, si votre situation remplit les critères publiés."
           />
           <ul className="mt-10 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
             {FAMILLES.map((f, i) => (
@@ -450,7 +444,7 @@ export default function Home() {
             Cinq minutes pour chiffrer votre projet
           </h2>
           <Button href="/simulateur" variant="inverse" size="lg" fleche pleineLargeur="mobile" className="shrink-0">
-            Estimer mon financement
+            Trouver mes financements
           </Button>
         </div>
       </section>

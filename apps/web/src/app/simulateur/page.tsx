@@ -1,26 +1,23 @@
 import type { Metadata } from 'next';
+import { SectionTitle } from '@/components/ui/SectionTitle';
 import { WizardContainer } from '@/components/wizard/WizardContainer';
 
 export const metadata: Metadata = {
-  title: 'Simulateur de financement OPCO',
+  title: 'Simulateur de financement : trouvez toutes vos aides',
   description:
-    'Estimez en 5 étapes la prise en charge de votre formation : coûts pédagogiques, salaires, frais annexes. Basé sur les critères officiels 2026 des 11 OPCO.',
+    'Estimez en 6 étapes le financement de votre formation : OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe… Aides éligibles, montants, démarches et sources.',
 };
 
 export default function SimulateurPage() {
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-      <div className="mb-8 print:hidden">
-        <p className="marginalia mb-2">Simulateur · 5 étapes · ~5 minutes</p>
-        <h1 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Estimez votre prise en charge
-        </h1>
-        <p className="mt-3 max-w-2xl text-ink-soft">
-          Répondez aux questions pour obtenir une estimation détaillée, poste par poste,
-          du financement de votre formation par votre OPCO. Chaque montant est accompagné
-          de sa source officielle et d&apos;un tampon de fiabilité.
-        </p>
-      </div>
+    <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12">
+      <SectionTitle
+        as="h1"
+        surtitre="Simulateur · 6 étapes · ~5 minutes"
+        titre="Trouvez tous les financements de votre formation"
+        chapeau="Répondez aux questions&nbsp;: le site identifie votre OPCO, recherche toutes les aides et tous les financements mobilisables et estime votre reste à charge. Chaque aide est accompagnée de sa source officielle et de son niveau de fiabilité&nbsp;; les estimations sont signalées."
+        className="mb-8 sm:mb-10 print:hidden"
+      />
       <WizardContainer />
     </main>
   );

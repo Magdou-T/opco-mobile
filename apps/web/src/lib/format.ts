@@ -39,19 +39,17 @@ const DATE_ISO = /\b(\d{4})-(\d{2})-(\d{2})\b/g;
 const datesFr = (s: string): string => s.replace(DATE_ISO, '$3/$2/$1');
 
 /**
- * Convertit les dates ISO (AAAA-MM-JJ) d'un texte d'annotation en JJ/MM/AAAA, par remplacement de chaîne (aucun fuseau
- * horaire en jeu). À appliquer à tout texte des données affiché tel quel (notes de barème, de dispositif ou de variante,
- * conditions, démarches, textes libres). Les extraits cités entre « » restent mot pour mot, dates comprises : seul le
- * texte hors citation est converti (citations imbriquées comprises ; une citation non refermée court jusqu'à la fin).
+ * Applique `transformer` au seul texte hors citation : les extraits cités entre « » restent mot pour mot (citations
+ * imbriquées comprises ; une citation non refermée court jusqu'à la fin du texte ; un « » » isolé est un simple caractère).
  */
-export function texteFr(s: string): string {
+export function horsCitations(s: string, transformer: (morceau: string) => string): string {
   let resultat = '';
   let profondeur = 0;
   let debut = 0;
   for (let i = 0; i < s.length; i++) {
     if (s[i] === '«') {
       if (profondeur === 0) {
-        resultat += datesFr(s.slice(debut, i));
+        resultat += transformer(s.slice(debut, i));
         debut = i;
       }
       profondeur++;
@@ -63,7 +61,45 @@ export function texteFr(s: string): string {
       }
     }
   }
-  return resultat + (profondeur > 0 ? s.slice(debut) : datesFr(s.slice(debut)));
+  return resultat + (profondeur > 0 ? s.slice(debut) : transformer(s.slice(debut)));
+}
+
+/**
+ * Convertit les dates ISO (AAAA-MM-JJ) d'un texte d'annotation en JJ/MM/AAAA, par remplacement de chaîne (aucun fuseau
+ * horaire en jeu). À appliquer à tout texte des données affiché tel quel (notes de barème, de dispositif ou de variante,
+ * conditions, démarches, textes libres). Les extraits cités entre « » restent mot pour mot, dates comprises : seul le
+ * texte hors citation est converti (citations imbriquées comprises ; une citation non refermée court jusqu'à la fin).
+ */
+export function texteFr(s: string): string {
+  return horsCitations(s, datesFr);
+}
+
+/** Unités qu'une espace insécable attache au nombre qui les précède (mot entier : « 5 annexes » n'est pas « 5 ans »). */
+const NOMBRE_ET_UNITE = /(\d) (?=(?:%|€|h|ans?|mois|jours?|heures?|km|nuits?|salariés?|euros?)(?![\p{L}\p{N}]))/gu;
+/** Groupe de milliers : « 2 000 », « 1 500 000 ». */
+const GROUPE_DE_MILLIERS = /(\d) (?=\d{3}(?!\d))/g;
+/** Ponctuation haute précédée d'une espace ordinaire. */
+const PONCTUATION_HAUTE = / (?=[:;?!])/g;
+
+/**
+ * Typographie française d'un texte tiré des tableaux ou des données (espaces ordinaires dans les sources) : espace
+ * insécable avant « : ; ? ! », entre un nombre et son unité (%, €, h, ans, mois, jours, heures, km, nuits, salariés,
+ * euros) et entre les groupes de milliers, pour qu'aucune ponctuation, unité ou fin de nombre ne commence seule une
+ * ligne. Seules des espaces ordinaires deviennent insécables (même longueur, aucun autre caractère touché) ; les extraits
+ * cités entre « » restent mot pour mot.
+ */
+export function typo(s: string): string {
+  return horsCitations(s, (morceau) =>
+    morceau
+      .replace(PONCTUATION_HAUTE, INSECABLE)
+      .replace(NOMBRE_ET_UNITE, `$1${INSECABLE}`)
+      .replace(GROUPE_DE_MILLIERS, `$1${INSECABLE}`),
+  );
+}
+
+/** Texte des données prêt à l'affichage : dates au format JJ/MM/AAAA et typographie française, hors extraits cités. */
+export function texteDonnees(s: string): string {
+  return typo(texteFr(s));
 }
 
 const MOIS = [
