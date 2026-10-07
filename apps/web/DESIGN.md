@@ -291,7 +291,8 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
   - Sous 1 024 px : logo compact (36 px) et bouton « Menu » (`aria-expanded`, `aria-controls` ; icône seule sous 400 px,
     « Menu » restant son nom accessible). Le panneau se ferme par Échap (focus rendu au bouton), par un clic sur le
     voile, par un lien (focus rendu au bouton), dès que le focus le quitte (Tab après le dernier lien, Maj+Tab avant le
-    bouton : rien ne reste caché sous le panneau) et à chaque changement de page.
+    bouton : rien ne reste caché sous le panneau) et à chaque changement de page, retour et avance de l'historique
+    compris (l'état « ouvert » est remis à zéro dès que le chemin change).
   - Page active : pilule lin et point orange, `aria-current="page"`. Le bouton principal s'efface sur le simulateur.
 - Pied de page (`components/site/SiteFooter.tsx`) : surface encre, filet tricolore turquoise / or / orange (les trois
   soulignés du slogan de marque), logo en version claire, liens, date des critères dérivée des données des OPCO.

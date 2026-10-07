@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '@opco/core';
 import type { Financeur } from '@opco/core';
 import { cx } from '@/lib/cx';
+import { extrait } from '@/lib/extrait';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
@@ -151,23 +152,7 @@ const INSECABLE = String.fromCharCode(0xa0);
 const typo = (texte: string): string =>
   texte.replace(/ ([:;?!])/g, `${INSECABLE}$1`).replace(/(\d) (%|€|h\b)/g, `$1${INSECABLE}$2`);
 
-/**
- * Début d'un texte en `max` caractères au plus, suivi de « … » s'il a été coupé : la coupe se fait après un élément de
- * la liste (à la dernière virgule, si elle passe la moitié), sinon à la fin d'un mot ; une parenthèse ouverte n'est
- * jamais laissée sans sa fermante. Rien n'est résumé : le texte entier est sur la fiche de l'OPCO.
- */
-function extrait(texte: string, max: number): string {
-  if (texte.length <= max) return texte;
-  const debut = texte.slice(0, max + 1);
-  const virgule = debut.lastIndexOf(', ');
-  let coupe =
-    virgule > max / 2 ? debut.slice(0, virgule) : debut.slice(0, Math.max(debut.lastIndexOf(' '), 0)) || texte.slice(0, max);
-  const ouvrante = coupe.lastIndexOf('(');
-  if (ouvrante > coupe.lastIndexOf(')')) coupe = coupe.slice(0, ouvrante);
-  return `${coupe.replace(/[\s,;:·(]+$/u, '')}…`;
-}
-
-/** Ligne de secteurs d'une carte d'OPCO : extrait de 96 caractères au plus, typographie française. */
+/** Ligne de secteurs d'une carte d'OPCO : extrait de 96 caractères au plus (`lib/extrait.ts`), typographie française. */
 const secteurs = (texte: string): string => typo(extrait(texte, 96));
 
 const delai = (ms: number) => ({ '--delai': `${ms}ms` }) as CSSProperties;

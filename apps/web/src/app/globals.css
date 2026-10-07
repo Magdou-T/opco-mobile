@@ -182,8 +182,8 @@
     outline: 3px solid var(--focus);
     outline-offset: 2px;
   }
-  /* Controles natifs (case a cocher, bouton radio, curseur, barre de progression) : l'orange d'action au lieu du bleu
-     du navigateur ; case cochee 5,16:1 sur blanc, 4,63:1 sur orange-soft. */
+  /* Controles natifs (case a cocher, bouton radio, curseur) : l'orange d'action au lieu du bleu du navigateur ; case
+     cochee 5,16:1 sur blanc, 4,63:1 sur orange-soft. */
   :root {
     accent-color: var(--orange-deep);
   }

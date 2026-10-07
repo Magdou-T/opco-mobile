@@ -112,8 +112,11 @@ export function MenuMobile({
   children: ReactNode;
 }) {
   const chemin = usePathname() ?? '/';
-  // Le menu est ouvert pour une page donnée : une navigation le referme sans effet ni état à resynchroniser.
+  // Le menu est ouvert pour une page donnée. Dès que la page change (lien, retour ou avance de l'historique), l'état est
+  // remis à zéro pendant le rendu, sans effet : sinon revenir par l'historique sur la page où il était ouvert le
+  // rouvrirait seul.
   const [ouvertSur, setOuvertSur] = useState<string | null>(null);
+  if (ouvertSur !== null && ouvertSur !== chemin) setOuvertSur(null);
   const ouvert = ouvertSur === chemin;
   const bouton = useRef<HTMLButtonElement>(null);
 
