@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { COMPANY_SIZE_LABELS, EMBEDDED_OPCOS, getEmbeddedOpcoBySlug } from '@opco/core';
 import type {
+  Confidence,
   CoutHoraireSeuil,
   DispositifComplementaire,
   ModeSeuils,
@@ -15,7 +16,14 @@ import { AlertesOpco } from '@/components/ui/AlertesOpco';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
 import { CumulBadge } from '@/components/ui/CumulBadge';
 import { SourceBadge } from '@/components/ui/SourceBadge';
-import { CUMUL_EXPLICATIONS, CUMUL_ORDRE, UNITE_DISPOSITIF_LABELS, dateFr } from '@/lib/format';
+import {
+  CUMUL_EXPLICATIONS,
+  CUMUL_ORDRE,
+  UNITE_DISPOSITIF_LABELS,
+  dateFr,
+  premierePhrase,
+  texteFr,
+} from '@/lib/format';
 
 export function generateStaticParams() {
   return EMBEDDED_OPCOS.map((o) => ({ slug: o.slug }));
@@ -49,10 +57,10 @@ const LIBELLES_VAE: Record<string, string> = {
  * Plusieurs champs textuels des données (alternance, CPF, VAE) ne sont pas des chaînes alors que les types du moteur
  * les déclarent comme telles : { description, note, ... } (OPCO EP, OPCO Santé) ou { vae_simple: { value, note },
  * vae_mixte: { value, note } } (VAE d'Uniformation). On les lit donc comme des valeurs inconnues, un paragraphe par
- * texte ; une valeur sans texte exploitable donne une liste vide.
+ * texte ; une valeur sans texte exploitable donne une liste vide. Les dates ISO des textes sont converties en JJ/MM/AAAA.
  */
 function paragraphes(value: unknown): string[] {
-  if (typeof value === 'string') return value.trim() ? [value] : [];
+  if (typeof value === 'string') return value.trim() ? [texteFr(value)] : [];
   if (value == null || typeof value !== 'object') return [];
   const champs = value as Record<string, unknown>;
   const textes: string[] = [];
@@ -65,7 +73,7 @@ function paragraphes(value: unknown): string[] {
     const intitule = typeof montant === 'number' ? `${libelle} : jusqu'à ${nombre(montant)} €.` : `${libelle}.`;
     textes.push(typeof note === 'string' ? `${intitule} ${note}` : intitule);
   }
-  return textes;
+  return textes.map(texteFr);
 }
 
 function CarteTexte({ titre, valeur }: { titre: string; valeur: unknown }) {
@@ -99,6 +107,21 @@ type PostesBareme = Partial<
   >
 >;
 
+/**
+ * Renvoi à la précision d'une ligne sans montant unique : la colonne « Précision » à partir de 768 px, le texte placé
+ * sous le montant en dessous (la colonne y est masquée).
+ */
+function RenvoiPrecision() {
+  return (
+    <span className="inline-block font-sans text-xs leading-snug text-ink-soft md:w-32">
+      <span className="hidden md:inline">montant précisé dans la colonne Précision</span>
+      <span className="md:hidden">
+        montant précisé <span className="whitespace-nowrap">ci-dessous</span>
+      </span>
+    </span>
+  );
+}
+
 function BaremeRow({
   label,
   sourced,
@@ -112,9 +135,14 @@ function BaremeRow({
   valeurNulle?: string;
 }) {
   if (!sourced) return null;
-  // Valeur absente et « exact » : l'OPCO publie qu'il n'y a pas de forfait ni de plafond chiffré (frais réels, pas de
-  // prise en charge...), la précision donne la règle. Sinon l'OPCO ne publie pas de barème pour ce poste.
-  const libelleNul = valeurNulle ?? (sourced.confidence === 'exact' ? 'sans montant fixe' : 'non publié');
+  const note = sourced.note?.trim() ?? '';
+  // Première phrase de la précision, pour l'écran étroit où la colonne Précision est masquée.
+  const resume = note ? premierePhrase(note) : '';
+  // Valeur absente et « exact » : l'OPCO ne publie pas de montant unique pour ce poste (frais réels, forfait conditionnel
+  // selon la formation ou le public, pas de prise en charge...) et la précision donne la règle publiée. Une ligne sans
+  // précision (aucune dans les données actuelles) reste « sans montant fixe ». Sinon l'OPCO ne publie pas de barème.
+  const libelleNul =
+    valeurNulle ?? (sourced.confidence !== 'exact' ? 'non publié' : resume ? <RenvoiPrecision /> : 'sans montant fixe');
   return (
     <tr>
       <td className="px-4 py-3 align-top font-medium text-ink">{label}</td>
@@ -126,12 +154,18 @@ function BaremeRow({
         ) : (
           <span className="text-ink-faint">{libelleNul}</span>
         )}
+        {/* La colonne Précision est masquée sous 768 px : sa première phrase passe sous le montant. */}
+        {resume && (
+          <p className="mt-1.5 ml-auto max-w-[15rem] min-w-[8.5rem] text-left font-sans text-xs leading-snug font-normal tracking-normal text-ink-soft md:hidden">
+            {resume}
+          </p>
+        )}
       </td>
       <td className="px-4 py-3 text-center align-top">
         <ConfidenceBadge confidence={sourced.confidence} />
       </td>
       <td className="hidden px-4 py-3 align-top text-xs leading-relaxed text-ink-faint md:table-cell">
-        {sourced.note}
+        {texteFr(note)}
       </td>
       <td className="px-4 py-3 text-center align-top">
         {sourced.source_url && <SourceBadge url={sourced.source_url} />}
@@ -192,11 +226,11 @@ function TableauBareme({ children }: { children: React.ReactNode }) {
       <table className="w-full text-sm">
         <thead className="bg-paper-deep">
           <tr>
-            <th className="marginalia px-4 py-3 text-left">Poste</th>
-            <th className="marginalia px-4 py-3 text-right">Montant</th>
-            <th className="marginalia px-4 py-3 text-center">Fiabilité</th>
-            <th className="marginalia hidden px-4 py-3 text-left md:table-cell">Précision</th>
-            <th className="marginalia px-4 py-3 text-center">Source</th>
+            <th scope="col" className="marginalia px-4 py-3 text-left">Poste</th>
+            <th scope="col" className="marginalia px-4 py-3 text-right">Montant</th>
+            <th scope="col" className="marginalia px-4 py-3 text-center">Fiabilité</th>
+            <th scope="col" className="marginalia hidden px-4 py-3 text-left md:table-cell">Précision</th>
+            <th scope="col" className="marginalia px-4 py-3 text-center">Source</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-rule">{children}</tbody>
@@ -249,11 +283,17 @@ function BaremeDegressif({
   );
 }
 
-/** Chiffres d'un plafond par taille d'entreprise (la description en prose reste la référence). */
+/**
+ * Chiffres d'un plafond par taille d'entreprise (la description en prose reste la référence). Le plafond horaire est le
+ * seul chiffre qui porte sa propre fiabilité (`confidence`) : quand elle n'est pas « exact », le tampon l'indique comme
+ * partout ailleurs sur la fiche.
+ */
 function ChiffresTaille({ plafond }: { plafond: PlafondTaille }) {
-  const chiffres: [string, string][] = [];
+  const chiffres: [string, string, Confidence?][] = [];
   if (plafond.budget_annuel_max != null) chiffres.push(['Budget annuel', `${nombre(plafond.budget_annuel_max)} €`]);
-  if (plafond.cout_horaire_max != null) chiffres.push(['Plafond horaire', `${nombre(plafond.cout_horaire_max)} €/h`]);
+  if (plafond.cout_horaire_max != null) {
+    chiffres.push(['Plafond horaire', `${nombre(plafond.cout_horaire_max)} €/h`, plafond.confidence]);
+  }
   if (plafond.prise_en_charge_salaires_horaire != null) {
     chiffres.push(['Salaires', `${nombre(plafond.prise_en_charge_salaires_horaire)} €/h`]);
   }
@@ -261,10 +301,13 @@ function ChiffresTaille({ plafond }: { plafond: PlafondTaille }) {
   if (chiffres.length === 0) return null;
   return (
     <dl className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs">
-      {chiffres.map(([libelle, valeur]) => (
-        <div key={libelle} className="flex gap-1.5">
+      {chiffres.map(([libelle, valeur, confiance]) => (
+        <div key={libelle} className="flex items-center gap-1.5">
           <dt className="text-ink-faint">{libelle}</dt>
-          <dd className="amount font-semibold text-ink">{valeur}</dd>
+          <dd className="flex items-center gap-1.5">
+            <span className="amount font-semibold text-ink">{valeur}</span>
+            {confiance && confiance !== 'exact' && <ConfidenceBadge confidence={confiance} />}
+          </dd>
         </div>
       ))}
     </dl>
@@ -277,7 +320,7 @@ function ListeTailles({ plafonds }: { plafonds: PlafondTaille[] }) {
       {plafonds.map((p) => (
         <div key={p.taille} className="rounded border border-rule bg-white p-4">
           <div className="marginalia">{COMPANY_SIZE_LABELS[p.taille]}</div>
-          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{p.description}</p>
+          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{texteFr(p.description)}</p>
           <ChiffresTaille plafond={p} />
         </div>
       ))}
@@ -305,27 +348,27 @@ function DispositifFiche({ d }: { d: DispositifComplementaire }) {
         <CumulBadge cumul={d.cumul} />
       </div>
       <MontantDispositif d={d} />
-      <p className="mt-2 text-sm leading-relaxed text-ink-soft">{d.description}</p>
+      <p className="mt-2 text-sm leading-relaxed text-ink-soft">{texteFr(d.description)}</p>
       {d.conditions.length > 0 && (
         <ul className="mt-3 space-y-1">
           {d.conditions.map((c, i) => (
             <li key={i} className="flex items-start gap-2 text-xs leading-relaxed text-ink-soft">
               <span className="mt-0.5 text-cobalt">•</span>
-              {c}
+              {texteFr(c)}
             </li>
           ))}
         </ul>
       )}
       {d.demarches && (
         <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-          <strong className="font-semibold text-ink">Démarche :</strong> {d.demarches}
+          <strong className="font-semibold text-ink">Démarche :</strong> {texteFr(d.demarches)}
         </p>
       )}
       <dl className="mt-3 space-y-1 text-xs leading-relaxed text-ink-faint">
         {d.publics && (
           <div className="flex gap-1.5">
             <dt className="font-semibold">Public visé :</dt>
-            <dd>{d.publics}</dd>
+            <dd>{texteFr(d.publics)}</dd>
           </div>
         )}
         {d.tailles_eligibles && (
@@ -341,7 +384,7 @@ function DispositifFiche({ d }: { d: DispositifComplementaire }) {
           </div>
         )}
       </dl>
-      {d.note && <p className="mt-2 text-xs leading-relaxed text-ink-faint">{d.note}</p>}
+      {d.note && <p className="mt-2 text-xs leading-relaxed text-ink-faint">{texteFr(d.note)}</p>}
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <ConfidenceBadge confidence={d.confidence} />
         <SourceBadge url={d.source_url} />
@@ -363,7 +406,7 @@ function VarianteFiche({ opco, variante }: { opco: OpcoData; variante: VarianteB
           {variante.idcc.join(', ')}
         </p>
         {variante.note && (
-          <p className="mt-3 text-xs leading-relaxed text-ink-soft">{variante.note}</p>
+          <p className="mt-3 text-xs leading-relaxed text-ink-soft">{texteFr(variante.note)}</p>
         )}
         <div className="mt-3">
           <SourceBadge url={variante.source_url} label="Source de la branche" />
@@ -389,7 +432,7 @@ function VarianteFiche({ opco, variante }: { opco: OpcoData; variante: VarianteB
         )}
         {variante.budget_annuel_description && (
           <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-            <strong>Budget annuel :</strong> {variante.budget_annuel_description}
+            <strong>Budget annuel :</strong> {texteFr(variante.budget_annuel_description)}
           </p>
         )}
         {variante.plafonds_par_taille && variante.plafonds_par_taille.length > 0 && (
@@ -435,7 +478,7 @@ export default async function OpcoFichePage({
           {opco.nom_complet && (
             <p className="mt-1 text-lg font-medium text-ink-soft">{opco.nom_complet}</p>
           )}
-          <p className="mt-4 max-w-2xl leading-relaxed text-ink-soft">{opco.secteurs}</p>
+          <p className="mt-4 max-w-2xl leading-relaxed text-ink-soft">{texteFr(opco.secteurs)}</p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <a
               href={opco.url_finance_page}
@@ -474,9 +517,10 @@ export default async function OpcoFichePage({
           <p className="mt-3 max-w-3xl text-sm text-ink-soft">
             Montants publiés par {opco.name}{' '}pour 2026. « Non publié » signifie que
             l&apos;OPCO ne communique pas de barème national : le montant dépend de votre
-            branche, contactez votre conseiller. « Sans montant fixe » signifie que l&apos;OPCO
-            n&apos;applique ni forfait ni plafond chiffré pour ce poste (frais réels, ou pas de prise
-            en charge) : la colonne Précision donne la règle publiée.
+            branche, contactez votre conseiller. « Montant précisé dans la colonne Précision »
+            signifie que l&apos;OPCO ne fixe pas de montant unique pour ce poste (frais réels, forfait
+            conditionnel selon la formation ou le public, ou pas de prise en charge) : la règle
+            publiée figure dans la précision, sous le montant sur petit écran.
           </p>
           <div className="mt-5">
             <TableauBareme>
@@ -496,7 +540,7 @@ export default async function OpcoFichePage({
           )}
           {opco.budget_annuel_description && (
             <p className="mt-3 text-sm text-ink-soft">
-              <strong>Budget annuel :</strong> {opco.budget_annuel_description}
+              <strong>Budget annuel :</strong> {texteFr(opco.budget_annuel_description)}
             </p>
           )}
         </section>
@@ -560,7 +604,7 @@ export default async function OpcoFichePage({
             {opco.note_variantes && (
               <div className="mt-4 rounded border border-cobalt/40 bg-cobalt-soft p-4">
                 <div className="marginalia !text-navy">À savoir</div>
-                <p className="mt-2 text-sm leading-relaxed text-navy">{opco.note_variantes}</p>
+                <p className="mt-2 text-sm leading-relaxed text-navy">{texteFr(opco.note_variantes)}</p>
               </div>
             )}
             {variantes.length > 0 && (
@@ -594,13 +638,13 @@ export default async function OpcoFichePage({
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <div className="rounded border border-rule bg-white p-4">
               <div className="marginalia">Demande</div>
-              <p className="mt-2 text-sm text-ink-soft">{opco.processus_approbation}</p>
+              <p className="mt-2 text-sm text-ink-soft">{texteFr(opco.processus_approbation)}</p>
             </div>
             <CarteTexte titre="Délai de validation" valeur={opco.delai_validation} />
             {opco.mode_paiement && (
               <div className="rounded border border-rule bg-white p-4">
                 <div className="marginalia">Mode de paiement</div>
-                <p className="mt-2 text-sm text-ink-soft">{opco.mode_paiement}</p>
+                <p className="mt-2 text-sm text-ink-soft">{texteFr(opco.mode_paiement)}</p>
               </div>
             )}
             {opco.email_contact.trim() !== '' && (
@@ -617,13 +661,13 @@ export default async function OpcoFichePage({
           {opco.specificites && (
             <div className="mt-4 rounded border border-cobalt/40 bg-cobalt-soft p-4">
               <div className="marginalia !text-navy">À savoir</div>
-              <p className="mt-2 text-sm leading-relaxed text-navy">{opco.specificites}</p>
+              <p className="mt-2 text-sm leading-relaxed text-navy">{texteFr(opco.specificites)}</p>
             </div>
           )}
           {opco.points_cles_maximisation && (
             <div className="mt-4 rounded border border-valid/40 bg-valid-soft p-4">
               <div className="marginalia !text-valid">Maximiser la prise en charge</div>
-              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{opco.points_cles_maximisation}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">{texteFr(opco.points_cles_maximisation)}</p>
             </div>
           )}
         </section>

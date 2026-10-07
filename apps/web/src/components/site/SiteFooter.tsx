@@ -1,4 +1,19 @@
 import Link from 'next/link';
+import { EMBEDDED_OPCOS } from '@opco/core';
+import { moisAnneeFr } from '@/lib/format';
+
+/**
+ * Vérification la plus récente des barèmes parmi les 11 OPCO : le pied de page annonce la fraîcheur des données, pas la
+ * date du build (AAAA-MM-JJ : l'ordre alphabétique est l'ordre chronologique). Composant serveur : les données des OPCO
+ * ne partent pas dans le code envoyé au navigateur.
+ */
+const DERNIERE_VERIFICATION = EMBEDDED_OPCOS.reduce(
+  (recente, o) => (o.derniere_verification && o.derniere_verification > recente ? o.derniere_verification : recente),
+  '',
+);
+const CRITERES = DERNIERE_VERIFICATION
+  ? `Critères 2026 · vérifiés ${moisAnneeFr(DERNIERE_VERIFICATION)}`
+  : 'Critères 2026';
 
 export function SiteFooter() {
   return (
@@ -44,7 +59,7 @@ export function SiteFooter() {
       <div className="border-t border-paper/15">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-4 text-xs text-paper/50 sm:px-6">
           <span>Estimations indicatives, ne constitue ni un conseil juridique ni un engagement de financement.</span>
-          <span className="amount">Critères 2026 · vérifiés {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</span>
+          <span className="amount">{CRITERES}</span>
         </div>
       </div>
     </footer>

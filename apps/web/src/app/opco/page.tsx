@@ -18,7 +18,8 @@ export default function OpcoIndexPage() {
       <p className="mt-4 max-w-2xl text-ink-soft">
         Chaque entreprise relève d&apos;un seul OPCO, déterminé par sa convention collective
         (code IDCC). Chaque fiche rassemble les barèmes publiés, leur source officielle et les
-        dispositifs qui ne consomment pas votre budget formation.
+        dispositifs complémentaires : certains s&apos;ajoutent à votre budget, d&apos;autres ont
+        leur propre enveloppe ou remplacent le plan de développement des compétences.
       </p>
 
       <div className="mt-10 grid gap-5 md:grid-cols-2">
