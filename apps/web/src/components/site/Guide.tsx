@@ -102,11 +102,12 @@ export function GuideCta({ title, text, href, label }: { title: string; text: st
 
 /**
  * Corps d'un guide : sommaire (colonne collante à partir de 1 024 px, bloc replié en dessous) et colonne de lecture.
- * `min-w-0` et une grille à une colonne sous 1 024 px : un tableau large ne fait plus déborder la page.
+ * `min-w-0` et une grille à une colonne sous 1 024 px : un tableau large ne fait plus déborder la page. À l'impression,
+ * le sommaire est masqué et la grille n'a qu'une colonne, quelle que soit la largeur de la page (A4 paysage compris).
  */
 export function GuideBody({ toc, children }: { toc: { id: string; label: string }[]; children: ReactNode }) {
   return (
-    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12 lg:py-14">
+    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12 lg:py-14 print:grid-cols-1">
       <Sommaire entrees={toc.map((t) => ({ id: t.id, libelle: typo(t.label) }))} etiquette="Sommaire du guide" numerote />
       <div className="min-w-0 space-y-16">{children}</div>
     </div>

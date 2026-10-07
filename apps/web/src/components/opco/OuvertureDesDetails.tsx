@@ -1,17 +1,20 @@
 'use client';
 
 import { useEffect } from 'react';
+// Module sans importation (et non lib/fiche.ts) : ce composant client n'embarque que cette fonction.
+import { decoderAncre } from '@/lib/ancre';
 
 /**
  * Blocs repliables (`<details>`) d'une fiche OPCO, sans rien rendre :
  * - quand l'adresse porte l'ancre d'un bloc (`/opco/akto/#hcr`, branche HCR) ou d'un élément qu'il contient, le bloc
- *   s'ouvre, au chargement et à chaque changement d'ancre ; sinon tout reste replié ;
+ *   s'ouvre, au chargement et à chaque changement d'ancre ; sinon tout reste replié. Une ancre mal encodée
+ *   (`#taux-100%`) est lue telle quelle et ne fait pas tomber la page (`decoderAncre`) ;
  * - à l'impression, tous les blocs s'ouvrent (précisions, branches, listes de conventions), puis reprennent leur état.
  */
 export function OuvertureDesDetails() {
   useEffect(() => {
     const ouvrirLaCible = () => {
-      const id = decodeURIComponent(window.location.hash.slice(1));
+      const id = decoderAncre(window.location.hash);
       const cible = id ? document.getElementById(id) : null;
       if (!cible) return;
       let bloc: HTMLDetailsElement | null = cible instanceof HTMLDetailsElement ? cible : cible.closest('details');

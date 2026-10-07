@@ -11,6 +11,7 @@ import {
   alertesDeLaBranche,
   cartesAlternance,
   chiffresDeLaTaille,
+  decoderAncre,
   definirAbreviations,
   elementsDeTexte,
   etapesDeDemarche,
@@ -20,6 +21,7 @@ import {
   montantAvecUnite,
   montantDuDispositif,
   precisionDuPoste,
+  restePrecision,
   resumeDesAlertes,
   resumeIdcc,
   sectionsDeLaFiche,
@@ -27,7 +29,8 @@ import {
   tranchesDegressives,
   trierParNom,
 } from '../src/lib/fiche';
-import type { Affichage, LigneBareme } from '../src/lib/fiche';
+import type { Affichage, LigneBareme, PostesBareme } from '../src/lib/fiche';
+import { premierePhrase, texteFr } from '../src/lib/format';
 
 /** Espace insécable (U+00A0) et espace fine insécable (U+202F), écrites par leur code. */
 const NBSP = String.fromCharCode(0xa0);
@@ -70,6 +73,29 @@ describe('elementsDeTexte', () => {
     assert.deepEqual(elementsDeTexte('  Délai non publié.  '), ['Délai non publié.']);
     assert.deepEqual(elementsDeTexte('   '), []);
     assert.deepEqual(elementsDeTexte(''), []);
+  });
+
+  test('séparateur « espace, barre, espace » : une barre collée à un caractère ne sépare rien', () => {
+    assert.deepEqual(elementsDeTexte('A|B'), ['A|B']);
+    assert.deepEqual(elementsDeTexte('A |B | C'), ['A |B', 'C']);
+    assert.deepEqual(elementsDeTexte('A| B | C'), ['A| B', 'C']);
+    assert.deepEqual(elementsDeTexte('Grille sur https://exemple.fr/bareme|2026 | Règle B'), [
+      'Grille sur https://exemple.fr/bareme|2026',
+      'Règle B',
+    ]);
+    // Toute espace compte (tabulation, insécable) ; plusieurs espaces aussi.
+    assert.deepEqual(elementsDeTexte(`A${NBSP}|${NBSP}B  |\tC`), ['A', 'B', 'C']);
+  });
+
+  test('deux séparateurs de suite, ou un séparateur au bord du texte, ne laissent aucun élément vide', () => {
+    assert.deepEqual(elementsDeTexte('A | | B'), ['A', 'B']);
+    assert.deepEqual(elementsDeTexte('A |  | | B'), ['A', 'B']);
+    assert.deepEqual(elementsDeTexte('| A | B |'), ['A', 'B']);
+    assert.deepEqual(elementsDeTexte(' | A | B | '), ['A', 'B']);
+    assert.deepEqual(elementsDeTexte('|'), []);
+    assert.deepEqual(elementsDeTexte(' | | '), []);
+    // Au bord, une barre collée au texte reste intacte.
+    assert.deepEqual(elementsDeTexte('|A | B|'), ['|A', 'B|']);
   });
 
   test("jamais de coupe dans un extrait cité ni dans une parenthèse", () => {
@@ -234,12 +260,15 @@ describe('barème poste par poste', () => {
     }
   });
 
-  test('précision : règle en une phrase, note complète seulement si elle en dit davantage', () => {
+  test("précision : règle en une phrase, puis le reste de la note sans la répéter ; aucun reste quand elle ne dit rien d'autre", () => {
     assert.equal(precisionDuPoste(undefined), null);
     assert.equal(precisionDuPoste('   '), null);
-    assert.deepEqual(precisionDuPoste('Frais réels plafonnés.'), { resume: 'Frais réels plafonnés.', complete: null });
+    assert.deepEqual(precisionDuPoste('Frais réels plafonnés.'), { resume: 'Frais réels plafonnés.', reste: null });
     const note = '« Prise en charge au réel » Frais réels plafonnés. Autre règle. (vérifié le 2026-10-05)';
-    assert.deepEqual(precisionDuPoste(note), { resume: 'Frais réels plafonnés.', complete: note });
+    assert.deepEqual(precisionDuPoste(note), {
+      resume: 'Frais réels plafonnés.',
+      reste: '« Prise en charge au réel » Autre règle. (vérifié le 05/10/2026)',
+    });
   });
 
   test('lignes : montants mis en forme, raison de chaque montant absent, forfait annexe seulement publié', () => {
@@ -270,7 +299,8 @@ describe('barème poste par poste', () => {
       ],
     );
     assert.equal(lignes[2].precision?.resume, 'Frais réels.');
-    assert.equal(lignes[2].precision?.complete, 'Frais réels. Détail.');
+    assert.equal(lignes[2].precision?.reste, 'Détail.');
+    assert.equal(lignes[0].precision?.reste, null);
   });
 
   test('salaires : libellé et unité selon le mode ; « incluse dans le plafond horaire » ; restauration par jour', () => {
@@ -340,6 +370,133 @@ describe('barème poste par poste', () => {
     const deuxI = opco('opco2i');
     const budget = lignesDuBareme(deuxI, deuxI.prise_en_charge_salaires_mode, deuxI.frais_restauration_unite).at(-1);
     assert.equal(budget?.montant, `4${FINE}800${NBSP}€/an`);
+  });
+});
+
+describe('restePrecision', () => {
+  const POSTES: (keyof PostesBareme)[] = [
+    'cout_horaire_inter',
+    'cout_horaire_intra',
+    'cout_horaire_metier',
+    'prise_en_charge_salaires',
+    'frais_transport',
+    'frais_hebergement',
+    'frais_restauration',
+    'frais_annexes_pourcentage',
+    'budget_annuel_max',
+  ];
+
+  /** Note d'un poste réel, au barème général (branche null) ou d'une branche. */
+  const noteDe = (slug: string, branche: string | null, cle: keyof PostesBareme): string => {
+    const o = opco(slug);
+    const bareme: PostesBareme | undefined = branche === null ? o : o.variantes_branche?.find((v) => v.id === branche);
+    const note = bareme?.[cle]?.note;
+    if (!note) throw new Error(`note introuvable : ${slug} ${branche} ${cle}`);
+    return note;
+  };
+
+  test("note d'une seule phrase : aucun reste", () => {
+    assert.equal(restePrecision('Frais réels plafonnés.'), '');
+    assert.equal(restePrecision('  Frais réels plafonnés.  '), '');
+    assert.equal(restePrecision('« Prise en charge au réel. »'), '');
+    assert.equal(restePrecision(''), '');
+  });
+
+  test('une phrase et sa date de vérification (AKTO, prévention-sécurité, salaires) : seule la date reste', () => {
+    const note = noteDe('akto', 'prevention-securite', 'prise_en_charge_salaires');
+    assert.equal(premierePhrase(note), '« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge. »');
+    assert.equal(restePrecision(note), '(vérifié le 05/10/2026)');
+    // Phrase sans point final avant la mention : premierePhrase le rétablit, le reste ne garde que la mention.
+    assert.equal(restePrecision('Frais réels plafonnés (vérifié le 2026-10-05)'), '(vérifié le 05/10/2026)');
+  });
+
+  test('plusieurs phrases (OPCO Mobilités, intra) : les phrases suivantes et la mention, dans leur ordre', () => {
+    const note = noteDe('opco-mobilites', null, 'cout_horaire_intra');
+    assert.equal(premierePhrase(note), 'Pas de plafond horaire publié sur la page PDC.');
+    assert.equal(
+      restePrecision(note),
+      "À confirmer : les guides pratiques 2026 par branche (version du 01/10/2026) n'étaient pas consultables lors de la vérification, site officiel inaccessible le 06/10. (vérifié le 06/10/2026 ; informations relevées sur une copie de la page officielle de l'OPCO, le site officiel étant momentanément inaccessible lors de la vérification).",
+    );
+  });
+
+  test("extrait cité en tête (AFDAS, inter) : la règle affichée est retirée, l'extrait garde sa place", () => {
+    const note = noteDe('afdas', null, 'cout_horaire_inter');
+    const extrait = note.slice(0, note.indexOf('»') + 1);
+    assert.ok(extrait.startsWith('« À ces plafonds annuels'), extrait);
+    assert.equal(
+      premierePhrase(note),
+      'Barème unique du PDC des structures de moins de 50 salariés, dans la limite du plafond annuel.',
+    );
+    assert.equal(restePrecision(note), `${extrait} (vérifié le 05/10/2026)`);
+  });
+
+  test('adresse web : la parenthèse de source (OPCO 2i, salaires) et la phrase de provenance (ATLAS) restent', () => {
+    const deuxI = noteDe('opco2i', null, 'prise_en_charge_salaires');
+    // premierePhrase retire la parenthèse de source et rétablit le point : elle reste dans la précision.
+    assert.ok(premierePhrase(deuxI).endsWith('alors que la règle 2021 la prévoyait.'));
+    const reste = restePrecision(deuxI);
+    assert.ok(reste.startsWith('(« pour toutes les entreprises de moins de 50 salariés'), reste);
+    assert.ok(reste.includes('https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/).'), reste);
+    assert.ok(reste.endsWith('(vérifié le 05/10/2026)'), reste);
+    assert.ok(!reste.includes('La règle PDC 2026'), reste);
+
+    // La règle d'ATLAS cite sa page : le résumé est l'extrait cité, la phrase de provenance reste.
+    const atlas = noteDe('atlas', 'societes-financieres', 'cout_horaire_metier');
+    assert.equal(premierePhrase(atlas), '« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an »');
+    const resteAtlas = restePrecision(atlas);
+    assert.ok(resteAtlas.startsWith('Page officielle de critères 2026 (affichée seulement'), resteAtlas);
+    assert.ok(resteAtlas.includes('(https://web.archive.org/web/20260618072451/'), resteAtlas);
+    assert.ok(!resteAtlas.includes('Plafond par entreprise'), resteAtlas);
+  });
+
+  test('premier extrait cité de la note pris pour résumé : retiré de son milieu ; « ; » de jonction retiré', () => {
+    // Règle qui cite une adresse sans parenthèse ni extrait de tête : premierePhrase se replie sur le premier extrait.
+    const note = 'Barème publié sur https://exemple.fr/bareme. « Plafond de 30 € par heure » ; « 1 200 heures au plus » (vérifié le 2026-10-05)';
+    assert.equal(premierePhrase(note), '« Plafond de 30 € par heure »');
+    assert.equal(restePrecision(note), 'Barème publié sur https://exemple.fr/bareme. « 1 200 heures au plus » (vérifié le 05/10/2026)');
+    assert.equal(restePrecision('« Plafond de 30 € » ; « 1 200 heures au plus »'), '« 1 200 heures au plus »');
+    // « ; » entre l'extrait de tête et la règle affichée : il part avec elle.
+    assert.equal(restePrecision('« Plafond de 30 € » ; Règle publiée. Autre phrase.'), '« Plafond de 30 € » Autre phrase.');
+  });
+
+  test('phrase affichée introuvable telle quelle dans la note : la note entière, rien ne se perd', () => {
+    // Parenthèse de source au milieu de la phrase : premierePhrase la retire, la phrase affichée n'est plus dans la note.
+    const note = 'Plafond (« 30 € », https://exemple.fr/a) appliqué. Autre règle.';
+    assert.equal(premierePhrase(note), 'Plafond appliqué.');
+    assert.equal(restePrecision(note), note);
+  });
+
+  test('les notes des 11 OPCO : première phrase + reste = note (aux espaces près), le reste ne répète jamais la phrase', () => {
+    const compact = (s: string) => s.replace(/\s+/g, '');
+    let notes = 0;
+    let sansReste = 0;
+    for (const o of EMBEDDED_OPCOS) {
+      const baremes: [string, PostesBareme][] = [['général', o], ...(o.variantes_branche ?? []).map((v): [string, PostesBareme] => [v.id, v])];
+      for (const [nom, bareme] of baremes) {
+        for (const cle of POSTES) {
+          const note = bareme[cle]?.note;
+          if (!note?.trim()) continue;
+          notes++;
+          const id = `${o.slug} ${nom} ${cle}`;
+          const texte = texteFr(note).trim();
+          const phrase = premierePhrase(note);
+          // Le point final que premierePhrase rétablit après une parenthèse de source retirée n'est pas dans la note.
+          const affichee = texte.includes(phrase) ? phrase : phrase.replace(/\.$/, '');
+          assert.ok(texte.includes(affichee), `${id} : phrase introuvable`);
+          const reste = restePrecision(note);
+          if (!reste) sansReste++;
+          assert.ok(!reste.includes(affichee), `${id} : le reste répète la phrase`);
+          const [n, p, r] = [compact(texte), compact(affichee), compact(reste)];
+          const recomposee = Array.from({ length: r.length + 1 }, (_, k) => [r.slice(0, k), r.slice(k)]).some(
+            ([a, z]) => n === a + p + z || n === a + p + ';' + z || n === a + ';' + p + z,
+          );
+          assert.ok(recomposee, `${id} : « ${reste} »`);
+        }
+      }
+    }
+    assert.ok(notes >= 240, `${notes} notes`);
+    // Toutes les notes actuelles disent davantage que leur règle (au moins la date de vérification).
+    assert.equal(sansReste, 0);
   });
 });
 
@@ -578,6 +735,53 @@ describe('trierParNom', () => {
     const liste = [{ name: 'B' }, { name: 'A' }];
     trierParNom(liste);
     assert.deepEqual(liste.map((o) => o.name), ['B', 'A']);
+  });
+});
+
+describe('decoderAncre', () => {
+  test('ancre bien encodée : décodée, sans le « # »', () => {
+    assert.equal(decoderAncre('#organismes-de-formation'), 'organismes-de-formation');
+    assert.equal(decoderAncre('#%C3%A9conomie'), 'économie');
+    assert.equal(decoderAncre('#a%20b'), 'a b');
+    assert.equal(decoderAncre('#hcr'), 'hcr');
+  });
+
+  test("ancre mal encodée : rendue telle quelle sans le « # », jamais d'exception", () => {
+    assert.equal(decoderAncre('#taux-100%'), 'taux-100%');
+    assert.equal(decoderAncre('#%E0%A4%A'), '%E0%A4%A');
+    assert.equal(decoderAncre('#%'), '%');
+    assert.equal(decoderAncre('#%C3%A9-100%'), '%C3%A9-100%');
+    // Octets qui ne forment pas un caractère UTF-8 valide.
+    assert.equal(decoderAncre('#%FF'), '%FF');
+  });
+
+  test('ancre vide ou absente : chaîne vide ; seul un « # » de tête est retiré', () => {
+    assert.equal(decoderAncre('#'), '');
+    assert.equal(decoderAncre(''), '');
+    assert.equal(decoderAncre('hcr'), 'hcr');
+    assert.equal(decoderAncre('##hcr'), '#hcr');
+  });
+
+  test('2 000 ancres tirées au hasard (graine fixe) : aucune exception, aller-retour exact une fois encodées', () => {
+    const hasard = hasardFixe(7);
+    const signes = ['%', '#', 'a', 'é', ' ', '-', '1', 'E', '0', 'Z', '€', '/', '?', '&', '%2', '%C3', '%A9', '%E0%A4'];
+    let malEncodees = 0;
+    for (let i = 0; i < 2000; i++) {
+      let s = '';
+      const n = hasard(10);
+      for (let k = 0; k < n; k++) s += signes[hasard(signes.length)];
+      const brut = decoderAncre(`#${s}`);
+      let attendu: string;
+      try {
+        attendu = decodeURIComponent(s);
+      } catch {
+        attendu = s;
+        malEncodees++;
+      }
+      assert.equal(brut, attendu, `ancre ${i} : « #${s} »`);
+      assert.equal(decoderAncre(`#${encodeURIComponent(s)}`), s, `ancre ${i} encodée : « ${s} »`);
+    }
+    assert.ok(malEncodees > 300, `${malEncodees} ancres mal encodées`);
   });
 });
 

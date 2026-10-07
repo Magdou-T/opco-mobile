@@ -59,8 +59,13 @@ function decouper(texte: string, separateur: RegExp): string[] {
   return morceaux.map((m) => m.trim()).filter((m) => m !== '');
 }
 
-/** Séparateur des textes composés de plusieurs éléments (« A | B | C ») : une barre verticale entre deux espaces. */
-const SEPARATEUR_ELEMENTS = /\s+\|\s+/;
+/**
+ * Séparateur des textes composés de plusieurs éléments (« A | B | C », seule forme des 11 OPCO) : une barre verticale
+ * entre deux espaces, le début ou la fin du texte en tenant lieu. Les espaces ne font pas partie du séparateur : deux
+ * séparateurs de suite (« A | | B ») partagent la leur et ne laissent qu'un élément vide, retiré. Une barre collée à un
+ * caractère (« A|B », adresse web) ne sépare rien.
+ */
+const SEPARATEUR_ELEMENTS = /(?<=^|\s)\|(?=\s|$)/;
 
 const LIBELLES_VAE: Readonly<Record<string, string>> = {
   vae_simple: 'VAE sans action de formation',
@@ -68,11 +73,12 @@ const LIBELLES_VAE: Readonly<Record<string, string>> = {
 };
 
 /**
- * Éléments d'un texte des données, un par ligne. Un texte composé de plusieurs éléments séparés par « | »
- * (`specificites`, `points_cles_maximisation`) est découpé, jamais dans un extrait cité ni dans une parenthèse. Un champ
- * libre (`FreeText`) peut aussi être un objet { description, note, … } (OPCO EP, OPCO Santé) ou { vae_simple: { value,
- * note }, vae_mixte: { value, note } } (VAE d'Uniformation) : chacun de ses textes devient un élément, ses autres champs
- * (nombres, adresse de la source) sont ignorés. Seules des chaînes sont rendues : jamais « [object Object] ».
+ * Éléments d'un texte des données, un par ligne. Un texte composé de plusieurs éléments séparés par « | » entre deux
+ * espaces (`specificites`, `points_cles_maximisation`) est découpé, jamais dans un extrait cité ni dans une parenthèse ;
+ * une barre collée à un caractère reste dans le texte, aucun élément vide n'est rendu. Un champ libre (`FreeText`) peut
+ * aussi être un objet { description, note, … } (OPCO EP, OPCO Santé) ou { vae_simple: { value, note }, vae_mixte:
+ * { value, note } } (VAE d'Uniformation) : chacun de ses textes devient un élément, ses autres champs (nombres, adresse
+ * de la source) sont ignorés. Seules des chaînes sont rendues : jamais « [object Object] ».
  */
 export function elementsDeTexte(valeur: unknown): string[] {
   if (typeof valeur === 'string') return decouper(valeur, SEPARATEUR_ELEMENTS);
@@ -183,18 +189,48 @@ export function libelleValeurAbsente(genre: ValeurAbsente, affichage: Affichage)
 
 /**
  * Précision d'un poste : sa règle en une phrase (`premierePhrase`) et, si la note en dit davantage (autres phrases,
- * extraits cités, date de vérification), la note complète, montrée à la demande. null sans note.
+ * extraits cités, adresse de la source, date de vérification), ce reste (`restePrecision`), montré à la demande. null
+ * sans note.
  */
 export interface PrecisionDuPoste {
   resume: string;
-  complete: string | null;
+  /** Ce que la note dit en plus de sa règle ; null quand elle ne dit rien d'autre (aucun « Voir la précision »). */
+  reste: string | null;
+}
+
+/** Extraits cités (« … », séparés ou non par « ; ») qui ouvrent une note : `premierePhrase` prend sa règle après eux. */
+const CITATIONS_DE_TETE = /^(?:«[^»]*»\s*;?\s*)+/;
+
+/**
+ * Reste d'une note de poste une fois sa première phrase affichée (`premierePhrase`) : la note sans cette phrase, dans
+ * son ordre (extraits cités qui l'ouvrent, phrases suivantes, parenthèse de source, date de vérification), dates au
+ * format JJ/MM/AAAA ; chaîne vide quand la note ne dit rien d'autre. La phrase est cherchée là où `premierePhrase` la
+ * prend : après les extraits cités de tête (sa règle), en tête (l'extrait cité de tête) ou au premier extrait cité (son
+ * repli) ; le point final qu'elle rétablit (après une parenthèse de source ou une mention de vérification retirées)
+ * n'est pas exigé. Le « ; » qui séparait la phrase du reste part avec elle. Une phrase introuvable telle quelle (aucun
+ * cas dans les données) laisse la note entière : rien ne se perd.
+ */
+export function restePrecision(note: string): string {
+  const texte = texteFr(note).trim();
+  if (!texte) return '';
+  const phrase = premierePhrase(note);
+  const departs = [CITATIONS_DE_TETE.exec(texte)?.[0].length ?? 0, 0, texte.indexOf('«')];
+  for (const debut of departs) {
+    if (debut < 0) continue;
+    for (const cherchee of [phrase, phrase.replace(/\.$/, '')]) {
+      if (!cherchee || !texte.startsWith(cherchee, debut)) continue;
+      const avant = texte.slice(0, debut).trim().replace(/\s*;$/, '');
+      const apres = texte.slice(debut + cherchee.length).trim().replace(/^;\s*/, '');
+      return [avant, apres].filter((m) => m !== '').join(' ');
+    }
+  }
+  return texte;
 }
 
 export function precisionDuPoste(note: string | undefined): PrecisionDuPoste | null {
   const texte = note?.trim() ?? '';
   if (!texte) return null;
-  const resume = premierePhrase(texte);
-  return { resume, complete: texteFr(texte).trim() === resume ? null : texte };
+  return { resume: premierePhrase(texte), reste: restePrecision(texte) || null };
 }
 
 export interface LigneBareme {
@@ -453,6 +489,14 @@ export function trierParNom<T extends { name: string }>(opcos: readonly T[]): T[
     cleDeTri(a.name).localeCompare(cleDeTri(b.name), 'fr', { sensitivity: 'base', numeric: true }),
   );
 }
+
+// --- Ancre de l'adresse --------------------------------------------------------------------------------------------
+
+/**
+ * Ancre d'une fiche (`/opco/akto/#hcr`) décodée sans jamais lever, même mal encodée (`#taux-100%`). Définie dans
+ * lib/ancre.ts, module sans importation, que le composant client `OuvertureDesDetails` importe directement.
+ */
+export { decoderAncre } from './ancre';
 
 // --- Abréviations --------------------------------------------------------------------------------------------------
 

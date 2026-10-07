@@ -12,11 +12,16 @@ import { useEffect, useId, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { REGIONS, REGIONS_TRIEES } from '@opco/core';
 import type { CodeRegion } from '@opco/core';
+import { FieldLabel } from '@/components/ui/FieldLabel';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { texteFr } from '@/lib/format';
 import { lireNombre, saisieDuNombre } from '@/lib/saisie';
+
+// Libellé d'un champ : composant sans état, dans son propre module (sans directive client) ; réexporté ici pour les
+// importations existantes.
+export { FieldLabel };
 
 /**
  * Champ de saisie : 48 px de haut, rayon 12 px (`rounded-champ`), contour filet-fort (3,54:1 sur blanc), contour
@@ -38,50 +43,6 @@ const LARGEURS: Record<LargeurChamp, string> = {
 function decrit(id: string, aide: boolean, erreur: boolean): string | undefined {
   const ids = [aide ? `${id}-aide` : null, erreur ? `${id}-erreur` : null].filter(Boolean);
   return ids.length > 0 ? ids.join(' ') : undefined;
-}
-
-/**
- * Libellé d'un champ (Inter 600). Avec `htmlFor` c'est un <label> relié au champ ; sans lui, c'est le titre d'un groupe
- * de boutons (il porte alors l'`id` que le groupe référence). Un champ obligatoire porte un astérisque rouge et la
- * mention « (obligatoire) » pour les lecteurs d'écran ; un champ facultatif le dit en clair.
- */
-export function FieldLabel({
-  label,
-  required,
-  facultatif,
-  htmlFor,
-  id,
-}: {
-  label: ReactNode;
-  required?: boolean;
-  facultatif?: boolean;
-  htmlFor?: string;
-  id?: string;
-}) {
-  const contenu = (
-    <>
-      {label}
-      {required && (
-        <>
-          <span className="text-rouge" aria-hidden="true">
-            {' '}*
-          </span>
-          <span className="sr-only"> (obligatoire)</span>
-        </>
-      )}
-      {facultatif && <span className="font-normal text-texte-discret"> (facultatif)</span>}
-    </>
-  );
-  const classe = 'block text-sm leading-snug font-semibold text-texte';
-  return htmlFor ? (
-    <label id={id} htmlFor={htmlFor} className={classe}>
-      {contenu}
-    </label>
-  ) : (
-    <p id={id} className={classe}>
-      {contenu}
-    </p>
-  );
 }
 
 /** Aide d'un champ ou d'un groupe, en texte discret (5,35:1 sur blanc). */

@@ -4,10 +4,11 @@ import { useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
-import { FieldLabel } from '@/components/ui/forms';
+// Module sans directive client : le formulaire n'embarque pas les champs du simulateur (forms.tsx).
+import { FieldLabel } from '@/components/ui/FieldLabel';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
-import { CHAMPS_OBLIGATOIRES, CONTACT_EMAIL, SUJETS, erreursDuContact, lienMailto } from '@/lib/contact';
+import { CHAMPS_OBLIGATOIRES, CONTACT_EMAIL, LIBELLES_DES_SUJETS, SUJETS, erreursDuContact, lienMailto } from '@/lib/contact';
 import type { ChampObligatoire, MessageContact } from '@/lib/contact';
 
 /**
@@ -164,9 +165,11 @@ export function ContactForm() {
             onChange={changer('sujet')}
             className={cx(CHAMP, 'cursor-pointer appearance-none pr-11')}
           >
+            {/* Libellé court, lisible sans coupure à 320 px ; la valeur, reprise dans l'objet du message, reste le sujet
+                complet (lib/contact.ts). */}
             {SUJETS.map((s) => (
               <option key={s} value={s}>
-                {s}
+                {LIBELLES_DES_SUJETS[s]}
               </option>
             ))}
           </select>

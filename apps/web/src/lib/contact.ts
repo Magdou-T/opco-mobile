@@ -8,6 +8,7 @@ import { INSECABLE } from './format';
 
 export const CONTACT_EMAIL = 'contact@sfgdeveloppement.fr';
 
+/** Sujets du formulaire : chacun est repris tel quel dans l'objet du message (« [financementOPCO] sujet »). */
 export const SUJETS = [
   'Estimer ou monter un dossier de financement OPCO',
   'Organiser une formation pour mes salariés',
@@ -15,6 +16,21 @@ export const SUJETS = [
   'Signaler une erreur sur le site',
   'Autre demande',
 ] as const;
+
+export type Sujet = (typeof SUJETS)[number];
+
+/**
+ * Libellé affiché de chaque sujet dans la liste « Sujet » : court, pour se lire sans coupure dans le champ à 320 px
+ * (153 px au plus en Inter 16 px ; le champ en montre 162 avec une barre de défilement classique, le sujet le plus long
+ * en faisait 419). Il ne sert qu'à l'affichage : la valeur choisie, et donc l'objet du message, reste le sujet complet.
+ */
+export const LIBELLES_DES_SUJETS: Readonly<Record<Sujet, string>> = {
+  'Estimer ou monter un dossier de financement OPCO': 'Financement OPCO',
+  'Organiser une formation pour mes salariés': 'Former mes salariés',
+  'Question sur mes obligations (contributions, entretiens)': 'Mes obligations',
+  'Signaler une erreur sur le site': 'Signaler une erreur',
+  'Autre demande': 'Autre demande',
+};
 
 export interface MessageContact {
   nom: string;

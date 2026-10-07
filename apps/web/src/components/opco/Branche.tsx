@@ -74,8 +74,9 @@ export function CarteBranche({
   return (
     <details id={variante.id} className="group/branche rounded-carte border border-filet bg-white shadow-douce">
       {/* Le résumé ne contient que du texte courant et un titre (modèle de contenu de <summary>) : la grille place la
-          pastille à gauche du titre et de sa ligne d'informations. */}
-      <summary className="grid cursor-pointer list-none grid-cols-[auto_minmax(0,1fr)] gap-x-3 rounded-carte p-4 transition-[background-color] group-open/branche:rounded-b-none hover:bg-lin-soft focus-visible:outline-offset-[-3px] sm:gap-x-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+          pastille à gauche du titre et de sa ligne d'informations. À l'impression, la pastille est masquée : une seule
+          colonne, sinon le titre prenait la colonne `auto` et poussait les informations hors de la page. */}
+      <summary className="grid cursor-pointer list-none grid-cols-[auto_minmax(0,1fr)] gap-x-3 rounded-carte p-4 transition-[background-color] group-open/branche:rounded-b-none hover:bg-lin-soft focus-visible:outline-offset-[-3px] sm:gap-x-4 sm:p-5 print:grid-cols-1 [&::-webkit-details-marker]:hidden">
         <span
           aria-hidden="true"
           className="row-span-2 mt-0.5 grid size-8 place-items-center rounded-full bg-turquoise-soft text-turquoise-deep print:hidden"

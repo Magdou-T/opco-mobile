@@ -155,7 +155,9 @@ export default async function OpcoFichePage({
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12 lg:py-14">
+      {/* À l'impression, le sommaire est masqué : une seule colonne, sinon le contenu se range dans celle du sommaire
+          (216 px) dès que la page imprimée atteint 1 024 px (A4 paysage). */}
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12 lg:py-14 print:grid-cols-1">
         <Sommaire entrees={sections} etiquette={`Sommaire de la fiche ${opco.name}`} />
 
         <div className="min-w-0 space-y-16">

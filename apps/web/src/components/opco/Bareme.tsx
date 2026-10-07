@@ -30,8 +30,9 @@ function Montant({ ligne, affichage }: { ligne: LigneBareme; affichage: Affichag
 }
 
 /**
- * Précision d'un poste : la règle en une phrase, puis la note complète à la demande (« Voir la précision ») quand elle
- * en dit davantage. Une adresse web longue passe à la ligne sans élargir la colonne ni la carte.
+ * Précision d'un poste : la règle en une phrase, puis le reste de la note à la demande (« Voir la précision »), sans
+ * répéter la règle ; rien de plus quand la note ne dit rien d'autre. À l'impression, la règle puis ce reste, une fois
+ * chacun. Une adresse web longue passe à la ligne sans élargir la colonne ni la carte.
  */
 function Precision({ precision, poste, sigles }: { precision: PrecisionDuPoste; poste: string; sigles: Sigles }) {
   return (
@@ -39,7 +40,7 @@ function Precision({ precision, poste, sigles }: { precision: PrecisionDuPoste; 
       <p className="text-sm leading-relaxed text-texte-doux">
         <TexteDonnees texte={precision.resume} sigles={sigles} />
       </p>
-      {precision.complete && (
+      {precision.reste && (
         <details className="group/precision mt-1">
           <summary className="-ml-1 inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-full px-1 text-sm font-semibold text-orange-deep underline-offset-4 hover:underline md:min-h-9 print:hidden [&::-webkit-details-marker]:hidden">
             <Icon
@@ -53,7 +54,7 @@ function Precision({ precision, poste, sigles }: { precision: PrecisionDuPoste; 
             <span className="sr-only"> : {poste}</span>
           </summary>
           <p className="mt-1 mb-1 text-sm leading-relaxed text-texte-discret">
-            <TexteDonnees texte={precision.complete} sigles={sigles} />
+            <TexteDonnees texte={precision.reste} sigles={sigles} />
           </p>
         </details>
       )}
