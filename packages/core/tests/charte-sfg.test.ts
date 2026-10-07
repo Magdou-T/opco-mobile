@@ -1,8 +1,9 @@
 // ============================================================
-// Charte rédactionnelle SFG : jamais le tiret cadratin (U+2014), quelle que soit la production. Ce garde parcourt les données
-// que le site affiche (les 11 barèmes OPCO, la table IDCC avec ses titres et ses notes, le catalogue d'aides national et régional,
-// les portails régionaux, les suggestions d'OPCO par code NAF) et signale chaque chaîne lue qui en contient un, avec son
-// chemin JSON. Le contrôle est générique : il lit toutes les chaînes, sans liste de champs à tenir à jour.
+// Charte rédactionnelle SFG : jamais le tiret cadratin (U+2014), ni la barre horizontale (U+2015) qui s'affiche comme lui,
+// quelle que soit la production. Ce garde parcourt les données que le site affiche (les 11 barèmes OPCO, la table IDCC avec ses
+// titres et ses notes, le catalogue d'aides national et régional, les portails régionaux, les suggestions d'OPCO par code NAF)
+// et signale chaque chaîne lue qui en contient un, avec son chemin JSON et le signe trouvé. Le contrôle est générique : il lit
+// toutes les chaînes, sans liste de champs à tenir à jour.
 //   - chaînes lues : toutes, sauf une adresse web seule (`https://…` sans espace) et un identifiant nu (identifiant d'aide,
 //     valeur d'énumération, date, code : lettres sans accent, chiffres, tiret, point, souligné), qui ne peut contenir aucun
 //     tiret cadratin. Un nom d'un seul mot (un mot, un tiret cadratin, un mot) est donc lu : l'absence d'espace n'exempte rien ;
@@ -20,6 +21,13 @@ import type { OpcoData } from '../src/types';
 
 /** U+2014, construit par son code : le tiret cadratin ne figure pas dans ce fichier (charte SFG). */
 const TIRET_CADRATIN = String.fromCharCode(0x2014);
+/** U+2015, barre horizontale : même rendu qu'un tiret cadratin (un titre de convention collective en portait une). */
+const BARRE_HORIZONTALE = String.fromCharCode(0x2015);
+/** Les signes interdits et le nom donné dans un signalement. */
+const SIGNES_INTERDITS: ReadonlyArray<readonly [string, string]> = [
+  [TIRET_CADRATIN, 'tiret cadratin'],
+  [BARRE_HORIZONTALE, 'barre horizontale'],
+];
 
 /** Citation entre guillemets français : un extrait de source repris mot pour mot. */
 const CITATION = /«[^»]*»/g;
@@ -59,8 +67,14 @@ function chainesLues(valeur: unknown, chemin: string, sortie: Chaine[] = []): Ch
   return sortie;
 }
 
-/** true si le texte contient un tiret cadratin hors des citations « … » et des adresses web. */
-const contientTiret = (texte: string): boolean => texte.replace(CITATION, ' ').replace(ADRESSE_WEB, ' ').includes(TIRET_CADRATIN);
+/** Signes interdits présents dans le texte hors des citations « … » et des adresses web (un nom par signe, dans l'ordre de la liste). */
+const signesTrouves = (texte: string): string[] => {
+  const lu = texte.replace(CITATION, ' ').replace(ADRESSE_WEB, ' ');
+  return SIGNES_INTERDITS.filter(([signe]) => lu.includes(signe)).map(([, nom]) => nom);
+};
+
+/** true si le texte contient un tiret cadratin ou une barre horizontale hors des citations « … » et des adresses web. */
+const contientTiret = (texte: string): boolean => signesTrouves(texte).length > 0;
 
 interface Donnees {
   opcos: OpcoData[];
@@ -89,15 +103,14 @@ function lire(d: Donnees): Record<keyof Donnees, Chaine[]> {
   };
 }
 
-/** Une ligne par chaîne lue qui contient un tiret cadratin : son chemin (vide = conforme). */
+/** Une ligne par chaîne lue et par signe interdit qu'elle contient : son chemin et le signe (vide = conforme). */
 function controlerCharte(d: Donnees): string[] {
   return Object.values(lire(d))
     .flat()
-    .filter(({ texte }) => contientTiret(texte))
-    .map(({ chemin }) => `${chemin} : tiret cadratin`);
+    .flatMap(({ chemin, texte }) => signesTrouves(texte).map((nom) => `${chemin} : ${nom}`));
 }
 
-describe('charte SFG : aucun tiret cadratin dans les textes que le site affiche', () => {
+describe('charte SFG : ni tiret cadratin ni barre horizontale dans les textes que le site affiche', () => {
   it('les 11 OPCO, la table IDCC, le catalogue d\'aides, les portails régionaux et les suggestions NAF n\'en contiennent aucun', () => {
     expect(EMBEDDED_OPCOS).toHaveLength(11);
     expect(controlerCharte(embarquees())).toEqual([]);
@@ -124,12 +137,13 @@ describe('charte SFG : aucun tiret cadratin dans les textes que le site affiche'
 });
 
 /**
- * Copie des données embarquées dont chaque tiret cadratin est remplacé par une virgule : le point de départ des mutations est
- * propre quel que soit l'état des données, et chaque signalement d'une copie mutée vient de la seule mutation.
+ * Copie des données embarquées dont chaque tiret cadratin et chaque barre horizontale sont remplacés par une virgule : le point
+ * de départ des mutations est propre quel que soit l'état des données, et chaque signalement d'une copie mutée vient de la seule
+ * mutation.
  */
 function propres(): Donnees {
   const nettoyer = (valeur: unknown): unknown => {
-    if (typeof valeur === 'string') return valeur.replaceAll(TIRET_CADRATIN, ',');
+    if (typeof valeur === 'string') return valeur.replaceAll(TIRET_CADRATIN, ',').replaceAll(BARRE_HORIZONTALE, ',');
     if (Array.isArray(valeur)) return valeur.map(nettoyer);
     if (valeur !== null && typeof valeur === 'object') {
       return Object.fromEntries(Object.entries(valeur).map(([cle, v]) => [cle, nettoyer(v)]));
@@ -209,6 +223,38 @@ describe('le contrôle détecte une copie mutée', () => {
       opco(d, 'akto').specificites = `A ${TIRET_CADRATIN} B ${TIRET_CADRATIN} C ${TIRET_CADRATIN} D`;
     });
     expect(controlerCharte(copie)).toEqual(['opcos[akto].specificites : tiret cadratin']);
+  });
+
+  it('une barre horizontale (U+2015) réinjectée est signalée avec son chemin JSON, dans chacune des cinq sources', () => {
+    const naf = EMBEDDED_NAF.find((s) => /\s/.test(s.libelle))!;
+    const avecBarre = (debut: string, fin: string): string => `${debut} ${BARRE_HORIZONTALE} ${fin}`;
+    const copie = muter((d) => {
+      opco(d, 'akto').specificites = avecBarre('Règles propres à chaque branche', 'voir la fiche');
+      d.idcc['2636'].titre = avecBarre("Enseignement, écoles supérieures d'ingénieurs et de cadres", 'FESIC du 5 décembre 2006');
+      aide(d, 'nat-cpf').description = avecBarre('Compte personnel', 'solde');
+      portail(d, '53').liens[0].titre = avecBarre('Région', 'Bretagne');
+      d.naf.find((s) => s.prefixe === naf.prefixe)!.libelle = avecBarre(naf.libelle, 'suite');
+    });
+    expect(controlerCharte(copie).sort()).toEqual(
+      [
+        'opcos[akto].specificites : barre horizontale',
+        'idcc[2636].titre : barre horizontale',
+        'aides[nat-cpf].description : barre horizontale',
+        'portails[53].liens[0].titre : barre horizontale',
+        `naf[${naf.prefixe}].libelle : barre horizontale`,
+      ].sort(),
+    );
+  });
+
+  it('une chaîne qui porte les deux signes est signalée une fois pour chacun ; entre « », la barre horizontale ne l\'est pas', () => {
+    const copie = muter((d) => {
+      opco(d, 'akto').specificites = `A ${TIRET_CADRATIN} B ${BARRE_HORIZONTALE} C ${BARRE_HORIZONTALE} D`;
+      aide(d, 'nat-cpf').description = `Extrait : « Plan ${BARRE_HORIZONTALE} budget » repris tel quel.`;
+    });
+    expect(controlerCharte(copie)).toEqual([
+      'opcos[akto].specificites : tiret cadratin',
+      'opcos[akto].specificites : barre horizontale',
+    ]);
   });
 
   it('un tiret cadratin entre « » (citation mot pour mot) n\'est pas signalé', () => {
@@ -305,6 +351,12 @@ describe('la garde lit toute chaîne sauf une adresse web seule et un identifian
     for (const identifiant of ['nat-cpf', 'faf-fifpl', 'par_heure', 'depends_on_branche', 'less_11', '11_49', '2026-10-06', '86.21', '2A', '1516', '53']) {
       expect(estLue(identifiant), identifiant).toBe(false);
     }
+  });
+
+  it('la barre horizontale est interdite comme le tiret cadratin ; le tiret demi-cadratin (U+2013) ne l\'est pas', () => {
+    expect(contientTiret(`a${BARRE_HORIZONTALE}b`)).toBe(true);
+    expect(signesTrouves(`a ${BARRE_HORIZONTALE} b ${TIRET_CADRATIN} c`)).toEqual(['tiret cadratin', 'barre horizontale']);
+    expect(contientTiret(`0,05 ${String.fromCharCode(0x2013)} 0,60 %`)).toBe(false);
   });
 
   it("une chaîne vide est lue (elle n'est ni une adresse ni un identifiant), sans rien signaler", () => {
