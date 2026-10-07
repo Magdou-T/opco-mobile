@@ -7,8 +7,10 @@
 //   - une simple requête GET par adresse (le corps de la réponse est annulé dès les en-têtes) ;
 //   - au plus deux requêtes simultanées vers un même site, six au total ;
 //   - jamais d'appel à api.francecompetences.fr : les tables et l'API de France compétences ne sont réutilisables
-//     qu'avec une licence (art. R. 6123-35 du code du travail). Ces adresses, et toute redirection qui y mène,
-//     sont signalées « ignorées » sans être contactées. Une page web ordinaire du même organisme est vérifiée normalement.
+//     qu'avec une licence (art. R. 6123-35 du code du travail). Ces adresses, leurs sous-domaines, quelle que soit
+//     l'écriture de l'hôte (majuscules, point final, %2E, port, identifiants), et toute redirection qui y mène,
+//     sont signalés « ignorés » sans être contactés. Une page web ordinaire du même organisme est vérifiée normalement ;
+//   - pas de nouvel essai quand l'échec se reproduirait à l'identique (boucle de redirections, certificat refusé).
 // ============================================================
 
 import fs from 'node:fs';
@@ -19,7 +21,7 @@ import type { Aide, IdccTable, OpcoData, PortailRegional, SuggestionNaf } from '
 
 /**
  * ok : réponse 2xx ou 3xx ;
- * a_verifier : refus anti-robots (401, 403, 429, 503), connexion coupée par le serveur ou réponse hors protocole HTTP ;
+ * a_verifier : refus anti-robots (401, 403, 429, 503), connexion coupée ou fermée sans réponse par le serveur, ou réponse hors protocole HTTP ;
  * casse : toute autre erreur (404, 5xx, nom d'hôte inconnu, délai dépassé, certificat refusé) ;
  * ignore : adresse non contactée (licence France compétences).
  */
@@ -127,23 +129,42 @@ export function classerStatut(statut: number | null): Exclude<EtatLien, 'ignore'
   return 'casse';
 }
 
-/** Hôtes qu'aucune requête ne doit atteindre, avec la raison affichée dans le rapport. */
-const HOTES_IGNORES: Record<string, string> = {
-  'api.francecompetences.fr': 'licence France compétences (art. R. 6123-35 du code du travail)',
-};
+/**
+ * Hôtes qu'aucune requête ne doit atteindre, sous-domaines compris, avec la raison affichée dans le rapport.
+ * Une Map et non un objet : un hôte nommé « constructor » ou « __proto__ » ne doit pas retrouver une propriété d'objet.
+ */
+const HOTES_IGNORES: ReadonlyMap<string, string> = new Map([
+  ['api.francecompetences.fr', 'licence France compétences (art. R. 6123-35 du code du travail)'],
+]);
+
+/**
+ * Nom d'hôte tel que le client HTTP le contactera, en minuscules et sans point final : « exemple.fr. » (nom de domaine
+ * complet) désigne le même serveur que « exemple.fr ». L'analyseur d'adresses a déjà décodé %2E, les points
+ * idéographiques et les lettres pleine chasse, et écarté le port et les identifiants. Null pour une adresse illisible.
+ */
+function nomDHote(url: string): string | null {
+  try {
+    return new URL(url).hostname.toLowerCase().replace(/\.+$/, '');
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Raison pour laquelle une adresse ne doit jamais être contactée, ou null.
  * L'API de France compétences (api.francecompetences.fr) donne accès aux tables de correspondance entre branches,
  * établissements (SIRET) et OPCO : leur réutilisation exige une licence (art. R. 6123-35 du code du travail).
- * Les pages web ordinaires de l'organisme, dont l'outil officiel « Quel est mon OPCO », ne sont pas concernées.
+ * L'hôte est comparé en entier (ou comme parent d'un sous-domaine) : ni « notapi.francecompetences.fr » ni
+ * « api.francecompetences.fr.exemple.fr » ne sont concernés. Les pages web ordinaires de l'organisme, dont l'outil
+ * officiel « Quel est mon OPCO », ne le sont pas non plus.
  */
 export function motifIgnore(url: string): string | null {
-  try {
-    return HOTES_IGNORES[new URL(url).hostname.toLowerCase()] ?? null;
-  } catch {
-    return null;
+  const hote = nomDHote(url);
+  if (hote === null) return null;
+  for (const [interdit, motif] of HOTES_IGNORES) {
+    if (hote === interdit || hote.endsWith(`.${interdit}`)) return motif;
   }
+  return null;
 }
 
 // --- Vérification -----------------------------------------------------------
@@ -152,23 +173,33 @@ const MAX_REDIRECTIONS = 10;
 
 const pause = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
+/** Site contacté, pour limiter les requêtes simultanées : « exemple.fr » et « exemple.fr. » ne font qu'un. */
 function hoteDe(url: string): string {
-  try {
-    return new URL(url).hostname.toLowerCase();
-  } catch {
-    return url;
-  }
+  return nomDHote(url) ?? url;
 }
 
 /**
- * Le serveur a été joint mais l'échange échoue : connexion coupée (ECONNRESET, typique d'un pare-feu applicatif ou
- * d'une protection anti-robots) ou réponse qui n'est pas du HTTP valide (HTTPParserError, qu'un navigateur tolère).
- * Le lien n'est pas pour autant cassé : il est classé « à vérifier ». Un nom d'hôte inconnu, un délai de connexion
- * dépassé ou un certificat refusé restent des liens cassés.
+ * Le serveur a été joint mais l'échange échoue : connexion coupée (ECONNRESET) ou fermée sans réponse (UND_ERR_SOCKET,
+ * « other side closed »), typiques d'un pare-feu applicatif ou d'une protection anti-robots, ou réponse qui n'est pas
+ * du HTTP valide (HTTPParserError, qu'un navigateur tolère). Le lien n'est pas pour autant cassé : il est classé
+ * « à vérifier ». Un nom d'hôte inconnu, un délai de connexion dépassé ou un certificat refusé restent des liens cassés.
  */
 function serveurJointMaisInexploitable(err: unknown): boolean {
   const cause = ((err ?? {}) as { cause?: { name?: string; code?: string } }).cause;
-  return cause?.code === 'ECONNRESET' || cause?.name === 'HTTPParserError' || (cause?.code?.startsWith('HPE_') ?? false);
+  return (
+    cause?.code === 'ECONNRESET' ||
+    cause?.code === 'UND_ERR_SOCKET' ||
+    cause?.name === 'HTTPParserError' ||
+    (cause?.code?.startsWith('HPE_') ?? false)
+  );
+}
+
+/** Codes d'erreur de certificat d'OpenSSL et de Node : le site présentera le même certificat au prochain essai. */
+const CODE_CERTIFICAT = /^(?:CERT_|ERR_TLS_CERT_|DEPTH_ZERO_SELF_SIGNED_CERT$|SELF_SIGNED_CERT_IN_CHAIN$|UNABLE_TO_GET_ISSUER_CERT(?:_LOCALLY)?$|UNABLE_TO_VERIFY_LEAF_SIGNATURE$)/;
+
+function certificatRefuse(err: unknown): boolean {
+  const code = ((err ?? {}) as { cause?: { code?: unknown } }).cause?.code;
+  return typeof code === 'string' && CODE_CERTIFICAT.test(code);
 }
 
 function decrireErreur(err: unknown, timeoutMs: number): string {
@@ -186,6 +217,8 @@ interface Tentative {
   urlFinale?: string;
   /** Serveur joint dont l'échange échoue (connexion coupée, réponse hors protocole) : lien à vérifier, pas cassé. */
   protege?: true;
+  /** Échec qui se reproduira à l'identique (boucle de redirections, certificat refusé) : inutile de réessayer. */
+  definitif?: true;
 }
 
 /**
@@ -218,16 +251,25 @@ async function tenter(url: string, fetchImpl: typeof fetch, timeoutMs: number): 
       if (!suite) return { statut: res.status, urlFinale: courante !== url ? courante : undefined };
       courante = new URL(suite, courante).href;
     }
-    return { statut: null, erreur: `plus de ${MAX_REDIRECTIONS} redirections` };
+    return { statut: null, erreur: `plus de ${MAX_REDIRECTIONS} redirections`, definitif: true };
   } catch (err) {
-    return { statut: null, erreur: decrireErreur(err, timeoutMs), protege: serveurJointMaisInexploitable(err) || undefined };
+    return {
+      statut: null,
+      erreur: decrireErreur(err, timeoutMs),
+      protege: serveurJointMaisInexploitable(err) || undefined,
+      definitif: certificatRefuse(err) || undefined,
+    };
   } finally {
     clearTimeout(minuteur);
   }
 }
 
-/** Une erreur réseau ou une réponse 5xx est souvent passagère : elle est retentée avant d'être déclarée (sauf un serveur protégé, qui coupe à chaque fois). */
-const estPassager = (r: Tentative) => r.motif == null && !r.protege && (r.statut === null || r.statut >= 500);
+/**
+ * Une erreur réseau ou une réponse 5xx est souvent passagère : elle est retentée avant d'être déclarée. Ne le sont pas :
+ * un serveur protégé (il coupe à chaque fois), une boucle de redirections et un certificat refusé (ils recommencent à
+ * l'identique, et une boucle coûte 11 requêtes par essai).
+ */
+const estPassager = (r: Tentative) => r.motif == null && !r.protege && !r.definitif && (r.statut === null || r.statut >= 500);
 
 async function verifierUrl(url: string, fetchImpl: typeof fetch, timeoutMs: number, tentatives: number, pauseMs: number): Promise<Tentative> {
   let r = await tenter(url, fetchImpl, timeoutMs);

@@ -166,11 +166,47 @@ describe('motifIgnore (licence France compétences)', () => {
     expect(motifIgnore('http://api.francecompetences.fr:8443/x')).not.toBeNull();
   });
 
+  // Chaque écriture ci-dessous est envoyée par le client HTTP au serveur api.francecompetences.fr.
+  it.each([
+    ['point final (nom de domaine complet)', 'https://api.francecompetences.fr./referentiels/x'],
+    ['point final en majuscules', 'https://API.FRANCECOMPETENCES.FR./x'],
+    ['plusieurs points finaux', 'https://api.francecompetences.fr../x'],
+    ['point final codé %2E', 'https://api.francecompetences.fr%2E/x'],
+    ['point intérieur codé %2E', 'https://api.francecompetences%2Efr/x'],
+    ['point idéographique U+3002', 'https://api。francecompetences。fr/x'],
+    ['lettres pleine chasse', 'https://ａｐｉ.francecompetences.fr/x'],
+    ['schéma en majuscules', 'HTTPS://api.francecompetences.fr/x'],
+    ['port 443 explicite', 'https://api.francecompetences.fr:443/x'],
+    ['identifiants devant le nom', 'https://utilisateur:secret@api.francecompetences.fr/x'],
+    ['barre oblique inverse après le nom', 'https://api.francecompetences.fr\\@exemple.fr/x'],
+    ['sous-domaine', 'https://v2.api.francecompetences.fr/x'],
+    ['sous-domaine en majuscules avec point final', 'https://V2.API.francecompetences.fr./x'],
+  ])("écarte l'adresse écrite avec %s", (_forme, url) => {
+    expect(motifIgnore(url)).toMatch(/R\. 6123-35/);
+  });
+
+  it.each([
+    ["un nom de domaine qui commence par l'hôte interdit", 'https://api.francecompetences.fr.exemple.fr/x'],
+    ['un sous-domaine voisin dont le nom se termine pareil', 'https://notapi.francecompetences.fr/x'],
+    ["l'hôte interdit placé devant @ (c'est un identifiant, l'hôte réel est exemple.fr)", 'https://api.francecompetences.fr@exemple.fr/x'],
+    ["l'hôte interdit cité dans le chemin ou la requête", 'https://exemple.fr/api.francecompetences.fr?site=api.francecompetences.fr'],
+    ['le domaine parent', 'https://francecompetences.fr/'],
+    ["le site web de l'organisme", 'https://www.francecompetences.fr/reguler-le-marche/mon-cep/'],
+    ["l'outil officiel « Quel est mon OPCO »", 'https://quel-est-mon-opco.francecompetences.fr/'],
+  ])('laisse passer %s', (_cas, url) => {
+    expect(motifIgnore(url)).toBeNull();
+  });
+
   it("laisse passer les pages web ordinaires, dont celle de l'outil officiel, et les adresses illisibles", () => {
     expect(motifIgnore('https://quel-est-mon-opco.francecompetences.fr/')).toBeNull();
     expect(motifIgnore('https://www.francecompetences.fr/reguler-le-marche/mon-cep/')).toBeNull();
     expect(motifIgnore('https://exemple.fr/api.francecompetences.fr')).toBeNull();
     expect(motifIgnore('pas une adresse')).toBeNull();
+  });
+
+  it("ne confond pas un hôte nommé comme une propriété d'objet (constructor, __proto__) avec un hôte interdit", () => {
+    expect(motifIgnore('http://constructor/x')).toBeNull();
+    expect(motifIgnore('http://__proto__/x')).toBeNull();
   });
 });
 
@@ -214,6 +250,33 @@ describe('verifierUrls', () => {
     expect(r[0]).toMatchObject({ url: 'https://api.francecompetences.fr/referentiels/tables', statut: null, utilisePar: ['idcc:0001.source'] });
     expect(r[0].motif).toMatch(/R\. 6123-35/);
     expect(r[0].erreur).toBeUndefined();
+  });
+
+  it('ne contacte jamais api.francecompetences.fr écrit avec un point final, %2E ou un sous-domaine, mais contacte les adresses voisines', async () => {
+    const appels: string[] = [];
+    const faux = (async (url: string) => {
+      appels.push(url);
+      return reponse(200);
+    }) as unknown as typeof fetch;
+    const interdites = ['https://api.francecompetences.fr./referentiels/tables', 'https://api.francecompetences.fr%2E/referentiels/tables', 'https://V2.API.francecompetences.fr./x'];
+    const voisines = ['https://notapi.francecompetences.fr/x', 'https://api.francecompetences.fr.exemple.fr/x'];
+    const r = await verifierUrls(new Map([...interdites, ...voisines].map((u) => [u, ['x']])), { fetchImpl: faux });
+
+    expect([...appels].sort()).toEqual([...voisines].sort());
+    expect(r.map((x) => x.etat)).toEqual(['ignore', 'ignore', 'ignore', 'ok', 'ok']);
+    for (const x of r.slice(0, 3)) expect(x.motif).toMatch(/R\. 6123-35/);
+  });
+
+  it("contacte normalement un hôte nommé comme une propriété d'objet (constructor, __proto__) au lieu de le déclarer ignoré", async () => {
+    const appels: string[] = [];
+    const faux = (async (url: string) => {
+      appels.push(url);
+      return reponse(200);
+    }) as unknown as typeof fetch;
+    const r = await verifierUrls(new Map([['http://constructor/x', ['a']], ['http://__proto__/x', ['b']]]), { fetchImpl: faux });
+    expect([...appels].sort()).toEqual(['http://__proto__/x', 'http://constructor/x']);
+    expect(r.map((x) => x.etat)).toEqual(['ok', 'ok']);
+    expect(r.every((x) => x.motif === undefined)).toBe(true);
   });
 
   it("conserve l'ordre des liens même quand les réponses arrivent dans le désordre", async () => {
@@ -275,6 +338,35 @@ describe('verifierUrls', () => {
       expect(r.motif).toMatch(/api\.francecompetences\.fr.*R\. 6123-35/);
     });
 
+    it.each([
+      ['un point final', 'https://api.francecompetences.fr./referentiels/x'],
+      ['un point final codé %2E', 'https://api.francecompetences.fr%2E/referentiels/x'],
+      ['un point final, un port et des identifiants', 'https://u:p@API.francecompetences.fr.:443/x'],
+      ['une adresse relative au protocole (//) et un point final', '//api.francecompetences.fr./referentiels/x'],
+      ['un sous-domaine', 'https://v2.api.francecompetences.fr/x'],
+    ])('ne suit jamais une redirection vers api.francecompetences.fr écrit avec %s', async (_forme, cible) => {
+      const appels: string[] = [];
+      const faux = (async (url: string) => {
+        appels.push(url);
+        return redirection(cible);
+      }) as unknown as typeof fetch;
+      const [r] = await verifierUrls(new Map([['https://relais.fr/page', ['x']]]), { fetchImpl: faux, pauseMs: 0 });
+      expect(appels).toEqual(['https://relais.fr/page']);
+      expect(r).toMatchObject({ etat: 'ignore', statut: null, utilisePar: ['x'] });
+      expect(r.motif).toMatch(/api\.francecompetences\.fr.*R\. 6123-35/);
+    });
+
+    it("ne suit pas une chaîne de redirections dont le deuxième saut mène à api.francecompetences.fr (point final et port)", async () => {
+      const appels: string[] = [];
+      const faux = (async (url: string) => {
+        appels.push(url);
+        return redirection(url === 'https://a.fr/p' ? 'https://b.fr/q' : 'https://API.francecompetences.fr.:443/x');
+      }) as unknown as typeof fetch;
+      const [r] = await verifierUrls(new Map([['https://a.fr/p', ['x']]]), { fetchImpl: faux, pauseMs: 0 });
+      expect(appels).toEqual(['https://a.fr/p', 'https://b.fr/q']);
+      expect(r).toMatchObject({ etat: 'ignore', statut: null });
+    });
+
     it('signale une boucle de redirections', async () => {
       let appels = 0;
       const faux = (async (url: string) => {
@@ -282,6 +374,18 @@ describe('verifierUrls', () => {
         return redirection(url);
       }) as unknown as typeof fetch;
       const [r] = await verifierUrls(new Map([['https://boucle.fr/a', ['x']]]), { fetchImpl: faux, pauseMs: 0, tentatives: 1 });
+      expect(appels).toBe(11);
+      expect(r).toMatchObject({ etat: 'casse', statut: null });
+      expect(r.erreur).toMatch(/redirections/);
+    });
+
+    it("ne réessaie pas une boucle de redirections : elle recommencerait à l'identique (11 requêtes, pas 22)", async () => {
+      let appels = 0;
+      const faux = (async (url: string) => {
+        appels += 1;
+        return redirection(url);
+      }) as unknown as typeof fetch;
+      const [r] = await verifierUrls(new Map([['https://boucle.fr/a', ['x']]]), { fetchImpl: faux, pauseMs: 0, tentatives: 3 });
       expect(appels).toBe(11);
       expect(r).toMatchObject({ etat: 'casse', statut: null });
       expect(r.erreur).toMatch(/redirections/);
@@ -351,6 +455,46 @@ describe('verifierUrls', () => {
       expect(r[1].erreur).toContain('HTTP/1.1');
     });
 
+    it('classe en « à vérifier » un serveur qui ferme la connexion sans répondre (UND_ERR_SOCKET), sans réessayer', async () => {
+      let appels = 0;
+      const faux = (async () => {
+        appels += 1;
+        throw Object.assign(new TypeError('fetch failed'), {
+          cause: Object.assign(new Error('other side closed'), { name: 'SocketError', code: 'UND_ERR_SOCKET' }),
+        });
+      }) as unknown as typeof fetch;
+      const [r] = await verifierUrls(new Map([['https://ferme.test/page', ['a']]]), { fetchImpl: faux, pauseMs: 0, tentatives: 3 });
+      expect(appels).toBe(1);
+      expect(r).toMatchObject({ etat: 'a_verifier', statut: null });
+      expect(r.erreur).toContain('UND_ERR_SOCKET');
+    });
+
+    it.each(['CERT_HAS_EXPIRED', 'DEPTH_ZERO_SELF_SIGNED_CERT', 'UNABLE_TO_VERIFY_LEAF_SIGNATURE', 'SELF_SIGNED_CERT_IN_CHAIN', 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY', 'ERR_TLS_CERT_ALTNAME_INVALID'])(
+      'ne réessaie pas un certificat refusé (%s) : il sera le même au prochain essai',
+      async (code) => {
+        let appels = 0;
+        const faux = (async () => {
+          appels += 1;
+          throw Object.assign(new TypeError('fetch failed'), { cause: Object.assign(new Error('certificat'), { code }) });
+        }) as unknown as typeof fetch;
+        const [r] = await verifierUrls(new Map([['https://certificat.test', ['a']]]), { fetchImpl: faux, pauseMs: 0, tentatives: 3 });
+        expect(appels).toBe(1);
+        expect(r).toMatchObject({ etat: 'casse', statut: null });
+        expect(r.erreur).toContain(code);
+      },
+    );
+
+    it.each(['UND_ERR_CONNECT_TIMEOUT', 'ECONNREFUSED'])('réessaie encore une erreur réseau passagère (%s)', async (code) => {
+      let appels = 0;
+      const faux = (async () => {
+        appels += 1;
+        throw Object.assign(new TypeError('fetch failed'), { cause: Object.assign(new Error('x'), { code }) });
+      }) as unknown as typeof fetch;
+      const [r] = await verifierUrls(new Map([['https://passager.test', ['a']]]), { fetchImpl: faux, pauseMs: 0, tentatives: 3 });
+      expect(appels).toBe(3);
+      expect(r).toMatchObject({ etat: 'casse', statut: null });
+    });
+
     it('garde « cassé » un délai de connexion dépassé et un certificat refusé', async () => {
       const faux = (async (url: string) => {
         throw Object.assign(new TypeError('fetch failed'), {
@@ -394,6 +538,23 @@ describe('verifierUrls', () => {
     expect(r.every((x) => x.etat === 'ok')).toBe(true);
     expect(maxParHote['legifrance.test']).toBe(2);
     expect(maxParHote['autre.test']).toBe(1);
+  });
+
+  it('compte pour un seul site les écritures avec et sans point final, pour la limite de requêtes simultanées', async () => {
+    let enCours = 0;
+    let maxEnCours = 0;
+    const faux = (async () => {
+      enCours += 1;
+      maxEnCours = Math.max(maxEnCours, enCours);
+      await attendre(10);
+      enCours -= 1;
+      return reponse(200);
+    }) as unknown as typeof fetch;
+    const urls = new Map<string, string[]>();
+    for (let i = 0; i < 6; i++) urls.set(`https://legifrance.test${i % 2 === 0 ? '' : '.'}/page-${i}`, [`u${i}`]);
+    const r = await verifierUrls(urls, { fetchImpl: faux, concurrence: 6, parHote: 2 });
+    expect(r.every((x) => x.etat === 'ok')).toBe(true);
+    expect(maxEnCours).toBe(2);
   });
 });
 
