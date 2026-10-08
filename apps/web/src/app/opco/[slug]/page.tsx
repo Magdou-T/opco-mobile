@@ -28,6 +28,7 @@ import {
 } from '@/lib/fiche';
 import type { CarteTexteLibre, IdSection } from '@/lib/fiche';
 import { CUMUL_ORDRE, dateFr, de, typo } from '@/lib/format';
+import { descriptionDeFiche, metadonnees } from '@/lib/metadonnees';
 
 export function generateStaticParams() {
   return EMBEDDED_OPCOS.map((o) => ({ slug: o.slug }));
@@ -41,13 +42,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const opco = getEmbeddedOpcoBySlug(slug);
   if (!opco) return {};
-  const verification = opco.derniere_verification
-    ? ` vérifiés le ${dateFr(opco.derniere_verification)}`
-    : '';
-  return {
-    title: `${opco.name} : barèmes de financement 2026, conditions, dispositifs`,
-    description: `Barèmes de prise en charge 2026 ${de(opco.name)}${verification} : plafonds horaires, budgets annuels, frais annexes, barèmes par branche, dispositifs complémentaires et alertes, avec sources officielles.`,
-  };
+  return metadonnees(descriptionDeFiche(opco));
 }
 
 /** Pastille d'icône des cartes « Alternance, CPF et VAE ». */

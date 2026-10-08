@@ -507,6 +507,19 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   Audit et test : `tests/parcours.test.ts` (« aucun champ invisible ne pèse sur le résultat »).
 - **Région** (`ChampRegion`) : la région connue s'affiche avec « Modifier », qui ouvre la liste sur la région choisie ;
   un choix referme la liste et rend le focus au nom de la région.
+- **Recherche d'entreprise et sources** (`StepIdentification`, `lib/entreprise.ts`, `lib/mentions.ts`) : sous le champ,
+  une phrase dit que la recherche interroge l'API Recherche d'entreprises de l'État et que le site n'en conserve rien,
+  avec le lien « Mentions légales et données » vers la rubrique « Données personnelles », ouvert dans un nouvel onglet
+  (quitter le simulateur effacerait les réponses, que le site ne garde nulle part). Sous les résultats et au bas de la
+  carte de l'entreprise : « Source : API Recherche d'entreprises (DINUM), données SIRENE de l'INSEE, licence ouverte
+  2.0. » (`SOURCE_ENTREPRISES`). Le sigle IDCC est défini à sa première occurrence dans les résultats (`Abreviation`,
+  `<abbr title>`). La carte de l'OPCO recalcule la résolution depuis l'état par `entreeDeResolution` (conventions, code
+  NAF, catégorie juridique : un employeur public sans convention ne reçoit aucun OPCO d'après son code NAF) ; quand
+  l'OPCO présélectionné vient du code NAF (`preselectionParNaf` : sans les suggestions, le résolveur ne l'aurait pas
+  présélectionné), le motif est suivi de la source des suggestions (« Source de la suggestion : Table SIRET-OPCO de
+  France compétences (data.gouv.fr), licence ouverte 2.0, mise à jour du 24/09/2026. »). Motifs et avertissements du
+  résolveur passent par `texteDuResolveur` (dates JJ/MM/AAAA, espaces insécables : « 86 % des établissements »). Ces
+  lignes de source et d'information sont en Inter 12 px, texte-discret (5,35:1).
 - **Alertes** : `Callout` avertissement pour le plafond horaire indicatif (rien n'est bloqué) ; le rouge reste réservé
   aux saisies refusées et à l'échec de la recherche d'entreprise.
 - **Récapitulatif** : une `Card` par étape (pastille d'icône, `h3`, « Modifier ») ; une valeur absente s'écrit
@@ -677,7 +690,7 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   et pied en `print:table-row-group`, Chrome ne les répète plus en haut et en bas de chaque page (PDF A4 du scénario 1,
   marge haute de 0,4 à 3,9 pouces : « Total » imprimé une fois, au lieu de deux quand le tableau tombait sur deux pages).
 
-## 16. Fiches OPCO, liste des OPCO, guides, contact et page 404
+## 16. Fiches OPCO, liste des OPCO, guides, contact, mentions légales et page 404
 
 Pages de référence et de lecture. Logique de présentation en fonctions pures : `lib/fiche.ts` (tests :
 `tests/fiche.test.ts`), `lib/contact.ts` (`tests/contact.test.ts`), `lib/typographie.ts` (`tests/typographie.test.ts`).
@@ -772,6 +785,26 @@ Composants des fiches : `components/opco/`.
   « Financement OPCO », « Former mes salariés »… ; 153 px au plus en Inter 16 px, le champ en montre 162 à 320 px avec
   une barre de défilement classique) ; la valeur choisie reste le sujet complet, si bien que l'objet et le corps du
   message sont mot pour mot ceux d'avant (testé sujet par sujet contre 7c791cf).
+- **Mentions légales et données** (`app/mentions-legales/page.tsx` ; données `lib/mentions.ts`, module sans autre
+  importation que l'espace insécable ; tests `tests/mentions.test.ts`) : gabarit des guides (`GuideHero`, `GuideBody`
+  dont le sommaire s'appelle « Sommaire de la page »), six rubriques numérotées : éditeur, directeur de la publication,
+  hébergement, données personnelles (aucun cookie, aucune mesure d'audience, aucun script tiers ; recherche
+  d'entreprise ; formulaire de contact ; droits et CNIL), sources et licences (API Recherche d'entreprises, Table
+  SIRET-OPCO de France compétences, barèmes, polices, marque), limites des estimations. Informations en liste de
+  définitions (libellé, puis valeur à côté à partir de 640 px). **État « à compléter »** : chaque information légale est
+  une chaîne ou `null` ; `null` s'écrit « [à compléter : libellé] » sur fond or doux (texte #1A1A1A), et tant que
+  `mentionsIncompletes()` n'est pas vide, un `Callout` d'avertissement ouvre la page (« Page à compléter avant
+  publication »). Aucune donnée légale n'est devinée : seuls les faits du répertoire SIRENE (dénomination, forme, SIREN,
+  SIRET et adresse du siège, relus le 08/10/2026) et l'adresse électronique du site sont remplis ; le reste attend
+  l'éditeur (le contrôleur l'inscrit dans `MENTIONS`). Lien « Mentions légales et données », souligné, dans la dernière
+  ligne du pied de page ; adresse `/mentions-legales/` au plan du site (priorité 0,3).
+- **Métadonnées** (`lib/metadonnees.ts`, tests `tests/metadonnees.test.ts`) : chaque page déclare titre, description,
+  adresse canonique à barre finale, Open Graph (titre, description, adresse, nom du site, `fr_FR`, `website`) et carte
+  Twitter `summary`, sans image ; `metadataBase` (layout) les rend absolues. Le gabarit « %s | financementOPCO » suit le
+  titre, sauf à l'accueil (titre complet). La page 404 garde un titre et une description simples.
+- **Textes JSX et espaces** : SWC, le compilateur de Next 16.2, perd l'espace de tête d'un texte JSX écrit sur
+  plusieurs lignes qui contient une entité (« <strong>Titre.</strong> Le site n&apos;envoie », suivi d'un saut de
+  ligne, s'affichait « Titre.Le site ») ; écrire `{' '}` avant le texte. Garde : `tests/jsx-espaces.test.ts`.
 - **Page 404** (`app/not-found.tsx`) : dans le gabarit du site, un message court, trois liens (simulateur, liste des
   OPCO, accueil) et le rail de la marque au jalon manquant (décor) ; l'export produit `out/404.html`.
 

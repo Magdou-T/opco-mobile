@@ -12,8 +12,17 @@
 // et la sélection d'une entreprise repart de la tranche suggérée par l'INSEE, sans effectif saisi pour une autre.
 // ============================================================
 
-import { createInitialWizardState } from '@opco/core';
-import type { CompanySize, EntreeResolution, EntrepriseInfo, ProjetType, ResolutionOpco, WizardState } from '@opco/core';
+import { createInitialWizardState, resoudreOpco } from '@opco/core';
+import { texteFr, typo } from './format';
+import type {
+  CompanySize,
+  EntreeResolution,
+  EntrepriseInfo,
+  IdccTable,
+  ProjetType,
+  ResolutionOpco,
+  WizardState,
+} from '@opco/core';
 
 /**
  * Tranche de taille d'un effectif exact, avec les bornes du moteur d'aides (`bornesEffectif` de @opco/core) :
@@ -115,6 +124,27 @@ export function entreeDeResolution(source: {
     codeNaf: source.codeNaf,
     natureJuridique: source.natureJuridique,
   };
+}
+
+/**
+ * Vrai quand l'OPCO présélectionné vient du code NAF : suggestion seule (aucune convention exploitable) ou choix parmi
+ * plusieurs OPCO possibles. Critère : sans les suggestions par code NAF, le résolveur n'aurait pas présélectionné cet
+ * OPCO (les suggestions ne font qu'ajouter une présélection : sans OPCO présélectionné, le résultat est donc faux ; la
+ * présélection par la convention du siège n'en dépend pas). `resolution` est celle de `resoudreOpco` pour `entree` et
+ * `table`, avec les suggestions. La carte de l'OPCO cite alors la source des suggestions (Table SIRET-OPCO de France
+ * compétences).
+ */
+export function preselectionParNaf(entree: EntreeResolution, resolution: ResolutionOpco, table: IdccTable): boolean {
+  return resoudreOpco(entree, table, []).opcoSlug !== resolution.opcoSlug;
+}
+
+/**
+ * Texte du résolveur d'OPCO (motif, avertissements, conventions des candidats) prêt à l'affichage : dates JJ/MM/AAAA et
+ * typographie française (espace insécable avant « : », entre un nombre et son unité : « 86 % »), hors extraits cités.
+ * Aucune lecture de nombre décimal : les codes NAF (« 87.1 », « 85.59A ») restent tels quels.
+ */
+export function texteDuResolveur(s: string): string {
+  return typo(texteFr(s));
 }
 
 /** L'OPCO est facultatif pour le projet « former le dirigeant » et obligatoire pour les autres (projet non choisi compris). */

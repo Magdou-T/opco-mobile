@@ -1,6 +1,19 @@
 import { Fragment } from 'react';
+import type { ReactNode } from 'react';
 import { definirAbreviations } from '@/lib/fiche';
 import { texteDonnees } from '@/lib/format';
+
+/** Sigle défini à sa première occurrence par une infobulle (`<abbr title>`), souligné en pointillé. */
+export function Abreviation({ definition, children }: { definition: string; children: ReactNode }) {
+  return (
+    <abbr
+      title={definition}
+      className="cursor-help underline decoration-texte-discret decoration-dotted underline-offset-[0.2em]"
+    >
+      {children}
+    </abbr>
+  );
+}
 
 /**
  * Texte des données affiché sur une fiche OPCO : dates JJ/MM/AAAA, montants et typographie à la française
@@ -16,13 +29,9 @@ export function TexteDonnees({ texte, sigles }: { texte: string; sigles?: Readon
         m.genre === 'texte' ? (
           <Fragment key={i}>{m.valeur}</Fragment>
         ) : (
-          <abbr
-            key={i}
-            title={m.definition}
-            className="cursor-help underline decoration-texte-discret decoration-dotted underline-offset-[0.2em]"
-          >
+          <Abreviation key={i} definition={m.definition}>
             {m.valeur}
-          </abbr>
+          </Abreviation>
         ),
       )}
     </>

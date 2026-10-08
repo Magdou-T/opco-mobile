@@ -9,6 +9,7 @@ import {
   GuideCta,
 } from '@/components/site/Guide';
 import { Etiquette } from '@/components/ui/Etiquette';
+import { PAGES, metadonnees } from '@/lib/metadonnees';
 
 /* Tableau des financements : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft) ; sous 640 px,
    une carte par ligne, l'en-tête de colonne repris devant chaque cellule. */
@@ -18,11 +19,7 @@ const TITRE_LIGNE = 'px-4 py-3.5 text-left leading-snug font-semibold text-texte
 const CELLULE =
   'px-4 py-3.5 leading-relaxed text-texte-doux sm:px-5 max-sm:mt-2 max-sm:block max-sm:p-0 max-sm:before:block max-sm:before:text-xs max-sm:before:font-semibold max-sm:before:tracking-[0.12em] max-sm:before:text-texte-discret max-sm:before:uppercase max-sm:before:content-[attr(data-label)]';
 
-export const metadata: Metadata = {
-  title: 'Comprendre les OPCO : rôle, rattachement, financements',
-  description:
-    "Qui sont les 11 opérateurs de compétences, comment votre entreprise est rattachée au sien, et ce qu'ils peuvent financer en 2026 : plan de développement des compétences, alternance, période de reconversion, VAE.",
-};
+export const metadata: Metadata = metadonnees(PAGES.comprendre);
 
 const TOC = [
   { id: 'role', label: 'Le rôle des OPCO' },

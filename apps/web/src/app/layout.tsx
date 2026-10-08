@@ -3,6 +3,7 @@ import { Montserrat, Inter } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { ADRESSE_DU_SITE, GABARIT_DU_TITRE, PAGES } from "@/lib/metadonnees";
 
 // Charte SFG : titres en Montserrat (SemiBold, Bold), texte en Inter (Regular ; Medium et SemiBold pour l'interface).
 const montserrat = Montserrat({
@@ -19,13 +20,15 @@ const inter = Inter({
   display: "swap",
 });
 
+// Valeurs par défaut : chaque page déclare ses propres métadonnées (lib/metadonnees.ts : adresse canonique, Open Graph,
+// carte Twitter). `metadataBase` résout leurs chemins en adresses absolues.
 export const metadata: Metadata = {
+  metadataBase: new URL(ADRESSE_DU_SITE),
   title: {
-    default: "financementOPCO : tous les financements de votre formation",
-    template: "%s | financementOPCO",
+    default: PAGES.accueil.titre,
+    template: GABARIT_DU_TITRE,
   },
-  description:
-    "Trouvez les financements de votre formation : OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe. Aides éligibles, montants indicatifs et sources officielles, guides des OPCO et des obligations des entreprises. Un service SFG Développement.",
+  description: PAGES.accueil.description,
 };
 
 export default function RootLayout({

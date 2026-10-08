@@ -7,6 +7,7 @@ import { cx } from '@/lib/cx';
 import { DOMAINES_DE_FORMATION } from '@/lib/domaines';
 import { extrait } from '@/lib/extrait';
 import { typo } from '@/lib/format';
+import { PAGES, metadonnees } from '@/lib/metadonnees';
 import { BandeAppel } from '@/components/site/BandeAppel';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -16,11 +17,7 @@ import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 
-export const metadata: Metadata = {
-  title: 'financementOPCO : trouvez tous les financements de votre formation',
-  description:
-    'Simulateur gratuit : OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe. Les aides et financements de votre formation, avec leurs montants indicatifs et leurs sources officielles. Plus les guides : fonctionnement des OPCO, obligations des entreprises, formations 100 % financées.',
-};
+export const metadata: Metadata = metadonnees(PAGES.accueil);
 
 /* ============================================================
    Données lues dans le catalogue au moment du build (composant serveur : rien n'est envoyé au navigateur).

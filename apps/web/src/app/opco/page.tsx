@@ -8,12 +8,9 @@ import { Icon } from '@/components/ui/Icon';
 import { extrait } from '@/lib/extrait';
 import { trierParNom } from '@/lib/fiche';
 import { dateFr, typo } from '@/lib/format';
+import { PAGES, metadonnees } from '@/lib/metadonnees';
 
-export const metadata: Metadata = {
-  title: 'Les 11 OPCO : fiches, barèmes et dispositifs 2026',
-  description:
-    'Fiches détaillées des 11 opérateurs de compétences : secteurs couverts, plafonds de financement 2026, frais annexes, actions collectives et conditions de prise en charge.',
-};
+export const metadata: Metadata = metadonnees(PAGES.opco);
 
 /** Ligne de secteurs d'une carte : extrait de 110 caractères au plus (`lib/extrait.ts`), typographie française. */
 const secteurs = (texte: string): string => typo(extrait(texte, 110));

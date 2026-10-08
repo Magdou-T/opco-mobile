@@ -26,6 +26,7 @@ import type {
   TypeStructure,
   WizardState,
 } from '@opco/core';
+import { Abreviation } from '@/components/opco/TexteDonnees';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { CertitudeBadge } from '@/components/ui/CertitudeBadge';
@@ -40,9 +41,12 @@ import {
   etatSansEntreprise,
   opcoRequis,
   ouvreBudgetOpco,
+  preselectionParNaf,
+  texteDuResolveur,
 } from '@/lib/entreprise';
 import { texteFr } from '@/lib/format';
 import { INSECABLE } from '@/lib/insecable';
+import { LIEN_MENTIONS, SOURCE_ENTREPRISES, SOURCE_SUGGESTION_NAF } from '@/lib/mentions';
 import { idccAffichables, numeroLisible } from '@/lib/recherche';
 import { EnTeteEtape } from './EnTeteEtape';
 
@@ -65,6 +69,9 @@ const STATUTS_STRUCTURE: Record<TypeStructure, string> = {
 
 /** Nombre maximal d'IDCC listés sous un résultat de recherche (un grand groupe peut en déclarer des dizaines). */
 const IDCC_AFFICHES = 6;
+
+/** Ligne de source ou d'information en petit texte discret (5,35:1 sur blanc). */
+const PETIT_TEXTE = 'text-xs leading-relaxed text-texte-discret';
 
 const MOTIF_CANDIDAT_CHOISI = 'Vous avez choisi cet OPCO parmi les candidats.';
 
@@ -169,6 +176,7 @@ function CarteEntreprise({ state, titreRef }: { state: WizardState; titreRef: Re
             </div>
           ))}
       </dl>
+      <p className={`mt-2 border-t border-filet pt-3 ${PETIT_TEXTE}`}>{SOURCE_ENTREPRISES}</p>
     </Card>
   );
 }
@@ -176,10 +184,12 @@ function CarteEntreprise({ state, titreRef }: { state: WizardState; titreRef: Re
 /**
  * OPCO retenu pour l'entreprise, avec le niveau de certitude de l'identification, ses motifs et ses avertissements.
  * `resolution` est nulle tant qu'aucune entreprise n'est choisie (l'OPCO ne peut alors venir que d'un choix manuel).
+ * `suggestionNaf` : l'OPCO présélectionné vient du code NAF ; le motif est alors suivi de la source des suggestions.
  */
 function CarteOpco({
   state,
   resolution,
+  suggestionNaf,
   titreRef,
   listeOuverte,
   onToggleListe,
@@ -189,6 +199,7 @@ function CarteOpco({
 }: {
   state: WizardState;
   resolution: ResolutionOpco | null;
+  suggestionNaf: boolean;
   titreRef: Ref<HTMLHeadingElement>;
   listeOuverte: boolean;
   onToggleListe: () => void;
@@ -234,14 +245,17 @@ function CarteOpco({
       ) : (
         resolution && (
           <>
-            <p className="text-sm leading-relaxed text-texte-doux">
-              {autreCandidat ? MOTIF_CANDIDAT_CHOISI : texteFr(resolution.motif)}
-            </p>
+            <div className="space-y-1.5">
+              <p className="text-sm leading-relaxed text-texte-doux">
+                {autreCandidat ? MOTIF_CANDIDAT_CHOISI : texteDuResolveur(resolution.motif)}
+              </p>
+              {suggestionNaf && !autreCandidat && <p className={PETIT_TEXTE}>{SOURCE_SUGGESTION_NAF}</p>}
+            </div>
             {resolution.avertissements.length > 0 && (
               <Callout tone="avertissement" titre="Points à vérifier">
                 <ul className="space-y-1.5">
                   {resolution.avertissements.map((avertissement, i) => (
-                    <li key={i}>{texteFr(avertissement)}</li>
+                    <li key={i}>{texteDuResolveur(avertissement)}</li>
                   ))}
                 </ul>
               </Callout>
@@ -257,7 +271,7 @@ function CarteOpco({
               <ChoiceButton
                 key={candidat.opcoSlug}
                 label={nomOpco(candidat.opcoSlug)}
-                sublabel={texteFr(candidat.idccs.map((i) => `IDCC ${i.idcc}${INSECABLE}: ${i.titre}`).join(' · '))}
+                sublabel={texteDuResolveur(candidat.idccs.map((i) => `IDCC ${i.idcc}${INSECABLE}: ${i.titre}`).join(' · '))}
                 selected={state.detectedOpcoSlug === candidat.opcoSlug}
                 onClick={() => onChoisirCandidat(candidat)}
               />
@@ -359,6 +373,73 @@ function lieuDuSiege(e: EntrepriseInfo): string {
   return commune && codePostal ? `${commune} (${codePostal})` : commune || codePostal;
 }
 
+/**
+ * Entreprises trouvées par la recherche, suivies de la source de leurs données (licence ouverte 2.0). Le sigle IDCC
+ * est défini à sa première occurrence.
+ */
+function ResultatsDeRecherche({
+  resultats,
+  onChoisir,
+}: {
+  resultats: EntrepriseInfo[];
+  onChoisir: (entreprise: EntrepriseInfo) => void;
+}) {
+  const premierAvecIdcc = resultats.findIndex((e) => idccAffichables(e.idccs).length > 0);
+  return (
+    <>
+      <ul
+        role="list"
+        aria-label="Entreprises trouvées"
+        className="max-h-[26rem] divide-y divide-filet overflow-y-auto rounded-carte border border-filet bg-white shadow-douce"
+      >
+        {resultats.map((entreprise, rang) => {
+          const lieu = lieuDuSiege(entreprise);
+          const idccs = idccAffichables(entreprise.idccs);
+          const autres = idccs.length - IDCC_AFFICHES;
+          return (
+            <li key={entreprise.siren}>
+              <button
+                type="button"
+                onClick={() => onChoisir(entreprise)}
+                className="group flex w-full items-start gap-3 px-4 py-3.5 text-left transition-[background-color] hover:bg-lin-soft focus-visible:bg-lin-soft focus-visible:outline-offset-[-3px]"
+              >
+                <span
+                  aria-hidden="true"
+                  className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-turquoise-soft text-turquoise-deep"
+                >
+                  <Icon name="batiment" className="size-[18px]" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold break-words text-texte">{entreprise.nom}</span>
+                  <span className="mt-0.5 block text-sm text-texte-doux">
+                    {[`SIREN ${numeroLisible(entreprise.siren)}`, lieu].filter(Boolean).join(' · ')}
+                  </span>
+                  {idccs.length > 0 && (
+                    <span className="mt-1 block text-xs font-medium text-turquoise-deep">
+                      {rang === premierAvecIdcc ? (
+                        <Abreviation definition="identifiant de la convention collective">IDCC</Abreviation>
+                      ) : (
+                        'IDCC'
+                      )}{' '}
+                      {idccs.slice(0, IDCC_AFFICHES).join(', ')}
+                      {autres > 0 ? ` (+${autres})` : ''}
+                    </span>
+                  )}
+                </span>
+                <Icon
+                  name="chevron"
+                  className="mt-2 size-4 shrink-0 text-texte-discret transition-transform group-hover:translate-x-0.5"
+                />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <p className={PETIT_TEXTE}>{SOURCE_ENTREPRISES}</p>
+    </>
+  );
+}
+
 export function StepIdentification({ state, updateState }: Props) {
   // Le mode survit au changement d'étape grâce à `opcoKnown` (vrai : OPCO et région saisis à la main).
   const [mode, setMode] = useState<Mode>(state.opcoKnown === true ? 'manuel' : 'recherche');
@@ -380,21 +461,22 @@ export function StepIdentification({ state, updateState }: Props) {
   });
 
   // Résolution de l'OPCO recalculée depuis l'état (jamais mémorisée à part) : elle suit toujours l'entreprise affichée.
-  const resolution = useMemo(
+  const entree = useMemo(
     () =>
       state.sirenNumber
-        ? resoudreOpco(
-            entreeDeResolution({
-              idccs: state.idccEtablissements,
-              idccSiege: state.idccSiege,
-              codeNaf: state.codeNaf,
-              natureJuridique: state.natureJuridique,
-            }),
-            EMBEDDED_IDCC,
-            EMBEDDED_NAF,
-          )
+        ? entreeDeResolution({
+            idccs: state.idccEtablissements,
+            idccSiege: state.idccSiege,
+            codeNaf: state.codeNaf,
+            natureJuridique: state.natureJuridique,
+          })
         : null,
     [state.sirenNumber, state.idccEtablissements, state.idccSiege, state.codeNaf, state.natureJuridique],
+  );
+  const resolution = useMemo(() => (entree ? resoudreOpco(entree, EMBEDDED_IDCC, EMBEDDED_NAF) : null), [entree]);
+  const suggestionNaf = useMemo(
+    () => entree != null && resolution != null && preselectionParNaf(entree, resolution, EMBEDDED_IDCC),
+    [entree, resolution],
   );
   const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
   const opco = slug ? getEmbeddedOpcoBySlug(slug) : undefined;
@@ -520,6 +602,15 @@ export function StepIdentification({ state, updateState }: Props) {
               autoComplete="off"
               icone="loupe"
             />
+            {/* Nouvel onglet : quitter le simulateur effacerait les réponses, que le site ne conserve nulle part. */}
+            <p className={PETIT_TEXTE}>
+              La recherche interroge l&apos;API Recherche d&apos;entreprises de l&apos;État&nbsp;; le site n&apos;en
+              conserve rien.{' '}
+              <a href={`${LIEN_MENTIONS.href}#donnees`} target="_blank" rel="noopener noreferrer" className="lien">
+                {LIEN_MENTIONS.libelle}
+                <span className="sr-only"> (nouvel onglet)</span>
+              </a>
+            </p>
 
             <div role="status" aria-live="polite" className="text-sm">
               {loading && (
@@ -563,49 +654,7 @@ export function StepIdentification({ state, updateState }: Props) {
             </div>
 
             {results.length > 0 && !state.sirenNumber && (
-              <ul
-                role="list"
-                aria-label="Entreprises trouvées"
-                className="max-h-[26rem] divide-y divide-filet overflow-y-auto rounded-carte border border-filet bg-white shadow-douce"
-              >
-                {results.map((entreprise) => {
-                  const lieu = lieuDuSiege(entreprise);
-                  const idccs = idccAffichables(entreprise.idccs);
-                  const autres = idccs.length - IDCC_AFFICHES;
-                  return (
-                    <li key={entreprise.siren}>
-                      <button
-                        type="button"
-                        onClick={() => choisirEntreprise(entreprise)}
-                        className="group flex w-full items-start gap-3 px-4 py-3.5 text-left transition-[background-color] hover:bg-lin-soft focus-visible:bg-lin-soft focus-visible:outline-offset-[-3px]"
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-turquoise-soft text-turquoise-deep"
-                        >
-                          <Icon name="batiment" className="size-[18px]" />
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block font-semibold break-words text-texte">{entreprise.nom}</span>
-                          <span className="mt-0.5 block text-sm text-texte-doux">
-                            {[`SIREN ${numeroLisible(entreprise.siren)}`, lieu].filter(Boolean).join(' · ')}
-                          </span>
-                          {idccs.length > 0 && (
-                            <span className="mt-1 block text-xs font-medium text-turquoise-deep">
-                              IDCC {idccs.slice(0, IDCC_AFFICHES).join(', ')}
-                              {autres > 0 ? ` (+${autres})` : ''}
-                            </span>
-                          )}
-                        </span>
-                        <Icon
-                          name="chevron"
-                          className="mt-2 size-4 shrink-0 text-texte-discret transition-transform group-hover:translate-x-0.5"
-                        />
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+              <ResultatsDeRecherche resultats={results} onChoisir={choisirEntreprise} />
             )}
           </div>
         )}
@@ -647,6 +696,7 @@ export function StepIdentification({ state, updateState }: Props) {
           <CarteOpco
             state={state}
             resolution={resolution}
+            suggestionNaf={suggestionNaf}
             titreRef={titreOpco}
             listeOuverte={listeOpcoOuverte}
             onToggleListe={() => setListeOpcoOuverte((ouverte) => !ouverte)}

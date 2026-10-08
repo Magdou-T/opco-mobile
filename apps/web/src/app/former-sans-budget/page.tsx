@@ -11,12 +11,9 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { typo } from '@/lib/format';
+import { PAGES, metadonnees } from '@/lib/metadonnees';
 
-export const metadata: Metadata = {
-  title: 'Se former sans toucher au budget formation : actions collectives, CPF, FSE+',
-  description:
-    "Actions collectives des OPCO, CPF, période de reconversion, et cofinancement FSE+ quand votre OPCO en ouvre un : les leviers 2026 pour former sans consommer l'enveloppe de l'entreprise.",
-};
+export const metadata: Metadata = metadonnees(PAGES.formerSansBudget);
 
 const TOC = [
   { id: 'principe', label: 'Le principe' },

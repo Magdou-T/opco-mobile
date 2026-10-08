@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { EMBEDDED_OPCOS } from '@opco/core';
 import { moisAnneeFr, verificationLaPlusRecente } from '@/lib/format';
+import { LIEN_MENTIONS } from '@/lib/mentions';
 import { Logo } from '@/components/site/Logo';
 import { Icon } from '@/components/ui/Icon';
 
@@ -52,8 +53,8 @@ export function SiteFooter() {
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/75">
             Un service SFG Développement. Les montants proviennent des critères publiés par les 11 opérateurs de
-            compétences et sont donnés à titre indicatif : seul votre OPCO confirme une prise en charge, après étude
-            du dossier.
+            compétences et sont donnés à titre indicatif&nbsp;: seul votre OPCO confirme une prise en charge, après
+            étude du dossier.
           </p>
           <a
             href="mailto:contact@sfgdeveloppement.fr"
@@ -95,7 +96,16 @@ export function SiteFooter() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-xs text-white/65 sm:px-6 md:flex-row md:items-center md:justify-between">
-          <p>Estimations indicatives, ne constitue ni un conseil juridique ni un engagement de financement.</p>
+          <p>
+            Estimations indicatives, ne constitue ni un conseil juridique ni un engagement de financement.{' '}
+            {/* Lien dans la phrase : souligné, il ne se distingue pas du texte par la seule couleur. */}
+            <Link
+              href={LIEN_MENTIONS.href}
+              className="font-medium text-white/80 underline underline-offset-4 transition-[color] hover:text-white"
+            >
+              {LIEN_MENTIONS.libelle}
+            </Link>
+          </p>
           <p className="inline-flex shrink-0 items-center gap-2 font-medium whitespace-nowrap text-white/80">
             <span aria-hidden="true" className="size-1.5 rounded-full bg-vert-clair" />
             {CRITERES}

@@ -9,6 +9,7 @@ import {
   GuideCta,
 } from '@/components/site/Guide';
 import { cx } from '@/lib/cx';
+import { PAGES, metadonnees } from '@/lib/metadonnees';
 
 /* Tableau des taux : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft), contribution en
    titre de ligne, taux en chiffres clés Montserrat tabulaires. */
@@ -16,11 +17,7 @@ const EN_TETE = 'px-4 py-3 text-xs font-semibold tracking-[0.12em] text-texte-di
 const CONTRIBUTION = 'px-4 py-3.5 text-left leading-snug font-medium text-texte sm:px-5';
 const TAUX = 'amount px-4 py-3.5 text-right text-base whitespace-nowrap text-texte sm:px-5';
 
-export const metadata: Metadata = {
-  title: 'Obligations formation des entreprises en 2026',
-  description:
-    "CUFPA, taxe d'apprentissage, entretien de parcours professionnel, abondement correctif de 3 000 € : ce que votre entreprise doit verser et organiser en 2026, taux exacts et sources officielles.",
-};
+export const metadata: Metadata = metadonnees(PAGES.obligations);
 
 const TOC = [
   { id: 'contributions', label: 'Ce que votre entreprise verse' },

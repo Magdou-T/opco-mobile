@@ -6,12 +6,9 @@ import { Etiquette } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import { CONTACT_EMAIL } from '@/lib/contact';
 import { DOMAINES_DE_FORMATION } from '@/lib/domaines';
+import { PAGES, metadonnees } from '@/lib/metadonnees';
 
-export const metadata: Metadata = {
-  title: 'Nous contacter',
-  description:
-    'Une question sur le financement de votre formation, un projet à monter avec votre OPCO ? Écrivez à SFG Développement : réponse sous 48 h ouvrées.',
-};
+export const metadata: Metadata = metadonnees(PAGES.contact);
 
 export default function ContactPage() {
   return (

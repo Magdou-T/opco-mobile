@@ -14,7 +14,7 @@ import {
   profilDepuisWizard,
   resoudreOpco,
 } from '@opco/core';
-import type { CompanySize, EntrepriseInfo, WizardState } from '@opco/core';
+import type { CompanySize, EntreeResolution, EntrepriseInfo, WizardState } from '@opco/core';
 import {
   entreeDeResolution,
   etatDepuisEffectif,
@@ -22,8 +22,11 @@ import {
   etatSansEntreprise,
   opcoRequis,
   ouvreBudgetOpco,
+  preselectionParNaf,
+  texteDuResolveur,
   trancheDepuisEffectif,
 } from '../src/lib/entreprise';
+import { texteFr } from '../src/lib/format';
 
 const lire = (chemin: string): string => readFileSync(fileURLToPath(new URL(chemin, import.meta.url)), 'utf8');
 
@@ -413,5 +416,100 @@ describe("entrée du résolveur d'OPCO (entreeDeResolution) : la catégorie juri
   test('entreprise écartée : la catégorie juridique revient à vide avec le reste de la recherche', () => {
     const etat = appliquer(choisir(createInitialWizardState(), ehpad('7366')), etatSansEntreprise());
     assert.equal(etat.natureJuridique, null);
+  });
+});
+
+describe("textes du résolveur d'OPCO prêts à l'affichage (texteDuResolveur)", () => {
+  const NBSP = String.fromCharCode(0xa0);
+  // Suggestion par code NAF sans convention (EHPAD privé, 87.10A) : le motif porte un pourcentage et un code NAF à point.
+  const motifNaf = resoudreOpco(
+    { idccs: [], idccSiege: [], codeNaf: '87.10A', natureJuridique: '5710' },
+    EMBEDDED_IDCC,
+    EMBEDDED_NAF,
+  ).motif;
+
+  test('pourcentage et deux-points attachés par une espace insécable ; le code NAF reste « 87.1 »', () => {
+    const t = texteDuResolveur(motifNaf);
+    assert.match(t, new RegExp(`\\d+${NBSP}% des établissements`));
+    assert.match(t, new RegExp(`\\(Hébergement médicalisé\\)${NBSP}: `));
+    assert.match(t, /code NAF 87\.1 \(/);
+    assert.doesNotMatch(t, /\d %/);
+  });
+
+  test('seules des espaces deviennent insécables : motifs et avertissements des fixtures, avec plusieurs codes NAF', () => {
+    const textes = [motifNaf];
+    for (const e of ENTREPRISES) {
+      for (const codeNaf of [e.codeNaf, '87.10A', '56.10A', null]) {
+        const r = resoudreOpco({ ...entreeDeResolution(e), codeNaf }, EMBEDDED_IDCC, EMBEDDED_NAF);
+        textes.push(r.motif, ...r.avertissements);
+      }
+    }
+    assert.ok(textes.length >= 40, String(textes.length));
+    for (const s of textes) {
+      const t = texteDuResolveur(s);
+      assert.equal(t.replaceAll(NBSP, ' '), texteFr(s).replaceAll(NBSP, ' '), s);
+      assert.doesNotMatch(t, / [:;?!]/, s);
+    }
+  });
+});
+
+describe("présélection d'après le code NAF (preselectionParNaf) : la carte de l'OPCO cite alors la Table SIRET-OPCO", () => {
+  const parNaf = (entree: EntreeResolution) =>
+    preselectionParNaf(entree, resoudreOpco(entree, EMBEDDED_IDCC, EMBEDDED_NAF), EMBEDDED_IDCC);
+  // 1516 : organismes de formation (AKTO) ; 2264 : hospitalisation privée (OPCO Santé) ; 87.10A : hébergement
+  // médicalisé, suggéré à OPCO Santé par la Table SIRET-OPCO.
+  const deuxOpco = { idccs: ['1516', '2264'], idccSiege: [], codeNaf: '87.10A', natureJuridique: '5710' };
+
+  test('suggestion seule, sans convention : oui ; employeur public au même code NAF : non', () => {
+    assert.equal(parNaf({ idccs: [], idccSiege: [], codeNaf: '87.10A', natureJuridique: '5710' }), true);
+    assert.equal(parNaf({ idccs: [], idccSiege: [], codeNaf: '87.10A', natureJuridique: '7366' }), false);
+    assert.equal(parNaf({ idccs: [], idccSiege: [], codeNaf: null, natureJuridique: '5710' }), false);
+  });
+
+  test('plusieurs OPCO possibles : oui si le code NAF départage, non si la convention du siège le fait ou si rien ne départage', () => {
+    assert.equal(resoudreOpco(deuxOpco, EMBEDDED_IDCC, EMBEDDED_NAF).opcoSlug, 'opco-sante');
+    assert.equal(parNaf(deuxOpco), true);
+    assert.equal(parNaf({ ...deuxOpco, idccSiege: ['1516'] }), false);
+    assert.equal(parNaf({ ...deuxOpco, idccSiege: ['2264'] }), false);
+    assert.equal(parNaf({ ...deuxOpco, codeNaf: '01.11Z' }), false);
+  });
+
+  test('convention exploitable : non (SFG DEVELOPPEMENT et chaque entreprise des fixtures dont le motif ne cite pas le code NAF)', () => {
+    assert.equal(parNaf(entreeDeResolution(parSiren('814739728'))), false);
+    for (const e of ENTREPRISES) {
+      const entree = entreeDeResolution(e);
+      const r = resoudreOpco(entree, EMBEDDED_IDCC, EMBEDDED_NAF);
+      assert.equal(preselectionParNaf(entree, r, EMBEDDED_IDCC), /d'après le code NAF/.test(r.motif), e.siren);
+    }
+  });
+
+  test('propriété : 1 000 entrées tirées (graine 31), vrai exactement quand le motif du résolveur cite le code NAF', () => {
+    let graine = 31;
+    const hasard = (n: number) => {
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+    };
+    // Conventions fermes de deux OPCO, convention inconnue, code échappatoire ; codes NAF suggérés ou non.
+    const IDCC = ['1516', '2264', '1311', '1077', '2046', '9876', '9999', '5501'];
+    const NAF = ['87.10A', '01.11Z', '56.10A', '85.59A', '99.00Z', null];
+    const NATURES = ['5710', '9220', '7366', '7490', null];
+    const vus = { oui: 0, non: 0 };
+    for (let i = 0; i < 1000; i++) {
+      const idccs = IDCC.filter(() => hasard(3) === 0);
+      const entree: EntreeResolution = {
+        idccs,
+        idccSiege: idccs.filter(() => hasard(3) === 0),
+        codeNaf: NAF[hasard(NAF.length)],
+        natureJuridique: NATURES[hasard(NATURES.length)],
+      };
+      const r = resoudreOpco(entree, EMBEDDED_IDCC, EMBEDDED_NAF);
+      const attendu = /d'après le code NAF/.test(r.motif);
+      assert.equal(preselectionParNaf(entree, r, EMBEDDED_IDCC), attendu, JSON.stringify(entree));
+      vus[attendu ? 'oui' : 'non']++;
+    }
+    // Les deux issues sont bien tirées (sinon la propriété ne prouverait rien).
+    assert.ok(vus.oui >= 100 && vus.non >= 100, JSON.stringify(vus));
   });
 });
