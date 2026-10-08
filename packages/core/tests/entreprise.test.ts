@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { parseResultatRechercheEntreprises, tailleDepuisTranche } from '../src/entreprise';
+import { resoudreOpco } from '../src/opco-resolver';
+import { EMBEDDED_IDCC, EMBEDDED_NAF } from '../src/data';
 
 // Forme réelle d'un résultat de https://recherche-entreprises.api.gouv.fr/search (valeurs fictives).
 const RESULTAT = {
@@ -33,6 +35,7 @@ describe('parseResultatRechercheEntreprises', () => {
       siren: '123456789',
       nom: 'ORGANISME EXEMPLE',
       codeNaf: '85.59A',
+      natureJuridique: '5710',
       trancheEffectif: '01',
       anneeTrancheEffectif: '2024',
       tailleSuggeree: 'less_11',
@@ -73,6 +76,45 @@ describe('parseResultatRechercheEntreprises', () => {
     expect(e.idccs).toEqual([]);
     expect(e.trancheEffectif).toBeNull();
     expect(e.tailleSuggeree).toBeNull();
+  });
+});
+
+// Chemin du site : réponse de l'API lue par parseResultatRechercheEntreprises, puis résolveur appelé avec la catégorie
+// juridique. Un établissement public sans convention ne reçoit aucun OPCO d'après son code NAF.
+describe('réponse de l\'API → résolveur (catégorie juridique transmise)', () => {
+  const EHPAD_PUBLIC = {
+    ...RESULTAT,
+    nom_complet: 'EHPAD PUBLIC EXEMPLE',
+    activite_principale: '87.10A',
+    nature_juridique: '7366',
+    siege: { ...RESULTAT.siege, liste_idcc: [] },
+    matching_etablissements: [],
+    complements: { liste_idcc: [] },
+  };
+  const resoudre = (raw: Record<string, unknown>) => {
+    const e = parseResultatRechercheEntreprises(raw);
+    return resoudreOpco(
+      { idccs: e.idccs, idccSiege: e.idccSiege, codeNaf: e.codeNaf, natureJuridique: e.natureJuridique },
+      EMBEDDED_IDCC,
+      EMBEDDED_NAF,
+    );
+  };
+
+  it('établissement public (7366) sans convention : inconnu, motif propre aux employeurs publics', () => {
+    const r = resoudre(EHPAD_PUBLIC);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'inconnu', candidats: [], idccRetenu: null });
+    expect(r.motif).toContain('la plupart des employeurs publics ne cotisent pas à un OPCO');
+  });
+
+  it('même activité, société privée (5710) : suggestion « à confirmer » d\'après le code NAF', () => {
+    const r = resoudre({ ...EHPAD_PUBLIC, nature_juridique: '5710' });
+    expect(r).toMatchObject({ opcoSlug: 'opco-sante', certitude: 'a_confirmer', idccRetenu: null });
+    expect(r.motif).toContain('% des établissements');
+  });
+
+  it('établissement public avec une convention : la convention fait foi', () => {
+    const r = resoudre({ ...EHPAD_PUBLIC, complements: { liste_idcc: ['2264'] } });
+    expect(r).toMatchObject({ opcoSlug: 'opco-sante', certitude: 'fiable', idccRetenu: '2264' });
   });
 });
 
