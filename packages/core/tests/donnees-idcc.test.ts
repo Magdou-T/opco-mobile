@@ -171,6 +171,23 @@ describe('table IDCC v2 : conventions partagées, provenance et hygiène des tex
     }
   });
 
+  it("« de » est élidé devant une voyelle ou un h muet dans tous les titres et toutes les notes (« d'AFDAS », « de l'Opcommerce »)", () => {
+    // Mots à h aspiré présents dans les titres officiels : pas d'élision (« jeux de hasard », « de Haute-Savoie »). Un
+    // autre mot en h relevé ici est à vérifier : s'il est aspiré, l'ajouter à cette liste ; sinon, corriger le texte.
+    const H_ASPIRE = /^(haut|haute|hautes|hauts|hasard|houille)(-|$)/i;
+    const deSansElision = /(^|[^\p{L}'])[Dd]e ([aeiouyhàâäéèêëîïôöûùü][\p{L}-]*)/giu;
+    const fautes: string[] = [];
+    for (const e of entrees) {
+      for (const texte of [e.titre, e.note ?? '']) {
+        for (const m of texte.replace(/https?:\/\/\S+/g, ' ').matchAll(deSansElision)) {
+          if (!H_ASPIRE.test(m[2])) fautes.push(`${e.idcc} : de ${m[2]}`);
+        }
+      }
+    }
+    expect(entrees.length).toBeGreaterThanOrEqual(900);
+    expect(fautes).toEqual([]);
+  });
+
   it("aucun titre ne se termine par des points de suspension et aucun titre ni aucune note ne contient d'apostrophe courbe", () => {
     // U+2019, construite par son code pour rester visible dans le source (les textes affichés n'ont que des apostrophes droites).
     const apostropheCourbe = String.fromCharCode(0x2019);

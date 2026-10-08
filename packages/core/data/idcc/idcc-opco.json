@@ -2628,7 +2628,7 @@
     "opco": "opcommerce",
     "statut": "fusionne",
     "idcc_cible": "1557",
-    "note": "Code clos dans la table IDCC DSN (fin de validité le 23/01/2023). Rattachement : Table IDCC DSN : « (fusion entre la 1557 et la 1618) » (code clos le 23/01/2023) (source : https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv). L'arrêté d'agrément ou le site de afdas mentionne encore cet IDCC ; la convention de rattachement 1557 relève de opcommerce (https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908300A/jo/texte).",
+    "note": "Code clos dans la table IDCC DSN (fin de validité le 23/01/2023). Rattachement : Table IDCC DSN : « (fusion entre la 1557 et la 1618) » (code clos le 23/01/2023) (source : https://portail.net-entreprises.fr/nmcl/telechargeFichierCsv/NEODESP27-IDCC-P27V01.csv). L'arrêté d'agrément ou le site d'AFDAS mentionne encore cet IDCC ; la convention de rattachement 1557 relève de l'Opcommerce (https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908300A/jo/texte).",
     "source": "https://www.legifrance.gouv.fr/eli/arrete/2019/3/29/MTRD1908300A/jo/texte"
   },
   "1619": {
