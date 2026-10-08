@@ -74,8 +74,8 @@ interface Candidat extends LignePlan {
  *   Ce coût est nul quand le coût pédagogique est inconnu (jamais les frais annexes seuls) et jamais négatif.
  * - Solde CPF : les aides qui prélèvent sur le solde CPF (`modeMontant === 'solde_cpf'`) partagent UN seul solde, celui du
  *   profil (`soldeCpf`, nul s'il est inconnu) : chacune est plafonnée par le reste à charge et par ce qui reste du solde
- *   après les aides empilées avant elle. Une autre aide du financeur CPF (abondement de l'employeur, forfait) n'est pas
- *   concernée : elle s'empile en plus du solde.
+ *   après les aides empilées avant elle. Une autre aide chiffrée du financeur CPF n'est pas concernée : elle s'empile en plus
+ *   du solde (la dotation volontaire de l'employeur, son propre argent, n'est pas chiffrée et n'est donc jamais empilée).
  * - Aides « au choix » (alternatives déclarées dans un sens ou dans l'autre) : la sélection est GLOUTONNE, pas optimale.
  *   Des mieux chiffrées aux moins bien chiffrées ; à montant égal, le pivot (l'aide déclarée comme alternative par le plus
  *   grand nombre d'autres aides éligibles), puis l'ordre de la liste. Une aide dont une alternative est déjà retenue devient

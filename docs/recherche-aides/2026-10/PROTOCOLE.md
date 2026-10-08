@@ -1,4 +1,4 @@
-# Research protocol — French training-funding aids catalog (READ FULLY BEFORE STARTING)
+# Research protocol: French training-funding aids catalog (READ FULLY BEFORE STARTING)
 
 ## Context
 We are building "Financement OPCO", a French mobile app (Expo/React Native) that tells a company or a person
@@ -24,7 +24,7 @@ apprenticeship aid reforms, CPF changes, "période de reconversion" since 1 Feb 
    List it in `exclues` with the official evidence (URL + extract). This is important: we must not present dead schemes.
 5. If an amount only applies when a **non-checkable condition** holds (e.g. the training must be in a specific regional
    catalogue, the jury must approve), use `"mode": "non_chiffre"` and describe the rule in `montant.libelle`
-   (e.g. "Formation gratuite si elle figure au programme régional") — never claim 100 % coverage unconditionally.
+   (e.g. "Formation gratuite si elle figure au programme régional"); never claim 100 % coverage unconditionally.
 6. All user-facing text (`nom`, `description`, `conditions`, `demarches`, `montant.libelle`, notes) **in French**,
    concise, factual, no marketing, no emojis.
 
@@ -85,7 +85,7 @@ interface Aide {
   financeur: Financeur;
   financeur_nom: string;     // e.g. 'Région Île-de-France', 'France Travail', 'Agefiph'
   categorie: CategorieAide;
-  projets: ProjetType[];     // ≥1 — every project type where this aid can apply
+  projets: ProjetType[];     // ≥1: every project type where this aid can apply
   beneficiaires: StatutBeneficiaire[]; // ≥1
   description: string;       // 1-3 sentences, what it is and what it pays
   criteres: CriteresAide;    // ONLY machine-checkable criteria (see below); everything else goes to `conditions`
@@ -108,7 +108,7 @@ interface CriteresAide {     // all optional; omit a key when there is no constr
   departements?: string[];   // INSEE dept codes ('75','2A','971'…)
   effectif_min?: number; effectif_max?: number; // company headcount bounds, inclusive (e.g. "moins de 250 salariés" → effectif_max: 249)
   age_min?: number; age_max?: number;           // trainee age bounds, inclusive (e.g. "moins de 30 ans" → age_max: 29)
-  rqth?: boolean;            // true = only for people with disability recognition (RQTH / BOETH)
+  rqth?: true;               // `true` seulement, omettre sinon (le schéma refuse false) : only for people with disability recognition (RQTH / BOETH)
   niveaux_diplome?: NiveauDiplome[];            // trainee must hold one of these as highest diploma
   niveau_certification_max?: NiveauCertification; niveau_certification_min?: NiveauCertification;
   contrats?: ContractType[];
@@ -118,12 +118,12 @@ interface CriteresAide {     // all optional; omit a key when there is no constr
   statuts_dirigeant?: StatutDirigeant[];
   micro_entrepreneur?: boolean;                 // true = only micro-entrepreneurs; false = excludes them
   certifications?: CertificationType[];         // training must lead to one of these
-  eligible_cpf?: boolean;                       // training must be CPF-eligible
+  eligible_cpf?: true;                          // `true` seulement, omettre sinon (le schéma refuse false) : training must be CPF-eligible
   duree_min_heures?: number; duree_max_heures?: number;
   opcos?: string[];          // OPCO slugs: afdas, akto, atlas, constructys, ocapiat, opco-ep, opco-mobilites, opco-sante, opco2i, opcommerce, uniformation
   idcc?: string[]; naf_prefixes?: string[];
   structures?: TypeStructure[];                 // employer must be one of these
-  qualiopi_requis?: boolean;                    // training provider must be Qualiopi-certified
+  qualiopi_requis?: true;                       // `true` seulement, omettre sinon (le schéma refuse false) : training provider must be Qualiopi-certified
 }
 interface MontantAide {
   mode: 'forfait' | 'pourcentage' | 'par_heure' | 'par_mois' | 'solde_cpf' | 'non_chiffre';
@@ -150,5 +150,5 @@ interface PortailRegional {   // regional tasks only: one per region
 - [ ] Every number appears verbatim in an extract.
 - [ ] Criteria are faithful (inclusive bounds converted correctly: "moins de 30 ans" → age_max 29; "jusqu'à 29 ans révolus" → age_max 29).
 - [ ] Nothing duplicated across ids; no OPCO-specific schemes (they are handled elsewhere) unless the task says so.
-- [ ] `exclues` lists dead/suspended schemes you encountered (with evidence) — very useful.
+- [ ] `exclues` lists dead/suspended schemes you encountered (with evidence): very useful.
 - [ ] JSON parses; enums valid.
