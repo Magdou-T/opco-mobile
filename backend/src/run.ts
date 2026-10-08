@@ -24,6 +24,8 @@ import { applyCorrections, formatChangelog } from './correct';
 import { getMaxDeltaPct, validatePipeline } from './validate';
 import { publishDataset, readCurrentVersion, verifyPublishedSha } from './publish';
 import { deepClone } from './util';
+import { choisirCiblesDryRun } from './dry-run';
+import type { CiblesDryRun } from './dry-run';
 import type { ChangelogEntry, ExtractionResult, OpcoDiff, OpcoSources, RunReport } from './types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -37,25 +39,13 @@ const cacheDir = path.join(backendDir, 'cache');
 
 // --- Mutations factices CONTRÔLÉES du dry-run --------------------------------
 // Elles n'existent que pour démontrer le cycle complet sans réseau ni IA. Les deux premières cibles sont choisies dans
-// les données du moment : un OPCO écrit en dur peut perdre sa valeur à la vérification suivante (atlas depuis octobre
-// 2026), et sa mutation ne plus rien démontrer.
+// les données du moment (choisirCiblesDryRun, src/dry-run.ts) : un OPCO écrit en dur peut perdre sa valeur à la
+// vérification suivante (atlas depuis octobre 2026), et sa mutation ne plus rien démontrer.
 //  - hausse : premier OPCO dont cout_horaire_inter est renseigné, +12 % -> doit être AUTO-APPLIQUÉ (sous le seuil).
 //  - doublement : premier OPCO dont budget_annuel_max est renseigné, +100 % -> doit partir en needsReview et être
 //    REVENU à l'ancienne valeur par le garde-fou de variation.
 //  - opcommerce.cout_horaire_inter : retiré de l'extraction -> not_found ->
 //    rétrogradation de la confiance, valeur conservée.
-interface CiblesDryRun {
-  hausse: string | null;
-  doublement: string | null;
-}
-
-function choisirCiblesDryRun(opcos: OpcoData[]): CiblesDryRun {
-  return {
-    hausse: opcos.find((o) => o.cout_horaire_inter.value != null)?.slug ?? null,
-    doublement: opcos.find((o) => o.budget_annuel_max.value != null)?.slug ?? null,
-  };
-}
-
 function applyDryRunMutations(slug: string, extraction: ExtractionResult, cibles: CiblesDryRun): ExtractionResult {
   const mutated = deepClone(extraction);
 

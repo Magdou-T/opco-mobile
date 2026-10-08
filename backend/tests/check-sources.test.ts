@@ -578,6 +578,9 @@ describe('rapportMarkdown', () => {
     expect(rapport).toContain('## À vérifier à la main');
     expect(rapport).toContain('| https://protege.fr/d | 403 | idcc:0016.source |');
     expect(rapport).toContain('## Liens ignorés (licence France compétences)');
+    expect(rapport).toContain(
+      "Ces adresses ne sont jamais contactées : l'API de France compétences n'est réutilisable qu'avec une licence (art. R. 6123-35 du code du travail).",
+    );
     expect(rapport).toContain('| https://api.francecompetences.fr/f | licence France compétences (art. R. 6123-35 du code du travail) | idcc:0005.source |');
     expect(rapport).not.toContain('https://ok.fr/a');
   });

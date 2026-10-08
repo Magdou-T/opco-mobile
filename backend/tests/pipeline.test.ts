@@ -1,5 +1,5 @@
 // ============================================================
-// Tests unitaires du pipeline : verify / correct / validate / publish.
+// Tests unitaires du pipeline : verify / correct / validate / publish, et cibles des mutations du dry-run.
 // Aucun réseau, aucune IA : tout est déterministe.
 // ============================================================
 
@@ -14,6 +14,7 @@ import { applyCorrections } from '../src/correct';
 import { validatePipeline, runFundingScenarios } from '../src/validate';
 import { publishDataset, verifyPublishedSha } from '../src/publish';
 import { simulateExtractionFromCurrent } from '../src/extract';
+import { choisirCiblesDryRun } from '../src/dry-run';
 import { parseRobots, htmlToText } from '../src/scrape';
 import { deepClone, sha256Hex, downgradeConfidence } from '../src/util';
 import type { ExtractionResult } from '../src/types';
@@ -427,5 +428,43 @@ describe('scrape helpers', () => {
     expect(text).toContain('Plafond : 25 €/h');
     expect(text).not.toContain('menu');
     expect(text).not.toContain('x()');
+  });
+});
+
+// --- DRY-RUN (cibles des mutations contrôlées) ----------------------------------------
+
+describe('dry-run.choisirCiblesDryRun', () => {
+  // Trois OPCO embarqués aux montants épinglés : le choix ne dépend que de l'ordre des OPCO et des valeurs renseignées.
+  const troisOpco = (): OpcoData[] => {
+    const [a, b, c] = deepClone(EMBEDDED_OPCOS).slice(0, 3);
+    a.cout_horaire_inter.value = null;
+    a.budget_annuel_max.value = null;
+    b.cout_horaire_inter.value = 30;
+    b.budget_annuel_max.value = null;
+    c.cout_horaire_inter.value = 25;
+    c.budget_annuel_max.value = 4000;
+    return [a, b, c];
+  };
+
+  it("vise le premier OPCO dont la valeur est renseignée, dans l'ordre des données", () => {
+    const opcos = troisOpco();
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: opcos[1].slug, doublement: opcos[2].slug });
+  });
+
+  it('aucune valeur renseignée -> aucune cible', () => {
+    const opcos = troisOpco();
+    for (const o of opcos) {
+      o.cout_horaire_inter.value = null;
+      o.budget_annuel_max.value = null;
+    }
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: null, doublement: null });
+  });
+
+  it('données embarquées : chaque cible a un montant, que le dry-run augmente de 12 % ou double', () => {
+    // Sans montant, la mutation ne change rien et le dry-run ne traverse plus le garde-fou de variation (atlas, écrit en
+    // dur jusqu'en octobre 2026, avait perdu ses deux valeurs).
+    const { hausse, doublement } = choisirCiblesDryRun(EMBEDDED_OPCOS);
+    expect(EMBEDDED_OPCOS.find((o) => o.slug === hausse)?.cout_horaire_inter.value).toEqual(expect.any(Number));
+    expect(EMBEDDED_OPCOS.find((o) => o.slug === doublement)?.budget_annuel_max.value).toEqual(expect.any(Number));
   });
 });
