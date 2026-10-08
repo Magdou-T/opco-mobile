@@ -6,8 +6,8 @@
 // Règles de conduite :
 //   - une simple requête GET par adresse (le corps de la réponse est annulé dès les en-têtes) ;
 //   - au plus deux requêtes simultanées vers un même site, six au total ;
-//   - jamais d'appel à api.francecompetences.fr : les tables et l'API de France compétences ne sont réutilisables
-//     qu'avec une licence (art. R. 6123-35 du code du travail). Ces adresses, leurs sous-domaines, quelle que soit
+//   - jamais d'appel à api.francecompetences.fr : l'API de France compétences n'est réutilisable qu'avec une licence
+//     (art. R. 6123-35 du code du travail). Ces adresses, leurs sous-domaines, quelle que soit
 //     l'écriture de l'hôte (majuscules, point final, %2E, port, identifiants), et toute redirection qui y mène,
 //     sont signalés « ignorés » sans être contactés. Une page web ordinaire du même organisme est vérifiée normalement ;
 //   - pas de nouvel essai quand l'échec se reproduirait à l'identique (boucle de redirections, certificat refusé).
@@ -153,7 +153,8 @@ function nomDHote(url: string): string | null {
 /**
  * Raison pour laquelle une adresse ne doit jamais être contactée, ou null.
  * L'API de France compétences (api.francecompetences.fr) donne accès aux tables de correspondance entre branches,
- * établissements (SIRET) et OPCO : leur réutilisation exige une licence (art. R. 6123-35 du code du travail).
+ * établissements (SIRET) et OPCO : sa réutilisation exige une licence (art. R. 6123-35 du code du travail). La Table
+ * SIRET-OPCO publiée sur data.gouv.fr, elle, est sous Licence Ouverte 2.0 ; elle n'est pas concernée ici.
  * L'hôte est comparé en entier (ou comme parent d'un sous-domaine) : ni « notapi.francecompetences.fr » ni
  * « api.francecompetences.fr.exemple.fr » ne sont concernés. Les pages web ordinaires de l'organisme, dont l'outil
  * officiel « Quel est mon OPCO », ne le sont pas non plus.
@@ -367,7 +368,7 @@ export function rapportMarkdown(resultats: ResultatLien[], date: string): string
     ...tableau(['URL', 'Statut', 'Utilisé par'], aVerifier.map((r) => [r.url, statutOuErreur(r), usages(r)])),
     '## Liens ignorés (licence France compétences)',
     '',
-    "Ces adresses ne sont jamais contactées : les tables et l'API de France compétences ne sont réutilisables qu'avec une licence (art. R. 6123-35 du code du travail).",
+    "Ces adresses ne sont jamais contactées : l'API de France compétences n'est réutilisable qu'avec une licence (art. R. 6123-35 du code du travail).",
     '',
     ...tableau(['URL', 'Motif', 'Utilisé par'], ignores.map((r) => [r.url, r.motif ?? 'n/a', usages(r)])),
   ].join('\n');
