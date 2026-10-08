@@ -12,5 +12,8 @@
     "typecheck": "npm run typecheck --workspace @opco/core",
     "check:charte": "node scripts/check-charte-sfg.mjs",
     "test:web": "node --import tsx --test apps/web/tests/*.test.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0"
   }
 }
