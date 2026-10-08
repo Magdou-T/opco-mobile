@@ -1,6 +1,6 @@
 // ============================================================
 // Tests unitaires du pipeline : verify / correct / validate / publish.
-// Aucun réseau, aucune IA — tout est déterministe.
+// Aucun réseau, aucune IA : tout est déterministe.
 // ============================================================
 
 import { describe, expect, it } from 'vitest';
@@ -20,7 +20,7 @@ import type { ExtractionResult } from '../src/types';
 
 // Fixture découplée des données réelles : on part d'un OPCO embarqué mais on
 // ÉPINGLE les valeurs que les tests supposent (les données vivantes évoluent
-// au fil des vérifications de sources — les tests unitaires, eux, doivent
+// au fil des vérifications de sources ; les tests unitaires, eux, doivent
 // rester déterministes).
 const atlas = (): OpcoData => {
   const o = deepClone(getEmbeddedOpcoBySlug('atlas')!);

@@ -99,7 +99,7 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
   const sources = loadSources();
   const current = loadCurrentOpcos(mode);
 
-  console.log(`\n=== Pipeline OPCO (${mode}) — ${startedAt} ===`);
+  console.log(`\n=== Pipeline OPCO (${mode}), ${startedAt} ===`);
   console.log(`Modèles : EXTRACT_MODEL=${getExtractModel()} | VERIFY_MODEL=${getVerifyModel()}`);
   console.log(`Seuil de variation MAX_DELTA_PCT=${getMaxDeltaPct()} %`);
   console.log(`OPCO à traiter : ${current.length}\n`);
@@ -112,7 +112,7 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
   for (const opco of current) {
     const source = sources[opco.slug];
     if (!source) {
-      console.warn(`[run] Pas de sources pour ${opco.slug} — OPCO conservé tel quel.`);
+      console.warn(`[run] Pas de sources pour ${opco.slug} : OPCO conservé tel quel.`);
       corrected.push(deepClone(opco));
       continue;
     }
@@ -126,7 +126,7 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
       extraction = applyDryRunMutations(opco.slug, simulateExtractionFromCurrent(opco as unknown as { slug: string }));
     } else {
       if (scraped.pages.length === 0) {
-        console.warn(`[run] ${opco.slug}: aucune page scrapée — extraction vide (tout sera "not_found", confiances rétrogradées).`);
+        console.warn(`[run] ${opco.slug}: aucune page scrapée, extraction vide (tout sera "not_found", confiances rétrogradées).`);
         extraction = { slug: opco.slug, fields: [], plafonds_par_taille: [] };
       } else {
         extraction = await extractAmounts(opco.slug, scraped);
@@ -161,7 +161,7 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
   console.log(`ok=${validation.ok} | issues=${validation.issues.length} | needsReview=${validation.needsReview.length}`);
   for (const issue of validation.issues) console.log(`  [ISSUE] ${issue}`);
   for (const r of validation.needsReview) {
-    console.log(`  [REVIEW] ${r.slug}.${r.field} : ${r.oldValue} -> ${r.newValue} (${r.reason}) — ancienne valeur conservée`);
+    console.log(`  [REVIEW] ${r.slug}.${r.field} : ${r.oldValue} -> ${r.newValue} (${r.reason}), ancienne valeur conservée`);
   }
 
   // Changelog lisible (chaque changement journalisé, jamais d'écrasement silencieux).
@@ -176,7 +176,7 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
   // 6) PUBLISH
   let published = null;
   if (!validation.ok) {
-    console.error('\n[run] VALIDATION ÉCHOUÉE — publication ANNULÉE.');
+    console.error('\n[run] VALIDATION ÉCHOUÉE : publication ANNULÉE.');
   } else {
     const target = dryRun ? draftsDir : datasetsDir;
     published = publishDataset(validation.opcos, {

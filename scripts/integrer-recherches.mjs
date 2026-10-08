@@ -768,7 +768,7 @@ const exclusionsFusionnees = exclues
 const puces = (lignes) => (lignes.length > 0 ? lignes.map((l) => `- ${l}`) : ['- aucun']);
 
 const rapport = [
-  `# Rapport d'intégration du catalogue — ${aujourdhui}`,
+  `# Rapport d'intégration du catalogue du ${aujourdhui}`,
   '',
   `- Aides nationales : ${nationaux.aides.length}`,
   `- Aides régionales : ${regionaux.aides.length}`,
@@ -783,7 +783,7 @@ const rapport = [
   ...puces([...fichiersNat, ...fichiersReg].map((f) => f.nom)),
   '',
   '## Aides à confirmer',
-  ...puces(aConfirmer.map((a) => `${a.id} — ${a.nom}`)),
+  ...puces(aConfirmer.map((a) => `${a.id} : ${a.nom}`)),
   '',
   '## Alternatives connues (aides au choix, déclarées dans les deux sens)',
   ...puces(alternativesLiees),
@@ -798,7 +798,7 @@ const rapport = [
   ...puces(correctionsAppliquees),
   '',
   '## Dispositifs exclus (terminés, suspendus, sans financement)',
-  ...puces(exclues.map((e) => `${e.nom} — ${e.raison} (${e.fichiers.join(' ; ')})`)),
+  ...puces(exclues.map((e) => `${e.nom} : ${e.raison} (${e.fichiers.join(' ; ')})`)),
   '',
   '## Notes des chercheurs',
   ...puces([...nationaux.notes, ...regionaux.notes]),
