@@ -158,11 +158,18 @@ export interface VarianteBranche {
   branche_nom: string;
   /** Codes IDCC couverts (4 chiffres, ex. "1516"). */
   idcc: string[];
+  /** Page de critères de la branche (https), rendue en lien par le site. */
   source_url: string;
   confidence: Confidence;
   note?: string;
+  /**
+   * true : le barème de la variante est celui d'un plan conventionnel de branche qui prend le relais d'une enveloppe de plan de
+   * développement des compétences épuisée (AKTO, organismes de formation, octobre 2026) ; le plafond annuel est
+   * `budget_annuel_max`. Absent sinon (jamais `false`). Lu sur la variante rendue par `resolveVarianteBranche`.
+   */
+  relais_plan_conventionnel?: true;
 
-  // Overrides (optionnels — héritent du défaut OPCO si absents)
+  // Overrides (optionnels : héritent du défaut OPCO si absents)
   cout_horaire_inter?: SourcedValue<number | null>;
   cout_horaire_metier?: SourcedValue<number | null>;
   cout_horaire_seuils?: CoutHoraireSeuil[];
@@ -408,7 +415,7 @@ export interface WizardState {
   detectedOpcoSlug: string | null;
   detectedIdcc: string | null;
   detectedCompanyName: string | null;
-  /** Branche choisie manuellement (id de VarianteBranche) — prime sur l'IDCC détecté. */
+  /** Branche choisie manuellement (id de VarianteBranche) : prime sur l'IDCC détecté. */
   selectedBrancheId: string | null;
   /** Certitude de l'identification automatique de l'OPCO. */
   opcoCertitude: CertitudeOpco | null;

@@ -1,5 +1,5 @@
 // ============================================================
-// Schéma de validation (Zod) — miroir de types.ts et aides/types.ts.
+// Schéma de validation (Zod), miroir de types.ts et aides/types.ts.
 // Source de vérité partagée : utilisé par le BACKEND avant publication
 // d'un dataset ET par l'APP après téléchargement, pour ne jamais
 // charger de données corrompues.
@@ -10,7 +10,7 @@ import type { Aide } from './aides/types';
 
 export const ConfidenceSchema = z.enum(['exact', 'estimated', 'depends_on_branche']);
 
-/** SourcedValue<number | null> — le cas le plus courant. */
+/** SourcedValue<number | null> : le cas le plus courant. */
 export const SourcedNumberSchema = z.object({
   value: z.number().nullable(),
   confidence: ConfidenceSchema,
@@ -72,9 +72,13 @@ export const VarianteBrancheSchema = z.object({
   id: z.string().min(1),
   branche_nom: z.string().min(1),
   idcc: z.array(z.string().regex(/^\d{4}$/)).min(1),
-  source_url: z.string().min(1),
+  // Rendue en lien par le site : une adresse https, comme la source d'une alerte.
+  source_url: HttpsUrlSchema,
   confidence: ConfidenceSchema,
   note: z.string().optional(),
+  // true : le barème de la variante est celui d'un plan conventionnel de branche qui prend le relais d'une enveloppe de plan de
+  // développement des compétences épuisée ; le plafond annuel est `budget_annuel_max`. Vrai seulement (`false` refusé).
+  relais_plan_conventionnel: z.literal(true).optional(),
 
   cout_horaire_inter: SourcedNumberSchema.optional(),
   cout_horaire_metier: SourcedNumberSchema.optional(),
@@ -109,7 +113,8 @@ export const DispositifComplementaireSchema = z.object({
   idcc: z.array(z.string().regex(/^\d{4}$/)).optional(),
   note: z.string().optional(),
   confidence: ConfidenceSchema,
-  source_url: z.string(),
+  // Rendue en lien par le site : une adresse https, comme la source d'une alerte.
+  source_url: HttpsUrlSchema,
 });
 
 /** Alerte datée et sourcée publiée par un OPCO ; `idcc` vide = toutes les entreprises de l'OPCO. */
@@ -347,7 +352,8 @@ export const MontantAideSchema = z
 export const SourceAideSchema = z.object({
   url: HttpsUrlSchema,
   titre: z.string().min(1),
-  extrait: z.string().min(1).max(600),
+  // Mot pour mot, 300 caractères au plus (spécification, protocole de recherche).
+  extrait: z.string().min(1).max(300),
 }).strict();
 
 export const AideSchema = z.object({
@@ -401,7 +407,11 @@ export const IdccEntreeSchema = z.object({
   idcc: z.string().regex(/^\d{4}$/),
   titre: z.string().min(1),
   opco: z.string().min(1).nullable(),
+  // fusionne : convention fusionnée dans une autre (`idcc_cible`) ou convention close (code fermé dans la table IDCC DSN) ;
+  // une convention close n'a souvent pas de cible publiée (7509, 0438, 1237, 0779, 5545... : une cinquantaine d'entrées) et
+  // garde alors son propre rattachement, expliqué par la note.
   statut: z.enum(['actif', 'fusionne', 'echappatoire', 'partage']),
+  // Statut 'fusionne' : IDCC de rattachement, quand la convention a été fusionnée dans une autre (absent pour une convention close).
   idcc_cible: z.string().regex(/^\d{4}$/).optional(),
   opcos_possibles: z.array(z.string().min(1)).optional(),
   // true : l'OPCO de cette convention n'est établi par aucune source officielle propre à cet IDCC (repris d'une

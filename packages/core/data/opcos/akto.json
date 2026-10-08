@@ -489,7 +489,8 @@
       ],
       "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
       "confidence": "exact",
-      "note": "« Suspension du financement des formations sur le budget Plan de développement des compétences (PDC) » ; « A ce jour, l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. » ; « Les dossiers qui n’ont pas pu être engagés pourront faire l’objet d’une prise en charge au titre du Plan conventionnel dans la limite du plafond annuel par entreprise. » PDC 2026 (4 500 € / 5 600 €) épuisé : le barème retenu est celui du plan conventionnel, qui prend le relais. VAE et abondement CPF non financés. (vérifié le 2026-10-05)",
+      "relais_plan_conventionnel": true,
+      "note": "« Suspension du financement des formations sur le budget Plan de développement des compétences (PDC) » ; « A ce jour, l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. » ; « Les dossiers qui n’ont pas pu être engagés pourront faire l’objet d’une prise en charge au titre du Plan conventionnel dans la limite du plafond annuel par entreprise. » PDC 2026 (4 500 € / 5 600 €) épuisé : le barème retenu est celui du plan conventionnel, qui prend le relais. VAE et abondement CPF non financés. (vérifié le 2026-10-05 ; suspension et relais du plan conventionnel relus en ligne le 2026-10-08, page mise à jour le 10/07/2026)",
       "cout_horaire_inter": {
         "value": 60,
         "confidence": "exact",

@@ -4,17 +4,19 @@ import {
   DispositifComplementaireSchema,
   OpcoDataSchema,
   PlafondTailleSchema,
+  SourceAideSchema,
   VarianteBrancheSchema,
   validateDataset,
   sanityCheckOpco,
 } from '../src/schema';
+import { resolveVarianteBranche } from '../src/calculator';
 import { ALERTE_OPCO_LABELS } from '../src/types';
-import type { AlerteOpco, FreeText, OpcoData } from '../src/types';
-import { EMBEDDED_OPCOS } from '../src/data';
+import type { AlerteOpco, FreeText, OpcoData, VarianteBranche } from '../src/types';
+import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '../src/data';
 import paquet from '../package.json';
 import { makeOpco } from './fixtures';
 
-describe('schéma — dataset embarqué', () => {
+describe('schéma, dataset embarqué', () => {
   it('contient bien 11 OPCO', () => {
     expect(EMBEDDED_OPCOS).toHaveLength(11);
   });
@@ -52,7 +54,7 @@ describe('schéma — dataset embarqué', () => {
 
 // Les schémas des OPCO ne sont pas stricts : une clé absente du schéma serait supprimée en silence au parsing.
 // Chaque test vérifie donc que la valeur ressort du parsing, pas seulement que le parsing réussit.
-describe('schéma — champs des barèmes vérifiés (v2)', () => {
+describe('schéma, champs des barèmes vérifiés (v2)', () => {
   const source = 'https://exemple.fr';
 
   it('la fabrique de test produit un OPCO valide', () => {
@@ -367,7 +369,7 @@ describe('schéma — champs des barèmes vérifiés (v2)', () => {
 // Les champs descriptifs libres : les données réelles mélangent texte, objet détaillé { description, source_url, … } et null
 // (OPCO EP, OPCO Santé, Uniformation). Le type doit dire ce que le schéma accepte, sans quoi un composant typé « string »
 // reçoit un objet sans le savoir. Ces champs ne pilotent pas le calcul.
-describe('schéma et types — textes libres des OPCO (FreeText)', () => {
+describe('schéma et types, textes libres des OPCO (FreeText)', () => {
   const CHAMPS_TEXTE_LIBRE = [
     'delai_validation',
     'alternance_apprentissage',
@@ -422,7 +424,7 @@ describe('schéma et types — textes libres des OPCO (FreeText)', () => {
 
 // Le catalogue d'aides (le plus lourd des jeux de données) vit dans son propre module : un composant du site qui n'importe que
 // les barèmes ou la table IDCC n'embarque pas le catalogue, à condition que le paquet se déclare sans effet de bord.
-describe('données embarquées — catalogue d\'aides séparé du reste', () => {
+describe('données embarquées, catalogue d\'aides séparé du reste', () => {
   it('data.ts et l\'index du paquet exposent toujours le catalogue et les portails, avec les mêmes références que data-aides', async () => {
     const aides = await import('../src/data-aides');
     const data = await import('../src/data');
@@ -433,9 +435,96 @@ describe('données embarquées — catalogue d\'aides séparé du reste', () => 
     expect(data.EMBEDDED_PORTAILS).toBe(aides.EMBEDDED_PORTAILS);
     expect(index.EMBEDDED_AIDES).toBe(aides.EMBEDDED_AIDES);
     expect(index.EMBEDDED_PORTAILS).toBe(aides.EMBEDDED_PORTAILS);
-  });
+  }, 30_000); // l'import de l'index charge tout le paquet : plus de 5 s (délai par défaut) sur une machine chargée
 
   it('le paquet se déclare sans effet de bord (sideEffects false) : un bundler écarte les données qu\'aucun import n\'utilise', () => {
     expect((paquet as { sideEffects?: unknown }).sideEffects).toBe(false);
+  });
+});
+
+// Le site rend en lien (href) la source d'une variante de branche et celle d'un dispositif : comme pour une alerte, seule une
+// adresse https est acceptée. Un extrait de source d'aide tient en 300 caractères (spécification, protocole de recherche).
+describe('schéma : sources des variantes et des dispositifs, longueur des extraits', () => {
+  const variante = {
+    id: 'branche', branche_nom: 'Branche', idcc: ['1234'], source_url: 'https://www.exemple.fr/branche', confidence: 'exact' as const,
+  };
+  const dispositif = {
+    id: 'dispositif', nom: 'Dispositif', cumul: 'additif' as const, montant_max: null, unite: null, pourcentage_couts: null,
+    description: 'Dispositif de test', conditions: [], demarches: 'Demande en ligne', tailles_eligibles: null, publics: null,
+    confidence: 'exact' as const, source_url: 'https://www.exemple.fr/dispositif',
+  };
+
+  it("la source d'une variante et celle d'un dispositif sont des adresses https", () => {
+    expect(VarianteBrancheSchema.safeParse(variante).success).toBe(true);
+    expect(DispositifComplementaireSchema.safeParse(dispositif).success).toBe(true);
+    for (const source_url of ['pas une adresse', 'http://www.exemple.fr/branche', '', 'javascript:alert(1)', 'www.exemple.fr']) {
+      expect(VarianteBrancheSchema.safeParse({ ...variante, source_url }).success, `variante ${source_url}`).toBe(false);
+      expect(DispositifComplementaireSchema.safeParse({ ...dispositif, source_url }).success, `dispositif ${source_url}`).toBe(false);
+    }
+  });
+
+  it('toutes les variantes et tous les dispositifs embarqués ont une source https acceptée par le schéma', () => {
+    const variantes = EMBEDDED_OPCOS.flatMap((o) => o.variantes_branche ?? []);
+    const dispositifs = EMBEDDED_OPCOS.flatMap((o) => o.dispositifs_complementaires ?? []);
+    expect(variantes.length).toBeGreaterThan(30);
+    expect(dispositifs.length).toBeGreaterThan(30);
+    expect(variantes.filter((v) => !VarianteBrancheSchema.safeParse(v).success).map((v) => v.id)).toEqual([]);
+    expect(dispositifs.filter((d) => !DispositifComplementaireSchema.safeParse(d).success).map((d) => d.id)).toEqual([]);
+  });
+
+  it("un extrait de source d'aide tient en 300 caractères : 300 accepté, 301 refusé ; le catalogue embarqué les respecte", () => {
+    const source = { url: 'https://www.exemple.fr/aide', titre: 'Page officielle', extrait: 'x'.repeat(300) };
+    expect(SourceAideSchema.safeParse(source).success).toBe(true);
+    expect(SourceAideSchema.safeParse({ ...source, extrait: 'x'.repeat(301) }).success).toBe(false);
+    expect(Math.max(...EMBEDDED_AIDES.flatMap((a) => a.sources.map((s) => s.extrait.length)))).toBeLessThanOrEqual(300);
+  });
+});
+
+// Une branche dont l'enveloppe du plan de développement des compétences est épuisée peut être financée par le plan
+// conventionnel de la branche, qui prend le relais : le barème de la variante est alors celui de ce plan conventionnel, dans
+// la limite de son plafond annuel (budget_annuel_max). Le champ relais_plan_conventionnel le dit au site, qui nomme alors la
+// ligne de l'OPCO « plan conventionnel de branche » au lieu de laisser croire que les fonds épuisés financent la formation.
+describe('variante de branche : relais du plan conventionnel', () => {
+  const variante = {
+    id: 'branche', branche_nom: 'Branche', idcc: ['1234'], source_url: 'https://www.exemple.fr/branche', confidence: 'exact' as const,
+  };
+
+  it('champ facultatif : true conservé au parsing, false et toute autre valeur refusés, absent par défaut', () => {
+    expect(VarianteBrancheSchema.parse({ ...variante, relais_plan_conventionnel: true }).relais_plan_conventionnel).toBe(true);
+    expect(VarianteBrancheSchema.parse(variante).relais_plan_conventionnel).toBeUndefined();
+    for (const valeur of [false, 'oui', 1, null]) {
+      expect(VarianteBrancheSchema.safeParse({ ...variante, relais_plan_conventionnel: valeur }).success, String(valeur)).toBe(false);
+    }
+    const opco = makeOpco({ variantes_branche: [{ ...variante, relais_plan_conventionnel: true }] });
+    expect(OpcoDataSchema.parse(opco).variantes_branche?.[0].relais_plan_conventionnel).toBe(true);
+    // Le type exporté porte le champ (vérifié à la compilation par tsc --noEmit).
+    const typee: VarianteBranche = { ...variante, relais_plan_conventionnel: true };
+    expect(typee.relais_plan_conventionnel).toBe(true);
+  });
+
+  it("données : seule la variante AKTO « Organismes de formation » (IDCC 1516) le porte, avec le plafond annuel de 10 000 € du plan conventionnel", () => {
+    const marquees = EMBEDDED_OPCOS.flatMap((o) =>
+      (o.variantes_branche ?? []).filter((v) => v.relais_plan_conventionnel === true).map((v) => `${o.slug}/${v.id}`),
+    );
+    expect(marquees).toEqual(['akto/organismes-de-formation']);
+    const akto = EMBEDDED_OPCOS.find((o) => o.slug === 'akto')!;
+    const of = akto.variantes_branche!.find((v) => v.id === 'organismes-de-formation')!;
+    expect(of.idcc).toEqual(['1516']);
+    expect(of.budget_annuel_max).toMatchObject({ value: 10000, confidence: 'exact' });
+    expect(of.budget_annuel_max!.note).toContain('« La prise en charge des formations ne peut dépasser le plafond annuel de 10 000 €/entreprise au titre du Plan conventionnel. »');
+    expect(of.note).toContain('Plan conventionnel dans la limite du plafond annuel par entreprise.');
+    // La variante des branches dont l'enveloppe est épuisée sans relais (dépôts suspendus) ne le porte pas.
+    expect(akto.variantes_branche!.find((v) => v.id === 'akto-pdc-2026-epuise')!.relais_plan_conventionnel).toBeUndefined();
+  });
+
+  it('resolveVarianteBranche rend la variante avec le champ (IDCC détecté ou branche choisie) ; validateDataset et sanityCheckOpco gardent le jeu embarqué', () => {
+    const akto = EMBEDDED_OPCOS.find((o) => o.slug === 'akto')!;
+    expect(resolveVarianteBranche(akto, { selectedBrancheId: null, detectedIdcc: '1516' })?.relais_plan_conventionnel).toBe(true);
+    expect(resolveVarianteBranche(akto, { selectedBrancheId: 'organismes-de-formation', detectedIdcc: null })?.relais_plan_conventionnel).toBe(true);
+    expect(resolveVarianteBranche(akto, { selectedBrancheId: 'hcr', detectedIdcc: null })?.relais_plan_conventionnel).toBeUndefined();
+    const ds = validateDataset({ version: 4, generatedAt: '2026-10-08T00:00:00.000Z', opcos: EMBEDDED_OPCOS });
+    const parse = ds.opcos.find((o) => o.slug === 'akto')!.variantes_branche!.find((v) => v.id === 'organismes-de-formation')!;
+    expect(parse.relais_plan_conventionnel).toBe(true);
+    expect(sanityCheckOpco(ds.opcos.find((o) => o.slug === 'akto')!)).toEqual([]);
   });
 });
