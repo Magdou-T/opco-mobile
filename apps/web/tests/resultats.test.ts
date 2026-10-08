@@ -344,13 +344,13 @@ describe('barre empilée', () => {
 
   test('scénario 1 à 90 €/h avec 800 € de CPF : une part par famille, la somme vaut 100', () => {
     const { plan: p, aides } = simuler({ ...SCENARIOS.akto, pedagogyCostPerHour: 90, pedagogyCostTotal: 12600, soldeCpf: 800 });
-    // AKTO 8 400 € ; CPF 800 € et abondement de l'employeur 150 € (même famille : 950 €) ; reste 3 250 €, sur 12 600 €.
-    // Parts exactes 66,67 / 7,54 / 25,79 : arrondis inférieurs 66 + 7 + 25 = 98 ; les deux points restants vont aux plus
-    // grandes décimales (0,79 puis 0,67) : 67 / 7 / 26.
+    // AKTO 8 400 € ; CPF 800 € (la dotation de l'employeur est son propre argent : listée sans montant, jamais une part) ;
+    // reste 3 400 €, sur 12 600 €. Parts exactes 66,67 / 6,35 / 26,98 : arrondis inférieurs 66 + 6 + 26 = 98 ; les deux points
+    // restants vont aux plus grandes décimales (0,98 puis 0,67) : 67 / 6 / 27.
     assert.deepEqual(partsBarre(p, aides), [
       { cle: 'opco', libelle: 'AKTO', montant: 8400, part: 67 },
-      { cle: 'cpf', libelle: 'Compte personnel de formation', montant: 950, part: 7 },
-      { cle: 'reste', libelle: 'Reste à charge', montant: 3250, part: 26 },
+      { cle: 'cpf', libelle: 'Compte personnel de formation', montant: 800, part: 6 },
+      { cle: 'reste', libelle: 'Reste à charge', montant: 3400, part: 27 },
     ]);
   });
 
@@ -659,8 +659,9 @@ describe('cartes du plan', () => {
   });
 
   test("rappels du bandeau quand aucun financement n'est chiffré (scénarios 3 et 4)", () => {
+    // Scénario 3 : CléA n'est plus éligible sans certification précisée (« à vérifier »), il quitte les aides au montant selon dossier.
     assert.deepEqual(rappelsAucunFinancement(simuler(SCENARIOS.demandeur).plan), [
-      { carte: 'non-chiffrees', nombre: 11, libelle: '11 aides au montant selon dossier' },
+      { carte: 'non-chiffrees', nombre: 10, libelle: '10 aides au montant selon dossier' },
       { carte: 'personne', nombre: 2, libelle: '2 revenus et aides à la personne' },
     ]);
     assert.deepEqual(rappelsAucunFinancement(simuler(SCENARIOS.apprenti).plan), [
@@ -753,18 +754,21 @@ describe('encadré du bandeau quand aucun financement de la formation n’est ch
         `Voici les aides identifiées. ${PLUSIEURS_CHIFFREES}`,
     );
     assert.deepEqual(rappels.map((r) => r.carte), ['non-chiffrees', 'personne']);
-    // Aide aux employeurs (contrat de professionnalisation, 2 000 €) et GEIQ (814 €) chiffrées ; CPF et PEC sans montant.
-    assert.deepEqual(aidesAVerifier, { nombre: 4, libelle: '4 aides à vérifier' });
+    // Aide aux employeurs (contrat de professionnalisation, 2 000 €) et GEIQ (814 €) chiffrées ; CPF, CléA (certification non
+    // précisée) et PEC sans montant.
+    assert.deepEqual(aidesAVerifier, { nombre: 5, libelle: '5 aides à vérifier' });
   });
 
-  test('scénario 2 (120 salariés) : options au choix chiffrées et aides au montant selon dossier, abondement « à vérifier » cité', () => {
+  test('scénario 2 (120 salariés) : options au choix chiffrées et aides au montant selon dossier ; aucune aide « à vérifier » chiffrée, rien à citer', () => {
     const { texte, aidesAVerifier } = encadreDe(SCENARIOS.grande);
+    // La dotation de l'employeur sur le CPF, « à vérifier » (éligibilité au CPF inconnue), n'a plus de montant : c'est l'argent de
+    // l'employeur. Les aides « à vérifier » (dotation, CPF, CléA, FSE+ de l'OPCO) sont toutes sans montant.
     assert.equal(
       espaces(texte),
       "Aucun financement cumulable n'est chiffré pour cette formation : les options au choix ont un montant, à comparer, et les " +
-        `autres financeurs fixent le montant après étude du dossier. ${UNE_CHIFFREE}`,
+        'autres financeurs fixent le montant après étude du dossier.',
     );
-    assert.deepEqual(aidesAVerifier, { nombre: 3, libelle: '3 aides à vérifier' });
+    assert.equal(aidesAVerifier, null);
   });
 
   test('options chiffrées sans aide au montant selon dossier : aucun « autres financeurs »', () => {

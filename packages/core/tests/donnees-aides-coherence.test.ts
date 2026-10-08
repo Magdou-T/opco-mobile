@@ -250,7 +250,7 @@ function resultatsElargis(): Resultat[] {
 
 /**
  * Catalogue réel dont toutes les alternatives (et notes de cumul) sont retirées, sur les profils de reconversion RNCP de la
- * grille : pour le type « vae » et 24 h, les quatre aides prélevées sur le solde CPF sont éligibles ensemble. Seul le plan
+ * grille : pour le type « vae » et 24 h, les trois aides prélevées sur le solde CPF sont éligibles ensemble. Seul le plan
  * (solde partagé, plafond au reste à charge) les empêche alors de s'additionner.
  */
 function resultatsSansAlternatives(): Resultat[] {
@@ -389,13 +389,16 @@ describe('alternatives : chaque groupe est complet', () => {
     }
   });
 
-  it('les quatre aides prélevées sur le même solde CPF sont deux à deux alternatives', () => {
+  it('les trois aides prélevées sur le même solde CPF et CléA (même solde, sans montant) sont deux à deux alternatives', () => {
     const soldeCpf = EMBEDDED_AIDES.filter((a) => a.montant.mode === 'solde_cpf').map((a) => a.id).sort();
-    expect(soldeCpf).toEqual(['nat-bilan-competences', 'nat-clea', 'nat-cpf', 'nat-vae']);
+    expect(soldeCpf).toEqual(['nat-bilan-competences', 'nat-cpf', 'nat-vae']);
+    // CléA mobilise le même solde mais n'est plus chiffré (jamais empilé) : il reste au choix avec les trois autres.
+    expect(aide('nat-clea').montant.mode).toBe('non_chiffre');
+    const groupe = [...soldeCpf, 'nat-clea'];
     const declarations = (id: string) => aide(id).cumul.alternatives ?? [];
-    for (const a of soldeCpf) {
-      for (const b of soldeCpf.filter((autre) => autre !== a)) {
-        expect(declarations(a).includes(b) || declarations(b).includes(a)).toBe(true);
+    for (const a of groupe) {
+      for (const b of groupe.filter((autre) => autre !== a)) {
+        expect(declarations(a).includes(b) || declarations(b).includes(a), `${a} ↔ ${b}`).toBe(true);
       }
     }
   });
@@ -513,8 +516,8 @@ describe('solde CPF : les lignes du plan prélevées sur le solde ne le dépasse
     expect(apercu(depassements(resultatsGrille()))).toEqual([]);
   });
 
-  it("le contrôle est exercé : jusqu'à quatre aides prélevées sur le solde sont éligibles à la fois, et le solde est parfois utilisé en entier", () => {
-    expect(Math.max(...resultatsGrille().map(eligiblesSurSolde))).toBe(4);
+  it("le contrôle est exercé : jusqu'à trois aides prélevées sur le solde sont éligibles à la fois, et le solde est parfois utilisé en entier", () => {
+    expect(Math.max(...resultatsGrille().map(eligiblesSurSolde))).toBe(3);
     const soldesUtilisesEnEntier = resultatsGrille().filter((r) => centimes(sommeSurSoldeCpf(r.plan)) === centimes(r.scenario.soldeCpf));
     expect(soldesUtilisesEnEntier.length).toBeGreaterThan(0);
     expect(resultatsGrille().some((r) => sommeSurSoldeCpf(r.plan) > 0 && sommeSurSoldeCpf(r.plan) < r.scenario.soldeCpf)).toBe(true);
@@ -522,21 +525,17 @@ describe('solde CPF : les lignes du plan prélevées sur le solde ne le dépasse
 
   it("même si aucune alternative n'était déclarée, le plan partage un seul solde entre les aides qui le prélèvent", () => {
     expect(apercu(depassements(resultatsSansAlternatives()))).toEqual([]);
-    expect(Math.max(...resultatsSansAlternatives().map(eligiblesSurSolde))).toBe(4);
+    expect(Math.max(...resultatsSansAlternatives().map(eligiblesSurSolde))).toBe(3);
     expect(resultatsSansAlternatives().some((r) => centimes(sommeSurSoldeCpf(r.plan)) === centimes(r.scenario.soldeCpf))).toBe(true);
   });
 
-  it("scénario réel d'une VAE à 8 000 € : nat-cpf est retenue, nat-vae et nat-clea sont des options « au choix » avec elle", () => {
+  it("scénario réel d'une VAE à 8 000 € : nat-cpf est retenue, nat-vae est une option « au choix » avec elle ; CléA (répertoire spécifique seulement) n'est pas proposé pour une certification RNCP", () => {
     const r = jouer({ projet: 'formation_salarie', soldeCpf: 800, cout: 8000, annexes: false, dureeHeures: 140, certification: 'rncp', typeFormation: 'vae', opco: 'akto' });
     expect(r.plan.financements.map((l) => l.id)).toContain('nat-cpf');
     const options = r.plan.options.filter((o) => IDS_SOLDE_CPF.has(o.id)).map((o) => [o.id, o.raison]);
-    expect(options).toEqual(
-      expect.arrayContaining([
-        ['nat-clea', 'Au choix avec « Compte personnel de formation (CPF) »'],
-        ['nat-vae', 'Au choix avec « Compte personnel de formation (CPF) »'],
-      ]),
-    );
-    expect(options).toHaveLength(2);
+    expect(options).toEqual([['nat-vae', 'Au choix avec « Compte personnel de formation (CPF) »']]);
+    expect(r.aides.find((a) => a.id === 'nat-clea')?.statut).toBe('non_eligible');
+    expect(idsDuPlan(r.plan)).not.toContain('nat-clea');
     expect(sommeSurSoldeCpf(r.plan)).toBe(800);
   });
 });

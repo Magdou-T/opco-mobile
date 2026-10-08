@@ -223,7 +223,7 @@ describe('plan : avec le CPF, le plan retient une seule des deux aides et propos
 
   describe('AGEFICE, formation RNCP de 140 h à 9 000 € (64,29 €/h)', () => {
     // AGEFICE : 42 €/h x 140 h = 5 880 €, ramené à l'enveloppe de 5 000 € pour une formation RNCP (CFP d'au moins 7 €) ; 5 000 € est
-    // sous le coût de 9 000 €. CPF : le solde du titulaire, dans la limite de 5 000 € de droits.
+    // sous le coût de 9 000 €. CPF : le solde du titulaire, dans la limite du coût.
     const parcours: Partial<WizardState> = {
       ...FORMATION_RNCP, statutDirigeant: 'commercant', pedagogyCostTotal: 9000, pedagogyCostPerHour: 64.29,
     };
@@ -339,29 +339,49 @@ describe('plan : avec le CPF, le plan retient une seule des deux aides et propos
   });
 });
 
-describe("plan : une VAE financée par le CPF écarte aussi le fonds, même quand nat-vae est mieux chiffrée que nat-cpf", () => {
-  // VAE de 24 h à 9 000 €, solde CPF de 6 000 €. nat-cpf est limité à 5 000 € de droits utilisables, nat-vae non : nat-vae (6 000 €)
-  // passe devant nat-cpf (5 000 €) et devant chaque fonds (AGEFICE : 42 x 24 h = 1 008 € ; FAFCEA et FIF PL : non chiffrés, le FAFCEA
-  // n'intervenant pour une VAE qu'en cas de refus du CPF). Sans la déclaration de nat-vae par le fonds, celui-ci serait empilé en plus :
-  // 6 000 + 1 008 = 7 008 € pour l'AGEFICE.
-  // Financé : 6 000 € (nat-vae seul) ; reste à charge : 9 000 - 6 000 = 3 000 €.
+describe('plan : une VAE financée par le CPF écarte aussi le fonds, que le plan retienne nat-cpf ou nat-vae', () => {
+  // VAE de 24 h à 9 000 €, solde CPF de 6 000 €. nat-cpf et nat-vae prélèvent le même solde, chacune 6 000 € (le plafond de 5 000 €
+  // borne les droits acquis chaque année, pas le solde du compte, qui comprend aussi les dotations). Fonds : AGEFICE 42 x 24 h =
+  // 1 008 € ; FAFCEA et FIF PL non chiffrés (le FAFCEA n'intervient pour une VAE qu'en cas de refus du CPF). Sans la déclaration du
+  // CPF par le fonds, celui-ci serait empilé en plus : 6 000 + 1 008 = 7 008 € pour l'AGEFICE.
+  //   - formation éligible au CPF : à montants égaux, nat-cpf, que nat-vae et le fonds citent, est retenue ; nat-vae et le fonds sont
+  //     deux options au choix avec elle ;
+  //   - éligibilité au CPF inconnue : nat-cpf est « à vérifier », jamais comptée ; nat-vae (sans critère d'éligibilité au CPF) est
+  //     retenue et le fonds, qui la cite aussi, est une option au choix avec elle.
+  // Financé : 6 000 € (une seule des aides du solde) ; reste à charge : 9 000 - 6 000 = 3 000 €, dans les deux cas.
   const parcours: Partial<WizardState> = {
     ...FORMATION_RNCP, formationType: 'vae', durationHours: 24, pedagogyCostTotal: 9000, pedagogyCostPerHour: 375, soldeCpf: 6000,
   };
+  const nomCpf = aide('nat-cpf').nom;
   const nomVae = aide('nat-vae').nom;
-
-  it.each([
+  const FONDS_DE_LA_VAE = [
     { id: 'faf-agefice', profil: { statutDirigeant: 'commercant' } as Partial<WizardState> },
     { id: 'faf-fafcea', profil: { statutDirigeant: 'artisan' } as Partial<WizardState> },
     { id: 'faf-fifpl', profil: { statutDirigeant: 'profession_liberale', codeNaf: '69.10Z' } as Partial<WizardState> },
-  ])('$id : nat-vae est retenue, nat-cpf et le fonds sont deux options au choix avec elle', ({ id, profil }) => {
+  ];
+
+  it.each(FONDS_DE_LA_VAE)('$id, formation éligible au CPF : nat-cpf est retenue, nat-vae et le fonds sont deux options au choix avec elle', ({ id, profil }) => {
     const { aides, plan } = jouer({ ...parcours, ...profil });
-    expect(aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'eligible', montantEstime: 5000 });
+    expect(aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'eligible', montantEstime: 6000 });
+    expect(aides.find((a) => a.id === 'nat-vae')).toMatchObject({ statut: 'eligible', montantEstime: 6000 });
+    expect(aides.find((a) => a.id === id)).toMatchObject({ statut: 'eligible' });
+    expect(plan.financements).toEqual([expect.objectContaining({ id: 'nat-cpf', montant: 6000 })]);
+    expect(plan.options).toContainEqual(expect.objectContaining({ id: 'nat-vae', raison: `Au choix avec « ${nomCpf} »` }));
+    expect(plan.options).toContainEqual(expect.objectContaining({ id, raison: `Au choix avec « ${nomCpf} »` }));
+    expect(plan.nonChiffrees.map((a) => a.id)).not.toContain(id);
+    expect(plan.totalFinance).toBe(6000);
+    expect(plan.resteACharge).toBe(3000);
+    coutRespecte(plan, 9000);
+  });
+
+  it.each(FONDS_DE_LA_VAE)('$id, éligibilité au CPF inconnue : nat-vae est retenue, le fonds est une option au choix avec elle', ({ id, profil }) => {
+    const { aides, plan } = jouer({ ...parcours, ...profil, eligibleCpf: null });
+    expect(aides.find((a) => a.id === 'nat-cpf')).toMatchObject({ statut: 'a_verifier' });
     expect(aides.find((a) => a.id === 'nat-vae')).toMatchObject({ statut: 'eligible', montantEstime: 6000 });
     expect(aides.find((a) => a.id === id)).toMatchObject({ statut: 'eligible' });
     expect(plan.financements).toEqual([expect.objectContaining({ id: 'nat-vae', montant: 6000 })]);
-    expect(plan.options).toContainEqual(expect.objectContaining({ id: 'nat-cpf', raison: `Au choix avec « ${nomVae} »` }));
     expect(plan.options).toContainEqual(expect.objectContaining({ id, raison: `Au choix avec « ${nomVae} »` }));
+    expect(plan.options.map((o) => o.id)).not.toContain('nat-cpf');
     expect(plan.nonChiffrees.map((a) => a.id)).not.toContain(id);
     expect(plan.totalFinance).toBe(6000);
     expect(plan.resteACharge).toBe(3000);

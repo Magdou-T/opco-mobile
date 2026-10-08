@@ -48,29 +48,18 @@
         "valeur": null,
         "pourcentage": null,
         "base": null,
-        "plafond": 5000,
+        "plafond": null,
         "duree_max_mois": null,
-        "libelle": "Solde des droits CPF du titulaire : 500 € par an (au moins à mi-temps), dans la limite de 5 000 € hors dotations, diminué de la participation forfaitaire de 150 € sauf exonération. Plafonds d'utilisation : 1 500 € (répertoire spécifique hors CléA), 1 600 € (bilan de compétences), 900 € (permis du groupe léger).",
+        "libelle": "Solde du compte affiché sur Mon Compte Formation (droits acquis et dotations), diminué de la participation forfaitaire de 150 € sauf exonération. Droits acquis : 500 € par an (au moins à mi-temps) dans la limite de 5 000 €, ou 800 € par an dans la limite de 8 000 € pour un salarié sans qualification de niveau CAP/BEP ou reconnu travailleur handicapé ; les dotations ne sont pas plafonnées. Plafonds d'utilisation : 1 500 € (répertoire spécifique hors CléA), 1 600 € (bilan de compétences), 900 € (permis du groupe léger).",
         "majorations": [
           {
             "criteres": {
-              "niveaux_diplome": [
-                "sans_diplome"
+              "certifications": [
+                "rs"
               ]
             },
-            "valeur": null,
-            "pourcentage": null,
-            "plafond": 8000,
-            "libelle": "Salarié sans qualification de niveau CAP/BEP (niveau 3) : 800 € par an, plafond de 8 000 €."
-          },
-          {
-            "criteres": {
-              "rqth": true
-            },
-            "valeur": null,
-            "pourcentage": null,
-            "plafond": 8000,
-            "libelle": "Travailleur reconnu handicapé (au moins à mi-temps) : 800 € par an, plafond de 8 000 €."
+            "plafond": 1500,
+            "libelle": "Certification du répertoire spécifique : droits CPF mobilisables dans la limite de 1 500 € depuis le 26 février 2026. Ce plafond ne s'applique pas à la certification CléA."
           }
         ]
       },
@@ -156,9 +145,19 @@
           "url": "https://www.moncompteformation.gouv.fr/espace-public/evolution-des-regles-dutilisation-du-cpf-compter-du-2-octobre-2026",
           "titre": "Évolution des règles d'utilisation du CPF à compter du 2 octobre 2026 - Mon Compte Formation",
           "extrait": "En confirmant son achat, le titulaire s’engage à régler, le cas échéant, en 2027, un complément pouvant atteindre 200 €."
+        },
+        {
+          "url": "https://financeurs.moncompteformation.gouv.fr/espace-public/aide/les-dotations-sont-elles-plafonnees",
+          "titre": "Les dotations sont-elles plafonnées ? - Mon Compte Formation (financeurs)",
+          "extrait": "Les plafonds appliqués par exercice (500 ou 800 €) ou sur l’ensemble des droits acquis au titre d’une activité professionnelle (5000 ou 8000 €) ne s’appliquent pas aux dotations. Le compte formation des titulaires n’est donc pas plafonné."
+        },
+        {
+          "url": "https://of.moncompteformation.gouv.fr/espace-public/loi-de-finances-2026-les-evolutions-concernant-le-cpf",
+          "titre": "Loi de finances 2026 : les évolutions concernant le CPF - Mon Compte Formation (organismes)",
+          "extrait": "Concernant les certifications inscrites au Répertoire Spécifique, les titulaires peuvent mobiliser au maximum 1 500 € de leurs droits CPF."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-10-08",
       "validite": {
         "debut": null,
         "fin": null
@@ -170,7 +169,7 @@
       "id": "nat-cpf-abondement-employeur",
       "nom": "Abondement de l'employeur sur le CPF (dotation volontaire)",
       "financeur": "cpf",
-      "financeur_nom": "Caisse des Dépôts – Mon Compte Formation (dotation de l'employeur via l'EDEF)",
+      "financeur_nom": "L'employeur (dotation versée sur Mon Compte Formation)",
       "categorie": "cout_formation",
       "projets": [
         "formation_salarie",
@@ -179,7 +178,7 @@
       "beneficiaires": [
         "salarie"
       ],
-      "description": "L'employeur peut verser une dotation sur le CPF de son salarié pour cofinancer une formation. Lorsque la formation fait l'objet d'un abondement de l'employeur, le salarié est exonéré de la participation forfaitaire de 150 €.",
+      "description": "L'employeur peut verser une dotation sur le CPF de son salarié pour cofinancer une formation : c'est l'argent de l'employeur, crédité sur le compte du salarié par l'espace des financeurs de Mon Compte Formation, et non une aide de la Caisse des Dépôts. Lorsque la formation fait l'objet d'un abondement de l'employeur, le salarié est exonéré de la participation forfaitaire de 150 €.",
       "criteres": {
         "eligible_cpf": true
       },
@@ -193,17 +192,17 @@
         "À défaut d'abondement, l'employeur ou l'OPCO peut rembourser au salarié les 150 € payés."
       ],
       "montant": {
-        "mode": "forfait",
-        "valeur": 150,
+        "mode": "non_chiffre",
+        "valeur": null,
         "pourcentage": null,
         "base": null,
         "plafond": null,
         "duree_max_mois": null,
-        "libelle": "Évite au salarié la participation forfaitaire de 150 € (montant 2026) : les droits CPF et la dotation peuvent couvrir tout le coût. Le montant de la dotation est libre et non plafonné."
+        "libelle": "Montant libre et non plafonné, fixé par l'employeur : c'est l'argent de l'employeur, il ne réduit pas sa dépense. La dotation dispense le salarié de la participation forfaitaire de 150 € (montant 2026)."
       },
       "cumul": {
         "cumulable": true,
-        "note": "Levier associé à nat-cpf (le solde CPF du salarié reste mobilisé)."
+        "note": "Levier associé à nat-cpf (le solde CPF du salarié reste mobilisé) ; la dotation est payée par l'employeur, elle ne s'ajoute pas aux financements extérieurs."
       },
       "demarches": [
         "Le salarié sélectionne la formation sur Mon Compte Formation, choisit de demander à son entreprise de l'aider à financer la formation et télécharge le PDF du dossier, sans l'envoyer à l'organisme.",
@@ -265,7 +264,7 @@
           "extrait": "il n’y a que votre employeur ou votre OPCO qui pourront prendre en charge cette participation financière obligatoire : cela signifie que vous pourrez leur demander un remboursement de ces 150 €"
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-10-08",
       "validite": {
         "debut": null,
         "fin": null
@@ -1094,22 +1093,27 @@
         "salarie",
         "demandeur_emploi"
       ],
-      "description": "Certification interprofessionnelle des savoirs de base destinée aux salariés et demandeurs d'emploi peu qualifiés. L'évaluation et les formations complémentaires sont finançables par le CPF sans plafond d'utilisation, par l'employeur (plan de développement des compétences), dans une période de reconversion ou, pour les demandeurs d'emploi, par France Travail.",
-      "criteres": {},
+      "description": "Certification interprofessionnelle des savoirs de base, enregistrée au répertoire spécifique, destinée aux salariés et demandeurs d'emploi peu qualifiés. L'évaluation et les formations complémentaires sont finançables par le CPF sans plafond d'utilisation, par l'employeur (plan de développement des compétences), dans une période de reconversion ou, pour les demandeurs d'emploi, par France Travail.",
+      "criteres": {
+        "certifications": [
+          "rs"
+        ]
+      },
       "conditions": [
+        "Concerne la seule certification CléA : une autre certification du répertoire spécifique relève du CPF, dans la limite de 1 500 €.",
         "Être salarié ou demandeur d'emploi, sans autre condition.",
         "Évaluation préalable par un organisme évaluateur, formations complémentaires si nécessaire, puis jury paritaire.",
         "Le plafond CPF de 1 500 € des certifications du répertoire spécifique ne s'applique pas à CléA.",
         "Participation forfaitaire de 150 € en cas de mobilisation du CPF, sauf exonération (demandeur d'emploi, abondement de l'employeur...)."
       ],
       "montant": {
-        "mode": "solde_cpf",
+        "mode": "non_chiffre",
         "valeur": null,
         "pourcentage": null,
         "base": null,
         "plafond": null,
         "duree_max_mois": null,
-        "libelle": "Évaluation et formations CléA finançables par le solde CPF sans plafond d'utilisation ; également par le plan de développement des compétences, la période de reconversion ou France Travail."
+        "libelle": "Pour la certification CléA uniquement : évaluation et formations finançables par le solde CPF sans le plafond de 1 500 € des autres certifications du répertoire spécifique, ou par le plan de développement des compétences, la période de reconversion ou France Travail. Le coût dépend des formations prescrites après l'évaluation préalable."
       },
       "cumul": {
         "cumulable": true,
@@ -1118,7 +1122,7 @@
           "nat-vae",
           "nat-bilan-competences"
         ],
-        "note": "Mobilise le même solde CPF que nat-cpf lorsqu'il est utilisé ; peut aussi être financé dans nat-periode-reconversion."
+        "note": "Mobilise le même solde CPF que nat-cpf : au choix avec lui, jamais additionné. Peut aussi être financé dans nat-periode-reconversion."
       },
       "demarches": [
         "Contacter un organisme évaluateur CléA de sa région ou de sa branche (certificat-clea.fr).",
@@ -1153,7 +1157,7 @@
           "extrait": "La période de reconversion peut aussi vous permettre l’acquisition de Cléa dont l’objectif est de prouver que vous maîtrisez les savoirs de base."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-10-08",
       "validite": {
         "debut": null,
         "fin": null

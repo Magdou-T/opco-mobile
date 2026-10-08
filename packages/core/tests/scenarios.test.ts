@@ -188,12 +188,12 @@ describe('scénarios de bout en bout (données réelles)', () => {
 
     // Variante : le même salarié chez un organisme à 90 €/h (12 600 €), avec 800 € sur son compte CPF.
     //   pédagogie : min(90 ; 60) x 140 h = 60 x 140 = 8 400 € pris en charge, reste (90 - 60) x 140 = 4 200 € ; 8 400 € < 10 000 € : le plafond annuel ne joue pas ;
-    //   plan, trois lignes empilées par ordre d'empilement : l'OPCO d'abord (8 400 €), puis le CPF, limité à son solde (800 €, sous le
-    //   reste de 4 200 €), puis l'abondement de l'employeur sur le CPF (nat-cpf-abondement-employeur), un forfait de 150 € : la
-    //   participation forfaitaire de 150 € que le salarié n'a plus à payer quand son employeur abonde son CPF
-    //   (https://www.service-public.gouv.fr/particuliers/vosdroits/F10705). Le catalogue la compte comme un financement du salarié
-    //   éligible au CPF, sans savoir si l'employeur abonde réellement ;
-    //   financé : 8 400 + 800 + 150 = 9 350 € ; reste à charge : 12 600 - 9 350 = 3 250 €.
+    //   plan, deux lignes empilées par ordre d'empilement : l'OPCO d'abord (8 400 €), puis le CPF, limité à son solde (800 €, sous le
+    //   reste de 4 200 €). La dotation volontaire de l'employeur sur le CPF (nat-cpf-abondement-employeur) n'est pas une ligne : c'est
+    //   l'argent de l'employeur, pas un financement extérieur, et 150 € est la participation forfaitaire dont elle dispense le salarié
+    //   (https://www.service-public.gouv.fr/particuliers/vosdroits/F10705), pas un montant d'aide : elle est listée sans montant
+    //   (jusqu'en octobre 2026, le catalogue la comptait comme une ligne de 150 € : financé 9 350 €, reste 3 250 €) ;
+    //   financé : 8 400 + 800 = 9 200 € ; reste à charge : 12 600 - 9 200 = 3 400 €.
     const cher = simuler({ ...parcours, pedagogyCostPerHour: 90, pedagogyCostTotal: 12600, soldeCpf: 800 });
     invariants(cher);
     expect(ligne(cher, 'pedagogie')).toMatchObject({ requestedAmount: 12600, fundedAmount: 8400, remainder: 4200 });
@@ -201,10 +201,10 @@ describe('scénarios de bout en bout (données réelles)', () => {
     expect(cher.plan.financements).toEqual([
       expect.objectContaining({ id: 'opco-pdc', montant: 8400 }),
       expect.objectContaining({ id: 'nat-cpf', montant: 800 }),
-      expect.objectContaining({ id: 'nat-cpf-abondement-employeur', montant: 150 }),
     ]);
-    expect(cher.plan.totalFinance).toBe(9350);
-    expect(cher.plan.resteACharge).toBe(3250);
+    expect(cher.plan.nonChiffrees.map((a) => a.id)).toContain('nat-cpf-abondement-employeur');
+    expect(cher.plan.totalFinance).toBe(9200);
+    expect(cher.plan.resteACharge).toBe(3400);
   });
 
   it('2. Entreprise de 120 salariés : règle des 50 salariés', () => {
@@ -372,7 +372,8 @@ describe('scénarios de bout en bout (données réelles)', () => {
     // par le Conseil d’Administration ». Le FAFCEA n'est donc qu'un repli après un refus du CPF, et son montant dépend de l'avis des
     // commissions techniques : le plan le liste sans le compter. Il ne reprend pas le tarif de la formation technique (35 €/h, soit
     // 35 x 100 h = 3 500 € au plus), qui ne vaut pas pour une formation RNCP.
-    // Le CPF, lui, est le droit du titulaire : son solde, plafond de 5 000 € non atteint.
+    // Le CPF, lui, est le droit du titulaire : son solde, dans la limite du coût (le plafond de 5 000 € borne les droits acquis
+    // chaque année, pas le solde du compte, qui comprend aussi les dotations).
     const parcours: Partial<WizardState> = {
       projetType: 'formation_dirigeant', regionCode: '53', companySize: 'less_11', statutDirigeant: 'artisan', microEntrepreneur: false,
       ageBeneficiaire: 45, formationType: 'certification', certificationLevel: 'rncp', niveauFormationVise: 5, eligibleCpf: true,
@@ -396,7 +397,7 @@ describe('scénarios de bout en bout (données réelles)', () => {
     expect(faible.plan.totalFinance).toBe(800);
     expect(faible.plan.resteACharge).toBe(3400);
 
-    // Solde CPF de 3 900 € : le CPF finance 3 900 € (sous le plafond de 5 000 € et sous le coût) ; le FAFCEA reste une option sans montant.
+    // Solde CPF de 3 900 € : le CPF finance 3 900 € (sous le coût) ; le FAFCEA reste une option sans montant.
     //   financé : 3 900 € ; reste à charge : 4 200 - 3 900 = 300 €.
     const fort = simuler({ ...parcours, soldeCpf: 3900 });
     invariants(fort);
