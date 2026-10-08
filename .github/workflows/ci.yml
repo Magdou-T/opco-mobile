@@ -3,8 +3,10 @@
 #
 # Quand : à chaque pull request vers main, à chaque push sur main, et à la demande (onglet Actions, « Run workflow »).
 # Une nouvelle exécution sur la même référence (branche ou pull request) annule la précédente, devenue inutile.
-# La pull request et le commit du pipeline IA (update-dataset.yml) sont faits avec le GITHUB_TOKEN : GitHub ne lance pas
-# ce workflow pour eux. Le lancer à la main (« Run workflow ») sur la branche bot/opco-dataset-update, ou sur main.
+# La pull request et le commit du pipeline IA (update-dataset.yml) sont faits avec le GITHUB_TOKEN. Quand le pipeline crée
+# ou met à jour sa pull request, ce workflow démarre en attente d'approbation : une personne qui a le droit d'écriture sur
+# le dépôt clique sur « Approve workflows to run » dans la pull request. Le commit direct sur main ne le déclenche pas :
+# le lancer à la main (« Run workflow »), ce qui fonctionne toujours.
 #
 # Ce que le job « verifier » fait, dans cet ordre :
 #   1. vérification de types du core, du backend, de l'app mobile et du site ;

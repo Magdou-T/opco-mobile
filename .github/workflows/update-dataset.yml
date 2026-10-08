@@ -34,9 +34,10 @@
 #     v4 (tâche 19 du plan docs/superpowers/plans/2026-10-05-aides-financements.md ; voir datasets/README.md), autoriser
 #     GitHub Actions à créer des pull requests (Settings > Actions > General > Workflow permissions), puis créer la
 #     variable et le secret.
-#   - Limite de GitHub : la pull request et le commit du pipeline sont faits avec le GITHUB_TOKEN, et ce qui est fait avec
-#     ce jeton ne déclenche aucun autre workflow : ci.yml ne tourne pas sur eux. Lancer la CI à la main (onglet Actions,
-#     CI, « Run workflow ») sur la branche bot/opco-dataset-update, ou sur main après un commit direct.
+#   - Limite de GitHub : la pull request et le commit du pipeline sont faits avec le GITHUB_TOKEN. Quand le pipeline crée
+#     ou met à jour sa pull request, ci.yml démarre en attente d'approbation : une personne qui a le droit d'écriture sur
+#     le dépôt clique sur « Approve workflows to run » dans la pull request. Le commit direct sur main ne déclenche pas
+#     ci.yml : lancer la CI à la main (onglet Actions, CI, « Run workflow »), ce qui fonctionne toujours.
 #
 # Échecs étrangers au code : npm ci dépend du registre npm, le contrôle des liens du réseau du runner (il ne bloque pas).
 # Relancer le job avant de chercher une cause dans le dépôt.
@@ -236,8 +237,10 @@ jobs:
             `rapport-pipeline-ia` du run, et le changelog de `datasets/manifest.json`.
             `report.json` n'est pas committé : le dossier `backend/out/` est ignoré par git.
 
-            La CI ne se lance pas d'elle-même sur cette pull request (limite du GITHUB_TOKEN) :
-            la lancer depuis l'onglet Actions (CI, « Run workflow », branche `bot/opco-dataset-update`).
+            La CI démarre sur cette pull request en attente d'approbation (pull request créée avec le
+            GITHUB_TOKEN) : une personne qui a le droit d'écriture sur le dépôt la lance avec
+            « Approve workflows to run », dans la pull request. « Run workflow » (onglet Actions, CI,
+            branche `bot/opco-dataset-update`) fonctionne aussi.
 
             Run : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           add-paths: |
