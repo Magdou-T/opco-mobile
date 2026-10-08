@@ -36,22 +36,39 @@ const sourcesPath = path.join(backendDir, 'sources', 'opco-sources.json');
 const cacheDir = path.join(backendDir, 'cache');
 
 // --- Mutations factices CONTRÔLÉES du dry-run --------------------------------
-// Elles n'existent que pour démontrer le cycle complet sans réseau ni IA :
-//  - atlas.cout_horaire_inter : +12 % -> doit être AUTO-APPLIQUÉ (sous le seuil).
-//  - atlas.budget_annuel_max  : +100 % -> doit partir en needsReview et être
+// Elles n'existent que pour démontrer le cycle complet sans réseau ni IA. Les deux premières cibles sont choisies dans
+// les données du moment : un OPCO écrit en dur peut perdre sa valeur à la vérification suivante (atlas depuis octobre
+// 2026), et sa mutation ne plus rien démontrer.
+//  - hausse : premier OPCO dont cout_horaire_inter est renseigné, +12 % -> doit être AUTO-APPLIQUÉ (sous le seuil).
+//  - doublement : premier OPCO dont budget_annuel_max est renseigné, +100 % -> doit partir en needsReview et être
 //    REVENU à l'ancienne valeur par le garde-fou de variation.
 //  - opcommerce.cout_horaire_inter : retiré de l'extraction -> not_found ->
 //    rétrogradation de la confiance, valeur conservée.
-function applyDryRunMutations(slug: string, extraction: ExtractionResult): ExtractionResult {
+interface CiblesDryRun {
+  hausse: string | null;
+  doublement: string | null;
+}
+
+function choisirCiblesDryRun(opcos: OpcoData[]): CiblesDryRun {
+  return {
+    hausse: opcos.find((o) => o.cout_horaire_inter.value != null)?.slug ?? null,
+    doublement: opcos.find((o) => o.budget_annuel_max.value != null)?.slug ?? null,
+  };
+}
+
+function applyDryRunMutations(slug: string, extraction: ExtractionResult, cibles: CiblesDryRun): ExtractionResult {
   const mutated = deepClone(extraction);
 
-  if (slug === 'atlas') {
+  if (slug === cibles.hausse) {
     const inter = mutated.fields.find((f) => f.field === 'cout_horaire_inter');
     if (inter && inter.value != null) {
       inter.value = Math.round(inter.value * 1.12 * 100) / 100; // +12 % (< seuil 50 %)
       inter.confidence = 'exact';
       inter.quote = '[dry-run] mutation contrôlée : simule une hausse tarifaire de 12 % publiée par la source';
     }
+  }
+
+  if (slug === cibles.doublement) {
     const budget = mutated.fields.find((f) => f.field === 'budget_annuel_max');
     if (budget && budget.value != null) {
       budget.value = budget.value * 2; // +100 % (> seuil) -> needsReview attendu
@@ -102,6 +119,13 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
   console.log(`\n=== Pipeline OPCO (${mode}), ${startedAt} ===`);
   console.log(`Modèles : EXTRACT_MODEL=${getExtractModel()} | VERIFY_MODEL=${getVerifyModel()}`);
   console.log(`Seuil de variation MAX_DELTA_PCT=${getMaxDeltaPct()} %`);
+  const cibles = choisirCiblesDryRun(current);
+  if (dryRun) {
+    console.log(
+      `Mutations contrôlées : cout_horaire_inter +12 % chez ${cibles.hausse ?? 'aucun OPCO (aucun montant renseigné)'}, ` +
+        `budget_annuel_max x2 chez ${cibles.doublement ?? 'aucun OPCO (aucun montant renseigné)'}, cout_horaire_inter retiré chez opcommerce`,
+    );
+  }
   console.log(`OPCO à traiter : ${current.length}\n`);
 
   const diffs: OpcoDiff[] = [];
@@ -123,7 +147,7 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
     // 2) EXTRACT (dry-run : simulation identité + mutations contrôlées ; live : IA)
     let extraction: ExtractionResult;
     if (dryRun) {
-      extraction = applyDryRunMutations(opco.slug, simulateExtractionFromCurrent(opco as unknown as { slug: string }));
+      extraction = applyDryRunMutations(opco.slug, simulateExtractionFromCurrent(opco as unknown as { slug: string }), cibles);
     } else {
       if (scraped.pages.length === 0) {
         console.warn(`[run] ${opco.slug}: aucune page scrapée, extraction vide (tout sera "not_found", confiances rétrogradées).`);
