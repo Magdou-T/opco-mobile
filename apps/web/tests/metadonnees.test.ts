@@ -3,6 +3,7 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { EMBEDDED_OPCOS } from '@opco/core';
+import robots from '../src/app/robots';
 import { LIEN_MENTIONS } from '../src/lib/mentions';
 import {
   ADRESSE_DU_SITE,
@@ -67,6 +68,11 @@ describe('métadonnées des pages', () => {
     assert.equal(new Set(chemins).size, chemins.length);
     assert.equal(PAGES.mentions.chemin, LIEN_MENTIONS.href);
     assert.equal(ADRESSE_DU_SITE, 'https://www.financementopco.fr');
+  });
+
+  test('robots.txt annonce le plan du site à l’adresse du site : une seule constante à changer avec le nom de domaine', () => {
+    assert.equal(robots().sitemap, `${ADRESSE_DU_SITE}/sitemap.xml`);
+    assert.doesNotMatch(ADRESSE_DU_SITE, /\/$/, 'sans barre finale : les adresses ajoutent la leur');
   });
 
   test('longueurs : description de l’accueil de 160 caractères au plus, titre de « Se former sans budget » de 72 au plus', () => {

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { EMBEDDED_NAF } from '@opco/core';
 import sitemap from '../src/app/sitemap';
 import { CONTACT_EMAIL } from '../src/lib/contact';
+import { ADRESSE_DU_SITE } from '../src/lib/metadonnees';
 import {
   LIBELLES_DES_CHAMPS,
   LIEN_MENTIONS,
@@ -33,8 +34,10 @@ function completes(): MentionsLegales {
 }
 
 describe('mentions légales : champs à compléter (mentionsIncompletes)', () => {
-  test('les informations que seul l’éditeur peut fournir sont vides, dans l’ordre de la page', () => {
-    assert.deepEqual(mentionsIncompletes(), [
+  test('les informations que seul l’éditeur peut fournir, laissées vides, sont signalées dans l’ordre de la page', () => {
+    // Un brouillon de l'éditeur : les faits publics du répertoire SIRENE remplis, les treize autres informations à null.
+    // Le test ne lit pas MENTIONS : il reste vrai le jour où l'éditeur a tout rempli.
+    const attendus = [
       { champ: 'editeur.capitalSocial', libelle: 'capital social' },
       { champ: 'editeur.villeRcs', libelle: 'ville du greffe (RCS)' },
       { champ: 'editeur.tvaIntracommunautaire', libelle: 'numéro de TVA intracommunautaire' },
@@ -48,7 +51,13 @@ describe('mentions légales : champs à compléter (mentionsIncompletes)', () =>
       { champ: 'donnees.dureeConservationContact', libelle: 'durée de conservation des messages de contact' },
       { champ: 'donnees.adresseExerciceDroits', libelle: "adresse d'exercice des droits" },
       { champ: 'donnees.delegueProtectionDonnees', libelle: 'délégué à la protection des données (facultatif)' },
-    ]);
+    ];
+    const brouillon = completes();
+    for (const { champ } of attendus) {
+      const [groupe, nom] = champ.split('.');
+      (brouillon[groupe as keyof MentionsLegales] as Record<string, string | null>)[nom] = null;
+    }
+    assert.deepEqual(mentionsIncompletes(brouillon), attendus);
   });
 
   test('page complète : aucun champ à compléter ; un champ rendu vide redevient à compléter', () => {
@@ -89,9 +98,15 @@ describe('mentions légales : faits publics préremplis (répertoire SIRENE, rel
     assert.equal(MENTIONS.editeur.courriel, CONTACT_EMAIL);
   });
 
-  test('aucune donnée légale devinée : directeur de la publication et hébergeur restent à compléter', () => {
-    assert.deepEqual(MENTIONS.directeurPublication, { nom: null, fonction: null });
-    assert.deepEqual(MENTIONS.hebergeur, { denomination: null, adresse: null, telephone: null });
+  test('un champ rempli n’est jamais un texte de remplissage ni une valeur avec des espaces en trop', () => {
+    // Vrai avant comme après la saisie des informations de l'éditeur : un champ vaut null (à compléter) ou une valeur réelle.
+    for (const [groupe, champs] of Object.entries(MENTIONS)) {
+      for (const [champ, valeur] of Object.entries(champs as Record<string, string | null>)) {
+        if (valeur === null) continue;
+        assert.doesNotMatch(valeur, /à compléter|a completer|todo|lorem|xxx/i, `${groupe}.${champ}`);
+        assert.equal(valeur, valeur.trim(), `${groupe}.${champ}`);
+      }
+    }
   });
 });
 
@@ -163,11 +178,13 @@ describe('mentions légales : page, pied de page et plan du site', () => {
   });
 
   test('plan du site : adresses à barre finale, accueil compris, mentions légales comprises', () => {
+    // L'adresse du site n'est pas répétée ici : tests/metadonnees.test.ts est le seul endroit qui la fixe.
     const adresses = sitemap().map((e) => e.url);
-    assert.ok(adresses.includes('https://www.financementopco.fr/mentions-legales/'), adresses.join(' '));
-    assert.equal(adresses[0], 'https://www.financementopco.fr/');
-    for (const a of adresses) assert.match(a, /^https:\/\/www\.financementopco\.fr\/(?:[a-z0-9-]+\/)*$/, a);
+    const echappee = ADRESSE_DU_SITE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    assert.ok(adresses.includes(`${ADRESSE_DU_SITE}/mentions-legales/`), adresses.join(' '));
+    assert.equal(adresses[0], `${ADRESSE_DU_SITE}/`);
+    for (const a of adresses) assert.match(a, new RegExp(`^${echappee}/(?:[a-z0-9-]+/)*$`), a);
     assert.equal(new Set(adresses).size, adresses.length);
-    assert.ok(adresses.includes('https://www.financementopco.fr/opco/akto/'));
+    assert.ok(adresses.includes(`${ADRESSE_DU_SITE}/opco/akto/`));
   });
 });
