@@ -300,15 +300,25 @@ function calcPedagogy(
       details.push(`Plafond horaire ${opco.name} : ${ceiling} €/h`);
       if (userCostPerHour > ceiling) {
         const reste = (userCostPerHour - ceiling) * hours;
-        details.push(`⚠ Votre coût (${userCostPerHour} €/h) dépasse le plafond → taux appliqué : ${ceiling} €/h`);
+        // Coût horaire égal au plafond une fois arrondi au centime (4 200,50 € sur 140 h : 30,0036 €/h, qui s'affiche
+        // 30 €/h) : le dépassement s'écrit en euros, jamais « 30 €/h dépasse le plafond de 30 €/h ». Montants inchangés.
+        const egalAuCentime = Math.round(userCostPerHour * 100) === Math.round(ceiling * 100);
+        details.push(
+          egalAuCentime
+            ? `⚠ Votre coût dépasse le plafond de ${reste.toFixed(2)} € sur la formation → taux appliqué : ${ceiling} €/h`
+            : `⚠ Votre coût (${userCostPerHour} €/h) dépasse le plafond → taux appliqué : ${ceiling} €/h`,
+        );
         details.push(`Calcul : ${ceiling} €/h × ${hours} h = ${(ceiling * hours).toFixed(2)} €`);
         details.push(`Reste à charge sur ce poste : ${reste.toFixed(2)} €`);
         warnings.push(
-          `Le coût horaire demandé (${userCostPerHour} €/h) dépasse le plafond ${opco.name} (${ceiling} €/h). ` +
-            `Le reste à charge est de ${reste.toFixed(2)} €.`,
+          egalAuCentime
+            ? `Le coût demandé dépasse le plafond ${opco.name} (${ceiling} €/h) de ${reste.toFixed(2)} € sur la formation : ce montant reste à charge.`
+            : `Le coût horaire demandé (${userCostPerHour} €/h) dépasse le plafond ${opco.name} (${ceiling} €/h). ` +
+                `Le reste à charge est de ${reste.toFixed(2)} €.`,
         );
       } else {
-        details.push('Votre coût est dans le plafond → intégralement pris en charge');
+        // Une estimation : l'OPCO peut refuser la prise en charge (fonds épuisés, étude du dossier).
+        details.push("Votre coût horaire ne dépasse pas le plafond : l'estimation le retient en entier.");
         details.push(`Calcul : ${userCostPerHour} €/h × ${hours} h = ${(userCostPerHour * hours).toFixed(2)} €`);
       }
     } else if (budgetAnnuelPublie) {
@@ -450,7 +460,7 @@ function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
       details.push(`⚠ Votre coût dépasse le plafond → taux appliqué : ${ceiling} €/nuit`);
       details.push(`Calcul : ${ceiling} €/nuit × ${nights} nuits = ${funded.toFixed(2)} €`);
     } else {
-      details.push('Votre coût est dans le plafond → intégralement pris en charge');
+      details.push("Votre coût par nuit ne dépasse pas le plafond : l'estimation le retient en entier.");
     }
     return line('hebergement', 'Hébergement', requested, funded, confidence, sourceUrl, `Plafond : ${ceiling} €/nuit`, details);
   }
@@ -506,7 +516,7 @@ function calcMeals(opco: OpcoData, state: WizardState): FundingLine {
       `Calcul : ${tarif(tauxApplique)} × ${days} jours = ${funded.toFixed(2)} €`,
       requested > funded
         ? `Reste à charge : ${(requested - funded).toFixed(2)} €`
-        : 'Intégralement couvert par le forfait',
+        : "Votre coût ne dépasse pas le forfait : l'estimation le retient en entier.",
     );
     return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, `${tarif(tauxApplique)} × ${days} jours`, details);
   }

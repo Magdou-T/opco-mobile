@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { calculateFunding, applyVarianteBranche } from '../src/calculator';
+import { EMBEDDED_OPCOS } from '../src/data';
 import type { AlerteOpco, Confidence, DispositifComplementaire, OpcoData, PlafondTaille, VarianteBranche, WizardState } from '../src/types';
 import { makeOpco, makeFormationState } from './fixtures';
 
@@ -37,6 +38,77 @@ describe('calculateFunding — coûts pédagogiques', () => {
     // Ni plafond horaire ni budget annuel publiés : rien ne borne le montant, il n'est donc pas compté comme financé
     // (avant la tâche 8a, le coût saisi entier était financé).
     expect(peda.fundedAmount).toBe(0);
+  });
+});
+
+describe('calculateFunding, textes du calcul : rien de plus fort que l’estimation, dépassement lisible au centime', () => {
+  const opcoA = (plafond: number) => makeOpco({ cout_horaire_inter: { value: plafond, confidence: 'exact', source_url: 'x' } });
+  const pedagogie = (r: ReturnType<typeof calculateFunding>) => r.lines.find((l) => l.poste === 'pedagogie')!;
+
+  it('coût horaire sous le plafond : l’estimation le retient en entier, sans promettre une prise en charge', () => {
+    const r = calculateFunding(opcoA(40), makeFormationState({ durationHours: 100, pedagogyCostPerHour: 30 }));
+    expect(pedagogie(r).details).toContain("Votre coût horaire ne dépasse pas le plafond : l'estimation le retient en entier.");
+    expect(pedagogie(r).fundedAmount).toBe(3000);
+  });
+
+  it('hébergement sous le plafond, repas sous le forfait : même formulation', () => {
+    const opco = makeOpco({
+      frais_hebergement: { value: 100, confidence: 'exact', source_url: 'x' },
+      frais_restauration: { value: 20, confidence: 'exact', source_url: 'x' },
+    });
+    const r = calculateFunding(
+      opco,
+      makeFormationState({
+        needsAccommodation: true, accommodationCostPerNight: 80, accommodationNights: 2, needsMeals: true, mealCostPerDay: 15, trainingDays: 5,
+      }),
+    );
+    const heb = r.lines.find((l) => l.poste === 'hebergement')!;
+    const repas = r.lines.find((l) => l.poste === 'restauration')!;
+    expect(heb.details).toContain("Votre coût par nuit ne dépasse pas le plafond : l'estimation le retient en entier.");
+    expect(repas.details).toContain("Votre coût ne dépasse pas le forfait : l'estimation le retient en entier.");
+    expect([heb.fundedAmount, repas.fundedAmount]).toEqual([160, 75]);
+  });
+
+  it('données réelles, tous OPCO et branches : aucun texte du calcul ne promet plus que l’estimation', () => {
+    const PROMESSES = /intégralement|garanti|assuré|totalité/i;
+    let textes = 0;
+    for (const opco of EMBEDDED_OPCOS) {
+      for (const idcc of [null, ...(opco.variantes_branche ?? []).map((v) => v.idcc[0] ?? null)]) {
+        for (const over of [
+          { durationHours: 21, pedagogyCostTotal: 300, pedagogyCostPerHour: 300 / 21 },
+          { durationHours: 7, pedagogyCostTotal: 140, pedagogyCostPerHour: 20, needsMeals: true, mealCostPerDay: 5, trainingDays: 1 },
+          { durationHours: 14, pedagogyCostTotal: 280, pedagogyCostPerHour: 20, needsAccommodation: true, accommodationCostPerNight: 30, accommodationNights: 1 },
+        ]) {
+          const r = calculateFunding(opco, makeFormationState({ selectedOpcoSlug: opco.slug, detectedIdcc: idcc, trainingMode: 'presentiel', ...over }));
+          for (const t of [...r.lines.flatMap((l) => [l.note ?? '', ...(l.details ?? [])]), ...r.warnings]) {
+            textes++;
+            expect(t, `${opco.slug} ${idcc}`).not.toMatch(PROMESSES);
+          }
+        }
+      }
+    }
+    expect(textes).toBeGreaterThan(1000);
+  });
+
+  it('coût horaire égal au plafond une fois arrondi au centime (4 200,50 € sur 140 h, plafond 30 €/h) : dépassement écrit en euros, montants inchangés', () => {
+    const r = calculateFunding(
+      opcoA(30),
+      makeFormationState({ durationHours: 140, pedagogyCostTotal: 4200.5, pedagogyCostPerHour: 4200.5 / 140 }),
+    );
+    const peda = pedagogie(r);
+    // (4 200,50 / 140 - 30) x 140 = 0,50 € au-dessus du plafond : 4 200 € financés, 0,50 € de reste.
+    expect(peda).toMatchObject({ requestedAmount: 4200.5, fundedAmount: 4200, remainder: 0.5 });
+    expect(peda.details).toContain('⚠ Votre coût dépasse le plafond de 0.50 € sur la formation → taux appliqué : 30 €/h');
+    expect(r.warnings).toContain('Le coût demandé dépasse le plafond Test OPCO (30 €/h) de 0.50 € sur la formation : ce montant reste à charge.');
+    // Jamais un coût horaire qui s'affiche 30 €/h présenté au-dessus d'un plafond de 30 €/h.
+    expect([...(peda.details ?? []), ...r.warnings].filter((t) => /\(30(?:\.\d+)? €\/h\) dépasse/.test(t))).toEqual([]);
+  });
+
+  it('coût horaire au-dessus du plafond une fois arrondi (30,10 €/h) : le dépassement reste écrit en €/h', () => {
+    const r = calculateFunding(opcoA(30), makeFormationState({ durationHours: 140, pedagogyCostTotal: 4214, pedagogyCostPerHour: 4214 / 140 }));
+    expect(pedagogie(r).details).toContain('⚠ Votre coût (30.1 €/h) dépasse le plafond → taux appliqué : 30 €/h');
+    expect(r.warnings).toContain('Le coût horaire demandé (30.1 €/h) dépasse le plafond Test OPCO (30 €/h). Le reste à charge est de 14.00 €.');
+    expect(pedagogie(r)).toMatchObject({ fundedAmount: 4200, remainder: 14 });
   });
 });
 
