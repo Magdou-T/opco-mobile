@@ -27,7 +27,7 @@ Les adresses se terminent par une barre oblique (`/simulateur/`, réglage `trail
 
 Le `.htaccess` règle l'encodage (UTF-8), interdit la liste des dossiers (`Options -Indexes`), désigne `404.html` comme page d'erreur 404, compresse les textes et fixe la durée de mise en cache :
 
-- le HTML reçoit `max-age=0` : le navigateur peut le garder, mais redemande au serveur à chaque visite s'il a changé (ce n'est pas une interdiction de mise en cache comme `no-store`) ;
+- le HTML et les fichiers `.txt` reçoivent `max-age=0` : le navigateur peut les garder, mais redemande au serveur à chaque visite s'ils ont changé (ce n'est pas une interdiction de mise en cache comme `no-store`). Les `.txt` sont surtout les fichiers de navigation de Next (`index.txt`, `__next.*.txt`), qui changent à chaque build : une copie gardée d'un dépôt précédent ne correspondrait plus aux pages en ligne. `robots.txt` suit la même règle ;
 - `sitemap.xml` est gardé une heure, `favicon.ico` et les images SVG un mois, les scripts, feuilles de style et polices un an, car leurs noms changent quand leur contenu change.
 
 Il ne contient aucune réécriture ni redirection : la redirection vers HTTPS se règle chez l'hébergeur (§ 5), celle entre `www` et le domaine nu est une décision à prendre (§ 3).
@@ -159,9 +159,9 @@ Les libellés de hPanel viennent des pages d'aide d'Hostinger relues le 08/10/20
 7. Vérifier que `index.html`, `.htaccess` et le dossier `_next` se trouvent directement dans `public_html`, sans dossier intermédiaire : l'archive a la forme de celle de juillet, mais la boîte d'extraction décide où elle la déploie. Le Gestionnaire de fichiers affiche les fichiers cachés par défaut (aide d'Hostinger) : `.htaccess` doit apparaître dans la liste.
 8. Supprimer l'archive du serveur : tant qu'elle y reste, n'importe qui peut la télécharger à son adresse.
 9. Certificat SSL : page SSL du site (l'aide conseille de chercher « SSL » dans la barre latérale du tableau de bord). Le certificat doit être installé et actif sur le domaine final, et sur `www` comme sur le domaine nu si les deux servent. D'après l'aide, HTTPS est forcé par défaut dès qu'un certificat est installé ; vérifier que Forcer HTTPS (Force HTTPS, dans le menu de la ligne du domaine) est actif. Ce réglage vit dans le compte d'hébergement, hors du dépôt : c'est pourquoi le `.htaccess` ne contient aucune redirection vers HTTPS.
-10. Après chaque dépôt, vider le cache du serveur : tableau de bord du site, rubrique Avancé, Gestionnaire de cache (Cache Manager), bouton Purger tout (Purge all). Sans cela, des visiteurs peuvent recevoir les anciennes pages.
+10. Après chaque dépôt, vider le cache du serveur : tableau de bord du site, rubrique Avancé, Gestionnaire de cache (Cache Manager), puis purger le cache de tout le site (l'aide décrit aussi la purge d'une seule adresse). Sans cela, des visiteurs peuvent recevoir les anciennes pages.
 
-Pages d'aide Hostinger consultées le 08/10/2026 : [extraire une archive](https://www.hostinger.com/support/1583613-how-to-extract-archives-using-the-file-manager-in-hostinger/), [sauvegardes](https://docs.hostinger.com/websites/backups), [fichiers cachés et `.htaccess`](https://www.hostinger.com/support/1583395-what-to-do-if-the-htaccess-file-is-missing/), [page d'attente `default.php`](https://www.hostinger.com/support/5811527-the-website-shows-a-you-are-all-set-to-go-message/), [activer HTTPS](https://www.hostinger.com/support/1583201-how-to-enable-or-disable-https-for-your-website-at-hostinger/), [gestionnaire de cache](https://www.hostinger.com/support/6215624-how-to-use-cache-manager-at-hostinger/).
+Pages d'aide Hostinger consultées le 08/10/2026 : [extraire une archive](https://www.hostinger.com/support/1583613-how-to-extract-archives-using-the-file-manager-in-hostinger/), [sauvegardes](https://docs.hostinger.com/websites/backups), [fichiers cachés et `.htaccess`](https://www.hostinger.com/support/1583307-how-to-create-an-htaccess-file-at-hostinger/), [page d'attente `default.php`](https://www.hostinger.com/support/5811527-the-website-shows-a-you-are-all-set-to-go-message/), [activer HTTPS](https://www.hostinger.com/support/1583201-how-to-enable-or-disable-https-for-your-website-at-hostinger/), [gestionnaire de cache](https://www.hostinger.com/support/6215624-how-to-use-cache-manager-at-hostinger/).
 
 Entre la suppression et la fin de l'extraction, le site est indisponible : choisir un moment calme.
 
@@ -195,6 +195,7 @@ Refaire les étapes 3 à 8 et 10 du § 5 avec l'archive précédente : `financem
 - **Safari et iOS non testés.** Les essais ont eu lieu dans un navigateur Chromium. À vérifier sur un iPhone après le dépôt : la barre de navigation collante du simulateur et le menu mobile.
 - **Écran de résultats chargé à la demande.** L'écran de résultats et le catalogue d'aides forment un lot JavaScript d'environ 800 Ko (150 Ko compressés), téléchargé quand l'écran s'affiche et non avec la page. Si la connexion tombe à ce moment, l'écran propose de recharger la page et les réponses sont à saisir de nouveau : le site ne conserve aucune réponse, par choix. Un visiteur qui avait ouvert le simulateur avant un nouveau dépôt peut voir le même écran, car le nom d'un fichier change quand son contenu change et l'ancien n'existe plus.
 - **Données figées au build.** Voir le § 2.
+- **Pistes.** Le `.htaccess` n'envoie aucun en-tête de sécurité (`X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`) : un site statique sans cookie ni compte s'en passe pour cette publication. À ajouter dans une prochaine version, puis à vérifier sur l'hébergement réel : le serveur de test local ne lit pas le `.htaccess`.
 
 ## 9. Ce qui reste à faire de votre côté
 

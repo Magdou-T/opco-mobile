@@ -15,6 +15,8 @@ ErrorDocument 404 /404.html
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
+  # Fichiers .txt de navigation de Next.js (index.txt, __next.*.txt), liés au build : revalidés comme le HTML.
+  ExpiresByType text/plain "access plus 0 seconds"
   ExpiresByType application/xml "access plus 1 hour"
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
