@@ -8,7 +8,10 @@
 // ============================================================
 
 import { describe, it, expect } from 'vitest';
+import { construirePlan } from '../src/aides/plan';
+import { profilDepuisWizard } from '../src/aides/profil';
 import { applyVarianteBranche, calculateFunding } from '../src/calculator';
+import { EMBEDDED_OPCOS, getEmbeddedOpcoBySlug } from '../src/data';
 import { OpcoDataSchema, PlafondTailleSchema, VarianteBrancheSchema } from '../src/schema';
 import type { FundingResult, OpcoData, PlafondTaille, VarianteBranche, WizardState } from '../src/types';
 import { makeFormationState, makeOpco } from './fixtures';
@@ -341,5 +344,247 @@ describe('schéma : indicateurs des actions qualifiantes', () => {
     expect(OpcoDataSchema.safeParse({ ...opco, frais_annexes_pourcentage_qualifiant: 'oui' }).success).toBe(false);
     expect(VarianteBrancheSchema.safeParse({ ...opco.variantes_branche![0], frais_annexes_pourcentage_qualifiant: 1 }).success).toBe(false);
     expect(PlafondTailleSchema.safeParse({ ...taille('11_49'), prise_en_charge_salaires_qualifiant: 'true' }).success).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Données réelles. Fiche officielle « Modalites_Batiment_PDC_2026.pdf » (Constructys, septembre 2026, archive
+// https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip), relue le 2026-10-08 :
+// « Entreprises de moins de 11 salariés Plafond : 15 € HT / heure / stagiaire. Sauf FEEBAT plafond : 100 € HT / jour / stagiaire. »
+// « Entreprises de 11 à moins de 50 salariés Plafond : 10 € HT / heure / stagiaire uniquement pour les actions qualifiantes. »
+// « Frais annexes (uniquement pour les actions qualifiantes) : Plafond : 8 % des coûts pédagogiques financés par Constructys
+// dans la limite de 1 500 € HT / stagiaire. »
+// ---------------------------------------------------------------------------
+
+describe('Constructys (données réelles) : salaires et forfait réservés aux actions qualifiantes', () => {
+  const constructys = getEmbeddedOpcoBySlug('constructys')!;
+  /** Profil du constat : formation de 21 h à 1 200 € (57,14 €/h). */
+  const profil = (over: Partial<WizardState>): WizardState =>
+    makeFormationState({
+      selectedOpcoSlug: 'constructys',
+      companySize: '11_49',
+      trainingMode: 'presentiel',
+      durationHours: 21,
+      pedagogyCostTotal: 1200,
+      pedagogyCostPerHour: 1200 / 21,
+      ...over,
+    });
+  const montants = (r: FundingResult) => ({
+    pedagogie: poste(r, 'pedagogie')!.fundedAmount,
+    salaires: poste(r, 'salaires')!.fundedAmount,
+    forfait: poste(r, 'frais_annexes')?.fundedAmount ?? null,
+    total: r.totalFunded,
+  });
+  /** Le barème par défaut de Constructys est celui du Bâtiment ; la variante le répète (choisie ou détectée par l'IDCC 1597). */
+  const BATIMENT: [string, Partial<WizardState>][] = [
+    ['barème par défaut', {}],
+    ['Bâtiment choisi', { selectedBrancheId: 'batiment' }],
+    ['IDCC 1597 détecté', { detectedIdcc: '1597' }],
+  ];
+
+  it.each(BATIMENT)('%s, 11 à 49 salariés : 0 € de salaires et de forfait pour une formation non qualifiante (399 € au lieu de 640,92 €)', (_, branche) => {
+    for (const [nom, declaration] of NON_QUALIFIANTES) {
+      expect(montants(calculateFunding(constructys, profil({ ...branche, ...declaration }))), nom).toEqual({
+        pedagogie: 399,
+        salaires: 0,
+        forfait: 0,
+        total: 399,
+      });
+    }
+  });
+
+  it.each(BATIMENT)('%s, 11 à 49 salariés : 210 € de salaires et 31,92 € de forfait pour une certification RNCP, un diplôme ou un CQP', (_, branche) => {
+    for (const [nom, declaration] of QUALIFIANTES) {
+      expect(montants(calculateFunding(constructys, profil({ ...branche, ...declaration }))), nom).toEqual({
+        pedagogie: 399,
+        salaires: 210,
+        forfait: 31.92,
+        total: 640.92,
+      });
+    }
+  });
+
+  it.each(BATIMENT)('%s, moins de 11 salariés : 15 €/h de salaires pour toute formation, forfait pour une action qualifiante seulement', (_, branche) => {
+    for (const [nom, declaration] of NON_QUALIFIANTES) {
+      expect(montants(calculateFunding(constructys, profil({ companySize: 'less_11', ...branche, ...declaration }))), nom).toEqual({
+        pedagogie: 504,
+        salaires: 315,
+        forfait: 0,
+        total: 819,
+      });
+    }
+    for (const [nom, declaration] of QUALIFIANTES) {
+      expect(montants(calculateFunding(constructys, profil({ companySize: 'less_11', ...branche, ...declaration }))), nom).toEqual({
+        pedagogie: 504,
+        salaires: 315,
+        forfait: 40.32,
+        total: 859.32,
+      });
+    }
+  });
+
+  it('50 salariés et plus : plan fermé quel que soit le type (aucune enveloppe publiée pour le Bâtiment de 50 à 299 salariés)', () => {
+    for (const companySize of ['50_299', '300_plus'] as const) {
+      for (const [nom, declaration] of [...NON_QUALIFIANTES, ...QUALIFIANTES]) {
+        const r = calculateFunding(constructys, profil({ companySize, ...declaration }));
+        expect([r.pdcFerme, r.totalFunded], `${companySize} ${nom}`).toEqual([true, 0]);
+      }
+    }
+  });
+
+  it('Travaux publics et Négoce : le type de formation ne change rien (aucune réserve), le Négoce ne finance ni salaires ni forfait', () => {
+    for (const [branche, companySize] of [
+      ['travaux-publics', 'less_11'],
+      ['travaux-publics', '11_49'],
+      ['negoce-materiaux', 'less_11'],
+      ['negoce-materiaux', '11_49'],
+    ] as const) {
+      const resultats = [...NON_QUALIFIANTES, ...QUALIFIANTES].map(([, d]) =>
+        calculateFunding(constructys, profil({ selectedBrancheId: branche, companySize, ...d })),
+      );
+      expect(new Set(resultats.map((r) => JSON.stringify(montants(r)))).size, `${branche} ${companySize}`).toBe(1);
+      expect(resultats.flatMap(avertissementsQualifiants), `${branche} ${companySize}`).toEqual([]);
+      expect(poste(resultats[0], 'frais_annexes'), `${branche} ${companySize}`).toBeUndefined();
+    }
+    expect(montants(calculateFunding(constructys, profil({ selectedBrancheId: 'travaux-publics', companySize: 'less_11' })))).toEqual({
+      pedagogie: 672,
+      salaires: 315,
+      forfait: null,
+      total: 987,
+    });
+    for (const companySize of ['less_11', '11_49'] as const) {
+      expect(montants(calculateFunding(constructys, profil({ selectedBrancheId: 'negoce-materiaux', companySize }))), companySize).toEqual({
+        pedagogie: 630,
+        salaires: 0,
+        forfait: null,
+        total: 630,
+      });
+    }
+  });
+
+  it('le point d’attention affiché nomme les deux postes, leurs taux et la condition (Bâtiment, 11 à 49 salariés, formation courte)', () => {
+    const r = calculateFunding(constructys, profil({ formationType: 'non_certifiante' }));
+    expect(avertissementsQualifiants(r)).toEqual([
+      `Constructys réserve la prise en charge des salaires (10${NBSP}€/h) et le forfait de frais annexes (8${NBSP}% des coûts pédagogiques) ` +
+        `aux actions qualifiantes : ${DEFINITION}. Votre formation n'est pas déclarée comme telle : ces postes ne sont pas comptés.`,
+    ]);
+    expect(poste(r, 'salaires')!.sourceUrl).toBe('https://www.constructys.fr/conditions-de-prise-en-charge-2/');
+    expect(poste(r, 'frais_annexes')!.sourceUrl).toBe('https://www.constructys.fr/conditions-de-prise-en-charge-2/');
+  });
+
+  it('les indicateurs sont posés là où la fiche Bâtiment 2026 les écrit, et nulle part ailleurs', () => {
+    const batiment = constructys.variantes_branche!.find((v) => v.id === 'batiment')!;
+    // Forfait : barème par défaut (le Bâtiment) et variante Bâtiment, qui le répète.
+    expect([constructys.frais_annexes_pourcentage_qualifiant, batiment.frais_annexes_pourcentage_qualifiant]).toEqual([true, true]);
+    // Salaires : 11 à 49 salariés seulement (sous 11 salariés, 15 €/h pour toute formation).
+    const tailles = (plafonds: PlafondTaille[] | undefined) =>
+      Object.fromEntries((plafonds ?? []).map((p) => [p.taille, p.prise_en_charge_salaires_qualifiant ?? null]));
+    const attendu = { less_11: null, '11_49': true, '50_299': null, '300_plus': null };
+    expect(tailles(constructys.plafonds_par_taille)).toEqual(attendu);
+    expect(tailles(batiment.plafonds_par_taille)).toEqual(attendu);
+    // Travaux publics et Négoce : aucun forfait (8 % propre au Bâtiment) ni réserve sur les salaires.
+    for (const id of ['travaux-publics', 'negoce-materiaux']) {
+      const v = constructys.variantes_branche!.find((x) => x.id === id)!;
+      expect(v.frais_annexes_pourcentage!.value, id).toBeNull();
+      expect(v.frais_annexes_pourcentage_qualifiant, id).toBeUndefined();
+      expect(Object.values(tailles(v.plafonds_par_taille)).every((x) => x === null), id).toBe(true);
+    }
+    // Aucun autre OPCO ne porte ces indicateurs (balayage des 11 OPCO du 2026-10-08).
+    const porteurs = EMBEDDED_OPCOS.filter((o) =>
+      JSON.stringify(o).match(/"(?:frais_annexes_pourcentage|prise_en_charge_salaires)_qualifiant"/),
+    ).map((o) => o.slug);
+    expect(porteurs).toEqual(['constructys']);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Balayage des 11 OPCO, toutes branches, à graine fixe.
+// ---------------------------------------------------------------------------
+
+/** mulberry32 : tirages indépendants et reproductibles. */
+function generateur(graine: number) {
+  let etatInterne = graine;
+  return (n: number) => {
+    etatInterne = (etatInterne + 0x6d2b79f5) | 0;
+    let t = Math.imul(etatInterne ^ (etatInterne >>> 15), 1 | etatInterne);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+  };
+}
+
+describe('balayage des 11 OPCO et de leurs branches (graine 2026) : la réserve ne fait jamais gagner une formation non qualifiante', () => {
+  it('aucun NaN, aucun poste financé au-delà de sa demande, plan dans la limite du coût ; à pédagogie égale, le profil non qualifiant ne reçoit jamais plus', () => {
+    const hasard = generateur(2026);
+    const un = <T,>(liste: readonly T[]): T => liste[hasard(liste.length)];
+    const compte = { paires: 0, comparees: 0, retires: 0, opcos: new Set<string>() };
+    const pedagogie = (r: FundingResult) => poste(r, 'pedagogie')!.fundedAmount;
+    const montantDe = (r: FundingResult, p: string) => poste(r, p)?.fundedAmount ?? 0;
+    for (; compte.paires < 3000; compte.paires++) {
+      const opco = un(EMBEDDED_OPCOS);
+      const heures = un([7, 21, 35, 140, 400, 1200]);
+      const cout = un([150, 600, 1200, 3500, 9000, 24000]);
+      const commun: Partial<WizardState> = {
+        projetType: 'formation_salarie',
+        selectedOpcoSlug: opco.slug,
+        selectedBrancheId: un([null, ...(opco.variantes_branche ?? []).map((v) => v.id)]),
+        companySize: un(['less_11', '11_49', '50_299', '300_plus'] as const),
+        trainingMode: 'presentiel',
+        durationHours: heures,
+        pedagogyCostTotal: cout,
+        pedagogyCostPerHour: cout / heures,
+        needsTransport: hasard(2) === 0,
+        needsAccommodation: hasard(2) === 0,
+        accommodationNights: un([1, 2, 5]),
+        accommodationCostPerNight: un([60, 120, 200]),
+        needsMeals: hasard(2) === 0,
+        mealCostPerDay: un([12, 20, 30]),
+        trainingDays: Math.max(1, Math.round(heures / 7)),
+        budgetDejaConsomme: un([null, 0, 500]),
+      };
+      const etats = [
+        makeFormationState({ ...commun, ...un(NON_QUALIFIANTES)[1] }),
+        makeFormationState({ ...commun, ...un(QUALIFIANTES)[1] }),
+      ];
+      const [non, qual] = etats.map((e) => calculateFunding(opco, e));
+      etats.forEach((e, i) => {
+        const r = [non, qual][i];
+        const contexte = `${opco.slug} ${JSON.stringify(e)}`;
+        const nombres = [
+          r.totalRequested,
+          r.totalFunded,
+          r.totalRemainder,
+          r.enveloppeMaxPotentielle,
+          ...r.lines.flatMap((l) => [l.requestedAmount, l.fundedAmount, l.remainder]),
+          ...r.dispositifsComplementaires.map((d) => d.montantEstime ?? 0),
+        ];
+        expect(nombres.every(Number.isFinite), contexte).toBe(true);
+        for (const l of r.lines) {
+          expect(l.fundedAmount, `${contexte} ${l.poste}`).toBeGreaterThanOrEqual(0);
+          expect(l.fundedAmount, `${contexte} ${l.poste}`).toBeLessThanOrEqual(l.requestedAmount + 0.005);
+        }
+        expect(r.totalFunded, contexte).toBeLessThanOrEqual(r.totalRequested + 0.005);
+        const plan = construirePlan(r, [], profilDepuisWizard(e, opco.slug));
+        expect(plan.totalFinance, contexte).toBeLessThanOrEqual(plan.coutFormation + 0.005);
+      });
+      // À pédagogie égale et sans plafond annuel appliqué, seule la réserve distingue les deux profils : jamais plus pour
+      // le profil non qualifiant, ni sur les salaires, ni sur les frais annexes, ni au total. Ailleurs la pédagogie peut
+      // différer selon le type pour d'autres raisons (plafond des certifications plus bas chez OPCO EP, barème dégressif
+      // réservé aux certifiantes chez Uniformation) : la comparaison des totaux n'y dirait rien de la réserve.
+      if (pedagogie(non) === pedagogie(qual) && !non.budgetCapApplied && !qual.budgetCapApplied) {
+        compte.comparees++;
+        const contexte = `${opco.slug} ${JSON.stringify(etats[0])}`;
+        expect(montantDe(non, 'salaires'), contexte).toBeLessThanOrEqual(montantDe(qual, 'salaires') + 0.005);
+        expect(montantDe(non, 'frais_annexes'), contexte).toBeLessThanOrEqual(montantDe(qual, 'frais_annexes') + 0.005);
+        expect(non.totalFunded, contexte).toBeLessThanOrEqual(qual.totalFunded + 0.005);
+        if (non.totalFunded < qual.totalFunded - 0.005) {
+          compte.retires++;
+          compte.opcos.add(opco.slug);
+        }
+      }
+    }
+    // Le balayage exerce la réserve (Constructys) et compare la plupart des paires.
+    expect(compte.comparees, JSON.stringify(compte)).toBeGreaterThan(2000);
+    expect(compte.retires, JSON.stringify(compte)).toBeGreaterThan(30);
+    expect([...compte.opcos]).toEqual(['constructys']);
   });
 });

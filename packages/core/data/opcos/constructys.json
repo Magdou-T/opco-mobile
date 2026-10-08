@@ -38,7 +38,7 @@
     "value": 15,
     "confidence": "estimated",
     "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-    "note": "« Entreprises de moins de 11 salariés Plafond : 15 € HT / heure / stagiaire. Sauf FEEBAT plafond : 100 € HT / jour / stagiaire. » ; « Plafond : 10 € HT / heure / stagiaire uniquement pour les actions qualifiantes. » Valeur exacte pour le Bâtiment de moins de 11 salariés uniquement. Bâtiment 11-49 : 10 € HT/h pour les seules actions qualifiantes (15 € HT/h création-reprise-transmission et AFEST), rien pour les actions non qualifiantes. TP : 15 €/h hors budget ; Négoce : non publié. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+    "note": "« Entreprises de moins de 11 salariés Plafond : 15 € HT / heure / stagiaire. Sauf FEEBAT plafond : 100 € HT / jour / stagiaire. » ; « Plafond : 10 € HT / heure / stagiaire uniquement pour les actions qualifiantes. » Valeur exacte pour le Bâtiment de moins de 11 salariés uniquement. Bâtiment 11-49 : 10 € HT/h pour les seules actions qualifiantes, 0 € dans l'estimation pour les autres formations (15 € HT/h pour la création, la reprise ou la transmission d'entreprise et les heures en AFEST, non comptés). TP : 15 €/h hors budget ; Négoce : non publié. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; condition des actions qualifiantes relue le 2026-10-08)"
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
   "frais_transport": {
@@ -63,8 +63,9 @@
     "value": 8,
     "confidence": "estimated",
     "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-    "note": "« Plafond : 8 % des coûts pédagogiques financés par Constructys dans la limite de 1 500 € HT / stagiaire. » ; « (uniquement pour les actions qualifiantes) : » Bâtiment, moins de 50 salariés, actions qualifiantes uniquement (0 € pour les actions non qualifiantes) ; plafond de 1 500 € HT par stagiaire non pris en compte dans l'estimation. Pas de forfait équivalent en TP ni en Négoce. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+    "note": "« Plafond : 8 % des coûts pédagogiques financés par Constructys dans la limite de 1 500 € HT / stagiaire. » ; « (uniquement pour les actions qualifiantes) : » ; « Par action qualifiante (qualification CCN Bâtiment / certification RNCP / blocs de compétences / CQP inscrits ou non au RNCP) » Bâtiment, moins de 50 salariés : forfait réservé aux actions qualifiantes, 0 € pour les autres formations (l'estimation le compte pour une certification visée enregistrée au RNCP, un diplôme ou un CQP) ; plafond de 1 500 € HT par stagiaire non pris en compte dans l'estimation. Pas de forfait équivalent en TP ni en Négoce. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; condition des actions qualifiantes relue le 2026-10-08)"
   },
+  "frais_annexes_pourcentage_qualifiant": true,
   "budget_annuel_max": {
     "value": null,
     "confidence": "exact",
@@ -112,8 +113,9 @@
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": 1200,
-      "description": "Bâtiment 11 à 49 salariés : 19 € HT/h/stagiaire depuis le 1er juin 2026 (intra 665 €/jour/groupe), salaires 10 € HT/h en qualifiant ; 300 h (non qualifiant) ou 1 200 h et 3 stagiaires/an (qualifiant).",
-      "prise_en_charge_salaires_horaire": 10
+      "description": "Bâtiment 11 à 49 salariés : 19 € HT/h/stagiaire depuis le 1er juin 2026 (intra 665 €/jour/groupe) ; salaires 10 € HT/h pour les seules actions qualifiantes (15 € HT/h pour les actions de création, reprise, transmission ou gestion d'entreprise et pour les heures de formation en situation de travail, non comptés dans l'estimation) ; 300 h (non qualifiant) ou 1 200 h et 3 stagiaires/an (qualifiant).",
+      "prise_en_charge_salaires_horaire": 10,
+      "prise_en_charge_salaires_qualifiant": true
     },
     {
       "taille": "50_299",
@@ -494,15 +496,16 @@
         "value": 15,
         "confidence": "estimated",
         "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-        "note": "« Entreprises de moins de 11 salariés Plafond : 15 € HT / heure / stagiaire. Sauf FEEBAT plafond : 100 € HT / jour / stagiaire. » ; « Plafond : 10 € HT / heure / stagiaire uniquement pour les actions qualifiantes. » Exact pour les moins de 11 salariés ; 11-49 : 10 €/h en qualifiant seulement. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+        "note": "« Entreprises de moins de 11 salariés Plafond : 15 € HT / heure / stagiaire. Sauf FEEBAT plafond : 100 € HT / jour / stagiaire. » ; « Plafond : 10 € HT / heure / stagiaire uniquement pour les actions qualifiantes. » Exact pour les moins de 11 salariés ; 11-49 : 10 €/h pour les seules actions qualifiantes, 0 € dans l'estimation pour les autres formations. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; condition des actions qualifiantes relue le 2026-10-08)"
       },
       "prise_en_charge_salaires_mode": "euro_par_heure",
       "frais_annexes_pourcentage": {
         "value": 8,
         "confidence": "estimated",
         "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-        "note": "« Plafond : 8 % des coûts pédagogiques financés par Constructys dans la limite de 1 500 € HT / stagiaire. » ; « (uniquement pour les actions qualifiantes) : » Actions qualifiantes uniquement. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+        "note": "« Plafond : 8 % des coûts pédagogiques financés par Constructys dans la limite de 1 500 € HT / stagiaire. » ; « (uniquement pour les actions qualifiantes) : » ; « Par action qualifiante (qualification CCN Bâtiment / certification RNCP / blocs de compétences / CQP inscrits ou non au RNCP) » Actions qualifiantes uniquement : 0 € pour les autres formations. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; condition des actions qualifiantes relue le 2026-10-08)"
       },
+      "frais_annexes_pourcentage_qualifiant": true,
       "budget_annuel_max": {
         "value": null,
         "confidence": "exact",
@@ -527,8 +530,9 @@
           "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": 1200,
-          "description": "Bâtiment 11 à 49 salariés : 19 € HT/h/stagiaire depuis le 1er juin 2026 (intra 665 €/jour/groupe), salaires 10 € HT/h en qualifiant ; 300 h (non qualifiant) ou 1 200 h et 3 stagiaires/an (qualifiant).",
-          "prise_en_charge_salaires_horaire": 10
+          "description": "Bâtiment 11 à 49 salariés : 19 € HT/h/stagiaire depuis le 1er juin 2026 (intra 665 €/jour/groupe) ; salaires 10 € HT/h pour les seules actions qualifiantes (15 € HT/h pour les actions de création, reprise, transmission ou gestion d'entreprise et pour les heures de formation en situation de travail, non comptés dans l'estimation) ; 300 h (non qualifiant) ou 1 200 h et 3 stagiaires/an (qualifiant).",
+          "prise_en_charge_salaires_horaire": 10,
+          "prise_en_charge_salaires_qualifiant": true
         },
         {
           "taille": "50_299",
