@@ -13,6 +13,8 @@
 
 Le format exact est défini par `packages/core/src/aides/types.ts` et validé par `packages/core/src/schema.ts`.
 
+Barèmes des OPCO : un forfait de frais annexes ou une prise en charge des salaires que la source réserve aux actions qualifiantes porte l'indicateur `frais_annexes_pourcentage_qualifiant: true` (barème ou variante de branche ; une variante qui ne le précise pas hérite de celui de l'OPCO) ou `prise_en_charge_salaires_qualifiant: true` (dans l'entrée de `plafonds_par_taille` de la taille concernée). L'estimation ne compte alors ce poste que pour une certification visée enregistrée au RNCP, diplôme compris, ou un CQP ; pour toute autre formation elle le met à 0 € et nomme la règle dans les points d'attention (aujourd'hui : Constructys, Bâtiment).
+
 ## Règles
 
 1. Sources officielles uniquement (service-public, travail-emploi, France Travail, Transitions Pro, Agefiph, Régions, OPCO, FAF, Légifrance, URSSAF, impots.gouv).

@@ -10,7 +10,7 @@
 #
 # Ce que le job « verifier » fait, dans cet ordre :
 #   1. vérification de types du core, du backend, de l'app mobile et du site ;
-#   2. lint du site, garde de charte SFG (puis son autotest) et tests du site ;
+#   2. lint du site, garde de charte SFG (puis son autotest), garde des tirets cadratins (tout le dépôt) et tests du site ;
 #   3. tests du core et du backend ;
 #   4. build du site : export statique dans apps/web/out ;
 #   5. dépôt de apps/web/out en artefact « site-hostinger », conservé 30 jours. include-hidden-files est
