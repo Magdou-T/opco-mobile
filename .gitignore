@@ -3,8 +3,8 @@ dist/
 .expo/
 *.apk
 *.aab
-.env
-.env.local
+# Fichiers d'environnement (clés d'API comme ANTHROPIC_API_KEY) : tous ignorés, quel que soit le suffixe.
+.env*
 android/
 ios/
 backend/.out/
