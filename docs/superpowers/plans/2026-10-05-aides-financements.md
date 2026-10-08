@@ -1,4 +1,4 @@
-# Plan d'implémentation — Moteur d'aides et financements + identification fiable de l'OPCO
+# Plan d'implémentation : moteur d'aides et financements + identification fiable de l'OPCO
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -18,11 +18,11 @@
 - **Aucun montant inventé** : toute valeur chiffrée des données porte une source officielle (URL + extrait mot pour mot + date) ; sinon `non_chiffre` / `a_confirmer`.
 - **Ne jamais appeler** `api.francecompetences.fr` ni réutiliser les tables de France Compétences (licence requise, art. R. 6123-35 du code du travail) ; un simple lien vers `https://quel-est-mon-opco.francecompetences.fr/` est autorisé.
 - Pas de nouvelle dépendance npm.
-- Textes affichés en français, apostrophes droites `'`, pas d'émoji (les symboles déjà utilisés dans l'UI — ✓ ⚠ ↗ ▸ ▾ — restent autorisés).
+- Textes affichés en français, apostrophes droites `'`, pas d'émoji (les symboles déjà utilisés dans l'UI, ✓ ⚠ ↗ ▸ ▾, restent autorisés).
 - Codes région INSEE : `84 27 53 24 94 44 32 11 28 75 76 52 93 01 02 03 04 06` (18 régions).
 - Commandes de test : `npx vitest run` dans `packages/core` et dans `backend` ; typecheck : `npx tsc --noEmit` dans `packages/core`, `backend`, `apps/mobile`.
 - Dossier des recherches documentaires (produit par les agents de recherche, hors dépôt) :
-  `C:\Users\magdo\AppData\Local\Temp\claude\C--Users-magdo-Desktop-Claude-Projet-OPCO\52697ff6-6d7d-4f13-8eff-c5938bb2697d\scratchpad\research` — noté `$RECHERCHE` ci-dessous.
+  `C:\Users\magdo\AppData\Local\Temp\claude\C--Users-magdo-Desktop-Claude-Projet-OPCO\52697ff6-6d7d-4f13-8eff-c5938bb2697d\scratchpad\research`, noté `$RECHERCHE` ci-dessous.
 
 ---
 
@@ -54,7 +54,7 @@
 
 ---
 
-# Phase 1 — Socle
+# Phase 1 : socle
 
 ### Task 1 : Types du parcours et référentiel géographique
 
@@ -133,7 +133,7 @@ describe('référentiel géographique', () => {
 - [ ] **Step 2 : Vérifier l'échec**
 
 Run : `cd packages/core && npx vitest run tests/geo.test.ts`
-Expected : FAIL — `Failed to load url ../src/geo`.
+Expected : FAIL (`Failed to load url ../src/geo`).
 
 - [ ] **Step 3 : Ajouter les types dans `packages/core/src/types.ts`**
 
@@ -325,7 +325,7 @@ export interface WizardState {
   detectedOpcoSlug: string | null;
   detectedIdcc: string | null;
   detectedCompanyName: string | null;
-  /** Branche choisie manuellement (id de VarianteBranche) — prime sur l'IDCC détecté. */
+  /** Branche choisie manuellement (id de VarianteBranche) : prime sur l'IDCC détecté. */
   selectedBrancheId: string | null;
   /** Certitude de l'identification automatique de l'OPCO. */
   opcoCertitude: CertitudeOpco | null;
@@ -535,7 +535,7 @@ export function departementDuCodePostal(codePostal: string | null | undefined): 
 }
 ```
 
-- [ ] **Step 5 : Exporter le module** — dans `packages/core/src/index.ts`, ajouter après `export * from './data';` :
+- [ ] **Step 5 : Exporter le module.** Dans `packages/core/src/index.ts`, ajouter après `export * from './data';` :
 
 ```ts
 export * from './geo';
@@ -545,7 +545,7 @@ export * from './geo';
 
 Run : `cd packages/core && npx vitest run && npx tsc --noEmit`
 Expected : PASS (30 tests existants + 6 nouveaux), aucune erreur de type.
-Run : `cd apps/mobile && npx tsc --noEmit` — Expected : aucune erreur (changements additifs).
+Run : `cd apps/mobile && npx tsc --noEmit`. Expected : aucune erreur (changements additifs).
 
 - [ ] **Step 7 : Commit**
 
@@ -569,10 +569,10 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes : types de la tâche 1.
 - Produces : `export type PosteFinancement = 'pedagogie' | 'salaires' | 'transport' | 'hebergement' | 'restauration' | 'frais_annexes'` ; `FundingLine.poste: PosteFinancement` ; `export const REFERENCE_REGLE_50_SALARIES: string` ; `export function estEntreprise50Plus(size: CompanySize | null): boolean` ; `calculateFunding(opco, state): FundingResult` (signature inchangée) ; `FundingResult.enveloppeMaxPotentielle` ≤ `totalRequested`.
 
-- [ ] **Step 1 : Écrire les tests qui échouent** — ajouter à la fin de `packages/core/tests/calculator.test.ts` :
+- [ ] **Step 1 : Écrire les tests qui échouent.** Ajouter à la fin de `packages/core/tests/calculator.test.ts` :
 
 ```ts
-describe('calculateFunding — règle des 50 salariés', () => {
+describe('calculateFunding, règle des 50 salariés', () => {
   it('50+ sans enveloppe publiée : PDC mutualisé à 0 € et explication', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });
     const state = makeFormationState({ companySize: '50_299', durationHours: 100, pedagogyCostPerHour: 30, pedagogyCostTotal: 3000 });
@@ -599,7 +599,7 @@ describe('calculateFunding — règle des 50 salariés', () => {
   });
 });
 
-describe('calculateFunding — barème dégressif', () => {
+describe('calculateFunding, barème dégressif', () => {
   const seuils = [
     { max_heures: 105, valeur: 65 },
     { max_heures: null, valeur: 15 },
@@ -622,7 +622,7 @@ describe('calculateFunding — barème dégressif', () => {
   });
 });
 
-describe('calculateFunding — portée du plafond annuel', () => {
+describe('calculateFunding, portée du plafond annuel', () => {
   it('portée pédagogie : salaires financés en plus du plafond', () => {
     const opco = makeOpco({
       cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
@@ -640,7 +640,7 @@ describe('calculateFunding — portée du plafond annuel', () => {
   });
 });
 
-describe('calculateFunding — dispositifs complémentaires et enveloppe', () => {
+describe('calculateFunding, dispositifs complémentaires et enveloppe', () => {
   const boost = {
     id: 'boost', nom: 'Boost', cumul: 'additif' as const,
     montant_max: 750, unite: 'par_dossier' as const, pourcentage_couts: 50,
@@ -688,7 +688,7 @@ Puis, dans le test existant `filtre les dispositifs par taille et calcule l’en
 Run : `cd packages/core && npx vitest run tests/calculator.test.ts`
 Expected : FAIL (propriété `poste` absente, règle des 50 salariés non appliquée, `cout_horaire_seuils` ignoré).
 
-- [ ] **Step 3 : Ajouter `PosteFinancement` dans `types.ts`** — juste avant `export interface FundingLine`, insérer :
+- [ ] **Step 3 : Ajouter `PosteFinancement` dans `types.ts`.** Juste avant `export interface FundingLine`, insérer :
 
 ```ts
 /** Poste de dépense d'une ligne de financement OPCO. */
@@ -961,9 +961,9 @@ function calcPedagogy(
     } else {
       confidence = 'depends_on_branche';
       funded = userCostPerHour * hours;
-      note = "Plafond horaire non renseigné — dépend de l'accord de branche";
+      note = "Plafond horaire non renseigné : dépend de l'accord de branche";
       details.push(`Aucun plafond horaire officiel renseigné pour ${opco.name}`);
-      details.push('Le montant réel dépend de votre accord de branche — contactez votre OPCO');
+      details.push('Le montant réel dépend de votre accord de branche : contactez votre OPCO');
     }
   }
 
@@ -1088,7 +1088,7 @@ function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
     requested,
     'depends_on_branche',
     sourceUrl,
-    "Plafond hébergement non renseigné — dépend de l'accord de branche",
+    "Plafond hébergement non renseigné : dépend de l'accord de branche",
     [
       `${opco.name} ne publie pas de plafond hébergement fixe`,
       'Le montant affiché est basé sur votre estimation et reste à confirmer',
@@ -1456,7 +1456,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
 
   // ---- 7. Conditions, démarches & next steps ----
   const dispositifPrincipal = pdcFerme
-    ? 'Plan de développement des compétences — fonds mutualisés non accessibles (50 salariés et plus)'
+    ? 'Plan de développement des compétences : fonds mutualisés non accessibles (50 salariés et plus)'
     : enveloppeGrande
       ? 'Plan de développement des compétences (fonds conventionnels ou volontaires, 50 salariés et plus)'
       : 'Plan de développement des compétences (fonds mutualisés OPCO)';
@@ -1491,8 +1491,8 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
 
 Run : `cd packages/core && npx vitest run && npx tsc --noEmit`
 Expected : PASS (tous les tests, y compris les 8 nouveaux et le test d'enveloppe mis à jour).
-Run : `cd backend && npx vitest run && npx tsc --noEmit` — Expected : PASS (les scénarios du pipeline ne vérifient que des totaux finis et positifs).
-Run : `cd apps/mobile && npx tsc --noEmit` — Expected : aucune erreur.
+Run : `cd backend && npx vitest run && npx tsc --noEmit`. Expected : PASS (les scénarios du pipeline ne vérifient que des totaux finis et positifs).
+Run : `cd apps/mobile && npx tsc --noEmit`. Expected : aucune erreur.
 
 - [ ] **Step 6 : Commit**
 
@@ -1560,7 +1560,7 @@ export function makeAide(over: Partial<Aide> = {}): Aide {
 }
 ```
 
-- [ ] **Step 2 : Écrire les tests qui échouent** — `packages/core/tests/schema-aides.test.ts`
+- [ ] **Step 2 : Écrire les tests qui échouent** (`packages/core/tests/schema-aides.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -1678,7 +1678,7 @@ describe('dataset v4', () => {
 - [ ] **Step 3 : Vérifier l'échec**
 
 Run : `cd packages/core && npx vitest run tests/schema-aides.test.ts`
-Expected : FAIL — `../src/aides/types` introuvable, exports de schéma absents.
+Expected : FAIL (`../src/aides/types` introuvable, exports de schéma absents).
 
 - [ ] **Step 4 : Créer `packages/core/src/aides/types.ts`**
 
@@ -1892,7 +1892,7 @@ export interface AideEvaluee {
   statut: StatutEligibilite;
   /** non_eligible : critères non remplis ; a_verifier : informations à confirmer. */
   raisons: string[];
-  /** true : aide sans rapport avec la situation (autre projet, autre public, autre région) — masquée à l'écran. */
+  /** true : aide sans rapport avec la situation (autre projet, autre public, autre région), masquée à l'écran. */
   horsPerimetre: boolean;
   conditions: string[];
   montantEstime: number | null;
@@ -1946,7 +1946,7 @@ export const FINANCEUR_LABELS: Record<Financeur, string> = {
 
 ```ts
 // ============================================================
-// Schéma de validation (Zod) — miroir de types.ts et aides/types.ts.
+// Schéma de validation (Zod), miroir de types.ts et aides/types.ts.
 // Source de vérité partagée : utilisé par le BACKEND avant publication
 // d'un dataset ET par l'APP après téléchargement, pour ne jamais
 // charger de données corrompues.
@@ -1957,7 +1957,7 @@ import type { Aide } from './aides/types';
 
 export const ConfidenceSchema = z.enum(['exact', 'estimated', 'depends_on_branche']);
 
-/** SourcedValue<number | null> — le cas le plus courant. */
+/** SourcedValue<number | null> : le cas le plus courant. */
 export const SourcedNumberSchema = z.object({
   value: z.number().nullable(),
   confidence: ConfidenceSchema,
@@ -2369,7 +2369,7 @@ export function validateDataset(raw: unknown, opts: { minOpcoCount?: number } = 
 }
 ```
 
-- [ ] **Step 6 : Exporter** — dans `packages/core/src/index.ts`, ajouter :
+- [ ] **Step 6 : Exporter.** Dans `packages/core/src/index.ts`, ajouter :
 
 ```ts
 export * from './aides/types';
@@ -2379,7 +2379,7 @@ export * from './aides/types';
 
 Run : `cd packages/core && npx vitest run && npx tsc --noEmit`
 Expected : PASS. **Si** `chaque OPCO embarqué respecte le schéma Zod` échoue sur `constructys` (tailles en double, données de juin), c'est attendu : corriger les données en tâche 8 n'est pas encore possible, donc déplacer dès maintenant les entrées en double de `packages/core/data/opcos/constructys.json` : conserver dans `plafonds_par_taille` les entrées `branche: "batiment"` (bâtiment) et `50_299`/`300_plus`, supprimer les deux entrées `branche: "travaux_publics"` (elles seront reprises en variante de branche par les données vérifiées de la tâche 8). Relancer les tests : PASS.
-Run : `cd backend && npx vitest run && npx tsc --noEmit` et `cd apps/mobile && npx tsc --noEmit` — Expected : aucune erreur.
+Run : `cd backend && npx vitest run && npx tsc --noEmit` et `cd apps/mobile && npx tsc --noEmit`. Expected : aucune erreur.
 
 - [ ] **Step 8 : Commit**
 
@@ -2405,7 +2405,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Produces : `IdccEntree`, `IdccTable`, `SuggestionNaf`, `CandidatOpco`, `ResolutionOpco`, `EntreeResolution`, `CODES_ECHAPPATOIRES`, `URL_VERIFICATION_OPCO`, `normaliserIdcc(raw: string): string | null`, `suggestionParNaf(codeNaf: string | null, suggestions: SuggestionNaf[]): SuggestionNaf | null`, `resoudreOpco(entree: EntreeResolution, table: IdccTable, suggestionsNaf?: SuggestionNaf[]): ResolutionOpco`, `titreConvention(idcc: string, table: IdccTable): string` ; `EMBEDDED_IDCC: IdccTable`, `EMBEDDED_NAF: SuggestionNaf[]`, `EMBEDDED_AIDES: Aide[]`, `EMBEDDED_PORTAILS: PortailRegional[]`.
 - Conserve temporairement `resolveIdccToOpco(idccCodes: string[])` (marqué déprécié, supprimé en tâche 7).
 
-- [ ] **Step 1 : Écrire les tests qui échouent** — `packages/core/tests/opco-resolver.test.ts`
+- [ ] **Step 1 : Écrire les tests qui échouent** (`packages/core/tests/opco-resolver.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -2527,7 +2527,7 @@ Dans `packages/core/tests/schema.test.ts`, supprimer l'import `resolveIdccToOpco
 - [ ] **Step 2 : Vérifier l'échec**
 
 Run : `cd packages/core && npx vitest run tests/opco-resolver.test.ts`
-Expected : FAIL — `resoudreOpco` non exporté, `EMBEDDED_IDCC` absent.
+Expected : FAIL (`resoudreOpco` non exporté, `EMBEDDED_IDCC` absent).
 
 - [ ] **Step 3 : Réécrire `packages/core/src/opco-resolver.ts`**
 
@@ -2864,7 +2864,7 @@ Expected : `OK …idcc-opco.json (956 entrées)` (952 + 4 échappatoires, à ±1
 }
 ```
 
-- [ ] **Step 6 : Étendre `packages/core/src/data.ts`** — ajouter après les imports existants :
+- [ ] **Step 6 : Étendre `packages/core/src/data.ts`.** Ajouter après les imports existants :
 
 ```ts
 import idccData from '../data/idcc/idcc-opco.json';
@@ -2899,7 +2899,7 @@ export const EMBEDDED_PORTAILS: PortailRegional[] = (portailsData as unknown as 
 
 Run : `cd packages/core && npx vitest run && npx tsc --noEmit`
 Expected : PASS (tests du résolveur ; plus de test `resolveIdccToOpco` dans schema.test.ts).
-Run : `cd apps/mobile && npx tsc --noEmit` et `cd backend && npx vitest run` — Expected : PASS (l'app utilise encore `resolveIdccToOpco`, conservé).
+Run : `cd apps/mobile && npx tsc --noEmit` et `cd backend && npx vitest run`. Expected : PASS (l'app utilise encore `resolveIdccToOpco`, conservé).
 
 - [ ] **Step 8 : Commit**
 
@@ -2923,7 +2923,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes : `departementDuCodePostal`, `estCodeRegion`, `regionDuDepartement` (geo.ts) ; `normaliserIdcc` (opco-resolver.ts).
 - Produces : `EtablissementInfo`, `EntrepriseInfo`, `TRANCHES_EFFECTIF_INSEE: Record<string, string>`, `tailleDepuisTranche(tranche: string | null): CompanySize | null`, `parseResultatRechercheEntreprises(raw: Record<string, unknown>): EntrepriseInfo`.
 
-- [ ] **Step 1 : Écrire les tests qui échouent** — `packages/core/tests/entreprise.test.ts`
+- [ ] **Step 1 : Écrire les tests qui échouent** (`packages/core/tests/entreprise.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -3020,7 +3020,7 @@ describe('tailleDepuisTranche', () => {
 - [ ] **Step 2 : Vérifier l'échec**
 
 Run : `cd packages/core && npx vitest run tests/entreprise.test.ts`
-Expected : FAIL — module `../src/entreprise` introuvable.
+Expected : FAIL (module `../src/entreprise` introuvable).
 
 - [ ] **Step 3 : Créer `packages/core/src/entreprise.ts`**
 
@@ -3181,7 +3181,7 @@ export function parseResultatRechercheEntreprises(raw: Record<string, unknown>):
 }
 ```
 
-- [ ] **Step 4 : Exporter** — dans `packages/core/src/index.ts`, ajouter :
+- [ ] **Step 4 : Exporter.** Dans `packages/core/src/index.ts`, ajouter :
 
 ```ts
 export * from './entreprise';
@@ -3203,7 +3203,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 6 : App — dataset actif complet
+### Task 6 : App, dataset actif complet
 
 **Files:**
 - Modify: `apps/mobile/src/lib/dataset-sync.ts`
@@ -3395,7 +3395,7 @@ Dans `apps/mobile/src/app/index.tsx` et `apps/mobile/src/components/wizard/Wizar
 
 Run : `cd apps/mobile && npx tsc --noEmit`
 Expected : aucune erreur.
-Run : `grep -rn "useActiveOpcos\|getActiveOpcos" apps/mobile/src` — Expected : aucun résultat.
+Run : `grep -rn "useActiveOpcos\|getActiveOpcos" apps/mobile/src`. Expected : aucun résultat.
 
 - [ ] **Step 5 : Commit**
 
@@ -3408,7 +3408,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 7 : App — étape « Entreprise »
+### Task 7 : App, étape « Entreprise »
 
 **Files:**
 - Modify: `apps/mobile/src/lib/siren-client.ts`, `apps/mobile/src/hooks/useSirenLookup.ts`
@@ -3427,13 +3427,13 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 Dans `packages/core/src/types.ts` : supprimer les sections `// --- SIREN API Types ---` (interfaces `SirenSearchResult`, `SirenApiResponse`) et `// --- IDCC Mapping ---` (interface `IdccOpcoMapping`) ; dans `WIZARD_STEPS`, remplacer `{ key: 'identification', label: 'Votre OPCO', icon: '1' }` par `{ key: 'identification', label: 'Entreprise', icon: '1' }` et `{ key: 'situation', label: 'Situation professionnelle', icon: '2' }` par `{ key: 'situation', label: 'Bénéficiaire', icon: '2' }`.
 Dans `packages/core/src/opco-resolver.ts` : supprimer la fonction `resolveIdccToOpco` et l'import `EMBEDDED_IDCC`.
 
-Run : `cd packages/core && npx vitest run && npx tsc --noEmit` — Expected : PASS.
+Run : `cd packages/core && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
-- [ ] **Step 2 : `apps/mobile/src/lib/siren-client.ts`** — remplacer le fichier par :
+- [ ] **Step 2 : `apps/mobile/src/lib/siren-client.ts`.** Remplacer le fichier par :
 
 ```ts
 // ============================================================
-// Client SIREN — appel DIRECT de l'API publique recherche-entreprises.
+// Client SIREN : appel DIRECT de l'API publique recherche-entreprises.
 // La lecture du résultat (établissements, région, effectif, NAF, IDCC)
 // est faite par parseResultatRechercheEntreprises (@opco/core, testée).
 // ============================================================
@@ -3567,7 +3567,7 @@ export function CertitudeBadge({ certitude }: { certitude: CertitudeOpco }) {
 - [ ] **Step 5 : Réécrire `apps/mobile/src/components/wizard/StepIdentification.tsx`**
 
 ```tsx
-// Étape 1 — Entreprise : recherche (nom, SIREN ou SIRET) ou saisie manuelle.
+// Étape 1 (Entreprise) : recherche (nom, SIREN ou SIRET) ou saisie manuelle.
 // L'OPCO est identifié par resoudreOpco (@opco/core) avec un niveau de certitude
 // explicite ; l'utilisateur peut toujours le vérifier sur l'outil officiel.
 
@@ -3734,8 +3734,8 @@ export function StepIdentification({ state, updateState, opcoList, getOpcoBySlug
                 >
                   <Text className="font-medium text-gray-900">{r.nom}</Text>
                   <Text className="mt-0.5 text-xs text-gray-500">
-                    SIREN {r.siren} — {r.siege.commune} ({r.siege.codePostal})
-                    {r.idccs.length > 0 ? ` — IDCC ${r.idccs.join(', ')}` : ''}
+                    SIREN {r.siren}, {r.siege.commune} ({r.siege.codePostal})
+                    {r.idccs.length > 0 ? `, IDCC ${r.idccs.join(', ')}` : ''}
                   </Text>
                 </Pressable>
               ))}
@@ -3749,7 +3749,7 @@ export function StepIdentification({ state, updateState, opcoList, getOpcoBySlug
           <Text className="font-semibold text-gray-900">{state.detectedCompanyName}</Text>
           <Text className="text-xs text-gray-600">
             SIREN {state.sirenNumber}
-            {state.siret ? ` — SIRET du siège ${state.siret}` : ''}
+            {state.siret ? `, SIRET du siège ${state.siret}` : ''}
           </Text>
           {state.codeNaf ? <Text className="text-xs text-gray-600">Code NAF : {state.codeNaf}</Text> : null}
           {state.trancheEffectifInsee ? (
@@ -3782,7 +3782,7 @@ export function StepIdentification({ state, updateState, opcoList, getOpcoBySlug
                 <ChoiceButton
                   key={c.opcoSlug}
                   label={nomOpco(c.opcoSlug)}
-                  sublabel={c.idccs.map((i) => `IDCC ${i.idcc} — ${i.titre}`).join(' · ')}
+                  sublabel={c.idccs.map((i) => `IDCC ${i.idcc} : ${i.titre}`).join(' · ')}
                   selected={state.detectedOpcoSlug === c.opcoSlug}
                   onPress={() => updateState({ detectedOpcoSlug: c.opcoSlug, detectedIdcc: c.idccs[0]?.idcc ?? null, selectedBrancheId: null })}
                 />
@@ -3944,9 +3944,9 @@ export function StepIdentification({ state, updateState, opcoList, getOpcoBySlug
 
 - [ ] **Step 7 : Vérifier**
 
-Run : `cd apps/mobile && npx tsc --noEmit` — Expected : aucune erreur.
-Run : `cd packages/core && npx vitest run` — Expected : PASS.
-Run : `grep -rn "SirenSearchResult\|resolveIdccToOpco\|IdccOpcoMapping" packages apps --include=*.ts --include=*.tsx | grep -v node_modules` — Expected : aucun résultat.
+Run : `cd apps/mobile && npx tsc --noEmit`. Expected : aucune erreur.
+Run : `cd packages/core && npx vitest run`. Expected : PASS.
+Run : `grep -rn "SirenSearchResult\|resolveIdccToOpco\|IdccOpcoMapping" packages apps --include=*.ts --include=*.tsx | grep -v node_modules`. Expected : aucun résultat.
 
 - [ ] **Step 8 : Commit**
 
@@ -3959,7 +3959,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 8 : Données — barèmes OPCO vérifiés
+### Task 8 : Données, barèmes OPCO vérifiés
 
 **Dépendance :** fichiers des agents de recherche OPCO dans `$RECHERCHE/opcos/` (11 fichiers `<slug>.json` + `rapport-groupe-A.md`, `-B.md`, `-C.md`).
 
@@ -3970,7 +3970,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 **Interfaces:**
 - Consumes : `OpcoDataSchema`, `sanityCheckOpco` (tâche 3) ; `REFERENCE_REGLE_50_SALARIES` (tâche 2).
 
-- [ ] **Step 1 : Écrire le test de données** — `packages/core/tests/donnees-opco.test.ts`
+- [ ] **Step 1 : Écrire le test de données** (`packages/core/tests/donnees-opco.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -4060,9 +4060,9 @@ Copier les 11 fichiers `$RECHERCHE/opcos/<slug>.json` vers `packages/core/data/o
 - [ ] **Step 5 : Faire passer les tests**
 
 Run : `cd packages/core && npx vitest run`
-Si un test de données échoue : corriger la donnée concernée (jamais le test) — note sans extrait `« »` → passer `confidence` à `estimated` et préciser la note ; taille en double → déplacer l'écart dans une `variantes_branche` avec ses IDCC ; date absente → `derniere_verification` = date de vérification de l'agent. Si un test de calcul existant échoue parce qu'il lit les données réelles, corriger l'attente du test en citant la nouvelle valeur sourcée.
+Si un test de données échoue : corriger la donnée concernée (jamais le test). Note sans extrait `« »` → passer `confidence` à `estimated` et préciser la note ; taille en double → déplacer l'écart dans une `variantes_branche` avec ses IDCC ; date absente → `derniere_verification` = date de vérification de l'agent. Si un test de calcul existant échoue parce qu'il lit les données réelles, corriger l'attente du test en citant la nouvelle valeur sourcée.
 Expected final : PASS.
-Run : `cd backend && npx vitest run` — Expected : PASS.
+Run : `cd backend && npx vitest run`. Expected : PASS.
 
 - [ ] **Step 6 : Commit**
 
@@ -4077,7 +4077,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 9 : Données — table IDCC v2 et suggestions NAF
+### Task 9 : Données, table IDCC v2 et suggestions NAF
 
 **Dépendance :** `$RECHERCHE/idcc/idcc-opco.json`, `$RECHERCHE/idcc/naf-suggestions.json`, `$RECHERCHE/idcc/rapport.md`.
 
@@ -4086,7 +4086,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Delete: `packages/core/data/idcc-opco-map.json`, `scripts/convertir-table-idcc.mjs`
 - Test: `packages/core/tests/donnees-idcc.test.ts`
 
-- [ ] **Step 1 : Écrire le test de données** — `packages/core/tests/donnees-idcc.test.ts`
+- [ ] **Step 1 : Écrire le test de données** (`packages/core/tests/donnees-idcc.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -4179,7 +4179,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-# Phase 2 — Moteur d'aides
+# Phase 2 : moteur d'aides
 
 ### Task 10 : Évaluation des critères (tri-état)
 
@@ -4233,7 +4233,7 @@ export function makeProfil(over: Partial<ProfilAides> = {}): ProfilAides {
 
 (l'import devient `import type { Aide, ProfilAides } from '../src/aides/types';`)
 
-- [ ] **Step 2 : Écrire les tests qui échouent** — `packages/core/tests/aides-criteres.test.ts`
+- [ ] **Step 2 : Écrire les tests qui échouent** (`packages/core/tests/aides-criteres.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -4304,7 +4304,7 @@ describe('evaluerCriteres', () => {
 - [ ] **Step 3 : Vérifier l'échec**
 
 Run : `cd packages/core && npx vitest run tests/aides-criteres.test.ts`
-Expected : FAIL — module `../src/aides/criteres` introuvable.
+Expected : FAIL (module `../src/aides/criteres` introuvable).
 
 - [ ] **Step 4 : Créer `packages/core/src/aides/criteres.ts`**
 
@@ -4523,9 +4523,9 @@ export function evaluerCriteres(c: CriteresAide, p: ProfilAides): BilanCriteres 
 }
 ```
 
-- [ ] **Step 5 : Exporter** — `packages/core/src/index.ts` : ajouter `export * from './aides/criteres';`
+- [ ] **Step 5 : Exporter.** `packages/core/src/index.ts` : ajouter `export * from './aides/criteres';`
 
-- [ ] **Step 6 : Vérifier** — Run : `cd packages/core && npx vitest run && npx tsc --noEmit` — Expected : PASS.
+- [ ] **Step 6 : Vérifier.** Run : `cd packages/core && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
 - [ ] **Step 7 : Commit**
 
@@ -4549,7 +4549,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes : `evaluerCriteres` (tâche 10), `ORDRE_EMPILEMENT_DEFAUT` (tâche 3).
 - Produces : `formaterDate(iso: string): string` (« JJ/MM/AAAA »), `estimerMontant(m: MontantAide, p: ProfilAides): { montant: number | null; libelle: string }`, `evaluerAide(aide: Aide, p: ProfilAides, dateRef: string): AideEvaluee`, `evaluerAides(aides: Aide[], p: ProfilAides, dateRef: string): AideEvaluee[]` (triées : éligibles, à vérifier, non éligibles ; puis montant décroissant ; puis nom).
 
-- [ ] **Step 1 : Écrire les tests qui échouent** — `packages/core/tests/aides-evaluer.test.ts`
+- [ ] **Step 1 : Écrire les tests qui échouent** (`packages/core/tests/aides-evaluer.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -4562,7 +4562,7 @@ const montant = (over: Partial<MontantAide>): MontantAide => ({
   mode: 'forfait', valeur: null, pourcentage: null, base: null, plafond: null, duree_max_mois: null, libelle: 'règle', ...over,
 });
 
-describe('evaluerAide — statut', () => {
+describe('evaluerAide, statut', () => {
   it('éligible quand tout est rempli', () => {
     const r = evaluerAide(makeAide(), makeProfil(), AUJOURDHUI);
     expect(r).toMatchObject({ statut: 'eligible', montantEstime: 1000, raisons: [] });
@@ -4662,7 +4662,7 @@ describe('formaterDate', () => {
 });
 ```
 
-- [ ] **Step 2 : Vérifier l'échec** — Run : `cd packages/core && npx vitest run tests/aides-evaluer.test.ts` — Expected : FAIL (module absent).
+- [ ] **Step 2 : Vérifier l'échec.** Run : `cd packages/core && npx vitest run tests/aides-evaluer.test.ts`. Expected : FAIL (module absent).
 
 - [ ] **Step 3 : Créer `packages/core/src/aides/evaluer.ts`**
 
@@ -4810,9 +4810,9 @@ export function evaluerAides(aides: Aide[], p: ProfilAides, dateRef: string): Ai
 
 Note : dans le test de tri, `nat-d` et `nat-a` sont éligibles (1 000 € puis 500 €), `nat-b` est à vérifier et `nat-c` non éligible.
 
-- [ ] **Step 4 : Exporter** — `packages/core/src/index.ts` : ajouter `export * from './aides/evaluer';`
+- [ ] **Step 4 : Exporter.** `packages/core/src/index.ts` : ajouter `export * from './aides/evaluer';`
 
-- [ ] **Step 5 : Vérifier** — Run : `cd packages/core && npx vitest run && npx tsc --noEmit` — Expected : PASS.
+- [ ] **Step 5 : Vérifier.** Run : `cd packages/core && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
 - [ ] **Step 6 : Commit**
 
@@ -4835,7 +4835,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 **Interfaces:**
 - Produces : `bornesEffectif(effectif: number | null, taille: CompanySize | null): { min: number | null; max: number | null }`, `profilDepuisWizard(state: WizardState, opcoSlug: string | null): ProfilAides`, `moisDepuisSaisie(texte: string): string | null` (« MM/AAAA » → « AAAA-MM »), `saisieDepuisMois(mois: string | null): string` (« AAAA-MM » → « MM/AAAA »), `dateDeReference(debutFormation: string | null, aujourdhui: string): string`.
 
-- [ ] **Step 1 : Écrire les tests qui échouent** — `packages/core/tests/aides-profil.test.ts`
+- [ ] **Step 1 : Écrire les tests qui échouent** (`packages/core/tests/aides-profil.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -4917,7 +4917,7 @@ describe('dates', () => {
 });
 ```
 
-- [ ] **Step 2 : Vérifier l'échec** — Run : `cd packages/core && npx vitest run tests/aides-profil.test.ts` — Expected : FAIL.
+- [ ] **Step 2 : Vérifier l'échec.** Run : `cd packages/core && npx vitest run tests/aides-profil.test.ts`. Expected : FAIL.
 
 - [ ] **Step 3 : Créer `packages/core/src/aides/profil.ts`**
 
@@ -5016,9 +5016,9 @@ export function dateDeReference(debutFormation: string | null, aujourdhui: strin
 }
 ```
 
-- [ ] **Step 4 : Exporter** — `packages/core/src/index.ts` : ajouter `export * from './aides/profil';`
+- [ ] **Step 4 : Exporter.** `packages/core/src/index.ts` : ajouter `export * from './aides/profil';`
 
-- [ ] **Step 5 : Vérifier** — Run : `cd packages/core && npx vitest run && npx tsc --noEmit` — Expected : PASS.
+- [ ] **Step 5 : Vérifier.** Run : `cd packages/core && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
 - [ ] **Step 6 : Commit**
 
@@ -5042,7 +5042,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Consumes : `FundingResult` (calculator), `AideEvaluee`, `ProfilAides`.
 - Produces : `LignePlan { id; nom; financeurNom; montant; confidence }`, `OptionPlan { id; nom; financeurNom; montantEstime: number | null; raison }`, `PlanFinancement { coutFormation; financements: LignePlan[]; totalFinance; resteACharge; aidesEmployeur; remunerations; avantagesFiscauxSociaux; options: OptionPlan[]; nonChiffrees: AideEvaluee[]; servicesGratuits: AideEvaluee[] }`, `construirePlan(opco: FundingResult | null, aides: AideEvaluee[], profil: ProfilAides): PlanFinancement`.
 
-- [ ] **Step 1 : Écrire les tests qui échouent** — `packages/core/tests/aides-plan.test.ts`
+- [ ] **Step 1 : Écrire les tests qui échouent** (`packages/core/tests/aides-plan.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -5059,7 +5059,7 @@ const evaluer = (aides: Aide[]) => aides.map((a) => evaluerAide(a, profil, AUJOU
 const forfait = (id: string, financeur: Aide['financeur'], valeur: number, over: Partial<Aide> = {}) =>
   makeAide({ id, financeur, montant: { ...makeAide().montant, valeur }, ...over });
 
-describe('construirePlan — empilement', () => {
+describe('construirePlan, empilement', () => {
   it('empile dans l’ordre des financeurs et plafonne au coût', () => {
     const aides = evaluer([
       forfait('nat-cpf', 'cpf', 1500),
@@ -5090,7 +5090,7 @@ describe('construirePlan — empilement', () => {
   });
 });
 
-describe('construirePlan — alternatives et catégories', () => {
+describe('construirePlan, alternatives et catégories', () => {
   it('garde l’alternative la mieux chiffrée, l’autre devient une option', () => {
     const aides = evaluer([
       forfait('nat-a', 'etat', 1000, { cumul: { cumulable: true, alternatives: ['nat-b'] } }),
@@ -5125,7 +5125,7 @@ describe('construirePlan — alternatives et catégories', () => {
   });
 });
 
-describe('construirePlan — intégration du calcul OPCO', () => {
+describe('construirePlan, intégration du calcul OPCO', () => {
   it('pédagogie dans le financement, salaires côté employeur, dispositif alternatif en option', () => {
     const opco = makeOpco({
       cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
@@ -5148,7 +5148,7 @@ describe('construirePlan — intégration du calcul OPCO', () => {
 });
 ```
 
-- [ ] **Step 2 : Vérifier l'échec** — Run : `cd packages/core && npx vitest run tests/aides-plan.test.ts` — Expected : FAIL.
+- [ ] **Step 2 : Vérifier l'échec.** Run : `cd packages/core && npx vitest run tests/aides-plan.test.ts`. Expected : FAIL.
 
 - [ ] **Step 3 : Créer `packages/core/src/aides/plan.ts`**
 
@@ -5352,9 +5352,9 @@ export function construirePlan(opco: FundingResult | null, aides: AideEvaluee[],
 }
 ```
 
-- [ ] **Step 4 : Exporter** — `packages/core/src/index.ts` : ajouter `export * from './aides/plan';`
+- [ ] **Step 4 : Exporter.** `packages/core/src/index.ts` : ajouter `export * from './aides/plan';`
 
-- [ ] **Step 5 : Vérifier** — Run : `cd packages/core && npx vitest run && npx tsc --noEmit` — Expected : PASS.
+- [ ] **Step 5 : Vérifier.** Run : `cd packages/core && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
 - [ ] **Step 6 : Commit**
 
@@ -5367,7 +5367,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 14 : App — parcours en 6 étapes
+### Task 14 : App, parcours en 6 étapes
 
 **Files:**
 - Modify: `packages/core/src/types.ts` (étapes ; retrait de `isReconversion`, `isSortieChomage`)
@@ -5397,12 +5397,12 @@ export const WIZARD_STEPS: { key: WizardStep; label: string; icon: string }[] = 
 ```
 
 Supprimer `isReconversion` et `isSortieChomage` de `WizardState` et de `createInitialWizardState`.
-Run : `cd packages/core && npx vitest run && npx tsc --noEmit` — Expected : PASS.
+Run : `cd packages/core && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
 - [ ] **Step 2 : Créer `apps/mobile/src/components/wizard/StepProjet.tsx`**
 
 ```tsx
-// Étape 0 — Projet : oriente les questions posées et les aides recherchées.
+// Étape 0 (Projet) : oriente les questions posées et les aides recherchées.
 
 import { Text, View } from 'react-native';
 import { PROJET_LABELS, type ProjetType, type WizardState } from '@opco/core';
@@ -5437,7 +5437,7 @@ export function StepProjet({ state, updateState }: Props) {
 - [ ] **Step 3 : Réécrire `apps/mobile/src/components/wizard/StepSituation.tsx`**
 
 ```tsx
-// Étape 2 — Bénéficiaire : questions adaptées au projet (salarié, demandeur
+// Étape 2 (Bénéficiaire) : questions adaptées au projet (salarié, demandeur
 // d'emploi, alternant, dirigeant). Elles servent à vérifier l'éligibilité aux aides.
 
 import { Text, View } from 'react-native';
@@ -5590,7 +5590,7 @@ export function StepSituation({ state, updateState }: Props) {
 - [ ] **Step 4 : Réécrire `apps/mobile/src/components/wizard/StepFormation.tsx`**
 
 ```tsx
-// Étape 3 — Formation souhaitée.
+// Étape 3 : formation souhaitée.
 
 import { useState } from 'react';
 import { Text, View } from 'react-native';
@@ -5738,7 +5738,7 @@ export function StepFormation({ state, updateState, updateFormationCosts, getOpc
 - [ ] **Step 5 : Réécrire `apps/mobile/src/components/wizard/StepRecap.tsx`**
 
 ```tsx
-// Étape 6 — Récapitulatif avant calcul.
+// Étape 6 : récapitulatif avant calcul.
 
 import type { ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -5786,7 +5786,7 @@ function Item({ label, value }: { label: string; value: string | null | undefine
   return (
     <View className="flex-row items-start justify-between gap-4">
       <Text className="text-sm text-gray-500">{label}</Text>
-      <Text className="flex-1 text-right text-sm font-medium text-gray-900">{value || '—'}</Text>
+      <Text className="flex-1 text-right text-sm font-medium text-gray-900">{value || 'Non renseigné'}</Text>
     </View>
   );
 }
@@ -5863,7 +5863,7 @@ export function StepRecap({ state, onEdit, opcoList, getOpcoBySlug }: Props) {
 }
 ```
 
-- [ ] **Step 6 : `apps/mobile/src/hooks/useWizard.ts`** — remplacer la fonction `canGoNext` par :
+- [ ] **Step 6 : `apps/mobile/src/hooks/useWizard.ts`.** Remplacer la fonction `canGoNext` par :
 
 ```ts
   const canGoNext = useCallback((): boolean => {
@@ -5913,9 +5913,9 @@ export function StepRecap({ state, onEdit, opcoList, getOpcoBySlug }: Props) {
 
 - [ ] **Step 8 : Vérifier**
 
-Run : `cd apps/mobile && npx tsc --noEmit` — Expected : aucune erreur.
-Run : `grep -rn "isReconversion\|isSortieChomage" packages apps --include=*.ts --include=*.tsx | grep -v node_modules` — Expected : aucun résultat.
-Run : `cd packages/core && npx vitest run` — Expected : PASS.
+Run : `cd apps/mobile && npx tsc --noEmit`. Expected : aucune erreur.
+Run : `grep -rn "isReconversion\|isSortieChomage" packages apps --include=*.ts --include=*.tsx | grep -v node_modules`. Expected : aucun résultat.
+Run : `cd packages/core && npx vitest run`. Expected : PASS.
 
 - [ ] **Step 9 : Commit**
 
@@ -5928,7 +5928,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 15 : App — écran « Votre plan de financement »
+### Task 15 : App, écran « Votre plan de financement »
 
 **Files:**
 - Create: `apps/mobile/src/lib/format.ts`, `apps/mobile/src/components/results/PlanFinancement.tsx`, `AideCard.tsx`, `AidesList.tsx`, `PortailsRegionaux.tsx`
@@ -6036,7 +6036,7 @@ export function PlanFinancementCard({ plan }: { plan: PlanFinancement }) {
             {plan.options.map((o) => (
               <View key={o.id}>
                 <Text className="text-sm font-medium text-purple-900">
-                  {o.nom} — {o.montantEstime != null ? formatEuro(o.montantEstime) : 'montant selon dossier'}
+                  {o.nom} : {o.montantEstime != null ? formatEuro(o.montantEstime) : 'montant selon dossier'}
                 </Text>
                 <Text className="text-xs text-purple-700">{o.financeurNom} · {o.raison}</Text>
               </View>
@@ -6364,7 +6364,7 @@ import { PortailsRegionaux } from '@/components/results/PortailsRegionaux';
 - Titre du bandeau : `Trouvez tous les financements de votre formation`.
 - Sous-titre : `OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe… : en 6 étapes, l'app identifie les aides mobilisables et estime votre reste à charge.`
 - Bouton : `Démarrer`.
-- Ligne d'état : `{opcos.length} OPCO · {aides.length} aides — version {version} — {source === 'cache' ? 'dataset téléchargé' : 'données embarquées'}`.
+- Ligne d'état : `{opcos.length} OPCO · {aides.length} aides · version {version} · {source === 'cache' ? 'dataset téléchargé' : 'données embarquées'}`.
 - Liste « Comment ça marche ? » :
 
 ```tsx
@@ -6381,8 +6381,8 @@ import { PortailsRegionaux } from '@/components/results/PortailsRegionaux';
 
 - [ ] **Step 9 : Vérifier**
 
-Run : `cd apps/mobile && npx tsc --noEmit` — Expected : aucune erreur.
-Run : `cd apps/mobile && npx expo export --platform android --output-dir ../../.expo-export-check` puis supprimer `.expo-export-check` — Expected : export réussi.
+Run : `cd apps/mobile && npx tsc --noEmit`. Expected : aucune erreur.
+Run : `cd apps/mobile && npx expo export --platform android --output-dir ../../.expo-export-check` puis supprimer `.expo-export-check`. Expected : export réussi.
 
 - [ ] **Step 10 : Commit**
 
@@ -6395,7 +6395,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-# Phase 3 — Catalogue d'aides
+# Phase 3 : catalogue d'aides
 
 ### Task 16 : Double vérification des recherches
 
@@ -6431,7 +6431,7 @@ statut "a_confirmer" ; dispositif mort → déplace l'aide dans `exclues` avec l
 Valide le JSON avec python avant de terminer. Résume en français : nombre d'aides par verdict et corrections notables.
 ```
 
-- [ ] **Step 3 : Relire les rapports** — lire les 8 `verification-*.md` ; contrôler soi-même 2 aides « corrigées » par fichier (ouvrir la source). Tout désaccord non tranché : laisser l'aide en `a_confirmer`.
+- [ ] **Step 3 : Relire les rapports.** Lire les 8 `verification-*.md` ; contrôler soi-même 2 aides « corrigées » par fichier (ouvrir la source). Tout désaccord non tranché : laisser l'aide en `a_confirmer`.
 
 - [ ] **Step 4 : Pas de commit** (fichiers hors dépôt). Noter dans le message de commit de la tâche 17 le nombre d'aides par verdict.
 
@@ -6605,7 +6605,7 @@ ecrire('portails.json', {
 
 const aConfirmer = [...nationaux.aides, ...regionaux.aides].filter((a) => a.statut === 'a_confirmer');
 const rapport = [
-  `# Rapport d'intégration du catalogue — ${aujourdhui}`,
+  `# Rapport d'intégration du catalogue du ${aujourdhui}`,
   '',
   `- Aides nationales : ${nationaux.aides.length}`,
   `- Aides régionales : ${regionaux.aides.length}`,
@@ -6613,10 +6613,10 @@ const rapport = [
   `- Aides à confirmer : ${aConfirmer.length}`,
   '',
   '## Aides à confirmer',
-  ...aConfirmer.map((a) => `- ${a.id} — ${a.nom}`),
+  ...aConfirmer.map((a) => `- ${a.id} : ${a.nom}`),
   '',
   '## Dispositifs exclus (terminés, suspendus, sans financement)',
-  ...[...nationaux.exclues, ...regionaux.exclues].map((e) => `- ${e.nom} — ${e.raison} (${e.fichier})`),
+  ...[...nationaux.exclues, ...regionaux.exclues].map((e) => `- ${e.nom} : ${e.raison} (${e.fichier})`),
   '',
   '## Notes des chercheurs',
   ...[...nationaux.notes, ...regionaux.notes].map((n) => `- ${n}`),
@@ -6827,7 +6827,7 @@ describe('scénarios de bout en bout (données réelles)', () => {
 });
 ```
 
-- [ ] **Step 3 : Lancer** — Run : `cd packages/core && npx vitest run`
+- [ ] **Step 3 : Lancer.** Run : `cd packages/core && npx vitest run`
 Expected : PASS. Un échec révèle une donnée manquante ou fausse : en chercher la cause dans le catalogue et la source officielle, corriger la donnée (pas l'attente), sauf si la source officielle établit que l'attente est fausse (par exemple aucune aide France Travail ouverte) : dans ce cas, modifier l'attente en citant la source dans un commentaire du test.
 
 - [ ] **Step 4 : Commit**
@@ -6841,7 +6841,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-# Phase 4 — Publication
+# Phase 4 : publication
 
 ### Task 19 : Dataset v4
 
@@ -6870,7 +6870,7 @@ Ajouter dans `backend/tests/pipeline.test.ts`, à l'intérieur de `describe('pub
   });
 ```
 
-(ajouter `EMBEDDED_AIDES` à l'import `@opco/core` du fichier ; `fs`, `os`, `path` et `deepClone` y sont déjà importés — sinon ajouter `import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path';`.)
+(ajouter `EMBEDDED_AIDES` à l'import `@opco/core` du fichier ; `fs`, `os`, `path` et `deepClone` y sont déjà importés ; sinon ajouter `import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path';`.)
 
 Créer `backend/tests/dataset-publie.test.ts` :
 
@@ -6898,7 +6898,7 @@ describe('dataset publié (datasets/)', () => {
 });
 ```
 
-Run : `cd backend && npx vitest run` — Expected : FAIL (option `sections` inconnue, dataset v3 publié).
+Run : `cd backend && npx vitest run`. Expected : FAIL (option `sections` inconnue, dataset v3 publié).
 
 - [ ] **Step 2 : `backend/src/publish.ts`**
 
@@ -6940,7 +6940,7 @@ et remplacer la construction du manifest par :
   };
 ```
 
-- [ ] **Step 3 : `backend/src/run.ts`** — remplacer `import { EMBEDDED_OPCOS } from '@opco/core';` par :
+- [ ] **Step 3 : `backend/src/run.ts`.** Remplacer `import { EMBEDDED_OPCOS } from '@opco/core';` par :
 
 ```ts
 import { EMBEDDED_AIDES, EMBEDDED_IDCC, EMBEDDED_NAF, EMBEDDED_OPCOS, EMBEDDED_PORTAILS } from '@opco/core';
@@ -7018,9 +7018,9 @@ console.log(`sha256 ${sha256}`);
 Run : `DATASET_CHANGELOG="v4 : baremes OPCO reverifies (octobre 2026), table IDCC verifiee, catalogue d'aides (national, Europe, 18 regions), portails regionaux" node scripts/build-example-dataset.mjs`
 Expected : `Dataset v4 : 11 OPCO, <n> aides, <m> IDCC, 18 portails`.
 
-- [ ] **Step 6 : Aligner les données embarquées de l'app** — dans `apps/mobile/src/lib/dataset-sync.ts` : `EMBEDDED_DATASET_VERSION = 4` et `EMBEDDED_DATASET_DATE = '<date du jour AAAA-MM-JJ>'`.
+- [ ] **Step 6 : Aligner les données embarquées de l'app.** Dans `apps/mobile/src/lib/dataset-sync.ts` : `EMBEDDED_DATASET_VERSION = 4` et `EMBEDDED_DATASET_DATE = '<date du jour AAAA-MM-JJ>'`.
 
-- [ ] **Step 7 : Documenter le format** — dans `datasets/README.md`, remplacer l'exemple de format par :
+- [ ] **Step 7 : Documenter le format.** Dans `datasets/README.md`, remplacer l'exemple de format par :
 
 ```json
 {
@@ -7036,7 +7036,7 @@ Expected : `Dataset v4 : 11 OPCO, <n> aides, <m> IDCC, 18 portails`.
 
 et ajouter la ligne `"aidesCount": 123,` dans l'exemple de manifest, avec la phrase : « Les sections `aides`, `idcc`, `naf` et `portails` sont facultatives : une app 1.2.0 les ignore et profite tout de même des barèmes OPCO à jour. »
 
-- [ ] **Step 8 : Vérifier** — Run : `cd backend && npx vitest run && npx tsc --noEmit` puis `cd packages/core && npx vitest run` puis `cd apps/mobile && npx tsc --noEmit` — Expected : PASS / aucune erreur.
+- [ ] **Step 8 : Vérifier.** Run : `cd backend && npx vitest run && npx tsc --noEmit` puis `cd packages/core && npx vitest run` puis `cd apps/mobile && npx tsc --noEmit`. Expected : PASS / aucune erreur.
 
 - [ ] **Step 9 : Commit**
 
@@ -7055,7 +7055,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Create: `backend/src/check-sources.ts`, `backend/tests/check-sources.test.ts`, `docs/donnees-aides.md`, `docs/demande-licence-france-competences.md`
 - Modify: `backend/package.json`, `.github/workflows/update-dataset.yml`, `backend/src/extract.ts`, `README.md`
 
-- [ ] **Step 1 : Écrire le test qui échoue** — `backend/tests/check-sources.test.ts`
+- [ ] **Step 1 : Écrire le test qui échoue** (`backend/tests/check-sources.test.ts`)
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -7090,7 +7090,7 @@ describe('check-sources', () => {
 });
 ```
 
-Run : `cd backend && npx vitest run tests/check-sources.test.ts` — Expected : FAIL (module absent).
+Run : `cd backend && npx vitest run tests/check-sources.test.ts`. Expected : FAIL (module absent).
 
 - [ ] **Step 2 : Créer `backend/src/check-sources.ts`**
 
@@ -7200,11 +7200,11 @@ export async function verifierUrls(
 }
 
 export function rapportMarkdown(resultats: ResultatLien[], date: string): string {
-  const ligne = (r: ResultatLien) => `| ${r.url} | ${r.statut ?? r.erreur ?? '—'} | ${r.utilisePar.slice(0, 3).join(', ')} |`;
+  const ligne = (r: ResultatLien) => `| ${r.url} | ${r.statut ?? r.erreur ?? 'n/a'} | ${r.utilisePar.slice(0, 3).join(', ')} |`;
   const casses = resultats.filter((r) => r.etat === 'casse');
   const aVerifier = resultats.filter((r) => r.etat === 'a_verifier');
   return [
-    `# Contrôle des liens sources — ${date}`,
+    `# Contrôle des liens sources du ${date}`,
     '',
     `${resultats.length} liens : ${resultats.length - casses.length - aVerifier.length} OK, ${aVerifier.length} à vérifier, ${casses.length} cassés.`,
     '',
@@ -7241,11 +7241,11 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
 
 Dans `backend/package.json`, ajouter le script : `"check-sources": "node --import tsx src/check-sources.ts",`.
 
-Run : `cd backend && npx vitest run && npx tsc --noEmit` — Expected : PASS.
-Run : `cd backend && npm run check-sources` — Expected : rapport écrit ; ouvrir `backend/out/liens.md`, corriger dans les données toute URL cassée (nouvelle URL officielle, extrait revérifié) puis relancer jusqu'à 0 lien cassé.
+Run : `cd backend && npx vitest run && npx tsc --noEmit`. Expected : PASS.
+Run : `cd backend && npm run check-sources`. Expected : rapport écrit ; ouvrir `backend/out/liens.md`, corriger dans les données toute URL cassée (nouvelle URL officielle, extrait revérifié) puis relancer jusqu'à 0 lien cassé.
 
-- [ ] **Step 3 : Modèles du pipeline** — invoquer d'abord le skill `claude-api` (obligatoire avant de modifier ce fichier) pour confirmer les identifiants de modèles actuels, puis dans `backend/src/extract.ts` mettre `DEFAULT_EXTRACT_MODEL = 'claude-haiku-4-5'` et `DEFAULT_VERIFY_MODEL = 'claude-opus-5-5'` (valeurs à confirmer par le skill ; mettre à jour le commentaire d'en-tête en conséquence).
-Run : `cd backend && npx vitest run && npx tsc --noEmit` — Expected : PASS.
+- [ ] **Step 3 : Modèles du pipeline.** Invoquer d'abord le skill `claude-api` (obligatoire avant de modifier ce fichier) pour confirmer les identifiants de modèles actuels, puis dans `backend/src/extract.ts` mettre `DEFAULT_EXTRACT_MODEL = 'claude-haiku-4-5'` et `DEFAULT_VERIFY_MODEL = 'claude-opus-5-5'` (valeurs à confirmer par le skill ; mettre à jour le commentaire d'en-tête en conséquence).
+Run : `cd backend && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
 - [ ] **Step 4 : Réécrire `.github/workflows/update-dataset.yml`**
 
@@ -7253,7 +7253,7 @@ Run : `cd backend && npx vitest run && npx tsc --noEmit` — Expected : PASS.
 # ============================================================
 # Mise à jour planifiée du dataset OPCO (pipeline auto-correctif).
 #
-# SÉCURITÉ — clé API : ANTHROPIC_API_KEY est un SECRET CI (Settings > Secrets and
+# SÉCURITÉ de la clé API : ANTHROPIC_API_KEY est un SECRET CI (Settings > Secrets and
 # variables > Actions). Elle n'est JAMAIS embarquée dans l'app ni commitée.
 #
 # Comportement :
@@ -7403,7 +7403,7 @@ Le format exact est défini par `packages/core/src/aides/types.ts` et validé pa
 - [ ] **Step 6 : `docs/demande-licence-france-competences.md`** (brouillon à envoyer par l'utilisateur)
 
 ```markdown
-# Demande de licence de réutilisation — tables de correspondance OPCO
+# Demande de licence de réutilisation : tables de correspondance OPCO
 
 **À :** affaires-juridiques@francecompetences.fr
 **Objet :** Demande de licence gratuite de réutilisation des tables de correspondance IDCC / APE / OPCO
@@ -7422,10 +7422,10 @@ Nous restons à votre disposition pour tout complément.
 
 Cordialement,
 [Nom, fonction]
-SFG Développement — contact@sfgdeveloppement.fr
+SFG Développement, contact@sfgdeveloppement.fr
 ```
 
-- [ ] **Step 7 : `README.md`** — ajouter une section « Aides et financements (v1.3) » décrivant : les 6 étapes, le moteur (`aides/criteres`, `evaluer`, `profil`, `plan`), l'identification OPCO v2 (certitude, lien officiel, licence France Compétences à obtenir), le dataset v4, `npm run check-sources`, le guide `docs/donnees-aides.md` ; mettre à jour le tableau « Vérifications » avec le nombre réel de tests (sortie de `npx vitest run`).
+- [ ] **Step 7 : `README.md`.** Ajouter une section « Aides et financements (v1.3) » décrivant : les 6 étapes, le moteur (`aides/criteres`, `evaluer`, `profil`, `plan`), l'identification OPCO v2 (certitude, lien officiel, licence France Compétences à obtenir), le dataset v4, `npm run check-sources`, le guide `docs/donnees-aides.md` ; mettre à jour le tableau « Vérifications » avec le nombre réel de tests (sortie de `npx vitest run`).
 
 - [ ] **Step 8 : Commit**
 
@@ -7444,7 +7444,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Modify: `apps/mobile/app.json` (`version: "1.3.0"`, `android.versionCode: 4`)
 - Create: `.claude/launch.json` (serveur Expo web pour les tests dans le navigateur)
 
-- [ ] **Step 1 : Version** — `apps/mobile/app.json` : `"version": "1.3.0"` et `"versionCode": 4`.
+- [ ] **Step 1 : Version.** `apps/mobile/app.json` : `"version": "1.3.0"` et `"versionCode": 4`.
 
 - [ ] **Step 2 : Vérifications automatiques**
 
@@ -7486,11 +7486,11 @@ git commit -m "app 1.3.0 : aides et financements, identification OPCO fiable
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
 
-- [ ] **Step 5 : Rendre compte à l'utilisateur** — résumé des corrections, chiffres du catalogue, limites (aides « à confirmer », liens à vérifier), et **demander son accord** avant : (a) push de la branche, (b) publication du dataset v4 sur `main` (met à jour les APK installés). Rappeler les actions de son ressort : secret `ANTHROPIC_API_KEY` et réactivation du workflow, envoi de la demande de licence, build EAS de l'APK 1.3.0.
+- [ ] **Step 5 : Rendre compte à l'utilisateur.** Résumé des corrections, chiffres du catalogue, limites (aides « à confirmer », liens à vérifier), et **demander son accord** avant : (a) push de la branche, (b) publication du dataset v4 sur `main` (met à jour les APK installés). Rappeler les actions de son ressort : secret `ANTHROPIC_API_KEY` et réactivation du workflow, envoi de la demande de licence, build EAS de l'APK 1.3.0.
 
 ---
 
-# Révision du 06/10/2026 — cible : site web financementOPCO
+# Révision du 06/10/2026 (cible : site web financementOPCO)
 
 L'utilisateur a choisi le **site financementOPCO** (Next.js 16, export statique, Hostinger) comme support final. Le moteur et les données (`@opco/core`) ne changent pas ; les écrans sont réalisés dans le site, intégré au monorepo sous `apps/web`. L'app mobile reste en l'état et doit continuer à compiler.
 
@@ -7522,7 +7522,7 @@ L'utilisateur a choisi le **site financementOPCO** (Next.js 16, export statique,
 **Files:** Modify `apps/web/src/components/wizard/*`, `apps/web/src/components/results/FundingBreakdown.tsx`, `apps/web/src/app/opco/page.tsx`, `apps/web/src/app/opco/[slug]/page.tsx`, `apps/web/src/hooks/useWizard.ts` ; Delete `apps/web/src/lib/calculator.ts`, `apps/web/src/lib/opco-resolver.ts`, `apps/web/data/` ; Modify `packages/core/src/types.ts` + `schema.ts` (champ facultatif `nom_complet?: string` dans `OpcoData`).
 
 - [ ] Remplacer tous les imports du site vers `lib/calculator`, `lib/opco-resolver`, `data/opcos` et les types métier de `lib/types` par `@opco/core` (`calculateFunding`, `EMBEDDED_OPCOS`, `getEmbeddedOpcoBySlug`, `WizardState`, `createInitialWizardState`, labels). `apps/web/src/lib/types.ts` ne garde que ce qui est propre au site (ou disparaît).
-- [ ] Branche : le site passe de `selectedBranche` / `baremes_par_branche` à `selectedBrancheId` / `variantes_branche` (application automatique par IDCC, choix manuel prioritaire — voir `resolveVarianteBranche`).
+- [ ] Branche : le site passe de `selectedBranche` / `baremes_par_branche` à `selectedBrancheId` / `variantes_branche` (application automatique par IDCC, choix manuel prioritaire ; voir `resolveVarianteBranche`).
 - [ ] Fiches OPCO : afficher depuis `OpcoData` de `@opco/core` ; `dispositifs_sans_budget` → `dispositifs_complementaires` (avec leur règle de cumul) ; `baremes_par_branche` → `variantes_branche` ; `generateStaticParams` à partir de `EMBEDDED_OPCOS`. Ajouter `nom_complet?: string` au type et au schéma (`z.string().optional()`), renseigné pour les 11 OPCO (reprendre les valeurs de `opco-funding/data/opcos/*.json` si absentes).
 - [ ] `FundingBreakdown` du site : lire le `FundingResult` du moteur (lignes avec `poste`, dispositifs complémentaires, démarches) ; afficher dispositifs et démarches comme sections ; lien de contact seulement si `opcoEmail` non vide.
 - [ ] Vérifier : build du site OK ; même scénario (AKTO, organismes de formation, 140 h à 4 200 €) cohérent avec les barèmes de la tâche 8 ; `cd apps/mobile && npx tsc --noEmit` ; tests core.
@@ -7548,7 +7548,7 @@ L'utilisateur a choisi le **site financementOPCO** (Next.js 16, export statique,
 **Files:** Create `apps/web/src/components/wizard/StepProjet.tsx` ; Modify `StepSituation.tsx` (Bénéficiaire), `StepFormation.tsx`, `StepRecap.tsx`, `WizardContainer.tsx`, `apps/web/src/lib/etapes.ts`, `apps/web/src/hooks/useWizard.ts`.
 
 - [ ] Ajouter l'étape `projet` en tête de `etapes.ts` (6 étapes) et `StepProjet` (5 choix `PROJET_LABELS`).
-- [ ] « Bénéficiaire », « Formation » et « Récapitulatif » : mêmes champs, mêmes règles et mêmes libellés que les composants de la tâche 14 (versions web) — questions selon `STATUT_PAR_PROJET`, oui / non / je ne sais pas, niveau visé, éligibilité CPF, mois de début (`moisDepuisSaisie` / `saisieDepuisMois`), Qualiopi.
+- [ ] « Bénéficiaire », « Formation » et « Récapitulatif » : mêmes champs, mêmes règles et mêmes libellés que les composants de la tâche 14 (versions web). Questions selon `STATUT_PAR_PROJET`, oui / non / je ne sais pas, niveau visé, éligibilité CPF, mois de début (`moisDepuisSaisie` / `saisieDepuisMois`), Qualiopi.
 - [ ] `canGoNext` : règles de la tâche 14, étape 6 (par projet).
 - [ ] Le site n'utilise plus `isReconversion` / `isSortieChomage` (les champs restent dans `@opco/core` pour l'app mobile).
 - [ ] Vérifier : build, tests core, typecheck mobile ; parcours complet dans le navigateur pour les 5 projets.
