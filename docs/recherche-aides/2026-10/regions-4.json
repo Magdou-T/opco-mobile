@@ -1,0 +1,1361 @@
+{
+  "meta": {
+    "perimetre": "Régions 93 Provence-Alpes-Côte d'Azur, 94 Corse (Collectivité de Corse), 04 La Réunion",
+    "date_verification": "2026-10-05",
+    "auteur": "agent regions-4",
+    "nb_aides": 16
+  },
+  "aides": [
+    {
+      "id": "r93-programme-regional-formation",
+      "nom": "Programme régional de formation (PRF) de la Région Sud",
+      "financeur": "region",
+      "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations collectives achetées par la Région Sud (marché « Compétences professionnelles », cofinancé par le FSE+) pour les personnes en recherche d'emploi, vers des métiers correspondant aux besoins de compétences repérés en région.",
+      "criteres": {
+        "regions": [
+          "93"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être en recherche d'emploi ou éloigné de l'emploi (demandeurs d'emploi, jeunes, seniors, personnes handicapées, personnes inactives…)",
+        "La formation doit figurer au Programme régional de formation (filtre « Programme Régional Formation 2022-2026 (PRF) » du catalogue du Carif-Oref)"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Peut s'accompagner de la rémunération des stagiaires de la formation professionnelle si l'action est agréée à ce titre."
+      },
+      "demarches": [
+        "Rechercher la formation dans le catalogue du Carif-Oref Provence-Alpes-Côte d'Azur (programme « PRF » ou financeur « Région Sud »)",
+        "Valider le projet avec un conseiller (France Travail, Mission locale, Cap emploi, APEC…)",
+        "Candidater auprès de l'organisme de formation qui organise la session"
+      ],
+      "url_demarche": "https://www.cariforef-provencealpescotedazur.fr/Formation",
+      "sources": [
+        {
+          "url": "https://www.cariforef-provencealpescotedazur.fr/Page/financer-sa-formation",
+          "titre": "Carif-Oref Provence-Alpes-Côte d'Azur – Financer sa formation",
+          "extrait": "Le Plan Régional de Formation (PRF) rassemble les actions de formations collectives achetées par la Région Sud en fonction de ses besoins territoriaux"
+        },
+        {
+          "url": "https://www.orientation-regionsud.fr/Contenu/demandeurs-d-emploi-financer-formation",
+          "titre": "Orientation Région Sud – Demandeur d'emploi : financer votre formation",
+          "extrait": "La région Sud établit chaque année un Plan régional de formation qui vise des actions de formation vers des métiers en correspondance avec les besoins de compétences repérés en région."
+        },
+        {
+          "url": "https://europe.maregionsud.fr/competences-professionnelles-2022-2026-se-former-avec-le-fse",
+          "titre": "Europe en Région Sud – « Compétences professionnelles 2022-2026 »",
+          "extrait": "La Région Sud met en œuvre son projet au travers d’un marché public dédié, « Compétences professionnelles » pour la période 2022 à 2026, d’un montant de près de 131 millions d’euros, qu’elle co-finance à parité avec l’Union européenne (FSE+)."
+        },
+        {
+          "url": "https://www.cariforef-provencealpescotedazur.fr/Formation",
+          "titre": "Carif-Oref Provence-Alpes-Côte d'Azur – Rechercher une formation",
+          "extrait": "Programme Régional Formation 2022-2026 (PRF)"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r93-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (Région Sud)",
+      "financeur": "region",
+      "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Indemnité mensuelle versée par la Région Sud aux personnes en recherche d'emploi non indemnisées par France Travail qui suivent une formation agréée par l'État ou la Région, prescrite par un conseiller en évolution professionnelle. Des frais de transport ou d'hébergement peuvent s'y ajouter selon la distance.",
+      "criteres": {
+        "regions": [
+          "93"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être en recherche d'emploi et non indemnisé par France Travail (ou relever d'un autre public éligible : RSA, ASS, AAH, personne handicapée en centre de réadaptation…)",
+        "Suivre une formation agréée par l'État ou la Région, prescrite par un organisme du Conseil en évolution professionnelle dans le cadre du PPAE",
+        "Dossier saisi par l'organisme de formation dans l'application SUDREMU au plus tard à la date de fin de la formation"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 769.49,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Barème appliqué du 1er avril 2025 au 31 mars 2026 : 769,49 € par mois à partir de 26 ans (et dans certaines situations : activité salariée antérieure, parent isolé, handicap…), 561,68 € de 18 à 25 ans, 224,68 € avant 18 ans ; barème revalorisé chaque année",
+        "majorations": [
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 224.68,
+            "libelle": "Moins de 18 ans : 224,68 € par mois (barème 2025-2026)"
+          },
+          {
+            "criteres": {
+              "age_min": 18,
+              "age_max": 25
+            },
+            "valeur": 561.68,
+            "libelle": "18 à 25 ans : 561,68 € par mois, ou 769,49 € avec 6 mois d'activité salariée sur 12 ou 12 mois sur 24 (barème 2025-2026)"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Réservée aux personnes non indemnisées par France Travail (pas de cumul avec l'allocation chômage)."
+      },
+      "demarches": [
+        "Élaborer le projet avec un organisme du Conseil en évolution professionnelle (France Travail, Mission locale, Cap emploi, APEC…), qui le valide",
+        "Faire déposer le dossier par l'organisme de formation dans l'application SUDREMU, au plus tard à la date de fin de la formation",
+        "La rémunération est versée directement au stagiaire par Docaposte pour le compte de la Région"
+      ],
+      "url_demarche": "https://www.maregionsud.fr/vos-aides/detail/remuneration-des-stagiaires-de-la-formation-professionnelle",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/remuneration-des-stagiaires-de-la-formation-professionnelle",
+          "titre": "Région Sud – Rémunération des stagiaires de la formation professionnelle",
+          "extrait": "Barèmes de la rémunération appliqués du 1ᵉʳ avril 2025 au 31 mars 2026"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/remuneration-des-stagiaires-de-la-formation-professionnelle",
+          "titre": "Région Sud – Rémunération des stagiaires de la formation professionnelle",
+          "extrait": "Personne en recherche d’emploi de moins de 18 ans : 224,68 euros/mois Personne en recherche d’emploi de 18 à 25 ans : 561,68 euros/mois Personne en recherche d'emploi de 26 ans ou plus : 769,49 euros/mois"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/remuneration-des-stagiaires-de-la-formation-professionnelle",
+          "titre": "Région Sud – Rémunération des stagiaires de la formation professionnelle",
+          "extrait": "Les personnes en recherche d’emploi de plus de 16 ans non indemnisés par France Travail"
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/la-remuneration-des-formations-d.html",
+          "titre": "France Travail – Rémunération de formation (montant calqué sur la RSFP)",
+          "extrait": "Le montant de la RFFT est calqué sur celui de la rémunération des stagiaires de la formation professionnelle ( RSFP ), dont le montant est fixé par décret. Selon votre situation, son montant varie entre 224,68 € et 769,49 € (avec un plafond de 2 170,90 € pour les travailleurs handicapés)."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r93-pass-vae",
+      "nom": "Pass VAE (Région Sud)",
+      "financeur": "region",
+      "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
+      "categorie": "cout_formation",
+      "projets": [
+        "reconversion_salarie",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi"
+      ],
+      "description": "Aide de la Région Sud au financement d'un parcours de validation des acquis de l'expérience : accompagnement jusqu'au jury, modules manquants après une validation partielle et formations obligatoires exigées par le certificateur.",
+      "criteres": {
+        "regions": [
+          "93"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi, salarié en contrat précaire (CDD, intérim, saisonnier, remplacement, CDI à temps partiel de 60 % maximum), auto-entrepreneur dont l'activité est « en création » ou « conservée » par France Travail, militaire en transition professionnelle ou détenu",
+        "Déposer la demande après l'obtention du livret 1 (recevabilité) sur la plateforme France VAE"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 100,
+        "base": "cout_pedagogique",
+        "plafond": 1100,
+        "duree_max_mois": null,
+        "libelle": "Pass 1 : frais d'accompagnement jusqu'au jury pris en charge dans la limite de 1 100 € ; Pass 2 : modules manquants après validation partielle, jusqu'à 1 800 € ; Pass + : formations ou habilitations obligatoires, jusqu'à 400 €"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Le Pass VAE se compose de trois aides (Pass 1, Pass 2, Pass +) selon l'étape du parcours."
+      },
+      "demarches": [
+        "Obtenir la recevabilité (livret 1) sur France VAE",
+        "Déposer la demande sur la plateforme régionale des aides individuelles avec les pièces justificatives",
+        "Suivre l'instruction et transmettre les compléments via la messagerie sécurisée du dossier"
+      ],
+      "url_demarche": "https://aidesformation.maregionsud.fr/",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/validation-des-acquis-de-lexperience",
+          "titre": "Région Sud – Pass VAE",
+          "extrait": "Pass 1 accompagnement : plafonnée à 1 100 euros, l’aide régionale prend en charge les frais d’accompagnement au dépôt du livret 2 pour l’obtention du diplôme avant le passage devant le jury"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/validation-des-acquis-de-lexperience",
+          "titre": "Région Sud – Pass VAE",
+          "extrait": "Pass 2 post jury : plafonnée à 1 800 euros, l’aide régionale prend en charge les modules manquant(s) après l’obtention partielle du diplôme (post jury)"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/validation-des-acquis-de-lexperience",
+          "titre": "Région Sud – Pass VAE",
+          "extrait": "Pass + : plafonnée à 400 euros, l’aide régionale prend en charge les frais de formations obligatoires ou habilitations exigées par le certificateur pour finaliser le parcours VAE et valider le diplôme visé"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/validation-des-acquis-de-lexperience",
+          "titre": "Région Sud – Pass VAE",
+          "extrait": "Les salariés en contrat précaire, à savoir : Contrat à Durée Indéterminée (CDI) à temps partiel (60 % maximum)"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/validation-des-acquis-de-lexperience",
+          "titre": "Région Sud – Pass VAE",
+          "extrait": "Chaque demande doit être transmis de manière dématérialisée sur la plateforme régionale après l'obtention du Livret 1 sur le site du gouvernement France VAE"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r93-bourse-sanitaire-social",
+      "nom": "Bourse régionale d'études dans les filières du sanitaire et du travail social (Région Sud)",
+      "financeur": "region",
+      "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Bourse d'études de la Région Sud, sous conditions de ressources, pour les personnes inscrites dans une formation sanitaire ou sociale d'un institut autorisé ou agréé par la Région (aide-soignant, auxiliaire de puériculture, infirmier, accompagnant éducatif et social, éducateur…).",
+      "criteres": {
+        "regions": [
+          "93"
+        ],
+        "perimetre_region": "beneficiaire",
+        "duree_min_heures": 140
+      },
+      "conditions": [
+        "Être inscrit dans un institut de formation sanitaire ou sociale autorisé ou agréé par la Région Sud, dans une formation éligible",
+        "Ressources familiales ne permettant pas de suivre la formation dans des conditions financières suffisantes",
+        "Exclus notamment : formations éligibles aux bourses du CROUS, salariés pris en charge par un OPCO ou un projet de transition professionnelle, alternants, demandeurs d'emploi rémunérés au titre de la formation",
+        "Demande à déposer au plus tard 2 mois après l'entrée en formation et à renouveler chaque année"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 6335,
+        "duree_max_mois": null,
+        "libelle": "Entre 1 454 € et 6 335 € par année de formation selon les ressources, versés en 10 mensualités (6 pour la formation d'ambulancier)"
+      },
+      "cumul": {
+        "cumulable": false,
+        "alternatives": [
+          "r93-remuneration-stagiaires"
+        ],
+        "note": "Exclut les demandeurs d'emploi rémunérés au titre de la formation professionnelle."
+      },
+      "demarches": [
+        "Obtenir auprès de l'institut de formation le code d'authentification",
+        "Déposer la demande sur la plateforme régionale dès l'ouverture de la campagne et au plus tard 2 mois après l'entrée en formation",
+        "Joindre les justificatifs dans le dossier dématérialisé"
+      ],
+      "url_demarche": "https://www.maregionsud.fr/vos-aides/detail/bourse-regionale-detudes-dans-les-filieres-du-sanitaire-et-du-travail-social",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/bourse-regionale-detudes-dans-les-filieres-du-sanitaire-et-du-travail-social",
+          "titre": "Région Sud – Bourse régionale d'études sanitaire et social",
+          "extrait": "L'aide régionale prend la forme d'une bourse d'études comprise entre 1 454 euros et 6 335 euros et est versée en 10 mensualités pour un cursus complet, hors formation d'ambulancier qui est versée en 6 mensualités."
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/bourse-regionale-detudes-dans-les-filieres-du-sanitaire-et-du-travail-social",
+          "titre": "Région Sud – Bourse régionale d'études sanitaire et social",
+          "extrait": "À temps plein ou en cursus partiel (la durée minimale de formation doit être égale ou supérieure à 140 heures)"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/bourse-regionale-detudes-dans-les-filieres-du-sanitaire-et-du-travail-social",
+          "titre": "Région Sud – Bourse régionale d'études sanitaire et social",
+          "extrait": "Les demandeurs d’emploi stagiaires de la formation professionnelle et bénéficiaires à ce titre d'une rémunération"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/bourse-regionale-detudes-dans-les-filieres-du-sanitaire-et-du-travail-social",
+          "titre": "Région Sud – Bourse régionale d'études sanitaire et social",
+          "extrait": "La campagne de dépôt des dossiers est fixée à partir du 8 juin 2026."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r93-prame-mobilite-internationale",
+      "nom": "PRAME – Aide régionale à la mobilité internationale des étudiants, y compris en alternance",
+      "financeur": "region",
+      "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Bourse de la Région Sud pour un stage ou un semestre d'études à l'étranger, ouverte aux étudiants en formation initiale ou en alternance inscrits dans un établissement partenaire PRAME (enseignement supérieur, BTS, filières sanitaires et sociales).",
+      "criteres": {
+        "regions": [
+          "93"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être inscrit en formation initiale ou en alternance dans un établissement partenaire PRAME situé en Provence-Alpes-Côte d'Azur",
+        "Être domicilié fiscalement en Provence-Alpes-Côte d'Azur, avec un quotient familial n'excédant pas 26 000 €",
+        "Avoir moins de 30 ans au 31 décembre 2026 (volets enseignement supérieur, BTS et études)",
+        "Durée minimale à l'étranger : 8 semaines (stage, enseignement supérieur), 4 semaines (stage BTS), 3 semaines (sanitaire et social), 12 semaines (semestre d'études)",
+        "Pas de cumul avec Erasmus+ ou une autre aide à la mobilité internationale ; indemnité de stage ne dépassant pas 200 € par semaine"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 2500,
+        "duree_max_mois": null,
+        "libelle": "125 € par semaine complète à l'étranger, plafonné à 2 500 € par année universitaire (+ 400 € possibles en situation de handicap)"
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Non cumulable avec Erasmus+ ni avec toute autre aide à la mobilité internationale."
+      },
+      "demarches": [
+        "Obtenir le code d'authentification auprès de l'établissement de formation",
+        "Déposer la demande sur la plateforme régionale au plus tard 15 jours avant le départ",
+        "Transmettre le formulaire d'arrivée (versement de 80 %) puis le formulaire de fin de stage ou de séjour (solde)"
+      ],
+      "url_demarche": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-enseignement-superieur",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-enseignement-superieur",
+          "titre": "Région Sud – PRAME Enseignement supérieur",
+          "extrait": "Les étudiants inscrits en formation initiale ou en alternance au sein d’un établissement d'enseignement supérieur situé sur le territoire régional et partenaire PRAME de la Région Sud"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-enseignement-superieur",
+          "titre": "Région Sud – PRAME Enseignement supérieur",
+          "extrait": "L’aide régionale prend la forme d’une bourse de 125 euros par semaine complète de 7 jours consécutifs (repos hebdomadaire compris). Elle est plafonnée à 2 500 euros par année universitaire et par bénéficiaire sur cette même période."
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-enseignement-superieur",
+          "titre": "Région Sud – PRAME Enseignement supérieur",
+          "extrait": "Un forfait complémentaire de 400 € peut être attribué aux étudiants en situation de handicap."
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-enseignement-superieur",
+          "titre": "Région Sud – PRAME Enseignement supérieur",
+          "extrait": "Être âgé de moins de 30 ans au 31 décembre 2026"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-enseignement-superieur",
+          "titre": "Région Sud – PRAME Enseignement supérieur",
+          "extrait": "Avoir un Quotient Familial n'excédant pas 26 000 €"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-stage-bts",
+          "titre": "Région Sud – PRAME Stage BTS",
+          "extrait": "Réaliser un stage à l'étranger d'une durée minimale de 4 semaines"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-etudiante-prame-volet-sanitaire-et-social",
+          "titre": "Région Sud – PRAME Volet sanitaire et social",
+          "extrait": "Réaliser un stage à l'étranger d'une durée minimale de 3 semaines"
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-la-mobilite-internationale-etudiante-prame-etudes",
+          "titre": "Région Sud – PRAME Études",
+          "extrait": "un à deux semestres d'études à l'étranger de 12 semaines minimum"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r93-pass-zou-etudes",
+      "nom": "Pass ZOU! Études",
+      "financeur": "region",
+      "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "alternant",
+        "demandeur_emploi"
+      ],
+      "description": "Abonnement de la Région Sud donnant un accès illimité aux bus et trains régionaux du 1er septembre au 31 août, ouvert notamment aux apprentis et aux stagiaires de la formation professionnelle.",
+      "criteres": {
+        "regions": [
+          "93"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_max": 25
+      },
+      "conditions": [
+        "Avoir entre 3 et 25 ans (la même page indique aussi « moins de 25 ans » : à vérifier lors de l'achat)",
+        "Être notamment apprenti, stagiaire de la formation professionnelle, élève, étudiant ou volontaire du service civique"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Abonnement bus et train illimité en Région Sud pour 90 € par an"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Acheter le Pass ZOU! Études en ligne (inscriptions ouvertes à partir du 17 juin pour l'année scolaire suivante)"
+      ],
+      "url_demarche": "https://www.maregionsud.fr/vos-aides/detail/zou-etudes",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/zou-etudes",
+          "titre": "Région Sud – ZOU ! Études",
+          "extrait": "Pour les jeunes de 3 à 25 ans : maternelle, primaire, collégien, lycéen, étudiant, apprenti, stagiaire de la formation professionnelle, élève des formations sanitaires et sociales, volontaire du service civique."
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/zou-etudes",
+          "titre": "Région Sud – ZOU ! Études",
+          "extrait": "Avec la Région Sud, vous bénéficiez d’un abonnement de transport unique valable du 1er septembre au 31 août."
+        },
+        {
+          "url": "https://www.maregionsud.fr/ma-region/cest-quoi-la-region/education-orientation-et-apprentissage/toutes-vos-aides-en-1-clic",
+          "titre": "Région Sud – Toutes vos aides en 1 clic",
+          "extrait": "Avec le Pass ZOU ! Études, vous voyagez de manière illimitée en bus et en train sur toute la Région Sud pour seulement 90 € par an"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r93-fonds-aide-apprentis",
+      "nom": "Fonds d'aide régionale aux apprentis (FARA)",
+      "financeur": "region",
+      "financeur_nom": "Région Sud Provence-Alpes-Côte d'Azur",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide individuelle de la Région Sud destinée aux apprentis, demandée sur le portail régional des aides individuelles. Les conditions et le montant ne sont pas publiés sur le site de la Région à la date de vérification.",
+      "criteres": {
+        "regions": [
+          "93"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Être apprenti en cours de formation",
+        "Conditions d'attribution et montant à confirmer auprès du CFA ou de la Région avant toute demande"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Montant non publié par la Région : à confirmer"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Dispositif recensé dans le registre des traitements de la Région et sur le portail des aides individuelles, mais absent de la liste des aides de maregionsud.fr et de la page « aides aux apprentis » du portail régional d'orientation : ouverture en 2026 non confirmée."
+      },
+      "demarches": [
+        "Se renseigner auprès du CFA ou de la Région",
+        "Le cas échéant, déposer la demande sur le portail des aides individuelles de la Région"
+      ],
+      "url_demarche": "https://aidesformation.maregionsud.fr/",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/mentions-legales/donnees-personnelles/registre/detail/158",
+          "titre": "Région Sud – Registre des traitements : Fonds d'aide régionale aux apprentis",
+          "extrait": "Fonds d'aide régionale aux apprentis MENTIONS LEGALES PARTICULIERES CONCERNANT LES DONNÉES PERSONNELLES RELATIVES À L'ATTRIBUTION D'UNE AIDE RÉGIONALE AUX APPRENTIS"
+        },
+        {
+          "url": "https://aidesformation.maregionsud.fr/",
+          "titre": "Région Sud – Portail des aides individuelles (mentions données personnelles)",
+          "extrait": "Fonds d'aide régionale aux apprentis : adresse des parents, demandeur d’emploi, n° allocataire CAF, perçois des allocations, revenu, revenu du père, revenu de la mère"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "a_confirmer",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r94-programme-regional-formation",
+      "nom": "Programme régional de formation (PRF) de la Collectivité de Corse",
+      "financeur": "region",
+      "financeur_nom": "Collectivité de Corse",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations pré-qualifiantes, qualifiantes et certifiantes financées par la Collectivité de Corse pour les demandeurs d'emploi, mises en œuvre par l'AFPA et par commande publique ; ces formations peuvent être rémunérées.",
+      "criteres": {
+        "regions": [
+          "94"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi",
+        "La formation doit figurer au Programme régional de formation de la Collectivité de Corse"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Peut s'accompagner de la rémunération des stagiaires de la formation professionnelle."
+      },
+      "demarches": [
+        "Rechercher une formation sur Corsica Orientazione (rubrique « Truvà una furmazioni »)",
+        "Valider le projet et son financement avec un conseiller en évolution professionnelle (France Travail, Mission locale…)"
+      ],
+      "url_demarche": "https://orientazione.isula.corsica/se-former/",
+      "sources": [
+        {
+          "url": "https://www.isula.corsica/assemblea/docs/RapportCP/2026124CP.pdf",
+          "titre": "Collectivité de Corse – Rapport n° 2026/124/CP (24 juin 2026), financement du PRF",
+          "extrait": "Son action en faveur des demandeurs d’emploi se traduit par deux axes d’intervention élaborés afin de satisfaire au mieux les besoins de l’économie et des publics : - d’une part, une programmation dans le cadre d’une commande publique (30% de l’offre en direction des demandeurs d’emploi),"
+        },
+        {
+          "url": "https://orientazione.isula.corsica/se-former/financer-ma-formation/",
+          "titre": "Corsica Orientazione – Financer ma formation",
+          "extrait": "Le Programme régional de formation (formations pré qualifiantes, qualifiantes et certifiantes)."
+        },
+        {
+          "url": "https://orientazione.isula.corsica/actualite/comment-financer-ma-formation/",
+          "titre": "Corsica Orientazione – Comment financer ma formation ?",
+          "extrait": "Par ailleurs la Collectivité de Corse avec le Programme Régional de Formation finance également la formation des demandeurs d’emploi et propose différents types de formation (qualifiantes et pré-qualifiantes), ces formations peuvent être rémunérées."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r94-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (Collectivité de Corse)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité de Corse",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle prise en charge par la Collectivité de Corse pour les demandeurs d'emploi qui suivent une formation qu'elle finance et qui est agréée au titre de la rémunération, selon le barème national fixé par décret.",
+      "criteres": {
+        "regions": [
+          "94"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Suivre une formation financée par la Collectivité de Corse et agréée au titre de la rémunération",
+        "Ne pas avoir droit aux allocations d'assurance chômage"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Barème national fixé par décret : entre 224,68 € et 769,49 € par mois selon l'âge et la situation (plafond de 2 170,90 € pour les travailleurs handicapés)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Destinée aux stagiaires sans droit à l'allocation d'assurance chômage."
+      },
+      "demarches": [
+        "Valider le projet avec un conseiller en évolution professionnelle",
+        "Se renseigner auprès de l'organisme de formation, qui transmet le dossier de rémunération à l'ASP"
+      ],
+      "url_demarche": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/la-remuneration-des-stagiaires-d.html",
+      "sources": [
+        {
+          "url": "https://www.isula.corsica/assemblea/docs/rapports/2024E3149.pdf",
+          "titre": "Collectivité de Corse – Rapport n° 2024/E3/149, PRIC 2024-2027",
+          "extrait": "Les actions prises en charge sont : - les actions de formation mise en place dans le cadre de l’AFPA ou d’une commande publique ; - la rémunération des stagiaires de la formation professionnelle ; - les aides individuelles ;"
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/la-remuneration-des-formations-d.html",
+          "titre": "France Travail – Rémunération de formation (montant calqué sur la RSFP)",
+          "extrait": "Le montant de la RFFT est calqué sur celui de la rémunération des stagiaires de la formation professionnelle ( RSFP ), dont le montant est fixé par décret. Selon votre situation, son montant varie entre 224,68 € et 769,49 € (avec un plafond de 2 170,90 € pour les travailleurs handicapés)."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/la-remuneration-des-stagiaires-d.html",
+          "titre": "France Travail – Rémunération des stagiaires de la formation professionnelle (RSFP)",
+          "extrait": "Elle concerne les stagiaires qui n’ont pas droit aux allocations d’assurance chômage."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r94-assegnu-vae",
+      "nom": "Assegnu VAE",
+      "financeur": "region",
+      "financeur_nom": "Collectivité de Corse",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "dirigeant"
+      ],
+      "description": "Aide de la Collectivité de Corse à l'accompagnement méthodologique d'une VAE (élaboration du livret et préparation au jury), versée à l'organisme accompagnateur certifié Qualiopi.",
+      "criteres": {
+        "regions": [
+          "94"
+        ],
+        "perimetre_region": "beneficiaire",
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "Résider en Corse et avoir obtenu la recevabilité de la demande de VAE",
+        "Relever d'un public éligible : bénévole, bénéficiaire du RSA non inscrit à France Travail, bénéficiaire de l'AAH, personne sous main de justice, futur créateur d'entreprise dont l'activité réglementée exige une qualification, ou cas particulier sans autre prise en charge",
+        "Priorité aux VAE de niveau 3 à 6 visant un métier en tension défini par le CREFOP",
+        "Ne pas avoir bénéficié d'un chèque accompagnement VAE ou de l'Assegnu VAE au cours des trois années précédentes",
+        "Demande déposée par l'organisme accompagnateur avant le début de l'accompagnement, dans la limite des crédits annuels"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 1200,
+        "duree_max_mois": null,
+        "libelle": "Accompagnement VAE financé jusqu'à 1 200 € (financement total hors CPF ou abondement du CPF), versé à l'organisme accompagnateur, si l'aide est accordée"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Peut abonder le CPF du candidat."
+      },
+      "demarches": [
+        "Obtenir la recevabilité de la VAE",
+        "Choisir un organisme accompagnateur certifié Qualiopi, qui adresse la demande au service de l'orientation professionnelle de la Collectivité de Corse (assegnuvae@isula.corsica)",
+        "Attendre la notification de l'aide avant de commencer l'accompagnement"
+      ],
+      "url_demarche": "https://orientazione.isula.corsica/definir-mon-projet/evolution-professionnelle/dispositifs-emploi-formation/",
+      "sources": [
+        {
+          "url": "https://orientazione.isula.corsica/definir-mon-projet/evolution-professionnelle/dispositifs-emploi-formation/",
+          "titre": "Corsica Orientazione – Dispositifs Emploi-Formation (Assegnu VAE)",
+          "extrait": "Pour les bénéficiaires de ce dispositif, la Collectivité de Corse assure un financement à hauteur de 1200 € maximum ; l’accompagnement est assuré par des structures labellisées QUALIOPI."
+        },
+        {
+          "url": "https://orientazione.isula.corsica/content/uploads/2025/02/AVENANT-REGLEMENT-DES-AIDES-ASSEGNU-VAE-2-1.pdf",
+          "titre": "Collectivité de Corse – Règlement de l'aide « Assegnu VAE »",
+          "extrait": "*Faire partie d’une de ces catégories de public : -bénévole. -bénéficiaire du RSA non-inscrits à France Travail."
+        },
+        {
+          "url": "https://orientazione.isula.corsica/content/uploads/2025/02/AVENANT-REGLEMENT-DES-AIDES-ASSEGNU-VAE-2-1.pdf",
+          "titre": "Collectivité de Corse – Règlement de l'aide « Assegnu VAE »",
+          "extrait": "-bénéficiaires de l’AAH (Allocation adulte handicapé). -futurs créateurs d’entreprise dont l’activité est réglementée par l’obtention d’une qualification."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r94-mobilite-apprentis",
+      "nom": "Aide à la mobilité des apprentis (Aiutu à a mubilità di l'ampareti)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité de Corse",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Remboursement par la Collectivité de Corse des frais de déplacement des apprentis et alternants dont la formation théorique se déroule en France continentale parce qu'elle n'est pas dispensée en Corse.",
+      "criteres": {
+        "regions": [
+          "94"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_max": 27,
+        "types_alternance": [
+          "apprentissage",
+          "professionnalisation"
+        ]
+      },
+      "conditions": [
+        "Formation non dispensée en Corse, suivie en France continentale",
+        "Contrat d'apprentissage ou de professionnalisation signé avec une entreprise dont l'établissement employeur est en Corse",
+        "Être domicilié fiscalement en Corse au cours des trois dernières années et être assidu aux cours",
+        "Quotient familial de 25 000 € maximum",
+        "Remboursement sur factures acquittées, dans la limite des crédits disponibles"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 1000,
+        "duree_max_mois": null,
+        "libelle": "Remboursement des frais de déplacement sur justificatifs, jusqu'à 1 000 €"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Créer un compte sur la plateforme Ghjuventù",
+        "Déposer la demande entre le 25 juillet 2026 et le 31 mai 2027 avec le contrat, les justificatifs de déplacement et l'attestation d'inscription en CFA"
+      ],
+      "url_demarche": "https://www.ghjuventu.corsica/articles/CF7B4FA7-4CB5-4649-A407-6F9AA4E536CA",
+      "sources": [
+        {
+          "url": "https://www.ghjuventu.corsica/articles/CF7B4FA7-4CB5-4649-A407-6F9AA4E536CA",
+          "titre": "Ghjuventù (Collectivité de Corse) – Aide à la mobilité des apprentis",
+          "extrait": "L'attribution de cette aide permet de financer le besoin de mobilité des apprentis, même en ante-bac qui ont besoin dans leur parcours d'une formation théorique en France continentale qui n'est pas dispensée en Corse."
+        },
+        {
+          "url": "https://www.ghjuventu.corsica/articles/CF7B4FA7-4CB5-4649-A407-6F9AA4E536CA",
+          "titre": "Ghjuventù (Collectivité de Corse) – Aide à la mobilité des apprentis",
+          "extrait": "Elle vient en aide aux charges de déplacement. Le montant de l'aide maximale est de 1 000€."
+        },
+        {
+          "url": "https://www.ghjuventu.corsica/articles/CF7B4FA7-4CB5-4649-A407-6F9AA4E536CA",
+          "titre": "Ghjuventù (Collectivité de Corse) – Aide à la mobilité des apprentis",
+          "extrait": "Être âgé de moins de 28 ans au 31 décembre de l'année en cours"
+        },
+        {
+          "url": "https://www.ghjuventu.corsica/articles/CF7B4FA7-4CB5-4649-A407-6F9AA4E536CA",
+          "titre": "Ghjuventù (Collectivité de Corse) – Aide à la mobilité des apprentis",
+          "extrait": "Être en contrat d'apprentissage ou de professionnalisation avec signature d'une entreprise sur le territoire Corse"
+        },
+        {
+          "url": "https://www.ghjuventu.corsica/articles/CF7B4FA7-4CB5-4649-A407-6F9AA4E536CA",
+          "titre": "Ghjuventù (Collectivité de Corse) – Aide à la mobilité des apprentis",
+          "extrait": "à partir du 25 juillet 2026 et jusqu'au 31 mai 2027"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": "2026-07-25",
+        "fin": "2027-05-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r94-train-gratuit-apprentis",
+      "nom": "Gratuité du train domicile – lieu de formation (carte Via Corsica étudiant, lycéen interne, apprenti)",
+      "financeur": "region",
+      "financeur_nom": "Collectivité de Corse",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Mesure de la Collectivité de Corse : trajet gratuit en train entre le domicile et la gare la plus proche de l'établissement fréquenté pour les étudiants post-bac (y compris en apprentissage), les lycéens internes et les apprentis mineurs, moyennant des frais annuels.",
+      "criteres": {
+        "regions": [
+          "94"
+        ],
+        "perimetre_region": "beneficiaire",
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Être apprenti mineur, ou étudiant post-bac en apprentissage, inscrit dans un établissement en Corse",
+        "Trajet limité au parcours domicile – gare la plus proche de l'établissement, choisi lors de la demande",
+        "Fournir l'attestation d'études 2026/2027 et, pour les apprentis, la copie du contrat d'apprentissage"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Transport ferroviaire gratuit sur le trajet domicile – établissement (frais annuels de 20 € à la charge du bénéficiaire)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Remplir en ligne le formulaire de demande de carte Via Corsica « étudiant – lycéen interne – apprenti » des Chemins de fer de la Corse",
+        "Régler les frais annuels de 20 € lors de la demande ou du renouvellement"
+      ],
+      "url_demarche": "https://cf-corse.corsica/carte-etudiant-lyceen-interne-apprenti-mineur-via-corsica/",
+      "sources": [
+        {
+          "url": "https://cf-corse.corsica/carte-etudiant-lyceen-interne-apprenti-mineur-via-corsica/",
+          "titre": "Chemins de fer de la Corse – Carte étudiant-lycéen interne-apprenti mineur Via Corsica",
+          "extrait": "La Collectivité de Corse souhaite contribuer à l’amélioration des conditions de vie des étudiants, lycéens internes et apprentis mineurs en proposant une mesure d’aide au transport ferroviaire."
+        },
+        {
+          "url": "https://cf-corse.corsica/carte-etudiant-lyceen-interne-apprenti-mineur-via-corsica/",
+          "titre": "Chemins de fer de la Corse – Carte étudiant-lycéen interne-apprenti mineur Via Corsica",
+          "extrait": "Cette mesure se traduit par la gratuité du transport sur le parcours situé entre le domicile et l’arrêt de train le plus proche de l’établissement d’études/apprentissage fréquenté."
+        },
+        {
+          "url": "https://cf-corse.corsica/carte-etudiant-lyceen-interne-apprenti-mineur-via-corsica/",
+          "titre": "Chemins de fer de la Corse – Carte étudiant-lycéen interne-apprenti mineur Via Corsica",
+          "extrait": "Elles devront s’acquitter des frais annuels d’un montant de 20€."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r04-programme-regional-formation",
+      "nom": "Programme régional des formations professionnelles (PRFP) de la Région Réunion",
+      "financeur": "region",
+      "financeur_nom": "Région Réunion",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations collectives financées par la Région Réunion (cofinancées par le FSE+) pour les demandeurs de formation ou d'emploi : coûts pédagogiques pris en charge par la Région et indemnité mensuelle versée aux stagiaires.",
+      "criteres": {
+        "regions": [
+          "04"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur de formation ou d'emploi",
+        "La formation doit figurer au catalogue des formations de la Région Réunion"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "S'accompagne de la rémunération des stagiaires de la formation professionnelle versée pour le compte de la Région."
+      },
+      "demarches": [
+        "Consulter le catalogue des formations de la Région Réunion (Formanoo)",
+        "Valider le projet avec un conseiller (France Travail, Mission locale, Cap emploi) et candidater auprès de l'organisme de formation"
+      ],
+      "url_demarche": "https://www.formanoo.org/catalogues",
+      "sources": [
+        {
+          "url": "https://www.regionreunion.com/aides-services/article/demandeur-de-formation-ou-d-emploi-aides-regionaux",
+          "titre": "Région Réunion – Demandeur de formation ou d'emploi & aides régionales",
+          "extrait": "La Région te permet de bénéficier de la formation professionnelle gratuitement, en prenant en charge tous les frais pédagogiques. En plus, une indemnité mensuelle est versée aux stagiaires."
+        },
+        {
+          "url": "https://www.regionreunion.com/aides-services/article/demandeur-de-formation-ou-d-emploi-aides-regionaux",
+          "titre": "Région Réunion – Demandeur de formation ou d'emploi & aides régionales",
+          "extrait": "Te former gratuitement : les coûts pédagogiques sont entièrement pris en charge par la collectivité."
+        },
+        {
+          "url": "https://www.regionreunion.com/IMG/pdf/cadre_d_intervention_2025.pdf",
+          "titre": "Région Réunion – Cadre d'intervention Pass Formation 2025",
+          "extrait": "la Région Réunion met en œuvre, chaque année, un Programme Régional des Formations Professionnelles (PRFP)"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r04-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (Région Réunion)",
+      "financeur": "region",
+      "financeur_nom": "Région Réunion",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle, revalorisée par la Région Réunion en 2026, versée par l'ASP aux stagiaires de la formation professionnelle, avec protection sociale pendant toute la formation.",
+      "criteres": {
+        "regions": [
+          "04"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être stagiaire de la formation professionnelle dans une formation financée par la Région (y compris bénéficiaire du Pass Formation, sous conditions)",
+        "En cas d'allocation d'aide au retour à l'emploi (ARE), en parler au centre de formation et au conseiller dès l'entrée en stage"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 1000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "1 000 € par mois à partir de 26 ans ; 730 € de 18 à 25 ans ; 400 € de 16 à 18 ans ; 1 000 € minimum pour les personnes en situation de handicap",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 1000,
+            "libelle": "Personne en situation de handicap : 1 000 € minimum par mois"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 400,
+            "libelle": "16 à 18 ans : 400 € par mois"
+          },
+          {
+            "criteres": {
+              "age_min": 18,
+              "age_max": 25
+            },
+            "valeur": 730,
+            "libelle": "18 à 25 ans : 730 € par mois"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Versée par l'ASP pour le compte de la Région ; la situation est à examiner si la personne perçoit déjà l'ARE."
+      },
+      "demarches": [
+        "L'organisme de formation transmet le dossier à l'Agence de services et de paiement (ASP)",
+        "Signaler dès l'entrée en stage toute ARE en cours au centre de formation et au conseiller"
+      ],
+      "url_demarche": "https://www.regionreunion.com/aides-services/article/remuneration-des-stagiaires",
+      "sources": [
+        {
+          "url": "https://www.regionreunion.com/aides-services/article/remuneration-des-stagiaires",
+          "titre": "Région Réunion – Rémunération des stagiaires (26 février 2026)",
+          "extrait": "Désormais, le soutien financier peut atteindre jusqu’à 1000 € par mois, garantissant à chacun un revenu stable et une protection sociale durant toute la durée de sa formation."
+        },
+        {
+          "url": "https://www.regionreunion.com/aides-services/article/remuneration-des-stagiaires",
+          "titre": "Région Réunion – Rémunération des stagiaires (26 février 2026)",
+          "extrait": "16 à 18 ans 224,68 € 400 € 18 à 25 ans 561,68 € 730 € 26 ans et plus 769,49 € 1000 € Personnes en situation de handicap 769,49 € minimum 1000 € minimum"
+        },
+        {
+          "url": "https://www.regionreunion.com/aides-services/article/remuneration-des-stagiaires",
+          "titre": "Région Réunion – Rémunération des stagiaires (26 février 2026)",
+          "extrait": "Tous les stagiaires de la formation professionnelle * Les bénéficiaires du Pass’formation (sous conditions)"
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r04-pass-formation",
+      "nom": "Pass Formation (Région Réunion)",
+      "financeur": "region",
+      "financeur_nom": "Région Réunion",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide individuelle de la Région Réunion pour une formation certifiante liée à un métier en tension, à La Réunion ou en mobilité (hexagone, Union européenne) si la formation est inexistante ou saturée localement : coûts pédagogiques, rémunération de stagiaire et aides forfaitaires à la mobilité.",
+      "criteres": {
+        "regions": [
+          "04"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Être de nationalité française ou ressortissant de l'Union européenne et avoir au moins 16 ans à l'entrée en formation",
+        "Résider à La Réunion depuis plus de 6 mois et être inscrit à France Travail Réunion (catégories 1, 2 ou 3) à la date de la demande",
+        "Formation certifiante (RNCP) liée à un métier de la liste régionale des métiers en tension, dispensée par un organisme certifié Qualiopi",
+        "Le CPF doit être mobilisé en priorité s'il couvre la totalité du coût pédagogique",
+        "Volets mobilité : quotient familial inférieur à 26 631 € et non-éligibilité aux aides de LADOM",
+        "Exclus : formations universitaires, en apprentissage, titre ECSR ; pas de cumul avec les autres dispositifs de la Région, la NET-BOURSE ni les aides de LADOM"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 5000,
+        "duree_max_mois": null,
+        "libelle": "Coûts pédagogiques pris en charge jusqu'à 5 000 € par projet et par année de formation si le dossier est accepté ; en mobilité : forfait aérien de 800 € l'aller-retour et aide à l'installation de 400 € (moins de 2 mois) ou 800 € (plus de 2 mois)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Non cumulable avec les autres dispositifs de la Région Réunion, la NET-BOURSE du Département et les aides de LADOM ; les bénéficiaires peuvent percevoir la rémunération de stagiaire versée par l'ASP."
+      },
+      "demarches": [
+        "Vérifier que le métier visé figure dans la liste régionale des métiers en tension et obtenir le plan et le devis d'un organisme certifié Qualiopi",
+        "Déposer la demande auprès de la Direction de la Formation Professionnelle de la Région (cellule Aides individuelles et apprentissage) avec les annexes du cadre d'intervention"
+      ],
+      "url_demarche": "https://www.regionreunion.com/actualite/toute-l-actualite/article/pass-formation-un-soutien-personnalise-pour-la-formation-professionnelle-a-la-reunion",
+      "sources": [
+        {
+          "url": "https://www.regionreunion.com/IMG/pdf/cadre_d_intervention_2025.pdf",
+          "titre": "Région Réunion – Cadre d'intervention Pass Formation 2025",
+          "extrait": "Le montant de l’aide régionale est fixé à 5 000 € maximum par projet et par année de formation, au titre des frais pédagogiques."
+        },
+        {
+          "url": "https://www.regionreunion.com/IMG/pdf/cadre_d_intervention_2025.pdf",
+          "titre": "Région Réunion – Cadre d'intervention Pass Formation 2025",
+          "extrait": "Résider à La Réunion depuis plus de 6 mois et être inscrit à France Travail Réunion à la date de la demande de financement (Catégories 1,2 et 3),"
+        },
+        {
+          "url": "https://www.regionreunion.com/IMG/pdf/cadre_d_intervention_2025.pdf",
+          "titre": "Région Réunion – Cadre d'intervention Pass Formation 2025",
+          "extrait": "Prise en charge du déplacement aérien sur la base d’un forfait de 800 € pour un A/R, ▪ Aide forfaitaire à l’installation (400€ si <2 mois / 800€ > 2 mois),"
+        },
+        {
+          "url": "https://www.regionreunion.com/IMG/pdf/cadre_d_intervention_2025.pdf",
+          "titre": "Région Réunion – Cadre d'intervention Pass Formation 2025",
+          "extrait": "Avoir un quotient familial inférieur à 26 631 € pour les personnes sollicitant le volet « mobilité nationale » ou « mobilité internationale »."
+        },
+        {
+          "url": "https://www.regionreunion.com/actualite/toute-l-actualite/article/pass-formation-un-soutien-personnalise-pour-la-formation-professionnelle-a-la-reunion",
+          "titre": "Région Réunion – Pass Formation",
+          "extrait": "Les demandes relevant de l’ancien cadre sont recevables uniquement jusqu’au vendredi 27/03/2026 inclus."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    },
+    {
+      "id": "r04-reunipass-stagiaires",
+      "nom": "Réunipass – transport gratuit des stagiaires de la formation professionnelle",
+      "financeur": "region",
+      "financeur_nom": "Région Réunion",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Gratuité des bus et cars pour les stagiaires de la formation professionnelle, présentée par la Région Réunion parmi ses aides aux demandeurs de formation ou d'emploi.",
+      "criteres": {
+        "regions": [
+          "04"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être stagiaire de la formation professionnelle",
+        "Conditions de délivrance à vérifier auprès du réseau de transport régional (Car Jaune) ou de l'organisme de formation"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Voyage gratuit en bus et car pour les stagiaires"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Se renseigner auprès de l'organisme de formation ou du réseau Car Jaune pour obtenir le titre de transport"
+      ],
+      "url_demarche": "https://www.regionreunion.com/aides-services/article/demandeur-de-formation-ou-d-emploi-aides-regionaux",
+      "sources": [
+        {
+          "url": "https://www.regionreunion.com/aides-services/article/demandeur-de-formation-ou-d-emploi-aides-regionaux",
+          "titre": "Région Réunion – Demandeur de formation ou d'emploi & aides régionales",
+          "extrait": "Réunipass Voyage gratuit en bus et car pour les stagiaires."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated"
+    }
+  ],
+  "portails": [
+    {
+      "region": "93",
+      "nom_region": "Provence-Alpes-Côte d'Azur",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Sud – Toutes les aides",
+          "url": "https://www.maregionsud.fr/vos-aides",
+          "type": "region"
+        },
+        {
+          "titre": "Orientation Région Sud – Demandeur d'emploi : financer votre formation",
+          "url": "https://www.orientation-regionsud.fr/Contenu/demandeurs-d-emploi-financer-formation",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref Provence-Alpes-Côte d'Azur – Financer sa formation",
+          "url": "https://www.cariforef-provencealpescotedazur.fr/Page/financer-sa-formation",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Carif-Oref Provence-Alpes-Côte d'Azur – Rechercher une formation (filtre PRF / Région Sud)",
+          "url": "https://www.cariforef-provencealpescotedazur.fr/Formation",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro – Contacts en région",
+          "url": "https://www.transitionspro.fr/contacts-en-region/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail – Provence-Alpes-Côte d'Azur",
+          "url": "https://www.francetravail.fr/region/provence-alpes-cote-d-azur/",
+          "type": "france_travail"
+        }
+      ]
+    },
+    {
+      "region": "94",
+      "nom_region": "Corse",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Corsica Orientazione – Dispositifs et aides financières de la Collectivité de Corse 2026",
+          "url": "https://orientazione.isula.corsica/definir-mon-projet/les-dispositifs-et-aides-financieres-de-la-collectivite-de-corse/",
+          "type": "region"
+        },
+        {
+          "titre": "Ghjuventù – Aides de la Collectivité de Corse pour les jeunes",
+          "url": "https://www.ghjuventu.corsica/nos-aides",
+          "type": "region"
+        },
+        {
+          "titre": "Corsica Orientazione (missions Carif-Oref de la Collectivité de Corse) – Financer ma formation",
+          "url": "https://orientazione.isula.corsica/se-former/financer-ma-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Corsica Orientazione – Trouver une formation en Corse",
+          "url": "https://orientazione.isula.corsica/se-former/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Corsica",
+          "url": "https://www.transitionspro-corsica.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail – Corse",
+          "url": "https://www.francetravail.fr/region/corse/",
+          "type": "france_travail"
+        }
+      ]
+    },
+    {
+      "region": "04",
+      "nom_region": "La Réunion",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Réunion – Demandeur de formation ou d'emploi & aides régionales",
+          "url": "https://www.regionreunion.com/aides-services/article/demandeur-de-formation-ou-d-emploi-aides-regionaux",
+          "type": "region"
+        },
+        {
+          "titre": "Formanoo (Carif-Oref Réunion) – Catalogues des formations",
+          "url": "https://www.formanoo.org/catalogues",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Réunion",
+          "url": "https://www.transitionspro-reunion.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail – La Réunion",
+          "url": "https://monemploi-lareunion.francetravail.fr/",
+          "type": "france_travail"
+        }
+      ]
+    }
+  ],
+  "exclues": [
+    {
+      "nom": "Pass Sud Formation (Région Sud)",
+      "raison": "Portail de dépôt fermé aux nouvelles demandes (page mise à jour le 1er octobre 2026) ; seuls les dossiers déjà déposés sont instruits. Pour mémoire : coûts pédagogiques plafonnés à 9 500 € TTC et 35 € HT de l'heure, frais périphériques selon le quotient familial. À réintégrer si le portail rouvre.",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/pass-sud-formation",
+          "titre": "Région Sud – Pass Sud Formation",
+          "extrait": "Au regard de l’affluence des demandes déposées au titre du Pass Sud Formation, le portail de dépôt est actuellement fermé aux nouvelles demandes."
+        },
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/pass-sud-formation",
+          "titre": "Région Sud – Pass Sud Formation",
+          "extrait": "L’aide régionale prend la forme d’une prise en charge des coûts pédagogiques plafonnée à 9 500 euros TTC"
+        }
+      ]
+    },
+    {
+      "nom": "Aide à l'hébergement pour les élèves, étudiants et demandeurs d'emploi inscrits dans une formation financée par la Région (Région Sud)",
+      "raison": "Dispositif clos faute de disponibilité budgétaire (page mise à jour le 20 août 2026).",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/aide-a-lhebergement-pour-les-eleves-etudiants-et-demandeurs-demploi-dans-les-filieres-du-sanitaire-et-du-travail-social",
+          "titre": "Région Sud – Aide à l'hébergement",
+          "extrait": "Victime de son succès, l’Aide à l’hébergement est désormais close, faute de disponibilité budgétaire."
+        }
+      ]
+    },
+    {
+      "nom": "INVESTour (Région Sud) – prêts participatifs pouvant financer notamment la formation des salariés d'entreprises du tourisme",
+      "raison": "Dépôt des demandes suspendu.",
+      "sources": [
+        {
+          "url": "https://www.maregionsud.fr/vos-aides/detail/investour",
+          "titre": "Région Sud – INVESTour",
+          "extrait": "Le dépôt des demandes relatives à INVESTour est actuellement suspendu."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Agefiph : www.agefiph.fr était en maintenance (HTTP 503, page « www.agefiph.fr est en maintenance ») le 2026-10-06 ; aucun lien régional Agefiph n'a pu être vérifié, ils ne figurent donc pas dans les portails des trois régions.",
+    "PACA – Transitions Pro : le site régional https://www.transitionspro-paca.fr/ renvoie une page de contrôle anti-robot (HTTP 503) aux outils automatiques ; le lien national « Contacts en région » (vérifié) est utilisé dans le portail.",
+    "Pages protégées par Cloudflare (HTTP 403 pour les robots, consultables dans un navigateur) : orientazione.isula.corsica et regionreunion.com. Elles ont été lues via r.jina.ai ; le contrôle automatique des liens pourra les signaler à tort.",
+    "PACA – Rémunération des stagiaires : la page régionale affiche le barème « appliqué du 1er avril 2025 au 31 mars 2026 » ; le code du travail (art. R6341-24-8) prévoit une revalorisation au 1er avril de chaque année. La page France Travail consultée affiche toujours 224,68 € à 769,49 €. Montants à revérifier (confidence « estimated »).",
+    "PACA – Non retenus : aide au BAFA 3 (150 €, 16-25 ans : brevet non professionnel) ; aide aux jeunes du Service militaire volontaire de Marseille (212,35 €/mois, public très spécifique) ; Move2Digital (accompagnement à la transformation numérique des PME, ne finance pas directement la formation) ; Mon projet d'entreprise (conseil à la création, pas de formation) ; Fonds d'innovation pour la formation (réservé aux organismes/porteurs de projets). Aucune aide régionale directe à la formation des salariés de PME n'a été trouvée sur maregionsud.fr.",
+    "PACA – Fonds d'aide régionale aux apprentis (FARA) : laissé en « a_confirmer » (aucune page officielle décrivant conditions et montant ; un plafond de 1 200 €/an circule sur des sites de CFA, non confirmé par la Région).",
+    "Corse – Aide à la mobilité des stagiaires du PRF (« Mesure 30 ») et ancienne « Mesure 11 » : les fiches Ghjuventù correspondantes affichent « Cette page n'est pas valide » ; statut 2026 inconnu, non intégrées (la Mesure 11 semble remplacée par l'aide à la mobilité des apprentis). Un article Corsica Orientazione de 2023 évoquait une aide à la mobilité « de l'ordre de 1500 € » pour les formations non dispensées en Corse : trop ancien, non retenu.",
+    "Corse – Non retenus : Prima Strada (aide au permis B/A1 jusqu'à 500 € pour les 15-25 ans, non cumulable avec une autre aide, conditions d'engagement citoyen et de revenus ; aide jeunesse non spécifique à la formation) ; aide à la complémentaire santé (150 €) ; U Pattu Impiegu de l'ADEC (aide à la création d'emploi en CDI, sans volet formation, guide 2023).",
+    "Corse – Le rapport PRIC 2024-2027 (Assemblée de Corse, juillet 2024) cite parmi les actions financées la rémunération des stagiaires, les aides individuelles, les aides à la mobilité et à la garde d'enfant ; aucune page 2026 ne détaille ces aides individuelles.",
+    "La Réunion – Aides aux apprentis : aucune aide régionale individuelle aux apprentis n'a pu être vérifiée (pages thématiques bloquées par Cloudflare) ; EKIPAOU (premier équipement) exclut explicitement les apprentis. La Région évoque une forte baisse des financements de l'apprentissage. À compléter.",
+    "La Réunion – LADOM (dispositifs nationaux de mobilité outre-mer) : le Pass Formation n'intervient en mobilité que pour les personnes non éligibles aux aides de LADOM et n'est pas cumulable avec elles (cadre d'intervention Pass Formation 2025, https://www.regionreunion.com/IMG/pdf/cadre_d_intervention_2025.pdf). À traiter dans le catalogue national.",
+    "La Réunion – Non retenus faute de vérification détaillée : Bourse régionale sanitaire et sociale 2026-2027 et Crèches AVIP (accueil des enfants des parents en formation), toutes deux citées sur la page « Demandeur de formation ou d'emploi » de la Région."
+  ]
+}

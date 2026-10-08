@@ -1,5 +1,5 @@
 // ============================================================
-// @opco/core — logique métier PARTAGÉE (web, mobile, backend).
+// @opco/core : logique métier PARTAGÉE (web, mobile, backend).
 // Aucune dépendance UI. Source de vérité du schéma et du calcul.
 // ============================================================
 
@@ -8,3 +8,10 @@ export * from './calculator';
 export * from './opco-resolver';
 export * from './schema';
 export * from './data';
+export * from './geo';
+export * from './entreprise';
+export * from './aides/types';
+export * from './aides/criteres';
+export * from './aides/evaluer';
+export * from './aides/profil';
+export * from './aides/plan';

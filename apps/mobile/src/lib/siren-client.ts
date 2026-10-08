@@ -1,5 +1,5 @@
 // ============================================================
-// Client SIREN — appel DIRECT de l'API recherche-entreprises
+// Client SIREN : appel DIRECT de l'API recherche-entreprises
 // (pas de route serveur en mobile).
 //
 // Reproduit EXACTEMENT la logique d'extraction IDCC de la V1 web

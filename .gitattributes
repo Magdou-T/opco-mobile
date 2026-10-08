@@ -2,3 +2,5 @@
 # aucune conversion de fin de ligne ne doit alterer leurs octets.
 datasets/** -text
 packages/core/data/** -text
+# Recherche archivée (piste d'audit, rejouable par scripts/integrer-recherches.mjs) : octets conservés tels quels.
+docs/recherche-aides/** -text

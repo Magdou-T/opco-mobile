@@ -3,12 +3,14 @@ dist/
 .expo/
 *.apk
 *.aab
-.env
-.env.local
+# Fichiers d'environnement (clés d'API comme ANTHROPIC_API_KEY) : tous ignorés, quel que soit le suffixe.
+.env*
 android/
 ios/
 backend/.out/
 datasets/_drafts/
+# Rapport écrit par scripts/integrer-recherches.mjs dans le dossier de recherche : régénéré à chaque lancement.
+docs/recherche-aides/*/rapport-integration.md
 *.log
 .DS_Store
 backend/out/

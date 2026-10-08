@@ -137,7 +137,7 @@ export function WizardContainer() {
         </View>
       </ScrollView>
 
-      {/* Navigation — surélevée au-dessus des boutons système du téléphone */}
+      {/* Navigation, surélevée au-dessus des boutons système du téléphone */}
       <View
         className="flex-row justify-between gap-3 border-t border-gray-200 bg-white p-4"
         style={{ paddingBottom: navBottomPadding }}

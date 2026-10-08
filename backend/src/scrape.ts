@@ -1,5 +1,5 @@
 // ============================================================
-// SCRAPE — récupération du texte lisible des pages financement OPCO.
+// SCRAPE : récupération du texte lisible des pages financement OPCO.
 //
 // - Respecte robots.txt (User-agent: * et notre bot).
 // - User-Agent identifiable : OPCO-Funding-Bot/1.0.
@@ -110,7 +110,7 @@ export async function scrapeOpco(
   const pages: ScrapedPage[] = [];
 
   for (const url of sources.scrape_urls) {
-    // Les PDF ne sont pas parsés par ce scraper minimal — on les saute proprement.
+    // Les PDF ne sont pas parsés par ce scraper minimal : on les saute proprement.
     if (url.toLowerCase().endsWith('.pdf')) {
       console.warn(`[scrape] ${slug}: PDF ignoré (non parsé) : ${url}`);
       continue;

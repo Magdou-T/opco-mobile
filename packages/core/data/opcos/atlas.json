@@ -1,167 +1,490 @@
 {
   "slug": "atlas",
   "name": "ATLAS",
-  "secteurs": "Services financiers, conseil, ingenierie, informatique, bureaux d'etudes techniques, assurances, societes d'assistance",
-  "secteurs_source": "https://www.opco-atlas.fr/",
-  "email_contact": "contact@opco-atlas.fr",
+  "nom_complet": "Opérateur de compétences des services financiers et du conseil",
+  "secteurs": "Services financiers et conseil : bureaux d'études, ingénierie, numérique, conseil et événementiel, expertise comptable, banque, assurance, courtage, agences générales d'assurance, sociétés financières, géomètres, économistes de la construction (14 branches)",
+  "secteurs_source": "https://www.opco-atlas.fr/adhesion-entreprise-sans-convention-ou-a-statut.html",
+  "email_contact": "",
   "url_finance_page": "https://www.opco-atlas.fr/criteres-financement",
   "types_formations": [
-    "Actions de formation du plan de dev. des competences",
-    "Actions collectives nationales",
-    "AFEST (Action de Formation En Situation de Travail)"
+    "Plan de développement des compétences (barème propre à chaque branche)",
+    "campusAtlas / cap compétence (formations clés en main)",
+    "AFEST",
+    "VAE",
+    "Période de reconversion",
+    "Contrat de professionnalisation",
+    "Contrat d'apprentissage",
+    "FSE+ (cofinancement 50 %)"
   ],
-  "types_formations_source": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
+  "types_formations_source": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
   "cout_horaire_inter": {
     "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
-    "note": "Criteres 2026 : plus de taux horaire unique publie. Bureaux d'etudes : plafond annuel seul (couts reels). Agents generaux d'assurance : coat reel plafonne a 50 euros/h. Les anciennes valeurs 2025 (40 euros/h / 150h / 8 000 euros, 15-18 euros/h standard) ne figurent plus dans les criteres 2026. Consulter la page criteres de votre branche sur opco-atlas.fr."
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Plafond horaire propre à chaque branche : bureaux d'études et sociétés financières = coût réel dans la limite du plafond annuel (pas de taux horaire) ; agents généraux d'assurance = 50 €/h. (vérifié le 2026-10-05)"
   },
   "cout_horaire_intra": {
     "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/criteres-financement",
-    "note": "Aucune grille intra distincte publiee dans les criteres 2026. Varie par branche."
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Aucune grille intra commune publiée ; selon la branche. (vérifié le 2026-10-05)"
   },
-  "cout_horaire_afest": {
-    "value": 20,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/criteres-financement/societes-financieres",
-    "note": "AFEST : 20 euros HT/h limite a 150h (societes financieres, agents generaux). Bureaux d'etudes 2026 : 40 euros HT/h, 150h max (budget 8 000 euros HT, 12 000 euros avec referent AFEST forme)."
-  },
-  "cout_horaire_afest_heures_max": 150,
   "cout_horaire_metier": {
     "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/criteres-financement",
-    "note": "Pas de plafond metier unique publie dans les criteres 2026. Varie selon la branche."
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Selon la branche (certifications de branche souvent financées par des dispositifs spécifiques). (vérifié le 2026-10-05)"
   },
   "prise_en_charge_salaires": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
-    "note": "NON pris en charge : Atlas finance uniquement les frais pedagogiques des actions du plan de developpement des competences (perimetre explicite sur la page officielle). Aucune branche consultee (bureaux d'etudes, societes financieres, agents generaux) ne publie de forfait salaire PDC."
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Seuls les frais pédagogiques sont financés au titre du PDC ; aucune prise en charge des salaires. (vérifié le 2026-10-05)"
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
-    "note": "PDC: null/depends_on_branche. Apprentissage uniquement: forfaits specifiques."
+    "confidence": "exact",
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Frais annexes non financés au titre du PDC (forfaits uniquement en apprentissage). (vérifié le 2026-10-05)"
   },
   "frais_hebergement": {
     "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
-    "note": "PDC: null/depends_on_branche. Apprentissage: 6 euros/nuit."
+    "confidence": "exact",
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Non financés au titre du PDC ; apprentissage : 6 €/nuit versés au CFA. (vérifié le 2026-10-05)"
   },
   "frais_restauration": {
     "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
-    "note": "PDC: null/depends_on_branche. Apprentissage: 3 euros/repas."
+    "confidence": "exact",
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Non financés au titre du PDC ; apprentissage : 3 €/repas versés au CFA. (vérifié le 2026-10-05)"
   },
   "frais_annexes_pourcentage": {
     "value": null,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
-    "note": "Non confirme a 8% pour le PDC. Valeur retiree."
+    "confidence": "exact",
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Aucun forfait de frais annexes pour le PDC. (vérifié le 2026-10-05)"
   },
   "frais_apprentissage": {
     "restauration_par_repas": 3,
     "hebergement_par_nuit": 6,
-    "source_url": "https://www.opco-atlas.fr/entreprise/financer-la-formation.html",
-    "note": "Forfaits apprentissage uniquement"
+    "premier_equipement_max": 500,
+    "mobilite_ultramarine_max": 1000,
+    "source_url": "https://www.opco-atlas.fr/criteres-financement",
+    "note": "« Restauration : 3€/repas (net de taxe) » ; « Hébergement : 6€/nuit (net de taxe) » ; « 1er équipement : dans la limite de 500 € » ; « Mobilité ultra-marine : dans la limite de 1 000€ » Frais versés au CFA (apprentissage). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
   },
   "budget_annuel_max": {
     "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.opco-atlas.fr/criteres-financement",
-    "note": "Criteres 2026 : plafonds annuels PAR TAILLE et PAR BRANCHE (fourchette observee 1 000 a 8 000 euros HT/an). Bureaux d'etudes : 2 500 (<11), 3 000 (11-49), 4 000 euros (50-299). Societes financieres : 1 000 (<11), 7 000 euros (11-49). Agents generaux : 3 000 (<5), 5 000 (5-11), 8 000 euros (>11). L'ancien plafond unique 8 000 euros (criteres 2025) est obsolete."
+    "source_url": "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "note": "« Atlas prend en charge les frais pédagogiques des actions de formation inscrites dans le plan de développement des compétences, selon un barème fixé par votre branche professionnelle. » Plafond annuel fixé par chaque branche (de 1 000 € à 8 000 € HT selon les grilles consultées) : voir le détail par taille d'entreprise (barème BETIC par défaut) et les variantes de branche. (vérifié le 2026-10-05)"
   },
-  "budget_annuel_description": "Plafond annuel par taille et par branche (criteres 2026) : 1 000 a 8 000 euros HT/an. Exemple bureaux d'etudes : 2 500 / 3 000 / 4 000 euros selon taille. Sous reserve de fonds disponibles.",
+  "budget_annuel_portee": "pedagogie",
+  "budget_annuel_description": "Plafond annuel de coûts pédagogiques fixé par chaque branche. Barème par défaut de ce simulateur : branche des bureaux d'études, ingénierie, numérique et conseil (IDCC 1486, la plus représentée chez Atlas) : 2 500 € HT (moins de 11 salariés), 3 000 € HT (11-49), 4 000 € HT (50-299, fonds conventionnels). Autres grilles 2026 : sociétés financières 1 000 € / 7 000 € HT ; agents généraux d'assurance 3 000 € à 8 000 € HT (50 €/h). Sous réserve de fonds disponibles.",
+  "quota_horaire_min": null,
+  "quota_horaire_max": null,
   "plafonds_par_taille": [
     {
       "taille": "less_11",
       "cout_horaire_max": null,
       "budget_annuel_max": 2500,
       "quota_horaire_max": null,
-      "description": "Moins de 11 salaries : plafond annuel 2 500 euros HT/an (bureaux d'etudes 2026, valeur representative). Selon branche : 1 000 euros (societes financieres) a 3 000 euros (agents generaux <5 sal.). Couts reels, sans taux horaire publie."
+      "description": "Moins de 11 salariés : 2 500 € HT/an (barème BETIC retenu par défaut ; sociétés financières 1 000 €, agents généraux 3 000 € à 5 000 €) - sélectionnez votre branche."
     },
     {
       "taille": "11_49",
       "cout_horaire_max": null,
       "budget_annuel_max": 3000,
       "quota_horaire_max": null,
-      "description": "11-49 salaries : plafond annuel 3 000 euros HT/an (bureaux d'etudes 2026, valeur representative). Selon branche : jusqu'a 7 000-8 000 euros (societes financieres, agents generaux)."
+      "description": "11 à 49 salariés : 3 000 € HT/an (barème BETIC retenu par défaut ; sociétés financières 7 000 €, agents généraux 8 000 €) - sélectionnez votre branche."
     },
     {
       "taille": "50_299",
       "cout_horaire_max": null,
-      "budget_annuel_max": 4000,
+      "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "50-299 salaries : plafond annuel 4 000 euros HT/an (bureaux d'etudes 2026, valeur representative). Varie selon branche."
+      "description": "50 salariés et plus : pas de fonds mutualisés ; financement par versement volontaire, sauf branches qui financent les 50-299 sur fonds conventionnels (bureaux d'études 4 000 € HT, agents généraux 8 000 € HT)."
     },
     {
       "taille": "300_plus",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "300+ salaries : NON eligible au PDC mutualise (criteres 2026 reserves aux salaries des entreprises de moins de 300 salaries). Fonds conventionnels selon branche."
+      "description": "300 salariés et plus : pas de PDC sur fonds mutualisés (versement volontaire ; certains dispositifs de branche restent ouverts)."
     }
   ],
   "tutorat": {
     "montant_mensuel": 230,
     "montant_mensuel_prioritaire": 345,
-    "duree_max_mois": null,
-    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
-    "note": "230 euros/mois (345 euros/mois publics prioritaires) confirmes 2026 (bureaux d'etudes). Duree max non confirmee dans les criteres 2026. Formation du tuteur : 40h a 15 euros HT/h."
+    "duree_max_mois": 4,
+    "formation_tuteur_heures": 40,
+    "formation_tuteur_euro_par_heure": 15,
+    "source_url": "https://www.opco-atlas.fr/criteres-financement",
+    "note": "« Durée maximale : 4 mois » ; « Forfait : 230€/mois (net de taxe) » ; « Majoration uniquement pour le contrat de professionnalisation : 345€/mois (net de taxe) » ; « Durée : 40h Forfait : 15€ HT/h » Grille bureaux d'études. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
   },
-  "quota_horaire_min": null,
-  "quota_horaire_max": null,
   "profils_candidats": [
-    "Tous salaries entreprise relevante",
-    "TPE/PME prioritaires",
-    "BOETH (beneficiaires obligation emploi travailleurs handicapes)",
-    "Salaries 50 ans et plus"
+    "Salariés des entreprises des 14 branches Atlas",
+    "TPE/PME de moins de 50 salariés (fonds mutualisés)",
+    "Bénéficiaires de l'obligation d'emploi des travailleurs handicapés (BOETH)",
+    "Salariés de 45 ans et plus (tutorat majoré) et de 50 ans et plus (reconversion, alternance)"
   ],
-  "tailles_cibles": "Priorite TPE/PME",
+  "tailles_cibles": "PDC sur fonds mutualisés pour les moins de 50 salariés ; certaines branches financent aussi les 50-299 salariés (fonds conventionnels)",
   "priorite_tpe_pme": true,
   "duree_min_formation": null,
-  "processus_approbation": "Dossier a deposer AVANT le debut de la formation | Sous reserve de fonds disponibles | Criteres susceptibles d'evoluer en cours d'annee",
-  "delai_validation": "Delai non publie. Regle : depot du dossier avant le debut de la formation, sous reserve de fonds.",
-  "mode_paiement": "Tiers-payant ou remboursement",
-  "alternance_apprentissage": "Apprentissage selon NPEC branche",
-  "alternance_professionnalisation": "Professionnalisation selon accord",
+  "processus_approbation": "Demande à déposer sur myAtlas Entreprise (« Dossiers/Contrats » puis « Nouvelle demande ») avant le début de la formation ; être à jour de la contribution conventionnelle pour les dispositifs cofinancés par la branche ; sous réserve de fonds disponibles.",
+  "delai_validation": "Non publié : Atlas notifie l'accord, le refus ou une demande de pièces après instruction ; dossier à déposer avant le début de la formation.",
+  "mode_paiement": "Depuis le 1er octobre 2026 (réforme de la TVA) : subrogation possible seulement pour le PDC des entreprises de moins de 50 salariés, campusAtlas, l'apprentissage et le FSE+ (dossiers déposés depuis le 19 octobre 2026) ; sinon l'entreprise paie l'organisme puis demande le remboursement de la part HT prise en charge sur myAtlas.",
+  "alternance_apprentissage": "Niveaux de prise en charge définis par la branche et validés par France compétences (+20 % dans les DROM) ; majoration jusqu'à 4 000 € pour un apprenti handicapé ; frais versés au CFA : 3 €/repas, 6 €/nuit, 1er équipement 500 € maximum, mobilité ultramarine 1 000 € maximum.",
+  "alternance_professionnalisation": "Forfait selon la branche : 11 € HT/h dans le cas général (bureaux d'études, agents généraux), 30 € HT/h pour les certifications de branche BETIC, 15 à 18 € HT/h pour les publics RQTH ; reste à charge financé à 100 % pour les salariés de 50 ans et plus ; forfait de 500 € si une AFEST est intégrée. Aide tutorale : 230 €/mois (345 € majorée), 4 mois maximum.",
   "cpf_abondement": true,
-  "cpf_details": "Oui - selon accord branche",
+  "cpf_details": "Selon la branche : bureaux d'études, abondement jusqu'à 2 500 € TTC par certification prioritaire et 100 % du reste à charge pour les certifications de branche ; agents généraux et sociétés financières : remboursement de la participation forfaitaire de 150 € (dans le plafond PDC).",
   "vae_possible": true,
-  "vae_details": "Oui - selon accord branche",
-  "limite_dossiers_an": "Sous reserve fonds disponibles",
-  "specificites": "Actions Collectives Nationales a 100% si cataloguees | campusAtlas | AFEST 20 euros/h max 150h",
-  "points_cles_maximisation": "ACN (Actions Collectives Nationales): financement 100% pedagogie | campusAtlas: forfaits interessants | BOETH/50+: taux majore 18 euros/h",
+  "vae_details": "Coût réel plafonné à 3 000 € HT par parcours (3 500 € HT pour les certifications de branche des bureaux d'études).",
+  "limite_dossiers_an": "Dans la limite du plafond annuel de la branche et des fonds disponibles (critères susceptibles d'évoluer en cours d'année)",
+  "specificites": "Critères propres à chacune des 14 branches, consultables après sélection de la branche sur opco-atlas.fr | campusAtlas : formations clés en main à 100 % dans la limite de crédits annuels | Plan IA-tlas : modules IA à 100 % pour les moins de 50 salariés (dossiers jusqu'au 15/12/2026) | FSE+ : 50 % des coûts pédagogiques (demandes jusqu'au 15/12/2027) | Réforme TVA au 1er octobre 2026 : subrogation limitée",
+  "points_cles_maximisation": "Utiliser d'abord les crédits campusAtlas (100 % des coûts pédagogiques) | Moins de 50 salariés : modules IA-tlas à 100 % jusqu'au 15 décembre 2026 | Bureaux d'études : bonus transition écologique et parcours stratégique TPE/PME (80 %) en plus du PDC | FSE+ : 50 % des coûts pédagogiques avec un versement volontaire | Déposer sur myAtlas avant le démarrage",
   "sources": [
-    "https://www.opco-atlas.fr/",
-    "https://www.opco-atlas.fr/entreprise/financer-la-formation.html"
+    "https://www.opco-atlas.fr/criteres-financement",
+    "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
+    "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html",
+    "https://www.opco-atlas.fr/entreprise/beneficier-fse.html",
+    "https://www.opco-atlas.fr/entreprise/conditions-reglement.html",
+    "https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
+    "https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres"
   ],
   "dispositifs_complementaires": [
     {
-      "id": "actions-collectives-nationales",
-      "nom": "Actions Collectives Nationales (campusAtlas)",
+      "id": "campusatlas",
+      "nom": "campusAtlas (formations clés en main)",
       "cumul": "alternatif",
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": 100,
-      "description": "Formations du catalogue campusAtlas financees a 100 % des couts pedagogiques.",
+      "description": "Formations sélectionnées par la branche à tarifs négociés : coûts pédagogiques pris en charge selon les critères de la branche, souvent à 100 % dans la limite de crédits annuels (bureaux d'études : 3 crédits moins de 11 salariés, 5 de 11 à 49, 7 de 50 à 299 ; agents généraux : catalogue cap compétence, crédits égaux à l'effectif moyen N-1).",
       "conditions": [
-        "Formation choisie dans le catalogue des Actions Collectives Nationales",
-        "Sous reserve de fonds disponibles"
+        "Formation choisie dans le catalogue campusAtlas (ou cap compétence) de sa branche",
+        "Être à jour de la contribution conventionnelle de la branche lorsque celle-ci cofinance",
+        "Dans la limite des crédits attribués à l'entreprise et des fonds disponibles"
       ],
-      "demarches": "Choisir la formation sur campusatlas.fr puis s'inscrire via l'espace entreprise Atlas.",
+      "demarches": "Se connecter à campusAtlas avec son SIREN, choisir une session, inscrire le salarié puis saisir la demande de financement sur myAtlas Entreprise.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html",
+      "note": "« Les thématiques proposées sur campusAtlas sont définies par les branches professionnelles afin de répondre au plus près des besoins des entreprises. » Crédits BETIC : « Entreprises de moins de 11 salariés 100% des coûts pédagogiques dans la limite de 3 crédits/entreprise/an » (page de critères BETIC, copie archivée du 18/06/2026 : https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils). (vérifié le 2026-10-05)"
+    },
+    {
+      "id": "plan-ia-tlas",
+      "nom": "Plan IA-tlas (modules d'intelligence artificielle)",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": 100,
+      "description": "Modules IA-tlas des catalogues campusAtlas et cap compétence financés à 100 % du coût pédagogique pour les entreprises de moins de 50 salariés.",
+      "conditions": [
+        "Entreprise de moins de 50 salariés relevant d'une branche couverte par Atlas (hors critères légaux et entreprises à statut)",
+        "Dossier reçu entre le 1er juillet et le 15 décembre 2026",
+        "Formation démarrant au plus tard le 31 décembre 2026",
+        "Dans la limite des fonds disponibles"
+      ],
+      "demarches": "Choisir un module IA-tlas sur campusAtlas (ou cap compétence) et déposer la demande sur myAtlas Entreprise avant le 15 décembre 2026.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html",
+      "note": "« Profitez d’un financement à 100% du coût pédagogique pour les modules IA-tlas » ; « Réception des dossiers : du 1er juillet au 15 décembre 2026 » ; « Démarrage des formations : du 1er juillet au 31 décembre 2026 » ; « Offre réservée aux entreprises relevant des branches couvertes par Atlas (hors légal et à statut), dans la limite des fonds disponibles. » (vérifié le 2026-10-05)"
+    },
+    {
+      "id": "fse-plus",
+      "nom": "FSE+ Atlas (cofinancement européen)",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": 50,
+      "description": "Le FSE+ finance 50 % des coûts pédagogiques de formations liées aux transitions numérique, écologique et démographique, au management de projet ou à la diversité ; le reste (50 %, TVA et 4 % de frais de gestion) est couvert par un versement volontaire de l'entreprise ou par les fonds conventionnels de la branche. Plafond FSE+ : 500 000 € par entreprise.",
+      "conditions": [
+        "Entreprise relevant d'une branche Atlas, sous réserve de fonds disponibles",
+        "Formation en présence continue d'un formateur, d'au moins 3,5 heures (formations internes et à distance exclues), achevée avant le 31 décembre 2027",
+        "Demande déposée avant le début de la formation et au plus tard le 15 décembre 2027 ; convention signée au plus tôt le lendemain du dépôt",
+        "Rémunération et frais annexes non éligibles"
+      ],
+      "demarches": "Valider l'éligibilité avec un conseiller Atlas, puis déposer la demande de subvention FSE+ signée sur myAtlas (dispositif FSE+) avec devis, programme et attestations employeur.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.opco-atlas.fr/entreprise/beneficier-fse.html",
+      "note": "« Le FSE+ prend en charge 50 % des coûts pédagogiques. » ; « Le montant pris en charge au titre du FSE+ ne peut dépasser 500 000€ pour une même entreprise. » ; « La demande doit être déposée avant le début de la formation et au plus tard le 15 décembre 2027. » ; « Les frais de rémunération et frais annexes ne sont pas éligibles. » (vérifié le 2026-10-05)"
+    },
+    {
+      "id": "bonus-transition-ecologique-betic",
+      "nom": "Bonus Transition écologique – Bureaux d'études (IDCC 1486)",
+      "cumul": "additif",
+      "montant_max": null,
+      "unite": "par_an",
+      "pourcentage_couts": null,
+      "description": "Branche des bureaux d'études uniquement : enveloppe annuelle supplémentaire pour les formations en faveur de la transition écologique, 2 000 € HT (1 à 49 salariés), 3 000 € HT (50 à 299) et 4 500 € HT (300 et plus) selon la grille 2026 (la note politique de branche indique 3 500 € pour les 50-229 salariés).",
+      "conditions": [
+        "Entreprise relevant de la branche des bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils (IDCC 1486)",
+        "Être à jour de la contribution conventionnelle",
+        "Formation agissant en faveur de la transition écologique (hors formations obligatoires de mise à niveau)"
+      ],
+      "demarches": "Déposer la demande sur myAtlas Entreprise avant le début de la formation (cumulable avec un dossier PDC ou mobilisable seul).",
       "tailles_eligibles": null,
       "publics": null,
       "confidence": "estimated",
-      "source_url": "https://www.opco-atlas.fr/criteres-financement"
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
+      "idcc": [
+        "1486"
+      ],
+      "note": "« Entreprises de 1 à 49 salariés Plafond du bonus par entreprise : 2 000€ HT/an » ; « Entreprises de 50 à 299 salariés Plafond du bonus par entreprise : 3 000€ HT/an » ; « Entreprises de 300 salariés et plus Plafond du bonus par entreprise : 4 500€ HT/an » Montant non chiffré ici : il dépend de la convention collective (IDCC) de l'entreprise, ce dispositif étant réservé à l'IDCC 1486. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+    },
+    {
+      "id": "parcours-strategique-tpe-pme-betic",
+      "nom": "Parcours stratégique TPE/PME – Bureaux d'études (IDCC 1486)",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": "par_dossier",
+      "pourcentage_couts": null,
+      "description": "Branche des bureaux d'études, moins de 50 salariés : parcours d'au moins 35 h par personne répondant à un besoin stratégique, pris en charge à 80 % du coût pédagogique (assiette plafonnée à 15 000 € HT ; 80 € HT/h en inter, 1 500 € HT/jour en intra), sans mobiliser l'enveloppe PDC, une fois tous les deux ans.",
+      "conditions": [
+        "Entreprise de la branche des bureaux d'études (IDCC 1486) de moins de 50 salariés",
+        "Parcours d'au moins 35 heures par personne, hors formation interne et AFEST",
+        "Une prise en charge par entreprise tous les deux ans ; éligibilité à valider avec le conseiller Atlas"
+      ],
+      "demarches": "Contacter son conseiller emploi formation Atlas pour valider le projet, puis déposer la demande sur myAtlas avant le début du parcours.",
+      "tailles_eligibles": [
+        "less_11",
+        "11_49"
+      ],
+      "publics": null,
+      "confidence": "estimated",
+      "source_url": "https://www.opco-atlas.fr/agenda/parcours-strategique-tpepme-vous-connaissez-1-dispositif-exceptionnel-loire-atlantique-distance-juin-2026.html",
+      "idcc": [
+        "1486"
+      ],
+      "note": "« le dispositif peut être pris en charge jusqu’à 80 % des coûts pédagogiques, sans mobilisation de votre enveloppe du Plan de Développement des Compétences » Grille BETIC : « Prise en charge de 80% du coût pédagogique » ; « Une prise en charge par entreprise tous les deux ans » (copie archivée du 18/06/2026 : https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils). Montant non chiffré ici : il dépend de la convention collective (IDCC) de l'entreprise, ce dispositif étant réservé à l'IDCC 1486. (vérifié le 2026-10-05)"
+    }
+  ],
+  "variantes_branche": [
+    {
+      "id": "bureaux-etudes-betic",
+      "branche_nom": "Bureaux d'études techniques, ingénierie, numérique, conseil et événementiel (BETIC)",
+      "idcc": [
+        "1486"
+      ],
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 3 000€ HT/an » ; « Entreprises de 50 à 299 salariés Plafond par entreprise : 4 000€ HT/an » ; « Public : les salariés des entreprises de moins de 300 salariés » ; « Toute formation éligible au Plan de Développement des Compétences (obligatoire ou non), à l’exception de tous les permis de conduire, des formations à l’anglais et du reste à charge CPF. » IDCC confirmé sur la page de branche Atlas (« IDCC : 1486 »). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)",
+      "cout_horaire_inter": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » Pas de plafond horaire : coût réel dans la limite du plafond annuel. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » Pas de plafond horaire publié pour le PDC. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 3 000€ HT/an » ; « Entreprises de 50 à 299 salariés Plafond par entreprise : 4 000€ HT/an » Selon l'effectif : voir le détail par taille d'entreprise de la branche. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Bureaux d'études (IDCC 1486) : plafond annuel de coûts pédagogiques de 2 500 € HT (moins de 11 salariés), 3 000 € HT (11-49) et 4 000 € HT (50-299) ; PDC réservé aux entreprises de moins de 300 salariés ; permis de conduire, formations à l'anglais et reste à charge CPF exclus. En plus : bonus transition écologique, crédits campusAtlas, parcours stratégique TPE/PME, AFEST 40 €/h.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2500,
+          "quota_horaire_max": null,
+          "description": "BETIC moins de 11 salariés : 2 500 € HT/an de coûts pédagogiques (coût réel) ; campusAtlas : 3 crédits/an."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3000,
+          "quota_horaire_max": null,
+          "description": "BETIC 11 à 49 salariés : 3 000 € HT/an de coûts pédagogiques ; campusAtlas : 5 crédits/an."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": null,
+          "description": "BETIC 50 à 299 salariés : 4 000 € HT/an financés par la contribution conventionnelle de la branche (enveloppe officielle) ; campusAtlas : 7 crédits/an."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "BETIC 300 salariés et plus : pas de PDC ; bonus transition écologique (4 500 € HT/an), campusAtlas (3 % de l'effectif) et AFEST restent mobilisables."
+        }
+      ]
+    },
+    {
+      "id": "agents-generaux-assurance",
+      "branche_nom": "Agents généraux d'assurance",
+      "idcc": [
+        "2335"
+      ],
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 5 salariés Plafond par entreprise : 3 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de 5 à 11 salariés Plafond par entreprise : 5 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de plus de 11 salariés Plafond par entreprise : 8 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Uniquement les thématiques définies par la branche pour les entreprises de la France hexagonale : voir liste ci-dessous » ; « Les critères de financement définis par les partenaires sociaux peuvent évoluer en cours d’année en fonction de la consommation des fonds attribués par France Compétences. » Thématiques éligibles en hexagone : qualité de vie au travail, risques climatiques et transition écologique, finance durable. IDCC confirmé sur la page de branche (« IDCC : 2335 »). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)",
+      "cout_horaire_inter": {
+        "value": 50,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 5 salariés Plafond par entreprise : 3 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » Coût réel plafonné à 50 €/h, toutes tailles. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 50,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de plus de 11 salariés Plafond par entreprise : 8 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 5 salariés Plafond par entreprise : 3 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de 5 à 11 salariés Plafond par entreprise : 5 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de plus de 11 salariés Plafond par entreprise : 8 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » Selon l'effectif : voir le détail par taille d'entreprise de la branche. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Agents généraux d'assurance : plafond annuel de 3 000 € HT (moins de 5 salariés), 5 000 € HT (5 à 11) et 8 000 € HT (plus de 11), coût réel plafonné à 50 €/h, pour les seules thématiques de branche en hexagone (QVT, risques climatiques, finance durable) ; AFEST 20 €/h (150 h) dans ce plafond ; catalogue cap compétence en plus (moins de 50 salariés).",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3000,
+          "quota_horaire_max": null,
+          "description": "Agents généraux moins de 5 salariés : 3 000 € HT/an (5 000 € HT de 5 à 11 salariés), 50 €/h, thématiques de branche."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 8000,
+          "quota_horaire_max": null,
+          "description": "Agents généraux plus de 11 salariés : 8 000 € HT/an (11 salariés exactement : 5 000 €), 50 €/h, thématiques de branche."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 8000,
+          "quota_horaire_max": null,
+          "description": "Agents généraux 50 salariés et plus : PDC ouvert à toutes les entreprises de la branche, 8 000 € HT/an (enveloppe officielle de branche), 50 €/h."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 8000,
+          "quota_horaire_max": null,
+          "description": "Agents généraux 300 salariés et plus : 8 000 € HT/an (enveloppe officielle de branche), 50 €/h."
+        }
+      ]
+    },
+    {
+      "id": "societes-financieres",
+      "branche_nom": "Sociétés financières",
+      "idcc": [
+        "0478"
+      ],
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
+      "confidence": "estimated",
+      "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 7 000€ HT/an » ; « Uniquement les thématiques définies par la branche : seules les formations correspondant aux formacodes génériques listés ci-dessous sont éligibles. » IDCC confirmé sur la page de branche (« IDCC : 0478 »). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)",
+      "cout_horaire_inter": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » Pas de plafond horaire publié : coût réel dans la limite du plafond annuel. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
+        "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 7 000€ HT/an » Selon l'effectif : voir le détail par taille d'entreprise de la branche. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Sociétés financières : plafond annuel de 1 000 € HT (moins de 11 salariés) ou 7 000 € HT (11 à 49), pour les seules formations correspondant aux formacodes de la branche (banque, crédit, assurance, comptabilité, informatique, langues, management, etc.) ; AFEST 20 €/h (150 h) dans ce plafond. 50 salariés et plus : versement volontaire.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 1000,
+          "quota_horaire_max": null,
+          "description": "Sociétés financières moins de 11 salariés : 1 000 € HT/an, formacodes de branche uniquement."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 7000,
+          "quota_horaire_max": null,
+          "description": "Sociétés financières 11 à 49 salariés : 7 000 € HT/an, formacodes de branche uniquement."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Sociétés financières 50 salariés et plus : pas de PDC mutualisé (campusAtlas sous versement volontaire)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Sociétés financières 300 salariés et plus : versement volontaire."
+        }
+      ]
+    }
+  ],
+  "derniere_verification": "2026-10-05",
+  "alertes": [
+    {
+      "type": "acces_restreint",
+      "branche": "Toutes branches : pages de critères",
+      "idcc": [],
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
+      "extrait": "Activez vos recommandations ou connectez-vous à myAtlas pour découvrir vos critères de financements",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "evolution_en_cours_annee",
+      "branche": "Branches financées par France compétences",
+      "idcc": [],
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
+      "extrait": "Les critères de financement définis par les partenaires sociaux peuvent évoluer en cours d’année en fonction de la consommation des fonds attribués par France Compétences.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "changement_paiement",
+      "branche": "Toutes branches : réforme de la TVA",
+      "idcc": [],
+      "source_url": "https://www.opco-atlas.fr/actualites/reforme-de-la-tva-ce-qui-change-pour-le-financement-de-vos-formations.html",
+      "extrait": "ce mécanisme de subrogation de paiement ne pourra plus être appliqué, sauf exception.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "echeance",
+      "branche": "Plan IA-tlas (moins de 50 salariés)",
+      "idcc": [],
+      "source_url": "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html",
+      "extrait": "Réception des dossiers : du 1er juillet au 15 décembre 2026",
+      "verifie_le": "2026-10-05"
     }
   ]
 }

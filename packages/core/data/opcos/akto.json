@@ -1,153 +1,486 @@
 {
   "slug": "akto",
   "name": "AKTO",
-  "secteurs": "Travail temporaire, proprete, restauration, hotellerie, commerce de gros, securite, enseignement prive",
-  "secteurs_source": "https://www.akto.fr/branches-professionnelles/",
-  "email_contact": "contact@akto.fr",
-  "url_finance_page": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+  "nom_complet": "Opérateur de compétences des services à forte intensité de main-d'œuvre",
+  "secteurs": "Services à forte intensité de main-d'œuvre : hôtels-cafés-restaurants, restauration rapide et collective, propreté, travail temporaire, prévention-sécurité, commerces de gros, organismes de formation, enseignement privé, déchet, autoroutes, portage salarial, etc.",
+  "secteurs_source": "https://www.akto.fr/entreprise/financer-une-formation/regles-de-prise-en-charge/",
+  "email_contact": "",
+  "url_finance_page": "https://www.akto.fr/entreprise/financer-une-formation/regles-de-prise-en-charge/",
   "types_formations": [
-    "Plan de dev. des competences",
-    "Alternance (apprentissage, professionnalisation)",
-    "Pro-A",
-    "VAE",
-    "CQP / TFP",
-    "CleA",
-    "AFEST"
+    "Plan de développement des compétences (moins de 50 salariés, règles par branche)",
+    "Espace Formation (actions collectives sélectionnées par la branche)",
+    "AFEST",
+    "Contrat d'apprentissage",
+    "Contrat de professionnalisation",
+    "Période de reconversion",
+    "VAE et bilan de compétences (selon la branche)",
+    "Formation tuteur et maître d'apprentissage"
   ],
-  "types_formations_source": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+  "types_formations_source": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
   "cout_horaire_inter": {
     "value": 30,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "Defaut interprofession metropole 2026 : couts reels plafonnes a 30 euros/h/salarie. Outre-mer : 40 euros/h. Selon branche : jusqu'a 60 euros/h (ex. Organismes de formation). Verifiez votre branche sur akto.fr."
+    "note": "« Coûts pédagogiques : coûts réels, plafonnés à 30€/heure de formation/salarié formé » Barème par défaut = interprofession (entreprises sans convention collective, IDCC 5017, 17671, 1311, Mayotte, Saint-Martin, Saint-Barthélemy, Saint-Pierre-et-Miquelon), en hexagone ; outre-mer : 40 €/h. Chaque branche fixe ses propres plafonds (voir les barèmes par branche). (vérifié le 2026-10-05)"
   },
   "cout_horaire_intra": {
     "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-    "note": "Intra : souvent un plafond au jour (ex. 1 200 euros/jour mini 3 participants, branche Organismes de formation). Pas de plafond intra interprofession unique."
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "« Coûts pédagogiques plafonnés à 1 000€/jour pour 3 stagiaires minimum » Pas de taux horaire en intra : forfait journalier (interprofession 1 000 €/jour, 3 stagiaires minimum) ; montant propre à chaque branche. (vérifié le 2026-10-05)"
   },
   "cout_horaire_metier": {
     "value": 30,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "Aligne sur le plafond pedagogique general interprofession (30 euros/h metropole). Certaines branches financent davantage les CQP/formations metier."
+    "note": "« Coûts pédagogiques : coûts réels, plafonnés à 30€/heure de formation/salarié formé » Même plafond pour toutes les formations hors Espace Formation dans l'interprofession ; certaines branches financent mieux leurs certifications (ex. HCR 24-30 €/h, propreté 27-37 €/h). (vérifié le 2026-10-05)"
   },
   "prise_en_charge_salaires": {
-    "value": 13,
+    "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "Forfait remuneration du salarie en formation : 13 euros/h depuis le 1er janvier 2026 (interprofession metropole), 12 euros/h outre-mer. Varie selon branche (jusqu'a 15 euros/h). AKTO prend bien en charge une partie du salaire pendant la formation."
+    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » ; « Rémunération : Coûts réels, plafonnés à 12€/heure par salarié formé » Interprofession : pas de prise en charge en hexagone, 12 €/h en outre-mer. Certaines branches financent la rémunération (organismes de formation 15 €/h sur fonds conventionnels, HCR 14 €/h pour les certifications, propreté 14 €/h pour les CQP/TFP). (vérifié le 2026-10-05)"
   },
-  "prise_en_charge_salaires_mode": "euro_par_heure",
+  "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-    "note": "Prise en charge selon branche et accord. Outre-mer : jusqu'a 1 500 euros/salarie"
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » Non pris en charge en hexagone (interprofession). Outre-mer, si la formation n'existe pas sur le territoire : avion jusqu'à 1 500 € (hexagone) ou 600 € (inter-îles). (vérifié le 2026-10-05)"
   },
   "frais_hebergement": {
-    "value": 150,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-    "note": "60-190 euros/nuit selon branche et localisation (150 euros/nuit branche OF, 60-70 euros/nuit Proprete)"
-  },
-  "frais_restauration": {
-    "value": 25,
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-    "note": "15-33 euros/repas selon branche (25 euros branche OF, 15-20 euros Proprete)"
-  },
-  "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-    "note": "Pas de forfait %, frais individuels selon branche"
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » Non pris en charge en hexagone (interprofession). Mobilité ultramarine : 190 € TTC/nuit (Paris ou outre-mer) ou 120 € TTC/nuit (province), 10 jours maximum. Selon la branche : 60 € à 190 €/nuit. Seuls les montants de l'outre-mer sont ici en TTC ; ceux de l'hexagone sont en HT (« Les montants indiqués s'entendent hors taxe – HT. »). (vérifié le 2026-10-05)"
   },
-  "budget_annuel_max": {
-    "value": 2500,
+  "frais_restauration": {
+    "value": null,
     "confidence": "depends_on_branche",
     "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
-    "note": "Defaut interprofession metropole 2026 : 2 500 euros/an (<11 sal.), 4 000 euros/an (11-49 sal.). Outre-mer : 5 000 / 7 000 euros. Selon branche, budgets plus eleves (ex. Commerces de gros 6 000 / 12 000 euros). Plan conventionnel 50+ sal. : enveloppe selon contribution."
+    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » ; « Frais annexes (Repas, dîner) : Coûts réels, plafonnées à 33€ TTC / jour de formation par salarié formé » Non pris en charge en hexagone (interprofession) ; outre-mer 33 € TTC/jour. Selon la branche : 15 € à 25 € par repas. Seuls les montants de l'outre-mer sont ici en TTC ; ceux de l'hexagone sont en HT (« Les montants indiqués s'entendent hors taxe – HT. »). (vérifié le 2026-10-05)"
   },
-  "budget_annuel_description": "Defaut interprofession : 2 500 euros/an (<11 sal.), 4 000 euros/an (11-49 sal.) en metropole. Montants superieurs selon la branche (jusqu'a 6 000-12 000 euros).",
+  "frais_restauration_unite": "repas",
+  "frais_annexes_pourcentage": {
+    "value": null,
+    "confidence": "exact",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge » Aucun forfait en pourcentage. (vérifié le 2026-10-05)"
+  },
+  "budget_annuel_max": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+    "note": "« et emploie moins de 11 salariés, elle dispose d’un budget annuel de 2 500€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » ; « et emploie 11 à 49 salariés, elle dispose d’un budget annuel de 4 000€ réservé à la prise en charge des actions de formation que vous mobilisez (point 2 et 3) » Montant selon l'effectif et la branche (voir le détail par taille d'entreprise et les variantes de branche) ; outre-mer : 5 000 € / 7 000 €. (vérifié le 2026-10-05)"
+  },
+  "budget_annuel_portee": "global",
+  "budget_annuel_description": "Barème par défaut (interprofession) : budget annuel de 2 500 € (moins de 11 salariés) et 4 000 € (11 à 49 salariés) en hexagone, 5 000 € et 7 000 € en outre-mer, pour les formations hors Espace Formation, dans la limite des fonds disponibles. Chaque branche fixe ses propres budgets ; à l'automne 2026, l'enveloppe PDC est épuisée dans plusieurs branches (voir les barèmes par branche).",
   "quota_horaire_min": null,
   "quota_horaire_max": null,
   "profils_candidats": [
-    "Salaries entreprises <50 salaries (priorite)",
-    "Tous salaries (plan conventionnel 50+)",
+    "Salariés des entreprises de moins de 50 salariés (fonds mutualisés)",
+    "Salariés des entreprises de 50 salariés et plus via plan conventionnel ou versement volontaire (selon la branche)",
     "Alternants (apprentissage, professionnalisation)",
-    "Publics prioritaires (GEIQ, handicap)"
+    "Publics prioritaires (GEIQ, travailleurs handicapés)"
   ],
-  "tailles_cibles": "Priorite TPE/PME <50 salaries",
+  "tailles_cibles": "Fonds mutualisés PDC réservés aux entreprises de moins de 50 salariés",
   "priorite_tpe_pme": true,
   "duree_min_formation": null,
-  "processus_approbation": "Demande en ligne sur akto.fr avant debut de formation | Validation sous conditions de fonds disponibles",
-  "delai_validation": "15-30 jours",
-  "mode_paiement": "Tiers-payant ou remboursement",
-  "alternance_apprentissage": "Selon referentiel France Competences (NPEC). Bonus handicap : 4 000 euros. Repas : 3 euros/repas, hebergement : 6 euros/nuit, equipement : 500 euros/apprenti.",
-  "alternance_professionnalisation": "14-20 euros/h selon branche et type (standard 14 euros/h, prioritaire 15 euros/h, GEIQ 19 euros/h, CQP gestionnaire 20 euros/h)",
+  "processus_approbation": "Déposer sur MonEspace un dossier complet (convention de formation signée mentionnant tous les coûts pédagogiques et programme) 30 jours calendaires avant le démarrage ; organisme avec NDA valide et certifié Qualiopi ; dans la limite des fonds disponibles. Formations Espace Formation : inscription en ligne, sans dossier.",
+  "delai_validation": "Accord ou refus communiqué sous 30 jours (dossier à déposer 30 jours calendaires avant le démarrage).",
+  "mode_paiement": "Subrogation (AKTO paie l'organisme) ou remboursement sur justificatifs. Depuis le 1er octobre 2026 (réforme de la TVA des OPCO), la subrogation n'est maintenue que pour les actions financées en totalité sur le PDC des moins de 50 salariés ; les autres actions engagées depuis cette date ne peuvent plus en bénéficier.",
+  "alternance_apprentissage": "Niveau de prise en charge validé par la branche (ou décret de carence) ; majoration jusqu'à 4 000 € pour un apprenti reconnu travailleur handicapé ; frais versés au CFA : 3 €/repas, 6 €/nuit, 1er équipement 500 € (niveaux 3-4) ou 300 € (niveau 5).",
+  "alternance_professionnalisation": "Forfait horaire fixé par la branche : interprofession 9,15 €/h (15 €/h pour un public prioritaire) ; HCR 11 € à 20 €/h selon la certification et le public. Aide à la fonction tutorale selon la branche (ex. HCR : 230 €/mois).",
   "cpf_abondement": true,
-  "cpf_details": "Selon accord de branche",
+  "cpf_details": "Selon la branche : abondement CPF finançable sur le budget annuel dans certaines branches (ex. restauration rapide : 1 500 €/an moins de 11 salariés, 3 000 €/an de 11 à 49), exclu dans d'autres (organismes de formation, propreté).",
   "vae_possible": true,
-  "vae_details": "VAE, CQP/TFP, CleA, certifications metier",
-  "limite_dossiers_an": "Dans la limite du budget annuel par entreprise et des fonds disponibles",
-  "specificites": "AKTO couvre 27 branches professionnelles avec des regles specifiques par branche. Les montants varient significativement selon la branche. Plateforme Click & Form pour formations pre-negociees.",
-  "points_cles_maximisation": "Verifier les regles specifiques de votre branche sur akto.fr | AFEST possible (1 200-2 400 euros accompagnement) | Majoration tuteur : 230 euros/mois",
+  "vae_details": "Interprofession : VAE et bilans de compétences plafonnés à 1 500 €. HCR : 2 000 € (certifications de la branche) ou 1 500 € (autres RNCP), pour 24 h d'accompagnement. Organismes de formation : pas de prise en charge.",
+  "limite_dossiers_an": "Dans la limite du budget annuel par entreprise fixé par la branche et des fonds disponibles",
+  "specificites": "Règles de prise en charge propres à chaque branche (une vingtaine) | Espace Formation : coûts pédagogiques pris en charge à 100 % pour les moins de 50 salariés, en général sans déduction du budget annuel | Automne 2026 : enveloppe PDC épuisée dans 10 branches (commerces de gros et textile hors Espace Formation, organismes de formation, déchet, autoroutes, quincaillerie, eau, travail du bois, exploitations forestières, enseignement privé non lucratif) | FSE+ : dépôts clos depuis le 1er juillet 2026 (actions accordées réalisables jusqu'au 30/11/2026) | Réforme TVA au 1er octobre 2026",
+  "points_cles_maximisation": "Privilégier Espace Formation (100 % des coûts pédagogiques, hors budget annuel dans la plupart des branches) | Vérifier la page « règles de prise en charge » de votre branche et l'état de son enveloppe | Déposer 30 jours avant le démarrage | Organismes de formation : plan conventionnel (10 000 €/an) en relais du PDC épuisé | AFEST : 20 €/h (formateur interne) ou 25 €/h (prestataire)",
   "plafonds_par_taille": [
     {
       "taille": "less_11",
-      "cout_horaire_max": 30,
+      "cout_horaire_max": null,
       "budget_annuel_max": 2500,
       "quota_horaire_max": null,
-      "description": "TPE <11 salaries - Defaut interprofession metropole 2026 : 2 500 euros/an, plafond pedagogique 30 euros/h. Selon branche, montants superieurs (jusqu'a 6 000 euros)."
+      "description": "Moins de 11 salariés (interprofession, hexagone) : budget annuel 2 500 €, 30 €/h/salarié formé (outre-mer : 5 000 €, 40 €/h)."
     },
     {
       "taille": "11_49",
-      "cout_horaire_max": 30,
+      "cout_horaire_max": null,
       "budget_annuel_max": 4000,
       "quota_horaire_max": null,
-      "description": "PME 11-49 salaries - Defaut interprofession metropole 2026 : 4 000 euros/an, plafond pedagogique 30 euros/h. Selon branche, montants superieurs (jusqu'a 12 000 euros)."
+      "description": "11 à 49 salariés (interprofession, hexagone) : budget annuel 4 000 €, 30 €/h/salarié formé (outre-mer : 7 000 €, 40 €/h)."
     },
     {
       "taille": "50_299",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "50+ salaries - Pas de fonds mutualise interprofession. Financement via plan conventionnel de branche (selon contribution versee). Remuneration selon accord."
+      "description": "50 salariés et plus : pas de fonds mutualisés PDC ; Espace Formation au coût négocié sous condition de versement volontaire, ou plan conventionnel selon la branche."
     },
     {
       "taille": "300_plus",
       "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "300+ salaries - Pas de fonds mutualise interprofession. Financement via plan conventionnel de branche (sous reserve de fonds)."
+      "description": "300 salariés et plus : pas de fonds mutualisés PDC ; versement volontaire ou plan conventionnel selon la branche."
     }
   ],
   "dispositifs_complementaires": [
     {
       "id": "espace-formation",
-      "nom": "Espace Formation AKTO",
+      "nom": "Espace Formation (actions collectives AKTO)",
       "cumul": "alternatif",
       "montant_max": null,
       "unite": null,
-      "pourcentage_couts": null,
-      "description": "Catalogue de formations negociees par AKTO avec des conditions de prise en charge specifiques, distinctes des plafonds PDC classiques.",
+      "pourcentage_couts": 100,
+      "description": "Catalogue de formations collectives sélectionnées par la branche : coûts pédagogiques entièrement pris en charge pour les moins de 50 salariés et, dans la plupart des branches, non déduits du budget annuel. Rémunération et frais annexes selon la branche.",
       "conditions": [
-        "Entreprise de moins de 50 salaries",
-        "Formation choisie dans le catalogue Espace Formation"
+        "Entreprise de moins de 50 salariés (50 et plus : coût négocié sous condition de versement volontaire)",
+        "Formation choisie dans le catalogue Espace Formation de sa branche, dans la limite des places et des fonds disponibles",
+        "Certaines branches ont aussi épuisé l'enveloppe Espace Formation en 2026 (ex. quincaillerie, travail du bois, exploitations forestières)"
       ],
-      "demarches": "Consulter le catalogue Espace Formation sur akto.fr et s'inscrire via l'espace entreprise.",
+      "demarches": "Choisir la session sur Espace Formation (akto.fr) et inscrire les salariés en ligne : aucun dossier de prise en charge à fournir.",
       "tailles_eligibles": [
         "less_11",
         "11_49"
       ],
       "publics": null,
-      "confidence": "estimated",
-      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/"
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-interprofession/",
+      "note": "« Le + à savoir : les actions de formation que vous mobilisez via Espace Formation ne sont pas déduites de votre budget annuel. » ; « Les coûts pédagogiques sont entièrement pris en charge » (vérifié le 2026-10-05)"
+    },
+    {
+      "id": "plans-conventionnels-branche",
+      "nom": "Plan conventionnel de branche (selon la branche)",
+      "cumul": "additif",
+      "montant_max": null,
+      "unite": "par_an",
+      "pourcentage_couts": null,
+      "description": "Certaines branches financent, sur leur contribution conventionnelle, des formations en relais du PDC ou pour les 50 salariés et plus (ex. organismes de formation : 10 000 €/an pour les moins de 50 salariés ; HCR 50 salariés et plus : 80 % de la contribution ; enseignement privé non lucratif : Capital Compétences 3 000 €/an).",
+      "conditions": [
+        "Relever d'une branche ayant institué une contribution conventionnelle et être à jour de ses contributions",
+        "Respecter les critères de la branche, dans la limite du budget par entreprise et des fonds disponibles"
+      ],
+      "demarches": "Consulter la page « règles de prise en charge » de sa branche sur akto.fr puis déposer la demande sur MonEspace.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+      "note": "« La prise en charge des formations ne peut dépasser le plafond annuel de 10 000 €/entreprise au titre du Plan conventionnel. » (vérifié le 2026-10-05)"
     }
   ],
   "variantes_branche": [
+    {
+      "id": "hcr",
+      "branche_nom": "Hôtels, cafés, restaurants (HCR)",
+      "idcc": [
+        "1979"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+      "confidence": "exact",
+      "note": "« Seules les formations dont les thématiques ne figurent pas sur Espace Formation peuvent être prises en charge au titre du plan de développement des compétences. » ; « Entreprises de moins de 11 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 2 000 € » IDCC indiqué sur la page générale AKTO : « Hôtels, cafés, restaurants IDCC 1979 ». Budgets 11-49 : 3 000 € jusqu'à 25 salariés, 6 000 € de 26 à 49 (estimation prudente : 3 000 €). (vérifié le 2026-10-05)",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+        "note": "« Présentiel : 25€/heure au réel plafonné » ; « Distanciel : 15€/heure au réel plafonné » Formations hors catalogue, moins de 50 salariés : 25 €/h en présentiel, 15 €/h à distance. (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 24,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+        "note": "« Coûts pédagogiques : Coûts réels, plafonnés à 24€/h dans la limite de 200 heures » ; « Coûts pédagogiques : Coûts réels, plafonnés à 30 €/h, dans la limite de 200 heures » Certifications RNCP/CléA en présentiel : 24 €/h (200 h max) ; CQP/TFP de la branche HCR : 30 €/h (200 h max) ; à distance 15 €/h. (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+        "note": "« La rémunération n’est pas prise en charge. » ; « Rémunération : prise en charge de la rémunération du salarié formé, dans la limite d’un forfait de 14€ par heure pour 200 heures maximum » Pas de prise en charge pour les formations courantes ; forfait de 14 €/h (200 h max) pour les formations certifiantes et en cas d'activité partielle. (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_hebergement": {
+        "value": 120,
+        "confidence": "estimated",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+        "note": "« 120 €/nuit, hors Île-de-France » ; « 190 €/nuit en Île-de-France » Plafond hors Île-de-France retenu (190 €/nuit en Île-de-France) ; budget annuel publié pour les seuls coûts pédagogiques. (vérifié le 2026-10-05)"
+      },
+      "frais_restauration": {
+        "value": 20,
+        "confidence": "estimated",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+        "note": "« Restauration (Déjeuner et dîner) : 20 €/repas/ jour de formation » Par repas et par jour de formation. (vérifié le 2026-10-05)"
+      },
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+        "note": "« Train : frais réels d’un billet 2nde classe » Frais réels (train 2nde classe) ou barème kilométrique 4 CV : pas de forfait journalier. (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+        "note": "« Entreprises de moins de 11 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 2 000 € » ; « Entreprises de 11 à 25 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 3 000 € » ; « Entreprises de 26 à 49 salariés : Budget annuel (coûts pédagogiques) : plafond annuel de 6 000 € » Selon l'effectif : voir le détail par taille d'entreprise de la branche. (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "HCR, moins de 50 salariés : budget annuel de coûts pédagogiques de 2 000 € (moins de 11), 3 000 € (11 à 25) et 6 000 € (26 à 49) pour les seules formations dont la thématique n'existe pas sur Espace Formation ; Espace Formation : coûts pris en charge en totalité ; AFEST : budget complémentaire de 3 600 €. 50 salariés et plus : 80 % de la contribution conventionnelle (coûts pédagogiques + frais annexes).",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 2000,
+          "quota_horaire_max": null,
+          "description": "HCR moins de 11 salariés : 2 000 €/an (coûts pédagogiques), 25 €/h présentiel, 15 €/h distanciel, 2 formations intra par an maximum."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 3000,
+          "quota_horaire_max": null,
+          "description": "HCR 11 à 25 salariés : 3 000 €/an (6 000 €/an de 26 à 49 salariés), 25 €/h présentiel, 15 €/h distanciel."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": 35,
+          "confidence": "estimated",
+          "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "HCR 50 salariés et plus : budget égal à 80 % de la contribution conventionnelle ; plafond horaire variable selon le type de formation, de 20 €/h (hygiène alimentaire) et 25 €/h (autres formations) à 45 €/h (formations métiers) et 50 €/h (langues en présentiel) ; 35 €/h retenu (formations réglementaires et transverses, relation clientèle et sécurité) : estimation à confirmer. Extrait de la grille : « Relation clientèle & Sécurité | Relation clientèle, santé-sécurité, hébergement, sécurité alimentaire non obligatoire | 35€/h »."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": 35,
+          "confidence": "estimated",
+          "source_url": "https://www.akto.fr/regles-de-prise-en-charge-hotels-cafes-restaurants/",
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "HCR 300 salariés et plus : 80 % de la contribution conventionnelle ; plafond horaire variable selon le type de formation (de 20 €/h à 50 €/h) ; 35 €/h retenu : estimation à confirmer. Extrait de la grille : « Relation clientèle & Sécurité | Relation clientèle, santé-sécurité, hébergement, sécurité alimentaire non obligatoire | 35€/h »."
+        }
+      ]
+    },
+    {
+      "id": "proprete",
+      "branche_nom": "Propreté et services associés",
+      "idcc": [
+        "3043"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-proprete/",
+      "confidence": "exact",
+      "note": "« Votre entreprise dispose d’un budget annuel de 7 000€ réservé à la prise en charge des coûts pédagogiques dont les conditions d’utilisation sont listées ci-dessous cf points 2 et 3. » ; « Les formations listées ci-dessous sont prises en charge sans déduction de votre budget annuel de 7 000€. » Durée minimale 3,5 h par formation. CQP/TFP de branche (27 € à 37 €/h, rémunération 14 €/h, frais annexes plafonnés) financés hors budget annuel. (vérifié le 2026-10-05)",
+      "cout_horaire_inter": {
+        "value": 20,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-proprete/",
+        "note": "« Formation liée à l’acquisition de compétences transversales Durée minimale de formation : 3,5 heures Coûts pédagogiques : coûts réels, plafonnés à 20€/heure de formation/salarié formé » Formations transversales hors Espace Formation (formations métiers ou sécurité : 30 €/h). (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 30,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-proprete/",
+        "note": "« Formation liée aux métiers de la branche ou à la sécurité Durée minimale de formation : 3,5 heures Coûts pédagogiques : coûts réels, plafonnés à 30€/heure de formation/salarié formé » Formations liées aux métiers de la branche ou à la sécurité ; CQP/TFP de branche : 27 € à 37 €/h hors budget. (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-proprete/",
+        "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge. » Rémunération non prise en charge sur le budget annuel ; forfait de 14 €/h pour les CQP/TFP, CléA et MCCP de la branche. (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "budget_annuel_max": {
+        "value": 7000,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-proprete/",
+        "note": "« Votre entreprise dispose d’un budget annuel de 7 000€ réservé à la prise en charge des coûts pédagogiques dont les conditions d’utilisation sont listées ci-dessous cf points 2 et 3. » Montant identique pour toutes les entreprises de moins de 50 salariés. (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Propreté, moins de 50 salariés : budget annuel de 7 000 € de coûts pédagogiques (formations hors Espace Formation, durée minimale 3,5 h) ; CQP/TFP, CléA et MCCP de branche financés en plus du budget ; Espace Formation : coûts pédagogiques pris en charge à 100 %.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 7000,
+          "quota_horaire_max": null,
+          "description": "Propreté moins de 11 salariés : 7 000 €/an de coûts pédagogiques ; 20 €/h (transversal) ou 30 €/h (métiers, sécurité) ; durée minimale 3,5 h."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 7000,
+          "quota_horaire_max": null,
+          "description": "Propreté 11 à 49 salariés : 7 000 €/an de coûts pédagogiques ; 20 €/h (transversal) ou 30 €/h (métiers, sécurité) ; durée minimale 3,5 h."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Propreté 50 salariés et plus : pas de fonds mutualisés ; budget « Plan conventionnel – Actions non prioritaires » sous réserve de budget disponible, ou versement volontaire."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Propreté 300 salariés et plus : plan conventionnel sous réserve de budget disponible, ou versement volontaire."
+        }
+      ]
+    },
+    {
+      "id": "restauration-rapide",
+      "branche_nom": "Restauration rapide",
+      "idcc": [
+        "1501"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+      "confidence": "exact",
+      "note": "« Coûts pédagogiques : au coût réel plafonné à 25€/heure de formation/salarié formé Durée : dans la limite d’un plafond de 14 heures de formation » ; « Bon à savoir : les actions de formation visant l’un des deux TFP ne sont pas déduites de votre budget annuel. » Formations hors Espace Formation limitées à 14 h ; TFP de branche : 25 €/h, 180 h ou 200 h, hors budget annuel. (vérifié le 2026-10-05)",
+      "cout_horaire_inter": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+        "note": "« Coûts pédagogiques : au coût réel plafonné à 25€/heure de formation/salarié formé Durée : dans la limite d’un plafond de 14 heures de formation » Présentiel ou distanciel synchrone ; autres formations à distance : 15 €/h ; 14 h maximum par formation. (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+        "note": "« Coût pédagogique au réel plafonné à 25 €/heure de formation/salarié formé dans la limite de 1200 €/jour (pour les formations en intra et en interentreprises) » TFP de la branche (180 h ou 200 h maximum), hors budget annuel. (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+        "note": "« La prise en charge de la rémunération s’effectue uniquement lorsque votre coût pédagogique est à 0€. » Forfait de 13 €/h (14 h max) uniquement si le coût pédagogique est nul. (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+        "note": "« 180 € pour un aller retour en train ou en avion (dans la limite d’un aller-retour par action de formation) » Forfait par action (un aller-retour), pas par jour. (vérifié le 2026-10-05)"
+      },
+      "frais_hebergement": {
+        "value": 110,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+        "note": "« 110 € par nuitée (dans la limite de 2 nuitées par action de formation) » ; « Prise en charge des frais annexes des salariés formés au réel plafonné, sur demande de l’entreprise, dans la limite du plafond annuel de l’entreprise. » Déduit du budget annuel. (vérifié le 2026-10-05)"
+      },
+      "frais_restauration": {
+        "value": 25,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+        "note": "« 25 €/repas (pour le déjeuner et le diner, dans la limite de 4 repas par action de formation) » Déduit du budget annuel. (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-restauration-rapide/",
+        "note": "« Si votre entreprise emploie moins de 11 salariés, vous disposez d’un budget annuel de 4 000€ réservé à la prise en charge des actions de formation que vous mobilisez au point 2 » ; « Si votre entreprise emploie entre 11 et 49 salariés, vous disposez d’un budget annuel de 9 000€ » Selon l'effectif : voir le détail par taille d'entreprise de la branche. (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "global",
+      "budget_annuel_description": "Restauration rapide : budget annuel de 4 000 € (moins de 11 salariés) ou 9 000 € (11 à 49) pour les formations hors Espace Formation, les frais annexes, l'abondement CPF et la VAE ; AFEST : budget séparé de 3 600 € ; TFP de branche hors budget.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 4000,
+          "quota_horaire_max": 14,
+          "description": "Restauration rapide moins de 11 salariés : 4 000 €/an (formation, frais annexes, CPF, VAE) ; 25 €/h ; 14 h maximum par formation hors TFP de branche."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 9000,
+          "quota_horaire_max": 14,
+          "description": "Restauration rapide 11 à 49 salariés : 9 000 €/an (formation, frais annexes, CPF, VAE) ; 25 €/h ; 14 h maximum par formation hors TFP de branche."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50 salariés et plus : Espace Formation au coût négocié sous condition de versement volontaire."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : versement volontaire."
+        }
+      ]
+    },
+    {
+      "id": "prevention-securite",
+      "branche_nom": "Prévention et sécurité",
+      "idcc": [
+        "1351"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-prevention-securite/",
+      "confidence": "exact",
+      "note": "« Votre entreprise dispose aussi d’un budget annuel de 7 000€ réservé à la prise en charge des coûts pédagogiques, dans la limite des fonds disponibles (cf points 2 et 3) » ; « Les partenaires sociaux de votre branche maintiennent la non prise en charge des formations en distanciel sur le budget libre entreprise en 2026 » Distanciel non financé sauf formations réglementaires encadrées par l'arrêté du 23 octobre 2024. (vérifié le 2026-10-05)",
+      "cout_horaire_inter": {
+        "value": 21,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-prevention-securite/",
+        "note": "« Coûts pédagogiques : coûts réels, plafonnés à 21€/heure de formation/salarié formé » Inter et intra (intra : 1 700 €/jour/formateur, 4 à 12 stagiaires). (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 21,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-prevention-securite/",
+        "note": "« Coûts pédagogiques : coûts réels, plafonnés à 21€/heure de formation/salarié formé » Même plafond pour toutes les formations hors Espace Formation. (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-prevention-securite/",
+        "note": "« La rémunération et les frais annexes des salariés formés ne sont pas pris en charge. » (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "budget_annuel_max": {
+        "value": 7000,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-prevention-securite/",
+        "note": "« Votre entreprise dispose aussi d’un budget annuel de 7 000€ réservé à la prise en charge des coûts pédagogiques, dans la limite des fonds disponibles (cf points 2 et 3) » Même montant quelle que soit la taille (moins de 50 salariés). (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Prévention-sécurité, moins de 50 salariés : budget annuel de 7 000 € de coûts pédagogiques (21 €/h, rémunération et frais annexes non pris en charge) ; actions collectives transverses d'Espace Formation sur un budget mutualisé complémentaire.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 7000,
+          "quota_horaire_max": null,
+          "description": "Prévention-sécurité moins de 11 salariés : 7 000 €/an de coûts pédagogiques, 21 €/h ; distanciel non financé (sauf réglementaire)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 7000,
+          "quota_horaire_max": null,
+          "description": "Prévention-sécurité 11 à 49 salariés : 7 000 €/an de coûts pédagogiques, 21 €/h ; distanciel non financé (sauf réglementaire)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50 salariés et plus : Espace Formation au coût négocié sous condition de versement volontaire."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : versement volontaire."
+        }
+      ]
+    },
     {
       "id": "organismes-de-formation",
       "branche_nom": "Organismes de formation",
@@ -156,123 +489,304 @@
       ],
       "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
       "confidence": "exact",
-      "note": "Baremes 2026 verifies le 11/06/2026 sur la page officielle de la branche.",
+      "relais_plan_conventionnel": true,
+      "note": "« Suspension du financement des formations sur le budget Plan de développement des compétences (PDC) » ; « A ce jour, l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. » ; « Les dossiers qui n’ont pas pu être engagés pourront faire l’objet d’une prise en charge au titre du Plan conventionnel dans la limite du plafond annuel par entreprise. » PDC 2026 (4 500 € / 5 600 €) épuisé : le barème retenu est celui du plan conventionnel, qui prend le relais. VAE et abondement CPF non financés. (vérifié le 2026-10-05 ; suspension et relais du plan conventionnel relus en ligne le 2026-10-08, page mise à jour le 10/07/2026)",
       "cout_horaire_inter": {
         "value": 60,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-        "note": "60 euros/h/stagiaire maximum (hors Espace Formation), entreprises <50 salaries. Intra : 1 200 euros/jour minimum 3 participants."
+        "note": "« Coûts pédagogiques des formations en inter-entreprises : aux coûts réels, plafonnés à 60€/heure de formation/salarié formé » Plan conventionnel ; intra : 2 000 €/jour pour 3 stagiaires minimum. (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 60,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "« Coûts pédagogiques des formations en inter-entreprises : aux coûts réels, plafonnés à 60€/heure de formation/salarié formé » Même plafond pour toutes les formations hors Espace Formation. (vérifié le 2026-10-05)"
       },
       "prise_en_charge_salaires": {
         "value": 15,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-        "note": "Forfait remuneration 15 euros/h/stagiaire (plan conventionnel <50 salaries)."
+        "note": "« Rémunération : forfait de 15€/heure de formation/salarié formé » ; « La rémunération et les frais annexes des salariés en formation peuvent être pris en charge hors plafond annuel (enveloppe mutualisée dédiée) selon les conditions suivantes : » Hors plafond annuel, sur demande préalable lors du dépôt du dossier. (vérifié le 2026-10-05)"
       },
       "prise_en_charge_salaires_mode": "euro_par_heure",
+      "frais_transport": {
+        "value": null,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+        "note": "« prise en charge des frais de transport (train, car, parking, péages et avion le cas échéant) aux coûts réels et frais kilométriques selon le barème fiscal en vigueur dans la limite de 300 kms allers-retours » Frais réels, pas de forfait journalier ; hors plafond annuel. (vérifié le 2026-10-05)"
+      },
       "frais_hebergement": {
         "value": 150,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-        "note": "Jusqu'a 150 euros/nuit."
+        "note": "« Hébergement : prise en charge aux coûts réels plafonnés à 150 €/ nuit » Hors plafond annuel. (vérifié le 2026-10-05)"
       },
       "frais_restauration": {
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-        "note": "Jusqu'a 25 euros/repas (dejeuner et/ou diner)."
+        "note": "« Restauration : prise en charge aux coûts réels plafonnés à 25 €/repas (déjeuner et/ou diner) » Par repas, hors plafond annuel. (vérifié le 2026-10-05)"
       },
       "budget_annuel_max": {
-        "value": 4500,
+        "value": 10000,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
-        "note": "Budget annuel 2026 : 4 500 euros (<11 sal.), 5 600 euros (11-49 sal.) — verifie le 11/06/2026 (citation : « vous disposez d'un budget annuel de 4 500 euros »)."
+        "note": "« La prise en charge des formations ne peut dépasser le plafond annuel de 10 000 €/entreprise au titre du Plan conventionnel. » Plan conventionnel, entreprises de moins de 50 salariés (coûts pédagogiques). (vérifié le 2026-10-05)"
       },
-      "budget_annuel_description": "Branche Organismes de formation 2026 : 4 500 euros/an (<11 sal.), 5 600 euros/an (11-49 sal.), couts pedagogiques hors Espace Formation.",
+      "budget_annuel_portee": "pedagogie",
+      "budget_annuel_description": "Organismes de formation : enveloppe PDC 2026 (4 500 € / 5 600 €) intégralement engagée ; les demandes sont financées sur le plan conventionnel, dans la limite de 10 000 €/an par entreprise de moins de 50 salariés (coûts pédagogiques, 60 €/h), rémunération (15 €/h) et frais annexes pris en charge hors plafond. 50 salariés et plus : 80 % de la contribution conventionnelle versée en mars 2025.",
       "plafonds_par_taille": [
         {
           "taille": "less_11",
-          "cout_horaire_max": 60,
-          "budget_annuel_max": 4500,
+          "cout_horaire_max": null,
+          "budget_annuel_max": 10000,
           "quota_horaire_max": null,
-          "description": "Organismes de formation <11 salaries : budget 4 500 euros/an, plafond pedagogique 60 euros/h, salaire 15 euros/h."
+          "description": "Organismes de formation moins de 11 salariés : PDC 2026 épuisé, plan conventionnel jusqu'à 10 000 €/an (60 €/h) + rémunération 15 €/h et frais annexes hors plafond."
         },
         {
           "taille": "11_49",
-          "cout_horaire_max": 60,
-          "budget_annuel_max": 5600,
+          "cout_horaire_max": null,
+          "budget_annuel_max": 10000,
           "quota_horaire_max": null,
-          "description": "Organismes de formation 11-49 salaries : budget 5 600 euros/an, plafond pedagogique 60 euros/h, salaire 15 euros/h."
+          "description": "Organismes de formation 11 à 49 salariés : PDC 2026 épuisé, plan conventionnel jusqu'à 10 000 €/an (60 €/h) + rémunération 15 €/h et frais annexes hors plafond."
         },
         {
           "taille": "50_299",
           "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "50+ salaries : plan conventionnel (80 % de la contribution conventionnelle versee, moins frais de gestion)."
+          "description": "Organismes de formation 50 salariés et plus : budget égal à 80 % de la contribution conventionnelle versée en mars 2025 (moins frais de gestion), 60 €/h."
         },
         {
           "taille": "300_plus",
           "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "300+ salaries : plan conventionnel selon contribution versee."
+          "description": "Organismes de formation 300 salariés et plus : 80 % de la contribution conventionnelle versée en mars 2025 (moins frais de gestion), 60 €/h."
         }
       ]
     },
     {
-      "id": "commerces-de-gros",
-      "branche_nom": "Commerces de gros",
+      "id": "akto-pdc-2026-epuise",
+      "branche_nom": "Commerces de gros, déchet, autoroutes, quincaillerie, textile, eau, travail du bois (enveloppe PDC 2026 épuisée)",
       "idcc": [
-        "0573"
+        "0573",
+        "2149",
+        "2583",
+        "3243",
+        "2002",
+        "2147",
+        "0158"
       ],
       "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
       "confidence": "exact",
-      "note": "Baremes 2026 de la page officielle de la branche Commerces de gros.",
+      "note": "Page des commerces de gros : « Suspension du financement des formations hors Espace Formation » ; « A ce jour, une partie de l'enveloppe budgétaire a été intégralement engagée. » ; « Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026 ». Même constat, formulé « A ce jour l'enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. », sur les pages 2026 des branches déchet (IDCC 2149), autoroutes (2583), quincaillerie (3243), location et entretien textile (2002), eau et assainissement (2147), travail mécanique du bois (0158) et exploitations forestières (sans IDCC indiqué). Plafonds (horaire et annuel) mis à 0 € pour signaler qu'aucun nouveau dossier hors Espace Formation n'est financé en 2026 ; Espace Formation reste ouvert pour les commerces de gros et le textile, mais est aussi épuisé pour la quincaillerie, le travail du bois, les exploitations forestières et le déchet. (vérifié le 2026-10-05 ; libellé de la page des commerces de gros relu en ligne le 2026-10-06)",
+      "cout_horaire_inter": {
+        "value": 0,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
+        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée : plafond horaire mis à 0 € pour qu'aucun financement ne soit estimé hors Espace Formation (barèmes 2026 à titre indicatif : voir le budget annuel). (vérifié le 2026-10-05)"
+      },
+      "cout_horaire_metier": {
+        "value": 0,
+        "confidence": "exact",
+        "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
+        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée : plafond horaire mis à 0 €. (vérifié le 2026-10-05)"
+      },
       "prise_en_charge_salaires": {
-        "value": 13,
+        "value": null,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
-        "note": "Forfait 13 euros/h de formation/salarie forme pour toutes les actions realisees depuis le 1er janvier 2026."
+        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Plus aucune prise en charge (formation, rémunération, frais) hors Espace Formation pour les nouveaux dossiers 2026. (vérifié le 2026-10-05)"
       },
-      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "prise_en_charge_salaires_mode": "selon_accord",
       "budget_annuel_max": {
-        "value": 6000,
+        "value": 0,
         "confidence": "exact",
         "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
-        "note": "Budget annuel 2026 : 6 000 euros (<11 sal.), 12 000 euros (11-49 sal.). Couvre couts pedagogiques, remuneration et frais annexes."
+        "note": "« Les dossiers hors Espace formation qui n’ont pas pu être engagés ne pourront pas faire l’objet d’une prise en charge. » Enveloppe 2026 épuisée (critères 2026 à titre indicatif : commerces de gros 6 000 €/an, quincaillerie 8 000 €, déchet 3 000 € / 5 000 €, autoroutes 4 000 € / 8 000 €, travail du bois 6 000 € / 10 000 €). (vérifié le 2026-10-05)"
       },
-      "budget_annuel_description": "Branche Commerces de gros 2026 : 6 000 euros/an (<11 sal.), 12 000 euros/an (11-49 sal.) — couts pedagogiques + remuneration + frais annexes.",
+      "budget_annuel_description": "Enveloppe PDC 2026 intégralement engagée : AKTO demande de ne plus déposer de nouveaux dossiers pour 2026 (hors Espace Formation). Seules restent possibles, selon la branche, les actions collectives d'Espace Formation, la mobilité ultramarine et les autres dispositifs (alternance, période de reconversion). Nouveaux critères attendus pour 2027.",
       "plafonds_par_taille": [
         {
           "taille": "less_11",
           "cout_horaire_max": null,
-          "budget_annuel_max": 6000,
+          "budget_annuel_max": 0,
           "quota_horaire_max": null,
-          "description": "Commerces de gros <11 salaries : budget annuel 6 000 euros (pedagogie + remuneration 13 euros/h + frais)."
+          "description": "Enveloppe PDC 2026 de votre branche épuisée : aucun nouveau dossier hors Espace Formation financé en 2026 (plafond mis à 0 ; vérifier Espace Formation et les critères 2027)."
         },
         {
           "taille": "11_49",
           "cout_horaire_max": null,
-          "budget_annuel_max": 12000,
+          "budget_annuel_max": 0,
           "quota_horaire_max": null,
-          "description": "Commerces de gros 11-49 salaries : budget annuel 12 000 euros (pedagogie + remuneration 13 euros/h + frais)."
+          "description": "Enveloppe PDC 2026 de votre branche épuisée : aucun nouveau dossier hors Espace Formation financé en 2026 (plafond mis à 0 ; vérifier Espace Formation et les critères 2027)."
         },
         {
           "taille": "50_299",
           "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "50+ salaries : pas de fonds mutualises PDC ; plan conventionnel selon contribution."
+          "description": "50 salariés et plus : pas de fonds mutualisés ; versement volontaire."
         },
         {
           "taille": "300_plus",
           "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "300+ salaries : plan conventionnel selon contribution."
+          "description": "300 salariés et plus : versement volontaire."
         }
       ]
+    }
+  ],
+  "derniere_verification": "2026-10-06",
+  "alertes": [
+    {
+      "type": "fonds_epuises",
+      "branche": "Organismes de formation",
+      "idcc": [
+        "1516"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-organisme-de-formation/",
+      "extrait": "Suspension du financement des formations sur le budget Plan de développement des compétences (PDC) (…) A ce jour, l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Les dossiers qui n’ont pas pu être engagés pourront faire l’objet d’une prise en charge au titre du Plan conventionnel dans la limite du plafond annuel par entreprise.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Commerces de gros (hors Espace Formation)",
+      "idcc": [
+        "0573"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-gros/",
+      "extrait": "Suspension du financement des formations hors Espace Formation (…) Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Activités du déchet",
+      "idcc": [
+        "2149"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-activites-du-dechet/",
+      "extrait": "A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Autoroutes",
+      "idcc": [
+        "2583"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-autoroutes/",
+      "extrait": "A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Les budgets présentés ci-dessous sont épuisés.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Commerces de quincaillerie",
+      "idcc": [
+        "3243"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-commerces-de-quincaillerie/",
+      "extrait": "A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Location et entretien textile (hors Espace Formation)",
+      "idcc": [
+        "2002"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-entretien-et-location-textile/",
+      "extrait": "A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Services d'eau et d'assainissement",
+      "idcc": [
+        "2147"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-services-de-leau-et-dassainissement/",
+      "extrait": "A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Travail mécanique du bois",
+      "idcc": [
+        "0158"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-travail-mecanique-du-bois/",
+      "extrait": "A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Exploitations forestières et scieries agricoles",
+      "idcc": [
+        "8211",
+        "8212",
+        "8231",
+        "8241",
+        "8251",
+        "8311",
+        "8411",
+        "8412",
+        "8415",
+        "8421",
+        "8431",
+        "8432",
+        "8522",
+        "8531",
+        "8541",
+        "8721",
+        "8731",
+        "8741",
+        "8822",
+        "8831",
+        "9022",
+        "9062",
+        "9211",
+        "9551",
+        "9571",
+        "9581",
+        "9602",
+        "9711",
+        "9801",
+        "9891"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-exploitations-forestieres-et-scieries-agricoles/",
+      "extrait": "A ce jour l’enveloppe budgétaire qui a été attribuée à votre branche a été intégralement engagée. (…) Nous vous remercions de ne pas déposer de nouveaux dossiers pour 2026.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "fonds_epuises",
+      "branche": "Enseignement privé non lucratif (relais Capital Compétences 3 000 €)",
+      "idcc": [
+        "3218",
+        "7520"
+      ],
+      "source_url": "https://www.akto.fr/regles-de-prise-en-charge-enseignement-prive-non-lucratif/",
+      "extrait": "Bien que les fonds du plan de développement des compétences pour les entreprises de moins de 50 salariés soient épuisés, votre branche met à votre disposition un budget de 3 000 € par entreprise via le plan conventionnel Capital Compétences.",
+      "verifie_le": "2026-10-05"
+    },
+    {
+      "type": "dispositif_termine",
+      "branche": "Toutes branches : FSE+ AKTO",
+      "idcc": [],
+      "source_url": "https://www.akto.fr/beneficier-dune-aide-du-fse-en-2025-comment-faire/",
+      "extrait": "Au regard des dossiers déjà validés et en cours d’instruction par nos services, les dépôts sont clos à compter du 1er juillet 2026 au matin.",
+      "verifie_le": "2026-10-07"
+    },
+    {
+      "type": "changement_paiement",
+      "branche": "Toutes branches : réforme de la TVA des OPCO",
+      "idcc": [],
+      "source_url": "https://www.akto.fr/entreprise/financer-une-formation/deposer-demande/",
+      "extrait": "Attention, dans le cadre de la réforme de la TVA des OPCO, seules les actions de formation financées en totalité sur le Plan de développement des compétences des entreprises de moins de 50 salariés (PDC-50) peuvent continuer à bénéficier de la subrogation de paiement après le 1er octobre 2026.",
+      "verifie_le": "2026-10-05"
     }
   ]
 }

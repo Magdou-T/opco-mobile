@@ -1,0 +1,719 @@
+{
+  "meta": {
+    "perimetre": "Portails officiels par région (Région, Carif-Oref, Transitions Pro, France Travail, Agefiph)",
+    "date_integration": "2026-10-06"
+  },
+  "portails": [
+    {
+      "region": "01",
+      "nom_region": "Guadeloupe",
+      "liens": [
+        {
+          "titre": "Région Guadeloupe – Guide des aides : formation, insertion, apprentissage",
+          "url": "https://aides.regionguadeloupe.fr/-Toutes-les-aides-?id_mot=44",
+          "type": "region"
+        },
+        {
+          "titre": "Région Guadeloupe – Aide à la Formation pour la Montée en Compétences (AFMC)",
+          "url": "https://aides.regionguadeloupe.fr/afmc",
+          "type": "region"
+        },
+        {
+          "titre": "Transitions Pro Guadeloupe",
+          "url": "https://www.transitionspro-guadeloupe.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Guadeloupe",
+          "url": "https://www.francetravail.fr/region/guadeloupe/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/antilles-guyane",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "02",
+      "nom_region": "Martinique",
+      "liens": [
+        {
+          "titre": "Collectivité Territoriale de Martinique – Dispositifs et aides",
+          "url": "https://www.collectivitedemartinique.mq/dispositifs-daides/",
+          "type": "region"
+        },
+        {
+          "titre": "AGEFMA (Carif-Oref Martinique) – Formations et aides proposées par la CTM",
+          "url": "https://www.agefma.mq/formation/professionnelle/ctm-aides-formations/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Martinique Formation – catalogue régional des formations (AGEFMA)",
+          "url": "https://www.seformerenmartinique.mq/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Martinique",
+          "url": "https://www.transitionspro-martinique.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Martinique",
+          "url": "https://www.francetravail.fr/region/martinique/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/antilles-guyane",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "03",
+      "nom_region": "Guyane",
+      "liens": [
+        {
+          "titre": "Collectivité Territoriale de Guyane – Programme territorial des formations 2026-2028",
+          "url": "https://www.ctguyane.fr/une-offre-pour-construire-votre-avenir-plus-de-10-me-au-service-de-la-formation/",
+          "type": "region"
+        },
+        {
+          "titre": "Guyane Formation (Formanoo) – portail régional de la formation, Carif-Oref Guyane",
+          "url": "https://guyane-formation.formanoo.org/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Guyane",
+          "url": "https://www.transitionspro-guyane.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Guyane",
+          "url": "https://www.francetravail.fr/region/guyane/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/antilles-guyane",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "04",
+      "nom_region": "La Réunion",
+      "liens": [
+        {
+          "titre": "Région Réunion – Demandeur de formation ou d'emploi & aides régionales",
+          "url": "https://www.regionreunion.com/aides-services/article/demandeur-de-formation-ou-d-emploi-aides-regionaux",
+          "type": "region"
+        },
+        {
+          "titre": "Formanoo (Carif-Oref Réunion) – Catalogues des formations",
+          "url": "https://www.formanoo.org/catalogues",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Réunion",
+          "url": "https://www.transitionspro-reunion.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail – La Réunion",
+          "url": "https://monemploi-lareunion.francetravail.fr/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/la-reunion-mayotte",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "06",
+      "nom_region": "Mayotte",
+      "liens": [
+        {
+          "titre": "Département de Mayotte – Domaines de compétence (formation professionnelle)",
+          "url": "https://www.mayotte.fr/le-departement/fonctionnement-institutionnel/competences",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref Mayotte – Financer sa formation",
+          "url": "https://www.cariforef-mayotte.yt/financer-sa-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Mayotte Formation – catalogue régional des formations (Carif-Oref Mayotte)",
+          "url": "https://www.mayotte-formation.yt/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Mayotte",
+          "url": "https://www.transitionspro-mayotte.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Mayotte",
+          "url": "https://www.francetravail.fr/region/mayotte/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "LADOM – Passeport mobilité formation professionnelle",
+          "url": "https://ladom.fr/vie-active/formation-professionnelle/",
+          "type": "autre"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/la-reunion-mayotte",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "11",
+      "nom_region": "Île-de-France",
+      "liens": [
+        {
+          "titre": "Région Île-de-France – Espace demandeur d'emploi",
+          "url": "https://www.iledefrance.fr/morienter-etudier-me-former/demandeur-demploi",
+          "type": "region"
+        },
+        {
+          "titre": "Région Île-de-France – Aides et appels à projets",
+          "url": "https://www.iledefrance.fr/aides-et-appels-a-projets",
+          "type": "region"
+        },
+        {
+          "titre": "Oriane.info – Formations 100 % financées par la Région",
+          "url": "https://oriane.info/se-former/tout-au-long-de-la-vie/formations?financingOrganizations=Conseil%20r%C3%A9gional%20%C3%8Ele-de-France",
+          "type": "region"
+        },
+        {
+          "titre": "Transitions Pro Île-de-France",
+          "url": "https://www.transitionspro-idf.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Île-de-France",
+          "url": "https://www.francetravail.org/regions/ile-de-france/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/ile-de-france",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "24",
+      "nom_region": "Centre-Val de Loire",
+      "liens": [
+        {
+          "titre": "Les formations financées par la Région Centre-Val de Loire (PRF 2025-2028)",
+          "url": "https://formation.centre-valdeloire.fr/trouver-ma-formation/formations-financees/les-formations-de-la-region-centre-val-de-loire",
+          "type": "region"
+        },
+        {
+          "titre": "Rémunération et aides régionales pour les stagiaires de la formation professionnelle",
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/dispositifs-et-solutions/remuneration-et-aides-regionales-pour-les-stagiaires",
+          "type": "region"
+        },
+        {
+          "titre": "Formation Centre-Val de Loire (GIP Alfa Centre, Carif-Oref)",
+          "url": "https://formation.centre-valdeloire.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Les aides pour les demandeurs d'emploi (Formation Centre-Val de Loire)",
+          "url": "https://formation.centre-valdeloire.fr/financer-ma-formation/financements-par-public/les-aides-pour-les-demandeurs-demploi",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Centre-Val de Loire",
+          "url": "https://www.transitionspro-cvl.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Centre-Val de Loire",
+          "url": "https://www.francetravail.org/regions/centre-val-de-loire/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/centre-val-de-loire",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "27",
+      "nom_region": "Bourgogne-Franche-Comté",
+      "liens": [
+        {
+          "titre": "Région Bourgogne-Franche-Comté – La formation professionnelle des demandeurs d'emploi",
+          "url": "https://www.bourgognefranchecomte.fr/la-formation-professionnelle-des-demandeurs-demploi",
+          "type": "region"
+        },
+        {
+          "titre": "Région Bourgogne-Franche-Comté – Rémunération des stagiaires et aides annexes",
+          "url": "https://www.bourgognefranchecomte.fr/node/467",
+          "type": "region"
+        },
+        {
+          "titre": "Emfor BFC – J'ai ma place (formations financées par la Région)",
+          "url": "https://www.emfor-bfc.org/formation/zoom-sur/j-ai-ma-place",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Emfor BFC – Rechercher une formation",
+          "url": "https://www.emfor-bfc.org/formation/recherche",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Bourgogne-Franche-Comté",
+          "url": "https://www.transitionspro-bfc.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Bourgogne-Franche-Comté",
+          "url": "https://www.francetravail.org/regions/bourgogne-franche-comte/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/bourgogne-franche-comte",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "28",
+      "nom_region": "Normandie",
+      "liens": [
+        {
+          "titre": "Région Normandie – Formation tout au long de la vie",
+          "url": "https://www.normandie.fr/formation-tout-au-long-de-la-vie",
+          "type": "region"
+        },
+        {
+          "titre": "Parcours Métier (Région Normandie) – orientation, formation, aides",
+          "url": "https://parcours-metier.normandie.fr/",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref de Normandie – Trouver ma formation",
+          "url": "https://www.trouvermaformation.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Normandie",
+          "url": "https://www.transitionspro-normandie.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Normandie",
+          "url": "https://www.francetravail.org/regions/normandie/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/normandie-saint-pierre-et-miquelon",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "32",
+      "nom_region": "Hauts-de-France",
+      "liens": [
+        {
+          "titre": "Région Hauts-de-France – Guide des aides",
+          "url": "https://guide-aides.hautsdefrance.fr/",
+          "type": "region"
+        },
+        {
+          "titre": "C2RP (Carif-Oref Hauts-de-France) – Rechercher une formation",
+          "url": "https://www.c2rp.fr/former-orienter/formations",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Hauts-de-France",
+          "url": "https://www.transitionspro-hdf.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Hauts-de-France",
+          "url": "https://www.francetravail.org/regions/hauts-de-france/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/hauts-de-france",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "44",
+      "nom_region": "Grand Est",
+      "liens": [
+        {
+          "titre": "Orient'Est PRO (Carif Grand Est) – Les aides régionales pour la formation",
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/consulter-les-aides-regionales-formation",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Orient'Est PRO – Rechercher une formation continue (Formation Grand Est)",
+          "url": "https://www.orientest.pro/accompagner-les-publics/trouver-et-financer-une-formation/rechercher-une-formation-continue",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Grand Est",
+          "url": "https://www.transitionspro-grandest.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Grand Est",
+          "url": "https://www.francetravail.org/regions/grand-est/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/grand-est",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "52",
+      "nom_region": "Pays de la Loire",
+      "liens": [
+        {
+          "titre": "Région Pays de la Loire – Financer son parcours de formation professionnelle",
+          "url": "https://www.paysdelaloire.fr/formation-et-emploi/formation-professionnelle/financer-son-parcours-de-formation-professionnelle",
+          "type": "region"
+        },
+        {
+          "titre": "Région Pays de la Loire – Toutes les aides régionales",
+          "url": "https://www.paysdelaloire.fr/les-aides",
+          "type": "region"
+        },
+        {
+          "titre": "Cariforef des Pays de la Loire – Rechercher une formation",
+          "url": "https://pro.choisirmonmetier-paysdelaloire.fr/rechercher-une-formation-2/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Cariforef des Pays de la Loire – Rechercher un dispositif de financement",
+          "url": "https://pro.choisirmonmetier-paysdelaloire.fr/rechercher-un-dispositif/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Mon emploi en Pays de la Loire – Je me forme (formations financées)",
+          "url": "https://monemploi-paysdelaloire.francetravail.fr/je-me-forme",
+          "type": "autre"
+        },
+        {
+          "titre": "Transitions Pro Pays de la Loire",
+          "url": "https://www.transitionspro-pdl.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Pays de la Loire",
+          "url": "https://www.francetravail.org/regions/pays-de-la-loire/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/pays-de-la-loire",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "53",
+      "nom_region": "Bretagne",
+      "liens": [
+        {
+          "titre": "Région Bretagne – Toutes les aides (filtre Formation & Emploi)",
+          "url": "https://www.bretagne.bzh/aides/",
+          "type": "region"
+        },
+        {
+          "titre": "Région Bretagne – QUALIF Emploi programme",
+          "url": "https://www.bretagne.bzh/aides/fiches/qualif-emploi/",
+          "type": "region"
+        },
+        {
+          "titre": "GREF Bretagne – Trouver une formation (catalogue régional)",
+          "url": "https://www.formation.gref-bretagne.com/liste-des-offres",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "GREF Bretagne – Carif-Oref",
+          "url": "https://www.gref-bretagne.com/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Bretagne",
+          "url": "https://www.transitionspro-bretagne.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Bretagne",
+          "url": "https://www.francetravail.org/regions/bretagne/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/bretagne",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "75",
+      "nom_region": "Nouvelle-Aquitaine",
+      "liens": [
+        {
+          "titre": "Guide des aides de la Région - Formation professionnelle",
+          "url": "https://les-aides.nouvelle-aquitaine.fr/formation-professionnelle",
+          "type": "region"
+        },
+        {
+          "titre": "Je me forme pour trouver un emploi (portail Entreprises de la Région)",
+          "url": "https://entreprises.nouvelle-aquitaine.fr/guides-pratiques-de-lentreprise/je-me-forme-pour-trouver-un-emploi",
+          "type": "region"
+        },
+        {
+          "titre": "Cap Métiers - Les dispositifs de financement de la formation",
+          "url": "https://pro.cap-metiers.fr/financement-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "CMaFormation - catalogue des formations en Nouvelle-Aquitaine (Cap Métiers)",
+          "url": "https://www.cmaformation-na.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Nouvelle-Aquitaine",
+          "url": "https://www.transitionspro-na.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Nouvelle-Aquitaine",
+          "url": "https://www.francetravail.org/regions/nouvelle-aquitaine/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/nouvelle-aquitaine",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "76",
+      "nom_region": "Occitanie",
+      "liens": [
+        {
+          "titre": "Région Occitanie - La formation professionnelle",
+          "url": "https://www.laregion.fr/-La-formation-professionnelle-",
+          "type": "region"
+        },
+        {
+          "titre": "Région Occitanie - Les aides et accompagnements (formation)",
+          "url": "https://www.laregion.fr/-Les-aides-et-accompagnements-",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref Occitanie - Dispositifs et politiques publiques",
+          "url": "https://www.cariforefoccitanie.fr/orientation-et-parcours-des-publics/dispositifs-et-politiques-publiques/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Carif-Oref Occitanie - Trouver une formation",
+          "url": "https://www.cariforefoccitanie.fr/orientation-et-parcours-des-publics/trouver-une-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Occitanie",
+          "url": "https://www.transitionspro-occitanie.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Occitanie",
+          "url": "https://www.francetravail.org/regions/occitanie/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/occitanie",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "84",
+      "nom_region": "Auvergne-Rhône-Alpes",
+      "liens": [
+        {
+          "titre": "Région Auvergne-Rhône-Alpes - Me former, accéder à un emploi",
+          "url": "https://www.auvergnerhonealpes.fr/particuliers/emploi-formation",
+          "type": "region"
+        },
+        {
+          "titre": "Ma Formation Mon Emploi - formations financées par la Région",
+          "url": "https://maformation.auvergnerhonealpes.fr/",
+          "type": "region"
+        },
+        {
+          "titre": "Via Compétences - Financement et rémunération",
+          "url": "https://www.via-competences.fr/formation/politiques-et-principes-de-la-formation-professionnelle/financement-et-remuneration",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Côté Formations - catalogue des formations en Auvergne-Rhône-Alpes (Via Compétences)",
+          "url": "https://www.coteformations.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Auvergne-Rhône-Alpes",
+          "url": "https://www.transitionspro-ara.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Auvergne-Rhône-Alpes",
+          "url": "https://www.francetravail.org/regions/auvergne-rhone-alpes/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/auvergne-rhone-alpes",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "93",
+      "nom_region": "Provence-Alpes-Côte d'Azur",
+      "liens": [
+        {
+          "titre": "Région Sud – Toutes les aides",
+          "url": "https://www.maregionsud.fr/vos-aides",
+          "type": "region"
+        },
+        {
+          "titre": "Orientation Région Sud – Demandeur d'emploi : financer votre formation",
+          "url": "https://www.orientation-regionsud.fr/Contenu/demandeurs-d-emploi-financer-formation",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref Provence-Alpes-Côte d'Azur – Financer sa formation",
+          "url": "https://www.cariforef-provencealpescotedazur.fr/Page/financer-sa-formation",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Carif-Oref Provence-Alpes-Côte d'Azur – Rechercher une formation (filtre PRF / Région Sud)",
+          "url": "https://www.cariforef-provencealpescotedazur.fr/Formation",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro – Contacts en région",
+          "url": "https://www.transitionspro.fr/contacts-en-region/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail – Provence-Alpes-Côte d'Azur",
+          "url": "https://www.francetravail.fr/region/provence-alpes-cote-d-azur/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    },
+    {
+      "region": "94",
+      "nom_region": "Corse",
+      "liens": [
+        {
+          "titre": "Corsica Orientazione – Dispositifs et aides financières de la Collectivité de Corse 2026",
+          "url": "https://orientazione.isula.corsica/definir-mon-projet/les-dispositifs-et-aides-financieres-de-la-collectivite-de-corse/",
+          "type": "region"
+        },
+        {
+          "titre": "Ghjuventù – Aides de la Collectivité de Corse pour les jeunes",
+          "url": "https://www.ghjuventu.corsica/nos-aides",
+          "type": "region"
+        },
+        {
+          "titre": "Corsica Orientazione (missions Carif-Oref de la Collectivité de Corse) – Financer ma formation",
+          "url": "https://orientazione.isula.corsica/se-former/financer-ma-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Corsica Orientazione – Trouver une formation en Corse",
+          "url": "https://orientazione.isula.corsica/se-former/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Corsica",
+          "url": "https://www.transitionspro-corsica.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail – Corse",
+          "url": "https://www.francetravail.fr/region/corse/",
+          "type": "france_travail"
+        },
+        {
+          "titre": "Agefiph : aides pour l'emploi des personnes handicapées",
+          "url": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+          "type": "agefiph"
+        }
+      ],
+      "derniere_verification": "2026-10-06"
+    }
+  ]
+}

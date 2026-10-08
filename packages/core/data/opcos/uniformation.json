@@ -1,173 +1,575 @@
 {
   "slug": "uniformation",
   "name": "Uniformation",
-  "secteurs": "Economie sociale et solidaire, habitat social, protection sociale, cohesion sociale, mutualites",
-  "secteurs_source": "https://www.uniformation.fr/entreprise/financements",
-  "email_contact": "contact@uniformation.fr",
-  "url_finance_page": "https://www.uniformation.fr/entreprise/financements",
-
+  "nom_complet": "Opérateur de compétences de la cohésion sociale",
+  "secteurs": "Cohésion sociale (16 branches professionnelles) : aide à domicile, animation (ÉCLAT), acteurs du lien social et familial (ALISFA), ateliers et chantiers d'insertion, régies de quartier, missions locales, habitat social (ESH, OPCHS), habitat et logement accompagnés, mutualité, sécurité sociale, retraite complémentaire et prévoyance, tourisme social et familial",
+  "secteurs_source": "https://www.uniformation.fr/contacts",
+  "email_contact": "",
+  "url_finance_page": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
   "types_formations": [
-    "Formation continue",
-    "Alternance",
-    "Bilan de competences",
+    "Plan de développement des compétences (demande d'aide financière)",
+    "Offre de formations clés en main",
+    "Alternance (apprentissage, professionnalisation)",
+    "Période de reconversion (PREC)",
+    "Bilan de compétences",
     "VAE",
-    "Formations transversales"
+    "Financements exceptionnels (PIC IAE, CNSA, numérique)"
   ],
-  "types_formations_source": "https://www.uniformation.fr/entreprise/financements",
-
+  "types_formations_source": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
   "cout_horaire_inter": {
-    "value": 65,
-    "currency": "EUR_TTC",
-    "confidence": "exact",
+    "value": null,
+    "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "65 euros TTC/h max (formations <=105h) | 15 euros TTC/h (formations >105h)"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (plafond horaire selon la durée : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_intra": {
-    "value": 65,
-    "currency": "EUR_TTC",
-    "confidence": "exact",
+    "value": null,
+    "confidence": "depends_on_branche",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "65 euros TTC/h max (formations <=105h) | 15 euros TTC/h (formations >105h) — memes tarifs inter et intra"
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (plafond horaire selon la durée : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
   "cout_horaire_metier": {
-    "value": 65,
-    "currency": "EUR_TTC",
-    "confidence": "exact",
-    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "65 euros TTC/h (formations <=105h)"
-  },
-
-  "prise_en_charge_salaires": {
-    "value": 13,
+    "value": null,
     "confidence": "depends_on_branche",
-    "source_url": "https://www.uniformation.fr/particulier/salaries/formation-et-financements/autres-dispositifs-de-formation/le-plan-de-developpement-des-competences/financement",
-    "note": "Uniformation prend en charge la remuneration selon la branche : regle generale forfait 13 euros/h reserve aux entreprises de moins de 11 salaries et uniquement en cas de remplacement. Selon la branche : de 'pas de prise en charge' (ESH, Missions locales, OPH, Tourisme social) au cout reel (Aide a domicile, Eclat, Mutualite, avec ou sans justificatif de remplacement)."
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "note": "Plafond horaire des formations non certifiantes non publié ; formations certifiantes : barème dégressif (plafond horaire selon la durée : 65 €/h pour 105 h ou moins, 15 €/h au-delà, montants en TTC, TVA comprise). Extraits : « formations d'une durée supérieure à 105 heures > prise en charge dans la limite de 15€ TTC / heure (y compris TVA) » ; « formations d'une durée de 105 heures ou moins > prise en charge dans la limite de 65€ TTC/heure par stagiaire (y compris TVA) »"
   },
-  "prise_en_charge_salaires_mode": "euro_par_heure",
-
+  "cout_horaire_seuils": [
+    {
+      "max_heures": 105,
+      "valeur": 65
+    },
+    {
+      "max_heures": null,
+      "valeur": 15
+    }
+  ],
+  "cout_horaire_seuils_mode": "selon_duree_totale",
+  "cout_horaire_seuils_certifiant": true,
+  "prise_en_charge_salaires": {
+    "value": null,
+    "confidence": "depends_on_branche",
+    "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+    "note": "Règle générale 2026 (fonds légaux) : 13 €/h seulement pour les entreprises de moins de 11 salariés et si le salarié est remplacé ; aucune prise en charge pour les 11 à 49 salariés. Valeur non prise en compte dans l'estimation car conditionnelle ; selon la branche, de « pas de prise en charge » au coût réel. « Rémunération : forfait de 13 €/h uniquement pour les entreprises de moins de 11 salariés en cas de remplacement du collaborateur. » (vérifié le 2026-10-05)"
+  },
+  "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Bareme fiscal 6CV — plafond 1800 euros TTC/jour pour formations collectives",
-    "bareme": "6CV fiscal",
-    "plafond_collectif_jour": 1800,
-    "currency": "EUR_TTC"
+    "note": "Pas de forfait journalier : train 2e classe au réel, voiture au barème fiscal 6 CV, péages au réel, avion en classe économique pour les résidents des DOM sans offre locale. « Déplacement en train : remboursement sur la base des frais réels d'un billet acheté en 2e classe. » « les frais kilométriques sont remboursés de porte à porte sur la base du barème fiscal 6CV de la Direction générale des impôts » (vérifié le 2026-10-05)"
   },
   "frais_hebergement": {
     "value": 150,
-    "currency": "EUR_NET",
     "confidence": "exact",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "150 euros net/stagiaire province et outre-mer | 200 euros net/stagiaire Ile-de-France",
-    "value_idf": 200
+    "note": "150 € net par nuit et par stagiaire (province, outre-mer), 200 € en Île-de-France ; nuitée, taxe de séjour et petit-déjeuner compris. « 150 € net par stagiaire pour les formations se déroulant en province et/ou les territoires ultramarins 200 € net par stagiaire pour les formations se déroulant en ile de France ou Paris intra-muros » (vérifié le 2026-10-05)"
   },
   "frais_restauration": {
     "value": 30,
-    "currency": "EUR_TTC",
     "confidence": "exact",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "30 euros TTC par repas"
+    "note": "30 € TTC par repas : 1 repas par jour sans hébergement, 2 avec hébergement. « Repas : 30€ TTC et dans les limites suivantes : 1 repas pour une formation d’une journée sans hébergement 2 repas pour une formation d’une journée avec hébergement » (vérifié le 2026-10-05)"
   },
+  "frais_restauration_unite": "repas",
   "frais_annexes_pourcentage": {
     "value": null,
-    "confidence": "depends_on_branche",
+    "confidence": "exact",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "Uniformation utilise des forfaits fixes, pas de pourcentage"
+    "note": "Remboursement des frais réels dans la limite des forfaits unitaires, pas de pourcentage. Frais de garde d'enfants pris en charge si la formation a lieu hors temps de travail. « Si vous ne bénéficiez pas de budget plan de développement des compétences, il est impératif de nous avoir adressé une demande d’aide financière avant le début de l’action, nous vous donnons alors un accord financier pour ces frais annexes » (vérifié le 2026-10-05)"
   },
-
   "budget_annuel_max": {
     "value": 5000,
-    "currency": "EUR_TTC",
-    "confidence": "depends_on_branche",
-    "source_url": "https://www.uniformation.fr/particulier/salaries/formation-et-financements/autres-dispositifs-de-formation/le-plan-de-developpement-des-competences/financement",
-    "note": "Regle generale (<50 sal.) : 1 demande d'aide par an, plafond 5 000 euros. Tres variable selon branche : de 4 550 euros (Missions locales <50) a 40 000 euros (OPH 300+). Le plafond 10 000/15 000 euros n'est pas la regle generale (specifique a certaines branches, ex. Regies de quartier)."
+    "confidence": "exact",
+    "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+    "note": "Fonds légaux 2026 : une demande d'aide financière par an et par entreprise de moins de 50 salariés, plafonnée à 5 000 €. Les fonds conventionnels de branche peuvent s'y ajouter (voir variantes de branche). « Mis à jour le 15 septembre 2026 » « Pour l'année 2026, si vous êtes une entreprise de moins de 50 salariés (1 entreprise = 1 numéro de siren) vous avez accès à 1 demande d'aide financière par an, dans la limite d'un plafond de 5 000€ et dans la limite des fonds disponibles. » « Pour les entreprises ne relevant pas d'une convention collective, ce plafond ne s'applique pas pour les actions de formation visant une certification inscrite au RNCP. » (vérifié le 2026-10-05)"
   },
-  "budget_annuel_description": "Regle generale 5 000 euros/an (<50 sal., 1 demande/an). Variable selon branche : 4 550 a 40 000 euros. Couts pedagogiques 65 euros TTC/h (<=105h) ou 15 euros/h (>105h).",
+  "budget_annuel_portee": "global",
+  "budget_annuel_description": "Fonds légaux 2026 (moins de 50 salariés) : 1 demande d'aide financière par an, plafonnée à 5 000 € (coûts pédagogiques, frais annexes et le cas échéant rémunération), dans la limite des fonds disponibles ; plafond non applicable aux formations certifiantes RNCP des entreprises sans convention collective. Fonds conventionnels selon la branche (ex. ACI 15 000 €, régies de quartier 10 000 €, ÉCLAT et tourisme social sans plafond).",
   "plafonds_par_taille": [
     {
       "taille": "less_11",
-      "cout_horaire_max": 65,
+      "cout_horaire_max": null,
       "budget_annuel_max": 5000,
       "quota_horaire_max": null,
-      "description": "Moins de 11 salaries: regle generale 5 000 euros/an (1 demande), 65 euros/h (<=105h) ou 15 euros/h (>105h). Variable selon branche."
+      "description": "Moins de 11 salariés : 1 demande d'aide financière par an, 5 000 € maximum (fonds légaux) ; coût pédagogique selon le barème (65 €/h TTC jusqu'à 105 h, 15 €/h TTC au-delà pour les certifiantes) ; salaire 13 €/h seulement en cas de remplacement."
     },
     {
       "taille": "11_49",
-      "cout_horaire_max": 65,
+      "cout_horaire_max": null,
       "budget_annuel_max": 5000,
       "quota_horaire_max": null,
-      "description": "11-49 salaries: regle generale 5 000 euros/an, 65 euros/h (<=105h) ou 15 euros/h (>105h). Variable selon branche."
+      "description": "11 à 49 salariés : 1 demande d'aide financière par an, 5 000 € maximum (fonds légaux), sans prise en charge du salaire au titre de la règle générale."
     },
     {
       "taille": "50_299",
-      "cout_horaire_max": 65,
+      "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "50-299 salaries: plafond annuel tres variable selon branche (ex. 10 000-15 000 euros pour certaines, jusqu'a 40 000 euros OPH). 65 euros/h (<=105h) ou 15 euros/h (>105h)."
+      "description": "50 à 299 salariés : pas de fonds légaux pour le plan de développement des compétences ; budgets et demandes d'aide financière sur fonds conventionnels selon la branche."
     },
     {
       "taille": "300_plus",
-      "cout_horaire_max": 65,
+      "cout_horaire_max": null,
       "budget_annuel_max": null,
       "quota_horaire_max": null,
-      "description": "300+ salaries: plafond annuel selon branche (jusqu'a 40 000 euros, ex. OPH). 65 euros/h (<=105h) ou 15 euros/h (>105h)."
+      "description": "300 salariés et plus : pas de fonds légaux ; fonds conventionnels selon la branche."
     }
   ],
   "quota_horaire_min": null,
   "quota_horaire_max": null,
-
   "profils_candidats": [
-    "Tous salaries economie sociale et solidaire",
-    "Apprentis",
-    "Demandeurs d'emploi"
+    "Salariés des structures de la cohésion sociale (tous contrats)",
+    "Dirigeants bénévoles (dans certaines branches)",
+    "Apprentis et contrats de professionnalisation",
+    "Salariés en insertion (PIC IAE)"
   ],
-  "tailles_cibles": "Toutes tailles",
-  "priorite_tpe_pme": false,
+  "tailles_cibles": "Fonds légaux du plan de développement des compétences réservés aux moins de 50 salariés (offre clés en main en priorité pour les moins de 11 salariés) ; fonds conventionnels de branche pour toutes les tailles",
+  "priorite_tpe_pme": true,
   "duree_min_formation": null,
-
-  "processus_approbation": "Demande dematerialisee a saisir AVANT le demarrage de la formation (certaines branches exigent un depot >= 1 mois avant). Confirmation du demarrage obligatoire sous peine de cloture.",
-  "delai_validation": "Depot avant le demarrage (>= 1 mois avant selon branche). Delai de traitement non publie.",
-  "mode_paiement": "Tiers-payant ou remboursement",
-
-  "alternance_apprentissage": "Apprentissage NPEC",
-  "alternance_professionnalisation": "Selon accord branche",
-
+  "processus_approbation": "Demande d'aide financière à saisir sur l'espace privé Uniformation avant le démarrage de la formation (une demande par action, devis et programme joints) ; réponse par courrier ; démarrage à confirmer en ligne sous peine de clôture de l'accord ; demande de remboursement après la formation.",
+  "delai_validation": "Délai non publié : demande à saisir avant le démarrage de la formation (au moins 1 mois avant dans certaines branches, ex. aide à domicile) ; réponse par courrier.",
+  "mode_paiement": "Remboursement à l'entreprise sur demande de règlement après la formation (factures établies au nom de l'entreprise) ; offre clés en main sans avance des frais pédagogiques ni des déjeuners de groupe. Uniformation n'est pas concernée par la communication inter-OPCO sur la réforme TVA du 1er octobre 2026.",
+  "alternance_apprentissage": "Niveaux de prise en charge (NPEC) par certification. Frais 2026 versés au CFA : 3 € par repas (2 par jour maximum), 6 € par nuitée ; aide au premier équipement jusqu'à 500 € (niveaux 3 et 4), 300 € (niveau 5), supprimée à partir du niveau 6 ; aide au maître d'apprentissage (AEFMA) 230 €/mois pendant 6 mois si l'apprenti est en situation de handicap.",
+  "alternance_professionnalisation": "Aide à l'exercice de la fonction tutorale (AEFT) : 345 €/mois pendant 6 mois (alternant en situation de handicap) ou 230 €/mois pendant 6 mois (autres publics), contrats débutant à compter du 1er janvier 2026 ; forfaits de formation fixés par branche.",
   "cpf_abondement": true,
-  "cpf_details": "Possible",
-
+  "cpf_details": "Abondement du CPF possible selon la branche (modalités détaillées par branche sur la page financement du plan de développement des compétences) ; en période de reconversion interne, mobilisation du CPF jusqu'à 50 % des droits.",
   "vae_possible": true,
   "vae_details": {
     "vae_simple": {
       "value": 3000,
-      "currency": "EUR_TTC",
-      "note": "3 000 euros TTC forfait VAE simple (accompagnement)"
+      "note": "« VAE sans action de formation : prise en charge au réel dans la limite de 3.000 €. » (vérifié le 2026-10-05)"
     },
     "vae_mixte": {
       "value": 5000,
-      "currency": "EUR_TTC",
-      "note": "VAE mixte : 3 000 euros coaching + 65 euros TTC/h formation complementaire"
+      "note": "Dont accompagnement au réel dans la limite de 3 000 € et heures de formation à 65 €/h (105 h ou moins) ou 15 €/h (plus de 105 h). « VAE avec action de formation : prise en charge dans la limite totale de 5.000 € avec 2 plafonds » (vérifié le 2026-10-05)"
     },
-    "source_url": "https://www.uniformation.fr/entreprise/financements"
+    "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques"
   },
-
   "bilan_competences": {
     "cout_horaire": 65,
-    "currency": "EUR_TTC",
     "max_heures": 24,
     "confidence": "exact",
     "source_url": "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
-    "note": "65 euros TTC/h, maximum 24 heures"
+    "note": "« bilans de compétences > prise en charge dans la limite de 65€ TTC/heure par stagiaire et dans la limite de 24 heures » (vérifié le 2026-10-05)"
   },
-
-  "limite_dossiers_an": null,
-
-  "specificites": "Large portefeuille economie sociale et solidaire | Tarifs degressifs selon duree (65 euros/h <=105h, 15 euros/h >105h) | Budget annuel et prise en charge salaire tres variables selon la branche",
-  "points_cles_maximisation": "Verifier le plafond de VOTRE branche (5 000 euros en regle generale, jusqu'a 40 000 euros) | Tarifs degressifs >105h | Salaire pris en charge 13 euros/h (<11 sal., remplacement) selon branche | VAE mixte jusqu'a 5 000 euros | Bilan competences 24h max",
-
+  "limite_dossiers_an": "Fonds légaux : 1 demande d'aide financière par an et par entreprise (SIREN) de moins de 50 salariés ; fonds conventionnels selon la branche (ex. ALISFA 7, 10 ou 25 demandes selon la taille ; ÉCLAT et tourisme social sans limite en 2026).",
+  "specificites": "Critères 2026 mis à jour le 15/09/2026 : 1 demande d'aide financière par an plafonnée à 5 000 € (moins de 50 salariés) | Barème horaire dégressif pour les certifiantes : 65 €/h jusqu'à 105 h, 15 €/h au-delà ; groupe de 5 personnes ou plus : 1 800 €/jour | Salaire : 13 €/h uniquement pour les moins de 11 salariés avec remplacement | Fonds conventionnels très variables selon la branche | Offre clés en main : frais pédagogiques et déjeuners de groupe pris en charge sans avance de frais | PIC IAE 2026 rouvert le 17/07/2026 (demandes avant le 31/12/2026) | Pas d'e-mail générique publié : téléphone employeurs 0969 32 79 79 et formulaires en ligne",
+  "points_cles_maximisation": "Utiliser d'abord l'offre clés en main (100 % des coûts pédagogiques, sans consommer la demande annuelle d'aide financière) | Vérifier les fonds conventionnels de sa branche (ÉCLAT, tourisme social sans plafond ; ACI 15 000 € ; régies 10 000 €) | Pour une formation certifiante longue, tenir compte du taux de 15 €/h au-delà de 105 h | Regrouper plusieurs salariés sur une même demande (même session) | Déposer avant le démarrage et confirmer le démarrage en ligne",
   "sources": [
-    "https://www.uniformation.fr/entreprise/financements",
-    "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques"
+    "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+    "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
+    "https://www.uniformation.fr/entreprise/financements/demande-daide-financiere",
+    "https://www.uniformation.fr/formations",
+    "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/periode-de-reconversion-prec",
+    "https://www.uniformation.fr/actualites/financements-dans-le-cadre-du-plan-dinvestissement-competences-en-faveur-de-linsertion-pic-iae",
+    "https://www.uniformation.fr/actualites/facturation-electronique-modalites-de-mise-en-oeuvre-avec-uniformation-compter-du-1r-septembre-2026",
+    "https://www.uniformation.fr/contacts"
   ],
-  "derniere_verification": "2026-03-24"
+  "derniere_verification": "2026-10-06",
+  "dispositifs_complementaires": [
+    {
+      "id": "offre-cles-en-main",
+      "nom": "Offre de formations clés en main",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": 100,
+      "description": "Catalogue de formations (management, RH, paie, gestion associative…) dont les frais pédagogiques et les déjeuners de groupe sont entièrement pris en charge, sans avance de frais. Les moins de 50 salariés accèdent aux formations nationales/transversales ; certaines branches proposent leur propre catalogue (ÉCLAT, ESH, mutualité, OPCHS…).",
+      "conditions": [
+        "Entreprise rattachée à Uniformation et à jour de ses contributions",
+        "Formation choisie dans le catalogue (nationale/transversale pour les moins de 50 salariés, ou catalogue de la branche)",
+        "Frais de déplacement, dîner et hébergement avancés par l'entreprise et remboursés selon le barème dans certains cas"
+      ],
+      "demarches": "S'inscrire en ligne sur uniformation.fr (rubrique Offre de formations) avec le numéro d'adhérent et le mot de passe de l'entreprise ; convocation au plus tard trois semaines avant la session.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "exact",
+      "source_url": "https://www.uniformation.fr/formations",
+      "note": "« Pour toutes les formations, sans exception, les frais pédagogiques et les repas du midi (pris en groupe) sont totalement pris en charge, sans aucune avance de frais pour les entreprises. » (vérifié le 2026-10-06 ; citation relue le 2026-10-08 sur la page des formations, nouvelle adresse de l'offre clés en main)"
+    },
+    {
+      "id": "periode-de-reconversion",
+      "nom": "Période de reconversion (PREC)",
+      "cumul": "hors_budget",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Reconversion interne ou externe visant une certification RNCP, un CQP ou un ou plusieurs blocs de compétences : frais de formation pris en charge au coût réel dans la limite de 15 € par heure et de 5 000 € par dossier. Frais annexes (barème de l'OPCO) et rémunération (13 €/h) seulement si un accord de branche ou d'entreprise le prévoit. Certaines branches complètent au-delà de 5 000 € (ALISFA, ÉCLAT : 15 €/h).",
+      "conditions": [
+        "Formation de 150 à 450 heures sur 12 mois maximum (jusqu'à 2 100 heures sur 36 mois par accord)",
+        "Accord écrit (Cerfa) entre l'employeur et le salarié",
+        "Dans la limite des fonds disponibles"
+      ],
+      "demarches": "Déposer la demande sur l'espace privé Uniformation au moins 30 jours avant le début de la période, avec le Cerfa d'accord écrit et la convention de formation.",
+      "tailles_eligibles": null,
+      "publics": "Salariés en projet de changement d'emploi ou de fonction",
+      "confidence": "exact",
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/periode-de-reconversion-prec"
+    },
+    {
+      "id": "pic-iae-2026",
+      "nom": "PIC IAE 2026 (salariés en parcours d'insertion)",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Financement de l'État géré par Uniformation pour les salariés en parcours dans les structures d'insertion : plafond de 26 €/h par stagiaire (coûts pédagogiques et frais annexes), 39 €/h pour le permis de conduire, les CACES, CléA, les métiers en tension et certaines formations de l'aide à domicile ; associations intermédiaires et entreprises d'insertion : 30,33 €/h (moins de 250 ETP) ou 19,50 €/h ; forfait rémunération de 1,30 €/h (ACI, EBE).",
+      "conditions": [
+        "Structure de l'insertion par l'activité économique (ou entreprise à but d'emploi) adhérente à Uniformation ; EITI non éligibles",
+        "Salariés en CDDI, CDDU, CDI inclusion, contrat d'emploi pénitentiaire, contrat passerelle ou CDI conventionné (EBE)",
+        "Formations réalisées entre le 23 mars 2026 et le 30 avril 2027",
+        "Demande avant le démarrage de la formation et avant le 31 décembre 2026 ; plafond par structure, dans la limite des fonds"
+      ],
+      "demarches": "Espace privé Uniformation : Mes dossiers > Saisir > Avant > Demande d'aide financière, avec devis et programme ; demande de remboursement dans le mois suivant la fin de la formation.",
+      "tailles_eligibles": null,
+      "publics": "Salariés en parcours d'insertion (SIAE)",
+      "confidence": "exact",
+      "source_url": "https://www.uniformation.fr/actualites/financements-dans-le-cadre-du-plan-dinvestissement-competences-en-faveur-de-linsertion-pic-iae"
+    },
+    {
+      "id": "actions-collectives",
+      "nom": "Actions de formation collectives (sur mesure)",
+      "cumul": "alternatif",
+      "montant_max": null,
+      "unite": null,
+      "pourcentage_couts": null,
+      "description": "Actions collectives proposées par Uniformation, par la branche ou demandées par au moins deux entreprises d'une même région, montées avec la délégation régionale.",
+      "conditions": [
+        "Projet commun à plusieurs entreprises de la même région ou action proposée par la branche",
+        "Modalités et prise en charge fixées avec la délégation régionale"
+      ],
+      "demarches": "Contacter la délégation régionale d'Uniformation.",
+      "tailles_eligibles": null,
+      "publics": null,
+      "confidence": "depends_on_branche",
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement"
+    }
+  ],
+  "variantes_branche": [
+    {
+      "id": "eclat",
+      "branche_nom": "ÉCLAT (éducation, culture, loisirs, animation)",
+      "idcc": [
+        "1518"
+      ],
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+      "confidence": "exact",
+      "note": "IDCC 1518 vérifié sur le Code du travail numérique (https://code.travail.gouv.fr/convention-collective/1518-education-culture-loisirs-et-animation-au-service-des-territoires-eclat). La DAF conventionnelle ÉCLAT s'ajoute à la DAF légale des moins de 50 salariés. « DAF ECLAT Pas de plafond par dossier, pas de limite du nombre de demandes d'aides financières par an et par entreprise. En cas de nouvelles demandes, la délégation régionale décide de la prise en charge en fonction des fonds disponibles. » « Frais annexes : prise en charge selon le barème de l’Opco à l'exception des frais de repas plafonnés à 20€ pour les formations de 70h ou 10 jours et plus. » (vérifié le 2026-10-05)",
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Coût réel sur justificatif de remplacement (non calculable à l'avance). « Rémunération : prise en charge au coût réel avec justificatif de remplacement » (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Aucun plafond publié pour la DAF conventionnelle ÉCLAT ; prise en charge décidée selon les fonds disponibles. « DAF ECLAT Pas de plafond par dossier, pas de limite du nombre de demandes d'aides financières par an et par entreprise. En cas de nouvelles demandes, la délégation régionale décide de la prise en charge en fonction des fonds disponibles. » « Ouverture le 15 avril 2026 Pour toutes les entreprises de 50 salariés et plus, son montant est égal à 80% de la contribution conventionnelle nette de frais de gestion. » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_description": "ÉCLAT (IDCC 1518) : DAF conventionnelle sans plafond par dossier ni limite du nombre de demandes (décision régionale selon les fonds disponibles), en plus de la DAF légale des moins de 50 salariés (1 par an, 5 000 €). 50 salariés et plus : budget égal à 80 % de la contribution conventionnelle nette de frais de gestion (ouvert le 15/04/2026). Repas plafonnés à 20 € pour les formations de 70 h ou 10 jours et plus.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : DAF ÉCLAT sans plafond publié, dans la limite des fonds disponibles (en plus de la DAF légale de 5 000 €)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : DAF ÉCLAT sans plafond publié, dans la limite des fonds disponibles (en plus de la DAF légale de 5 000 €)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50 à 299 salariés : budget égal à 80 % de la contribution conventionnelle nette + DAF ÉCLAT sans plafond publié."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : budget égal à 80 % de la contribution conventionnelle nette + DAF ÉCLAT sans plafond publié."
+        }
+      ]
+    },
+    {
+      "id": "aide-a-domicile",
+      "branche_nom": "Aide, accompagnement, soins et services à domicile (BAD)",
+      "idcc": [
+        "2941"
+      ],
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+      "confidence": "exact",
+      "note": "IDCC 2941 vérifié sur le Code du travail numérique (https://code.travail.gouv.fr/convention-collective/2941-aide-accompagnement-soins-et-services-a-domicile-bad) ; 6 330 structures selon Uniformation. Actions cofinancées CNSA : 5 000 € par an quelle que soit la taille, coût pédagogique plafonné à 2 000 € par jour de 7 h. « Prise en charge globale plafonnée à 5 000€ maxi TTC (ou HT), pour les entreprises de plus de 50 salariés Limitation à une demande par an pouvant comporter plusieurs actions de formation. 2 500€ maxi TTC (ou HT), pour les entreprises de moins de 50 salariés. » « Durée minimum de la formation : 7h (Présentiel +/- FOAD) » « Les demandes doivent être effectuées au minimum 1 mois avant le début de l'action de formation. » (vérifié le 2026-10-05)",
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Coût réel des intervenants à domicile, sans justificatif de remplacement (70 % pour les actions cofinancées CNSA) ; non calculable à l'avance. « Rémunération : au coût réel, uniquement pour les intervenants à domicile, sans justificatif de remplacement. » (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "budget_annuel_max": {
+        "value": 5000,
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Moins de 50 salariés : DAF légale de 5 000 € (règle générale) et DAF conventionnelle de 2 500 € par an ; 50 salariés et plus : DAF conventionnelle de 5 000 € par an. Les deux DAF des moins de 50 salariés ne sont pas additionnées ici faute de règle de cumul publiée. « Prise en charge globale plafonnée à 5 000€ maxi TTC (ou HT), pour les entreprises de plus de 50 salariés Limitation à une demande par an pouvant comporter plusieurs actions de formation. 2 500€ maxi TTC (ou HT), pour les entreprises de moins de 50 salariés. » « Pour l'année 2026, si vous êtes une entreprise de moins de 50 salariés (1 entreprise = 1 numéro de siren) vous avez accès à 1 demande d'aide financière par an, dans la limite d'un plafond de 5 000€ » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_description": "Aide à domicile (IDCC 2941) : moins de 50 salariés, DAF légale (1 par an, 5 000 €) et DAF conventionnelle de 2 500 € par an ; 50 salariés et plus, DAF conventionnelle de 5 000 € par an ; actions cofinancées CNSA plafonnées à 5 000 € par an quelle que soit la taille. Budget conventionnel égal à 95 % de la contribution conventionnelle nette. Formation de 7 h minimum, demande au moins 1 mois avant.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : DAF légale 5 000 €/an, plus DAF conventionnelle 2 500 €/an (cumul non précisé) ; demande au moins 1 mois avant, 7 h minimum."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : DAF légale 5 000 €/an, plus DAF conventionnelle 2 500 €/an (cumul non précisé)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "50 à 299 salariés : DAF conventionnelle de 5 000 € par an (1 demande pouvant regrouper plusieurs actions), en plus du budget conventionnel de l'entreprise."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : DAF conventionnelle de 5 000 € par an, en plus du budget conventionnel de l'entreprise."
+        }
+      ]
+    },
+    {
+      "id": "alisfa",
+      "branche_nom": "ALISFA (acteurs du lien social et familial)",
+      "idcc": [
+        "1261"
+      ],
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+      "confidence": "exact",
+      "note": "IDCC 1261 vérifié sur le Code du travail numérique (https://code.travail.gouv.fr/convention-collective/1261-acteurs-du-lien-social-et-familial-centres-sociaux-et-socioculturels-asso). Plafond par demande et non annuel : 5 000 € en intra (1 à 4 salariés), 8 000 € pour 5 stagiaires et plus (coût pédagogique limité à 1 800 €/jour) ; DAF formations certifiantes de 70 à 149 h : 15 €/h. « Le plafond maximum est de 5 000€ par demande (coût pédagogique + frais annexes + rémunération) » « Le plafond maximum est de 8 000€ par demande (coût pédagogique + frais annexes + rémunération) » « entreprise moins de 11 salariés : 7 demandes d'aide financière (dont légal+ conventionnel) entreprise de 11 à 49 salariés : 10 demandes d'aide financière (dont légal + conventionnel) entreprise de plus de 50 salariés : 25 demandes d'aide financière conventionnelles maximum » (vérifié le 2026-10-05)",
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "13 €/h uniquement pour les structures de moins de 11 salariés avec remplacement ; non pris en compte dans l'estimation. « Rémunération : prise en charge pour les structures de moins de 11 salariés à hauteur de 13€/heure avec obligation de remplacement » (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "budget_annuel_max": {
+        "value": 5000,
+        "confidence": "estimated",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Estimation : plafond par demande (7 demandes par an pour moins de 11 salariés, 10 pour 11 à 49, 25 pour 50 et plus) : budget annuel non publié ; la simulation d'une seule formation est bornée à 5 000 €. Plafond par demande (intra, 1 à 4 salariés) ; plusieurs demandes possibles par an selon la taille. « Le plafond maximum est de 5 000€ par demande (coût pédagogique + frais annexes + rémunération) » « entreprise moins de 11 salariés : 7 demandes d'aide financière (dont légal+ conventionnel) entreprise de 11 à 49 salariés : 10 demandes d'aide financière (dont légal + conventionnel) entreprise de plus de 50 salariés : 25 demandes d'aide financière conventionnelles maximum » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_description": "ALISFA (IDCC 1261) : plafond par demande (7 demandes par an pour moins de 11 salariés, 10 pour 11 à 49, 25 pour 50 et plus) : budget annuel non publié ; la simulation d'une seule formation est bornée à 5 000 €. Plafond par demande de 5 000 € (formation intra, 1 à 4 salariés) ou 8 000 € (5 stagiaires et plus), coût pédagogique, frais annexes et rémunération compris ; jusqu'à 7 demandes par an (moins de 11 salariés), 10 (11-49) et 25 conventionnelles (50 et plus).",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : 5 000 € par demande (8 000 € à partir de 5 stagiaires), jusqu'à 7 demandes par an (légale + conventionnelles) ; salaire 13 €/h avec remplacement."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : 5 000 € par demande (8 000 € à partir de 5 stagiaires), jusqu'à 10 demandes par an."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "50 à 299 salariés : 5 000 € par demande (8 000 € à partir de 5 stagiaires), jusqu'à 25 demandes conventionnelles par an."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 5000,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : 5 000 € par demande (8 000 € à partir de 5 stagiaires), jusqu'à 25 demandes conventionnelles par an."
+        }
+      ]
+    },
+    {
+      "id": "ateliers-chantiers-insertion",
+      "branche_nom": "Ateliers et chantiers d'insertion (ACI) - salariés permanents",
+      "idcc": [
+        "3016"
+      ],
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+      "confidence": "exact",
+      "note": "IDCC 3016 vérifié sur le Code du travail numérique (https://code.travail.gouv.fr/convention-collective/3016-ateliers-et-chantiers-dinsertion). Plafonds de la DAF des salariés permanents ; les salariés en insertion (CDDI) relèvent du PIC IAE. « DAF pour les salariés permanents » « 15 000€ par entreprise (siren) pour les moins de 50 salariés 35 000€ par entreprise (siren) de plus de 50 salariés et jusqu'à 150 salariés 50 000€ par entreprise (siren) de plus de 150 salariés » « pour les formations de plus de 105 h : 15 €/h. Le plafond est augmenté pour les demandes de moins de 5 stagiaires : 30 €/h » (vérifié le 2026-10-05)",
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Coût réel limité au coût horaire du SMIC chargé 2025 ; non calculable à l'avance. « Rémunération : prise en charge au coût réel, en limitant au coût horaire du SMIC chargé 2025, sans remplacement obligatoire. » (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "budget_annuel_max": {
+        "value": 15000,
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Plafond par entreprise (SIREN) : 15 000 € (moins de 50 salariés), 35 000 € (51 à 150), 50 000 € (plus de 150). « 15 000€ par entreprise (siren) pour les moins de 50 salariés 35 000€ par entreprise (siren) de plus de 50 salariés et jusqu'à 150 salariés 50 000€ par entreprise (siren) de plus de 150 salariés » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_description": "Ateliers et chantiers d'insertion (IDCC 3016), salariés permanents : plafond de 15 000 € par entreprise (moins de 50 salariés), 35 000 € (51 à 150 salariés), 50 000 € (plus de 150) ; formations de plus de 105 h à 15 €/h (30 €/h pour moins de 5 stagiaires), 105 h ou moins selon le barème de l'OPCO.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : plafond 15 000 € par entreprise (salariés permanents)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : plafond 15 000 € par entreprise."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 35000,
+          "quota_horaire_max": null,
+          "description": "50 à 299 salariés : 35 000 € jusqu'à 150 salariés, 50 000 € au-delà de 150 salariés (valeur basse retenue)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 50000,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : plafond 50 000 € par entreprise."
+        }
+      ]
+    },
+    {
+      "id": "tourisme-social-familial",
+      "branche_nom": "Tourisme social et familial",
+      "idcc": [
+        "1316"
+      ],
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+      "confidence": "exact",
+      "note": "IDCC 1316 confirmé sur la page de la branche (https://www.uniformation.fr/entreprise/uniformation-lopco-de-la-cohesion-sociale/branches-professionnelles-de-la-cohesion-sociale/tourisme-social-et-familial). « En 2026 : pas de limitation sur le nombre de demande d'aide financière ni de plafond par dossier. En revanche, l'utilisation du budget doit être privilégiée. » (vérifié le 2026-10-05)",
+      "prise_en_charge_salaires": {
+        "value": 0,
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Aucune prise en charge de la rémunération pour les demandes d'aide financière de la branche (le budget conventionnel des 50 salariés et plus la prend en charge au coût réel). « Rémunération : pas de prise en charge » (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "euro_par_heure",
+      "budget_annuel_max": {
+        "value": null,
+        "confidence": "estimated",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Pas de plafond par dossier publié en 2026 ; dans la limite des fonds disponibles. « En 2026 : pas de limitation sur le nombre de demande d'aide financière ni de plafond par dossier. En revanche, l'utilisation du budget doit être privilégiée. » « Pour toutes les structures de 50 salariés et plus, il permet de financer toute action de formation sans demande préalable de financement. Son montant est égal à 60% de la contribution conventionnelle nette de frais de gestion. » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_description": "Tourisme social et familial (IDCC 1316) : en 2026, pas de plafond par dossier ni de limite du nombre de demandes d'aide financière (dans la limite des fonds), sans prise en charge de la rémunération ; 50 salariés et plus : budget égal à 60 % de la contribution conventionnelle nette.",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : pas de plafond par dossier publié en 2026 (fonds disponibles)."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : pas de plafond par dossier publié en 2026."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "50 à 299 salariés : budget égal à 60 % de la contribution conventionnelle nette + DAF sans plafond publié."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": null,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : budget égal à 60 % de la contribution conventionnelle nette + DAF sans plafond publié."
+        }
+      ]
+    },
+    {
+      "id": "regies-de-quartier",
+      "branche_nom": "Régies de quartier",
+      "idcc": [
+        "3105"
+      ],
+      "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+      "confidence": "exact",
+      "note": "IDCC 3105 vérifié sur le Code du travail numérique (https://code.travail.gouv.fr/convention-collective/3105-regies-de-quartier). DAF certifiante (2 par an, salariés permanents) : coût réel limité à 30 €/h, rémunération 13 €/h sans obligation de remplacement. « Une DAF peut venir en complément du budget. En 2026, les montants restent identiques à : 10 000€ TTC par adhérent -50 salariés et par an 15 000€ TTC par adhérent +50 salariés et par an » « Possibilité de faire une seule demande par an. » (vérifié le 2026-10-05)",
+      "prise_en_charge_salaires": {
+        "value": null,
+        "confidence": "depends_on_branche",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "Pas de prise en charge de la rémunération pour la DAF générale ; 13 €/h pour la DAF certifiante. « Rémunération : prise en charge à hauteur d'un forfait de 13€/heure de formation sans obligation de remplacement » (vérifié le 2026-10-05)"
+      },
+      "prise_en_charge_salaires_mode": "selon_accord",
+      "budget_annuel_max": {
+        "value": 10000,
+        "confidence": "exact",
+        "source_url": "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
+        "note": "DAF de 10 000 € TTC par an (moins de 50 salariés) ou 15 000 € TTC (50 et plus), en complément du budget conventionnel (75 % de la contribution, minimum 1 500 €). « Une DAF peut venir en complément du budget. En 2026, les montants restent identiques à : 10 000€ TTC par adhérent -50 salariés et par an 15 000€ TTC par adhérent +50 salariés et par an » « Son montant est égal à 75% de la contribution conventionnelle nette de frais de gestion, avec un minimum de 1 500 € par régie et par an. » (vérifié le 2026-10-05)"
+      },
+      "budget_annuel_description": "Régies de quartier (IDCC 3105) : DAF annuelle (1 par an) de 10 000 € TTC (moins de 50 salariés) ou 15 000 € TTC (50 et plus), coût pédagogique au réel, frais annexes selon le barème, sans rémunération ; en complément du budget conventionnel (75 % de la contribution conventionnelle nette, minimum 1 500 € par régie).",
+      "plafonds_par_taille": [
+        {
+          "taille": "less_11",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 10000,
+          "quota_horaire_max": null,
+          "description": "Moins de 11 salariés : DAF de 10 000 € TTC par an (1 demande), en complément du budget conventionnel."
+        },
+        {
+          "taille": "11_49",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 10000,
+          "quota_horaire_max": null,
+          "description": "11 à 49 salariés : DAF de 10 000 € TTC par an (1 demande)."
+        },
+        {
+          "taille": "50_299",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "50 à 299 salariés : DAF de 15 000 € TTC par an (1 demande)."
+        },
+        {
+          "taille": "300_plus",
+          "cout_horaire_max": null,
+          "budget_annuel_max": 15000,
+          "quota_horaire_max": null,
+          "description": "300 salariés et plus : DAF de 15 000 € TTC par an (1 demande)."
+        }
+      ]
+    }
+  ]
 }

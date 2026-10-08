@@ -1,0 +1,794 @@
+[
+  {
+    "prefixe": "01",
+    "opco": "ocapiat",
+    "part": 0.98,
+    "effectif_etablissements": 52,
+    "libelle": "Culture et production animale, chasse et services annexes",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "03",
+    "opco": "ocapiat",
+    "part": 0.98,
+    "effectif_etablissements": 52,
+    "libelle": "Pêche et aquaculture",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "08",
+    "opco": "opco2i",
+    "part": 0.9,
+    "effectif_etablissements": 52,
+    "libelle": "Autres industries extractives",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "10",
+    "opco": "ocapiat",
+    "part": 0.83,
+    "effectif_etablissements": 41,
+    "libelle": "Industries alimentaires",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "10.13B",
+    "opco": "opco-ep",
+    "part": 0.88,
+    "effectif_etablissements": 33,
+    "libelle": "Charcuterie",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "10.71C",
+    "opco": "opco-ep",
+    "part": 1,
+    "effectif_etablissements": 55,
+    "libelle": "Boulangerie et boulangerie-pâtisserie",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "10.71D",
+    "opco": "opco-ep",
+    "part": 1,
+    "effectif_etablissements": 35,
+    "libelle": "Pâtisserie",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "11",
+    "opco": "ocapiat",
+    "part": 0.98,
+    "effectif_etablissements": 52,
+    "libelle": "Fabrication de boissons",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "13",
+    "opco": "opco2i",
+    "part": 0.9,
+    "effectif_etablissements": 52,
+    "libelle": "Fabrication de textiles",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "14",
+    "opco": "opco2i",
+    "part": 0.78,
+    "effectif_etablissements": 46,
+    "libelle": "Industrie de l'habillement",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "15",
+    "opco": "opco2i",
+    "part": 0.91,
+    "effectif_etablissements": 45,
+    "libelle": "Industrie du cuir et de la chaussure",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "17",
+    "opco": "opco2i",
+    "part": 0.85,
+    "effectif_etablissements": 40,
+    "libelle": "Industrie du papier et du carton",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "18",
+    "opco": "opco-ep",
+    "part": 0.83,
+    "effectif_etablissements": 52,
+    "libelle": "Imprimerie et reproduction d'enregistrements",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "20",
+    "opco": "opco2i",
+    "part": 0.87,
+    "effectif_etablissements": 52,
+    "libelle": "Industrie chimique",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "21",
+    "opco": "opco2i",
+    "part": 0.94,
+    "effectif_etablissements": 52,
+    "libelle": "Industrie pharmaceutique",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "22",
+    "opco": "opco2i",
+    "part": 0.9,
+    "effectif_etablissements": 52,
+    "libelle": "Fabrication de produits en caoutchouc et en plastique",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "23",
+    "opco": "opco2i",
+    "part": 0.64,
+    "effectif_etablissements": 72,
+    "libelle": "Fabrication d'autres produits minéraux non métalliques",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "24",
+    "opco": "opco2i",
+    "part": 0.94,
+    "effectif_etablissements": 52,
+    "libelle": "Métallurgie",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "25",
+    "opco": "opco2i",
+    "part": 0.95,
+    "effectif_etablissements": 40,
+    "libelle": "Fabrication de produits métalliques, à l'exception des machines et des équipements",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "26",
+    "opco": "opco2i",
+    "part": 0.85,
+    "effectif_etablissements": 52,
+    "libelle": "Fabrication de produits informatiques, électroniques et optiques",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "27",
+    "opco": "opco2i",
+    "part": 0.83,
+    "effectif_etablissements": 52,
+    "libelle": "Fabrication d'équipements électriques",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "28",
+    "opco": "opco2i",
+    "part": 0.81,
+    "effectif_etablissements": 36,
+    "libelle": "Fabrication de machines et équipements n.c.a.",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "30",
+    "opco": "opco2i",
+    "part": 0.81,
+    "effectif_etablissements": 36,
+    "libelle": "Fabrication d'autres matériels de transport",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "31",
+    "opco": "opco2i",
+    "part": 0.94,
+    "effectif_etablissements": 36,
+    "libelle": "Fabrication de meubles",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "32.50A",
+    "opco": "opco-ep",
+    "part": 0.78,
+    "effectif_etablissements": 49,
+    "libelle": "Fabrication de matériel médico-chirurgical et dentaire",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "33",
+    "opco": "opco2i",
+    "part": 0.72,
+    "effectif_etablissements": 36,
+    "libelle": "Réparation et installation de machines et d'équipements",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "36",
+    "opco": "akto",
+    "part": 0.89,
+    "effectif_etablissements": 36,
+    "libelle": "Captage, traitement et distribution d'eau",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "37",
+    "opco": "opco-ep",
+    "part": 0.64,
+    "effectif_etablissements": 36,
+    "libelle": "Collecte et traitement des eaux usées",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "41",
+    "opco": "constructys",
+    "part": 0.94,
+    "effectif_etablissements": 31,
+    "libelle": "Construction de bâtiments",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "41.1",
+    "opco": "opco-ep",
+    "part": 0.86,
+    "effectif_etablissements": 37,
+    "libelle": "Promotion immobilière",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "42",
+    "opco": "constructys",
+    "part": 0.83,
+    "effectif_etablissements": 36,
+    "libelle": "Génie civil",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "43",
+    "opco": "constructys",
+    "part": 0.94,
+    "effectif_etablissements": 36,
+    "libelle": "Travaux de construction spécialisés",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "45.1",
+    "opco": "opco-mobilites",
+    "part": 0.96,
+    "effectif_etablissements": 46,
+    "libelle": "Commerce de véhicules automobiles",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "45.2",
+    "opco": "opco-mobilites",
+    "part": 1,
+    "effectif_etablissements": 50,
+    "libelle": "Entretien et réparation de véhicules automobiles",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "45.32Z",
+    "opco": "opco-mobilites",
+    "part": 0.91,
+    "effectif_etablissements": 34,
+    "libelle": "Commerce de détail d'équipements automobiles",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "45.40Z",
+    "opco": "opco-mobilites",
+    "part": 0.91,
+    "effectif_etablissements": 33,
+    "libelle": "Commerce et réparation de motocycles",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.11",
+    "opco": "opcommerce",
+    "part": 1,
+    "effectif_etablissements": 35,
+    "libelle": "Commerce de détail en magasin non spécialisé à prédominance alimentaire",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.21Z",
+    "opco": "opcommerce",
+    "part": 0.97,
+    "effectif_etablissements": 39,
+    "libelle": "Commerce de détail de fruits et légumes en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.22Z",
+    "opco": "opco-ep",
+    "part": 0.94,
+    "effectif_etablissements": 32,
+    "libelle": "Commerce de détail de viandes et de produits à base de viande en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.23Z",
+    "opco": "opco-ep",
+    "part": 0.97,
+    "effectif_etablissements": 35,
+    "libelle": "Commerce de détail de poissons, crustacés et mollusques en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.24Z",
+    "opco": "opco-ep",
+    "part": 0.79,
+    "effectif_etablissements": 34,
+    "libelle": "Commerce de détail de pain, pâtisserie et confiserie en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.29Z",
+    "opco": "opcommerce",
+    "part": 0.93,
+    "effectif_etablissements": 44,
+    "libelle": "Autres commerces de détail alimentaires en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.30Z",
+    "opco": "opco-mobilites",
+    "part": 0.81,
+    "effectif_etablissements": 32,
+    "libelle": "Commerce de détail de carburants en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.59A",
+    "opco": "opcommerce",
+    "part": 0.98,
+    "effectif_etablissements": 45,
+    "libelle": "Commerce de détail de meubles",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.61Z",
+    "opco": "opco-ep",
+    "part": 0.85,
+    "effectif_etablissements": 39,
+    "libelle": "Commerce de détail de livres en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.64Z",
+    "opco": "opcommerce",
+    "part": 0.8,
+    "effectif_etablissements": 55,
+    "libelle": "Commerce de détail d'articles de sport en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.71Z",
+    "opco": "opco-ep",
+    "part": 0.92,
+    "effectif_etablissements": 38,
+    "libelle": "Commerce de détail d'habillement en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.73Z",
+    "opco": "opco-ep",
+    "part": 1,
+    "effectif_etablissements": 33,
+    "libelle": "Commerce de détail de produits pharmaceutiques en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.76Z",
+    "opco": "opco-ep",
+    "part": 0.65,
+    "effectif_etablissements": 43,
+    "libelle": "Commerce de détail de fleurs, plantes, graines, engrais, animaux de compagnie et aliments pour ces animaux en magasin spécialisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "47.78A",
+    "opco": "opcommerce",
+    "part": 1,
+    "effectif_etablissements": 40,
+    "libelle": "Commerces de détail d'optique",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "49.31Z",
+    "opco": "opco-mobilites",
+    "part": 0.79,
+    "effectif_etablissements": 33,
+    "libelle": "Transports urbains et suburbains de voyageurs",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "49.39",
+    "opco": "opco-mobilites",
+    "part": 0.83,
+    "effectif_etablissements": 36,
+    "libelle": "Autres transports terrestres de voyageurs n.c.a.",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "49.4",
+    "opco": "opco-mobilites",
+    "part": 0.98,
+    "effectif_etablissements": 49,
+    "libelle": "Transports routiers de fret et services de déménagement",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "50",
+    "opco": "opco-mobilites",
+    "part": 0.86,
+    "effectif_etablissements": 36,
+    "libelle": "Transports par eau",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "51",
+    "opco": "akto",
+    "part": 0.83,
+    "effectif_etablissements": 36,
+    "libelle": "Transports aériens",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "53",
+    "opco": "opco-mobilites",
+    "part": 0.81,
+    "effectif_etablissements": 36,
+    "libelle": "Activités de poste et de courrier",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "55",
+    "opco": "akto",
+    "part": 0.88,
+    "effectif_etablissements": 33,
+    "libelle": "Hébergement",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "55.30Z",
+    "opco": "afdas",
+    "part": 0.97,
+    "effectif_etablissements": 35,
+    "libelle": "Terrains de camping et parcs pour caravanes ou véhicules de loisirs",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "56",
+    "opco": "akto",
+    "part": 0.94,
+    "effectif_etablissements": 36,
+    "libelle": "Restauration",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "58.1",
+    "opco": "afdas",
+    "part": 0.89,
+    "effectif_etablissements": 44,
+    "libelle": "Édition de livres et périodiques et autres activités d'édition",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "58.2",
+    "opco": "atlas",
+    "part": 0.96,
+    "effectif_etablissements": 56,
+    "libelle": "Édition de logiciels",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "59",
+    "opco": "afdas",
+    "part": 0.92,
+    "effectif_etablissements": 36,
+    "libelle": "Production de films cinématographiques, de vidéo et de programmes de télévision ; enregistrement sonore et édition musicale",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "60",
+    "opco": "afdas",
+    "part": 0.97,
+    "effectif_etablissements": 36,
+    "libelle": "Programmation et diffusion",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "61.10Z",
+    "opco": "afdas",
+    "part": 0.88,
+    "effectif_etablissements": 42,
+    "libelle": "Télécommunications filaires",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "62",
+    "opco": "atlas",
+    "part": 0.92,
+    "effectif_etablissements": 36,
+    "libelle": "Programmation, conseil et autres activités informatiques",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "63",
+    "opco": "atlas",
+    "part": 0.83,
+    "effectif_etablissements": 36,
+    "libelle": "Services d'information",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "64.19Z",
+    "opco": "atlas",
+    "part": 0.95,
+    "effectif_etablissements": 37,
+    "libelle": "Autres intermédiations monétaires",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "66",
+    "opco": "atlas",
+    "part": 0.89,
+    "effectif_etablissements": 36,
+    "libelle": "Activités auxiliaires de services financiers et d'assurance",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "68",
+    "opco": "opco-ep",
+    "part": 0.89,
+    "effectif_etablissements": 36,
+    "libelle": "Activités immobilières",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "69.10Z",
+    "opco": "opco-ep",
+    "part": 0.98,
+    "effectif_etablissements": 49,
+    "libelle": "Activités juridiques",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "69.20Z",
+    "opco": "atlas",
+    "part": 0.98,
+    "effectif_etablissements": 51,
+    "libelle": "Activités comptables",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "70.2",
+    "opco": "atlas",
+    "part": 0.85,
+    "effectif_etablissements": 62,
+    "libelle": "Conseil de gestion",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "71.11Z",
+    "opco": "opco-ep",
+    "part": 0.97,
+    "effectif_etablissements": 35,
+    "libelle": "Activités d'architecture",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "71.12",
+    "opco": "atlas",
+    "part": 0.82,
+    "effectif_etablissements": 57,
+    "libelle": "Activités d'ingénierie",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "71.20A",
+    "opco": "opco-mobilites",
+    "part": 1,
+    "effectif_etablissements": 38,
+    "libelle": "Contrôle technique automobile",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "71.20B",
+    "opco": "atlas",
+    "part": 0.82,
+    "effectif_etablissements": 34,
+    "libelle": "Analyses, essais et inspections techniques",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "73",
+    "opco": "afdas",
+    "part": 0.92,
+    "effectif_etablissements": 36,
+    "libelle": "Publicité et études de marché",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "75",
+    "opco": "opco-ep",
+    "part": 0.97,
+    "effectif_etablissements": 36,
+    "libelle": "Activités vétérinaires",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "78.20Z",
+    "opco": "akto",
+    "part": 1,
+    "effectif_etablissements": 40,
+    "libelle": "Activités des agences de travail temporaire",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "78.30Z",
+    "opco": "ocapiat",
+    "part": 0.72,
+    "effectif_etablissements": 57,
+    "libelle": "Autre mise à disposition de ressources humaines",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "79.1",
+    "opco": "opco-mobilites",
+    "part": 0.93,
+    "effectif_etablissements": 55,
+    "libelle": "Activités des agences de voyage et voyagistes",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "80",
+    "opco": "akto",
+    "part": 0.92,
+    "effectif_etablissements": 36,
+    "libelle": "Enquêtes et sécurité",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "81.10Z",
+    "opco": "opco-ep",
+    "part": 0.88,
+    "effectif_etablissements": 43,
+    "libelle": "Activités combinées de soutien lié aux bâtiments",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "81.2",
+    "opco": "akto",
+    "part": 0.79,
+    "effectif_etablissements": 43,
+    "libelle": "Activités de nettoyage",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "81.30Z",
+    "opco": "ocapiat",
+    "part": 0.98,
+    "effectif_etablissements": 46,
+    "libelle": "Services d'aménagement paysager",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "82",
+    "opco": "opco-ep",
+    "part": 0.72,
+    "effectif_etablissements": 36,
+    "libelle": "Activités administratives et autres activités de soutien aux entreprises",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "85.52Z",
+    "opco": "uniformation",
+    "part": 0.71,
+    "effectif_etablissements": 38,
+    "libelle": "Enseignement culturel",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "85.53Z",
+    "opco": "opco-mobilites",
+    "part": 1,
+    "effectif_etablissements": 35,
+    "libelle": "Enseignement de la conduite",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "85.59A",
+    "opco": "akto",
+    "part": 0.88,
+    "effectif_etablissements": 42,
+    "libelle": "Formation continue d'adultes",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "86.2",
+    "opco": "opco-ep",
+    "part": 0.95,
+    "effectif_etablissements": 55,
+    "libelle": "Activité des médecins et des dentistes",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "86.90A",
+    "opco": "opco-mobilites",
+    "part": 0.98,
+    "effectif_etablissements": 40,
+    "libelle": "Ambulances",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "87.1",
+    "opco": "opco-sante",
+    "part": 0.86,
+    "effectif_etablissements": 44,
+    "libelle": "Hébergement médicalisé",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "87.2",
+    "opco": "opco-sante",
+    "part": 0.75,
+    "effectif_etablissements": 32,
+    "libelle": "Hébergement social pour personnes handicapées mentales, malades mentales et toxicomanes",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "87.3",
+    "opco": "opco-sante",
+    "part": 0.83,
+    "effectif_etablissements": 42,
+    "libelle": "Hébergement social pour personnes âgées ou handicapées physiques",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "90",
+    "opco": "afdas",
+    "part": 0.86,
+    "effectif_etablissements": 36,
+    "libelle": "Activités créatives, artistiques et de spectacle",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "93.1",
+    "opco": "afdas",
+    "part": 0.95,
+    "effectif_etablissements": 59,
+    "libelle": "Activités liées au sport",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "96.02A",
+    "opco": "opco-ep",
+    "part": 1,
+    "effectif_etablissements": 74,
+    "libelle": "Coiffure",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "96.02B",
+    "opco": "opco-ep",
+    "part": 1,
+    "effectif_etablissements": 48,
+    "libelle": "Soins de beauté",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  },
+  {
+    "prefixe": "96.03Z",
+    "opco": "opco-ep",
+    "part": 0.95,
+    "effectif_etablissements": 43,
+    "libelle": "Services funéraires",
+    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
+  }
+]

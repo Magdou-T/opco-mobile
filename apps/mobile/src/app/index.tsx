@@ -59,7 +59,7 @@ export default function HomeScreen() {
               <Text className="font-semibold text-gray-900">{formatDateFr(generatedAt)}</Text>
             </Text>
             <Text className="mt-1 text-xs text-gray-500">
-              {opcos.length} OPCO — version {version} —{' '}
+              {opcos.length} OPCO, version {version},{' '}
               {source === 'cache' ? 'dataset téléchargé' : 'données embarquées'}
             </Text>
           </>

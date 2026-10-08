@@ -1,4 +1,4 @@
-// Étape 1 — Identification de l'OPCO.
+// Étape 1 : identification de l'OPCO.
 // Port RN de opco-funding/src/components/wizard/StepIdentification.tsx :
 // recherche entreprise (SIREN, API directe) OU sélection manuelle de l'OPCO.
 
@@ -195,7 +195,7 @@ export function StepIdentification({ state, updateState, opcoList, getOpcoBySlug
                 >
                   <Text className="font-medium text-gray-900">{r.nom_complet}</Text>
                   <Text className="mt-0.5 text-xs text-gray-500">
-                    SIREN : {r.siren} — {r.siege.libelle_commune} ({r.siege.code_postal})
+                    SIREN : {r.siren}, {r.siege.libelle_commune} ({r.siege.code_postal})
                     {r.liste_idcc.length > 0 ? (
                       <Text className="text-green-600">
                         {'  '}IDCC : {r.liste_idcc.join(', ')}

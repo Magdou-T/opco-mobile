@@ -1,0 +1,32 @@
+# Site financementOPCO : configuration Apache pour l'hébergement mutualisé (Hostinger).
+# Next.js copie ce fichier tel quel à la racine de l'export statique (apps/web/out/.htaccess).
+# Il ne contient ni réécriture d'URL ni redirection vers HTTPS : voir docs/deploiement-site.md.
+
+AddDefaultCharset UTF-8
+Options -Indexes
+
+# Page 404 personnalisée
+ErrorDocument 404 /404.html
+
+# Cache long pour les ressources à empreinte de Next.js
+# (text/javascript et application/javascript : le type annoncé dépend de la version du serveur)
+# favicon.ico : image/x-icon, le type que le mime.types d'Apache et celui de LiteSpeed associent à .ico ;
+# le type enregistré à l'IANA, image/vnd.microsoft.icon, n'y est associé à aucune extension (relu le 08/10/2026).
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  # Fichiers .txt de navigation de Next.js (index.txt, __next.*.txt), liés au build : revalidés comme le HTML.
+  ExpiresByType text/plain "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>
+
+# Compression (text/plain : fichiers .txt de préchargement de Next.js)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>

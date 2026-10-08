@@ -1,0 +1,2175 @@
+{
+  "meta": {
+    "perimetre": "Aides nationales au recrutement et à la formation : alternance (apprentissage, contrat de professionnalisation, aides aux alternants) et recrutement-formation de demandeurs d'emploi (POEI, POEC, AIF, rémunérations, aides France Travail, contrats aidés)",
+    "date_verification": "2026-10-06",
+    "auteur": "agent nat-2",
+    "nb_aides": 22
+  },
+  "aides": [
+    {
+      "id": "nat-aide-unique-apprentissage",
+      "nom": "Aide unique aux employeurs d'apprentis",
+      "financeur": "etat",
+      "financeur_nom": "État (versée par l'Agence de services et de paiement)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide de l'État versée à l'employeur pour la première année d'un contrat d'apprentissage préparant un diplôme ou titre de niveau 4 (bac) maximum, dans les entreprises de moins de 250 salariés. Dispositif permanent du Code du travail.",
+      "criteres": {
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "effectif_max": 249,
+        "niveau_certification_max": 4
+      },
+      "conditions": [
+        "Contrat d'apprentissage conclu dans une entreprise de moins de 250 salariés.",
+        "Diplôme ou titre à finalité professionnelle préparé de niveau 4 (bac) maximum ; en Outre-mer, l'aide unique couvre aussi le niveau 5 (voir l'entrée « Aide unique – Outre-mer »).",
+        "L'employeur ne doit pas avoir déjà bénéficié d'une aide à l'embauche pour le même apprenti et la même certification professionnelle.",
+        "Contrat transmis à l'OPCO au plus tard 6 mois après sa conclusion.",
+        "Aide limitée à la première année d'exécution du contrat (12 mois maximum), proratisée en cas de contrat de moins d'un an ou de rupture.",
+        "Non cumulable avec l'aide exceptionnelle 2026 aux employeurs d'apprentis."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 5000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "5 000 € maximum pour la 1re année du contrat, versés mensuellement et proratisés ; 6 000 € maximum si l'apprenti est reconnu travailleur handicapé.",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 6000,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Apprenti reconnu travailleur handicapé : 6 000 € maximum pour la 1re année"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-aide-unique-apprentissage-outre-mer",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveau5",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveaux-6-7",
+          "nat-aide-exceptionnelle-apprentissage-250-plus"
+        ],
+        "note": "Non cumulable avec l'aide exceptionnelle (décret n° 2026-168) ; cumulable avec la prise en charge de la formation par l'OPCO (NPEC)."
+      },
+      "demarches": [
+        "Conclure le contrat d'apprentissage (cerfa) et le transmettre à l'OPCO au plus tard 6 mois après sa conclusion (en ligne ou par courrier selon l'OPCO).",
+        "Déclarer l'apprenti chaque mois dans la DSN : aucune demande d'aide spécifique n'est à formuler.",
+        "L'OPCO transmet le contrat au ministère chargé de la formation professionnelle, qui le transmet à l'Agence de services et de paiement (ASP) ; l'information de cette transmission vaut acceptation.",
+        "L'ASP verse l'aide chaque mois, avant le paiement du salaire ; les avis de paiement sont consultables sur le portail SYLAé de l'ASP (contact : contact-sylae@asp-public.fr)."
+      ],
+      "url_demarche": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "5 000 €, au titre de l’aide unique, si l'apprenti prépare un diplôme ou un titre à finalité professionnelle inférieur ou égal au niveau 4 (niveau Baccalauréat maximum) du cadre national des certifications professionnelles"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Quel que soit l'effectif de l'entreprise, s'il s'agit d'un apprenti en situation de handicap, le montant de l'aide est de 6 000 € (maximum)."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Ces dates ne concernent que l’aide exceptionnelle à l’apprentissage, qui est un dispositif temporaire. Aucune date de conclusion ou de début du contrat n’est imposée pour bénéficier de l’aide unique."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000018497856/",
+          "titre": "Code du travail, articles D6243-1 à D6243-4 (aide unique aux employeurs d'apprentis) - Légifrance",
+          "extrait": "Son montant est de 5 000 euros maximum. [...] le montant de l'aide est de 6 000 euros maximum pour les contrats conclus avec une personne reconnue travailleur handicapé."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "L'employeur doit transmettre le contrat d'apprentissage à son opérateur de compétences (OPCO) au plus tard 6 mois après la conclusion du contrat."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
+        },
+        {
+          "url": "https://www.alternance.emploi.gouv.fr/sites/default/files/2021-10/aide_unique_infog.pdf",
+          "titre": "Infographie « L'aide unique » - ministère du Travail (alternance.emploi.gouv.fr, 2021)",
+          "extrait": "Sur le portail Sylaé, l’employeur peut se connecter à son compte pour y consulter ses avis de paiement, modifier ses coordonnées bancaires, etc."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-aide-unique-apprentissage-outre-mer",
+      "nom": "Aide unique aux employeurs d'apprentis – Outre-mer (diplômes de niveau 5)",
+      "financeur": "etat",
+      "financeur_nom": "État (versée par l'Agence de services et de paiement)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "En Outre-mer, l'aide unique est ouverte jusqu'au niveau 5 (bac+2) : une entreprise de moins de 250 salariés qui embauche un apprenti préparant un diplôme ou titre de niveau 5 perçoit l'aide unique (5 000 € maximum) et non l'aide exceptionnelle.",
+      "criteres": {
+        "regions": [
+          "01",
+          "02",
+          "03",
+          "04",
+          "06"
+        ],
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "effectif_max": 249,
+        "niveau_certification_min": 5,
+        "niveau_certification_max": 5
+      },
+      "conditions": [
+        "Entreprise de moins de 250 salariés située en Guadeloupe, en Guyane, en Martinique, à Mayotte, à La Réunion (également Saint-Barthélemy, Saint-Martin et Saint-Pierre-et-Miquelon).",
+        "Apprenti préparant un diplôme ou titre à finalité professionnelle de niveau 5 (bac+2) ; les niveaux 4 et moins relèvent de l'aide unique de droit commun.",
+        "L'employeur ne doit pas avoir déjà bénéficié d'une aide à l'embauche pour le même apprenti et la même certification professionnelle.",
+        "Contrat transmis à l'OPCO au plus tard 6 mois après sa conclusion ; aide limitée à la 1re année du contrat, proratisée.",
+        "Non cumulable avec l'aide exceptionnelle 2026."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 5000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "5 000 € maximum pour la 1re année du contrat ; 6 000 € maximum si l'apprenti est reconnu travailleur handicapé.",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 6000,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Apprenti reconnu travailleur handicapé : 6 000 € maximum"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-aide-unique-apprentissage",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveau5",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveaux-6-7",
+          "nat-aide-exceptionnelle-apprentissage-250-plus"
+        ],
+        "note": "Non cumulable avec l'aide exceptionnelle (décret n° 2026-168)."
+      },
+      "demarches": [
+        "Conclure le contrat d'apprentissage (cerfa) et le transmettre à l'OPCO au plus tard 6 mois après sa conclusion (en ligne ou par courrier selon l'OPCO).",
+        "Déclarer l'apprenti chaque mois dans la DSN : aucune demande d'aide spécifique n'est à formuler.",
+        "L'OPCO transmet le contrat au ministère chargé de la formation professionnelle, qui le transmet à l'Agence de services et de paiement (ASP) ; l'information de cette transmission vaut acceptation.",
+        "L'ASP verse l'aide chaque mois, avant le paiement du salaire ; les avis de paiement sont consultables sur le portail SYLAé de l'ASP (contact : contact-sylae@asp-public.fr)."
+      ],
+      "url_demarche": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000041611752",
+          "titre": "Article D6522-2 du Code du travail - Légifrance",
+          "extrait": "Pour l'application de l'article D. 6243-1 en Guadeloupe, en Guyane, en Martinique, à Mayotte, à La Réunion, à Saint-Barthélemy, à Saint-Martin et à Saint-Pierre-et-Miquelon, les mots : « au baccalauréat » sont remplacés par les mots : « au niveau 5 »."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "L'apprenti doit préparer un diplôme ou un titre à finalité professionnelle inférieur ou égal au niveau 4 (niveau Baccalauréat maximum) du cadre national des certifications professionnelles (ou bac + 2 ans dans les Outre-mer)."
+        },
+        {
+          "url": "https://martinique.deets.gouv.fr/L-aide-unique-aux-employeurs-d-apprentis",
+          "titre": "L'aide unique aux employeurs d'apprentis - DEETS Martinique",
+          "extrait": "pour la préparation d’un diplôme ou d’un titre à finalité professionnelle de niveau inférieur ou égal au bac+2 dans les départements d’outre-mer (depuis le 1er janvier 2020)."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Quel que soit l'effectif de l'entreprise, s'il s'agit d'un apprenti en situation de handicap, le montant de l'aide est de 6 000 € (maximum)."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "L'employeur doit transmettre le contrat d'apprentissage à son opérateur de compétences (OPCO) au plus tard 6 mois après la conclusion du contrat."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
+        },
+        {
+          "url": "https://www.opcoep.fr/ressources/centre-ressources/fiche/Fiche-aide-exceptionnelle-aide-unique-contrat-apprentissage-opcoep.pdf",
+          "titre": "Fiche-outil Aide exceptionnelle et aide unique - contrat d'apprentissage - OPCO EP (06/08/2026)",
+          "extrait": "L’aide s’adresse aux employeurs de moins de 250 salariés du secteur privé et du secteur public industriel et commercial pour la préparation d’un diplôme ou d’un titre de niveau inférieur ou égal au Bac [...] ou Bac +2 dans les Outre-Mer."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-aide-exceptionnelle-apprentissage-pme-niveau5",
+      "nom": "Aide exceptionnelle aux employeurs d'apprentis 2026 – moins de 250 salariés, diplôme de niveau 5 (bac+2)",
+      "financeur": "etat",
+      "financeur_nom": "État (versée par l'Agence de services et de paiement)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide exceptionnelle de l'État de 4 500 € maximum pour la première année d'un contrat d'apprentissage préparant un diplôme ou titre de niveau 5 (bac+2, par exemple un BTS) dans une entreprise de moins de 250 salariés (décret n° 2026-168).",
+      "criteres": {
+        "regions": [
+          "84",
+          "27",
+          "53",
+          "24",
+          "94",
+          "44",
+          "32",
+          "11",
+          "28",
+          "75",
+          "76",
+          "52",
+          "93"
+        ],
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "effectif_max": 249,
+        "niveau_certification_min": 5,
+        "niveau_certification_max": 5
+      },
+      "conditions": [
+        "Entreprise de moins de 250 salariés ; apprenti préparant un diplôme ou titre de niveau 5 (bac+2).",
+        "En Outre-mer, le niveau 5 relève de l'aide unique (5 000 €) et non de cette aide.",
+        "Contrat d'apprentissage conclu à partir du 8 mars 2026 et dont l'exécution débute avant le 1er janvier 2027.",
+        "L'employeur ne doit pas avoir déjà bénéficié d'une aide à l'embauche pour le même apprenti et la même certification professionnelle.",
+        "Contrat transmis à l'OPCO au plus tard 6 mois après sa conclusion ; aide limitée à la 1re année d'exécution, versée mensuellement et proratisée.",
+        "Non cumulable avec l'aide unique aux employeurs d'apprentis."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 4500,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "4 500 € maximum pour la 1re année du contrat ; 6 000 € maximum si l'apprenti est reconnu travailleur handicapé.",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 6000,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Apprenti reconnu travailleur handicapé : 6 000 € maximum"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-aide-unique-apprentissage",
+          "nat-aide-unique-apprentissage-outre-mer",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveaux-6-7",
+          "nat-aide-exceptionnelle-apprentissage-250-plus"
+        ],
+        "note": "Non cumulable avec l'aide unique ; cumulable avec la prise en charge de la formation par l'OPCO (NPEC)."
+      },
+      "demarches": [
+        "Conclure le contrat d'apprentissage (cerfa) et le transmettre à l'OPCO au plus tard 6 mois après sa conclusion (en ligne ou par courrier selon l'OPCO).",
+        "Déclarer l'apprenti chaque mois dans la DSN : aucune demande d'aide spécifique n'est à formuler.",
+        "L'OPCO transmet le contrat au ministère chargé de la formation professionnelle, qui le transmet à l'Agence de services et de paiement (ASP) ; l'information de cette transmission vaut acceptation.",
+        "L'ASP verse l'aide chaque mois, avant le paiement du salaire ; les avis de paiement sont consultables sur le portail SYLAé de l'ASP (contact : contact-sylae@asp-public.fr)."
+      ],
+      "url_demarche": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "4 500 €, au titre de l’aide exceptionnelle, si l'apprenti prépare un diplôme ou un titre à finalité professionnelle équivalent au niveau 5 (niveau Bac + 2 maximum) du cadre national des certifications professionnelles"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le contrat doit être conclu à partir du 8 mars 2026 et commencer avant le 1er janvier 2027, pour ouvrir le droit à l’aide exceptionnelle."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053634597",
+          "titre": "Décret n° 2026-168 du 6 mars 2026 relatif à l'aide exceptionnelle aux employeurs d'apprentis - Légifrance",
+          "extrait": "de 4 500 euros maximum pour les contrats mentionnés au 1° du I"
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053634597",
+          "titre": "Décret n° 2026-168 du 6 mars 2026 relatif à l'aide exceptionnelle aux employeurs d'apprentis - Légifrance",
+          "extrait": "L'aide mentionnée au I n'est pas cumulable avec l'aide unique aux employeurs d'apprentis"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Quel que soit l'effectif de l'entreprise, s'il s'agit d'un apprenti en situation de handicap, le montant de l'aide est de 6 000 € (maximum)."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "L'employeur doit transmettre le contrat d'apprentissage à son opérateur de compétences (OPCO) au plus tard 6 mois après la conclusion du contrat."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-03-08",
+        "fin": "2026-12-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-aide-exceptionnelle-apprentissage-pme-niveaux-6-7",
+      "nom": "Aide exceptionnelle aux employeurs d'apprentis 2026 – moins de 250 salariés, diplôme de niveau 6 ou 7 (bac+3 à bac+5)",
+      "financeur": "etat",
+      "financeur_nom": "État (versée par l'Agence de services et de paiement)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide exceptionnelle de l'État de 2 000 € maximum pour la première année d'un contrat d'apprentissage préparant un diplôme ou titre de niveau 6 ou 7 (licence, master, diplôme d'ingénieur) dans une entreprise de moins de 250 salariés (décret n° 2026-168).",
+      "criteres": {
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "effectif_max": 249,
+        "niveau_certification_min": 6,
+        "niveau_certification_max": 7
+      },
+      "conditions": [
+        "Entreprise de moins de 250 salariés ; apprenti préparant un diplôme ou titre de niveau 6 ou 7 (jusqu'au master, bac+5).",
+        "Pour ces niveaux, l'employeur doit aussi verser au CFA une participation forfaitaire obligatoire de 750 € par contrat (voir « Prise en charge du coût de la formation par l'OPCO »).",
+        "Contrat d'apprentissage conclu à partir du 8 mars 2026 et dont l'exécution débute avant le 1er janvier 2027.",
+        "L'employeur ne doit pas avoir déjà bénéficié d'une aide à l'embauche pour le même apprenti et la même certification professionnelle.",
+        "Contrat transmis à l'OPCO au plus tard 6 mois après sa conclusion ; aide limitée à la 1re année d'exécution, versée mensuellement et proratisée.",
+        "Non cumulable avec l'aide unique aux employeurs d'apprentis."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 2000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "2 000 € maximum pour la 1re année du contrat ; 6 000 € maximum si l'apprenti est reconnu travailleur handicapé.",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 6000,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Apprenti reconnu travailleur handicapé : 6 000 € maximum"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-aide-unique-apprentissage",
+          "nat-aide-unique-apprentissage-outre-mer",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveau5",
+          "nat-aide-exceptionnelle-apprentissage-250-plus"
+        ],
+        "note": "Non cumulable avec l'aide unique ; cumulable avec la prise en charge de la formation par l'OPCO (NPEC)."
+      },
+      "demarches": [
+        "Conclure le contrat d'apprentissage (cerfa) et le transmettre à l'OPCO au plus tard 6 mois après sa conclusion (en ligne ou par courrier selon l'OPCO).",
+        "Déclarer l'apprenti chaque mois dans la DSN : aucune demande d'aide spécifique n'est à formuler.",
+        "L'OPCO transmet le contrat au ministère chargé de la formation professionnelle, qui le transmet à l'Agence de services et de paiement (ASP) ; l'information de cette transmission vaut acceptation.",
+        "L'ASP verse l'aide chaque mois, avant le paiement du salaire ; les avis de paiement sont consultables sur le portail SYLAé de l'ASP (contact : contact-sylae@asp-public.fr)."
+      ],
+      "url_demarche": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "2 000 €, au titre de l’aide exceptionnelle, si l'apprenti prépare un diplôme ou un titre à finalité professionnelle inférieur ou égal au niveau 7 (Master, DEA, DESS, diplôme d'ingénieur) du cadre national des certifications professionnelles."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le contrat doit être conclu à partir du 8 mars 2026 et commencer avant le 1er janvier 2027, pour ouvrir le droit à l’aide exceptionnelle."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053634597",
+          "titre": "Décret n° 2026-168 du 6 mars 2026 relatif à l'aide exceptionnelle aux employeurs d'apprentis - Légifrance",
+          "extrait": "de 2 000 euros maximum pour les contrats mentionnés aux 2° et 3° du I"
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053634597",
+          "titre": "Décret n° 2026-168 du 6 mars 2026 relatif à l'aide exceptionnelle aux employeurs d'apprentis - Légifrance",
+          "extrait": "L'aide mentionnée au I n'est pas cumulable avec l'aide unique aux employeurs d'apprentis"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Quel que soit l'effectif de l'entreprise, s'il s'agit d'un apprenti en situation de handicap, le montant de l'aide est de 6 000 € (maximum)."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "L'employeur doit transmettre le contrat d'apprentissage à son opérateur de compétences (OPCO) au plus tard 6 mois après la conclusion du contrat."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-03-08",
+        "fin": "2026-12-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-aide-exceptionnelle-apprentissage-250-plus",
+      "nom": "Aide exceptionnelle aux employeurs d'apprentis 2026 – entreprises de 250 salariés et plus",
+      "financeur": "etat",
+      "financeur_nom": "État (versée par l'Agence de services et de paiement)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide exceptionnelle de l'État pour la première année d'un contrat d'apprentissage dans une entreprise de 250 salariés et plus : 2 000 € (niveau 4 ou moins), 1 500 € (niveau 5) ou 750 € (niveaux 6 et 7), sous réserve d'objectifs d'emploi d'alternants (décret n° 2026-168).",
+      "criteres": {
+        "types_alternance": [
+          "apprentissage"
+        ],
+        "effectif_min": 250,
+        "niveau_certification_max": 7
+      },
+      "conditions": [
+        "Entreprise de 250 salariés et plus ; apprenti préparant un diplôme ou titre jusqu'au niveau 7 (bac+5).",
+        "Atteindre au 31 décembre 2027 au moins 5 % de contrats favorisant l'insertion professionnelle (apprentissage, professionnalisation…) dans l'effectif salarié total annuel, ou au moins 3 % d'alternants avec une progression de 10 % par rapport au 31 décembre 2026.",
+        "Transmettre à l'ASP un engagement sur l'honneur dans un délai de 8 mois à compter de la conclusion du contrat, faute de quoi l'aide n'est pas due ; déclarer le respect de l'engagement au plus tard le 31 mai de la deuxième année suivant la conclusion du contrat, sinon l'ASP récupère l'aide.",
+        "Pour les niveaux 6 et 7, l'employeur verse au CFA une participation forfaitaire obligatoire de 750 € par contrat.",
+        "Contrat d'apprentissage conclu à partir du 8 mars 2026 et dont l'exécution débute avant le 1er janvier 2027.",
+        "L'employeur ne doit pas avoir déjà bénéficié d'une aide à l'embauche pour le même apprenti et la même certification professionnelle.",
+        "Contrat transmis à l'OPCO au plus tard 6 mois après sa conclusion ; aide limitée à la 1re année d'exécution, versée mensuellement et proratisée.",
+        "Non cumulable avec l'aide unique aux employeurs d'apprentis."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 750,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "750 € (niveaux 6 et 7), 1 500 € (niveau 5) ou 2 000 € (niveau 4 ou moins) maximum pour la 1re année du contrat ; 6 000 € maximum si l'apprenti est reconnu travailleur handicapé.",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 6000,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Apprenti reconnu travailleur handicapé : 6 000 € maximum"
+          },
+          {
+            "criteres": {
+              "niveau_certification_max": 4
+            },
+            "valeur": 2000,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Diplôme ou titre de niveau 4 (bac) ou moins : 2 000 € maximum"
+          },
+          {
+            "criteres": {
+              "niveau_certification_min": 5,
+              "niveau_certification_max": 5
+            },
+            "valeur": 1500,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Diplôme ou titre de niveau 5 (bac+2) : 1 500 € maximum"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-aide-unique-apprentissage",
+          "nat-aide-unique-apprentissage-outre-mer",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveau5",
+          "nat-aide-exceptionnelle-apprentissage-pme-niveaux-6-7"
+        ],
+        "note": "Aide remboursable si les objectifs d'alternants ne sont pas atteints ou déclarés."
+      },
+      "demarches": [
+        "Conclure le contrat d'apprentissage (cerfa) et le transmettre à l'OPCO au plus tard 6 mois après sa conclusion (en ligne ou par courrier selon l'OPCO).",
+        "Déclarer l'apprenti chaque mois dans la DSN : aucune demande d'aide spécifique n'est à formuler.",
+        "L'OPCO transmet le contrat au ministère chargé de la formation professionnelle, qui le transmet à l'Agence de services et de paiement (ASP) ; l'information de cette transmission vaut acceptation.",
+        "L'ASP verse l'aide chaque mois, avant le paiement du salaire ; les avis de paiement sont consultables sur le portail SYLAé de l'ASP (contact : contact-sylae@asp-public.fr).",
+        "Transmettre à l'ASP l'engagement sur l'honneur dans les 8 mois suivant la conclusion du contrat, puis, après le 31 décembre 2027, l'attestation sur l'honneur de réalisation des objectifs envoyée par l'ASP."
+      ],
+      "url_demarche": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "2 000 € si l'apprenti prépare un diplôme ou un titre à finalité professionnelle inférieur ou égal au niveau 4 (niveau Baccalauréat maximum) du cadre national des certifications professionnelles"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "1 500 € si l'apprenti prépare un diplôme ou un titre à finalité professionnelle équivalent au niveau 5 (niveau Bac + 2 maximum) du cadre national des certifications professionnelles"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "750 € si l'apprenti prépare un diplôme ou un titre à finalité professionnelle inférieur ou égal au niveau 7 (Master, DEA, DESS, diplôme d'ingénieur) du cadre national des certifications professionnelles."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Atteindre au moins 5 % de contrats favorisant l'insertion professionnelle (contrat d’apprentissage, contrat de professionnalisation...) dans l’effectif salarié total annuel, au 31 décembre de l'année suivant celle de la conclusion du contrat (soit le 31 décembre 2027)."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Atteindre au moins 3 % d'alternants (contrat d'apprentissage ou de professionnalisation) et avoir connu une progression de 10 % d'alternants au 31 décembre de l'année suivant celle de la conclusion du contrat (soit le 31 décembre 2027)"
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053634597",
+          "titre": "Décret n° 2026-168 du 6 mars 2026 relatif à l'aide exceptionnelle aux employeurs d'apprentis - Légifrance",
+          "extrait": "dans un délai de huit mois à compter de la date de la conclusion du contrat à l'Agence de services et de paiement. A défaut de transmission dans ce délai, l'aide n'est pas due."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053634597",
+          "titre": "Décret n° 2026-168 du 6 mars 2026 relatif à l'aide exceptionnelle aux employeurs d'apprentis - Légifrance",
+          "extrait": "Au plus tard le 31 mai de la seconde année suivant celle de la conclusion du contrat d'apprentissage, l'entreprise d'au moins deux cent cinquante salariés qui a bénéficié de l'aide adresse à l'Agence de services et de paiement une déclaration sur l'honneur"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le contrat doit être conclu à partir du 8 mars 2026 et commencer avant le 1er janvier 2027, pour ouvrir le droit à l’aide exceptionnelle."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Quel que soit l'effectif de l'entreprise, s'il s'agit d'un apprenti en situation de handicap, le montant de l'aide est de 6 000 € (maximum)."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "L'employeur doit transmettre le contrat d'apprentissage à son opérateur de compétences (OPCO) au plus tard 6 mois après la conclusion du contrat."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-03-08",
+        "fin": "2026-12-31"
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-afe-contrat-pro-26-ans",
+      "nom": "Aide forfaitaire à l'employeur (AFE) pour l'embauche d'un demandeur d'emploi de 26 ans et plus en contrat de professionnalisation",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "alternant"
+      ],
+      "description": "Aide de France Travail de 2 000 € maximum versée à l'employeur qui embauche en contrat de professionnalisation (CDD ou CDI) un demandeur d'emploi inscrit âgé de 26 ans ou plus.",
+      "criteres": {
+        "types_alternance": [
+          "professionnalisation"
+        ],
+        "age_min": 26,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Employeur assujetti au financement de la formation professionnelle continue.",
+        "Salarié inscrit comme demandeur d'emploi à France Travail, âgé de 26 ans ou plus à la date d'embauche.",
+        "La personne embauchée ne doit pas avoir fait partie de l'entreprise dans les 6 mois précédant le contrat ; le poste ne doit pas avoir fait l'objet d'un licenciement économique dans les 6 mois précédant l'embauche.",
+        "Demande en ligne au plus tard 3 mois après le début du contrat, avec le contrat (cerfa n° 12434), la décision de prise en charge de l'OPCO (ou la preuve de dépôt) et un RIB.",
+        "Versement en deux échéances : 1 000 € à l'issue du 3e mois, solde à l'issue du 10e mois, si le contrat est toujours en cours ; montant proratisé en cas de temps partiel."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 2000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "2 000 € maximum (temps plein), versés en deux fois ; jusqu'à 4 000 € avec l'aide de l'État si le demandeur d'emploi a 45 ans ou plus."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Non cumulable avec les autres aides à l'embauche, sauf l'aide de l'État pour l'embauche d'un demandeur d'emploi de 45 ans et plus en contrat de professionnalisation (nat-aide-etat-contrat-pro-45-ans)."
+      },
+      "demarches": [
+        "Signer le contrat de professionnalisation (cerfa n° 12434) et le déposer auprès de l'OPCO.",
+        "Dans les 3 mois suivant le début du contrat, faire la demande en ligne depuis l'espace employeur France Travail Pro (une seule démarche pour l'AFE et l'aide 45 ans et plus).",
+        "Transmettre à chaque échéance (3e et 10e mois) la déclaration attestant que le contrat est toujours en cours."
+      ],
+      "url_demarche": "https://pro.francetravail.fr/accueil/description/contrat-professionnalisation",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-lembauche/aide-a-lembauche-dun-demandeur-d.html",
+          "titre": "Aides à l'embauche d'un demandeur d'emploi de 26 ans ou plus en contrat de professionnalisation - France Travail",
+          "extrait": "à une aide de France Travail d’un montant forfaitaire de 2 000 euros maximum, versé en deux échéances. Elle peut se cumuler avec une aide de l’Etat lorsque le demandeur d’emploi a 45 ans ou plus"
+        },
+        {
+          "url": "https://pro.francetravail.fr/accueil/description/contrat-professionnalisation",
+          "titre": "Bénéficier d'une aide à l'embauche d'un demandeur d'emploi en contrat de professionnalisation - France Travail Pro",
+          "extrait": "Le demandeur d'emploi a 26 ans et plus, l'aide peut atteindre 2000 euros"
+        },
+        {
+          "url": "https://pro.francetravail.fr/accueil/description/contrat-professionnalisation",
+          "titre": "Bénéficier d'une aide à l'embauche d'un demandeur d'emploi en contrat de professionnalisation - France Travail Pro",
+          "extrait": "Vous remplissez la demande d’aide en ligne au plus tard 3 mois après la date de début d’exécution du contrat de professionnalisation"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F35391",
+          "titre": "Aides à l'embauche en contrat de professionnalisation - Service Public Entreprendre (vérifié le 9 juillet 2025)",
+          "extrait": "La personne embauchée ne doit pas avoir fait partie de l'entreprise durant les 6 mois avant la signature du contrat."
+        },
+        {
+          "url": "https://pro.francetravail.fr/accueil/assets/documents/Notice_du_formulaire_AFE-PEPS_en_ligne.pdf",
+          "titre": "Notice explicative - Demande d'aides à l'embauche d'un demandeur d'emploi en contrat de professionnalisation (France Travail)",
+          "extrait": "Le premier versement d’un montant de 1 000 € pour chacune des aides, est effectué à l’issue du 3ème mois d’exécution du contrat de professionnalisation à durée déterminée ou de l’action de professionnalisation du contrat à durée indéterminée."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-aide-etat-contrat-pro-45-ans",
+      "nom": "Aide de l'État à l'embauche d'un demandeur d'emploi de 45 ans et plus en contrat de professionnalisation",
+      "financeur": "etat",
+      "financeur_nom": "État (aide gérée par France Travail)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "alternant"
+      ],
+      "description": "Aide de l'État de 2 000 € maximum pour l'embauche en contrat de professionnalisation d'un demandeur d'emploi de 45 ans et plus ; cumulable avec l'aide forfaitaire de France Travail (jusqu'à 4 000 € au total).",
+      "criteres": {
+        "types_alternance": [
+          "professionnalisation"
+        ],
+        "age_min": 45,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Salarié inscrit comme demandeur d'emploi, âgé de 45 ans ou plus à la date d'embauche en contrat de professionnalisation (CDD ou CDI).",
+        "La personne embauchée ne doit pas avoir fait partie de l'entreprise dans les 6 mois précédant le contrat ; pas de licenciement économique sur le poste dans les 6 mois précédant l'embauche.",
+        "Demande en ligne sur France Travail Pro dans les 3 mois suivant le début du contrat.",
+        "Versement en deux fois (1 000 € à l'issue du 3e mois, solde à l'issue du 10e mois), si le contrat est toujours en cours."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 2000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "2 000 € maximum, versés en deux fois ; jusqu'à 4 000 € en cumul avec l'AFE de France Travail."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Cumulable avec l'aide forfaitaire à l'employeur (AFE) de France Travail (nat-afe-contrat-pro-26-ans)."
+      },
+      "demarches": [
+        "Signer le contrat de professionnalisation (cerfa n° 12434) et le déposer auprès de l'OPCO.",
+        "Dans les 3 mois suivant le début du contrat, faire la demande en ligne depuis l'espace employeur France Travail Pro (demande commune avec l'AFE)."
+      ],
+      "url_demarche": "https://pro.francetravail.fr/accueil/description/contrat-professionnalisation",
+      "sources": [
+        {
+          "url": "https://pro.francetravail.fr/accueil/description/contrat-professionnalisation",
+          "titre": "Bénéficier d'une aide à l'embauche d'un demandeur d'emploi en contrat de professionnalisation - France Travail Pro",
+          "extrait": "Le demandeur d'emploi a 45 ans et plus, l'aide peut atteindre 4000 euros en étant cumulée avec l'aide accordée aux demandeurs d'emploi de 26 ans et plus"
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F35391",
+          "titre": "Aides à l'embauche en contrat de professionnalisation - Service Public Entreprendre (vérifié le 9 juillet 2025)",
+          "extrait": "L'aide peut atteindre 4 000 € car elle peut être cumulée avec l'aide accordée aux demandeurs d'emploi de 26 ans et plus."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F35391",
+          "titre": "Aides à l'embauche en contrat de professionnalisation - Service Public Entreprendre (vérifié le 9 juillet 2025)",
+          "extrait": "La demande doit être faite sur le site France Travail Pro, dans les 3 mois qui suivent le début du contrat."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000024009297",
+          "titre": "Décret n° 2011-524 du 16 mai 2011 relatif à l'aide à l'embauche des demandeurs d'emploi de 45 ans et plus en contrat de professionnalisation - Légifrance",
+          "extrait": "Le montant de l'aide est fixé à 2 000 €."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-aide-geiq-accompagnement",
+      "nom": "Aide de l'État aux GEIQ pour l'accompagnement des salariés en alternance",
+      "financeur": "etat",
+      "financeur_nom": "État (DREETS / DDETS)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "alternant",
+        "demandeur_emploi"
+      ],
+      "description": "Aide versée par l'État aux groupements d'employeurs pour l'insertion et la qualification (GEIQ) pour l'accompagnement socio-professionnel des personnes éloignées de l'emploi qu'ils recrutent en contrat de professionnalisation ou d'apprentissage. Elle est versée au GEIQ, pas aux entreprises adhérentes.",
+      "criteres": {
+        "structures": [
+          "association"
+        ],
+        "types_alternance": [
+          "professionnalisation",
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Réservée aux GEIQ labellisés (structures associatives) ayant conclu une convention avec la DREETS ou la DDETS ; une entreprise adhérente n'en bénéficie pas directement.",
+        "Salarié recruté en contrat de professionnalisation ou d'apprentissage et relevant des publics éligibles (critères de l'IAE, critères de l'arrêté du 10 mars 2022 ou prescription par un prescripteur habilité).",
+        "1 400 € pour les allocataires du RSA, de l'ASS ou de l'AAH, les demandeurs d'emploi de très longue durée, les personnes prescrites par un prescripteur habilité, ou les personnes réunissant deux critères de fragilité ; 814 € pour les autres publics éligibles.",
+        "Montant par salarié accompagné et par année pleine, versé à 75 % à la conclusion de la convention et 25 % à la fin."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 814,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "814 € par salarié accompagné et par année pleine ; 1 400 € pour les publics prioritaires définis par l'arrêté du 10 mars 2022 (versé au GEIQ)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Aide propre aux GEIQ ; articulation avec les autres aides à l'embauche à vérifier auprès de la DREETS."
+      },
+      "demarches": [
+        "Le GEIQ sollicite la DREETS (ou DDETS) du lieu d'exercice pour conclure une convention d'aide à l'accompagnement.",
+        "Le GEIQ transmet le bilan d'exécution de la convention pour le versement du solde."
+      ],
+      "url_demarche": "https://entreprendre.service-public.gouv.fr/vosdroits/F35391",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F35391",
+          "titre": "Aides à l'embauche en contrat de professionnalisation - Service Public Entreprendre (vérifié le 9 juillet 2025)",
+          "extrait": "Le montant de cette aide est de 814 € par salarié accompagné et par année pleine."
+        },
+        {
+          "url": "https://bulletins-officiels.social.gouv.fr/sites/textes-officiels/files/2026-04/TRSD2606611C_0.pdf",
+          "titre": "Circulaire n° DGEFP/MIP/METH/MPP/2026/39 du 3 avril 2026 relative au Fonds d'inclusion dans l'emploi (PEC, CIE, IAE, EA, GEIQ)",
+          "extrait": "Conformément à l’arrêté du 10 mars 2022, l’aide s’établit à 1 400 € pour les publics en contrat en alternance répondant à l’une des conditions suivantes :"
+        },
+        {
+          "url": "https://bulletins-officiels.social.gouv.fr/sites/textes-officiels/files/2026-04/TRSD2606611C_0.pdf",
+          "titre": "Circulaire n° DGEFP/MIP/METH/MPP/2026/39 du 3 avril 2026 relative au Fonds d'inclusion dans l'emploi (PEC, CIE, IAE, EA, GEIQ)",
+          "extrait": "L’aide s’établit à 814 € pour les autres publics éligibles listés dans l’arrêté du 10 mars 2022"
+        },
+        {
+          "url": "https://bulletins-officiels.social.gouv.fr/sites/textes-officiels/files/2026-04/TRSD2606611C_0.pdf",
+          "titre": "Circulaire n° DGEFP/MIP/METH/MPP/2026/39 du 3 avril 2026 relative au Fonds d'inclusion dans l'emploi (PEC, CIE, IAE, EA, GEIQ)",
+          "extrait": "Pour 2026, les crédits s’établissent à 12,88 M€ en AE et en CP."
+        },
+        {
+          "url": "https://bulletins-officiels.social.gouv.fr/sites/textes-officiels/files/2026-04/TRSD2606611C_0.pdf",
+          "titre": "Circulaire n° DGEFP/MIP/METH/MPP/2026/39 du 3 avril 2026 relative au Fonds d'inclusion dans l'emploi (PEC, CIE, IAE, EA, GEIQ)",
+          "extrait": "Les GEIQ sont des structures associatives (208 structures et 378 implantations en 2024)"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-npec-apprentissage",
+      "nom": "Prise en charge du coût de la formation en apprentissage par l'OPCO (niveau de prise en charge – NPEC)",
+      "financeur": "opco",
+      "financeur_nom": "OPCO dont relève l'employeur",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "L'OPCO de l'employeur finance le contrat d'apprentissage en payant au CFA le coût de la formation, dans la limite du niveau de prise en charge (NPEC) fixé par la branche professionnelle pour la certification préparée, publié dans le référentiel unique de France compétences.",
+      "criteres": {
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Contrat d'apprentissage transmis à l'OPCO de l'employeur (au plus tard dans les 5 jours ouvrables suivant le début du contrat) ; formation dispensée par un CFA.",
+        "Montant = NPEC de la certification dans la branche de l'employeur ; nouveaux NPEC applicables aux contrats conclus à compter du 1er septembre 2026 (décret n° 2026-832 du 29 août 2026 et référentiel France compétences de septembre 2026), en hausse ou en baisse selon les certifications.",
+        "Coût restant à l'employeur (ce n'est pas une aide) : participation forfaitaire obligatoire de 750 € par contrat préparant un diplôme ou titre de niveau 6 ou plus (bac+3 et au-delà), pour les contrats conclus depuis le 1er juillet 2025, facturée par le CFA à l'issue des 45 premiers jours de formation pratique.",
+        "En cas de rupture pendant les 45 premiers jours : participation égale à 50 % de la prise en charge due pour la période, dans la limite de 750 € ; nouvel employeur après rupture du contrat initial : participation réduite à 200 €.",
+        "Minoration de 20 % du NPEC lorsque les enseignements du CFA sont réalisés à distance pour au moins 80 % de leur durée (montant versé non inférieur à 4 000 €), pour les contrats conclus depuis le 1er juillet 2025 ; pas de minoration lorsque tous les CFA préparant la certification dispensent au moins 80 % de leurs enseignements à distance."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Coût pédagogique payé par l'OPCO au CFA dans la limite du NPEC de la certification dans la branche (montant variable selon le diplôme et la branche, consultable dans le référentiel unique de France compétences). Pour les niveaux 6 et 7, l'employeur verse une participation forfaitaire de 750 € par contrat."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Cumulable avec les aides à l'embauche d'apprentis (aide unique ou exceptionnelle) et la prise en charge des frais annexes par l'OPCO."
+      },
+      "demarches": [
+        "Vérifier, avant de signer, le NPEC de la certification visée dans la branche de l'entreprise (référentiel unique France compétences).",
+        "Signer la convention de formation avec le CFA et le contrat d'apprentissage (cerfa) avec l'apprenti.",
+        "Transmettre le contrat et la convention à l'OPCO, qui prend en charge le contrat et règle le CFA.",
+        "Pour les niveaux 6 et 7, régler la participation de 750 € facturée par le CFA à l'issue des 45 premiers jours de formation pratique."
+      ],
+      "url_demarche": "https://www.francecompetences.fr/referentiels-et-bases-de-donnees/",
+      "sources": [
+        {
+          "url": "https://www.francecompetences.fr/reguler-le-marche/niveaux-de-prise-en-charge-des-contrats-dapprentissage/",
+          "titre": "Niveaux de prise en charge des contrats d'apprentissage - France compétences",
+          "extrait": "Les branches professionnelles ont la responsabilité du financement des contrats d’apprentissage, via les opérateurs de compétences. Ces derniers prennent financièrement en charge les contrats d’apprentissage selon un niveau déterminé par les branches et en application de principes fixés par décret."
+        },
+        {
+          "url": "https://www.francecompetences.fr/referentiels-et-bases-de-donnees/",
+          "titre": "Référentiels et bases de données - France compétences",
+          "extrait": "Référentiel unique avec l’ensemble des niveaux de prise en charge des contrats d’apprentissage – Septembre 2026"
+        },
+        {
+          "url": "https://normandie.dreets.gouv.fr/Apprentissage-nouveaux-niveaux-de-prise-en-charge-pour-les-contrats-conclus-a",
+          "titre": "Apprentissage : nouveaux niveaux de prise en charge pour les contrats conclus à compter du 1er septembre 2026 - DREETS Normandie",
+          "extrait": "Le Décret n° 2026-832 du 29 août 2026 détermine les valeurs de carence des niveaux de prise en charge des contrats d’apprentissage conclus à compter du 1er septembre 2026."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F39190",
+          "titre": "Quand l'entreprise doit-elle verser une participation forfaitaire pour un contrat d'apprentissage ? - Service Public Entreprendre (vérifié le 2 juillet 2025)",
+          "extrait": "l'entreprise participe au financement de la formation en versant une somme forfaitaire de 750 € par contrat, quelle que soit sa durée."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F39190",
+          "titre": "Quand l'entreprise doit-elle verser une participation forfaitaire pour un contrat d'apprentissage ? - Service Public Entreprendre (vérifié le 2 juillet 2025)",
+          "extrait": "Cette mesure s'applique aux contrats conclus à partir du 1er juillet 2025."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F39190",
+          "titre": "Quand l'entreprise doit-elle verser une participation forfaitaire pour un contrat d'apprentissage ? - Service Public Entreprendre (vérifié le 2 juillet 2025)",
+          "extrait": "Lorsqu’une entreprise accueille un apprenti dont le contrat initial a été rompu, cette nouvelle entreprise ne verse qu’une participation réduite, de 200 €."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F39190",
+          "titre": "Quand l'entreprise doit-elle verser une participation forfaitaire pour un contrat d'apprentissage ? - Service Public Entreprendre (vérifié le 2 juillet 2025)",
+          "extrait": "Il transmet une facture à l’entreprise à l’issue des 45 premiers jours de formation pratique."
+        },
+        {
+          "url": "https://code.travail.gouv.fr/code-du-travail/r6332-25-1",
+          "titre": "Article R6332-25-1 du Code du travail - Code du travail numérique (mis à jour le 30/06/2025)",
+          "extrait": "La participation de l'employeur [...] est fixée à la somme forfaitaire de 750 euros pour chaque contrat d'apprentissage visant l'obtention d'un diplôme ou d'un titre à finalité professionnelle équivalant au moins au niveau 6"
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000051808289",
+          "titre": "Décret n° 2025-586 du 27 juin 2025 relatif à la minoration de la prise en charge des actions de formation par apprentissage dispensées en partie à distance - Légifrance",
+          "extrait": "L'opérateur de compétences minore le niveau de prise en charge de 20 % [...] Le niveau de prise en charge versé par l'opérateur de compétences après application de la minoration ne peut être inférieur à 4 000 euros."
+        },
+        {
+          "url": "https://www.urssaf.fr/accueil/employeur/embaucher-gerer-salaries/embaucher/contrat-apprentissage.html",
+          "titre": "Embaucher un alternant en contrat d'apprentissage - Urssaf.fr (mis à jour le 3 juillet 2026)",
+          "extrait": "Au plus tard, dans les 5 jours ouvrables suivant le début du contrat d’apprentissage, vous devez transmettre le contrat accompagné du dossier complet à votre opérateur de compétences (Opco)."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "nat-opco-frais-annexes-apprentis",
+      "nom": "Prise en charge par l'OPCO des frais annexes de l'apprenti (hébergement, restauration, premier équipement, mobilité internationale)",
+      "financeur": "opco",
+      "financeur_nom": "OPCO dont relève l'employeur (via le CFA)",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Lorsqu'ils sont financés par le CFA, l'OPCO prend en charge, en plus du niveau de prise en charge de la formation, certains frais annexes de l'apprenti : nuitées, repas, premier équipement pédagogique et frais de mobilité internationale.",
+      "criteres": {
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Frais pris en charge uniquement lorsqu'ils sont financés par le CFA : l'apprenti et l'employeur s'adressent au CFA.",
+        "Hébergement : 6 € par nuitée ; restauration : 3 € par repas.",
+        "Premier équipement pédagogique (contrats conclus à compter du 30 juillet 2026) : forfait fixé par l'OPCO, plafonné à 500 € pour les niveaux 3 et 4 et à 300 € pour le niveau 5 ; aucune prise en charge pour les niveaux 6 et 7 ; demande transmise par le CFA dans les 12 mois suivant la conclusion du contrat.",
+        "Les fournitures scolaires courantes, les consommables et les équipements de protection individuelle (à la charge de l'employeur) ne sont pas couverts.",
+        "Mobilité internationale : forfait déterminé par l'OPCO, identique pour tous les CFA concernés."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Versé au CFA : hébergement 6 €/nuitée, restauration 3 €/repas, premier équipement jusqu'à 500 € (niveaux 3 et 4) ou 300 € (niveau 5), mobilité internationale selon le forfait de l'OPCO."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "S'ajoute au NPEC ; la prise en charge de la mobilité internationale par l'OPCO peut se combiner avec une bourse Erasmus+."
+      },
+      "demarches": [
+        "Se renseigner auprès du CFA, qui finance ces frais (hébergement, restauration, équipement, mobilité) et en demande la prise en charge à l'OPCO.",
+        "Pour le premier équipement, le CFA transmet la demande à l'OPCO dans les 12 mois suivant la conclusion du contrat."
+      ],
+      "url_demarche": "https://code.travail.gouv.fr/actualite/decouvrez-les-nouveaux-plafonds-de-prise-en-charge-des-frais-de-premier-equipement-pedagogique-pour-les-contrats-dapprentissage-conclus-a-compter-du-30-juillet-2026",
+      "sources": [
+        {
+          "url": "https://code.travail.gouv.fr/actualite/decouvrez-les-nouveaux-plafonds-de-prise-en-charge-des-frais-de-premier-equipement-pedagogique-pour-les-contrats-dapprentissage-conclus-a-compter-du-30-juillet-2026",
+          "titre": "Apprentissage : les nouveaux plafonds de prise en charge des frais de premier équipement pédagogique - Code du travail numérique",
+          "extrait": "À compter du 30 juillet 2026, cette prise en charge est réservée aux apprentis préparant un diplôme ou une certification professionnelle de niveau 3, 4 ou 5 du cadre national des certifications professionnelles"
+        },
+        {
+          "url": "https://code.travail.gouv.fr/actualite/decouvrez-les-nouveaux-plafonds-de-prise-en-charge-des-frais-de-premier-equipement-pedagogique-pour-les-contrats-dapprentissage-conclus-a-compter-du-30-juillet-2026",
+          "titre": "Apprentissage : les nouveaux plafonds de prise en charge des frais de premier équipement pédagogique - Code du travail numérique",
+          "extrait": "500 € pour les apprentis préparant un diplôme ou une certification de niveau 3 ou 4 ; 300 € pour les apprentis préparant un diplôme ou une certification de niveau 5."
+        },
+        {
+          "url": "https://code.travail.gouv.fr/actualite/decouvrez-les-nouveaux-plafonds-de-prise-en-charge-des-frais-de-premier-equipement-pedagogique-pour-les-contrats-dapprentissage-conclus-a-compter-du-30-juillet-2026",
+          "titre": "Apprentissage : les nouveaux plafonds de prise en charge des frais de premier équipement pédagogique - Code du travail numérique",
+          "extrait": "Le centre de formation d'apprentis (CFA) doit transmettre la demande de prise en charge à l'opérateur de compétences dans les 12 mois suivant la conclusion du contrat d'apprentissage."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000038940362",
+          "titre": "Arrêté du 30 juillet 2019 relatif aux frais annexes à la formation des apprentis (D. 6332-83) - Légifrance",
+          "extrait": "Le montant prévu au 1° de l'article D. 6332-83 du code du travail est déterminé à 6 euros par nuitée. [...] Le montant prévu au 2° de l'article D. 6332-83 du code du travail est déterminé à 3 euros par repas."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000041770389",
+          "titre": "Article D6332-83 du Code du travail (version en vigueur depuis le 30 juillet 2026) - Légifrance",
+          "extrait": "L'opérateur de compétences prend en charge, dès lors qu'ils sont financés par les centres de formation d'apprentis, les frais annexes à la formation des apprentis"
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000041770389",
+          "titre": "Article D6332-83 du Code du travail (version en vigueur depuis le 30 juillet 2026) - Légifrance",
+          "extrait": "Les frais liés à la mobilité internationale des apprentis prévus au 10° de l'article L. 6231-2 sont pris en charge selon un forfait déterminé par l'opérateur de compétences"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "fis-exoneration-cotisations-apprentis",
+      "nom": "Exonérations de cotisations sociales et d'impôt sur le revenu liées au contrat d'apprentissage",
+      "financeur": "fiscal",
+      "financeur_nom": "Urssaf / administration fiscale",
+      "categorie": "avantage_fiscal_social",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Le salaire de l'apprenti est exonéré de cotisations salariales et de CSG-CRDS dans la limite de 50 % du SMIC (contrats conclus depuis le 1er mars 2025) et d'impôt sur le revenu dans la limite du SMIC annuel ; l'employeur privé applique la réduction générale dégressive unique (RGDU) des cotisations patronales.",
+      "criteres": {
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "Contrats conclus depuis le 1er mars 2025 : exonération des cotisations salariales d'origine légale et conventionnelle et de la CSG-CRDS dans la limite de 50 % du SMIC ; la part de rémunération au-delà est soumise.",
+        "Contrats conclus avant le 1er mars 2025 : règles antérieures (cotisations salariales exonérées dans la limite de 79 % du SMIC, CSG-CRDS exonérée), selon la date de début d'exécution.",
+        "Employeur privé : réduction générale dégressive unique (RGDU) des cotisations patronales, sous conditions de rémunération : inférieure à 3 Smic applicable au 1er janvier 2026, soit 2,9293 Smic applicable au 1er juin 2026, en métropole et dans les Drom (hors Mayotte) ; 1,6 Smic à Mayotte en 2026.",
+        "Employeur public : exonération des cotisations patronales et salariales de sécurité sociale jusqu'au terme du contrat d'apprentissage.",
+        "Impôt sur le revenu : salaires d'apprentissage exonérés dans la limite du montant annuel du SMIC (21 622 € pour les revenus 2025) ; ne concerne pas le contrat de professionnalisation."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Exonérations appliquées automatiquement en paie et lors de la déclaration de revenus : cotisations salariales et CSG-CRDS jusqu'à 50 % du SMIC, impôt sur le revenu jusqu'au SMIC annuel ; RGDU pour l'employeur privé."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Cumulable avec les aides à l'embauche d'apprentis."
+      },
+      "demarches": [
+        "Appliquer les exonérations dans la paie et les déclarer dans la DSN avec les codes types de personnel indiqués par l'Urssaf.",
+        "L'apprenti (ou le foyer fiscal de ses parents) ne déclare que la part du salaire supérieure au plafond d'exonération d'impôt."
+      ],
+      "url_demarche": "https://www.urssaf.fr/accueil/employeur/embaucher-gerer-salaries/embaucher/contrat-apprentissage.html",
+      "sources": [
+        {
+          "url": "https://www.urssaf.fr/accueil/employeur/embaucher-gerer-salaries/embaucher/contrat-apprentissage.html",
+          "titre": "Embaucher un alternant en contrat d'apprentissage - Urssaf.fr (mis à jour le 3 juillet 2026)",
+          "extrait": "cotisations salariales d'origine légale et conventionnelle dans la limite de 50 % du Smic ; CSG-CRDS dans la limite de 50 % du Smic. Cette limite de 50 % du Smic s’applique aux cotisations et contributions salariales dues au titre des contrats d’apprentissage conclus à partir du 1er mars 2025."
+        },
+        {
+          "url": "https://www.urssaf.fr/accueil/employeur/embaucher-gerer-salaries/embaucher/contrat-apprentissage.html",
+          "titre": "Embaucher un alternant en contrat d'apprentissage - Urssaf.fr (mis à jour le 3 juillet 2026)",
+          "extrait": "Vous pouvez bénéficier sous certaines conditions, d’une exonération des cotisations patronales au titre de la réduction générale dégressive unique (RGDU)."
+        },
+        {
+          "url": "https://www.urssaf.fr/accueil/employeur/embaucher-gerer-salaries/embaucher/contrat-apprentissage.html",
+          "titre": "Embaucher un alternant en contrat d'apprentissage - Urssaf.fr (mis à jour le 3 juillet 2026)",
+          "extrait": "Une exonération des cotisations patronales et salariales de Sécurité sociale s’applique jusqu’au terme du contrat d’apprentissage."
+        },
+        {
+          "url": "https://www.urssaf.fr/accueil/employeur/beneficier-exonerations/reduction-generale-cotisation.html",
+          "titre": "La réduction générale dégressive unique - Urssaf.fr (mis à jour le 13 juillet 2026)",
+          "extrait": "à 3 Smic applicable au 1er janvier 2026 (ou 2,9293 Smic applicable au 1er juin 2026) en métropole et dans les Drom (hors Mayotte) ; à 1,6 Smic applicable à Mayotte en 2026 ;"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F11249",
+          "titre": "Comment est imposé le salaire d'un apprenti ? - Service Public (vérifié le 1er janvier 2026)",
+          "extrait": "Si vous étiez apprenti en 2025, que ce soit dans le secteur privé ou dans la fonction publique, et que vous avez perçu des revenus liés à ce contrat d'apprentissage, ces salaires sont exonérés jusqu'à 21 622 €."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-mobili-jeune",
+      "nom": "AIDE MOBILI-JEUNE® (Action Logement)",
+      "financeur": "autre",
+      "financeur_nom": "Action Logement",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide au logement d'Action Logement qui prend en charge une partie du loyer des alternants de moins de 30 ans salariés d'une entreprise du secteur privé non agricole : de 10 € à 100 € par mois.",
+      "criteres": {
+        "age_max": 29,
+        "types_alternance": [
+          "apprentissage",
+          "professionnalisation"
+        ]
+      },
+      "conditions": [
+        "Avoir moins de 30 ans et être en contrat d'apprentissage ou de professionnalisation dans une entreprise du secteur privé non agricole (salariés agricoles : AGRI-MOBILI-JEUNE®).",
+        "Salaire mensuel brut inférieur ou égal à 120 % du SMIC.",
+        "Logement rapproché du lieu de formation ou de travail : à plus de 70 km de l'ancienne adresse ou à plus de 40 minutes de trajet, ou double charge de loyer (condition de distance non applicable dans les DROM).",
+        "Demande dans les 3 mois qui précèdent ou les 5 mois qui suivent le début du contrat (ou sa date anniversaire).",
+        "Montant calculé sur le loyer charges comprises après déduction de l'APL ; pas d'aide si le reste à charge est inférieur à 10 €."
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 100,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 1100,
+        "duree_max_mois": 11,
+        "libelle": "De 10 € à 100 € par mois, dans la limite de 1 100 € par année de formation (11 mensualités) ; peut être sollicitée sur deux années de formation au maximum."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Calculée après déduction des aides au logement (APL) ; cumulable sous conditions avec l'AVANCE LOCA-PASS® et la garantie Visale."
+      },
+      "demarches": [
+        "Vérifier son éligibilité et créer un compte sur la plateforme d'Action Logement.",
+        "Saisir la demande et déposer les justificatifs en ligne, dans les 3 mois avant ou les 5 mois après le début du contrat.",
+        "Déposer ensuite les quittances de loyer et bulletins de salaire : chaque dépôt déclenche un versement."
+      ],
+      "url_demarche": "https://www.actionlogement.fr/l-aide-mobili-jeune",
+      "sources": [
+        {
+          "url": "https://www.actionlogement.fr/l-aide-mobili-jeune",
+          "titre": "L'AIDE MOBILI-JEUNE® - Action Logement",
+          "extrait": "L'AIDE MOBILI-JEUNE® est une aide au logement prenant en charge une partie du loyer des jeunes de moins de 30 ans, alternants d’une entreprise du secteur privé non agricole."
+        },
+        {
+          "url": "https://www.actionlogement.fr/l-aide-mobili-jeune",
+          "titre": "L'AIDE MOBILI-JEUNE® - Action Logement",
+          "extrait": "Votre salaire mensuel brut est inférieur ou égal à 120% du SMIC."
+        },
+        {
+          "url": "https://www.actionlogement.fr/l-aide-mobili-jeune",
+          "titre": "L'AIDE MOBILI-JEUNE® - Action Logement",
+          "extrait": "Le montant de L’AIDE MOBILI-JEUNE® peut varier de 10 € minimum par mois à 100 € maximum. Le montant de l’aide est plafonné à 1 100€ par année de formation sur 11 mensualités,"
+        },
+        {
+          "url": "https://www.actionlogement.fr/l-aide-mobili-jeune",
+          "titre": "L'AIDE MOBILI-JEUNE® - Action Logement",
+          "extrait": "L'aide peut être sollicitée sur deux années de formation maximum, consécutives ou non, soit deux fois 11 mois."
+        },
+        {
+          "url": "https://www.actionlogement.fr/l-aide-mobili-jeune",
+          "titre": "L'AIDE MOBILI-JEUNE® - Action Logement",
+          "extrait": "Votre demande d'aide doit être réalisée dans les 3 mois qui précèdent ou dans les 5 mois qui suivent la date de début d'exécution du contrat d'alternance ou la date d'anniversaire du contrat."
+        },
+        {
+          "url": "https://www.actionlogement.fr/l-aide-mobili-jeune",
+          "titre": "L'AIDE MOBILI-JEUNE® - Action Logement",
+          "extrait": "Votre logement actuel (celui occupé, à titre de résidence principale, lors de votre formation en alternance) doit être à plus de 70km de votre ancienne adresse (logement occupé avant votre formation en alternance), ou à défaut, le temps de trajet doit être supérieur à 40 minutes"
+        },
+        {
+          "url": "https://www.1jeune1solution.gouv.fr/articles/l-aide-mobili-jeune-decouvrez-les-nouvelles-conditions-d-eligibilite",
+          "titre": "L'aide Mobili-Jeune® : découvrez les nouvelles conditions d'éligibilité ! - 1jeune1solution, ministère du Travail (mis à jour le 7 novembre 2024)",
+          "extrait": "L’aide Mobili-Jeune® offre une aide de 100 € par mois pendant 11 mois pour réduire votre charge de loyer."
+        },
+        {
+          "url": "https://www.1jeune1solution.gouv.fr/articles/l-aide-mobili-jeune-decouvrez-les-nouvelles-conditions-d-eligibilite",
+          "titre": "L'aide Mobili-Jeune® : découvrez les nouvelles conditions d'éligibilité ! - 1jeune1solution, ministère du Travail (mis à jour le 7 novembre 2024)",
+          "extrait": "vous pouvez désormais bénéficier de l’aide Mobili-Jeune® si votre salaire brut mensuel est inférieur ou égal à 120 % du SMIC, contre 80 % auparavant."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "ue-erasmus-mobilite-alternants",
+      "nom": "Erasmus+ – mobilité européenne et internationale des apprentis et alternants",
+      "financeur": "europe",
+      "financeur_nom": "Union européenne – Agence Erasmus+ France / Éducation Formation",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Le programme Erasmus+ finance des périodes de stage ou de formation à l'étranger pour les apprentis et alternants, par l'intermédiaire de leur organisme de formation (CFA, établissement) lorsqu'il dispose de financements Erasmus+ ; les OPCO cofinancent obligatoirement la mobilité internationale des apprentis.",
+      "criteres": {
+        "types_alternance": [
+          "apprentissage",
+          "professionnalisation"
+        ]
+      },
+      "conditions": [
+        "Pas de candidature individuelle : l'alternant passe par son organisme de formation, qui doit disposer de financements Erasmus+.",
+        "Accord conjoint de l'organisme de formation et de l'employeur ; contrat soit mis à disposition (l'employeur continue de verser le salaire), soit mis en veille pendant la mobilité.",
+        "Partie du contrat exécutée à l'étranger : un an maximum et au plus la moitié de la durée totale du contrat.",
+        "Formation professionnelle (niveaux 3 et 4) : mobilité de 10 jours à 12 mois (« ErasmusPro » à partir de 3 mois) ; enseignement supérieur (niveaux 5 et plus) : 2 à 12 mois, pour des diplômes visés par le ministère chargé de l'enseignement supérieur (titres seulement enregistrés au RNCP non éligibles)."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Aide Erasmus+ versée via l'organisme de formation, variable selon le pays et la durée ; cofinancement par l'OPCO (forfait mobilité internationale)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Se combine avec la prise en charge de la mobilité internationale par l'OPCO (nat-opco-frais-annexes-apprentis)."
+      },
+      "demarches": [
+        "Contacter le référent mobilité européenne et internationale du CFA ou de l'établissement.",
+        "Obtenir l'accord de l'employeur et choisir le régime (mise à disposition ou mise en veille du contrat).",
+        "Le CFA organise la mobilité dans le cadre de son projet Erasmus+ et verse l'aide à l'alternant."
+      ],
+      "url_demarche": "https://agence.erasmusplus.fr/priorites-et-thematiques/la-mobilite-des-alternants-avec-erasmus/",
+      "sources": [
+        {
+          "url": "https://agence.erasmusplus.fr/priorites-et-thematiques/la-mobilite-des-alternants-avec-erasmus/",
+          "titre": "La mobilité des alternants avec Erasmus+ - Agence Erasmus+ France / Éducation Formation",
+          "extrait": "Il est important de rappeler que les apprentis, tout comme les autres bénéficiaires, ne candidatent pas directement au programme Erasmus+ : ils passent par leur organisme de formation dès lors qu’il dispose de financements Erasmus+."
+        },
+        {
+          "url": "https://agence.erasmusplus.fr/priorites-et-thematiques/la-mobilite-des-alternants-avec-erasmus/",
+          "titre": "La mobilité des alternants avec Erasmus+ - Agence Erasmus+ France / Éducation Formation",
+          "extrait": "a également rendu obligatoire le cofinancement des mobilités internationales par les opérateurs de compétences (OPCO)."
+        },
+        {
+          "url": "https://agence.erasmusplus.fr/priorites-et-thematiques/la-mobilite-des-alternants-avec-erasmus/",
+          "titre": "La mobilité des alternants avec Erasmus+ - Agence Erasmus+ France / Éducation Formation",
+          "extrait": "Mobilité individuelle européenne et internationale en entreprise (stage), en centre de formation ou une combinaison des deux (entre 10 jours et 12 mois). Les mobilités de 3 mois et plus sont dénommées « ErasmusPro »."
+        },
+        {
+          "url": "https://agence.erasmusplus.fr/priorites-et-thematiques/la-mobilite-des-alternants-avec-erasmus/",
+          "titre": "La mobilité des alternants avec Erasmus+ - Agence Erasmus+ France / Éducation Formation",
+          "extrait": "Une alternance, qu’elle soit effectuée dans le cadre d’un contrat d’apprentissage ou d’un contrat de professionnalisation, peut se dérouler en partie à l’étranger pour une durée qui ne peut excéder un an ni la moitié de la durée totale du contrat."
+        },
+        {
+          "url": "https://agence.erasmusplus.fr/priorites-et-thematiques/la-mobilite-des-alternants-avec-erasmus/",
+          "titre": "La mobilité des alternants avec Erasmus+ - Agence Erasmus+ France / Éducation Formation",
+          "extrait": "Mobilité européenne et internationale, en entreprise (stage), en établissement de formation (étude) ou une combinaison des deux 2 à 12 mois."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "nat-opco-contrat-pro-forfait-horaire",
+      "nom": "Prise en charge par l'OPCO de la formation du contrat de professionnalisation (forfait horaire)",
+      "financeur": "opco",
+      "financeur_nom": "OPCO dont relève l'employeur",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "L'OPCO finance les actions d'évaluation, d'accompagnement et de formation du contrat de professionnalisation selon un forfait horaire fixé par la branche ; à défaut de forfait de branche, 9,15 € par heure (15 € pour certains publics).",
+      "criteres": {
+        "types_alternance": [
+          "professionnalisation"
+        ]
+      },
+      "conditions": [
+        "Contrat de professionnalisation déposé auprès de l'OPCO dans les 5 jours qui suivent sa signature.",
+        "Montant horaire fixé par la branche professionnelle (variable selon l'OPCO, la branche et la certification).",
+        "À défaut de forfait de branche : 9,15 € par heure, ou 15 € par heure pour les contrats conclus avec les publics visés à l'article L. 6325-1-1 du Code du travail ou en parcours d'insertion dans un GEIQ."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Forfait horaire de branche appliqué aux heures de formation ; à défaut, 9,15 €/h (15 €/h pour certains publics)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Cumulable avec l'AFE et l'aide de l'État aux 45 ans et plus. Montants par défaut (9,15 €/h et 15 €/h) de l'article D6332-86 reconfirmés le 06/10/2026 sur Légifrance (version en vigueur au 06/10/2026)."
+      },
+      "demarches": [
+        "Vérifier auprès de l'OPCO le forfait horaire applicable à la branche et à la certification.",
+        "Déposer le contrat de professionnalisation (cerfa n° 12434) et la convention de formation auprès de l'OPCO dans les 5 jours suivant la signature ; l'OPCO rend sa décision de prise en charge."
+      ],
+      "url_demarche": "https://www.urssaf.fr/accueil/employeur/embaucher-gerer-salaries/embaucher/contrat-professionnalisation.html",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000018498720/",
+          "titre": "Code du travail, articles D6332-85 à D6332-88 (prise en charge des contrats de professionnalisation) - Légifrance",
+          "extrait": "ce montant est fixé à 9,15 euros par heure ou, lorsqu'il porte sur des contrats conclus avec les personnes mentionnées à l'article L. 6325-1-1 ou les personnes en parcours d'insertion dans un groupement d'employeur pour l'insertion et la qualification"
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000018498720/",
+          "titre": "Code du travail, articles D6332-85 à D6332-88 (prise en charge des contrats de professionnalisation) - Légifrance",
+          "extrait": "L. 1253-1, à 15 euros par heure."
+        },
+        {
+          "url": "https://www.urssaf.fr/accueil/employeur/embaucher-gerer-salaries/embaucher/contrat-professionnalisation.html",
+          "titre": "Embaucher un alternant en contrat de professionnalisation - Urssaf.fr",
+          "extrait": "Vous devez déposer le contrat de professionnalisation auprès de votre Opérateur de Compétences (OPCO) dans les 5 jours qui suivent la signature."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "nat-poei",
+      "nom": "Préparation opérationnelle à l'emploi individuelle (POEI)",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail (cofinancement possible de l'OPCO)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "alternance"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide de France Travail au financement d'une formation avant embauche (tutorat en entreprise et/ou organisme de formation) pour combler l'écart entre les compétences d'un demandeur d'emploi présélectionné et celles du poste. Depuis la loi pour le plein emploi, elle intègre l'ancienne AFPR.",
+      "criteres": {
+        "inscrit_france_travail": true,
+        "duree_max_heures": 600
+      },
+      "conditions": [
+        "Offre d'emploi déposée auprès de France Travail ; employeur à jour de ses contributions d'assurance chômage et cotisations sociales ; pas de licenciement économique dans les 12 mois précédant la demande (sauf dérogation du directeur d'agence).",
+        "Candidat demandeur d'emploi (indemnisé ou non) présélectionné sur le poste ; également salariés en contrat d'insertion (CUI, CDDI) ou travailleurs handicapés d'une entreprise adaptée.",
+        "Durée : 300 heures maximum en tutorat en entreprise ; 450 heures maximum avec un organisme de formation externe certifié Qualiopi ou en formule mixte (jusqu'à 600 heures pour les publics prioritaires du Plan d'investissement dans les compétences).",
+        "Embauche à l'issue : CDI, CDI intérimaire, CDD d'au moins 6 mois, contrat saisonnier d'au moins 4 mois, contrat de professionnalisation ou d'apprentissage de plus de 6 mois, ou missions d'intérim totalisant au moins 6 mois dans les 9 mois suivant la formation.",
+        "Convention signée entre France Travail, l'employeur et le candidat avant le début de la formation ; pendant la formation, le candidat est stagiaire de la formation professionnelle (ARE-formation ou RFFT)."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Tutorat en entreprise : jusqu'à 5 € net par heure (300 h maximum). Organisme de formation externe : prise en charge sur dossier (plan individuel de formation et devis), totale ou partielle, jusqu'à 450 h (600 h pour les publics prioritaires). Aide versée une fois la formation réalisée ; cofinancement OPCO possible selon la branche."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-poec"
+        ],
+        "note": "L'AFPR n'existe plus (fusionnée avec la POEI). Cofinancement possible par l'OPCO de la branche. Pendant la formation, le candidat peut percevoir l'ARE-formation ou la RFFT et l'aide à la mobilité."
+      },
+      "demarches": [
+        "Déposer l'offre d'emploi dans l'espace employeur France Travail.",
+        "Identifier le candidat avec le conseiller France Travail et définir le plan de formation (tutorat et/ou organisme de formation, devis).",
+        "Déposer la demande d'aide (en autonomie depuis le compte entreprise ou avec le conseiller) et signer la convention avant le début de la formation.",
+        "Réaliser la formation puis embaucher le candidat ; France Travail verse l'aide après la formation."
+      ],
+      "url_demarche": "https://pro.francetravail.fr/accueil/description/poei",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "Tutorat en entreprise Jusqu'à 5 €/heure net 300 heures"
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "Organisme de formation externe Prise en charge sur dossier (plan individuel de formation et montant du devis) 450 heures (600h pour publics prioritaires)"
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "Lorsque la formation est dispensée par un organisme de formation externe certifié Qualiopi, sa durée maximale est de 450 heures. Pour les publics prioritaires relevant du Plan d'investissement dans les compétences, cette durée peut être portée jusqu'à 600 heures."
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "Il ne doit pas avoir procédé à un licenciement pour motif économique dans les 12 mois précédant la demande d'aide, sauf dérogation accordée par le directeur d'agence France Travail."
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "un CDI, un CDD d'au moins 6 mois, un contrat saisonnier d'au moins 4 mois, un contrat à durée indéterminée intérimaire (CDII), un contrat de professionnalisation ou d'apprentissage de plus de 6 mois"
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "Depuis la loi pour le plein emploi du 18 décembre 2023, l'AFPR (Action de Formation Préalable au Recrutement) a été fusionnée avec la POEI."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-poec",
+      "nom": "Préparation opérationnelle à l'emploi collective (POEC)",
+      "financeur": "opco",
+      "financeur_nom": "OPCO de branche et France Travail",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formation collective gratuite pour des demandeurs d'emploi, organisée à l'initiative d'une ou plusieurs branches professionnelles et de leur OPCO pour répondre aux besoins de recrutement de leurs entreprises ; l'entreprise recrute à l'issue de la session.",
+      "criteres": {
+        "inscrit_france_travail": true,
+        "duree_max_heures": 434
+      },
+      "conditions": [
+        "Session POEC organisée par la branche ou l'OPCO de l'entreprise sur le territoire : l'entreprise ne la demande pas seule.",
+        "Public : demandeurs d'emploi inscrits à France Travail (indemnisés ou non) et salariés en CUI ou en CDDI d'une structure d'insertion.",
+        "Durée : 400 heures maximum (434 heures pour les formations de conducteur du transport routier de marchandises sur porteur et de conducteur de transport en commun sur route), avec une période en entreprise.",
+        "Contrat proposé à l'issue : CDI ou CDD d'au moins 12 mois, y compris contrat d'apprentissage ou de professionnalisation.",
+        "Projet de formation validé par le conseiller France Travail (PPAE)."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite pour le demandeur d'emploi, financée par l'OPCO de la branche et France Travail, si une session est organisée ; le stagiaire est rémunéré par l'ARE-formation ou la RFFT."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-poei"
+        ],
+        "note": "Le stagiaire peut bénéficier de l'aide à la mobilité et de l'aide à la garde d'enfants de France Travail."
+      },
+      "demarches": [
+        "Se rapprocher de l'OPCO de la branche ou de l'agence France Travail pour connaître les sessions POEC prévues sur le territoire.",
+        "Participer à la sélection des stagiaires et accueillir la période en entreprise.",
+        "Embaucher le stagiaire à l'issue (CDI ou CDD d'au moins 12 mois, y compris en alternance)."
+      ],
+      "url_demarche": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/la-preparation-operationnelle-1.html",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/la-preparation-operationnelle-1.html",
+          "titre": "La préparation opérationnelle à l'emploi collective - France Travail (modifiée le 18/08/2026)",
+          "extrait": "La POEC est une formation collective pour les demandeurs d’emploi inscrits à France Travail, achetée par les Opérateurs de Compétences (OPCO) avec des budgets du Plan d’investissement dans les Compétences (PIC)."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/la-preparation-operationnelle-1.html",
+          "titre": "La préparation opérationnelle à l'emploi collective - France Travail (modifiée le 18/08/2026)",
+          "extrait": "La durée d’une POEC est de 400 heures maximum. Cette durée est augmentée de façon exceptionnelle et dérogatoire et va jusqu’à 434 heures maximum pour les formations de :"
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/la-preparation-operationnelle-1.html",
+          "titre": "La préparation opérationnelle à l'emploi collective - France Travail (modifiée le 18/08/2026)",
+          "extrait": "En contrat à durée déterminée (CDD) d’une durée de 12 mois minimum, y compris en contrat d’apprentissage et de professionnalisation."
+        },
+        {
+          "url": "https://www.francetravail.fr/actualites/a-laffiche/2026/cpf-aif-poec-quel-financement.html",
+          "titre": "CPF, AIF, POEC : quel financement de formation choisir en 2026 ? - France Travail",
+          "extrait": "La POEC est financée conjointement par France Travail et les OPCO. Elle est gratuite pour le chercheur d'emploi."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "nat-aif",
+      "nom": "Aide individuelle à la formation (AIF)",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide de France Travail qui finance tout ou partie des frais pédagogiques d'une formation validée dans le projet personnalisé d'accès à l'emploi (PPAE) d'un demandeur d'emploi, lorsqu'aucun autre financement ne la couvre entièrement.",
+      "criteres": {
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Demandeur d'emploi inscrit à France Travail (indemnisé ou non) ou personne en contrat de sécurisation professionnelle (CSP).",
+        "Formation validée par le conseiller France Travail et cohérente avec le PPAE.",
+        "Aucun autre financement (CPF, formations gratuites achetées par France Travail – AFC – ou par la Région – PRF) ne couvre la totalité des frais : l'AIF finance le reste à charge ou la totalité.",
+        "Aucun plafond national publié : décision au cas par cas après étude du devis."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Prise en charge totale ou partielle des frais pédagogiques, sur devis, après accord de France Travail."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Peut compléter le CPF (abondement) ou d'autres financements ; le stagiaire peut être rémunéré (ARE-formation ou RFFT)."
+      },
+      "demarches": [
+        "Valider le projet de formation avec le conseiller France Travail.",
+        "Demander un devis à l'organisme de formation, qui le transmet en ligne dans l'espace personnel francetravail.fr (ou l'application Ma formation).",
+        "Valider le devis : il est transmis automatiquement à France Travail, qui l'accepte ou le refuse.",
+        "Si la formation est éligible au CPF et le solde insuffisant, demander le complément à France Travail depuis Mon Compte Formation."
+      ],
+      "url_demarche": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/laide-individuelle-a-la-formatio.html",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/laide-individuelle-a-la-formatio.html",
+          "titre": "L'Aide individuelle à la formation (AIF) pour financer votre formation - France Travail (modifiée le 21/09/2026)",
+          "extrait": "L’aide individuelle à la formation (AIF) est une aide financière qui prend en charge les frais pédagogiques de la formation, c’est-à-dire le coût de celle-ci."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/laide-individuelle-a-la-formatio.html",
+          "titre": "L'Aide individuelle à la formation (AIF) pour financer votre formation - France Travail (modifiée le 21/09/2026)",
+          "extrait": "Dans ces cas, vous pouvez faire une demande d’AIF pour soit financer votre reste à charge soit financer la totalité de la formation, à condition que votre formation soit cohérente avec votre Projet Personnalisé d’Accès à l’Emploi."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/mes-aides-financieres/laide-individuelle-a-la-formatio.html",
+          "titre": "L'Aide individuelle à la formation (AIF) pour financer votre formation - France Travail (modifiée le 21/09/2026)",
+          "extrait": "au demandeur d'emploi inscrit(e) à France Travail, indemnisé(e) ou non."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "nat-aref",
+      "nom": "Allocation d'aide au retour à l'emploi formation (AREF)",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail (assurance chômage)",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Le demandeur d'emploi indemnisé par l'ARE qui suit une formation validée par France Travail perçoit l'ARE-formation, d'un montant brut égal à son ARE, dans la limite de ses droits restants ; la rémunération de fin de formation (RFF) peut prendre le relais.",
+      "criteres": {
+        "inscrit_france_travail": true,
+        "duree_min_heures": 40
+      },
+      "conditions": [
+        "Percevoir l'allocation d'aide au retour à l'emploi (ARE) le jour de l'entrée en formation.",
+        "Formation validée par France Travail (contrat d'engagement, PPAE) ou financée par le CPF, d'une durée d'au moins 40 heures.",
+        "Versée dans la limite des droits ARE restants ; si la formation est plus longue et qualifiante (métiers en tension), la RFF peut prendre le relais, dans la limite de 775,65 € par mois.",
+        "Montant net minimal de 22,99 € par jour ; exonérée de CSG et de CRDS ; imposable."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Montant brut égal à l'ARE perçue (minimum 22,99 € net par jour), pendant la durée des droits restants ; relais possible par la RFF jusqu'à 775,65 € par mois."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-rfft"
+        ],
+        "note": "Le demandeur d'emploi non indemnisé relève de la RFFT."
+      },
+      "demarches": [
+        "Faire valider la formation par le conseiller France Travail avant l'entrée en formation.",
+        "Continuer à s'actualiser chaque mois ; l'AREF est versée mensuellement à terme échu.",
+        "Si les droits s'épuisent avant la fin d'une formation qualifiante, demander la RFF au conseiller (réponse sous 21 jours)."
+      ],
+      "url_demarche": "https://www.service-public.gouv.fr/particuliers/vosdroits/F291",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F291",
+          "titre": "Allocation d'aide au retour à l'emploi formation (Aref) - Service Public (vérifié le 7 août 2026)",
+          "extrait": "Votre formation doit être d'une durée d'au moins 40 heures."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F291",
+          "titre": "Allocation d'aide au retour à l'emploi formation (Aref) - Service Public (vérifié le 7 août 2026)",
+          "extrait": "Le montant brut de l'Aref est égal au montant brut de l'ARE que vous touchez."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F291",
+          "titre": "Allocation d'aide au retour à l'emploi formation (Aref) - Service Public (vérifié le 7 août 2026)",
+          "extrait": "Le montant net de l'Aref ne peut pas être inférieur à 22,99 € par jour."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F292",
+          "titre": "Rémunération de fin de formation (RFF ou R2F) - Service Public (vérifié le 1er avril 2026)",
+          "extrait": "Le montant mensuel est égal au montant journalier multiplié par le nombre de jours du mois, dans la limite de 775,65 € par mois."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-rfft",
+      "nom": "Rémunération de formation de France Travail (RFFT)",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle versée par France Travail au demandeur d'emploi non indemnisé (ni ARE ni ASP) qui suit une formation validée et financée ou cofinancée par France Travail (AFC, AIF, POEI, POEC…).",
+      "criteres": {
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Être inscrit comme demandeur d'emploi et ne pas percevoir l'ARE (ni l'ASP) le jour de l'entrée en formation ; les bénéficiaires du RSA sont éligibles.",
+        "Formation validée par France Travail dans le PPAE et achetée, financée ou cofinancée par France Travail (AFC, AIF, POEI, POEC…).",
+        "Moins de 26 ans : 775,65 € par mois en cas d'activité salariée antérieure d'au moins 6 mois sur 12 mois (ou 12 mois sur 24), de parent isolé, de parent d'au moins 3 enfants ou de grossesse déclarée ; sinon 566,17 € (18-25 ans) ou 226,48 € (moins de 18 ans).",
+        "Formation à temps partiel (moins de 30 h par semaine) : rémunération horaire égale au montant mensuel divisé par 151,67.",
+        "Versée pendant la durée de la formation, dans la limite de 3 ans pour une même formation ; non cumulable avec l'ASS (suspendue) ; exclus : plus de 67 ans, bilan de compétences, permis de conduire, accompagnement à la création d'entreprise, VAE."
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 775.65,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": 36,
+        "libelle": "775,65 € par mois en 2026 pour une formation à temps plein (26 ans et plus) ; montants réduits pour les moins de 26 ans sans activité antérieure ; travailleurs handicapés : de 775,65 € à 2 188,27 €.",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 775.65,
+            "pourcentage": null,
+            "plafond": 2188.27,
+            "libelle": "Travailleur handicapé : de 775,65 € à 2 188,27 € par mois selon l'activité salariée antérieure"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 226.48,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "Moins de 18 ans : 226,48 € par mois"
+          },
+          {
+            "criteres": {
+              "age_min": 18,
+              "age_max": 25
+            },
+            "valeur": 566.17,
+            "pourcentage": null,
+            "plafond": null,
+            "libelle": "18 à 25 ans : 566,17 € par mois (775,65 € en cas d'activité salariée antérieure suffisante, de parent isolé ou de parent d'au moins 3 enfants)"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-aref"
+        ],
+        "note": "Non cumulable avec l'ASS ; cumulable avec le RSA (dont le montant peut être réduit)."
+      },
+      "demarches": [
+        "Faire valider le projet de formation par le conseiller France Travail.",
+        "L'éligibilité est étudiée automatiquement à réception de l'attestation d'inscription transmise par l'organisme de formation ; un courrier précise la date d'effet et le montant.",
+        "S'actualiser chaque mois et être assidu à la formation."
+      ],
+      "url_demarche": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/la-remuneration-des-formations-d.html",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d'emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? - Service Public (vérifié le 1er avril 2026)",
+          "extrait": "26 ans et plus Vous percevez 775,65 € par mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d'emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? - Service Public (vérifié le 1er avril 2026)",
+          "extrait": "18 à 25 ans Vous percevez 566,17 € par mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d'emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? - Service Public (vérifié le 1er avril 2026)",
+          "extrait": "Moins de 18 ans Vous percevez 226,48 € par mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F760",
+          "titre": "Un demandeur d'emploi non indemnisé peut-il percevoir une aide de France Travail pendant sa formation ? - Service Public (vérifié le 1er avril 2026)",
+          "extrait": "Si vous avez eu une activité salariée antérieure d'au moins 6 mois sur une période de 12 mois votre rémunération mensuelle est comprise entre 775,65 € et 2 188,27 €."
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "S'il n'est pas indemnisé, il peut bénéficier de la Rémunération de Formation France Travail (RFFT), qui s'élève à 775,65 euros par mois en 2026 pour une formation à temps plein."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/la-remuneration-des-formations-d.html",
+          "titre": "La Rémunération de Formation de France Travail (RFFT) - France Travail",
+          "extrait": "La durée de versement de la RFFT couvre nécessairement la durée de la formation. Elle ne peut, en revanche, excéder 3 ans pour une même formation (1095 jours versés)."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-aide-mobilite-france-travail",
+      "nom": "Aide à la mobilité de France Travail (formation, entretien d'embauche, reprise d'emploi)",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide de France Travail couvrant tout ou partie des frais de déplacement, de repas et d'hébergement d'un demandeur d'emploi pendant une formation éloignée de son domicile, ainsi que pour un entretien d'embauche, une immersion ou une reprise d'emploi.",
+      "criteres": {
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Inscrit à France Travail et stagiaire de la formation professionnelle, disponible pour occuper un emploi ou en contrat aidé (PEC, CIE, CDDI).",
+        "Non indemnisé, ou indemnisé à un montant inférieur ou égal à l'ARE minimale (RSA, RSFP, RFFT, RFF, AAH ou pension de retraite remplissent la condition).",
+        "Formation inscrite dans le contrat d'engagement ou le PPAE et financée ou cofinancée par France Travail (AFC, AIF, POEI) ou par un OPCO (CSP, POEC).",
+        "Lieu de formation en France, à plus de 60 km aller-retour ou à plus de 2 heures de trajet aller-retour du domicile (plus de 20 km aller-retour hors métropole).",
+        "Demande au plus tard 30 jours après l'entrée en formation ; factures à transmettre au plus tard 60 jours après la fin ; bilans de compétences, VAE et permis de conduire exclus."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 5200,
+        "duree_max_mois": null,
+        "libelle": "Déplacements : jusqu'à 0,23 € par km (aller-retour) ; repas : 6,25 € par jour ; hébergement : jusqu'à 31,20 € par nuit ; plafond de 5 200 € par an toutes aides cumulées."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Pas de prise en charge des repas s'ils sont déjà financés par un autre organisme (OPCO, Conseil régional)."
+      },
+      "demarches": [
+        "Déposer la demande dans l'espace personnel francetravail.fr, rubrique « Mes aides », dès les premiers jours de formation (au plus tard 30 jours après l'entrée).",
+        "Joindre l'attestation d'inscription en formation et les premières factures.",
+        "Déposer ensuite les factures chaque mois ; l'aide est versée mensuellement après actualisation et attestation de présence."
+      ],
+      "url_demarche": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/jentre-en-formation---laide-au-d.html",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/jentre-en-formation---laide-au-d.html",
+          "titre": "J'entre en formation - L'aide à la mobilité - France Travail (modifiée le 28/09/2026)",
+          "extrait": "Les frais de déplacement : prise en charge maximale à hauteur de 0,23 € par kilomètre parcouru pour votre trajet aller-retour ou temps de trajet."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/jentre-en-formation---laide-au-d.html",
+          "titre": "J'entre en formation - L'aide à la mobilité - France Travail (modifiée le 28/09/2026)",
+          "extrait": "Les frais de repas : forfait de 6,25 € par jour."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/jentre-en-formation---laide-au-d.html",
+          "titre": "J'entre en formation - L'aide à la mobilité - France Travail (modifiée le 28/09/2026)",
+          "extrait": "Les frais d’hébergement : prise en charge plafonnée à 31,20 € par nuit passée hors de votre domicile pour assister à votre formation."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/jentre-en-formation---laide-au-d.html",
+          "titre": "J'entre en formation - L'aide à la mobilité - France Travail (modifiée le 28/09/2026)",
+          "extrait": "Le montant maximal de la prise en charge de France Travail est de 5 200 €/an, toutes aides attribuées cumulées au cours des 12 derniers mois."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/jentre-en-formation---laide-au-d.html",
+          "titre": "J'entre en formation - L'aide à la mobilité - France Travail (modifiée le 28/09/2026)",
+          "extrait": "et à plus de 60 km aller-retour de votre domicile ou à plus de 2 heures de trajet aller-retour de votre domicile (cette distance est de plus de 20 km aller-retour pour les résidents hors métropole)."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/jentre-en-formation---laide-au-d.html",
+          "titre": "J'entre en formation - L'aide à la mobilité - France Travail (modifiée le 28/09/2026)",
+          "extrait": "la demande doit être déposée au plus tard dans les 30 jours suivant l’entrée en formation."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-age-garde-enfants",
+      "nom": "Aide à la garde d'enfants (AGE) de France Travail",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide forfaitaire de France Travail versée au début d'une formation (ou lors d'une reprise d'emploi) pour financer la garde d'enfants de moins de 12 ans du demandeur d'emploi peu ou pas indemnisé.",
+      "criteres": {
+        "inscrit_france_travail": true,
+        "duree_min_heures": 40
+      },
+      "conditions": [
+        "Élever un ou plusieurs enfants de moins de 12 ans.",
+        "Inscrit à France Travail et stagiaire de la formation professionnelle, disponible pour occuper un emploi ou en contrat aidé.",
+        "Non indemnisé, ou indemnisé à un montant inférieur ou égal à 1,3 fois l'ARE minimale.",
+        "Formation validée par le conseiller dans le PPAE, d'au moins 40 heures (bilans de compétences et permis B exclus).",
+        "Attribuée une seule fois sur 12 mois ; demande au plus tard 3 mois après l'entrée en formation."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 540.8,
+        "duree_max_mois": null,
+        "libelle": "Formation de 15 à 35 h par semaine : 416 € pour le 1er enfant + 62,40 € par enfant supplémentaire (540,80 € maximum) ; moins de 15 h par semaine ou de 64 h par mois : 176,80 € + 26 € par enfant supplémentaire (228,80 € maximum)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Aide forfaitaire versée une fois ; cumulable avec la rémunération de formation et l'aide à la mobilité."
+      },
+      "demarches": [
+        "Faire la demande dans l'espace personnel francetravail.fr, rubrique « Mes aides », dès que l'entrée en formation est connue (au plus tard 3 mois après).",
+        "Joindre les justificatifs (livret de famille ou acte de naissance), puis un justificatif de garde (facture d'une structure d'accueil, contrat d'assistante maternelle)."
+      ],
+      "url_demarche": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/formation---laide-a-la-garde-den.html",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/formation---laide-a-la-garde-den.html",
+          "titre": "Formation - L'aide à la garde d'enfants (AGE) - France Travail (modifiée le 06/08/2026)",
+          "extrait": "Si votre formation dure entre 15 et 35 heures par semaine, le montant forfaitaire pour le premier enfant est de 416 € ; le montant forfaitaire par enfant supplémentaire est de 62,40 €; le montant maximum de l’AGE est de 540,80 € au total pour trois enfants et plus."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/formation---laide-a-la-garde-den.html",
+          "titre": "Formation - L'aide à la garde d'enfants (AGE) - France Travail (modifiée le 06/08/2026)",
+          "extrait": "Si la formation est inférieure à 15 heures par semaine ou inférieure à 64 heures par mois, le montant forfaitaire pour le premier enfant est de 176,80 € ; le montant forfaitaire par enfant supplémentaire est de 26 € ; le montant maximum de l’AGE s’élève à 228,80 € pour trois enfants et plus."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/formation---laide-a-la-garde-den.html",
+          "titre": "Formation - L'aide à la garde d'enfants (AGE) - France Travail (modifiée le 06/08/2026)",
+          "extrait": "Votre projet de formation doit être validé par votre conseiller France Travail et la durée de votre formation doit être supérieure ou égale à 40h."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/en-formation/les-dispositifs/formation---laide-a-la-garde-den.html",
+          "titre": "Formation - L'aide à la garde d'enfants (AGE) - France Travail (modifiée le 06/08/2026)",
+          "extrait": "Vous n’êtes pas indemnisé au titre d’une l’allocation chômage ou indemnisé au titre d’une allocation dont le montant est inférieur ou égal à 1,3 fois du montant de l'allocation de retour à l’emploi (ARE) minimale."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-pec-cui-cae",
+      "nom": "Parcours emploi compétences (PEC) – contrat unique d'insertion CUI-CAE",
+      "financeur": "etat",
+      "financeur_nom": "État (aide versée par l'ASP ; prescription France Travail, Mission locale, Cap emploi ou conseil départemental)",
+      "categorie": "aide_employeur",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Contrat aidé du secteur non marchand associant mise en situation professionnelle, accompagnement et formation obligatoire ; l'employeur perçoit une aide de l'État calculée en pourcentage du SMIC brut par heure travaillée, dont le taux et la durée sont fixés par arrêté du préfet de région.",
+      "criteres": {
+        "structures": [
+          "association"
+        ]
+      },
+      "conditions": [
+        "Employeur du secteur non marchand : association, collectivité territoriale, autre personne morale de droit public ou entreprise chargée de la gestion d'un service public.",
+        "Salarié sans emploi rencontrant des difficultés d'accès à l'emploi (chômeur de longue durée, senior, travailleur handicapé, bénéficiaire du RSA, de l'ASS ou de l'AAH…), orienté par un prescripteur (France Travail, Mission locale, Cap emploi, conseil départemental).",
+        "CDI ou CDD d'au moins 6 mois (2 ans maximum, jusqu'à 5 ans pour les 50 ans et plus et les travailleurs handicapés) ; au moins 20 heures par semaine.",
+        "Obligation de prévoir des actions de formation professionnelle et de validation des acquis de l'expérience, un tuteur et un entretien tripartite à la signature.",
+        "En 2026, l'enveloppe nationale des contrats aidés est en forte baisse : les prescriptions sont limitées en priorité aux renouvellements, sauf priorités territoriales ; vérifier la disponibilité auprès du prescripteur."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Aide en % du SMIC brut par heure travaillée (dans la limite de la durée légale), taux et durée fixés par arrêté du préfet de région, au plus 95 % du SMIC brut ; paramètres moyens retenus pour 2026 : 37 % en métropole, 43,5 % en Outre-mer, 6 mois, 21 heures par semaine."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [],
+        "note": "Employeurs publics : exonérations de cotisations patronales ; autres employeurs : réduction générale des cotisations."
+      },
+      "demarches": [
+        "Contacter le prescripteur (France Travail, Mission locale, Cap emploi ou conseil départemental) pour vérifier l'éligibilité de la personne et l'enveloppe disponible.",
+        "Participer à l'entretien tripartite et signer la demande d'aide CUI (engagements de formation et de tutorat).",
+        "Signer le contrat de travail portant la mention « contrat unique d'insertion » ; l'aide est versée par l'ASP."
+      ],
+      "url_demarche": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-lembauche/le-contrat-unique-dinsertion---1.html",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-lembauche/le-contrat-unique-dinsertion---1.html",
+          "titre": "Le Contrat Unique d'Insertion - CUI - France Travail (modifiée le 10/07/2026)",
+          "extrait": "Son montant et sa durée sont fixés localement par le Préfet de votre région, et sont régulièrement réajustés."
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-lembauche/le-contrat-unique-dinsertion---1.html",
+          "titre": "Le Contrat Unique d'Insertion - CUI - France Travail (modifiée le 10/07/2026)",
+          "extrait": "95% du SMIC brut pour les embauches en CUI-CAE dit Parcours emploi compétences."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F21006",
+          "titre": "Contrat unique d'insertion (CUI) - Parcours emploi compétences (PEC) - Service Public Entreprendre (vérifié le 1er juin 2026)",
+          "extrait": "L'aide financière perçue par l'employeur peut varier notamment en fonction de la région et du public bénéficiaire."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F21006",
+          "titre": "Contrat unique d'insertion (CUI) - Parcours emploi compétences (PEC) - Service Public Entreprendre (vérifié le 1er juin 2026)",
+          "extrait": "La durée du travail est fixée au minimum à 20 heures par semaine."
+        },
+        {
+          "url": "https://bulletins-officiels.social.gouv.fr/sites/textes-officiels/files/2026-04/TRSD2606611C_0.pdf",
+          "titre": "Circulaire n° DGEFP/MIP/METH/MPP/2026/39 du 3 avril 2026 relative au Fonds d'inclusion dans l'emploi (PEC, CIE, IAE, EA, GEIQ)",
+          "extrait": "Taux de prise en charge Métropole 37 % Taux de prise en charge Outre-mer 43,5 % Durée de la prise en charge 6 mois Durée hebdomadaire 21 heures"
+        },
+        {
+          "url": "https://bulletins-officiels.social.gouv.fr/sites/textes-officiels/files/2026-04/TRSD2606611C_0.pdf",
+          "titre": "Circulaire n° DGEFP/MIP/METH/MPP/2026/39 du 3 avril 2026 relative au Fonds d'inclusion dans l'emploi (PEC, CIE, IAE, EA, GEIQ)",
+          "extrait": "réduisant de fait le volume de contrats aidés pouvant être prescrits en 2026. Vous conservez la possibilité d’ajuster leur programmation, avec comme priorité de limiter les prescriptions aux renouvellements"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    }
+  ],
+  "portails": [],
+  "exclues": [
+    {
+      "nom": "Aide exceptionnelle aux employeurs d'apprentis 2025 (contrats conclus du 24 février au 31 décembre 2025 : 5 000 € / 2 000 € / 6 000 €)",
+      "raison": "Dispositif temporaire terminé : aucune aide exceptionnelle pour les contrats conclus du 1er janvier au 7 mars 2026 (seule l'aide unique s'appliquait) ; remplacée depuis le 8 mars 2026 par l'aide exceptionnelle du décret n° 2026-168 (montants différents).",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Le contrat doit être conclu entre le 24 février 2025 et le 31 décembre 2025."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F23556",
+          "titre": "Aides à l'embauche en contrat d'apprentissage - Service Public Entreprendre (vérifié le 22 juillet 2026)",
+          "extrait": "Ces dates ne concernent que l’aide exceptionnelle à l’apprentissage, qui est un dispositif temporaire."
+        }
+      ]
+    },
+    {
+      "nom": "Aide exceptionnelle à l'embauche en contrat de professionnalisation (alternants de moins de 30 ans, jusqu'à 6 000 €)",
+      "raison": "Supprimée pour les contrats de professionnalisation signés après le 30 avril 2024 ; non rétablie par le décret n° 2026-168 (qui ne vise que l'apprentissage).",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F35391",
+          "titre": "Aides à l'embauche en contrat de professionnalisation - Service Public Entreprendre (vérifié le 9 juillet 2025)",
+          "extrait": "Le dispositif d'aide à l'embauche en contrat de professionnalisation d'un jeune de moins de 30 ans est supprimé pour les contrats signés après le 30 avril 2024."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/actualites/A14253",
+          "titre": "Aide à l'embauche : fin du dispositif pour les contrats de professionnalisation au 30 avril 2024 - Service Public Entreprendre",
+          "extrait": "L'aide de 6 000 € maximum accordée aux employeurs qui recrutent des alternants ne s'appliquera plus aux jeunes en contrat de professionnalisation au 30 avril 2024."
+        }
+      ]
+    },
+    {
+      "nom": "Aide de 500 € au financement du permis de conduire B des apprentis",
+      "raison": "Supprimée par la loi de finances pour 2026 (loi n° 2026-103 du 19 février 2026), à compter du 21 février 2026.",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/actualites/A18840",
+          "titre": "L'aide au permis de conduire pour les apprentis est supprimée - Service Public (19 mars 2026)",
+          "extrait": "Cette aide forfaitaire de 500 € n’est désormais plus attribuée. Sa suppression figure dans la loi de finances pour 2026, publiée au Journal officiel le 20 février 2026. La mesure est entrée en vigueur le 21 février 2026."
+        }
+      ]
+    },
+    {
+      "nom": "Aide de France Travail à l'obtention du permis de conduire B (demandeurs d'emploi)",
+      "raison": "Supprimée à compter du 1er avril 2026 (délibération n° 2025-48 du conseil d'administration de France Travail) ; le permis peut être financé par le CPF, le cas échéant abondé par France Travail.",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/actualites/A18840",
+          "titre": "L'aide au permis de conduire pour les apprentis est supprimée - Service Public (19 mars 2026)",
+          "extrait": "L’aide au permis B attribuée par France Travail est également supprimée à compter du 1er avril 2026 conformément à la délibération n° 2025‑48 du 27 novembre 2025."
+        },
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2025-48-du-27-novembre-2025-bo-n-2025-73.html?type=dossiers%2F2025%2Fbo-n-2025-73-du-4-decembre-2025",
+          "titre": "Délibération n° 2025-48 du 27 novembre 2025 - Bulletin officiel de France Travail",
+          "extrait": "La délibération n° 2011/13 du 11 avril 2011 est abrogée à effet du 1er avril 2026. Aucune demande d’aide effectuée à compter de cette date ne sera prise en compte."
+        }
+      ]
+    },
+    {
+      "nom": "Action de formation préalable au recrutement (AFPR)",
+      "raison": "N'existe plus comme dispositif distinct : fusionnée avec la POEI depuis la loi pour le plein emploi du 18 décembre 2023 (voir nat-poei).",
+      "sources": [
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-la-formation/la-preparation-operationnelle-a.html",
+          "titre": "La Préparation Opérationnelle à l'Emploi individuelle (POE I) - France Travail (modifiée le 15/09/2026)",
+          "extrait": "Depuis la loi pour le plein emploi du 18 décembre 2023, l'AFPR (Action de Formation Préalable au Recrutement) a été fusionnée avec la POEI."
+        }
+      ]
+    },
+    {
+      "nom": "Emplois francs (aide à l'embauche d'habitants des quartiers prioritaires)",
+      "raison": "Dispositif terminé : applicable aux contrats signés jusqu'au 31 décembre 2024 ; crédits 2026 limités au paiement des contrats déjà signés.",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/vosdroits/F34547",
+          "titre": "Est-il possible de bénéficier du dispositif de l'emploi franc ? - Service Public Entreprendre (vérifié le 18 décembre 2025)",
+          "extrait": "Ce dispositif a pris fin : il s'appliquait aux contrats signés jusqu'au 31 décembre 2024."
+        },
+        {
+          "url": "https://www.senat.fr/rap/l25-139-331/l25-139-3318.html",
+          "titre": "Projet de loi de finances pour 2026 : Travail, emploi et administration des ministères sociaux - rapport du Sénat",
+          "extrait": "La réduction des crédits dédiés aux emplois francs dans le PLF 2026 (nuls en AE et de 52,1 millions d'euros en CP pour solder les contrats déjà signés) traduit la décision du Gouvernement d'abandonner entièrement ce dispositif"
+        }
+      ]
+    },
+    {
+      "nom": "Contrat initiative emploi (CUI-CIE, secteur marchand)",
+      "raison": "Non retenu comme aide nationale : financement de l'État en extinction depuis la loi de finances pour 2025 ; ne subsiste que dans les DROM, pour des CIE financés exclusivement par les conseils départementaux ou de manière résiduelle, au sein d'une enveloppe 2026 commune PEC-CIE en forte baisse. À vérifier localement auprès de France Travail.",
+      "sources": [
+        {
+          "url": "https://www.senat.fr/rap/l25-139-331/l25-139-3318.html",
+          "titre": "Projet de loi de finances pour 2026 : Travail, emploi et administration des ministères sociaux - rapport du Sénat",
+          "extrait": "la LFI pour 2025 a prévu l'extinction des CUI-CIE, dont les crédits ont chuté à 1 million d'euros en AE et 3 millions d'euros en CP, des montants résiduels traduisant la fin du dispositif."
+        },
+        {
+          "url": "https://www.francetravail.fr/employeur/aides-aux-recrutements/les-aides-a-lembauche/le-contrat-unique-dinsertion---1.html",
+          "titre": "Le Contrat Unique d'Insertion - CUI - France Travail (modifiée le 10/07/2026)",
+          "extrait": "La version marchande du CUI reste possible dans les DOM et pour les CUI-CIE financés exclusivement par les conseils départementaux et depuis 2021 pour l’embauche des jeunes."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Les pages travail-emploi.gouv.fr affichent une vérification anti-robot (Cegedim) : non consultées. Faits établis à partir de service-public, Légifrance, France Travail, Urssaf, France compétences, Action Logement, Agence Erasmus+ et de la circulaire DGEFP n° 2026/39 du 3 avril 2026 (bulletins-officiels.social.gouv.fr).",
+    "Légifrance refuse le téléchargement direct (HTTP 403) : les extraits Légifrance (décrets n° 2026-168, 2025-586, 2011-524, articles D6243-2, D6522-2, D6332-83, D6332-86, arrêté du 30 juillet 2019) ont été restitués par un outil de lecture ; « [...] » signale une coupure. À reconfirmer mot pour mot si besoin. Tous les autres extraits ont été vérifiés automatiquement contre le texte téléchargé le 5 octobre 2026 ; l'extrait de la notice AFE provient d'un PDF image (lecture visuelle).",
+    "Aides à l'apprentissage modélisées en 5 entrées mutuellement exclusives (une seule correspond à un profil donné) : aide unique (moins de 250 salariés, niveau 4 ou moins), aide unique Outre-mer (niveau 5, article D6522-2), aide exceptionnelle moins de 250 salariés niveau 5 (métropole, 4 500 €), niveaux 6-7 (2 000 €), et 250 salariés et plus (2 000 / 1 500 / 750 €). RQTH : 6 000 € maximum dans tous les cas. L'aide exceptionnelle ne vaut que pour les contrats conclus depuis le 8 mars 2026 et débutant avant le 1er janvier 2027 : à réexaminer début 2027.",
+    "Aide unique Outre-mer : la fiche service-public ne mentionne l'extension « bac + 2 dans les Outre-mer » que pour la période du 1er janvier au 7 mars 2026 ; l'article D6522-2 (en vigueur depuis 2020) la prévoit sans limite de date. Confiance « estimated ».",
+    "Participation obligatoire de l'employeur au coût de l'apprentissage : 750 € par contrat de niveau 6 ou plus (contrats conclus depuis le 1er juillet 2025, article R6332-25-1) ; 200 € pour un nouvel employeur après rupture ; 50 % (plafonné à 750 €) en cas de rupture pendant les 45 premiers jours. C'est un coût, pas une aide : modélisé dans les conditions de nat-npec-apprentissage. Aucune nouvelle participation n'a été trouvée pour 2026.",
+    "NPEC : nouveaux niveaux de prise en charge pour les contrats conclus à compter du 1er septembre 2026 (décret « de carence » n° 2026-832 du 29 août 2026 et référentiel unique France compétences du 25/09/2026). Minoration de 20 % pour les formations à au moins 80 % à distance (plancher de 4 000 €).",
+    "Premier équipement pédagogique : depuis le décret n° 2026-679 du 27 juillet 2026 (contrats conclus à compter du 30 juillet 2026), plafond de 500 € (niveaux 3-4), de 300 € (niveau 5) et aucune prise en charge pour les niveaux 6-7.",
+    "RFFT : la page France Travail dédiée à la RFFT affiche encore « entre 224,68 € et 769,49 € » (plafond 2 170,90 €), alors que service-public (vérifié le 1er avril 2026) et la page POEI de France Travail donnent 775,65 € en 2026 (226,48 € / 566,17 € / jusqu'à 2 188,27 €). Les montants 2026 de service-public sont retenus.",
+    "AGE : la FAQ France Travail évoque encore les enfants de moins de 10 ans et les parents isolés (ancienne AGEPI) ; la page dédiée (modifiée le 6 août 2026) indique les enfants de moins de 12 ans sans condition d'isolement. La page dédiée est retenue ; l'AGEPI n'existe plus sous ce nom.",
+    "Contrat de professionnalisation : aucune exonération spécifique ; l'employeur applique la réduction générale (RGDU), selon l'Urssaf. Non modélisé comme aide distincte.",
+    "GEIQ : l'aide est versée au GEIQ (structure associative), pas à l'entreprise adhérente ; critère structures = association. Crédits 2026 confirmés (12,88 M€) par la circulaire DGEFP 2026/39.",
+    "PEC : maintenu en 2026, mais enveloppe PEC-CIE de 31,6 M€ en AE seulement, avec priorité aux renouvellements. Les taux réels sont fixés par arrêté préfectoral régional ; les 37 % / 43,5 % de la circulaire sont des paramètres moyens de programmation, pas un droit.",
+    "Non traités ici car recherchés ailleurs : rémunération des stagiaires et formations gratuites financées par les Régions (RSFP, PRF), aides Agefiph à l'embauche en alternance de personnes handicapées, aides des OPCO propres à leur catalogue.",
+    "Impôt sur le revenu des apprentis : plafond de 21 622 € pour les revenus 2025 ; la limite applicable aux revenus 2026 (SMIC annuel 2026) n'est pas encore publiée.",
+    "Mobili-Jeune : le plafond de ressources est désormais de 120 % du SMIC (page Action Logement consultée le 5 octobre 2026).",
+    "Aide à la mobilité France Travail : les montants (0,23 €/km, 6,25 €/jour, 31,20 €/nuit, 5 200 €/an) proviennent de la page France Travail modifiée le 28 septembre 2026 ; la délibération n° 2025-48 n'a supprimé que l'aide au permis de conduire.",
+    "VÉRIFICATION INDÉPENDANTE DU 06/10/2026 : 22 aides contrôlées (19 confirmées, 3 corrigées : fis-exoneration-cotisations-apprentis, nat-opco-contrat-pro-forfait-horaire, nat-npec-apprentissage) ; aucune aide déplacée vers « exclues » ; les 7 exclusions sont confirmées (extraits retrouvés sur les pages ouvertes le 06/10). Ajouts hors correction : source OPCO EP du 06/08/2026 et confidence « exact » pour nat-aide-unique-apprentissage-outre-mer ; source 1jeune1solution.gouv.fr (ministère du Travail) pour nat-mobili-jeune ; titre exact de la fiche service-public F39190 et source Code du travail numérique (R6332-25-1) pour nat-npec-apprentissage. Détail : verification-nat-2-recrutement-alternance.md.",
+    "RFFT, barème retenu au 06/10/2026 : 775,65 € (26 ans et plus ; moins de 26 ans avec activité antérieure, parent isolé, parent d'au moins 3 enfants ou grossesse déclarée), 566,17 € (18-25 ans), 226,48 € (moins de 18 ans), 2 188,27 € maximum (travailleurs handicapés). Sources : service-public F760 (vérifié le 01/04/2026), France Travail « Données à connaître » mis à jour au 1er avril 2026 (RFFT 26 ans et plus : 775,65 € ; RFF : 775,65 € maximum par mois), page POEI de France Travail modifiée le 15/09/2026 (« 775,65 euros par mois en 2026 »). Le barème 769,49 € / 561,68 € / 224,68 € / 2 170,90 € est celui de l'instruction France Travail n° 2024-6 (mise à jour de janvier 2026) ; il a été remplacé au 1er avril 2026 (documents France Travail et service-public cités ci-dessus) et subsiste sur la page France Travail dédiée à la RFFT (modifiée le 31/08/2026), qui est obsolète. Aucune revalorisation de l'assurance chômage au 1er juillet 2026 (Unédic, 30/06/2026 : ARE-F plancher 22,99 € maintenu).",
+    "Aide unique Outre-mer : article D6522-2 du Code du travail confirmé en vigueur (« au niveau 5 » dans les Drom, en vigueur depuis le 21/02/2020, relu le 06/10/2026) et fiche OPCO EP du 06/08/2026 (« Bac +2 dans les Outre-Mer »). La fiche service-public F23556 ne reprend la mention « bac + 2 dans les Outre-mer » que pour la période du 1er janvier au 7 mars 2026, et le décret n° 2026-168 réserve l'aide exceptionnelle aux employeurs qui ne bénéficient pas de l'aide unique : le niveau 5 en Outre-mer (moins de 250 salariés) relève donc bien de l'aide unique.",
+    "Extraits Légifrance (décrets n° 2026-168, 2025-586, 2011-524, articles D6243-2, D6522-2, D6332-83, D6332-86, arrêté du 30 juillet 2019) : Légifrance bloque curl (HTTP 403 Cloudflare) ; relus le 06/10/2026 via WebFetch, qui renvoie des citations de 125 caractères maximum : les passages chiffrés ont été retrouvés mot pour mot, les extraits plus longs sont concordants. L'extrait de la page pro.francetravail.fr (page JavaScript, vide sans navigateur) n'a été contrôlé que dans la copie du 05/10 ; les mêmes montants sont confirmés sur des pages lisibles (page France Travail, service-public F35391, notice PDF).",
+    "Contrôle du 06/10/2026 : les pages Urssaf (contrat d'apprentissage, RGDU, contrat de professionnalisation) étaient injoignables le 06/10 de 08h05 à environ 10h30 puis ont été ouvertes à 10h41 (pages de même taille que les copies du 05/10). Seuil RGDU corrigé : 3 Smic applicable au 1er janvier 2026, soit 2,9293 Smic applicable au 1er juin 2026 (1,6 Smic à Mayotte)."
+  ]
+}
