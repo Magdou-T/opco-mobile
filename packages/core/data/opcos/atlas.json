@@ -419,7 +419,7 @@
         "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 7 000€ HT/an » Selon l'effectif : voir le détail par taille d'entreprise de la branche. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
-      "budget_annuel_description": "Sociétés financières : plafond annuel de 1 000 € HT (moins de 11 salariés) ou 7 000 € HT (11 à 49), pour les seules formations correspondant aux formacodes de la branche (banque, crédit, assurance, comptabilité, informatique, langues, management...) ; AFEST 20 €/h (150 h) dans ce plafond. 50 salariés et plus : versement volontaire.",
+      "budget_annuel_description": "Sociétés financières : plafond annuel de 1 000 € HT (moins de 11 salariés) ou 7 000 € HT (11 à 49), pour les seules formations correspondant aux formacodes de la branche (banque, crédit, assurance, comptabilité, informatique, langues, management, etc.) ; AFEST 20 €/h (150 h) dans ce plafond. 50 salariés et plus : versement volontaire.",
       "plafonds_par_taille": [
         {
           "taille": "less_11",

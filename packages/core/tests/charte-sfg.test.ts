@@ -374,3 +374,91 @@ describe('la garde lit toute chaîne sauf une adresse web seule et un identifian
     expect(chainesLues(valeur, 'x').map((c) => c.chemin)).toEqual(['x.nom', 'x.conditions[0]']);
   });
 });
+
+// ============================================================
+// Typographie des textes affichés, hors extraits de source et hors citations « … » (copies mot pour mot de pages
+// officielles, jamais réécrites) :
+//   - article élidé en majuscule au milieu d'une phrase (« de L'Opcommerce ») : il s'écrit en minuscule, comme le moteur
+//     l'écrit (« de l'Opcommerce ») ; repéré après une minuscule ou une virgule suivie d'une espace ;
+//   - flèches et dingbats (blocs U+2190 à U+21FF et U+2700 à U+27BF) : seuls les signes tolérés par la charte passent
+//     (coche U+2713, attention U+26A0, flèche U+2197, triangles U+25B8 et U+25BE) ; une flèche U+2192 s'écrit en
+//     toutes lettres (« AKTO pour l'exploitation du bois ») ;
+//   - trois points ASCII : « etc. » termine une liste, le caractère « … » (U+2026) marque une coupure.
+// ============================================================
+
+/** Caractère construit par son code : ce fichier n'écrit telle quelle aucune flèche, aucun dingbat ni aucun signe toléré. */
+const car = (code: number): string => String.fromCharCode(code);
+/** Apostrophe typographique (U+2019) : l'article élidé s'écrit avec l'une ou l'autre apostrophe. */
+const APOSTROPHE_COURBE = car(0x2019);
+/** Article « L' » suivi d'une majuscule, après une minuscule ou une virgule et une espace : le milieu d'une phrase. */
+const ARTICLE_EN_MAJUSCULE = new RegExp(`(?:\\p{Ll}|,)\\s+L['${APOSTROPHE_COURBE}]\\p{Lu}`, 'u');
+/** Signes des blocs Flèches (U+2190 à U+21FF) et Dingbats (U+2700 à U+27BF). */
+const FLECHE_OU_DINGBAT = new RegExp(`[${car(0x2190)}-${car(0x21ff)}${car(0x2700)}-${car(0x27bf)}]`, 'gu');
+/** Liste blanche de la charte : coche, attention, flèche vers le haut à droite, triangles (seuls les deux premiers des blocs contrôlés y figurent). */
+const SIGNES_TOLERES = new Set([0x2713, 0x26a0, 0x2197, 0x25b8, 0x25be].map(car));
+/** Trois points ASCII de suite. */
+const TROIS_POINTS = /\.\.\./;
+
+/** Champ d'extrait de source (`sources[].extrait`, `alertes[].extrait`) : copie mot pour mot d'une page officielle. */
+const estUnExtrait = (chemin: string): boolean => /\.extrait$/.test(chemin);
+
+/** Textes affichés que contrôle la typographie : toutes les chaînes lues par la garde, hors extraits de source. */
+const textesAffiches = (d: Donnees): Chaine[] =>
+  Object.values(lire(d))
+    .flat()
+    .filter(({ chemin }) => !estUnExtrait(chemin));
+
+/** Une ligne par défaut typographique d'une chaîne, hors citations « … » et adresses web : son chemin et le défaut. */
+function controlerTypographie(d: Donnees): string[] {
+  return textesAffiches(d).flatMap(({ chemin, texte }) => {
+    const lu = texte.replace(CITATION, ' ').replace(ADRESSE_WEB, ' ');
+    const defauts: string[] = [];
+    if (ARTICLE_EN_MAJUSCULE.test(lu)) defauts.push(`${chemin} : article en majuscule au milieu d'une phrase`);
+    for (const signe of new Set(lu.match(FLECHE_OU_DINGBAT) ?? [])) {
+      if (!SIGNES_TOLERES.has(signe)) defauts.push(`${chemin} : signe U+${signe.charCodeAt(0).toString(16).toUpperCase()}`);
+    }
+    if (TROIS_POINTS.test(lu)) defauts.push(`${chemin} : trois points`);
+    return defauts;
+  });
+}
+
+describe("typographie des textes affichés : article « L' » au milieu d'une phrase, flèches et dingbats, trois points", () => {
+  it('les 11 OPCO, la table IDCC, le catalogue d\'aides, les portails régionaux et les suggestions NAF n\'en contiennent aucun', () => {
+    // Plus de 6 000 chaînes affichées (notes et titres de la table IDCC, barèmes, aides), hors extraits de source.
+    expect(textesAffiches(embarquees()).length).toBeGreaterThan(6000);
+    expect(controlerTypographie(embarquees())).toEqual([]);
+  });
+
+  it('un défaut réinjecté est signalé avec son chemin JSON', () => {
+    const copie = structuredClone(embarquees());
+    const opco = (slug: string): OpcoData => copie.opcos.find((o) => o.slug === slug)!;
+    const aide = (id: string): Aide => copie.aides.find((a) => a.id === id)!;
+    const avant = new Set(controlerTypographie(copie));
+    opco('opcommerce').specificites = "Contacter le conseiller de L'Opcommerce.";
+    aide('nat-cpf').description = `Entreprises, L${APOSTROPHE_COURBE}Opcommerce et les autres OPCO.`;
+    copie.idcc['1516'].note = `Exploitation du bois ${car(0x2192)} AKTO.`;
+    aide('nat-cpf').demarches[0] = `${car(0x279c)} Créer son compte.`;
+    copie.portails.find((p) => p.region === '53')!.liens[0].titre = 'Région, emploi, formation...';
+    expect(controlerTypographie(copie).filter((d) => !avant.has(d)).sort()).toEqual(
+      [
+        "opcos[opcommerce].specificites : article en majuscule au milieu d'une phrase",
+        "aides[nat-cpf].description : article en majuscule au milieu d'une phrase",
+        'idcc[1516].note : signe U+2192',
+        'aides[nat-cpf].demarches[0] : signe U+279C',
+        'portails[53].liens[0].titre : trois points',
+      ].sort(),
+    );
+  });
+
+  it("sans faux positif : article en tête de phrase, citation « … », extrait de source, signes tolérés, « etc. » et « … » passent", () => {
+    const copie = structuredClone(embarquees());
+    const opco = (slug: string): OpcoData => copie.opcos.find((o) => o.slug === slug)!;
+    const aide = (id: string): Aide => copie.aides.find((a) => a.id === id)!;
+    const avant = new Set(controlerTypographie(copie));
+    opco('opcommerce').specificites = "L'Opcommerce finance. L'Opcommerce le confirme ; « avec L'Opcommerce » est cité tel quel.";
+    aide('nat-cpf').description = `Plafond : « ${car(0x279c)} 1 100 € HT » (citation) ; suivi ${car(0x2713)}, lien ${car(0x2197)}, ${car(0x26a0)} alerte.`;
+    aide('nat-cpf').sources[0].extrait = `Son employeur L${APOSTROPHE_COURBE}OPCO ${car(0x2192)} [...] la Région...`;
+    copie.idcc['1516'].note = `Logement, transport, etc. ; coupure${car(0x2026)} et triangles ${car(0x25b8)} ${car(0x25be)}.`;
+    expect(controlerTypographie(copie).filter((d) => !avant.has(d))).toEqual([]);
+  });
+});

@@ -269,7 +269,7 @@
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=201",
-        "note": "Formations transverses (socle et autres) et formation transition écologique (hors plafond). Extrait : « Coût pédagogique : 25 € HT/h » Les actions de formation métier (coupe, coloration, barbier, soins, onglerie, maquillage...) sont aussi à 25 € HT/h : ce taux est donc celui du cœur de métier. (vérifié le 2026-10-05)."
+        "note": "Formations transverses (socle et autres) et formation transition écologique (hors plafond). Extrait : « Coût pédagogique : 25 € HT/h » Les actions de formation métier (coupe, coloration, barbier, soins, onglerie, maquillage, etc.) sont aussi à 25 € HT/h : ce taux est donc celui du cœur de métier. (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 15,
@@ -697,7 +697,7 @@
         "value": 25,
         "confidence": "exact",
         "source_url": "https://www.opcoep.fr/criteres-de-financement?branche=187",
-        "note": "Formations transverses (socles et autres) et formations spécifiques aux résidences de tourisme. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier : 30 € HT/h (gestion locative, copropriété, transaction, droit, numérique...) et 40 € HT/h pour les formations obligatoires et réglementaires (déontologie, TRACFIN, discrimination), supérieurs à ce taux transverse que le simulateur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Formations cœur de métiers … Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
+        "note": "Formations transverses (socles et autres) et formations spécifiques aux résidences de tourisme. Extrait : « Coût pédagogique : 25 € HT/h » Taux cœur de métier : 30 € HT/h (gestion locative, copropriété, transaction, droit, numérique, etc.) et 40 € HT/h pour les formations obligatoires et réglementaires (déontologie, TRACFIN, discrimination), supérieurs à ce taux transverse que le simulateur applique aux formations non certifiantes. Extrait du taux cœur de métier : « Formations cœur de métiers … Coût pédagogique : 30 € HT/h » (vérifié le 2026-10-05)."
       },
       "cout_horaire_metier": {
         "value": 9.15,

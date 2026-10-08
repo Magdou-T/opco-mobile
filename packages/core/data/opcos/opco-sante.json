@@ -170,7 +170,7 @@
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": 100,
-      "description": "Formations collectives clés en main du catalogue OPCO Santé (gestion de l'agressivité, fin de vie, maladie mentale, HACCP...) ; pour les moins de 50 salariés, les formations dédiées sont prises en charge à 100 % par l'OPCO Santé (coûts pédagogiques dans la limite de 1 200 € par jour, frais annexes et rémunérations dans la limite d'un SMIC).",
+      "description": "Formations collectives clés en main du catalogue OPCO Santé (gestion de l'agressivité, fin de vie, maladie mentale, HACCP, etc.) ; pour les moins de 50 salariés, les formations dédiées sont prises en charge à 100 % par l'OPCO Santé (coûts pédagogiques dans la limite de 1 200 € par jour, frais annexes et rémunérations dans la limite d'un SMIC).",
       "conditions": [
         "Structure de moins de 50 salariés pour les formations dédiées TPME",
         "Formation inscrite au catalogue OPCO Santé",
@@ -231,7 +231,7 @@
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": null,
-      "description": "Branche HP : fonds conventionnels mobilisés sur 2 axes, la qualification professionnelle (IBODE, IDE de bloc, DEAS, DEAES, préparateur en pharmacie, manipulateur radio, cuisinier, maître-nageur, agents thermaux...) et les projets de professionnalisation (prévention des risques, qualité de vie au travail, transitions écologique et numérique, intelligence artificielle). Montants non publiés.",
+      "description": "Branche HP : fonds conventionnels mobilisés sur 2 axes, la qualification professionnelle (IBODE, IDE de bloc, DEAS, DEAES, préparateur en pharmacie, manipulateur radio, cuisinier, maître-nageur, agents thermaux, etc.) et les projets de professionnalisation (prévention des risques, qualité de vie au travail, transitions écologique et numérique, intelligence artificielle). Montants non publiés.",
       "conditions": [
         "Structure de l'hospitalisation privée ou du thermalisme",
         "Action relevant de l'un des 2 axes prioritaires de la branche"

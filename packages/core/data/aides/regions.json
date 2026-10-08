@@ -3534,7 +3534,7 @@
       "beneficiaires": [
         "demandeur_emploi"
       ],
-      "description": "Allocation ponctuelle de la Région des Pays de la Loire pour les stagiaires demandeurs d'emploi en grande difficulté financière, afin d'éviter l'abandon de la formation : elle couvre un besoin précis lié à la formation (logement, restauration, transport...).",
+      "description": "Allocation ponctuelle de la Région des Pays de la Loire pour les stagiaires demandeurs d'emploi en grande difficulté financière, afin d'éviter l'abandon de la formation : elle couvre un besoin précis lié à la formation (logement, restauration, transport, etc.).",
       "criteres": {
         "regions": [
           "52"
@@ -4111,7 +4111,7 @@
       },
       "conditions": [
         "Avoir entre 18 et 25 ans et être accompagné par une Mission locale.",
-        "Être inscrit sur une formation pré-qualifiante ou qualifiante du Programme régional de formation : Prépa Métiers, Se former au métier de..., Se préparer à créer ou reprendre une entreprise."
+        "Être inscrit sur une formation pré-qualifiante ou qualifiante du Programme régional de formation : Prépa Métiers, Se former au métier de…, Se préparer à créer ou reprendre une entreprise."
       ],
       "montant": {
         "mode": "forfait",
@@ -4386,7 +4386,7 @@
         "age_min": 16
       },
       "conditions": [
-        "Être inscrit sur une formation agréée par la Région à la rémunération des stagiaires (programme qualifiant, DAQ, E2C, création-reprise d'entreprise, DFL, certaines formations sanitaires et sociales...).",
+        "Être inscrit sur une formation agréée par la Région à la rémunération des stagiaires (programme qualifiant, DAQ, E2C, création-reprise d'entreprise, DFL, certaines formations sanitaires et sociales, etc.).",
         "Ne pas être indemnisé au titre de l'ARE par France Travail.",
         "Exclus : bénéficiaires d'une rémunération conventionnelle ou d'une allocation du secteur public, personnes en contrat de sécurisation professionnelle, actifs occupés à temps plein, retraités non inscrits à France Travail.",
         "Démission d'un CDI à temps plein : délai de carence de 60 jours calendaires avant la rémunération Région.",
@@ -4792,7 +4792,7 @@
       "conditions": [
         "Projet porté par un OPCO, une branche professionnelle, une chambre consulaire, une structure de pôle de compétitivité, un groupement d'entreprises ou une association : l'entreprise ne dépose pas la demande seule.",
         "Salariés visés : sans qualification ou de niveau 3 maximum, qualifications inadaptées, nouvellement embauchés, en fragilité (deuxième partie de carrière, handicap, contrats précaires) ou chargés du management et des RH.",
-        "Exclues : formations obligatoires (sécurité, habilitations, sauvetage secourisme...).",
+        "Exclues : formations obligatoires (sécurité, habilitations, sauvetage secourisme, etc.).",
         "Ouverture des demandes et enveloppe 2026 à confirmer auprès de la Région."
       ],
       "montant": {
@@ -5781,7 +5781,7 @@
     },
     {
       "id": "r76-programme-regional-formation",
-      "nom": "Programme régional de formation (Parcours qualifiants, Compétences Plus, Projet Pro...)",
+      "nom": "Programme régional de formation (Parcours qualifiants, Compétences Plus, Projet Pro, etc.)",
       "financeur": "region",
       "financeur_nom": "Région Occitanie",
       "categorie": "cout_formation",

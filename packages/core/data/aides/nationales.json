@@ -65,7 +65,7 @@
       },
       "cumul": {
         "cumulable": true,
-        "note": "Cumulable avec les abondements (employeur, OPCO, Région, France Travail, Agefiph...). Les aides nat-bilan-competences, nat-vae et nat-clea mobilisent ce même solde : ne pas additionner. Dans un PTP, la Transitions Pro mobilise en priorité les droits CPF."
+        "note": "Cumulable avec les abondements (employeur, OPCO, Région, France Travail, Agefiph, etc.). Les aides nat-bilan-competences, nat-vae et nat-clea mobilisent ce même solde : ne pas additionner. Dans un PTP, la Transitions Pro mobilise en priorité les droits CPF."
       },
       "demarches": [
         "Consulter ses droits sur moncompteformation.gouv.fr ou l'application Mon Compte Formation.",
@@ -302,7 +302,7 @@
         "CDI : au moins 2 ans d'activité salariée, consécutifs ou non, dont 1 an dans la même entreprise.",
         "CDD : au moins 2 ans d'activité salariée au cours des 5 dernières années, dont 4 mois en CDD au cours des 12 derniers mois ; demande déposée avant la fin du CDD, formation débutant au plus tard 6 mois après.",
         "Intérimaire : 1 600 heures au cours des 18 derniers mois, dont 600 heures dans l'entreprise de travail temporaire.",
-        "Pas de condition d'ancienneté notamment pour les bénéficiaires de l'obligation d'emploi (RQTH...) et certains salariés licenciés pour motif économique ou pour inaptitude.",
+        "Pas de condition d'ancienneté notamment pour les bénéficiaires de l'obligation d'emploi (RQTH, etc.) et certains salariés licenciés pour motif économique ou pour inaptitude.",
         "Formation certifiante (RNCP ou répertoire spécifique) dispensée par un organisme certifié Qualiopi, précédée d'un positionnement préalable obligatoire et gratuit.",
         "Projet jugé pertinent par la commission paritaire (cohérence, parcours de formation, perspectives d'emploi) et inscrit dans ses priorités de financement : l'accord n'est pas automatique.",
         "Salariés exposés à des risques ergonomiques : PTP finançable sur les fonds spécifiques du FIPU."
@@ -1008,7 +1008,7 @@
         "duree_max_heures": 24
       },
       "conditions": [
-        "Ne pas avoir bénéficié d'un bilan de compétences financé (CPF, État, Région, France Travail, OPCO, fonds d'assurance formation...) au cours des 5 dernières années.",
+        "Ne pas avoir bénéficié d'un bilan de compétences financé (CPF, État, Région, France Travail, OPCO, fonds d'assurance formation, etc.) au cours des 5 dernières années.",
         "Seules les heures d'accompagnement réalisées par le prestataire sont finançables par le CPF.",
         "Participation forfaitaire de 150 € via le CPF, sauf abondement de l'employeur, mobilisation du C2P ou abondement AT-MP.",
         "Sur le temps de travail : accord préalable de l'employeur (réponse sous 30 jours) ; hors temps de travail : l'employeur n'a pas à être informé.",
@@ -1104,7 +1104,7 @@
         "Être salarié ou demandeur d'emploi, sans autre condition.",
         "Évaluation préalable par un organisme évaluateur, formations complémentaires si nécessaire, puis jury paritaire.",
         "Le plafond CPF de 1 500 € des certifications du répertoire spécifique ne s'applique pas à CléA.",
-        "Participation forfaitaire de 150 € en cas de mobilisation du CPF, sauf exonération (demandeur d'emploi, abondement de l'employeur...)."
+        "Participation forfaitaire de 150 € en cas de mobilisation du CPF, sauf exonération (demandeur d'emploi, abondement de l'employeur, etc.)."
       ],
       "montant": {
         "mode": "non_chiffre",
@@ -1256,7 +1256,7 @@
         "Accompagnement obligatoire par un conseiller en évolution professionnelle.",
         "Si les conditions sont remplies, la demande ne peut pas être refusée par Transitions Pro.",
         "Bilan de compétences ou VAE à réaliser avant toute action de formation ; bilan hors temps de travail.",
-        "En cas de points insuffisants, cofinancements possibles (CPF, Transitions Pro...)."
+        "En cas de points insuffisants, cofinancements possibles (CPF, Transitions Pro, etc.)."
       ],
       "montant": {
         "mode": "non_chiffre",
