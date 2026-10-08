@@ -72,6 +72,28 @@ function controlerMontantsExacts(aides: Aide[]): string[] {
     .map((a) => `${a.id} : montant « exact » sans aucun montant chiffré (nombre suivi de €, d'euros ou de %) dans ses extraits`);
 }
 
+/** true si `valeur` figure dans `texte` comme un nombre entier, séparateur de milliers compris (« 5 000 », « 5.000 », « 5000 »). */
+function citeLaValeur(texte: string, valeur: number): boolean {
+  const aplati = texte.replace(/\s/g, ' ').replace(/(\d)[ .](?=\d{3}(?!\d))/g, '$1');
+  return new RegExp(`(?<![\\d.,])${valeur}(?![\\d.,]\\d|\\d)`).test(aplati);
+}
+
+/**
+ * Forfaits calculés à partir de leurs extraits (la valeur n'y figure pas telle quelle), avec le calcul : la Région Hauts-de-France
+ * verse 500 € par mois pendant trois mois au plus, soit 1 500 €.
+ */
+const FORFAITS_CALCULES: Record<string, string> = {
+  'r32-reprise-apprentis': "500 € par mois pendant trois mois au plus (grille de la Région au 01/01/2026) : 3 x 500 = 1 500 €",
+};
+
+/** Forfaits « exact » dont la valeur ne figure dans aucun extrait de source (hors forfaits calculés, justifiés un par un). */
+function controlerForfaitsCites(aides: Aide[]): string[] {
+  return aides
+    .filter((a) => a.confidence === 'exact' && a.montant.mode === 'forfait' && a.montant.valeur != null && !(a.id in FORFAITS_CALCULES))
+    .filter((a) => !a.sources.some((s) => citeLaValeur(s.extrait, a.montant.valeur!)))
+    .map((a) => `${a.id} : forfait de ${a.montant.valeur} € absent de ses extraits`);
+}
+
 /** Aides régionales dont les critères de région ne contiennent pas le code porté par leur identifiant. */
 function controlerCodeRegion(aides: Aide[]): string[] {
   return aides.filter(estRegionale).flatMap((a) => {
@@ -144,6 +166,20 @@ describe("catalogue d'aides embarqué", () => {
     // Le contrôle n'est pas vide : des aides chiffrées « exact » existent.
     const exactes = EMBEDDED_AIDES.filter((a) => a.confidence === 'exact' && a.montant.mode !== 'non_chiffre' && a.montant.mode !== 'solde_cpf');
     expect(exactes.length).toBeGreaterThan(10);
+  });
+
+  it("chaque forfait « exact » cite sa valeur dans un extrait (5 000 € de l'aide unique en outre-mer compris), sauf les forfaits calculés justifiés", () => {
+    expect(controlerForfaitsCites(EMBEDDED_AIDES)).toEqual([]);
+    const forfaits = EMBEDDED_AIDES.filter((a) => a.confidence === 'exact' && a.montant.mode === 'forfait');
+    expect(forfaits.length).toBeGreaterThan(20); // le contrôle n'est pas vide
+    // Chaque forfait calculé existe, est bien un forfait, et ses extraits contiennent les éléments du calcul.
+    for (const [id, calcul] of Object.entries(FORFAITS_CALCULES)) {
+      const aide = EMBEDDED_AIDES.find((a) => a.id === id)!;
+      expect(aide.montant).toMatchObject({ mode: 'forfait', valeur: 1500 });
+      expect(aide.sources.some((s) => citeLaValeur(s.extrait, 500)), id).toBe(true);
+      expect(aide.sources.some((s) => /trois mois/.test(s.extrait)), id).toBe(true);
+      expect(calcul).toContain('1 500 €');
+    }
   });
 
   it('une aide régionale porte le code de sa région', () => {
@@ -311,6 +347,25 @@ describe('les contrôles détectent une copie mutée', () => {
       expect(dans(copie, 'faf-fifpl').montant.mode).toBe('non_chiffre');
       expect(dans(copie, 'faf-fafcea').confidence).not.toBe('exact');
       expect(ajouts(controlerMontantsExacts, EMBEDDED_AIDES, copie)).toEqual([]);
+    });
+  });
+
+  describe('forfaits cités dans les extraits', () => {
+    it("sans l'extrait « 5 000 €, au titre de l'aide unique », l'aide unique en outre-mer est signalée (son seul autre montant est 6 000 €)", () => {
+      const copie = copieAides();
+      const outreMer = dans(copie, 'nat-aide-unique-apprentissage-outre-mer');
+      outreMer.sources = outreMer.sources.filter((s) => !s.extrait.startsWith('5 000 €'));
+      expect(ajouts(controlerForfaitsCites, EMBEDDED_AIDES, copie)).toEqual([
+        'nat-aide-unique-apprentissage-outre-mer : forfait de 5000 € absent de ses extraits',
+      ]);
+    });
+
+    it("la valeur est lue comme un nombre entier : « 15 000 € » ou « 5 000,50 € » ne citent pas 5 000 €, « 5.000 € » et « 5000 € » si", () => {
+      expect(citeLaValeur('Plafond de 15 000 € par an', 5000)).toBe(false);
+      expect(citeLaValeur('Aide de 5 000,50 €', 5000)).toBe(false);
+      expect(citeLaValeur('Aide de 5.000 € au plus', 5000)).toBe(true);
+      expect(citeLaValeur('Aide de 5000 €', 5000)).toBe(true);
+      expect(citeLaValeur(`Aide de 5${String.fromCharCode(0xa0)}000 €`, 5000)).toBe(true);
     });
   });
 

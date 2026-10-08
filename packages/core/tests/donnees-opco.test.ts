@@ -878,6 +878,45 @@ describe('corrections des barèmes (tâche 8c)', () => {
     }
   });
 
+  it("Afdas : la condition des subventions ne promet plus de partenariat national ou européen (FSE+ 2025 épuisé, FNE-Formation non rétabli en 2026)", () => {
+    // Page FSE+ de l'Afdas, relue le 2026-10-08 : « Mise à jour au 20 mars 2026 » « Les fonds alloués au FSE+ sont épuisés ».
+    const subventions = par('afdas').dispositifs_complementaires!.find((d) => d.id === 'subventions-cofinancements')!;
+    expect(subventions.description).toContain('FSE+ 2025 : fonds épuisés');
+    expect(subventions.conditions.filter((c) => /national ou européen/.test(c))).toEqual([]);
+    expect(subventions.conditions[0]).toBe(
+      "Projet éligible à une subvention régionale en cours (le FSE+ 2025 de l'Afdas est épuisé et le FNE-Formation n'est pas rétabli en 2026)",
+    );
+  });
+
+  it("période de reconversion : jamais « en place depuis le 01/01/2026 » ; la Pro-A n'est plus conclue depuis le 01/01/2026, la période de reconversion est en vigueur depuis le 01/02/2026", () => {
+    // Service-public, F13516 : « il n'est plus possible de conclure de Pro-A. Cependant, elle continue à s'appliquer si l'avenant
+    // au contrat de travail a été signé avant le 1er janvier 2026. » ; A18798 : « le nouveau dispositif de la « période de
+    // reconversion » est entré en vigueur le 1er février 2026 » (décrets n° 2026-39 et 2026-40 du 28 janvier 2026).
+    const types = EMBEDDED_OPCOS.flatMap((o) => o.types_formations.map((t) => ({ slug: o.slug, t })));
+    expect(types.filter(({ t }) => /remplace la Pro-A depuis le 01\/01\/2026/.test(t)).map(({ slug }) => slug)).toEqual([]);
+    for (const slug of ['opco-ep', 'opco-sante']) {
+      const reconversion = par(slug).types_formations.find((t) => t.startsWith('Période de reconversion'))!;
+      expect(reconversion, slug).toBe('Période de reconversion (remplace la Pro-A, plus conclue depuis le 01/01/2026 ; en vigueur depuis le 01/02/2026)');
+    }
+  });
+
+  it("aucune adresse source ne redirige ailleurs : les pages de branche d'Atlas (302 vers la page générique, contenu affiché après sélection de la branche) et l'offre clés en main d'Uniformation (301 vers /formations) sont remplacées", () => {
+    /** Chaînes des données d'un OPCO, avec leur chemin. */
+    const chaines = (valeur: unknown, chemin: string): { chemin: string; texte: string }[] =>
+      typeof valeur === 'string'
+        ? [{ chemin, texte: valeur }]
+        : valeur && typeof valeur === 'object'
+          ? Object.entries(valeur).flatMap(([cle, v]) => chaines(v, `${chemin}.${cle}`))
+          : [];
+    // Adresse de page de branche d'Atlas hors instantané web.archive.org (la note cite l'instantané, qui garde le contenu).
+    const brancheAtlas = /(?<!web\.archive\.org\/web\/\d{14}\/)https:\/\/www\.opco-atlas\.fr\/criteres-financement\/[a-z]/;
+    expect(chaines(par('atlas'), 'atlas').filter((c) => brancheAtlas.test(c.texte)).map((c) => c.chemin)).toEqual([]);
+    expect(chaines(par('uniformation'), 'uniformation').filter((c) => c.texte.includes('offre-de-formations-cles-en-main')).map((c) => c.chemin)).toEqual([]);
+    // Les barèmes de branche d'Atlas renvoient à la page des critères, où l'on choisit sa branche.
+    for (const v of par('atlas').variantes_branche ?? []) expect(v.source_url, v.id).toBe('https://www.opco-atlas.fr/criteres-financement');
+    expect(par('uniformation').dispositifs_complementaires?.[0].source_url).toBe('https://www.uniformation.fr/formations');
+  });
+
   it('OPCO Santé : le taux de salaires suit le SMIC horaire, dont la source est la page du SMIC', () => {
     const s = par('opco-sante').prise_en_charge_salaires;
     expect(s.source_url).toBe('https://www.service-public.gouv.fr/particuliers/vosdroits/F2300');

@@ -176,7 +176,7 @@
       "pourcentage_couts": null,
       "description": "Selon le projet, des subventions régionales gérées par l'Afdas peuvent compléter le financement ; montants non publiés. FSE+ 2025 : fonds épuisés (mise à jour Afdas du 20 mars 2026). FNE-Formation : aucun nouvel engagement depuis 2025.",
       "conditions": [
-        "Projet éligible à un partenariat régional, national ou européen en cours",
+        "Projet éligible à une subvention régionale en cours (le FSE+ 2025 de l'Afdas est épuisé et le FNE-Formation n'est pas rétabli en 2026)",
         "Dans la limite des enveloppes disponibles"
       ],
       "demarches": "Contacter son conseiller Afdas (MyA, demande de contact « Un conseil, un accompagnement, un rendez-vous ») avant le début de la formation.",
@@ -184,7 +184,7 @@
       "publics": null,
       "confidence": "estimated",
       "source_url": "https://www.afdas.com/faq/entreprise/financement-pour-les-entreprises-de-moins-de-50-salaries.html",
-      "note": "« Des subventions (FNE, FSE, subventions régionales…) mobilisables en fonction du projet. » (vérifié le 2026-10-05). FSE+ : page Afdas « Fonds Social Européen (FSE+) 2025 » (https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-subventions-pour-elargir-vos-capacites-de-financement/fonds-social-europeen-fse-2025.html), « Mise à jour au 20 mars 2026 » : « Les fonds alloués au FSE+ sont épuisés » (vérifié le 2026-10-07). FNE-Formation : annexe « Formation professionnelle » au projet de loi de finances pour 2026 (https://www.assemblee-nationale.fr/dyn/dyn/contenu/visualisation/1089989/file/7-Jaune2026_Formation_Professionnelle.pdf) : « Le dispositif FNE-Formation a été suspendu au titre de l'exercice 2025. Par ailleurs, il n'est pas prévu de rétablir le FNE-Formation en 2026. » (vérifié le 2026-10-07)."
+      "note": "« Des subventions (FNE, FSE, subventions régionales…) mobilisables en fonction du projet. » (vérifié le 2026-10-05). FSE+ : page Afdas « Fonds Social Européen (FSE+) 2025 » (https://www.afdas.com/entreprise/financer-vos-actions-de-formation/choisir-le-bon-financement/les-subventions-pour-elargir-vos-capacites-de-financement/fonds-social-europeen-fse-2025.html), « Mise à jour au 20 mars 2026 » : « Les fonds alloués au FSE+ sont épuisés » (vérifié le 2026-10-08). FNE-Formation : annexe « Formation professionnelle » au projet de loi de finances pour 2026 (https://www.assemblee-nationale.fr/dyn/dyn/contenu/visualisation/1089989/file/7-Jaune2026_Formation_Professionnelle.pdf) : « Le dispositif FNE-Formation a été suspendu au titre de l'exercice 2025. Par ailleurs, il n'est pas prévu de rétablir le FNE-Formation en 2026. » (vérifié le 2026-10-07)."
     }
   ],
   "variantes_branche": [

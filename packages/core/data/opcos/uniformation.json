@@ -160,7 +160,7 @@
     "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/plan-de-developpement-des-competences/financement",
     "https://www.uniformation.fr/entreprise/financements/frais-annexes-et-couts-pedagogiques",
     "https://www.uniformation.fr/entreprise/financements/demande-daide-financiere",
-    "https://www.uniformation.fr/entreprise/formation/offre-de-formations-cles-en-main",
+    "https://www.uniformation.fr/formations",
     "https://www.uniformation.fr/entreprise/formation/dispositifs-de-formation/periode-de-reconversion-prec",
     "https://www.uniformation.fr/actualites/financements-dans-le-cadre-du-plan-dinvestissement-competences-en-faveur-de-linsertion-pic-iae",
     "https://www.uniformation.fr/actualites/facturation-electronique-modalites-de-mise-en-oeuvre-avec-uniformation-compter-du-1r-septembre-2026",
@@ -185,8 +185,8 @@
       "tailles_eligibles": null,
       "publics": null,
       "confidence": "exact",
-      "source_url": "https://www.uniformation.fr/entreprise/formation/offre-de-formations-cles-en-main",
-      "note": "« Pour toutes les formations, sans exception, les frais pédagogiques et les repas du midi (pris en groupe) sont totalement pris en charge, sans aucune avance de frais pour les entreprises. » (vérifié le 2026-10-06)"
+      "source_url": "https://www.uniformation.fr/formations",
+      "note": "« Pour toutes les formations, sans exception, les frais pédagogiques et les repas du midi (pris en groupe) sont totalement pris en charge, sans aucune avance de frais pour les entreprises. » (vérifié le 2026-10-06 ; citation relue le 2026-10-08 sur la page des formations, nouvelle adresse de l'offre clés en main)"
     },
     {
       "id": "periode-de-reconversion",

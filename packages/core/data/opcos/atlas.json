@@ -71,7 +71,7 @@
     "hebergement_par_nuit": 6,
     "premier_equipement_max": 500,
     "mobilite_ultramarine_max": 1000,
-    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement",
     "note": "« Restauration : 3€/repas (net de taxe) » ; « Hébergement : 6€/nuit (net de taxe) » ; « 1er équipement : dans la limite de 500 € » ; « Mobilité ultra-marine : dans la limite de 1 000€ » Frais versés au CFA (apprentissage). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
   },
   "budget_annuel_max": {
@@ -120,7 +120,7 @@
     "duree_max_mois": 4,
     "formation_tuteur_heures": 40,
     "formation_tuteur_euro_par_heure": 15,
-    "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "source_url": "https://www.opco-atlas.fr/criteres-financement",
     "note": "« Durée maximale : 4 mois » ; « Forfait : 230€/mois (net de taxe) » ; « Majoration uniquement pour le contrat de professionnalisation : 345€/mois (net de taxe) » ; « Durée : 40h Forfait : 15€ HT/h » Grille bureaux d'études. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
   },
   "profils_candidats": [
@@ -150,9 +150,9 @@
     "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html",
     "https://www.opco-atlas.fr/entreprise/beneficier-fse.html",
     "https://www.opco-atlas.fr/entreprise/conditions-reglement.html",
-    "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
-    "https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
-    "https://www.opco-atlas.fr/criteres-financement/societes-financieres"
+    "https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+    "https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
+    "https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres"
   ],
   "dispositifs_complementaires": [
     {
@@ -237,7 +237,7 @@
       "tailles_eligibles": null,
       "publics": null,
       "confidence": "estimated",
-      "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
       "idcc": [
         "1486"
       ],
@@ -277,25 +277,25 @@
       "idcc": [
         "1486"
       ],
-      "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
       "confidence": "estimated",
       "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 3 000€ HT/an » ; « Entreprises de 50 à 299 salariés Plafond par entreprise : 4 000€ HT/an » ; « Public : les salariés des entreprises de moins de 300 salariés » ; « Toute formation éligible au Plan de Développement des Compétences (obligatoire ou non), à l’exception de tous les permis de conduire, des formations à l’anglais et du reste à charge CPF. » IDCC confirmé sur la page de branche Atlas (« IDCC : 1486 »). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)",
       "cout_horaire_inter": {
         "value": null,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » Pas de plafond horaire : coût réel dans la limite du plafond annuel. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "cout_horaire_metier": {
         "value": null,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » Pas de plafond horaire publié pour le PDC. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "budget_annuel_max": {
         "value": null,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 2 500€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 3 000€ HT/an » ; « Entreprises de 50 à 299 salariés Plafond par entreprise : 4 000€ HT/an » Selon l'effectif : voir le détail par taille d'entreprise de la branche. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618073449/https://www.opco-atlas.fr/criteres-financement/bureaux-detudes-techniques-ingenieurs-et-conseils) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
@@ -337,25 +337,25 @@
       "idcc": [
         "2335"
       ],
-      "source_url": "https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
       "confidence": "estimated",
       "note": "« Entreprises de moins de 5 salariés Plafond par entreprise : 3 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de 5 à 11 salariés Plafond par entreprise : 5 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de plus de 11 salariés Plafond par entreprise : 8 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Uniquement les thématiques définies par la branche pour les entreprises de la France hexagonale : voir liste ci-dessous » ; « Les critères de financement définis par les partenaires sociaux peuvent évoluer en cours d’année en fonction de la consommation des fonds attribués par France Compétences. » Thématiques éligibles en hexagone : qualité de vie au travail, risques climatiques et transition écologique, finance durable. IDCC confirmé sur la page de branche (« IDCC : 2335 »). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)",
       "cout_horaire_inter": {
         "value": 50,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 5 salariés Plafond par entreprise : 3 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » Coût réel plafonné à 50 €/h, toutes tailles. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "cout_horaire_metier": {
         "value": 50,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de plus de 11 salariés Plafond par entreprise : 8 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "budget_annuel_max": {
         "value": null,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 5 salariés Plafond par entreprise : 3 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de 5 à 11 salariés Plafond par entreprise : 5 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » ; « Entreprises de plus de 11 salariés Plafond par entreprise : 8 000€ HT/an Prise en charge : au coût réel plafonné à 50€/h » Selon l'effectif : voir le détail par taille d'entreprise de la branche. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072028/https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
@@ -397,25 +397,25 @@
       "idcc": [
         "0478"
       ],
-      "source_url": "https://www.opco-atlas.fr/criteres-financement/societes-financieres",
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
       "confidence": "estimated",
       "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 7 000€ HT/an » ; « Uniquement les thématiques définies par la branche : seules les formations correspondant aux formacodes génériques listés ci-dessous sont éligibles. » IDCC confirmé sur la page de branche (« IDCC : 0478 »). Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)",
       "cout_horaire_inter": {
         "value": null,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/societes-financieres",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » Pas de plafond horaire publié : coût réel dans la limite du plafond annuel. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "cout_horaire_metier": {
         "value": null,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/societes-financieres",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "budget_annuel_max": {
         "value": null,
         "confidence": "estimated",
-        "source_url": "https://www.opco-atlas.fr/criteres-financement/societes-financieres",
+        "source_url": "https://www.opco-atlas.fr/criteres-financement",
         "note": "« Entreprises de moins de 11 salariés Plafond par entreprise : 1 000€ HT/an » ; « Entreprises de 11 à 49 salariés Plafond par entreprise : 7 000€ HT/an » Selon l'effectif : voir le détail par taille d'entreprise de la branche. Page officielle de critères 2026 (affichée seulement après sélection de la branche sur opco-atlas.fr) consultée via sa copie archivée web.archive.org du 18/06/2026 (https://web.archive.org/web/20260618072451/https://www.opco-atlas.fr/criteres-financement/societes-financieres) : valeur officielle 2026 mais à reconfirmer en ligne (critères susceptibles d'évoluer en cours d'année). (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
@@ -466,7 +466,7 @@
       "type": "evolution_en_cours_annee",
       "branche": "Branches financées par France compétences",
       "idcc": [],
-      "source_url": "https://www.opco-atlas.fr/criteres-financement/agents-generaux-dassurance",
+      "source_url": "https://www.opco-atlas.fr/criteres-financement",
       "extrait": "Les critères de financement définis par les partenaires sociaux peuvent évoluer en cours d’année en fonction de la consommation des fonds attribués par France Compétences.",
       "verifie_le": "2026-10-05"
     },
