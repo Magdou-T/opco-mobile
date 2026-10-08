@@ -15,8 +15,8 @@
 //       d'echappement JavaScript (\u{2014} et la forme courte a quatre chiffres, suivie ou non d'un chiffre) ou CSS
 //       (\2014, de quatre a six chiffres) ;
 //   (b) les couleurs bleues ou violettes (teinte TSL comprise entre 190 et 320 degres, gris exclus) :
-//       - classes Tailwind de la palette retiree (blue, indigo, violet, purple, fuchsia, sky) sur chacun des 49
-//         utilitaires de couleur de Tailwind 4 (bg, text, border-*, ring, inset-ring, shadow, inset-shadow,
+//       - classes Tailwind de la palette retiree (blue, indigo, violet, purple, fuchsia, sky) et de cyan sur chacun
+//         des 49 utilitaires de couleur de Tailwind 4 (bg, text, border-*, ring, inset-ring, shadow, inset-shadow,
 //         drop-shadow, text-shadow, mask-*-from/to, etc.) et variables --color-blue... ;
 //       - fonctions de couleur : rgb(), hsl(), hwb(), lab(), lch(), oklab(), oklch(), color(), separateurs virgule,
 //         espace, barre ou souligne, souligne admis devant (valeurs arbitraires Tailwind : bg-[rgb(59_130_246)],
@@ -92,7 +92,7 @@ const TIRETS_ECRITS = new RegExp(
 // ------------------------------------------------------------
 // (b) Bleu et violet
 // ------------------------------------------------------------
-const FAMILLES_BLEUES = 'blue|indigo|violet|purple|fuchsia|sky';
+const FAMILLES_BLEUES = 'blue|indigo|violet|purple|fuchsia|sky|cyan';
 // Les 49 racines d'utilitaires de couleur de Tailwind 4.2 (liste tiree de getClassList()).
 const RACINES_COULEUR = [
   'bg',
@@ -764,6 +764,8 @@ function autotest() {
     ['className="drop-shadow-blue-500 inset-shadow-indigo-400"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
     ['className="inset-ring-violet-500 text-shadow-purple-500"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
     ['className="mask-b-from-sky-300 border-bs-blue-500"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
+    // cyan : #0e7490 (cyan-700) est signale en hexadecimal (teinte 193 degres), la classe et la variable aussi
+    ['className="text-cyan-700 bg-[var(--color-cyan-500)]"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (variable Tailwind)']],
     ['--color-fuchsia: red;', ['bleu ou violet (variable Tailwind)']],
     // (b) hexadecimal en contexte de couleur
     ['color: #3B82F6;', ['bleu ou violet (couleur #3B82F6, teinte 217 degres)']],
@@ -880,6 +882,8 @@ function autotest() {
     'className="bg-navy text-paper ring-cobalt-soft"',
     'className="mask-b-from-orange drop-shadow-orange/40 inset-ring-filet"',
     '--navy: var(--encre); --color-navy: var(--navy);',
+    // teal, voisin vert du cyan (teinte inferieure a 190 degres) : ni la classe ni la variable ne sont signalees
+    'className="text-teal-700 bg-[var(--color-teal-500)]"',
     // (b) hexadecimal : couleurs de la charte, gris, ancres et identifiants
     '--orange: #E84E1B; --turquoise: #5E9F92; --encre: #0F1E1B; --lin: #E6EFEC;',
     '--or: #F9B233; --rouge: #BC1723; --vert-clair: #A3D1C8; --texte: #1A1A1A; --blanc: #FFF;',

@@ -416,12 +416,13 @@ ligne et colonne (code de sortie 1 en cas de problème) :
   U+FE58), écrits tels quels, en entité HTML (`&mdash;`, `&horbar;`, `&#8212;`, `&#x2014;`), en échappement JavaScript
   (`\u{2014}` et sa forme courte à quatre chiffres, qui n'en prend jamais un cinquième : suivie de `0`, elle donne un
   tiret puis 0) ou CSS (`\2014`, `\2E3A`, `\FE58`…, de quatre à six chiffres) ;
-- le bleu et le violet (teinte TSL de 190 à 320 degrés) : classes de la palette retirée sur les 49 utilitaires de
-  couleur de Tailwind 4 (`bg-`, `drop-shadow-`, `inset-ring-`, `text-shadow-`, `mask-*-from-`…), variables
-  `--color-blue…`, fonctions `rgb()`, `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, `color()` (séparateurs
-  virgule, espace, barre ou souligné, souligné compris devant la fonction dans une valeur arbitraire :
-  `shadow-[0_0_0_2px_rgb(59_130_246)]` ; les trois composantes de couleur sont lues et l'alpha est ignoré, même
-  calculé : `rgb(59 130 246 / var(--opacite))`), hexadécimaux et couleurs nommées CSS (`blue`, `navy`,
+- le bleu et le violet (teinte TSL de 190 à 320 degrés) : classes de la palette retirée (`blue`, `indigo`, `violet`,
+  `purple`, `fuchsia`, `sky`) et de `cyan` sur les 49 utilitaires de couleur de Tailwind 4 (`bg-`, `drop-shadow-`,
+  `inset-ring-`, `text-shadow-`, `mask-*-from-`…), variables `--color-blue…` et `--color-cyan…`, fonctions `rgb()`,
+  `hsl()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, `color()` (séparateurs virgule, espace, barre ou souligné,
+  souligné compris devant la fonction dans une valeur arbitraire : `shadow-[0_0_0_2px_rgb(59_130_246)]` ; les trois
+  composantes de couleur sont lues et l'alpha est ignoré, même calculé : `rgb(59 130 246 / var(--opacite))`),
+  hexadécimaux et couleurs nommées CSS (`blue`, `navy`,
   `rebeccapurple`…) **dans un contexte de couleur** : déclaration ou objet de style, attribut `fill`, `stroke`,
   `color`, valeur arbitraire `[…]`, argument d'un dégradé ou de `color-mix()`, chaîne qui n'est qu'un hexadécimal (sauf
   ancre affectée ou comparée : `href="#bad"`, `location.hash === '#bad'`, `url(#bad)` d'un masque ou d'un filtre et
@@ -449,12 +450,12 @@ texte suivis du dépôt (`git ls-files` : `.ts`, `.tsx`, `.js`, `.mjs`, `.cjs`, 
 fichiers restants par dossier ; il est une étape de l'intégration continue (`.github/workflows/ci.yml`), avec la garde de
 charte.
 
-`node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 213 cas : chaque règle a une violation et un
+`node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 215 cas : chaque règle a une violation et un
 jumeau propre ; sept contrôles portent sur les positions, l'extrait signalé et la durée (1 000 `rgb(` ouverts suivis de
 490 000 caractères : moins de 3 s), sept sur le périmètre des règles et dix-neuf sur le choix des fichiers du balayage
 `--tirets`. Les 67 mutants de la garde (copies du script dont une règle est retirée ou faussée) ont été essayés lors de
-la tâche D1a-fix2, hors dépôt. Limites : la garde lit le texte
-source, pas le rendu ; une couleur calculée à l'exécution (variable, concaténation, donnée, composante en `var()` ou
+la tâche D1a-fix2, hors dépôt, et trois de plus pour la famille `cyan` lors de la passe F6. Limites : la garde lit le
+texte source, pas le rendu ; une couleur calculée à l'exécution (variable, concaténation, donnée, composante en `var()` ou
 `calc()`), un hexadécimal sans contexte de couleur (commentaire, texte courant), une couleur encodée dans une image SVG
 en data URI (`fill='%233b82f6'`), une police mono sous un nom inconnu ou un nom ambigu rangé dans une constante, un
 émoji en entité nommée (`&hearts;`), une image ou une icône bleue lui échappent. Les données de `packages/core`
