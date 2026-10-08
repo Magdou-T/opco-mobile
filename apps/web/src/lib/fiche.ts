@@ -366,7 +366,11 @@ export function chiffresDeLaTaille(p: PlafondTaille): ChiffreTaille[] {
     chiffres.push({ libelle: 'Plafond horaire', valeur: montantAvecUnite(p.cout_horaire_max, '€/h'), confiance: p.confidence ?? 'exact' });
   }
   if (p.prise_en_charge_salaires_horaire != null) {
-    chiffres.push({ libelle: 'Salaires', valeur: montantAvecUnite(p.prise_en_charge_salaires_horaire, '€/h'), confiance: null });
+    chiffres.push({
+      libelle: p.prise_en_charge_salaires_qualifiant ? 'Salaires (actions qualifiantes)' : 'Salaires',
+      valeur: montantAvecUnite(p.prise_en_charge_salaires_horaire, '€/h'),
+      confiance: null,
+    });
   }
   if (p.quota_horaire_max != null) {
     chiffres.push({ libelle: "Plafond d'heures", valeur: `${nombreFr(p.quota_horaire_max)}${INSECABLE}h`, confiance: null });

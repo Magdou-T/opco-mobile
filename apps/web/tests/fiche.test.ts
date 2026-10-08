@@ -569,6 +569,34 @@ describe('chiffresDeLaTaille', () => {
       [],
     );
   });
+
+  test('salaires réservés aux actions qualifiantes : le chiffre le dit dans son libellé', () => {
+    assert.deepEqual(
+      chiffresDeLaTaille({
+        taille: '11_49',
+        description: '',
+        budget_annuel_max: null,
+        cout_horaire_max: 19,
+        quota_horaire_max: null,
+        prise_en_charge_salaires_horaire: 10,
+        prise_en_charge_salaires_qualifiant: true,
+      }),
+      [
+        { libelle: 'Plafond horaire', valeur: `19${NBSP}€/h`, confiance: 'exact' },
+        { libelle: 'Salaires (actions qualifiantes)', valeur: `10${NBSP}€/h`, confiance: null },
+      ],
+    );
+    // Sans l'indicateur, le libellé reste « Salaires » (autres tailles, autres OPCO).
+    const sansIndicateur = chiffresDeLaTaille({
+      taille: 'less_11',
+      description: '',
+      budget_annuel_max: null,
+      cout_horaire_max: null,
+      quota_horaire_max: null,
+      prise_en_charge_salaires_horaire: 15,
+    });
+    assert.deepEqual(sansIndicateur.map((c) => c.libelle), ['Salaires']);
+  });
 });
 
 describe('montantDuDispositif', () => {
