@@ -12,6 +12,13 @@ Application Android du calculateur de financement OPCO. Toute la logique métier
 > copie. Aucun jeu de données v4 n'est publié par la branche « aides et
 > financements » (décision du 08/10/2026).
 
+Sur la branche « aides et financements », le code de l'application n'a changé que
+pour la configuration de Metro (`metro.config.js` n'explore plus les dossiers
+générés du site) et la typographie : tirets cadratins retirés des commentaires et
+des textes, dont trois tirets affichés seuls devenus des mots, « Aucun » pour un
+reste à charge nul (`FundingBreakdown`, par ligne et au total) et « Non renseigné »
+pour une réponse vide du récapitulatif (`StepRecap`).
+
 ## Développement
 
 ```bash

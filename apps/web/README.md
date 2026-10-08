@@ -45,7 +45,7 @@ Au moment de l'usage, le navigateur n'appelle qu'une API, la recherche d'entrepr
 
 ## Design
 
-`DESIGN.md` décrit le système de design SFG : jetons de couleur, typographie, primitives, contrastes mesurés et interdits. `npm run check:charte` applique ces interdits (tiret cadratin, bleu, violet, police mono, émojis) au code de `src/`, et cherche tirets et émojis dans `tests/` et `DESIGN.md`. `npm run check:tirets` étend la recherche du tiret cadratin à tous les fichiers texte suivis du dépôt ; il n'est pas encore une étape de la CI.
+`DESIGN.md` décrit le système de design SFG : jetons de couleur, typographie, primitives, contrastes mesurés et interdits. `npm run check:charte` applique ces interdits (tiret cadratin, bleu, violet, police mono, émojis) au code de `src/`, et cherche tirets et émojis dans `tests/` et `DESIGN.md`. `npm run check:tirets` étend la recherche du tiret cadratin aux fichiers texte suivis du dépôt, hors données JSON de `datasets/` (instantanés publiés, immuables, qui en contiennent 19) et de `packages/core/data/` (contrôlées par un test du cœur) ; c'est aussi une étape de la CI (`.github/workflows/ci.yml`).
 
 ## Publier
 

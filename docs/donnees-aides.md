@@ -83,7 +83,7 @@ Il reste désactivé pour deux raisons :
 - Sa base de départ, `datasets/latest.json` (version 3, juin 2026), est rejetée par la validation actuelle : les plafonds de Constructys y ont des tailles en double (`less_11` et `11_49`, voir `datasets/README.md`). Activé, il paierait chaque lundi l'extraction et l'avis du modèle, puis échouerait à la validation sans rien publier. Le dry-run ne le montre pas : il part des données embarquées.
 - Il ne republie que les barèmes : `backend/src/run.ts` prend `datasets/latest.json` pour référence et `backend/src/publish.ts` n'écrit que `{version, generatedAt, opcos}`. Après la publication d'un v4 à sections (aides, table IDCC, suggestions NAF, portails), son premier run produirait un v5 sans ces sections, écrit dans `datasets/` et commité sur `main` sans revue si aucun écart n'est à revoir : les applications installées le téléchargeraient. C'est une raison de plus de le laisser désactivé tant que `run.ts` et `publish.ts` ne portent pas ces sections.
 
-Limite de GitHub : la pull request et le commit du pipeline sont faits avec le `GITHUB_TOKEN`, et rien de ce qui est fait avec ce jeton ne déclenche d'autre workflow. La CI (`ci.yml`) ne tourne donc pas d'elle-même sur eux : la lancer à la main (onglet Actions, CI, « Run workflow ») sur la branche de la pull request, `bot/opco-dataset-update`, ou sur `main` après un commit direct.
+Limite de GitHub : la pull request et le commit du pipeline sont faits avec le `GITHUB_TOKEN`. Quand le pipeline crée ou met à jour sa pull request (branche `bot/opco-dataset-update`), la CI (`ci.yml`) démarre en attente d'approbation : la pull request affiche un bandeau, et une personne qui a le droit d'écriture sur le dépôt lance les exécutions par « Approve workflows to run ». Le commit direct sur `main` ne déclenche pas la CI : la lancer à la main (onglet Actions, CI, « Run workflow »), ce qui fonctionne toujours, sur `main` comme sur une autre branche. Source : aide de GitHub, page « Triggering a workflow », section « Triggering a workflow from a workflow », relue le 08/10/2026.
 
 Pour l'activer, dans cet ordre :
 
@@ -108,8 +108,8 @@ Le site n'en dépend pas. Publier met à jour les applications mobiles déjà in
 
 Deux chemins :
 
-- v4 minimal, barèmes seuls : `scripts/build-example-dataset.mjs` tel quel écrit `{version, generatedAt, opcos}` avec les 11 barèmes de `packages/core/data/opcos/`, sans aides, table IDCC, suggestions NAF ni portails. Essai hors dépôt du 08/10/2026 : version 4 acceptée par `validateDataset`, 474 956 octets.
-- v4 à sections (aides, table IDCC, suggestions NAF, portails) : tâche 19 du plan `docs/superpowers/plans/2026-10-05-aides-financements.md`, une journée environ. Taille (1,93 Mo), schémas stricts des aides et de la table IDCC et risque du pipeline IA : `datasets/README.md`.
+- v4 minimal, barèmes seuls : `scripts/build-example-dataset.mjs` tel quel écrit `{version, generatedAt, opcos}` avec les 11 barèmes de `packages/core/data/opcos/`, sans aides, table IDCC, suggestions NAF ni portails. Essai hors dépôt du 08/10/2026 : version 4 acceptée par `validateDataset`, environ 475 Ko (la taille suit les barèmes).
+- v4 à sections (aides, table IDCC, suggestions NAF, portails) : tâche 19 du plan `docs/superpowers/plans/2026-10-05-aides-financements.md`, une journée environ. Taille (environ 1,9 Mo), schémas stricts des aides et de la table IDCC et risque du pipeline IA : `datasets/README.md`.
 
 Publier à l'adresse actuelle touche aussi les APK 1.2.0 déjà installés : ils acceptent le v4 mais calculent avec leur logique de juin 2026 (exemple mesuré : pour OPCO EP, 2 100 € comptés par l'APK 1.2.0 contre 0 € par le moteur actuel, faute de plafond publié ; détail dans `datasets/README.md`).
 
