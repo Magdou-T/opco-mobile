@@ -1,5 +1,15 @@
 # Plan d'implémentation : moteur d'aides et financements + identification fiable de l'OPCO
 
+> **Document historique.** Ce plan décrit le déroulement prévu le 05/10/2026 et sa révision du 06/10/2026 (en fin de fichier) ; il n'a pas été tenu à jour pendant l'exécution : le code et les documents du dépôt font foi. Écarts majeurs, vérifiés dans le dépôt le 08/10/2026 :
+>
+> - la cible finale est le site `apps/web` ; les tâches 6, 7, 14, 15 (écrans de l'application mobile) et 21 (version 1.3.0) sont annulées ;
+> - le parcours propose cinq types de projet (`PROJET_LABELS`, `packages/core/src/types.ts`) : former un salarié, reconversion d'un salarié, recruter et former un demandeur d'emploi, recruter en alternance, former le dirigeant ;
+> - aucun jeu de données v4 n'est publié par la branche (décision du 08/10/2026) : la tâche 19 n'est pas réalisée et `datasets/` reste en version 3 (voir `datasets/README.md`, section « Compatibilité avec le cœur actuel ») ;
+> - l'application mobile n'a pas changé : version 1.2.0 dans `apps/mobile/app.json`, aucun écran nouveau ; seuls la configuration de Metro et des tirets de commentaires et de textes ont été retouchés ;
+> - le pipeline IA reste inactif : il tourne dans un job à part de `.github/workflows/update-dataset.yml`, seulement si le secret `ANTHROPIC_API_KEY` ET la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent ; le site est construit par `.github/workflows/ci.yml` ;
+> - les deux workflows utilisent Node 22 (`node-version: 22`) ;
+> - la Table SIRET-OPCO de France compétences, publiée en données ouvertes (licence ouverte 2.0), a servi hors du site à calibrer les suggestions par code NAF (99 préfixes) ; `api.francecompetences.fr` n'est jamais appelée.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Corriger l'app mobile « Financement OPCO », fiabiliser l'identification de l'OPCO et ajouter un moteur qui identifie toutes les aides et financements mobilisables (OPCO, CPF, Région, France Travail, Transitions Pro, Agefiph, Europe, fonds des non-salariés, fiscalité) avec un plan de financement plafonné au coût réel.
@@ -6845,6 +6855,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ### Task 19 : Dataset v4
 
+> Non réalisée : aucun jeu de données v4 n'est publié par la branche (décision du 08/10/2026, voir l'encadré en tête).
+
 **Files:**
 - Modify: `scripts/build-example-dataset.mjs` (réécriture), `backend/src/publish.ts`, `backend/src/run.ts`, `apps/mobile/src/lib/dataset-sync.ts`, `datasets/README.md`
 - Create (généré) : `datasets/v4.json` ; Modify (généré) : `datasets/latest.json`, `datasets/manifest.json`
@@ -7249,6 +7261,8 @@ Run : `cd backend && npx vitest run && npx tsc --noEmit`. Expected : PASS.
 
 - [ ] **Step 4 : Réécrire `.github/workflows/update-dataset.yml`**
 
+Version d'origine ci-dessous : le workflow livré contrôle les liens avant les tests et ne lance le pipeline que dans un job à part, avec le secret ET la variable `PIPELINE_LIVE` (voir l'encadré en tête).
+
 ```yaml
 # ============================================================
 # Mise à jour planifiée du dataset OPCO (pipeline auto-correctif).
@@ -7402,6 +7416,8 @@ Le format exact est défini par `packages/core/src/aides/types.ts` et validé pa
 
 - [ ] **Step 6 : `docs/demande-licence-france-competences.md`** (brouillon à envoyer par l'utilisateur)
 
+L'adresse électronique de ce brouillon d'origine n'apparaît sur aucune page officielle : le document livré l'a retirée et donne les canaux de contact réels.
+
 ```markdown
 # Demande de licence de réutilisation : tables de correspondance OPCO
 
@@ -7439,6 +7455,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ---
 
 ### Task 21 : Version 1.3.0 et vérification finale
+
+> Annulée par la révision du 06/10/2026 : l'application reste en version 1.2.0, sans nouvelle build ; pour le secret et le pipeline IA, voir l'encadré en tête.
 
 **Files:**
 - Modify: `apps/mobile/app.json` (`version: "1.3.0"`, `android.versionCode: 4`)
@@ -7571,10 +7589,10 @@ L'utilisateur a choisi le **site financementOPCO** (Next.js 16, export statique,
 **Dépend de :** toutes les tâches précédentes.
 
 - [ ] `npm run build --workspace web` ; contrôle du contenu de `apps/web/out/`.
-- [ ] Archive pour Hostinger : `C:\Users\magdo\Desktop\Claude\Claude_OPCO\financementOPCO-hostinger-2026-10.zip` (contenu de `out/` à la racine de l'archive, `.htaccess` inclus). Ne pas écraser l'archive de juillet.
-- [ ] Workflow CI (`.github/workflows/update-dataset.yml`, tâche 20) : ajouter une étape `npm run build --workspace web` après les tests backend.
+- [ ] Archive pour Hostinger : `C:\Users\magdo\Desktop\Claude\Claude_OPCO\financementOPCO-hostinger-2026-10.zip` (contenu de `out/` à la racine de l'archive, `.htaccess` inclus, sans préfixe `./` : commandes dans `docs/deploiement-site.md`, § 4). Ne pas écraser l'archive de juillet.
+- [ ] Workflow CI (`.github/workflows/update-dataset.yml`, tâche 20) : ajouter une étape `npm run build --workspace web` après les tests backend. Réalisé dans `.github/workflows/ci.yml`, qui conserve l'export en artefact `site-hostinger`.
 - [ ] `.claude/launch.json` : configuration `site-web` servant `apps/web/out` (`npx serve apps/web/out -l 3000`) ; dérouler les 5 scénarios de la tâche 18 dans le navigateur et capturer le plan de financement de chacun.
 - [ ] `README.md` et `docs/donnees-aides.md` : le site (`apps/web`) est le support principal ; après une mise à jour des données : tests, build du site, nouvelle archive, dépôt sur Hostinger.
 - [ ] Commit : `site : archive Hostinger, build du site en CI, documentation`.
-- [ ] Rendre compte à l'utilisateur et demander son accord avant tout push ; rappeler les actions de son ressort (dépôt de l'archive sur Hostinger, secret `ANTHROPIC_API_KEY`, demande de licence France Compétences).
+- [ ] Rendre compte à l'utilisateur et demander son accord avant tout push ; rappeler les actions de son ressort (dépôt de l'archive sur Hostinger, secret `ANTHROPIC_API_KEY` et variable `PIPELINE_LIVE` seulement après un jeu de données v4, demande de licence France Compétences devenue facultative depuis la publication de la Table SIRET-OPCO en données ouvertes).
 
