@@ -15,7 +15,8 @@ import type {
   PlafondTaille,
   TypeAlerteOpco,
 } from '@opco/core';
-import { INSECABLE, UNITE_DISPOSITIF_LABELS, formatEuro, premierePhrase, texteFr } from './format';
+import { UNITE_DISPOSITIF_LABELS, formatEuro, premierePhrase, texteFr } from './format';
+import { INSECABLE } from './insecable';
 
 /** Nombre à la française (« 1 200 », « 9,15 ») : milliers séparés par une espace fine insécable (Intl, fr-FR). */
 const nombreFr = (n: number): string => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(n);
@@ -392,6 +393,11 @@ export function montantDuDispositif(
 
 /** Nombre de codes au-delà duquel une liste de conventions collectives se replie (« 76 conventions collectives »). */
 export const IDCC_AVANT_REPLI = 6;
+
+/** Une liste de conventions collectives se replie (`ListeIdcc`) : plus de 6 codes ; jusqu'à 6, ils sont cités tels quels. */
+export function idccRepliees(codes: readonly string[]): boolean {
+  return codes.length > IDCC_AVANT_REPLI;
+}
 
 /** Conventions collectives d'une branche en quelques mots : « IDCC 1486 », « IDCC 1516, 1518 », « 76 conventions collectives ». */
 export function resumeIdcc(codes: readonly string[]): string {

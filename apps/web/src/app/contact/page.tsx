@@ -3,25 +3,15 @@ import { ContactForm } from '@/components/site/ContactForm';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { Etiquette } from '@/components/ui/Etiquette';
-import type { EtiquetteTone } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import { CONTACT_EMAIL } from '@/lib/contact';
+import { DOMAINES_DE_FORMATION } from '@/lib/domaines';
 
 export const metadata: Metadata = {
   title: 'Nous contacter',
   description:
     'Une question sur le financement de votre formation, un projet à monter avec votre OPCO ? Écrivez à SFG Développement : réponse sous 48 h ouvrées.',
 };
-
-/** Domaines de formation de SFG Développement, dans la couleur que la charte attribue à chacun (comme sur l'accueil). */
-const DOMAINES: { label: string; tone: EtiquetteTone }[] = [
-  { label: 'Bureautique et TOSA', tone: 'orange' },
-  { label: 'Langues', tone: 'turquoise' },
-  { label: 'Intelligence artificielle', tone: 'vert-clair' },
-  { label: 'Santé et sécurité au travail', tone: 'rouge' },
-  { label: 'Soft skills', tone: 'orange' },
-  { label: 'Certifications', tone: 'or' },
-];
 
 export default function ContactPage() {
   return (
@@ -54,7 +44,7 @@ export default function ContactPage() {
               SFG Développement accompagne les entreprises dans leurs projets de formation&nbsp;:
             </p>
             <ul className="mt-3 flex flex-wrap gap-2">
-              {DOMAINES.map((d) => (
+              {DOMAINES_DE_FORMATION.map((d) => (
                 <Etiquette key={d.label} as="li" tone={d.tone}>
                   {d.label}
                 </Etiquette>

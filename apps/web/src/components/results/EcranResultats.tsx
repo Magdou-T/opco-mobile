@@ -8,7 +8,7 @@ import { Callout } from '@/components/ui/Callout';
 import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
-import { dateFr, moisAnneeFr, typo } from '@/lib/format';
+import { dateFr, moisAnneeFr, typo, verificationLaPlusRecente } from '@/lib/format';
 import { fondsEpuisesSurLePlan } from '@/lib/encadres-resultats';
 import { calculer, chapeauDetailOpco } from '@/lib/resultats';
 import { AidesList } from './AidesList';
@@ -31,11 +31,8 @@ function aujourdhuiLocal(): string {
   return `${d.getFullYear()}-${deux(d.getMonth() + 1)}-${deux(d.getDate())}`;
 }
 
-/** Vérification la plus récente des barèmes des OPCO, comme le pied de page (AAAA-MM-JJ : ordre alphabétique = chronologique). */
-const VERIFICATION_OPCO = EMBEDDED_OPCOS.reduce(
-  (recente, o) => (o.derniere_verification && o.derniere_verification > recente ? o.derniere_verification : recente),
-  '',
-);
+/** Vérification la plus récente des barèmes des OPCO, la même que le pied de page. */
+const VERIFICATION_OPCO = verificationLaPlusRecente(EMBEDDED_OPCOS);
 
 export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResultats) {
   // Le titre n'existait pas quand le parcours a affiché les résultats (code chargé à la demande) : l'écran pose le focus

@@ -4,7 +4,6 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { EMBEDDED_AIDES, EMBEDDED_OPCOS, calculateFunding, createInitialWizardState, type WizardState } from '@opco/core';
 import {
-  INSECABLE,
   de,
   formatEuro,
   moisAnneeFr,
@@ -14,7 +13,9 @@ import {
   texteFr,
   texteMoteur,
   typo,
+  verificationLaPlusRecente,
 } from '../src/lib/format';
+import { INSECABLE } from '../src/lib/insecable';
 import { coutsDeFormation } from '../src/lib/parcours';
 
 /** Espace fine insécable (U+202F), écrite par son code : séparateur des milliers de `formatEuro` (Intl, fr-FR). */
@@ -144,6 +145,42 @@ describe('moisAnneeFr', () => {
     for (const autre of ['2026-13-01', '2026-00-10', '2026-10', '05/10/2026', '', 'octobre']) {
       assert.equal(moisAnneeFr(autre), autre);
     }
+  });
+});
+
+describe('vérification la plus récente des barèmes (verificationLaPlusRecente, pied de page et écran de résultats)', () => {
+  test('la plus récente des dates de vérification ; aucune date : chaîne vide', () => {
+    assert.equal(
+      verificationLaPlusRecente([{ derniere_verification: '2026-10-05' }, { derniere_verification: '2026-10-07' }, {}]),
+      '2026-10-07',
+    );
+    assert.equal(verificationLaPlusRecente([{}, { derniere_verification: '' }]), '');
+    assert.equal(verificationLaPlusRecente([]), '');
+  });
+
+  test('600 listes tirées au hasard (graine 17) : la dernière date dans l’ordre chronologique, comme un tri', () => {
+    let etat = 17;
+    const hasard = (n: number) => {
+      etat = (etat + 0x6d2b79f5) | 0;
+      let t = Math.imul(etat ^ (etat >>> 15), 1 | etat);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+    };
+    const deux = (n: number) => String(n).padStart(2, '0');
+    for (let i = 0; i < 600; i++) {
+      const liste = Array.from({ length: hasard(8) }, () =>
+        hasard(5) === 0 ? {} : { derniere_verification: `${2024 + hasard(4)}-${deux(1 + hasard(12))}-${deux(1 + hasard(28))}` },
+      );
+      const dates = liste.map((o) => o.derniere_verification).filter((d): d is string => !!d);
+      const attendu = [...dates].sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1) ?? '';
+      assert.equal(verificationLaPlusRecente(liste), attendu, JSON.stringify(liste));
+    }
+  });
+
+  test('données réelles : la date que le pied de page et l’écran de résultats annoncent', () => {
+    const toutes = EMBEDDED_OPCOS.map((o) => o.derniere_verification).filter((d): d is string => !!d);
+    assert.equal(verificationLaPlusRecente(EMBEDDED_OPCOS), [...toutes].sort().at(-1));
+    assert.match(moisAnneeFr(verificationLaPlusRecente(EMBEDDED_OPCOS)), /^[a-zéû]+ \d{4}$/);
   });
 });
 

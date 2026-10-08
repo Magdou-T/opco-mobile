@@ -6,6 +6,7 @@ import type { AideEvaluee } from '@opco/core';
 import { Callout } from '@/components/ui/Callout';
 import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
+import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
 import { texteDonnees, typo } from '@/lib/format';
 import { ID_SECTION_AIDES } from '@/lib/encadres-resultats';
@@ -50,15 +51,13 @@ export function AidesList({ aides, avecPortail }: { aides: readonly AideEvaluee[
         </Callout>
       ) : (
         groupes.map((g, i) => (
-          <GroupeDuFinanceur key={g.financeur} groupe={g} nomParId={nomParId} style={delai(i * 60)} />
+          <GroupeDuFinanceur key={g.financeur} groupe={g} nomParId={nomParId} style={delai(i * 60, 360)} />
         ))
       )}
       {nonEligibles.length > 0 && <AidesNonEligibles aides={nonEligibles} />}
     </section>
   );
 }
-
-const delai = (ms: number) => ({ '--delai': `${Math.min(ms, 360)}ms` }) as CSSProperties;
 
 function GroupeDuFinanceur({
   groupe,

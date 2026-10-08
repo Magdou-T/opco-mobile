@@ -14,6 +14,8 @@
 // - un nombre trop grand pour être représenté (Infinity) est refusé.
 // ============================================================
 
+import { INSECABLE } from './insecable';
+
 export interface LectureNombre {
   /** Nombre lu, ou null quand la saisie est vide ou refusée. */
   valeur: number | null;
@@ -32,8 +34,7 @@ export interface ReglesNombre {
   max?: number;
 }
 
-/** Espace insécable (U+00A0), écrit par son code : avant « : » et « ; », dans « 1 500 » et avant « € ». */
-const INSECABLE = String.fromCharCode(0xa0);
+/** « 1 500 » des messages, groupé par une espace insécable (comme avant « : », « ; » et « € »). */
 const MILLE = `1${INSECABLE}500`;
 
 /** « € » ou « euros » en fin de saisie, avec ou sans espace avant (en JavaScript, `\s` couvre U+00A0 et U+202F). */

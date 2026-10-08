@@ -29,9 +29,6 @@ import { StepSituation } from './StepSituation';
 /** Texte qui dit ce qui manque pour continuer ; le bouton « Suivant » s'y réfère (aria-describedby). */
 const ID_AIDE_SUIVANT = 'aide-suivant';
 
-/** Titre de l'écran de résultats : il reçoit le focus quand les résultats s'affichent (défini avec l'écran). */
-export { ID_TITRE_RESULTATS };
-
 /**
  * Lot de l'écran de résultats : le calcul et le catalogue d'aides (environ 149 Ko gzip) ne pèsent pas sur le lot initial
  * du simulateur. Une seule fonction de chargement, appelée par `next/dynamic` au premier affichage et, plus tôt, par le

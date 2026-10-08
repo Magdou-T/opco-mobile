@@ -39,7 +39,7 @@ export function focaliserTitreResultats() {
   document.getElementById(ID_TITRE_RESULTATS)?.focus({ preventScroll: true });
 }
 
-export function TitreResultats({ chapeau }: { chapeau?: ReactNode }) {
+function TitreResultats({ chapeau }: { chapeau?: ReactNode }) {
   return (
     <SectionTitle
       as="h2"

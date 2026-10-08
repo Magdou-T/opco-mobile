@@ -25,13 +25,22 @@ function TexteAvecConventions({ texte }: { texte: string }) {
   return (
     <>
       {replierIdcc(texte).map((m, i) =>
-        m.genre === 'texte' ? <Fragment key={i}>{texteDonnees(m.valeur)}</Fragment> : <ListeIdcc key={i} codes={m.codes} />,
+        m.genre === 'texte' ? (
+          <Fragment key={i}>{texteDonnees(m.valeur)}</Fragment>
+        ) : (
+          <ConventionsEnLigne key={i} codes={m.codes} />
+        ),
       )}
     </>
   );
 }
 
-function ListeIdcc({ codes }: { codes: string[] }) {
+/**
+ * Liste de conventions collectives repliée au fil d'une phrase (condition d'un dispositif) : un bouton « 12 conventions
+ * collectives » qui déplie les codes sur place. À ne pas confondre avec `ListeIdcc` des fiches OPCO
+ * (components/opco/ListeIdcc.tsx), un bloc `<details>` sous la carte d'une branche.
+ */
+function ConventionsEnLigne({ codes }: { codes: string[] }) {
   const [ouvert, setOuvert] = useState(false);
   return (
     <>

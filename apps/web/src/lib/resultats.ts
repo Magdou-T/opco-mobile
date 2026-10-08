@@ -31,14 +31,15 @@ import type {
   WizardState,
 } from '@opco/core';
 import { ouvreBudgetOpco } from './entreprise';
-import { INSECABLE, formatEuro, horsCitations } from './format';
+import { formatEuro, horsCitations } from './format';
+import { INSECABLE } from './insecable';
 
 // --- Calcul -------------------------------------------------------------------------------------------------------
 
 /**
  * Calcul de l'écran de résultats, dérivation pure de l'état du parcours. `aujourdhui` (AAAA-MM-JJ) est la date du jour,
  * lue par l'écran (jamais dans @opco/core) : référence de validité des aides, sauf début de formation futur.
- * - OPCO retenu : le choix de l'utilisateur, sinon celui détecté (même règle que useWizard.getEffectiveOpcoSlug).
+ * - OPCO retenu : le choix de l'utilisateur, sinon celui détecté (même règle que les étapes Entreprise et Formation).
  * - Jours de formation non saisis : 7 heures par jour.
  * - Le plan de développement des compétences de l'OPCO ne finance que les projets salariés (former un salarié,
  *   reconversion : `ouvreBudgetOpco`) ; le dirigeant, l'alternance et le recrutement d'un demandeur d'emploi passent par
@@ -79,7 +80,7 @@ const FAMILLE_PAR_FINANCEUR: Record<Financeur, FamilleCouleur> = {
 };
 
 /** Nom d'une famille quand ses lignes n'ont pas un même nom court de financeur. */
-export const LIBELLES_FAMILLE: Record<FamilleCouleur, string> = {
+const LIBELLES_FAMILLE: Record<FamilleCouleur, string> = {
   opco: 'OPCO',
   faf: "Fonds d'assurance formation",
   cpf: 'Compte personnel de formation',
@@ -449,6 +450,25 @@ export function replierIdcc(texte: string): MorceauIdcc[] {
   }
   if (debut < texte.length) morceaux.push({ genre: 'texte', valeur: texte.slice(debut) });
   return morceaux;
+}
+
+// --- Note sur l'OPCO ----------------------------------------------------------------------------------------------
+
+/**
+ * Titre de la note posée sous le bandeau quand le plan ne compte pas le plan de développement des compétences de l'OPCO
+ * (`NoteOpco`), ou null sans note :
+ * - projet du dirigeant : ce plan finance la formation des salariés, il n'est pas calculé pour ce projet ; sans OPCO
+ *   (la saisie manuelle ne propose au dirigeant que la région et la taille), le titre le dit sans laisser croire à un
+ *   oubli ;
+ * - projet salarié (former, reconvertir ; projet non choisi compris) sans OPCO : « Aucun OPCO renseigné », avec le
+ *   retour à l'étape Entreprise ;
+ * - autres projets (alternance, recrutement) : ils passent par les aides, aucune note.
+ */
+export function titreNoteOpco(projet: WizardState['projetType'], sansOpco: boolean): string | null {
+  if (projet === 'formation_dirigeant') {
+    return sansOpco ? 'Pas de calcul du plan de développement des compétences pour ce projet' : 'OPCO non compté pour un dirigeant';
+  }
+  return sansOpco && ouvreBudgetOpco(projet) ? 'Aucun OPCO renseigné' : null;
 }
 
 // --- Région -------------------------------------------------------------------------------------------------------

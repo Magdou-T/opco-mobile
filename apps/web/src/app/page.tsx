@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import { EMBEDDED_AIDES, EMBEDDED_OPCOS } from '@opco/core';
 import type { Financeur } from '@opco/core';
+import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
+import { DOMAINES_DE_FORMATION } from '@/lib/domaines';
 import { extrait } from '@/lib/extrait';
 import { typo } from '@/lib/format';
 import { BandeAppel } from '@/components/site/BandeAppel';
@@ -11,7 +12,6 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
 import { Etiquette } from '@/components/ui/Etiquette';
-import type { EtiquetteTone } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
@@ -132,22 +132,11 @@ const FIABILITE = [
   },
 ];
 
-const DOMAINES: { label: string; tone: EtiquetteTone }[] = [
-  { label: 'Bureautique et TOSA', tone: 'orange' },
-  { label: 'Langues', tone: 'turquoise' },
-  { label: 'Intelligence artificielle', tone: 'vert-clair' },
-  { label: 'Santé et sécurité au travail', tone: 'rouge' },
-  { label: 'Soft skills', tone: 'orange' },
-  { label: 'Certifications', tone: 'or' },
-];
-
 /** Fiches d'OPCO montrées sur téléphone (sous 640 px) ; les autres restent dans la liste, masquées, et toutes sont sur /opco/. */
 const OPCO_SUR_TELEPHONE = 6;
 
 /** Ligne de secteurs d'une carte d'OPCO : extrait de 96 caractères au plus (`lib/extrait.ts`), typographie française. */
 const secteurs = (texte: string): string => typo(extrait(texte, 96));
-
-const delai = (ms: number) => ({ '--delai': `${ms}ms` }) as CSSProperties;
 
 /* ============================================================
    Aperçu « plan de financement » du hero : un exemple aux montants fictifs, en HTML et CSS. Seule l'étiquette
@@ -456,7 +445,7 @@ export default function Home() {
           <Card tone="teintee" padding="lg">
             <p className="surtitre">Nos domaines de formation</p>
             <ul className="mt-5 flex flex-wrap gap-2.5">
-              {DOMAINES.map((d) => (
+              {DOMAINES_DE_FORMATION.map((d) => (
                 <Etiquette key={d.label} as="li" variante="flottante" tone={d.tone}>
                   {d.label}
                 </Etiquette>

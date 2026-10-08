@@ -1,13 +1,13 @@
 import { Icon } from '@/components/ui/Icon';
-import { IDCC_AVANT_REPLI } from '@/lib/fiche';
+import { idccRepliees } from '@/lib/fiche';
 
 /**
  * Codes de convention collective (IDCC) d'une branche ou d'un dispositif : cités tels quels jusqu'à 6, repliés au-delà
- * (« 76 conventions collectives », dépliable ; ouverts à l'impression).
+ * (`idccRepliees` : « 76 conventions collectives », dépliable ; ouverts à l'impression).
  */
 export function ListeIdcc({ codes }: { codes: readonly string[] }) {
   if (codes.length === 0) return null;
-  if (codes.length <= IDCC_AVANT_REPLI) return <>IDCC {codes.join(', ')}</>;
+  if (!idccRepliees(codes)) return <>IDCC {codes.join(', ')}</>;
   return (
     <details className="group/idcc">
       <summary className="-ml-1 inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-full px-1 font-semibold text-orange-deep underline-offset-4 hover:underline md:min-h-9 [&::-webkit-details-marker]:hidden">

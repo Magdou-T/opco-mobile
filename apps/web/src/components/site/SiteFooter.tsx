@@ -1,18 +1,14 @@
 import Link from 'next/link';
 import { EMBEDDED_OPCOS } from '@opco/core';
-import { moisAnneeFr } from '@/lib/format';
+import { moisAnneeFr, verificationLaPlusRecente } from '@/lib/format';
 import { Logo } from '@/components/site/Logo';
 import { Icon } from '@/components/ui/Icon';
 
 /**
  * Vérification la plus récente des barèmes parmi les 11 OPCO : le pied de page annonce la fraîcheur des données, pas la
- * date du build (AAAA-MM-JJ : l'ordre alphabétique est l'ordre chronologique). Composant serveur : les données des OPCO
- * ne partent pas dans le code envoyé au navigateur.
+ * date du build. Composant serveur : les données des OPCO ne partent pas dans le code envoyé au navigateur.
  */
-const DERNIERE_VERIFICATION = EMBEDDED_OPCOS.reduce(
-  (recente, o) => (o.derniere_verification && o.derniere_verification > recente ? o.derniere_verification : recente),
-  '',
-);
+const DERNIERE_VERIFICATION = verificationLaPlusRecente(EMBEDDED_OPCOS);
 const CRITERES = DERNIERE_VERIFICATION
   ? `Critères 2026 · vérifiés ${moisAnneeFr(DERNIERE_VERIFICATION)}`
   : 'Critères 2026';

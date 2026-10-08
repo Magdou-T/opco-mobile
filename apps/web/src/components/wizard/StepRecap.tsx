@@ -27,7 +27,8 @@ import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import type { EtapeSite } from '@/lib/etapes';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
-import { INSECABLE, formatEuro } from '@/lib/format';
+import { formatEuro, nombreEtUnite } from '@/lib/format';
+import { INSECABLE } from '@/lib/insecable';
 import type { QuestionAvecInconnu } from '@/lib/parcours';
 import { numeroLisible } from '@/lib/recherche';
 import { EnTeteEtape } from './EnTeteEtape';
@@ -43,9 +44,8 @@ interface Props {
 /** Ligne du récapitulatif : une valeur nulle s'affiche « Non renseigné ». */
 type Ligne = [libelle: string, valeur: ReactNode | null | undefined];
 
-const nombre = (n: number): string => new Intl.NumberFormat('fr-FR').format(n);
-/** Nombre et unité liés par une espace insécable (« 35 h », « 24 mois ») : l'unité ne passe jamais seule à la ligne. */
-const avecUnite = (n: number, unite: string): string => `${nombre(n)}${INSECABLE}${unite}`;
+/** Nombre et unité liés par une espace insécable (« 35 h », « 1 500 h », « 24 mois ») : `nombreEtUnite`, comme l'en-tête des résultats. */
+const avecUnite = nombreEtUnite;
 const pluriel = (n: number, un: string, plusieurs: string): string => avecUnite(n, n > 1 ? plusieurs : un);
 
 /** Section du récapitulatif : en-tête iconifié, bouton « Modifier » qui rouvre l'étape, lignes libellé / valeur. */

@@ -36,8 +36,6 @@ export function useWizard() {
   /** Ce qui manque pour quitter l'étape affichée (vide : « Suivant » est actif). Voir `champsManquants`. */
   const manquants = useMemo(() => champsManquants(currentStep.key, state), [currentStep.key, state]);
 
-  const canGoNext = useCallback((): boolean => manquants.length === 0, [manquants]);
-
   // L'étape « Frais » est sautée, dans les deux sens, pour une formation entièrement à distance.
   const goNext = useCallback(() => {
     if (manquants.length > 0) return;
@@ -67,10 +65,6 @@ export function useWizard() {
     setShowResults(false);
   }, []);
 
-  const getEffectiveOpcoSlug = useCallback((): string | null => {
-    return state.selectedOpcoSlug || state.detectedOpcoSlug;
-  }, [state.selectedOpcoSlug, state.detectedOpcoSlug]);
-
   // Coût horaire recalculé quand le coût total ou la durée change, sans arrondi (coutsDeFormation).
   const updateFormationCosts = useCallback((total: number | null, hours: number | null) => {
     setState((prev) => ({ ...prev, ...coutsDeFormation(total, hours) }));
@@ -85,13 +79,11 @@ export function useWizard() {
     reponsesInconnues,
     updateState,
     repondre,
-    canGoNext,
     goNext,
     goPrev,
     goToStep,
     calculate,
     reset,
-    getEffectiveOpcoSlug,
     updateFormationCosts,
   };
 }

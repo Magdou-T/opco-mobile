@@ -2,7 +2,14 @@
 // (calculs détaillés en commentaire) ; les tirages au hasard ont une graine fixe.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { EMBEDDED_AIDES, EMBEDDED_PORTAILS, PROJET_LABELS, REGIONS, createInitialWizardState } from '@opco/core';
+import {
+  EMBEDDED_AIDES,
+  EMBEDDED_PORTAILS,
+  PROJET_LABELS,
+  REGIONS,
+  createInitialWizardState,
+  getEmbeddedOpcoBySlug,
+} from '@opco/core';
 import type {
   AideEvaluee,
   AlerteOpco,
@@ -14,7 +21,8 @@ import type {
   ProjetType,
   WizardState,
 } from '@opco/core';
-import { INSECABLE } from '../src/lib/format';
+import { nombreEtUnite } from '../src/lib/format';
+import { INSECABLE } from '../src/lib/insecable';
 import { coutsDeFormation } from '../src/lib/parcours';
 import { etiquettesDeSituation } from '../src/lib/situation';
 import {
@@ -38,9 +46,18 @@ import {
   replierIdcc,
   sansMontantEstime,
   sourcesDeLAide,
+  titreNoteOpco,
 } from '../src/lib/resultats';
 import type { PartBarre } from '../src/lib/resultats';
-import { encadreSansFinancement, fondsEpuisesSurLePlan, rappelsAucunFinancement } from '../src/lib/encadres-resultats';
+import {
+  ID_DETAIL_OPCO,
+  encadrePlanFerme,
+  encadreSansFinancement,
+  fondsEpuisesSurLePlan,
+  planFermeDe,
+  raisonPlanFerme,
+  rappelsAucunFinancement,
+} from '../src/lib/encadres-resultats';
 
 const nb = INSECABLE;
 
@@ -234,13 +251,22 @@ describe("calcul de l'écran (calculer)", () => {
 describe("étiquettes de la situation en tête de l'écran (etiquettesDeSituation, lot initial)", () => {
   test('les cinq scénarios', () => {
     const attendu: Record<string, string[]> = {
-      akto: ['Former un salarié', 'AKTO', 'Île-de-France', '140 h'],
-      grande: ['Former un salarié', 'ATLAS', 'Auvergne-Rhône-Alpes', '35 h'],
-      demandeur: ["Recruter et former un demandeur d'emploi", 'AKTO', 'Occitanie', '280 h'],
-      apprenti: ['Recruter en alternance', 'AKTO', 'Hauts-de-France', '800 h'],
-      artisan: ['Former le dirigeant', 'Bretagne', '21 h'],
+      akto: ['Former un salarié', 'AKTO', 'Île-de-France', `140${nb}h`],
+      grande: ['Former un salarié', 'ATLAS', 'Auvergne-Rhône-Alpes', `35${nb}h`],
+      demandeur: ["Recruter et former un demandeur d'emploi", 'AKTO', 'Occitanie', `280${nb}h`],
+      apprenti: ['Recruter en alternance', 'AKTO', 'Hauts-de-France', `800${nb}h`],
+      artisan: ['Former le dirigeant', 'Bretagne', `21${nb}h`],
     };
     for (const [nom, parcours] of Object.entries(SCENARIOS)) assert.deepEqual(etiquettesDeSituation(etat(parcours)), attendu[nom], nom);
+  });
+
+  test('durée : milliers séparés et unité insécable, comme au récapitulatif (« 1 500 h », jamais « 1500 h »)', () => {
+    const fine = String.fromCharCode(0x202f);
+    assert.deepEqual(etiquettesDeSituation(etat({ durationHours: 1500 })), ['Former un salarié', `1${fine}500${nb}h`]);
+    assert.equal(nombreEtUnite(1500, 'h'), `1${fine}500${nb}h`);
+    assert.equal(nombreEtUnite(24, 'mois'), `24${nb}mois`);
+    // Une durée décimale garde sa virgule (Intl, fr-FR).
+    assert.equal(nombreEtUnite(3.5, 'h'), `3,5${nb}h`);
   });
 
   test('projet non choisi : « Former un salarié » ; OPCO choisi, sinon détecté ; région inconnue ou durée vide : rien', () => {
@@ -269,7 +295,7 @@ describe("étiquettes de la situation en tête de l'écran (etiquettesDeSituatio
         PROJET_LABELS[r.projet].label,
         r.opco?.name,
         r.profil.regionEntreprise ? REGIONS[r.profil.regionEntreprise] : null,
-        state.durationHours ? `${state.durationHours} h` : null,
+        state.durationHours ? `${state.durationHours}${nb}h` : null,
       ].filter((e): e is string => !!e);
       assert.deepEqual(etiquettesDeSituation(state), attendu, JSON.stringify(state));
     }
@@ -879,11 +905,15 @@ describe('encadré du bandeau quand aucun financement de la formation n’est ch
         soldeCpf: un([null, 0, 800, 2000]),
         ...coutsDeFormation(un([300, 900, 1400, 3500, 7000]), heures),
       };
-      const { plan: p, portail, aidesEvaluees } = calculer(etat(over), DATE);
+      const { plan: p, portail, aidesEvaluees, funding } = calculer(etat(over), DATE);
       if (etatEnTete(p) !== 'aucun_financement_chiffre') continue;
       compte.sansFinancement++;
-      const { texte, rappels, aidesAVerifier } = encadreSansFinancement(p, aidesEvaluees, portail != null);
+      // Comme l'écran : le plan de l'OPCO fermé aux 50 salariés et plus (planFermeDe) ouvre l'encadré par sa raison.
+      const planFerme = planFermeDe(funding);
+      const { texte, rappels, aidesAVerifier, detailOpco } = encadreSansFinancement(p, aidesEvaluees, portail != null, planFerme);
       const contexte = `${JSON.stringify(over)} : ${texte}`;
+      assert.equal(texte.startsWith(planFerme ? raisonPlanFerme(planFerme) : 'Aucun financement'), true, contexte);
+      assert.equal(detailOpco, planFerme != null, contexte);
 
       // Ce que la page montre sous le bandeau.
       const listeesPlusBas = listees(aidesEvaluees);
@@ -940,6 +970,143 @@ describe('encadré du bandeau quand aucun financement de la formation n’est ch
     assert.ok(compte.troisiemeAvecAVerifierChiffrees >= 30, JSON.stringify(compte));
     assert.ok(compte.servicesSeuls >= 10 && compte.aucuneAideAMontant >= 10, JSON.stringify(compte));
     assert.ok(vus.size >= 8, `seulement ${vus.size} textes distincts : ${[...vus].join(' | ')}`);
+  });
+});
+
+describe('plan de développement des compétences fermé aux 50 salariés et plus : la raison dans le bandeau', () => {
+  const espaces = (s: string) => s.replace(/\s/g, ' ');
+  /** Scénario du constat : AKTO, Occitanie, 50 à 299 salariés, 14 h à 1 000 €. */
+  const AKTO_GRANDE: Partial<WizardState> = {
+    projetType: 'formation_salarie', selectedOpcoSlug: 'akto', regionCode: '76', companySize: '50_299', contractType: 'cdi',
+    formationType: 'non_certifiante', ...coutsDeFormation(1000, 14),
+  };
+
+  test('raison : la taille, les fonds mutualisés de l’OPCO et le barème appliqué (général, ou celui de la branche)', () => {
+    assert.equal(
+      espaces(raisonPlanFerme({ opco: 'AKTO', branche: null })),
+      "Votre entreprise compte 50 salariés ou plus : les fonds mutualisés du plan de développement des compétences d'AKTO ne lui sont pas ouverts, et le barème général d'AKTO ne prévoit pas d'enveloppe pour sa taille.",
+    );
+    assert.equal(
+      espaces(raisonPlanFerme({ opco: "L'Opcommerce", branche: 'Optique' })),
+      "Votre entreprise compte 50 salariés ou plus : les fonds mutualisés du plan de développement des compétences de l'Opcommerce ne lui sont pas ouverts, et le barème de la branche « Optique » ne prévoit pas d'enveloppe pour sa taille.",
+    );
+    assert.equal(planFermeDe(null), null);
+  });
+
+  test('scénario du constat : l’encadré dit la raison avant tout, renvoie au détail de l’OPCO, « les autres financeurs » fixent le montant', () => {
+    const { plan: p, aidesEvaluees, portail, funding } = calculer(etat(AKTO_GRANDE), DATE);
+    assert.ok(funding?.pdcFerme);
+    assert.equal(etatEnTete(p), 'aucun_financement_chiffre');
+    const planFerme = planFermeDe(funding);
+    assert.deepEqual(planFerme, { opco: 'AKTO', branche: null });
+    const { texte, detailOpco } = encadreSansFinancement(p, aidesEvaluees, portail != null, planFerme);
+    assert.ok(texte.startsWith(raisonPlanFerme(planFerme)), texte);
+    assert.equal(detailOpco, true);
+    assert.equal(ID_DETAIL_OPCO, 'titre-detail-opco');
+    // Dans cet état, la raison est dans l'encadré sans financement : pas de second encadré.
+    assert.equal(encadrePlanFerme('aucun_financement_chiffre', planFerme), null);
+    // Sans plan fermé (même plan), l'encadré reste celui d'avant : ni raison ni lien.
+    const ouvert = encadreSansFinancement(p, aidesEvaluees, portail != null);
+    assert.ok(!ouvert.texte.includes('50 salariés'), ouvert.texte);
+    assert.equal(ouvert.detailOpco, false);
+    assert.equal(texte, `${raisonPlanFerme(planFerme)} ${ouvert.texte}`);
+  });
+
+  test('aides au montant selon dossier : « les autres financeurs » fixent le montant, jamais « les financeurs » seuls', () => {
+    const selonDossier = aide({ id: 'f' });
+    const p = plan({ coutFormation: 1000, resteACharge: 1000, nonChiffrees: [selonDossier] });
+    const planFerme = { opco: 'AKTO', branche: null };
+    assert.equal(
+      espaces(encadreSansFinancement(p, [selonDossier], true, planFerme).texte),
+      `${espaces(raisonPlanFerme(planFerme))} Aucun financement de la formation n'est chiffrable à ce stade : les autres financeurs ` +
+        "fixent le montant après étude du dossier. Voici les aides identifiées.",
+    );
+    // Le même plan sans plan fermé : la phrase d'avant, inchangée.
+    assert.equal(
+      espaces(encadreSansFinancement(p, [selonDossier], true).texte),
+      "Aucun financement de la formation n'est chiffrable à ce stade : les financeurs fixent le montant après étude du dossier. Voici les aides identifiées.",
+    );
+  });
+
+  test('plan chiffré par d’autres financeurs (CPF) ou coût inconnu : un encadré du plan fermé, avec la même raison', () => {
+    const planFerme = { opco: 'AKTO', branche: null };
+    for (const etatDuBandeau of ['plan_chiffre', 'cout_inconnu'] as const) {
+      const e = encadrePlanFerme(etatDuBandeau, planFerme);
+      assert.ok(e, etatDuBandeau);
+      assert.equal(e.texte, raisonPlanFerme(planFerme));
+      assert.equal(espaces(e.titre), "Aucune prise en charge estimée sur le plan de développement des compétences d'AKTO");
+    }
+    assert.equal(encadrePlanFerme('plan_chiffre', null), null);
+    // CPF de 800 € sur la formation : le plan est chiffré sans l'OPCO, dont le plan reste fermé.
+    const { plan: p, funding } = calculer(etat({ ...AKTO_GRANDE, formationType: 'certification', eligibleCpf: true, soldeCpf: 800 }), DATE);
+    assert.ok(funding?.pdcFerme);
+    assert.equal(etatEnTete(p), 'plan_chiffre');
+    assert.ok(encadrePlanFerme(etatEnTete(p), planFermeDe(funding)));
+  });
+
+  test('états tirés au hasard (graine 41) jusqu’à 1 000 plans fermés : le bandeau dit la raison quand le plan est fermé, jamais sinon', () => {
+    const hasard = generateur(41);
+    const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
+    const OPCOS = ['akto', 'atlas', 'afdas', 'constructys', 'ocapiat', 'opco-ep', 'opco-mobilites', 'opco-sante', 'opco2i', 'opcommerce', 'uniformation'];
+    const REGIONS_CODES = EMBEDDED_PORTAILS.map((x) => x.region);
+    const compte = { tirages: 0, ferme: 0, ouvert: 0, sansFinancement: 0, chiffre: 0, branche: 0 };
+    for (; compte.ferme < 1000 && compte.tirages < 6000; compte.tirages++) {
+      const slug = un(OPCOS);
+      const variantes = getEmbeddedOpcoBySlug(slug)?.variantes_branche ?? [];
+      const over: Partial<WizardState> = {
+        projetType: un(['formation_salarie', 'reconversion_salarie'] as const),
+        selectedOpcoSlug: slug,
+        selectedBrancheId: variantes.length > 0 && hasard(2) === 0 ? un(variantes).id : null,
+        regionCode: un(REGIONS_CODES),
+        companySize: un(['50_299', '50_299', '300_plus', '11_49'] as const),
+        contractType: un(['cdi', 'cdd'] as const),
+        anciennete_mois: 24,
+        formationType: un(['non_certifiante', 'qualification', 'certification', 'cqp'] as const),
+        eligibleCpf: un([null, true, false]),
+        soldeCpf: un([null, 0, 800, 2000]),
+        ...coutsDeFormation(un([300, 1000, 1400, 3500, 7000]), un([7, 14, 35, 140, 280])),
+      };
+      const { plan: p, aidesEvaluees, portail, funding } = calculer(etat(over), DATE);
+      const planFerme = planFermeDe(funding);
+      const etatDuBandeau = etatEnTete(p);
+      // Ce que le bandeau écrit sous ses chiffres : l'encadré du plan fermé et, sans financement chiffré, l'encadré qui le dit.
+      const textes = [
+        encadrePlanFerme(etatDuBandeau, planFerme)?.texte,
+        etatDuBandeau === 'aucun_financement_chiffre' ? encadreSansFinancement(p, aidesEvaluees, portail != null, planFerme).texte : null,
+      ].filter((t): t is string => t != null);
+      const contexte = `${JSON.stringify(over)} : ${textes.join(' | ')}`;
+      const raison = (t: string) => espaces(t).includes('Votre entreprise compte 50 salariés ou plus : les fonds mutualisés');
+      if (funding?.pdcFerme) {
+        compte.ferme++;
+        if (etatDuBandeau === 'aucun_financement_chiffre') compte.sansFinancement++;
+        if (etatDuBandeau === 'plan_chiffre') compte.chiffre++;
+        if (funding.brancheAppliquee) compte.branche++;
+        assert.equal(textes.filter(raison).length, 1, contexte);
+        assert.ok(textes.some((t) => t.includes(raisonPlanFerme({ opco: funding.opcoName, branche: funding.brancheAppliquee }))), contexte);
+      } else {
+        compte.ouvert++;
+        assert.ok(!textes.some(raison), contexte);
+      }
+      for (const t of textes) assert.ok(!/ [:;?!]/.test(t), `espace ordinaire avant une ponctuation haute : ${t}`);
+    }
+    assert.ok(compte.ferme >= 1000, JSON.stringify(compte));
+    assert.ok(compte.sansFinancement >= 100 && compte.chiffre >= 20 && compte.branche >= 20 && compte.ouvert >= 50, JSON.stringify(compte));
+  });
+});
+
+describe('note sous le bandeau quand le plan de l’OPCO n’est pas compté (titreNoteOpco)', () => {
+  test('dirigeant sans OPCO (la saisie manuelle ne lui en propose pas) : jamais « Aucun OPCO renseigné »', () => {
+    assert.equal(titreNoteOpco('formation_dirigeant', true), 'Pas de calcul du plan de développement des compétences pour ce projet');
+    assert.equal(titreNoteOpco('formation_dirigeant', false), 'OPCO non compté pour un dirigeant');
+  });
+
+  test('projet salarié sans OPCO : « Aucun OPCO renseigné » ; avec OPCO, ou projet qui ne passe pas par ce plan : aucune note', () => {
+    assert.equal(titreNoteOpco('formation_salarie', true), 'Aucun OPCO renseigné');
+    assert.equal(titreNoteOpco('reconversion_salarie', true), 'Aucun OPCO renseigné');
+    assert.equal(titreNoteOpco(null, true), 'Aucun OPCO renseigné');
+    assert.equal(titreNoteOpco('formation_salarie', false), null);
+    assert.equal(titreNoteOpco('alternance', true), null);
+    assert.equal(titreNoteOpco('recrutement_demandeur_emploi', true), null);
   });
 });
 

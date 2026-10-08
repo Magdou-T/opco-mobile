@@ -4,7 +4,7 @@
 // (lien mailto) avec le message prérempli, adressé à SFG Développement. Aucune donnée n'est collectée par le site.
 // ============================================================
 
-import { INSECABLE } from './format';
+import { INSECABLE } from './insecable';
 
 export const CONTACT_EMAIL = 'contact@sfgdeveloppement.fr';
 

@@ -6,11 +6,13 @@
 
 import { PROJET_LABELS, REGIONS, estCodeRegion, getEmbeddedOpcoBySlug } from '@opco/core';
 import type { WizardState } from '@opco/core';
+import { nombreEtUnite } from './format';
 
 /**
  * Étiquettes de la situation : projet, OPCO retenu, région de l'entreprise, durée de la formation. Mêmes règles que le
  * calcul de l'écran (`calculer`, lib/resultats.ts) : projet non choisi « Former un salarié », OPCO choisi sinon détecté,
- * région reconnue par le moteur seulement ; une donnée absente n'a pas d'étiquette.
+ * région reconnue par le moteur seulement ; une donnée absente n'a pas d'étiquette. La durée s'écrit comme au
+ * récapitulatif (`nombreEtUnite` : « 1 500 h »).
  */
 export function etiquettesDeSituation(
   state: Pick<WizardState, 'projetType' | 'selectedOpcoSlug' | 'detectedOpcoSlug' | 'regionCode' | 'durationHours'>,
@@ -22,6 +24,6 @@ export function etiquettesDeSituation(
     PROJET_LABELS[projet].label,
     opco?.name,
     estCodeRegion(state.regionCode) ? REGIONS[state.regionCode] : null,
-    state.durationHours ? `${state.durationHours} h` : null,
+    state.durationHours ? nombreEtUnite(state.durationHours, 'h') : null,
   ].filter((e): e is string => !!e);
 }

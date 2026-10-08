@@ -1,14 +1,69 @@
 // ============================================================
 // Écran « Votre plan de financement » : encadrés du bandeau de synthèse, en fonctions pures (tests :
-// tests/resultats.test.ts). Encadré quand aucun financement de la formation n'est chiffré (texte, liens vers les cartes du
-// plan et vers les aides « à vérifier ») et fonds épuisés signalés par l'OPCO. Chaque phrase ne cite que ce que la page
-// montre, sans rien nier de ce qu'elle montre. Les cartes du plan viennent de lib/resultats.ts.
+// tests/resultats.test.ts). Plan de développement des compétences fermé aux entreprises de 50 salariés et plus (sa
+// raison, dans le bandeau), encadré quand aucun financement de la formation n'est chiffré (texte, liens vers les cartes
+// du plan, vers les aides « à vérifier » et vers le détail de l'OPCO) et fonds épuisés signalés par l'OPCO. Chaque phrase
+// ne cite que ce que la page montre, sans rien nier de ce qu'elle montre. Les cartes du plan viennent de lib/resultats.ts.
 // ============================================================
 
-import type { AideEvaluee, AlerteOpco, PlanFinancement } from '@opco/core';
-import { INSECABLE } from './format';
+import type { AideEvaluee, AlerteOpco, FundingResult, PlanFinancement } from '@opco/core';
+import { de } from './format';
+import { INSECABLE } from './insecable';
 import { cartesDuPlan, nombreDeLignes } from './resultats';
-import type { CartePlan } from './resultats';
+import type { CartePlan, EtatEnTete } from './resultats';
+
+// --- Plan de développement des compétences fermé (50 salariés et plus) ---------------------------------------------
+
+/**
+ * Plan de développement des compétences de l'OPCO fermé à l'entreprise (`pdcFerme` du moteur : 50 salariés et plus, et
+ * le barème appliqué ne publie aucune enveloppe pour sa taille) : l'OPCO et la branche du barème appliqué.
+ */
+export interface PlanFerme {
+  opco: string;
+  /** Branche dont le barème est appliqué ; null : barème général de l'OPCO. */
+  branche: string | null;
+}
+
+/** Plan fermé d'un calcul de l'OPCO, ou null (aucun calcul de l'OPCO, ou plan ouvert). */
+export function planFermeDe(
+  funding: Pick<FundingResult, 'pdcFerme' | 'opcoName' | 'brancheAppliquee'> | null | undefined,
+): PlanFerme | null {
+  return funding?.pdcFerme ? { opco: funding.opcoName, branche: funding.brancheAppliquee } : null;
+}
+
+/** Titre de la section « Détail de l'estimation OPCO » : le bandeau y renvoie, la raison y est détaillée. */
+export const ID_DETAIL_OPCO = 'titre-detail-opco';
+
+/**
+ * Raison du plan fermé, dite dans le bandeau et pas seulement dans le détail de l'OPCO, plus bas : sans elle, « les
+ * financeurs fixent le montant après étude du dossier » laissait croire que l'OPCO déciderait sur ce plan.
+ */
+export function raisonPlanFerme(p: PlanFerme): string {
+  const bareme = p.branche ? `le barème de la branche «${INSECABLE}${p.branche}${INSECABLE}»` : `le barème général ${de(p.opco)}`;
+  return (
+    `Votre entreprise compte 50 salariés ou plus${INSECABLE}: les fonds mutualisés du plan de développement des ` +
+    `compétences ${de(p.opco)} ne lui sont pas ouverts, et ${bareme} ne prévoit pas d'enveloppe pour sa taille.`
+  );
+}
+
+/** Encadré du plan fermé : titre et texte (la raison) ; le bandeau y ajoute le lien vers le détail de l'OPCO. */
+export interface EncadrePlanFerme {
+  titre: string;
+  texte: string;
+}
+
+/**
+ * Encadré du plan fermé dans le bandeau quand des chiffres l'occupent (plan chiffré par d'autres financeurs, coût
+ * inconnu). Sans financement chiffré, la raison ouvre l'encadré sans financement (`encadreSansFinancement`) : pas de
+ * second encadré. Null quand le plan n'est pas fermé.
+ */
+export function encadrePlanFerme(etat: EtatEnTete, planFerme: PlanFerme | null): EncadrePlanFerme | null {
+  if (!planFerme || etat === 'aucun_financement_chiffre') return null;
+  return {
+    titre: `Aucune prise en charge estimée sur le plan de développement des compétences ${de(planFerme.opco)}`,
+    texte: raisonPlanFerme(planFerme),
+  };
+}
 
 // --- Rappels vers les cartes du plan ------------------------------------------------------------------------------
 
@@ -51,6 +106,8 @@ export interface EncadreSansFinancement {
   rappels: Rappel[];
   /** Aides « à vérifier » citées par le texte : lien vers la section des aides ; null quand le texte n'en cite aucune. */
   aidesAVerifier: LienAidesAVerifier | null;
+  /** Le texte dit pourquoi le plan de l'OPCO est fermé : lien vers le détail de l'OPCO (`ID_DETAIL_OPCO`). */
+  detailOpco: boolean;
 }
 
 /** Section « Aides et financements identifiés » (`AidesList`) : cible du lien vers les aides à vérifier. */
@@ -75,11 +132,27 @@ const joindre = (phrases: readonly (string | null)[]): string => phrases.filter(
  * (une information manque ou le financeur doit confirmer), dit « à ce stade » plutôt que « pour cette situation », et le
  * bandeau renvoie à la liste (`aidesAVerifier`). Dans le dernier cas, des aides « à vérifier » sans montant sont citées
  * de même.
+ * Plan de développement des compétences de l'OPCO fermé (`planFerme`) : cette variante précède les autres. Sa raison
+ * ouvre le texte, les montants selon dossier sont ceux « des autres financeurs », les autres phrases restent, et le
+ * bandeau renvoie au détail de l'OPCO (`detailOpco`).
  */
 export function encadreSansFinancement(
   plan: PlanFinancement,
   aides: readonly AideEvaluee[],
   avecPortail: boolean,
+  planFerme: PlanFerme | null = null,
+): EncadreSansFinancement {
+  const encadre = encadreSelonLesAides(plan, aides, avecPortail, planFerme != null);
+  if (!planFerme) return encadre;
+  return { ...encadre, texte: joindre([raisonPlanFerme(planFerme), encadre.texte]), detailOpco: true };
+}
+
+/** Encadré sans financement chiffré, d'après les cartes et les aides ; `autres` : l'OPCO ne fixe rien, les montants selon dossier sont ceux des autres financeurs. */
+function encadreSelonLesAides(
+  plan: PlanFinancement,
+  aides: readonly AideEvaluee[],
+  avecPortail: boolean,
+  autres: boolean,
 ): EncadreSansFinancement {
   const rappels = rappelsAucunFinancement(plan);
   const optionsChiffrees = plan.options.some((o) => o.montantEstime != null && o.montantEstime > 0);
@@ -108,18 +181,21 @@ export function encadreSansFinancement(
       ]),
       rappels,
       aidesAVerifier: nonComptes ? lien() : null,
+      detailOpco: false,
     };
   }
   if (rappels.length > 0) {
+    const financeurs = autres ? 'les autres financeurs' : 'les financeurs';
     return {
       texte: joindre([
         selonDossier
-          ? `Aucun financement de la formation n'est chiffrable à ce stade${INSECABLE}: les financeurs fixent le montant après étude du dossier. Voici les aides identifiées.`
+          ? `Aucun financement de la formation n'est chiffrable à ce stade${INSECABLE}: ${financeurs} fixent le montant après étude du dossier. Voici les aides identifiées.`
           : `Aucun financement de la formation n'est chiffrable ${nonComptes ? 'à ce stade' : 'pour cette situation'}. Voici les aides identifiées, qui ne réduisent pas le prix de la formation.`,
         nonComptes,
       ]),
       rappels,
       aidesAVerifier: nonComptes ? lien() : null,
+      detailOpco: false,
     };
   }
   const aideAMontant = listees.some((a) => a.montantEstime != null && a.montantEstime > 0);
@@ -143,6 +219,7 @@ export function encadreSansFinancement(
     ]),
     rappels,
     aidesAVerifier: aVerifier.length > 0 ? lien() : null,
+    detailOpco: false,
   };
 }
 

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import type { TransportMode, WizardState } from '@opco/core';
 import type { IconName } from '@/components/ui/Icon';
 import { CheckboxRow, ChoiceButton, ChoiceGroup, NumberField } from '@/components/ui/forms';
-import { INSECABLE } from '@/lib/format';
+import { INSECABLE } from '@/lib/insecable';
 import { EnTeteEtape } from './EnTeteEtape';
 import { TRANSPORT_LABELS } from './libelles';
 

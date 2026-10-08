@@ -4,12 +4,15 @@
 // ============================================================
 
 import type { DispositifComplementaire } from '@opco/core';
+import { INSECABLE } from './insecable';
 
 /**
- * Espace insécable (U+00A0), écrite par son code : avant « : ; ? ! » et entre un nombre et son unité dans les chaînes
- * des composants (dans le texte JSX, l'entité `&nbsp;` suffit).
+ * Nombre suivi de son unité, à la française : milliers séparés (espace fine insécable, Intl fr-FR), virgule décimale,
+ * espace insécable avant l'unité (« 1 500 h », « 24 mois », « 3,5 h ») ; l'unité ne passe jamais seule à la ligne.
  */
-export const INSECABLE = String.fromCharCode(0xa0);
+export function nombreEtUnite(n: number, unite: string): string {
+  return `${new Intl.NumberFormat('fr-FR').format(n)}${INSECABLE}${unite}`;
+}
 
 /**
  * « de » devant un nom, élidé devant une voyelle : « d'AKTO », « d'OPCO 2i », « de Constructys ». L'article élidé qui
@@ -187,6 +190,17 @@ export function moisAnneeFr(iso: string): string {
   const m = /^(\d{4})-(\d{2})-\d{2}$/.exec(iso);
   const mois = m ? MOIS[Number(m[2]) - 1] : undefined;
   return m && mois ? `${mois} ${m[1]}` : iso;
+}
+
+/**
+ * Vérification la plus récente des barèmes parmi les OPCO (AAAA-MM-JJ : l'ordre alphabétique est l'ordre
+ * chronologique), annoncée par le pied de page et l'écran de résultats ; chaîne vide sans aucune date.
+ */
+export function verificationLaPlusRecente(opcos: readonly { derniere_verification?: string | null }[]): string {
+  return opcos.reduce(
+    (recente, o) => (o.derniere_verification && o.derniere_verification > recente ? o.derniere_verification : recente),
+    '',
+  );
 }
 
 /** Extraits cités (« … », séparés ou non par « ; ») qui ouvrent une annotation. */

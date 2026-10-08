@@ -22,7 +22,7 @@ export const COULEURS_FAMILLE: Record<FamilleCouleur, { fond: string; encre: str
 };
 
 /** Icône de chaque financeur, reprise des familles de l'accueil (« Ce que le simulateur recherche »). */
-export const ICONE_FINANCEUR: Record<Financeur, IconName> = {
+const ICONE_FINANCEUR: Record<Financeur, IconName> = {
   opco: 'batiment',
   branche: 'batiment',
   faf: 'mallette',

@@ -4,37 +4,16 @@ import { useRef, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
-// Module sans directive client : le formulaire n'embarque pas les champs du simulateur (forms.tsx).
+// Modules sans directive client : le formulaire n'embarque pas les champs du simulateur (forms.tsx).
+import { CHAMP as DESSIN_DU_CHAMP, ZoneErreur } from '@/components/ui/Champ';
 import { FieldLabel } from '@/components/ui/FieldLabel';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { CHAMPS_OBLIGATOIRES, CONTACT_EMAIL, LIBELLES_DES_SUJETS, SUJETS, erreursDuContact, lienMailto } from '@/lib/contact';
 import type { ChampObligatoire, MessageContact } from '@/lib/contact';
 
-/**
- * Champ du formulaire : le dessin des champs du simulateur (components/ui/forms.tsx) : 48 px, rayon 12 px, contour
- * filet-fort (3,54:1), orange foncé au focus en plus de l'anneau du site, rouge quand la saisie est refusée. Transition
- * sans `outline-color` : l'anneau de focus apparaît d'emblée (DESIGN.md, section 7).
- */
-const CHAMP =
-  'mt-2 block min-h-12 w-full min-w-0 rounded-champ border border-filet-fort bg-white px-4 py-2.5 text-base text-texte transition-[color,background-color,border-color] hover:border-texte-doux focus-visible:border-orange-deep aria-invalid:border-rouge';
-
-/** Zone de l'erreur d'un champ : elle existe toujours, pour que l'erreur soit annoncée quand elle apparaît. */
-function Erreur({ id, message }: { id: string; message: string | undefined }) {
-  return (
-    <div aria-live="polite" className="[&:not(:empty)]:mt-2">
-      {message ? (
-        <p id={id} className="flex items-start gap-1.5 text-sm leading-snug font-medium text-rouge">
-          <Icon name="alerte" className="mt-px size-4 shrink-0" strokeWidth={2} />
-          <span>
-            <span className="sr-only">Erreur : </span>
-            {message}
-          </span>
-        </p>
-      ) : null}
-    </div>
-  );
-}
+/** Champ du formulaire : le dessin des champs du simulateur (components/ui/Champ.tsx), sous son libellé, rétrécissable. */
+const CHAMP = cx('mt-2', DESSIN_DU_CHAMP, 'min-w-0');
 
 /**
  * Formulaire de contact. Il n'envoie rien lui-même : il ouvre la messagerie de l'utilisateur avec un message prérempli
@@ -98,7 +77,7 @@ export function ContactForm() {
       <div className="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2">
         <div className="min-w-0">
           <FieldLabel label="Votre nom" required htmlFor="contact-nom" />
-          <Erreur id="contact-nom-erreur" message={erreur('nom')} />
+          <ZoneErreur id="contact-nom-erreur" erreur={erreur('nom')} />
           <input
             ref={champNom}
             id="contact-nom"
@@ -127,7 +106,7 @@ export function ContactForm() {
         </div>
         <div className="min-w-0">
           <FieldLabel label="Votre adresse e-mail" required htmlFor="contact-email" />
-          <Erreur id="contact-email-erreur" message={erreur('email')} />
+          <ZoneErreur id="contact-email-erreur" erreur={erreur('email')} />
           <input
             ref={champEmail}
             id="contact-email"
@@ -182,7 +161,7 @@ export function ContactForm() {
 
       <div className="mt-6 min-w-0">
         <FieldLabel label="Votre message" required htmlFor="contact-message" />
-        <Erreur id="contact-message-erreur" message={erreur('message')} />
+        <ZoneErreur id="contact-message-erreur" erreur={erreur('message')} />
         <textarea
           ref={champMessage}
           id="contact-message"

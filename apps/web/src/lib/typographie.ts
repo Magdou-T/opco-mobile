@@ -5,7 +5,8 @@
 
 import { Children, cloneElement, isValidElement } from 'react';
 import type { ReactNode } from 'react';
-import { INSECABLE, typo } from './format';
+import { typo } from './format';
+import { INSECABLE } from './insecable';
 
 /** Texte qui commence par une ponctuation haute : l'espace qui le précède doit être insécable. */
 const PONCTUATION_EN_TETE = /^[:;?!]/;

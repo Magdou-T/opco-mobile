@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
+import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
 import { formatEuro, texteDonnees, typo } from '@/lib/format';
 import { cartesDuPlan, confianceDOption, etatEnTete, financeurDeLigne } from '@/lib/resultats';
@@ -67,8 +68,6 @@ export function PlanFinancementCard({
     </div>
   );
 }
-
-const delai = (ms: number) => ({ '--delai': `${ms}ms` }) as CSSProperties;
 
 // --- Cartes du plan -----------------------------------------------------------------------------------------------
 

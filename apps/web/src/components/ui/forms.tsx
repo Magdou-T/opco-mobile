@@ -12,24 +12,13 @@ import { useEffect, useId, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode, Ref } from 'react';
 import { REGIONS, REGIONS_TRIEES } from '@opco/core';
 import type { CodeRegion } from '@opco/core';
+import { CHAMP, ZoneErreur } from '@/components/ui/Champ';
 import { FieldLabel } from '@/components/ui/FieldLabel';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { texteFr } from '@/lib/format';
 import { lireNombre, saisieDuNombre } from '@/lib/saisie';
-
-// Libellé d'un champ : composant sans état, dans son propre module (sans directive client) ; réexporté ici pour les
-// importations existantes.
-export { FieldLabel };
-
-/**
- * Champ de saisie : 48 px de haut, rayon 12 px (`rounded-champ`), contour filet-fort (3,54:1 sur blanc), contour
- * orange foncé au focus (en plus de l'anneau du site), rouge quand la saisie est refusée. La couleur du texte d'exemple
- * (placeholder) vient de la règle globale du site (globals.css). Transition sans `outline-color` (DESIGN.md, section 7).
- */
-const CHAMP =
-  'block min-h-12 w-full rounded-champ border border-filet-fort bg-white px-4 py-2.5 text-base text-texte transition-[color,background-color,border-color] hover:border-texte-doux focus-visible:border-orange-deep aria-invalid:border-rouge';
 
 /** Largeur d'un champ court (nombre, code postal, date) : le libellé et l'aide gardent toute la largeur. */
 export type LargeurChamp = 'courte' | 'moyenne' | 'pleine';
@@ -51,23 +40,6 @@ function Aide({ id, children }: { id: string; children: ReactNode }) {
     <p id={id} className="mt-1 text-sm leading-relaxed text-texte-discret">
       {children}
     </p>
-  );
-}
-
-/** Zone de l'erreur d'un champ : elle existe toujours, pour que l'erreur soit annoncée quand elle apparaît. */
-function ZoneErreur({ id, erreur }: { id: string; erreur: ReactNode }) {
-  return (
-    <div aria-live="polite" className="[&:not(:empty)]:mt-2">
-      {erreur ? (
-        <p id={id} className="flex items-start gap-1.5 text-sm leading-snug font-medium text-rouge">
-          <Icon name="alerte" className="mt-px size-4 shrink-0" strokeWidth={2} />
-          <span>
-            <span className="sr-only">Erreur : </span>
-            {erreur}
-          </span>
-        </p>
-      ) : null}
-    </div>
   );
 }
 
@@ -456,7 +428,7 @@ const OUTRE_MER = (code: CodeRegion) => code.startsWith('0');
  * (à défaut le premier) prend le focus à l'ouverture. À placer dans un `ChoiceGroup`. Une seule colonne sous 360 px :
  * à deux colonnes, « Guadeloupe » (82 px) ou « Bourgogne- » ne tenaient plus dans le bouton et se coupaient en deux.
  */
-export function RegionPicker({
+function RegionPicker({
   selected,
   onSelect,
   focusInitial = false,

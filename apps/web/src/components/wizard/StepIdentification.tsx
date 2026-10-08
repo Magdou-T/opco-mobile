@@ -40,7 +40,8 @@ import {
   opcoRequis,
   ouvreBudgetOpco,
 } from '@/lib/entreprise';
-import { INSECABLE, texteFr } from '@/lib/format';
+import { texteFr } from '@/lib/format';
+import { INSECABLE } from '@/lib/insecable';
 import { idccAffichables, numeroLisible } from '@/lib/recherche';
 import { EnTeteEtape } from './EnTeteEtape';
 

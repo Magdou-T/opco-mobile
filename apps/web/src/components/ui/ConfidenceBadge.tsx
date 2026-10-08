@@ -1,5 +1,5 @@
 import type { Confidence } from '@opco/core';
-import { INSECABLE } from '@/lib/format';
+import { INSECABLE } from '@/lib/insecable';
 
 interface ConfidenceBadgeProps {
   confidence: Confidence;

@@ -1,11 +1,11 @@
-import { ALERTE_OPCO_LABELS } from '@opco/core';
 import type { AlerteOpco, OpcoData, VarianteBranche } from '@opco/core';
+import { ElementAlerte } from '@/components/ui/AlertesOpco';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
 import { Etiquette } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import { SourceBadge } from '@/components/ui/SourceBadge';
 import { alertesDeLaBranche, lignesDuBareme, resumeDesAlertes, resumeIdcc } from '@/lib/fiche';
-import { dateFr, de, texteFr } from '@/lib/format';
+import { de, texteFr } from '@/lib/format';
 import { Bareme, BaremeDegressif } from './Bareme';
 import { ListeIdcc } from './ListeIdcc';
 import { ListeTailles } from './Tailles';
@@ -27,21 +27,7 @@ function AlertesDeBranche({ alertes, opcoName }: { alertes: AlerteOpco[]; opcoNa
       </p>
       <ul className="mt-3 space-y-3">
         {alertes.map((a, i) => (
-          <li key={`${a.type}-${a.branche}-${i}`} className="border-t border-rouge/20 pt-3 first:border-t-0 first:pt-0">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span className="stamp text-rouge">{ALERTE_OPCO_LABELS[a.type] ?? a.type}</span>
-              <span className="text-sm font-semibold text-texte">{texteFr(a.branche)}</span>
-            </div>
-            <p className="mt-1.5 text-sm leading-relaxed text-texte-doux">«&nbsp;{a.extrait}&nbsp;»</p>
-            <p className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-texte-doux">
-              <a href={a.source_url} target="_blank" rel="noopener noreferrer" className="lien inline-flex items-center gap-1">
-                Voir la source
-                <Icon name="lien-externe" className="size-3.5" />
-                <span className="sr-only"> (nouvel onglet)</span>
-              </a>
-              <span>vérifié le {dateFr(a.verifie_le)}</span>
-            </p>
-          </li>
+          <ElementAlerte key={`${a.type}-${a.branche}-${i}`} alerte={a} />
         ))}
       </ul>
     </div>

@@ -3,15 +3,13 @@
 // ============================================================
 
 import { CODES_ECHAPPATOIRES } from '@opco/core';
+import { INSECABLE } from './insecable';
 
 /**
  * Préfixe « SIREN » ou « SIRET » (avec « : » ou « n° » éventuels) devant un numéro, puis chiffres et séparateurs.
  * En JavaScript, `\s` couvre aussi l'espace insécable (U+00A0) et l'espace fine insécable (U+202F).
  */
 const NUMERO_SAISI = /^(?:sire[nt](?![\p{L}\d])\s*(?:n°|nº|:)?\s*)?([\d\s.\-]+)$/iu;
-
-/** Espace insécable : un numéro groupé ne se coupe pas en fin de ligne. */
-const INSECABLE = String.fromCharCode(0x00a0);
 
 /**
  * Requête envoyée à l'API recherche-entreprises. Un numéro de 9 chiffres (SIREN) ou de 14 chiffres (SIRET) saisi avec

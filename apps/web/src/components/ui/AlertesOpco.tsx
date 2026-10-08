@@ -33,25 +33,33 @@ export function AlertesOpco({ alertes, opcoName, headingLevel = 3, id }: Alertes
       </p>
       <ul className="mt-4 space-y-4">
         {alertes.map((a, i) => (
-          <li key={`${a.type}-${a.branche}-${i}`} className="border-t border-rouge/20 pt-3 first:border-t-0 first:pt-0">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <span className="stamp text-rouge">{ALERTE_OPCO_LABELS[a.type] ?? a.type}</span>
-              <span className="text-sm font-semibold text-texte">{texteFr(a.branche)}</span>
-            </div>
-            <p className="mt-1.5 text-sm leading-relaxed text-texte-doux">
-              «&nbsp;{a.extrait}&nbsp;»
-            </p>
-            <p className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-texte-doux">
-              <a href={a.source_url} target="_blank" rel="noopener noreferrer" className="lien inline-flex items-center gap-1">
-                Voir la source
-                <Icon name="lien-externe" className="size-3.5" />
-                <span className="sr-only"> (nouvel onglet)</span>
-              </a>
-              <span>vérifié le {dateFr(a.verifie_le)}</span>
-            </p>
-          </li>
+          <ElementAlerte key={`${a.type}-${a.branche}-${i}`} alerte={a} />
         ))}
       </ul>
     </section>
+  );
+}
+
+/**
+ * Une alerte dans une liste : type, périmètre, extrait cité mot pour mot, lien vers la source et date de vérification.
+ * Partagé par cet encadré et par les alertes reprises dans la carte d'une branche (components/opco/Branche.tsx).
+ */
+export function ElementAlerte({ alerte: a }: { alerte: AlerteOpco }) {
+  return (
+    <li className="border-t border-rouge/20 pt-3 first:border-t-0 first:pt-0">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span className="stamp text-rouge">{ALERTE_OPCO_LABELS[a.type] ?? a.type}</span>
+        <span className="text-sm font-semibold text-texte">{texteFr(a.branche)}</span>
+      </div>
+      <p className="mt-1.5 text-sm leading-relaxed text-texte-doux">«&nbsp;{a.extrait}&nbsp;»</p>
+      <p className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-texte-doux">
+        <a href={a.source_url} target="_blank" rel="noopener noreferrer" className="lien inline-flex items-center gap-1">
+          Voir la source
+          <Icon name="lien-externe" className="size-3.5" />
+          <span className="sr-only"> (nouvel onglet)</span>
+        </a>
+        <span>vérifié le {dateFr(a.verifie_le)}</span>
+      </p>
+    </li>
   );
 }

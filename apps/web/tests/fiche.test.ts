@@ -7,6 +7,7 @@ import { EMBEDDED_OPCOS } from '@opco/core';
 import type { AlerteOpco, OpcoData, SourcedValue } from '@opco/core';
 import {
   ABREVIATIONS_PAR_OPCO,
+  IDCC_AVANT_REPLI,
   RENVOI_PRECISION,
   alertesDeLaBranche,
   cartesAlternance,
@@ -15,6 +16,7 @@ import {
   definirAbreviations,
   elementsDeTexte,
   etapesDeDemarche,
+  idccRepliees,
   legendeDuBareme,
   libelleValeurAbsente,
   lignesDuBareme,
@@ -591,6 +593,29 @@ describe('resumeIdcc', () => {
   });
 });
 
+describe('listes de conventions collectives repliées (idccRepliees)', () => {
+  const codes = (n: number) => Array.from({ length: n }, (_, i) => String(1000 + i));
+
+  test('jusqu’à 6 codes cités tels quels, repliés à partir de 7 (« 7 conventions collectives », dépliable)', () => {
+    assert.equal(IDCC_AVANT_REPLI, 6);
+    assert.equal(idccRepliees([]), false);
+    assert.equal(idccRepliees(codes(6)), false);
+    assert.equal(idccRepliees(codes(7)), true);
+    assert.equal(idccRepliees(codes(76)), true);
+  });
+
+  test('données réelles : chaque branche dont la carte replie ses codes en compte plus de 6', () => {
+    let repliees = 0;
+    for (const o of EMBEDDED_OPCOS) {
+      for (const v of o.variantes_branche ?? []) {
+        assert.equal(idccRepliees(v.idcc), v.idcc.length > 6, `${o.slug} : ${v.id}`);
+        if (idccRepliees(v.idcc)) repliees++;
+      }
+    }
+    assert.ok(repliees > 0, 'aucune branche à liste repliée dans les données');
+  });
+});
+
 describe('alertes', () => {
   const alerte = (type: AlerteOpco['type'], idcc: string[], branche = 'b'): AlerteOpco => ({
     type,
@@ -735,6 +760,14 @@ describe('trierParNom', () => {
     const liste = [{ name: 'B' }, { name: 'A' }];
     trierParNom(liste);
     assert.deepEqual(liste.map((o) => o.name), ['B', 'A']);
+  });
+
+  test('casse et accents ignorés : deux noms qui ne diffèrent que par eux gardent leur ordre, dans les deux sens', () => {
+    const noms = (liste: string[]) => trierParNom(liste.map((name) => ({ name }))).map((o) => o.name);
+    assert.deepEqual(noms(['OPCO B', 'opco b']), ['OPCO B', 'opco b']);
+    assert.deepEqual(noms(['opco b', 'OPCO B']), ['opco b', 'OPCO B']);
+    assert.deepEqual(noms(['Élan', 'Elan']), ['Élan', 'Elan']);
+    assert.deepEqual(noms(['Elan', 'Élan']), ['Elan', 'Élan']);
   });
 });
 

@@ -11,6 +11,7 @@ import {
   calculateFunding,
   createInitialWizardState,
   getEmbeddedOpcoBySlug,
+  moisDepuisSaisie,
   profilDepuisWizard,
 } from '@opco/core';
 import type {
@@ -37,6 +38,7 @@ import {
   QUESTIONS_PAR_STATUT,
   coutsDeFormation,
   depassePlafondHoraire,
+  erreurDuMoisDeDebut,
   etatDepuisModeFormation,
   etatDepuisProjet,
   plafondHoraireIndicatif,
@@ -698,5 +700,37 @@ describe('coût horaire de la formation (coutsDeFormation, saisie de la durée e
     assert.equal(depassePlafondHoraire(null, 30), false);
     assert.equal(depassePlafondHoraire(45, null), false);
     assert.equal(depassePlafondHoraire(45, 0), false);
+  });
+});
+
+describe('mois de début de la formation (erreurDuMoisDeDebut)', () => {
+  const nb = String.fromCharCode(0xa0);
+
+  test('vide ou mois valide : aucune erreur', () => {
+    for (const saisie of ['', '   ', '03/2027', '3/2027', '12/2026', ' 01/2027 ']) {
+      assert.equal(erreurDuMoisDeDebut(saisie), null, JSON.stringify(saisie));
+    }
+  });
+
+  test('« 13/2026 » : au format MM/AAAA, mais le mois 13 n’existe pas, et l’erreur le dit', () => {
+    const attendu = `Ce mois n'existe pas${nb}: écrivez un mois de 01 à 12, par exemple 03/2027.`;
+    assert.equal(erreurDuMoisDeDebut('13/2026'), attendu);
+    assert.equal(erreurDuMoisDeDebut('00/2027'), attendu);
+    assert.equal(erreurDuMoisDeDebut('99/2027'), attendu);
+  });
+
+  test('autre forme : le format attendu', () => {
+    const attendu = `Format attendu${nb}: MM/AAAA, par exemple 03/2027.`;
+    for (const saisie of ['2027-03', 'mars 2027', '03/27', '3', '03/2027/1', '123/2027']) {
+      assert.equal(erreurDuMoisDeDebut(saisie), attendu, saisie);
+    }
+  });
+
+  test('chaque saisie refusée par le moteur porte une erreur, et seulement elle', () => {
+    for (let mois = 0; mois <= 13; mois++) {
+      for (const saisie of [`${mois}/2027`, `${String(mois).padStart(2, '0')}/2027`]) {
+        assert.equal(erreurDuMoisDeDebut(saisie) == null, moisDepuisSaisie(saisie) != null, saisie);
+      }
+    }
   });
 });

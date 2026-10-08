@@ -8,9 +8,16 @@
 // tests/parcours.test.ts (« aucun champ invisible ne pèse sur le résultat »).
 // ============================================================
 
-import { STATUT_PAR_PROJET, applyVarianteBranche, createInitialWizardState, resolveVarianteBranche } from '@opco/core';
+import {
+  STATUT_PAR_PROJET,
+  applyVarianteBranche,
+  createInitialWizardState,
+  moisDepuisSaisie,
+  resolveVarianteBranche,
+} from '@opco/core';
 import type { OpcoData, ProjetType, StatutBeneficiaire, TrainingMode, TrainingType, WizardState } from '@opco/core';
 import { ouvreBudgetOpco } from './entreprise';
+import { INSECABLE } from './insecable';
 
 /** Questions de l'étape « Bénéficiaire » propres à un statut (le contrat d'un alternant découle de son type de contrat). */
 export const QUESTIONS_PAR_STATUT: Record<StatutBeneficiaire, readonly (keyof WizardState)[]> = {
@@ -116,6 +123,18 @@ export function depassePlafondHoraire(coutHoraire: number | null, plafond: numbe
   return (
     plafond != null && plafond > 0 && coutHoraire != null && Math.round(coutHoraire * 100) > Math.round(plafond * 100)
   );
+}
+
+/**
+ * Erreur du champ « Mois de début prévu (MM/AAAA) », facultatif : aucune quand il est vide ou que le moteur lit le mois
+ * (`moisDepuisSaisie`) ; « 13/2026 » est au bon format mais le mois n'existe pas, et l'erreur le dit ; toute autre forme
+ * rappelle le format attendu. Affichée, comme celle des autres champs, quand on quitte le champ.
+ */
+export function erreurDuMoisDeDebut(saisie: string): string | null {
+  if (saisie.trim() === '' || moisDepuisSaisie(saisie) != null) return null;
+  return /^\d{1,2}\/\d{4}$/.test(saisie.trim())
+    ? `Ce mois n'existe pas${INSECABLE}: écrivez un mois de 01 à 12, par exemple 03/2027.`
+    : `Format attendu${INSECABLE}: MM/AAAA, par exemple 03/2027.`;
 }
 
 /** Types de formation qui relèvent du plafond horaire des formations certifiantes (`cout_horaire_metier`). */
