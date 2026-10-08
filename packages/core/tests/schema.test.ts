@@ -31,13 +31,16 @@ describe('schéma — dataset embarqué', () => {
     }
   });
 
+  // Horodatage fixe : `generatedAt` n'est qu'une chaîne pour validateDataset, le test ne lit pas l'horloge.
+  const GENERATED_AT = '2026-10-08T00:00:00.000Z';
+
   it('validateDataset accepte le dataset embarqué', () => {
-    const ds = { version: 1, generatedAt: new Date().toISOString(), opcos: EMBEDDED_OPCOS };
+    const ds = { version: 1, generatedAt: GENERATED_AT, opcos: EMBEDDED_OPCOS };
     expect(() => validateDataset(ds)).not.toThrow();
   });
 
   it('validateDataset rejette un dataset incomplet', () => {
-    const ds = { version: 1, generatedAt: new Date().toISOString(), opcos: EMBEDDED_OPCOS.slice(0, 3) };
+    const ds = { version: 1, generatedAt: GENERATED_AT, opcos: EMBEDDED_OPCOS.slice(0, 3) };
     expect(() => validateDataset(ds)).toThrow();
   });
 

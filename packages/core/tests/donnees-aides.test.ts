@@ -1,8 +1,9 @@
 // ============================================================
 // Intégrité du catalogue d'aides embarqué (data/aides) : forme de chaque aide (schéma strict, aucune clé inconnue), cohérence
-// d'ensemble, fraîcheur (vérifié il y a moins de 12 mois, jamais à une date future), montants « exacts » justifiés par un extrait
-// qui chiffre un montant (un nombre suivi de €, d'euros ou de %), code de région des aides régionales et portail officiel de
-// chacune des 18 régions.
+// d'ensemble, dates de vérification (moins de 12 mois avant la date de référence du jeu de données, jamais après : aucune
+// lecture de l'horloge, la fraîcheur par rapport au jour est contrôlée à part par fraicheur.test.ts), montants « exacts »
+// justifiés par un extrait qui chiffre un montant (un nombre suivi de €, d'euros ou de %), code de région des aides
+// régionales et portail officiel de chacune des 18 régions.
 // Chaque contrôle est une fonction qui renvoie la liste des problèmes (vide = conforme) : elle est appliquée au catalogue
 // embarqué, puis à des copies mutées pour prouver qu'elle détecte bien ce qu'elle prétend détecter.
 // Les balayages du catalogue par profil et par plan sont dans donnees-aides-coherence.test.ts, les corrections de catégories
@@ -14,6 +15,7 @@ import type { Aide, PortailRegional } from '../src/aides/types';
 import { EMBEDDED_AIDES, EMBEDDED_PORTAILS } from '../src/data';
 import { REGIONS } from '../src/geo';
 import { AideSchema, CriteresAideSchema, MontantAideSchema, PortailRegionalSchema, sanityCheckAides } from '../src/schema';
+import { controlerDatesFutures, controlerFraicheur, dateDeReference } from './dates-donnees';
 
 // Clés connues du schéma. Le schéma est strict (Zod refuse déjà une clé inconnue) : cette seconde garde, indépendante de
 // `.strict()`, continue de signaler une clé mal orthographiée si la rigueur du schéma est un jour relâchée.
@@ -23,12 +25,6 @@ const CLES_MONTANT = Object.keys(MontantAideSchema.innerType().shape);
 
 /** Aide régionale : identifiant « r<code région>- ». La LADOM (nat-ladom-…) est nationale mais restreinte à l'outre-mer : elle n'est pas visée. */
 const estRegionale = (a: Aide): boolean => /^r\d{2}-/.test(a.id);
-
-/** Nombre de mois civils entre la date de vérification (AAAA-MM-JJ) et `maintenant`. */
-function moisEcoules(date: string, maintenant: Date): number {
-  const d = new Date(`${date}T00:00:00Z`);
-  return (maintenant.getUTCFullYear() - d.getUTCFullYear()) * 12 + (maintenant.getUTCMonth() - d.getUTCMonth());
-}
 
 // ---------------------------------------------------------------------------
 // Contrôles : chacun renvoie les problèmes (identifiant et raison), vide = conforme.
@@ -61,25 +57,6 @@ function controlerClesInconnues(aides: Aide[]): string[] {
 /** Les portails sous la forme que lit `controlerFraicheur` : un libellé et une date de vérification. */
 const entreesPortails = (portails: PortailRegional[]): { id: string; derniere_verification: string }[] =>
   portails.map((p) => ({ id: `portail ${p.region}`, derniere_verification: p.derniere_verification }));
-
-/** Entrées dont la dernière vérification remonte à 12 mois ou plus. */
-function controlerFraicheur(entrees: { id: string; derniere_verification: string }[], maintenant: Date): string[] {
-  return entrees
-    .filter((e) => moisEcoules(e.derniere_verification, maintenant) >= 12)
-    .map((e) => `${e.id} : dernière vérification le ${e.derniere_verification} (${moisEcoules(e.derniere_verification, maintenant)} mois)`);
-}
-
-/**
- * Entrées dont la dernière vérification est datée d'après-demain ou plus tard : une date future est une faute de frappe (2027 pour
- * 2026), que le contrôle de fraîcheur ne voit pas (un écart négatif de mois reste « frais »). La date du lendemain (UTC) est
- * acceptée : elle peut être celle du jour dans le fuseau de la personne qui a vérifié.
- */
-function controlerDatesFutures(entrees: { id: string; derniere_verification: string }[], maintenant: Date): string[] {
-  const limite = new Date(maintenant.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-  return entrees
-    .filter((e) => e.derniere_verification > limite)
-    .map((e) => `${e.id} : dernière vérification le ${e.derniere_verification}, après le ${limite}`);
-}
 
 /** Un nombre suivi d'une unité de montant : « 5 000 € », « 42€/h », « 100 % », « 8 euros ». Un millésime (2026) ou un numéro ne suffit pas. */
 const MONTANT_CHIFFRE = /\d\s*(?:€|euros?\b|%)/i;
@@ -152,16 +129,14 @@ describe("catalogue d'aides embarqué", () => {
     expect(sanityCheckAides(EMBEDDED_AIDES)).toEqual([]);
   });
 
-  it('a été vérifié il y a moins de 12 mois', () => {
-    const maintenant = new Date();
-    expect(controlerFraicheur(EMBEDDED_AIDES, maintenant)).toEqual([]);
-    expect(controlerFraicheur(entreesPortails(EMBEDDED_PORTAILS), maintenant)).toEqual([]);
+  it('a été vérifié moins de 12 mois avant la date de référence du jeu de données (la fraîcheur par rapport au jour : fraicheur.test.ts)', () => {
+    expect(controlerFraicheur(EMBEDDED_AIDES, dateDeReference())).toEqual([]);
+    expect(controlerFraicheur(entreesPortails(EMBEDDED_PORTAILS), dateDeReference())).toEqual([]);
   });
 
-  it("n'a aucune dernière vérification à une date future", () => {
-    const maintenant = new Date();
-    expect(controlerDatesFutures(EMBEDDED_AIDES, maintenant)).toEqual([]);
-    expect(controlerDatesFutures(entreesPortails(EMBEDDED_PORTAILS), maintenant)).toEqual([]);
+  it("n'a aucune dernière vérification après la date de référence du jeu de données (faute de frappe, ou date de référence à avancer)", () => {
+    expect(controlerDatesFutures(EMBEDDED_AIDES, dateDeReference())).toEqual([]);
+    expect(controlerDatesFutures(entreesPortails(EMBEDDED_PORTAILS), dateDeReference())).toEqual([]);
   });
 
   it('chaque montant exact est justifié par un extrait qui chiffre un montant (nombre suivi de €, d\'euros ou de %)', () => {
@@ -211,7 +186,7 @@ describe('les contrôles détectent une copie mutée', () => {
   };
 
   it('le catalogue embarqué passe tous les contrôles (point de départ des mutations)', () => {
-    const maintenant = new Date();
+    const maintenant = dateDeReference();
     expect(controlerSchema(EMBEDDED_AIDES)).toEqual([]);
     expect(controlerClesInconnues(EMBEDDED_AIDES)).toEqual([]);
     expect(controlerFraicheur(EMBEDDED_AIDES, maintenant)).toEqual([]);

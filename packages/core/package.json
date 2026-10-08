@@ -11,6 +11,7 @@
   "sideEffects": false,
   "scripts": {
     "test": "vitest run",
+    "test:fraicheur": "vitest run --config vitest.fraicheur.config.ts",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },

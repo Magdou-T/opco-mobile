@@ -3,6 +3,7 @@ import { EMBEDDED_OPCOS } from '../src/data';
 import { applyVarianteBranche } from '../src/calculator';
 import { OpcoDataSchema, sanityCheckOpco } from '../src/schema';
 import type { OpcoData, SourcedValue } from '../src/types';
+import { controlerDatesFutures, controlerFraicheur, dateDeReference } from './dates-donnees';
 
 const CHAMPS_CHIFFRES = [
   'cout_horaire_inter',
@@ -17,13 +18,6 @@ const CHAMPS_CHIFFRES = [
 ] as const;
 type ChampChiffre = (typeof CHAMPS_CHIFFRES)[number];
 type ChampsSources = Partial<Record<ChampChiffre, SourcedValue<number | null>>>;
-
-/** Nombre de mois entiers écoulés depuis une date AAAA-MM-JJ (horloge du test). */
-function moisDepuis(date: string): number {
-  const d = new Date(`${date}T00:00:00Z`);
-  const maintenant = new Date();
-  return (maintenant.getUTCFullYear() - d.getUTCFullYear()) * 12 + (maintenant.getUTCMonth() - d.getUTCMonth());
-}
 
 // ---------------------------------------------------------------------------
 // Outils de contrôle : chaque contrôle renvoie la liste des problèmes (chemin de la valeur + raison), vide = conforme.
@@ -288,11 +282,11 @@ describe('barèmes OPCO embarqués', () => {
     for (const o of EMBEDDED_OPCOS) expect(o.nom_complet, o.slug).toMatch(/^Opérateur de compétences /i);
   });
 
-  it('ont été vérifiés il y a moins de 12 mois', () => {
-    for (const o of EMBEDDED_OPCOS) {
-      expect(o.derniere_verification, o.slug).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(moisDepuis(o.derniere_verification!), o.slug).toBeLessThan(12);
-    }
+  it('ont été vérifiés moins de 12 mois avant la date de référence du jeu de données, jamais après (la fraîcheur par rapport au jour : fraicheur.test.ts)', () => {
+    for (const o of EMBEDDED_OPCOS) expect(o.derniere_verification, o.slug).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    const entrees = EMBEDDED_OPCOS.map((o) => ({ id: o.slug, derniere_verification: o.derniere_verification! }));
+    expect(controlerFraicheur(entrees, dateDeReference())).toEqual([]);
+    expect(controlerDatesFutures(entrees, dateDeReference())).toEqual([]);
   });
 
   it('chaque montant « exact », au niveau par défaut comme dans chaque variante, cite une source https et un extrait entre guillemets qui contient la valeur', () => {
