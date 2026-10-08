@@ -2,6 +2,9 @@
 # Intégration continue : vérifie le dépôt, construit le site et conserve l'archive à déposer sur l'hébergement.
 #
 # Quand : à chaque pull request vers main, à chaque push sur main, et à la demande (onglet Actions, « Run workflow »).
+# Une nouvelle exécution sur la même référence (branche ou pull request) annule la précédente, devenue inutile.
+# La pull request et le commit du pipeline IA (update-dataset.yml) sont faits avec le GITHUB_TOKEN : GitHub ne lance pas
+# ce workflow pour eux. Le lancer à la main (« Run workflow ») sur la branche bot/opco-dataset-update, ou sur main.
 #
 # Ce que le job « verifier » fait, dans cet ordre :
 #   1. vérification de types du core, du backend, de l'app mobile et du site ;
@@ -11,12 +14,15 @@
 #   5. dépôt de apps/web/out en artefact « site-hostinger », conservé 30 jours. include-hidden-files est
 #      indispensable : sans lui, le .htaccess serait exclu de l'artefact.
 #
-# Le build télécharge les polices Google (Montserrat, Inter) : le réseau du runner suffit. Aucun secret n'est utilisé.
+# Le build télécharge les polices Google (Montserrat, Inter) par next/font. Aucun secret n'est utilisé.
 # Ce workflow ne publie rien : le dépôt sur Hostinger se fait à la main (docs/deploiement-site.md).
 #
-# Des tests du core comparent la date du jour à la dernière vérification de chaque OPCO, de chaque aide et de chaque
-# portail : ils échouent à partir de 12 mois d'écart (octobre 2027 pour les vérifications d'octobre 2026). C'est le
-# rappel de la revue annuelle des données, décrite dans docs/donnees-aides.md.
+# Échecs étrangers au code : npm ci dépend du registre npm, et le build du site du téléchargement des polices Google.
+# Relancer le job avant de chercher une cause dans le dépôt.
+#
+# Les tests ne dépendent pas de la date du jour : l'alerte de fraîcheur des données (dernière vérification de plus de
+# 12 mois) est exclue de npm test et lancée chaque lundi par update-dataset.yml, sans bloquer ; une pull request ne
+# passe donc pas au rouge parce que le temps a passé. La revue annuelle est décrite dans docs/donnees-aides.md.
 # ============================================================
 name: CI
 
@@ -26,6 +32,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read

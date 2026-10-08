@@ -1,24 +1,45 @@
 # ============================================================
 # Contrôle hebdomadaire des données OPCO.
 #
-# Ce que le workflow fait aujourd'hui, chaque lundi à 06:00 UTC et à la demande (onglet Actions, « Run workflow ») :
-#   1. tests et typecheck du core et du backend ;
-#   2. contrôle des liens sources : le rapport est ajouté au résumé du run et déposé en artefact (« rapports ») ; un lien
-#      cassé, ou un contrôle interrompu, produit un avertissement sans faire échouer le run.
+# Quand : chaque lundi à 06:00 UTC, et à la demande (onglet Actions, « Run workflow »). Une seule exécution à la fois :
+# une exécution lancée pendant qu'une autre tourne attend la fin de celle-ci (groupe de concurrence update-dataset,
+# sans annulation) ; GitHub ne garde qu'une exécution en attente, la plus récente.
+#
+# Job « controle » (lecture seule du dépôt), dans cet ordre :
+#   1. contrôle des liens sources : le rapport est ajouté au résumé du run et déposé en artefact (« rapports ») ; un lien
+#      cassé, ou un contrôle interrompu, produit un avertissement sans faire échouer le run. Il passe avant les tests :
+#      un test rouge n'empêche plus le rapport des liens ;
+#   2. fraîcheur des données (npm run test:fraicheur du core) : une dernière vérification de plus de 12 mois écrit
+#      « Données plus anciennes que 12 mois : revue des données à planifier » dans le résumé, avec un avertissement, sans
+#      faire échouer le run ; sinon « Fraîcheur des données : OK ». La CI (ci.yml) ne lance pas ce contrôle ;
+#   3. tests et typecheck du core et du backend ;
+#   4. interrupteur du pipeline IA (ci-dessous).
 # Il ne modifie aucune donnée.
 #
-# Pipeline IA (étapes « Rebuild sources » à « Create PR ») : désactivé par défaut.
+# Job « pipeline-ia » (écriture : contents et pull-requests) : désactivé par défaut.
+#   - Quand il tourne : seulement si le job « controle » a réussi et que le secret ANTHROPIC_API_KEY ET la variable de
+#     dépôt PIPELINE_LIVE (valeur true) existent. Le secret seul ne suffit pas : l'ajouter ne déclenche pas une exécution
+#     payante.
 #   - Ce qu'il fait : lire les pages des 11 OPCO, faire extraire les montants par Claude, puis réécrire datasets/ (commit
 #     direct, ou pull request quand des écarts sont à revoir). Il met à jour le dataset des applications mobiles, pas le
 #     site : le site embarque packages/core/data à son build et ne lit jamais datasets/.
-#   - Quand il tourne : seulement si le secret ANTHROPIC_API_KEY ET la variable de dépôt PIPELINE_LIVE (valeur true)
-#     existent. Le secret seul ne suffit pas : l'ajouter ne déclenche pas une exécution payante.
-#   - Pourquoi il reste désactivé : il part de datasets/latest.json (version 3, juin 2026), que la validation actuelle
-#     rejette (tailles en double dans les plafonds de Constructys). Activé tel quel, il paierait l'extraction et l'avis du
-#     modèle, puis échouerait chaque lundi sans rien publier. Il ne republie d'ailleurs que les barèmes des OPCO, sans les
-#     aides, la table IDCC, les suggestions NAF ni les portails.
-#   - Avant de l'activer : publier le dataset v4 (tâche 19 du plan docs/superpowers/plans/2026-10-05-aides-financements.md :
-#     script de publication et pipeline étendus aux nouvelles sections), puis créer la variable et le secret.
+#   - Pourquoi il reste désactivé :
+#       a. il part de datasets/latest.json (version 3, juin 2026), que la validation actuelle rejette (tailles en double
+#          dans les plafonds de Constructys) : activé tel quel, il paierait l'extraction et l'avis du modèle, puis
+#          échouerait chaque lundi sans rien publier ;
+#       b. il ne republie que les barèmes ({ version, generatedAt, opcos }) : après un dataset v4 à sections (aides,
+#          table IDCC, suggestions NAF, portails), son premier run écrirait dans datasets/ un v5 SANS ces sections,
+#          commité sur main sans revue si aucun écart n'est à revoir.
+#   - Avant de l'activer : publier le dataset v4 et étendre backend/src/publish.ts et backend/src/run.ts aux sections du
+#     v4 (tâche 19 du plan docs/superpowers/plans/2026-10-05-aides-financements.md ; voir datasets/README.md), autoriser
+#     GitHub Actions à créer des pull requests (Settings > Actions > General > Workflow permissions), puis créer la
+#     variable et le secret.
+#   - Limite de GitHub : la pull request et le commit du pipeline sont faits avec le GITHUB_TOKEN, et ce qui est fait avec
+#     ce jeton ne déclenche aucun autre workflow : ci.yml ne tourne pas sur eux. Lancer la CI à la main (onglet Actions,
+#     CI, « Run workflow ») sur la branche bot/opco-dataset-update, ou sur main après un commit direct.
+#
+# Échecs étrangers au code : npm ci dépend du registre npm, le contrôle des liens du réseau du runner (il ne bloque pas).
+# Relancer le job avant de chercher une cause dans le dépôt.
 #
 # Données du site : elles se mettent à jour à la main (modifier packages/core/data/**, lancer les tests, reconstruire puis
 # redéposer le site). Voir docs/donnees-aides.md.
@@ -33,19 +54,26 @@ on:
     - cron: '0 6 * * 1' # tous les lundis à 06:00 UTC
   workflow_dispatch: {}
 
+# Une seule exécution à la fois, sans annuler celle qui tourne : le pipeline IA peut écrire dans datasets/.
+concurrency:
+  group: update-dataset
+  cancel-in-progress: false
+
+# Lecture seule par défaut : seul le job pipeline-ia reçoit les droits d'écriture.
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
-  update-dataset:
+  controle:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     env:
-      # Un secret ne peut pas être testé directement dans un « if » d'étape : on le convertit en booléen.
+      # Un secret ne peut pas être testé directement dans un « if » : on le convertit en booléen.
       HAS_ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_API_KEY != '' }}
       # Interrupteur du pipeline IA : variable de dépôt (Settings > Secrets and variables > Actions > Variables).
       PIPELINE_LIVE: ${{ vars.PIPELINE_LIVE == 'true' }}
+    outputs:
+      pipeline_actif: ${{ steps.interrupteur.outputs.actif }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -59,18 +87,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Tests core
-        run: npm test
-
-      - name: Typecheck core (les gardes de types des données ne sont vérifiées que par tsc)
-        run: npx tsc --noEmit -p packages/core
-
-      - name: Typecheck backend
-        run: npm run typecheck --workspace @opco/backend
-
-      - name: Tests backend
-        run: npm test --workspace @opco/backend
-
+      # Avant les tests : un test rouge n'empêche plus le rapport des liens.
       - name: Contrôle des liens sources
         id: liens
         run: npm run check-sources --workspace @opco/backend
@@ -90,20 +107,90 @@ jobs:
         run: |
           echo "::warning::Contrôle des liens en échec : au moins un lien cassé, ou contrôle interrompu. Détail dans le résumé du run et dans l'artefact rapports."
 
-      - name: Pipeline IA désactivé
-        if: env.HAS_ANTHROPIC_KEY != 'true' || env.PIPELINE_LIVE != 'true'
+      # Dernière vérification des OPCO, des aides et des portails comparée à la date du jour : alerte non bloquante.
+      - name: Fraîcheur des données
+        id: fraicheur
+        run: npm run test:fraicheur --workspace @opco/core
+        continue-on-error: true
+
+      - name: Fraîcheur des données dans le résumé du run
+        if: always()
+        env:
+          RESULTAT: ${{ steps.fraicheur.outcome }}
         run: |
-          manque=""
-          if [ "$HAS_ANTHROPIC_KEY" != "true" ]; then manque="le secret ANTHROPIC_API_KEY"; fi
-          if [ "$PIPELINE_LIVE" != "true" ]; then manque="${manque:+$manque et }la variable de dépôt PIPELINE_LIVE (valeur true)"; fi
-          echo "::notice::Pipeline IA désactivé : il manque ${manque}. Il met à jour le dataset mobile datasets/, pas le site, et reste désactivé tant que le dataset v4 n'est pas publié (voir docs/donnees-aides.md, section Mise à jour automatique)."
+          case "$RESULTAT" in
+            success)
+              echo "Fraîcheur des données : OK" >> "$GITHUB_STEP_SUMMARY"
+              ;;
+            failure)
+              echo "Données plus anciennes que 12 mois : revue des données à planifier (docs/donnees-aides.md, section Revue complète ; détail dans le journal de l'étape Fraîcheur des données)." >> "$GITHUB_STEP_SUMMARY"
+              echo "::warning::Données plus anciennes que 12 mois : revue des données à planifier (docs/donnees-aides.md, section Revue complète)."
+              ;;
+            *)
+              echo "Fraîcheur des données : non contrôlée (étape non exécutée)." >> "$GITHUB_STEP_SUMMARY"
+              ;;
+          esac
+
+      - name: Tests core
+        run: npm test
+
+      - name: Typecheck core (les gardes de types des données ne sont vérifiées que par tsc)
+        run: npx tsc --noEmit -p packages/core
+
+      - name: Typecheck backend
+        run: npm run typecheck --workspace @opco/backend
+
+      - name: Tests backend
+        run: npm test --workspace @opco/backend
+
+      - name: Interrupteur du pipeline IA
+        id: interrupteur
+        run: |
+          if [ "$HAS_ANTHROPIC_KEY" = "true" ] && [ "$PIPELINE_LIVE" = "true" ]; then
+            echo "actif=true" >> "$GITHUB_OUTPUT"
+          else
+            manque=""
+            if [ "$HAS_ANTHROPIC_KEY" != "true" ]; then manque="le secret ANTHROPIC_API_KEY"; fi
+            if [ "$PIPELINE_LIVE" != "true" ]; then manque="${manque:+$manque et }la variable de dépôt PIPELINE_LIVE (valeur true)"; fi
+            echo "::notice::Pipeline IA désactivé : il manque ${manque}. Il met à jour le dataset mobile datasets/, pas le site, et reste désactivé tant que le dataset v4 n'est pas publié (voir docs/donnees-aides.md, section Mise à jour automatique)."
+            echo "actif=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Rapports du contrôle des liens
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rapports
+          path: |
+            backend/out/liens.md
+            backend/out/liens.json
+          if-no-files-found: ignore
+
+  pipeline-ia:
+    needs: controle
+    if: needs.controle.outputs.pipeline_actif == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Rebuild sources (depuis packages/core/data/opcos)
-        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true'
         run: npm run build-sources --workspace @opco/backend
 
       - name: Run pipeline (live)
-        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true'
         env:
           # Secret CI, jamais dans le code ni dans l'app.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -114,7 +201,6 @@ jobs:
         run: npm run live --workspace @opco/backend
 
       - name: Count needsReview
-        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true'
         id: review
         run: |
           count=$(node -p "try { JSON.parse(require('fs').readFileSync('backend/out/report.json','utf8')).needsReview.length } catch (e) { 0 }")
@@ -122,7 +208,7 @@ jobs:
           echo "needsReview = $count"
 
       - name: Commit dataset (aucune revue requise)
-        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true' && steps.review.outputs.count == '0'
+        if: steps.review.outputs.count == '0'
         run: |
           git config user.name "opco-funding-bot"
           git config user.email "opco-funding-bot@users.noreply.github.com"
@@ -135,7 +221,7 @@ jobs:
           fi
 
       - name: Create PR (changements à revoir)
-        if: env.HAS_ANTHROPIC_KEY == 'true' && env.PIPELINE_LIVE == 'true' && steps.review.outputs.count != '0'
+        if: steps.review.outputs.count != '0'
         uses: peter-evans/create-pull-request@v8
         with:
           branch: bot/opco-dataset-update
@@ -147,20 +233,20 @@ jobs:
             publiés automatiquement : `latest.json` conserve les anciennes valeurs.
 
             Détail complet : le fichier `report.json` (champ `needsReview`) de l'artefact
-            `rapports` du run, et le changelog de `datasets/manifest.json`. `report.json`
-            n'est pas committé : le dossier `backend/out/` est ignoré par git.
+            `rapport-pipeline-ia` du run, et le changelog de `datasets/manifest.json`.
+            `report.json` n'est pas committé : le dossier `backend/out/` est ignoré par git.
+
+            La CI ne se lance pas d'elle-même sur cette pull request (limite du GITHUB_TOKEN) :
+            la lancer depuis l'onglet Actions (CI, « Run workflow », branche `bot/opco-dataset-update`).
 
             Run : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           add-paths: |
             datasets/
 
-      - name: Rapports (contrôle des liens, et pipeline IA quand il a tourné)
+      - name: Rapport du pipeline IA
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: rapports
-          path: |
-            backend/out/liens.md
-            backend/out/liens.json
-            backend/out/report.json
+          name: rapport-pipeline-ia
+          path: backend/out/report.json
           if-no-files-found: ignore
