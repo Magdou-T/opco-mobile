@@ -417,6 +417,15 @@ describe("entrée du résolveur d'OPCO (entreeDeResolution) : la catégorie juri
     const etat = appliquer(choisir(createInitialWizardState(), ehpad('7366')), etatSansEntreprise());
     assert.equal(etat.natureJuridique, null);
   });
+
+  test("l'étape Entreprise recalcule sa résolution depuis ces quatre champs de l'état, catégorie juridique comprise", () => {
+    // Aucun test ne rend le composant : ce motif l'attache à ce que depuisLEtat simule. Sans la catégorie juridique, un
+    // employeur public recevrait de nouveau, au retour sur l'étape, une suggestion d'après son seul code NAF.
+    assert.match(
+      lire('../src/components/wizard/StepIdentification.tsx'),
+      /entreeDeResolution\(\{\s*idccs: state\.idccEtablissements,\s*idccSiege: state\.idccSiege,\s*codeNaf: state\.codeNaf,\s*natureJuridique: state\.natureJuridique,\s*\}\)/,
+    );
+  });
 });
 
 describe("textes du résolveur d'OPCO prêts à l'affichage (texteDuResolveur)", () => {
@@ -511,5 +520,14 @@ describe("présélection d'après le code NAF (preselectionParNaf) : la carte de
     }
     // Les deux issues sont bien tirées (sinon la propriété ne prouverait rien).
     assert.ok(vus.oui >= 100 && vus.non >= 100, JSON.stringify(vus));
+  });
+
+  test("l'étape Entreprise passe la présélection telle quelle à la carte de l'OPCO", () => {
+    // Aucun test ne rend le composant : une présélection inversée citerait la Table SIRET-OPCO sous un OPCO établi par sa
+    // convention, et la tairait sous une suggestion d'après le code NAF.
+    assert.match(
+      lire('../src/components/wizard/StepIdentification.tsx'),
+      /<CarteOpco\s+state=\{state\}\s+resolution=\{resolution\}\s+suggestionNaf=\{suggestionNaf\}/,
+    );
   });
 });

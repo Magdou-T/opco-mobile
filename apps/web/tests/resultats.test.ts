@@ -2,6 +2,8 @@
 // (calculs détaillés en commentaire) ; les tirages au hasard ont une graine fixe.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import {
   EMBEDDED_AIDES,
   EMBEDDED_PORTAILS,
@@ -1321,6 +1323,14 @@ describe('relais du plan conventionnel de la branche (AKTO, organismes de format
     assert.equal(dispositifAffiche(r.funding, relais), r.funding.dispositifPrincipal);
     // Plusieurs branches : au pluriel.
     assert.match(espaces(texteFondsEpuises({ opco: 'AKTO', branches: ['A', 'B'] }, null)), /pour les branches « A », « B » : /);
+  });
+
+  test("le bandeau de synthèse passe le relais au titre et au texte de l'encadré des fonds épuisés", () => {
+    // Aucun test ne rend le composant : sans le relais, l'encadré titrerait « Fonds épuisés selon AKTO » et annoncerait un
+    // refus possible au-dessus d'un plan qui compte le plan conventionnel de la branche.
+    const bandeau = readFileSync(fileURLToPath(new URL('../src/components/results/BandeauSynthese.tsx', import.meta.url)), 'utf8');
+    assert.match(bandeau, /titre=\{titreFondsEpuises\(fondsEpuises, relais\)\}/);
+    assert.match(bandeau, /\{texteFondsEpuises\(fondsEpuises, relais\)\}/);
   });
 
   test('600 états tirés au hasard (graine 23) : le relais n’apparaît que si la variante appliquée porte le champ', () => {
