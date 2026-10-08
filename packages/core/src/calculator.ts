@@ -17,6 +17,7 @@ import type {
   VarianteBranche,
   PosteFinancement,
 } from './types';
+import { INSECABLE, apposition, dansLaPhrase, de } from './texte';
 
 /** Texte de référence de la règle des 50 salariés (fonds mutualisés du PDC). */
 export const REFERENCE_REGLE_50_SALARIES = 'art. L. 6332-17 du code du travail';
@@ -131,7 +132,7 @@ function line(
 function finMessagePlafondAnnuel(opco: OpcoData): string {
   return opco.budget_annuel_max.confidence === 'exact'
     ? '.'
-    : ` (montant estimé : à confirmer auprès de ${opco.name})`;
+    : ` (montant estimé : à confirmer auprès ${de(opco.name)})`;
 }
 
 function resolvePlafondForSize(opco: OpcoData, size: CompanySize | null): PlafondTaille | null {
@@ -286,7 +287,7 @@ function calcPedagogy(
     const reste = arrondi(userCostPerHour * hours - funded);
     if (reste > 0) {
       warnings.push(
-        `Le barème dégressif de ${opco.name} laisse un reste à charge de ${reste.toFixed(2)} € sur les coûts pédagogiques.`,
+        `Le barème dégressif ${de(opco.name)} laisse un reste à charge de ${reste.toFixed(2)} € sur les coûts pédagogiques.`,
       );
     }
   } else {
@@ -297,7 +298,7 @@ function calcPedagogy(
       confidence = ceilingInfo.confidence;
       funded = Math.min(userCostPerHour, ceiling) * hours;
       note = `Plafond horaire : ${ceiling} €/h`;
-      details.push(`Plafond horaire ${opco.name} : ${ceiling} €/h`);
+      details.push(`Plafond horaire ${apposition(opco.name)} : ${ceiling} €/h`);
       if (userCostPerHour > ceiling) {
         const reste = (userCostPerHour - ceiling) * hours;
         // Coût horaire égal au plafond une fois arrondi au centime (4 200,50 € sur 140 h : 30,0036 €/h, qui s'affiche
@@ -305,15 +306,15 @@ function calcPedagogy(
         const egalAuCentime = Math.round(userCostPerHour * 100) === Math.round(ceiling * 100);
         details.push(
           egalAuCentime
-            ? `⚠ Votre coût dépasse le plafond de ${reste.toFixed(2)} € sur la formation → taux appliqué : ${ceiling} €/h`
-            : `⚠ Votre coût (${userCostPerHour} €/h) dépasse le plafond → taux appliqué : ${ceiling} €/h`,
+            ? `Votre coût dépasse le plafond de ${reste.toFixed(2)} € sur la formation → taux appliqué : ${ceiling} €/h`
+            : `Votre coût (${userCostPerHour} €/h) dépasse le plafond → taux appliqué : ${ceiling} €/h`,
         );
         details.push(`Calcul : ${ceiling} €/h × ${hours} h = ${(ceiling * hours).toFixed(2)} €`);
         details.push(`Reste à charge sur ce poste : ${reste.toFixed(2)} €`);
         warnings.push(
           egalAuCentime
-            ? `Le coût demandé dépasse le plafond ${opco.name} (${ceiling} €/h) de ${reste.toFixed(2)} € sur la formation : ce montant reste à charge.`
-            : `Le coût horaire demandé (${userCostPerHour} €/h) dépasse le plafond ${opco.name} (${ceiling} €/h). ` +
+            ? `Le coût demandé dépasse le plafond ${apposition(opco.name)} (${ceiling} €/h) de ${reste.toFixed(2)} € sur la formation : ce montant reste à charge.`
+            : `Le coût horaire demandé (${userCostPerHour} €/h) dépasse le plafond ${apposition(opco.name)} (${ceiling} €/h). ` +
                 `Le reste à charge est de ${reste.toFixed(2)} €.`,
         );
       } else {
@@ -357,7 +358,16 @@ function calcPedagogy(
   };
 }
 
-function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number): FundingLine {
+/**
+ * Détail d'un poste dont la branche appliquée (variante choisie ou détectée) ne publie pas la valeur : la branche est connue,
+ * le texte la nomme au lieu de renvoyer à « votre accord de branche ».
+ */
+function nonPublieePourLaBranche(opco: OpcoData, branche: string): string {
+  return `Non publié pour la branche ${branche} : montant à confirmer auprès ${de(opco.name)}`;
+}
+
+/** `branche` : nom de la branche appliquée (variante), null sans variante. */
+function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number, branche: string | null): FundingLine {
   const hours = state.durationHours ?? 0;
   const mode = opco.prise_en_charge_salaires_mode;
   const rate = opco.prise_en_charge_salaires.value;
@@ -373,7 +383,7 @@ function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number):
       // Taux propre à la taille d'entreprise : absent = taux de l'OPCO ; null = pas de prise en charge pour cette taille.
       const plafond = resolvePlafondForSize(opco, state.companySize);
       const tauxTaille = plafond?.prise_en_charge_salaires_horaire;
-      details.push(`Mode de calcul ${opco.name} : forfait horaire`);
+      details.push(`Mode de calcul ${apposition(opco.name)} : forfait horaire`);
       if (tauxTaille === null) {
         note = "Pas de prise en charge des salaires pour cette taille d'entreprise";
         details.push(`${opco.name} ne prend pas en charge les salaires pour votre taille d'entreprise`);
@@ -381,27 +391,29 @@ function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number):
       }
       const taux = tauxTaille !== undefined ? tauxTaille : rate;
       funded = (taux ?? 0) * hours;
-      note = taux != null ? `${taux} €/h × ${hours}h` : undefined;
+      note = taux != null ? `${taux} €/h × ${hours}${INSECABLE}h` : undefined;
       if (taux != null) {
         if (tauxTaille !== undefined) details.push(`Taux propre à votre taille d'entreprise : ${taux} €/h`);
         details.push(`Taux de prise en charge : ${taux} €/h`);
-        details.push(`Calcul : ${taux} €/h × ${hours}h = ${funded.toFixed(2)} €`);
+        details.push(`Calcul : ${taux} €/h × ${hours}${INSECABLE}h = ${funded.toFixed(2)} €`);
       }
       break;
     }
     case 'pourcentage_pedagogique':
       funded = pedagogyFunded * ((rate ?? 0) / 100);
-      note = rate != null ? `${rate}% des coûts pédagogiques pris en charge` : undefined;
-      details.push(`Mode de calcul ${opco.name} : pourcentage des coûts pédagogiques`);
+      note = rate != null ? `${rate}${INSECABLE}% des coûts pédagogiques pris en charge` : undefined;
+      details.push(`Mode de calcul ${apposition(opco.name)} : pourcentage des coûts pédagogiques`);
       if (rate != null) {
-        details.push(`Taux : ${rate}% des coûts péda financés (${pedagogyFunded.toFixed(2)} €)`);
-        details.push(`Calcul : ${pedagogyFunded.toFixed(2)} € × ${rate}% = ${funded.toFixed(2)} €`);
+        details.push(`Taux : ${rate}${INSECABLE}% des coûts pédagogiques financés (${pedagogyFunded.toFixed(2)} €)`);
+        details.push(`Calcul : ${pedagogyFunded.toFixed(2)} € × ${rate}${INSECABLE}% = ${funded.toFixed(2)} €`);
       }
       break;
     case 'selon_accord':
-      note = "Montant dépendant de l'accord de branche";
+      note = branche ? `Prise en charge des salaires non publiée pour la branche ${branche}` : "Montant dépendant de l'accord de branche";
       details.push(`${opco.name} ne publie pas de taux fixe pour les salaires`);
-      details.push('Le montant dépend de votre convention collective / accord de branche');
+      details.push(
+        branche ? nonPublieePourLaBranche(opco, branche) : 'Le montant dépend de votre convention collective / accord de branche',
+      );
       details.push('Contactez votre OPCO pour connaître le montant exact');
       break;
     case 'inclus_plafond_horaire':
@@ -418,7 +430,7 @@ function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number):
   return line('salaires', 'Prise en charge salaires', funded, funded, effectiveConfidence, sourceUrl, note, details);
 }
 
-function calcTransport(opco: OpcoData, state: WizardState): FundingLine {
+function calcTransport(opco: OpcoData, state: WizardState, branche: string | null): FundingLine {
   if (!state.needsTransport) return line('transport', 'Transport', 0, 0, 'exact', opco.url_finance_page);
 
   const days = state.trainingDays ?? 0;
@@ -429,18 +441,27 @@ function calcTransport(opco: OpcoData, state: WizardState): FundingLine {
   if (rate != null && rate > 0) {
     const funded = rate * days;
     return line('transport', 'Transport', funded, funded, confidence, sourceUrl, `${rate} €/jour × ${days} jours`, [
-      `Forfait transport journalier ${opco.name} : ${rate} €/jour`,
+      `Forfait transport journalier ${apposition(opco.name)} : ${rate} €/jour`,
       `Calcul : ${rate} €/jour × ${days} jours = ${funded.toFixed(2)} €`,
     ]);
   }
 
-  return line('transport', 'Transport', 0, 0, 'depends_on_branche', sourceUrl, 'Montant transport selon accord de branche', [
-    `${opco.name} ne publie pas de forfait transport fixe`,
-    'Le montant dépend de votre accord de branche',
-  ]);
+  return line(
+    'transport',
+    'Transport',
+    0,
+    0,
+    'depends_on_branche',
+    sourceUrl,
+    branche ? `Forfait transport non publié pour la branche ${branche}` : 'Montant transport selon accord de branche',
+    [
+      `${opco.name} ne publie pas de forfait transport fixe`,
+      branche ? nonPublieePourLaBranche(opco, branche) : 'Le montant dépend de votre accord de branche',
+    ],
+  );
 }
 
-function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
+function calcAccommodation(opco: OpcoData, state: WizardState, branche: string | null): FundingLine {
   if (!state.needsAccommodation) return line('hebergement', 'Hébergement', 0, 0, 'exact', opco.url_finance_page);
 
   const nights = state.accommodationNights ?? 0;
@@ -454,10 +475,10 @@ function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
     const funded = Math.min(userCostPerNight, ceiling) * nights;
     const details = [
       `Votre coût : ${userCostPerNight} €/nuit × ${nights} nuits = ${requested.toFixed(2)} €`,
-      `Plafond hébergement ${opco.name} : ${ceiling} €/nuit`,
+      `Plafond hébergement ${apposition(opco.name)} : ${ceiling} €/nuit`,
     ];
     if (userCostPerNight > ceiling) {
-      details.push(`⚠ Votre coût dépasse le plafond → taux appliqué : ${ceiling} €/nuit`);
+      details.push(`Votre coût dépasse le plafond → taux appliqué : ${ceiling} €/nuit`);
       details.push(`Calcul : ${ceiling} €/nuit × ${nights} nuits = ${funded.toFixed(2)} €`);
     } else {
       details.push("Votre coût par nuit ne dépasse pas le plafond : l'estimation le retient en entier.");
@@ -467,7 +488,7 @@ function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
 
   // Aucun plafond exploitable : jamais de montant inventé, le coût saisi reste entièrement à charge.
   if (ceiling === 0) {
-    return line('hebergement', 'Hébergement', requested, 0, confidence, sourceUrl, `Hébergement non pris en charge par ${opco.name}`, [
+    return line('hebergement', 'Hébergement', requested, 0, confidence, sourceUrl, `Hébergement non pris en charge par ${dansLaPhrase(opco.name)}`, [
       `${opco.name} ne finance pas l'hébergement dans ce cadre`,
     ]);
   }
@@ -479,7 +500,9 @@ function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
     0,
     'depends_on_branche',
     sourceUrl,
-    "Plafond hébergement non publié : prise en charge selon l'accord de branche, à confirmer auprès de l'OPCO",
+    branche
+      ? `Plafond hébergement non publié pour la branche ${branche} : montant à confirmer auprès ${de(opco.name)}`
+      : "Plafond hébergement non publié : prise en charge selon l'accord de branche, à confirmer auprès de l'OPCO",
     [
       `${opco.name} ne publie pas de plafond hébergement`,
       "Aucun montant n'est compté tant que l'OPCO ne l'a pas confirmé",
@@ -487,7 +510,7 @@ function calcAccommodation(opco: OpcoData, state: WizardState): FundingLine {
   );
 }
 
-function calcMeals(opco: OpcoData, state: WizardState): FundingLine {
+function calcMeals(opco: OpcoData, state: WizardState, branche: string | null): FundingLine {
   if (!state.needsMeals) return line('restauration', 'Restauration', 0, 0, 'exact', opco.url_finance_page);
 
   const days = state.trainingDays ?? 0;
@@ -506,8 +529,8 @@ function calcMeals(opco: OpcoData, state: WizardState): FundingLine {
     const tarif = (montant: number): string => (parRepas ? `${montant} € par repas` : `${montant} €/jour`);
     const details = [
       parRepas
-        ? `Forfait restauration ${opco.name} : ${rate} € par repas (un repas par jour de formation retenu)`
-        : `Forfait restauration ${opco.name} : ${rate} €/jour`,
+        ? `Forfait restauration ${apposition(opco.name)} : ${rate} € par repas (un repas par jour de formation retenu)`
+        : `Forfait restauration ${apposition(opco.name)} : ${rate} €/jour`,
     ];
     if (userCostPerDay < rate) {
       details.push(`Votre coût (${userCostPerDay} €/jour) est inférieur au forfait : prise en charge au coût réel`);
@@ -522,10 +545,19 @@ function calcMeals(opco: OpcoData, state: WizardState): FundingLine {
   }
 
   // Aucun forfait publié : le coût déclaré reste affiché comme demandé (comme l'hébergement), rien n'est financé.
-  return line('restauration', 'Restauration', requested, 0, 'depends_on_branche', sourceUrl, 'Montant restauration selon accord de branche', [
-    `${opco.name} ne publie pas de forfait restauration fixe`,
-    'Le montant dépend de votre accord de branche',
-  ]);
+  return line(
+    'restauration',
+    'Restauration',
+    requested,
+    0,
+    'depends_on_branche',
+    sourceUrl,
+    branche ? `Forfait restauration non publié pour la branche ${branche}` : 'Montant restauration selon accord de branche',
+    [
+      `${opco.name} ne publie pas de forfait restauration fixe`,
+      branche ? nonPublieePourLaBranche(opco, branche) : 'Le montant dépend de votre accord de branche',
+    ],
+  );
 }
 
 function calcFraisAnnexesPourcentage(opco: OpcoData, pedagogyFunded: number): FundingLine | null {
@@ -540,11 +572,11 @@ function calcFraisAnnexesPourcentage(opco: OpcoData, pedagogyFunded: number): Fu
     funded,
     opco.frais_annexes_pourcentage.confidence,
     opco.frais_annexes_pourcentage.source_url,
-    `${pct}% des coûts pédagogiques`,
+    `${pct}${INSECABLE}% des coûts pédagogiques`,
     [
       `${opco.name} utilise un forfait global pour les frais annexes`,
-      `Taux : ${pct}% des coûts pédagogiques financés`,
-      `Calcul : ${pedagogyFunded.toFixed(2)} € × ${pct}% = ${funded.toFixed(2)} €`,
+      `Taux : ${pct}${INSECABLE}% des coûts pédagogiques financés`,
+      `Calcul : ${pedagogyFunded.toFixed(2)} € × ${pct}${INSECABLE}% = ${funded.toFixed(2)} €`,
       'Ce forfait couvre transport, hébergement et restauration',
     ],
   );
@@ -556,7 +588,7 @@ function lignesPdcFerme(opco: OpcoData, state: WizardState): FundingLine[] {
   const requested = state.pedagogyCostTotal ?? (state.pedagogyCostPerHour ?? 0) * hours;
   const note = 'Fonds mutualisés réservés aux entreprises de moins de 50 salariés';
   const details = [
-    `Les fonds mutualisés de ${opco.name} pour le plan de développement des compétences sont réservés aux entreprises de moins de 50 salariés (${REFERENCE_REGLE_50_SALARIES}).`,
+    `Les fonds mutualisés ${de(opco.name)} pour le plan de développement des compétences sont réservés aux entreprises de moins de 50 salariés (${REFERENCE_REGLE_50_SALARIES}).`,
     `${opco.name} ne publie pas d'enveloppe conventionnelle ou volontaire pour votre taille d'entreprise : aucun financement n'est estimé sur ce dispositif.`,
   ];
   const lignes = [
@@ -591,21 +623,24 @@ function generateWarnings(
 
   if (opco.quota_horaire_min != null && state.durationHours != null && state.durationHours < opco.quota_horaire_min) {
     warnings.push(
-      `La durée de formation (${state.durationHours}h) est inférieure au minimum requis par ${opco.name} (${opco.quota_horaire_min}h). ` +
-        'La prise en charge pourrait être refusée.',
+      `La durée de formation (${state.durationHours}${INSECABLE}h) est inférieure au minimum requis par ${dansLaPhrase(opco.name)} ` +
+        `(${opco.quota_horaire_min}${INSECABLE}h). La prise en charge pourrait être refusée.`,
     );
   }
 
   const plafond = resolvePlafondForSize(opco, state.companySize);
   if (plafond?.quota_horaire_max != null && state.durationHours != null && state.durationHours > plafond.quota_horaire_max) {
     warnings.push(
-      `La durée de formation (${state.durationHours}h) dépasse le plafond horaire pour votre taille d'entreprise ` +
-        `(${plafond.quota_horaire_max}h). Les heures au-delà ne seront pas prises en charge.`,
+      `La durée de formation (${state.durationHours}${INSECABLE}h) dépasse le plafond horaire pour votre taille d'entreprise ` +
+        `(${plafond.quota_horaire_max}${INSECABLE}h). Les heures au-delà ne seront pas prises en charge.`,
     );
   }
 
   if (plafond == null && opco.quota_horaire_max != null && state.durationHours != null && state.durationHours > opco.quota_horaire_max) {
-    warnings.push(`La durée de formation (${state.durationHours}h) dépasse le plafond horaire ${opco.name} (${opco.quota_horaire_max}h).`);
+    warnings.push(
+      `La durée de formation (${state.durationHours}${INSECABLE}h) dépasse le plafond horaire ${apposition(opco.name)} ` +
+        `(${opco.quota_horaire_max}${INSECABLE}h).`,
+    );
   }
 
   if (opco.priorite_tpe_pme && state.companySize === '300_plus') {
@@ -618,23 +653,23 @@ function generateWarnings(
   if (lines.some((l) => l.confidence === 'depends_on_branche' && l.fundedAmount > 0)) {
     warnings.push(
       'Certains montants dépendent de votre accord de branche et peuvent varier. ' +
-        `Contactez ${opco.name} pour confirmation.`,
+        `Contactez ${dansLaPhrase(opco.name)} pour confirmation.`,
     );
   }
 
   if (budgetAnnuelNul) {
     // Un budget à 0 n'est pas un plafond à appliquer mais une enveloppe fermée : ce message remplace celui de plafond appliqué.
     warnings.push(
-      `Aucun budget n'est disponible sur le plan de développement des compétences de ${opco.name} pour votre situation ` +
+      `Aucun budget n'est disponible sur le plan de développement des compétences ${de(opco.name)} pour votre situation ` +
         '(enveloppe épuisée ou fermée). Consultez les autres financements.',
     );
   } else if (budgetCapApplied) {
     if ((opco.budget_annuel_portee ?? 'global') === 'pedagogie') {
       // Salaires et frais annexes sont financés en plus (cf. calcPedagogy) : le total n'est pas plafonné.
-      warnings.push(`Le plafond budgétaire annuel de ${opco.name} a été appliqué aux coûts pédagogiques${finMessagePlafondAnnuel(opco)}`);
+      warnings.push(`Le plafond budgétaire annuel ${de(opco.name)} a été appliqué aux coûts pédagogiques${finMessagePlafondAnnuel(opco)}`);
     } else {
       warnings.push(
-        `Le plafond budgétaire annuel de ${opco.name} a été appliqué. Le montant total finançable est plafonné${finMessagePlafondAnnuel(opco)}`,
+        `Le plafond budgétaire annuel ${de(opco.name)} a été appliqué. Le montant total finançable est plafonné${finMessagePlafondAnnuel(opco)}`,
       );
     }
   }
@@ -643,7 +678,7 @@ function generateWarnings(
 }
 
 function generateConditions(opco: OpcoData, state: WizardState): string[] {
-  const conditions: string[] = [`Être à jour des cotisations auprès de ${opco.name}.`];
+  const conditions: string[] = [`Être à jour des cotisations auprès ${de(opco.name)}.`];
   if (opco.processus_approbation) conditions.push(opco.processus_approbation);
   if (state.formationType === 'vae' && opco.vae_possible) {
     conditions.push("VAE : la formation doit être éligible au dispositif VAE de l'OPCO.");
@@ -653,8 +688,8 @@ function generateConditions(opco: OpcoData, state: WizardState): string[] {
 }
 
 function generateNextSteps(opco: OpcoData): { label: string; url: string }[] {
-  const steps = [{ label: `Consulter les critères de financement ${opco.name}`, url: opco.url_finance_page }];
-  if (opco.email_contact) steps.push({ label: `Contacter ${opco.name} par email`, url: `mailto:${opco.email_contact}` });
+  const steps = [{ label: `Consulter les critères de financement ${apposition(opco.name)}`, url: opco.url_finance_page }];
+  if (opco.email_contact) steps.push({ label: `Contacter ${dansLaPhrase(opco.name)} par email`, url: `mailto:${opco.email_contact}` });
   return steps;
 }
 
@@ -753,12 +788,12 @@ function evaluateDispositifs(
 /** Construit la liste ordonnée des démarches concrètes. */
 function generateDemarches(opco: OpcoData, dispositifs: DispositifEligible[]): string[] {
   const steps: string[] = [
-    `Vérifier que votre entreprise est à jour de ses cotisations auprès de ${opco.name}.`,
+    `Vérifier que votre entreprise est à jour de ses cotisations auprès ${de(opco.name)}.`,
     "Demander un devis et le programme détaillé à l'organisme de formation (certifié Qualiopi).",
   ];
   steps.push(
     opco.processus_approbation ||
-      `Déposer la demande de prise en charge sur l'espace entreprise ${opco.name}, AVANT le début de la formation.`,
+      `Déposer la demande de prise en charge sur l'espace entreprise ${apposition(opco.name)}, AVANT le début de la formation.`,
   );
   if (typeof opco.delai_validation === 'string' && opco.delai_validation) {
     steps.push(`Délai : ${opco.delai_validation}`);
@@ -780,7 +815,7 @@ function generateDemarches(opco: OpcoData, dispositifs: DispositifEligible[]): s
 function demarchesPdcFerme(opco: OpcoData): string[] {
   return [
     `Votre entreprise compte 50 salariés ou plus : le plan de développement des compétences est financé sur ses fonds propres (${REFERENCE_REGLE_50_SALARIES}).`,
-    `Demandez à ${opco.name} si votre branche prévoit des fonds conventionnels ou un plan volontaire pour les entreprises de votre taille.`,
+    `Demandez à ${dansLaPhrase(opco.name)} si votre branche prévoit des fonds conventionnels ou un plan volontaire pour les entreprises de votre taille.`,
     'Consultez les autres financements mobilisables (CPF, Région, France Travail, Transitions Pro…) avant de démarrer la formation.',
   ];
 }
@@ -804,7 +839,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
   const idccDeLEntreprise = idccEntreprise(state, variante);
   if (!variante && (rawOpcoData.variantes_branche?.length ?? 0) > 0) {
     earlyWarnings.push(
-      `Barème général ${rawOpcoData.name} appliqué : votre branche professionnelle peut prévoir des montants différents ` +
+      `Barème général ${apposition(rawOpcoData.name)} appliqué : votre branche professionnelle peut prévoir des montants différents ` +
         `(souvent supérieurs). Sélectionnez votre branche professionnelle ou vérifiez les règles de votre branche sur ${rawOpcoData.url_finance_page}`,
     );
   }
@@ -841,7 +876,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
       budgetAnnuelNul,
     );
     capPedagogieApplique = capApplique;
-    const salaryLine = calcSalary(opcoData, state, pedagogyLine.fundedAmount);
+    const salaryLine = calcSalary(opcoData, state, pedagogyLine.fundedAmount, brancheAppliquee);
 
     const usePercentageModel =
       opcoData.frais_annexes_pourcentage.value != null && opcoData.frais_annexes_pourcentage.value > 0;
@@ -854,9 +889,9 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
       if (state.needsAccommodation) ancillaryLines.push(line('hebergement', 'Hébergement', 0, 0, 'exact', opcoData.url_finance_page, inclus));
       if (state.needsMeals) ancillaryLines.push(line('restauration', 'Restauration', 0, 0, 'exact', opcoData.url_finance_page, inclus));
     } else {
-      ancillaryLines.push(calcTransport(opcoData, state));
-      ancillaryLines.push(calcAccommodation(opcoData, state));
-      ancillaryLines.push(calcMeals(opcoData, state));
+      ancillaryLines.push(calcTransport(opcoData, state, brancheAppliquee));
+      ancillaryLines.push(calcAccommodation(opcoData, state, brancheAppliquee));
+      ancillaryLines.push(calcMeals(opcoData, state, brancheAppliquee));
     }
     allLines = [pedagogyLine, salaryLine, ...ancillaryLines];
   }
@@ -899,9 +934,9 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
   const warnings = [...earlyWarnings, ...generateWarnings(opcoData, state, allLines, budgetCapApplied, budgetAnnuelNul)];
   if (pdcFerme) {
     warnings.unshift(
-      `Règle légale : les fonds mutualisés de ${opcoData.name} pour le plan de développement des compétences sont réservés ` +
+      `Règle légale : les fonds mutualisés ${de(opcoData.name)} pour le plan de développement des compétences sont réservés ` +
         `aux entreprises de moins de 50 salariés (${REFERENCE_REGLE_50_SALARIES}). Aucune prise en charge n'est estimée sur ces fonds.`,
-      `Pistes pour votre entreprise : contributions conventionnelles ou versements volontaires auprès de ${opcoData.name} ` +
+      `Pistes pour votre entreprise : contributions conventionnelles ou versements volontaires auprès ${de(opcoData.name)} ` +
         '(selon votre branche), alternance, période de reconversion, actions collectives, et les autres aides identifiées.',
     );
   }
@@ -918,7 +953,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
     );
     if (annualCap - budgetDejaConsomme <= 0) {
       warnings.push(
-        `Votre enveloppe annuelle ${opcoData.name} est épuisée. Examinez les financements complémentaires ci-dessous ou attendez l'année suivante.`,
+        `Votre enveloppe annuelle ${apposition(opcoData.name)} est épuisée. Examinez les financements complémentaires ci-dessous ou attendez l'année suivante.`,
       );
     }
   }

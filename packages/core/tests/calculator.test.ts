@@ -4,7 +4,10 @@ import { EMBEDDED_OPCOS } from '../src/data';
 import type { AlerteOpco, Confidence, DispositifComplementaire, OpcoData, PlafondTaille, VarianteBranche, WizardState } from '../src/types';
 import { makeOpco, makeFormationState } from './fixtures';
 
-describe('calculateFunding — coûts pédagogiques', () => {
+/** Espace insécable (U+00A0), construite par son code : entre un nombre et son unité dans les textes du moteur. */
+const NBSP = String.fromCharCode(0xa0);
+
+describe('calculateFunding, coûts pédagogiques', () => {
   it('finance intégralement quand le coût est sous le plafond horaire', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });
     const state = makeFormationState({ durationHours: 100, pedagogyCostPerHour: 30 });
@@ -98,7 +101,7 @@ describe('calculateFunding, textes du calcul : rien de plus fort que l’estimat
     const peda = pedagogie(r);
     // (4 200,50 / 140 - 30) x 140 = 0,50 € au-dessus du plafond : 4 200 € financés, 0,50 € de reste.
     expect(peda).toMatchObject({ requestedAmount: 4200.5, fundedAmount: 4200, remainder: 0.5 });
-    expect(peda.details).toContain('⚠ Votre coût dépasse le plafond de 0.50 € sur la formation → taux appliqué : 30 €/h');
+    expect(peda.details).toContain('Votre coût dépasse le plafond de 0.50 € sur la formation → taux appliqué : 30 €/h');
     expect(r.warnings).toContain('Le coût demandé dépasse le plafond Test OPCO (30 €/h) de 0.50 € sur la formation : ce montant reste à charge.');
     // Jamais un coût horaire qui s'affiche 30 €/h présenté au-dessus d'un plafond de 30 €/h.
     expect([...(peda.details ?? []), ...r.warnings].filter((t) => /\(30(?:\.\d+)? €\/h\) dépasse/.test(t))).toEqual([]);
@@ -106,13 +109,106 @@ describe('calculateFunding, textes du calcul : rien de plus fort que l’estimat
 
   it('coût horaire au-dessus du plafond une fois arrondi (30,10 €/h) : le dépassement reste écrit en €/h', () => {
     const r = calculateFunding(opcoA(30), makeFormationState({ durationHours: 140, pedagogyCostTotal: 4214, pedagogyCostPerHour: 4214 / 140 }));
-    expect(pedagogie(r).details).toContain('⚠ Votre coût (30.1 €/h) dépasse le plafond → taux appliqué : 30 €/h');
+    expect(pedagogie(r).details).toContain('Votre coût (30.1 €/h) dépasse le plafond → taux appliqué : 30 €/h');
     expect(r.warnings).toContain('Le coût horaire demandé (30.1 €/h) dépasse le plafond Test OPCO (30 €/h). Le reste à charge est de 14.00 €.');
     expect(pedagogie(r)).toMatchObject({ fundedAmount: 4200, remainder: 14 });
   });
+
+  it('coût horaire égal au plafond (30 €/h pour un plafond de 30 €/h) : aucun avertissement ni détail de dépassement', () => {
+    // 4 200 € sur 140 h : 30 €/h exactement, le plafond. L'estimation retient le coût en entier, sans reste à charge ni « dépasse ».
+    const r = calculateFunding(opcoA(30), makeFormationState({ durationHours: 140, pedagogyCostTotal: 4200, pedagogyCostPerHour: 30 }));
+    expect(pedagogie(r)).toMatchObject({ requestedAmount: 4200, fundedAmount: 4200, remainder: 0 });
+    expect(pedagogie(r).details).toContain("Votre coût horaire ne dépasse pas le plafond : l'estimation le retient en entier.");
+    expect([...(pedagogie(r).details ?? []), ...r.warnings].filter((t) => /dépasse le plafond|Reste à charge sur ce poste/.test(t) && !t.includes('ne dépasse pas'))).toEqual([]);
+  });
+
+  it("variante de branche appliquée, forfaits de transport, d'hébergement et de restauration non publiés : « non publié pour la branche » plutôt que « selon votre accord de branche »", () => {
+    const variante: VarianteBranche = {
+      id: 'branche-test', branche_nom: 'Branche de test', idcc: ['9999'], source_url: 'https://example.opco.fr/branche', confidence: 'exact',
+    };
+    const etat = makeFormationState({
+      selectedBrancheId: 'branche-test', needsTransport: true, transportMode: 'train', trainingDays: 2,
+      needsAccommodation: true, accommodationNights: 1, accommodationCostPerNight: 90, needsMeals: true, mealCostPerDay: 15,
+    });
+    const r = calculateFunding(makeOpco({ variantes_branche: [variante] }), etat);
+    expect(r.brancheAppliquee).toBe('Branche de test');
+    const poste = (p: string) => r.lines.find((l) => l.poste === p)!;
+    expect(poste('transport').note).toBe('Forfait transport non publié pour la branche Branche de test');
+    expect(poste('transport').details).toEqual([
+      'Test OPCO ne publie pas de forfait transport fixe',
+      'Non publié pour la branche Branche de test : montant à confirmer auprès de Test OPCO',
+    ]);
+    expect(poste('restauration').note).toBe('Forfait restauration non publié pour la branche Branche de test');
+    expect(poste('hebergement').note).toBe(
+      'Plafond hébergement non publié pour la branche Branche de test : montant à confirmer auprès de Test OPCO',
+    );
+    for (const l of r.lines) expect([l.note ?? '', ...(l.details ?? [])].join(' '), l.poste).not.toMatch(/accord de branche/);
+    // Sans variante appliquée, le texte d'origine reste : la branche n'est pas connue.
+    const sansBranche = calculateFunding(makeOpco(), { ...etat, selectedBrancheId: null });
+    expect(sansBranche.lines.find((l) => l.poste === 'transport')!.note).toBe('Montant transport selon accord de branche');
+  });
+
+  it("données réelles, tous OPCO et branches, 1 000 états tirés au hasard (graine 61) : ni nombre collé à « h » ou à « % », ni « coûts péda », ni signe d'avertissement U+26A0, ni « de » sans élision devant un nom d'OPCO, ni « L'Opcommerce » au milieu d'une phrase", () => {
+    // mulberry32 : tirages indépendants et reproductibles.
+    let graine = 61;
+    const hasard = (n: number): number => {
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+    };
+    const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
+    const noms = EMBEDDED_OPCOS.map((o) => o.name);
+    const voyelle = /^[AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜ]/i;
+    // Nom précédé de l'article « L' » (L'Opcommerce) : majuscule en début de phrase seulement.
+    const avecArticle = noms.filter((n) => /^L'/.test(n)).map((n) => new RegExp(`[^.!?\\s]\\s+${n}`));
+    expect(avecArticle).toHaveLength(1);
+    const defauts: [string, (t: string) => boolean][] = [
+      ['nombre collé à « h »', (t) => /\dh(?![\p{L}\p{N}])/u.test(t)],
+      ['nombre collé à « % »', (t) => /\d%/.test(t)],
+      ['« coûts péda »', (t) => /coûts péda\b/.test(t)],
+      ["signe d'avertissement U+26A0", (t) => t.includes(String.fromCharCode(0x26a0))],
+      ['« de » sans élision', (t) => noms.some((n) => voyelle.test(n) && t.includes(`de ${n}`))],
+      ["« L'Opcommerce » au milieu d'une phrase", (t) => avecArticle.some((motif) => motif.test(t))],
+    ];
+    const vus = new Map<string, string[]>();
+    let textes = 0;
+    for (let i = 0; i < 1000; i++) {
+      const opco = un(EMBEDDED_OPCOS);
+      const variante = opco.variantes_branche?.length && hasard(3) > 0 ? un(opco.variantes_branche) : null;
+      const heures = un([2, 3.5, 7, 21, 35, 70, 140, 400]);
+      const cout = un([100, 300, 900, 1400, 4200, 12600]);
+      const r = calculateFunding(
+        opco,
+        makeFormationState({
+          selectedOpcoSlug: opco.slug, selectedBrancheId: variante?.id ?? null, trainingMode: 'presentiel',
+          companySize: un(['less_11', '11_49', '50_299', '300_plus', null] as const),
+          formationType: un(['non_certifiante', 'certification', 'cqp', 'habilitation', 'vae', null] as const),
+          certificationLevel: un(['rncp', 'rs', null] as const),
+          durationHours: heures, pedagogyCostTotal: cout, pedagogyCostPerHour: cout / heures,
+          needsTransport: hasard(2) === 0, transportMode: 'train', trainingDays: Math.ceil(heures / 7),
+          needsAccommodation: hasard(2) === 0, accommodationNights: 2, accommodationCostPerNight: un([40, 120]),
+          needsMeals: hasard(2) === 0, mealCostPerDay: un([10, 30]), budgetDejaConsomme: un([null, 0, 500, 20000]),
+        }),
+      );
+      const tous = [
+        r.dispositifPrincipal, ...r.lines.flatMap((l) => [l.label, l.note ?? '', ...(l.details ?? [])]), ...r.warnings,
+        ...r.conditions, ...r.demarches, ...r.nextSteps.map((s) => s.label),
+      ];
+      for (const t of tous) {
+        textes++;
+        for (const [nom, defaut] of defauts) if (defaut(t)) vus.set(nom, [...(vus.get(nom) ?? []), t].slice(0, 3));
+      }
+    }
+    expect(textes).toBeGreaterThan(20000);
+    expect(Object.fromEntries(vus)).toEqual({});
+    // Le contrôle n'est pas vide : chaque défaut est reconnu sur un exemple.
+    const exemples = ['15 €/h × 140h', 'Taux : 50% des coûts', 'coûts péda financés', `${String.fromCharCode(0x26a0)} Votre coût`, 'auprès de AKTO', "auprès de L'Opcommerce"];
+    expect(exemples.map((e) => defauts.filter(([, d]) => d(e)).map(([n]) => n))).toEqual(defauts.map(([n]) => [n]));
+  });
 });
 
-describe('calculateFunding — prise en charge salaires', () => {
+describe('calculateFunding, prise en charge salaires', () => {
   it('mode euro_par_heure', () => {
     const opco = makeOpco({
       prise_en_charge_salaires: { value: 12, confidence: 'exact', source_url: 'x' },
@@ -146,7 +242,7 @@ describe('calculateFunding — prise en charge salaires', () => {
   });
 });
 
-describe('calculateFunding — prise en charge des salaires propre à la taille d\'entreprise', () => {
+describe('calculateFunding, prise en charge des salaires propre à la taille d\'entreprise', () => {
   const plafondTaille = (taille: PlafondTaille['taille'], over: Partial<PlafondTaille> = {}): PlafondTaille => ({
     taille,
     cout_horaire_max: null,
@@ -172,15 +268,15 @@ describe('calculateFunding — prise en charge des salaires propre à la taille 
   it('moins de 11 salariés : 15 €/h', () => {
     const sal = salaires(opcoSalairesParTaille(taillesConstructys()), 'less_11');
     expect(sal.fundedAmount).toBe(1500);
-    expect(sal.note).toBe('15 €/h × 100h');
+    expect(sal.note).toBe(`15 €/h × 100${NBSP}h`);
   });
 
   it('de 11 à 49 salariés : 10 €/h, avec le détail du taux propre à la taille', () => {
     const sal = salaires(opcoSalairesParTaille(taillesConstructys()), '11_49');
     expect(sal.fundedAmount).toBe(1000);
-    expect(sal.note).toBe('10 €/h × 100h');
+    expect(sal.note).toBe(`10 €/h × 100${NBSP}h`);
     expect(sal.details).toContain('Taux propre à votre taille d\'entreprise : 10 €/h');
-    expect(sal.details).toContain('Calcul : 10 €/h × 100h = 1000.00 €');
+    expect(sal.details).toContain(`Calcul : 10 €/h × 100${NBSP}h = 1000.00 €`);
   });
 
   it('une taille à null : aucune prise en charge des salaires, avec la note explicative', () => {
@@ -213,7 +309,7 @@ describe('calculateFunding — prise en charge des salaires propre à la taille 
     const opco = opcoSalairesParTaille([plafondTaille('less_11', { prise_en_charge_salaires_horaire: 0 })]);
     const sal = salaires(opco, 'less_11');
     expect(sal.fundedAmount).toBe(0);
-    expect(sal.note).toBe('0 €/h × 100h');
+    expect(sal.note).toBe(`0 €/h × 100${NBSP}h`);
   });
 
   it('le taux propre à la taille ne concerne que le mode euro_par_heure', () => {
@@ -229,7 +325,7 @@ describe('calculateFunding — prise en charge des salaires propre à la taille 
   });
 });
 
-describe('calculateFunding — plafonds & caps', () => {
+describe('calculateFunding, plafonds & caps', () => {
   it('applique un plafond par taille d’entreprise', () => {
     const opco = makeOpco({
       plafonds_par_taille: [
@@ -265,7 +361,7 @@ describe('calculateFunding — plafonds & caps', () => {
   });
 });
 
-describe('calculateFunding — V2.1 : PDC, budget consommé, cumuls', () => {
+describe('calculateFunding, V2.1 : PDC, budget consommé, cumuls', () => {
   it('le type non_certifiante utilise le plafond inter (PDC)', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });
     const state = makeFormationState({ formationType: 'non_certifiante', durationHours: 20, pedagogyCostPerHour: 50 });
@@ -362,7 +458,7 @@ describe('calculateFunding — V2.1 : PDC, budget consommé, cumuls', () => {
   });
 });
 
-describe('calculateFunding — barèmes par branche (variantes)', () => {
+describe('calculateFunding, barèmes par branche (variantes)', () => {
   const opcoAvecVariantes = () =>
     makeOpco({
       cout_horaire_inter: { value: 30, confidence: 'depends_on_branche', source_url: 'x' },
@@ -457,7 +553,7 @@ describe('calculateFunding — barèmes par branche (variantes)', () => {
   });
 });
 
-describe('calculateFunding — forfait de frais annexes (%) et variante de branche', () => {
+describe('calculateFunding, forfait de frais annexes (%) et variante de branche', () => {
   const LIBELLE_FORFAIT = 'Frais annexes (forfait %)';
   const forfaitVariante = (value: number | null) => ({ value, confidence: 'exact' as const, source_url: 'https://exemple.fr' });
   const opcoForfaitBatiment = (variante: Partial<VarianteBranche> = {}): OpcoData =>
@@ -519,7 +615,7 @@ describe('calculateFunding — forfait de frais annexes (%) et variante de branc
   });
 });
 
-describe('calculateFunding — règle des 50 salariés', () => {
+describe('calculateFunding, règle des 50 salariés', () => {
   it('50+ sans enveloppe publiée : PDC mutualisé à 0 € et explication', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });
     const state = makeFormationState({ companySize: '50_299', durationHours: 100, pedagogyCostPerHour: 30, pedagogyCostTotal: 3000 });
@@ -546,7 +642,7 @@ describe('calculateFunding — règle des 50 salariés', () => {
   });
 });
 
-describe('calculateFunding — plan de développement des compétences fermé (pdcFerme)', () => {
+describe('calculateFunding, plan de développement des compétences fermé (pdcFerme)', () => {
   const PREMIERE_DEMARCHE =
     'Votre entreprise compte 50 salariés ou plus : le plan de développement des compétences est financé sur ses fonds propres (art. L. 6332-17 du code du travail).';
   const demarchesFerme = (nomOpco: string) => [
@@ -582,8 +678,9 @@ describe('calculateFunding — plan de développement des compétences fermé (p
 
   it('les démarches sont exactement les trois textes du PDC fermé, avec le nom de l\'OPCO', () => {
     expect(resultat(makeOpco(), '300_plus').demarches).toEqual(demarchesFerme('Test OPCO'));
+    // Au milieu de la phrase, l'article du nom passe en minuscule : « Demandez à l'Opcommerce ».
     expect(resultat(makeOpco({ name: "L'Opcommerce" }), '300_plus').demarches[1]).toBe(
-      "Demandez à L'Opcommerce si votre branche prévoit des fonds conventionnels ou un plan volontaire pour les entreprises de votre taille.",
+      "Demandez à l'Opcommerce si votre branche prévoit des fonds conventionnels ou un plan volontaire pour les entreprises de votre taille.",
     );
   });
 
@@ -662,7 +759,7 @@ describe('calculateFunding — plan de développement des compétences fermé (p
   });
 });
 
-describe('calculateFunding — barème dégressif', () => {
+describe('calculateFunding, barème dégressif', () => {
   const seuils = [
     { max_heures: 105, valeur: 65 },
     { max_heures: null, valeur: 15 },
@@ -760,7 +857,7 @@ describe('calculateFunding — barème dégressif', () => {
   });
 });
 
-describe('calculateFunding — barème dégressif réservé aux formations certifiantes', () => {
+describe('calculateFunding, barème dégressif réservé aux formations certifiantes', () => {
   const seuils = [
     { max_heures: 105, valeur: 65 },
     { max_heures: null, valeur: 15 },
@@ -873,7 +970,7 @@ describe('calculateFunding — barème dégressif réservé aux formations certi
   });
 });
 
-describe('calculateFunding — portée du plafond annuel', () => {
+describe('calculateFunding, portée du plafond annuel', () => {
   it('portée pédagogie : salaires financés en plus du plafond', () => {
     const opco = makeOpco({
       cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
@@ -918,7 +1015,7 @@ describe('calculateFunding — portée du plafond annuel', () => {
   });
 });
 
-describe('calculateFunding — budget annuel à 0 (enveloppe épuisée ou fermée)', () => {
+describe('calculateFunding, budget annuel à 0 (enveloppe épuisée ou fermée)', () => {
   const MESSAGE_BUDGET_NUL =
     "Aucun budget n'est disponible sur le plan de développement des compétences de Test OPCO pour votre situation (enveloppe épuisée ou fermée). Consultez les autres financements.";
   const budget = (value: number | null) => ({ value, confidence: 'exact' as const, source_url: 'https://exemple.fr' });
@@ -1018,7 +1115,7 @@ describe('calculateFunding — budget annuel à 0 (enveloppe épuisée ou fermé
   });
 });
 
-describe('calculateFunding — dispositifs complémentaires et enveloppe', () => {
+describe('calculateFunding, dispositifs complémentaires et enveloppe', () => {
   const boost = {
     id: 'boost', nom: 'Boost', cumul: 'additif' as const,
     montant_max: 750, unite: 'par_dossier' as const, pourcentage_couts: 50,
@@ -1078,7 +1175,7 @@ describe('calculateFunding — dispositifs complémentaires et enveloppe', () =>
   });
 });
 
-describe('calculateFunding — dispositifs réservés à certaines conventions collectives', () => {
+describe('calculateFunding, dispositifs réservés à certaines conventions collectives', () => {
   const dispositif = (over: Partial<DispositifComplementaire> = {}): DispositifComplementaire => ({
     id: 'transition-ecologique',
     nom: 'Transition écologique',
@@ -1213,7 +1310,7 @@ describe('calculateFunding — dispositifs réservés à certaines conventions c
   });
 });
 
-describe('calculateFunding — alertes publiées par l\'OPCO', () => {
+describe('calculateFunding, alertes publiées par l\'OPCO', () => {
   const alerte = (over: Partial<AlerteOpco> = {}): AlerteOpco => ({
     type: 'fonds_epuises',
     branche: 'Organismes de formation',
@@ -1407,7 +1504,7 @@ describe('calculateFunding — alertes publiées par l\'OPCO', () => {
   });
 });
 
-describe('calculateFunding — frais annexes plafonnés au coût déclaré', () => {
+describe('calculateFunding, frais annexes plafonnés au coût déclaré', () => {
   describe('forfait repas', () => {
     const opcoForfaitRepas = () =>
       makeOpco({ frais_restauration: { value: 20, confidence: 'exact', source_url: 'x' } });
@@ -1482,7 +1579,7 @@ describe('calculateFunding — frais annexes plafonnés au coût déclaré', () 
   });
 });
 
-describe('calculateFunding — montants non publiés : jamais comptés comme financés', () => {
+describe('calculateFunding, montants non publiés : jamais comptés comme financés', () => {
   const source = (value: number | null) => ({ value, confidence: 'exact' as const, source_url: 'https://exemple.fr' });
   // Aucun plafond horaire publié nulle part : ni inter, ni intra, ni métier, ni seuils, ni plafond par taille.
   const opcoSansPlafondHoraire = (over: Partial<OpcoData> = {}): OpcoData =>
@@ -1584,7 +1681,7 @@ describe('calculateFunding — montants non publiés : jamais comptés comme fin
   });
 });
 
-describe('calculateFunding — plafond horaire des formations certifiantes (CQP, certification, habilitation)', () => {
+describe('calculateFunding, plafond horaire des formations certifiantes (CQP, certification, habilitation)', () => {
   const opcoMetier = (metier: number | null): OpcoData =>
     makeOpco({
       cout_horaire_inter: { value: 25, confidence: 'exact', source_url: 'https://exemple.fr/inter' },
@@ -1623,7 +1720,7 @@ describe('calculateFunding — plafond horaire des formations certifiantes (CQP,
   });
 });
 
-describe('calculateFunding — habilitation au taux « métier » : jamais « exact »', () => {
+describe('calculateFunding, habilitation au taux « métier » : jamais « exact »', () => {
   // cout_horaire_metier est le taux publié pour les CQP et certifications ; les formations réglementaires (habilitations)
   // ont parfois un taux distinct (OPCO EP, immobilier : 40 €/h en formation métier, 9,15 €/h appliqué). Le plafond reste
   // appliqué (résultat prudent), mais il ne s'affiche pas « exact » pour une habilitation.
@@ -1713,7 +1810,7 @@ describe('calculateFunding — habilitation au taux « métier » : jamais « ex
   });
 });
 
-describe('calculateFunding — plafond horaire par taille : confiance et source de la valeur', () => {
+describe('calculateFunding, plafond horaire par taille : confiance et source de la valeur', () => {
   const PAGE_CRITERES = 'https://exemple.fr/criteres';
   const SOURCE_PLAFOND = 'https://exemple.fr/branche/plafonds';
   const SOURCE_CHAMP = 'https://exemple.fr/branche/champ-inter';
@@ -1789,7 +1886,7 @@ describe('calculateFunding — plafond horaire par taille : confiance et source 
   });
 });
 
-describe('calculateFunding — forfait de restauration : unité du forfait (repas ou jour)', () => {
+describe('calculateFunding, forfait de restauration : unité du forfait (repas ou jour)', () => {
   const forfait = { value: 20, confidence: 'exact' as const, source_url: 'x' };
   const opcoRestauration = (over: Partial<OpcoData> = {}): OpcoData => makeOpco({ frais_restauration: forfait, ...over });
   const stateRepas = (mealCostPerDay: number) => makeFormationState({ needsMeals: true, mealCostPerDay, trainingDays: 5 });
@@ -1883,7 +1980,7 @@ describe('calculateFunding — forfait de restauration : unité du forfait (repa
   });
 });
 
-describe('calculateFunding — plafond annuel estimé : mention « à confirmer » dans les messages', () => {
+describe('calculateFunding, plafond annuel estimé : mention « à confirmer » dans les messages', () => {
   const MENTION = ' (montant estimé : à confirmer auprès de Test OPCO)';
   const opcoPlafonne = (confidence: 'exact' | 'estimated' | 'depends_on_branche', portee?: 'global' | 'pedagogie'): OpcoData =>
     makeOpco({
@@ -1979,7 +2076,7 @@ describe('calculateFunding — plafond annuel estimé : mention « à confirmer 
   });
 });
 
-describe('calculateFunding — délai de validation (texte libre de l\'OPCO)', () => {
+describe('calculateFunding, délai de validation (texte libre de l\'OPCO)', () => {
   // delai_validation est un champ libre : le schéma accepte aussi un objet détaillé ou null. Le résultat reste une chaîne
   // (l'application mobile l'affiche telle quelle dans un <Text>, un objet y planterait) : sans texte, chaîne vide.
   const resultat = (delai_validation: OpcoData['delai_validation']) => calculateFunding(makeOpco({ delai_validation }), makeFormationState());
@@ -2006,7 +2103,7 @@ describe('calculateFunding — délai de validation (texte libre de l\'OPCO)', (
   });
 });
 
-describe('calculateFunding — déterminisme', () => {
+describe('calculateFunding, déterminisme', () => {
   it('mêmes entrées → mêmes sorties', () => {
     const opco = makeOpco({ cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' } });
     const state = makeFormationState();
