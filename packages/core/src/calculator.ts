@@ -82,6 +82,9 @@ export function applyVarianteBranche(opco: OpcoData, variante: VarianteBranche):
     frais_restauration: variante.frais_restauration ?? opco.frais_restauration,
     frais_restauration_unite: variante.frais_restauration_unite ?? opco.frais_restauration_unite,
     frais_annexes_pourcentage: variante.frais_annexes_pourcentage ?? opco.frais_annexes_pourcentage,
+    // La réserve aux actions qualifiantes qualifie le forfait : absente sur la variante, celle de l'OPCO (false l'ouvre à toutes).
+    frais_annexes_pourcentage_qualifiant:
+      variante.frais_annexes_pourcentage_qualifiant ?? opco.frais_annexes_pourcentage_qualifiant,
     budget_annuel_max: variante.budget_annuel_max ?? opco.budget_annuel_max,
     budget_annuel_portee: variante.budget_annuel_portee ?? opco.budget_annuel_portee,
     budget_annuel_description: variante.budget_annuel_description ?? opco.budget_annuel_description,
@@ -200,6 +203,65 @@ function estFormationCertifiante(state: WizardState): boolean {
   return (
     (state.certificationLevel != null && CERTIFICATIONS_ENREGISTREES.includes(state.certificationLevel)) ||
     (state.formationType != null && TYPES_FORMATION_CERTIFIANTS.includes(state.formationType))
+  );
+}
+
+const CERTIFICATIONS_QUALIFIANTES: readonly CertificationType[] = ['rncp', 'diplome', 'cqp'];
+
+/**
+ * Action qualifiante, au sens de l'art. L. 6314-1 du code du travail (qualification enregistrée au RNCP, reconnue par une
+ * convention collective de branche ou ouvrant droit à un CQP) et des fiches de Constructys (« qualification CCN Bâtiment /
+ * certification RNCP / blocs de compétences / CQP inscrits ou non au RNCP ») : certification visée enregistrée au RNCP
+ * (diplôme d'État compris, enregistré de droit : art. L. 6113-5) ou CQP (type de formation ou certification visée).
+ * Plus stricte que `estFormationCertifiante` : une certification du répertoire spécifique, une habilitation, une
+ * « certification » dont le répertoire n'est pas précisé et un type inconnu n'en sont pas (l'incertitude ne s'additionne
+ * jamais) ; une qualification de convention collective n'a pas de réponse propre dans le parcours, le texte de la règle la nomme.
+ */
+function estActionQualifiante(state: WizardState): boolean {
+  return (
+    (state.certificationLevel != null && CERTIFICATIONS_QUALIFIANTES.includes(state.certificationLevel)) ||
+    state.formationType === 'cqp'
+  );
+}
+
+/** Ce qu'est une action qualifiante, dans les textes des postes qui lui sont réservés. */
+const DEFINITION_ACTION_QUALIFIANTE =
+  'certification enregistrée au RNCP (diplôme, titre ou bloc de compétences), CQP ou qualification reconnue par une convention collective de branche';
+const FORMATION_NON_QUALIFIANTE = "Votre formation n'est pas déclarée comme telle : aucun montant n'est compté sur ce poste";
+const FORMATION_QUALIFIANTE = 'votre formation est déclarée comme telle';
+const POSTE_NON_PRIS_EN_CHARGE = 'Non pris en charge : le forfait de frais annexes est réservé aux actions qualifiantes';
+
+/**
+ * Taux horaire des salaires que la réserve aux actions qualifiantes retire à cette formation : mode euro_par_heure, taille
+ * marquée `prise_en_charge_salaires_qualifiant`, taux positif (celui de la taille ou, à défaut, celui de l'OPCO) et formation
+ * non qualifiante. null quand la réserve ne retire rien (taille sans prise en charge des salaires comprise).
+ */
+function salairesRetiresAuxNonQualifiantes(opco: OpcoData, state: WizardState): number | null {
+  if (opco.prise_en_charge_salaires_mode !== 'euro_par_heure') return null;
+  const plafond = resolvePlafondForSize(opco, state.companySize);
+  if (!plafond?.prise_en_charge_salaires_qualifiant || estActionQualifiante(state)) return null;
+  const taux =
+    plafond.prise_en_charge_salaires_horaire !== undefined ? plafond.prise_en_charge_salaires_horaire : opco.prise_en_charge_salaires.value;
+  return taux != null && taux > 0 ? taux : null;
+}
+
+/** Taux du forfait de frais annexes que la réserve aux actions qualifiantes retire à cette formation ; null quand elle ne retire rien. */
+function forfaitRetireAuxNonQualifiantes(opco: OpcoData, state: WizardState): number | null {
+  const pct = opco.frais_annexes_pourcentage.value;
+  if (pct == null || pct <= 0 || !opco.frais_annexes_pourcentage_qualifiant || estActionQualifiante(state)) return null;
+  return pct;
+}
+
+/** Point d'attention des postes que la réserve aux actions qualifiantes retire à cette formation ; null quand elle ne retire rien. */
+function avertissementActionsQualifiantes(opco: OpcoData, tauxSalaires: number | null, tauxForfait: number | null): string | null {
+  const postes = [
+    ...(tauxSalaires != null ? [`la prise en charge des salaires (${avecUnite(tauxSalaires, '€/h')})`] : []),
+    ...(tauxForfait != null ? [`le forfait de frais annexes (${avecUnite(tauxForfait, '%')} des coûts pédagogiques)`] : []),
+  ];
+  if (postes.length === 0) return null;
+  return (
+    `${opco.name} réserve ${postes.join(' et ')} aux actions qualifiantes : ${DEFINITION_ACTION_QUALIFIANTE}. ` +
+    `Votre formation n'est pas déclarée comme telle : ${postes.length > 1 ? 'ces postes ne sont pas comptés' : "ce poste n'est pas compté"}.`
   );
 }
 
@@ -393,10 +455,24 @@ function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number, 
         break;
       }
       const taux = tauxTaille !== undefined ? tauxTaille : rate;
+      // Salaires de cette taille réservés aux actions qualifiantes : 0 € pour une autre formation, avec la règle.
+      const retire = salairesRetiresAuxNonQualifiantes(opco, state);
+      if (retire != null) {
+        note = `Réservée aux actions qualifiantes (${avecUnite(retire, '€/h')}) : votre formation n'est pas déclarée comme telle`;
+        details.push(
+          `${tauxTaille !== undefined ? "Taux propre à votre taille d'entreprise" : 'Taux de prise en charge'} : ${avecUnite(retire, '€/h')}, réservé aux actions qualifiantes`,
+          `Action qualifiante : ${DEFINITION_ACTION_QUALIFIANTE}`,
+          FORMATION_NON_QUALIFIANTE,
+        );
+        break;
+      }
       funded = (taux ?? 0) * hours;
       note = taux != null ? `${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')}` : undefined;
       if (taux != null) {
         if (tauxTaille !== undefined) details.push(`Taux propre à votre taille d'entreprise : ${avecUnite(taux, '€/h')}`);
+        if (plafond?.prise_en_charge_salaires_qualifiant && taux > 0) {
+          details.push(`Taux réservé aux actions qualifiantes : ${FORMATION_QUALIFIANTE}`);
+        }
         details.push(`Taux de prise en charge : ${avecUnite(taux, '€/h')}`);
         details.push(`Calcul : ${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite(funded.toFixed(2), '€')}`);
       }
@@ -565,9 +641,29 @@ function calcMeals(opco: OpcoData, state: WizardState, branche: string | null): 
   );
 }
 
-function calcFraisAnnexesPourcentage(opco: OpcoData, pedagogyFunded: number): FundingLine | null {
+function calcFraisAnnexesPourcentage(opco: OpcoData, state: WizardState, pedagogyFunded: number): FundingLine | null {
   const pct = opco.frais_annexes_pourcentage.value;
   if (pct == null || pct <= 0) return null;
+  const { confidence, source_url: sourceUrl } = opco.frais_annexes_pourcentage;
+
+  // Forfait réservé aux actions qualifiantes : 0 € pour une autre formation, avec la règle.
+  if (forfaitRetireAuxNonQualifiantes(opco, state) != null) {
+    return line(
+      'frais_annexes',
+      'Frais annexes (forfait %)',
+      0,
+      0,
+      confidence,
+      sourceUrl,
+      `Réservé aux actions qualifiantes (${avecUnite(pct, '%')} des coûts pédagogiques) : votre formation n'est pas déclarée comme telle`,
+      [
+        `${opco.name} utilise un forfait global pour les frais annexes, réservé aux actions qualifiantes`,
+        `Action qualifiante : ${DEFINITION_ACTION_QUALIFIANTE}`,
+        FORMATION_NON_QUALIFIANTE,
+        'Ce forfait couvre transport, hébergement et restauration : ces frais restent à votre charge',
+      ],
+    );
+  }
 
   const funded = pedagogyFunded * (pct / 100);
   return line(
@@ -575,11 +671,12 @@ function calcFraisAnnexesPourcentage(opco: OpcoData, pedagogyFunded: number): Fu
     'Frais annexes (forfait %)',
     funded,
     funded,
-    opco.frais_annexes_pourcentage.confidence,
-    opco.frais_annexes_pourcentage.source_url,
+    confidence,
+    sourceUrl,
     `${avecUnite(pct, '%')} des coûts pédagogiques`,
     [
       `${opco.name} utilise un forfait global pour les frais annexes`,
+      ...(opco.frais_annexes_pourcentage_qualifiant ? [`Forfait réservé aux actions qualifiantes : ${FORMATION_QUALIFIANTE}`] : []),
       `Taux : ${avecUnite(pct, '%')} des coûts pédagogiques financés`,
       `Calcul : ${avecUnite(pedagogyFunded.toFixed(2), '€')} × ${avecUnite(pct, '%')} = ${avecUnite(funded.toFixed(2), '€')}`,
       'Ce forfait couvre transport, hébergement et restauration',
@@ -887,9 +984,11 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
       opcoData.frais_annexes_pourcentage.value != null && opcoData.frais_annexes_pourcentage.value > 0;
     const ancillaryLines: FundingLine[] = [];
     if (usePercentageModel) {
-      const pctLine = calcFraisAnnexesPourcentage(opcoData, pedagogyLine.fundedAmount);
+      const pctLine = calcFraisAnnexesPourcentage(opcoData, state, pedagogyLine.fundedAmount);
       if (pctLine) ancillaryLines.push(pctLine);
-      const inclus = 'Inclus dans le forfait frais annexes (%)';
+      // Forfait retiré à une formation non qualifiante : les frais déclarés ne sont pas « inclus » dans un forfait à 0 €.
+      const inclus =
+        forfaitRetireAuxNonQualifiantes(opcoData, state) != null ? POSTE_NON_PRIS_EN_CHARGE : 'Inclus dans le forfait frais annexes (%)';
       if (state.needsTransport) ancillaryLines.push(line('transport', 'Transport', 0, 0, 'exact', opcoData.url_finance_page, inclus));
       if (state.needsAccommodation) ancillaryLines.push(line('hebergement', 'Hébergement', 0, 0, 'exact', opcoData.url_finance_page, inclus));
       if (state.needsMeals) ancillaryLines.push(line('restauration', 'Restauration', 0, 0, 'exact', opcoData.url_finance_page, inclus));
@@ -898,6 +997,13 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
       ancillaryLines.push(calcAccommodation(opcoData, state, brancheAppliquee));
       ancillaryLines.push(calcMeals(opcoData, state, brancheAppliquee));
     }
+    // Postes réservés aux actions qualifiantes et retirés à cette formation : un point d'attention en donne la règle.
+    const avertissementQualifiant = avertissementActionsQualifiantes(
+      opcoData,
+      salairesRetiresAuxNonQualifiantes(opcoData, state),
+      forfaitRetireAuxNonQualifiantes(opcoData, state),
+    );
+    if (avertissementQualifiant) earlyWarnings.push(avertissementQualifiant);
     allLines = [pedagogyLine, salaryLine, ...ancillaryLines];
   }
 

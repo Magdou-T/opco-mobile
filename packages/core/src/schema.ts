@@ -46,6 +46,8 @@ export const PlafondTailleSchema = z.object({
   quota_horaire_max: z.number().nullable(),
   description: z.string(),
   prise_en_charge_salaires_horaire: z.number().nonnegative().nullable().optional(),
+  // true : les salaires à l'heure de cette taille ne sont comptés que pour une action qualifiante (types.ts, PlafondTaille).
+  prise_en_charge_salaires_qualifiant: z.boolean().optional(),
 });
 
 /** Une seule entrée par taille : le calcul ne retiendrait que la première. */
@@ -92,6 +94,7 @@ export const VarianteBrancheSchema = z.object({
   frais_restauration: SourcedNumberSchema.optional(),
   frais_restauration_unite: UniteRestaurationSchema.optional(),
   frais_annexes_pourcentage: SourcedNumberSchema.optional(),
+  frais_annexes_pourcentage_qualifiant: z.boolean().optional(),
   budget_annuel_max: SourcedNumberSchema.optional(),
   budget_annuel_portee: PorteeBudgetSchema.optional(),
   budget_annuel_description: z.string().optional(),
@@ -163,6 +166,8 @@ export const OpcoDataSchema = z.object({
   frais_restauration: SourcedNumberSchema,
   frais_restauration_unite: UniteRestaurationSchema.optional(),
   frais_annexes_pourcentage: SourcedNumberSchema,
+  // true : le forfait de frais annexes n'est compté que pour une action qualifiante (types.ts, OpcoData).
+  frais_annexes_pourcentage_qualifiant: z.boolean().optional(),
 
   budget_annuel_max: SourcedNumberSchema,
   budget_annuel_portee: PorteeBudgetSchema.optional(),

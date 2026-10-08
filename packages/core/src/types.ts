@@ -88,7 +88,13 @@ export interface OpcoData {
   frais_restauration: SourcedValue<number | null>;
   /** Unité du forfait de restauration : par repas (l'estimation retient un repas par jour de formation) ou par jour. Absent : par jour. */
   frais_restauration_unite?: UniteRestauration;
-  frais_annexes_pourcentage: SourcedValue<number | null>; // ex: Atlas 8%
+  frais_annexes_pourcentage: SourcedValue<number | null>; // ex. Constructys (Bâtiment) : 8 %
+  /**
+   * true : le forfait de frais annexes en % n'est compté que pour une action qualifiante (certification visée enregistrée au
+   * RNCP, diplôme d'État compris, ou CQP : voir `estActionQualifiante` dans calculator.ts) ; pour toute autre formation, ou
+   * un type non précisé, la ligne vaut 0 € avec la règle. Absent : forfait valable pour toutes les formations.
+   */
+  frais_annexes_pourcentage_qualifiant?: boolean;
 
   // Budget et plafonds
   budget_annuel_max: SourcedValue<number | null>;
@@ -189,6 +195,11 @@ export interface VarianteBranche {
   frais_restauration_unite?: UniteRestauration;
   /** Forfait de frais annexes en % des coûts pédagogiques financés ; value null : pas de forfait dans cette branche. */
   frais_annexes_pourcentage?: SourcedValue<number | null>;
+  /**
+   * Forfait réservé aux actions qualifiantes (voir `OpcoData`). Absent : la réserve de l'OPCO, même quand la variante publie
+   * son propre forfait (même règle que les seuils certifiants) ; false : forfait de branche valable pour toutes les formations.
+   */
+  frais_annexes_pourcentage_qualifiant?: boolean;
   budget_annuel_max?: SourcedValue<number | null>;
   budget_annuel_portee?: PorteeBudget;
   budget_annuel_description?: string;
@@ -216,6 +227,12 @@ export interface PlafondTaille {
    * Un taux propre à la taille l'emporte sur le salaire d'une variante de branche qui hérite des `plafonds_par_taille` de l'OPCO : une variante qui change les salaires doit aussi surcharger ces entrées.
    */
   prise_en_charge_salaires_horaire?: number | null;
+  /**
+   * true : pour cette taille, la prise en charge des salaires à l'heure (mode euro_par_heure : taux propre à la taille ou, à
+   * défaut, celui de l'OPCO) n'est comptée que pour une action qualifiante (voir `OpcoData.frais_annexes_pourcentage_qualifiant`) ;
+   * sinon 0 € avec la règle. Sans effet dans les autres modes. Absent : salaires dus à toute formation.
+   */
+  prise_en_charge_salaires_qualifiant?: boolean;
 }
 
 /**
