@@ -155,7 +155,7 @@ export const LIEN_MENTIONS = { href: '/mentions-legales/', libelle: 'Mentions l�
 export const SOURCE_ENTREPRISES = `Source${INSECABLE}: API Recherche d'entreprises (DINUM), données SIRENE de l'INSEE, licence ouverte 2.0.`;
 
 /**
- * Table SIRET-OPCO de France compétences (données ouvertes) : les 100 suggestions d'OPCO par code NAF de @opco/core en
+ * Table SIRET-OPCO de France compétences (données ouvertes) : les suggestions d'OPCO par code NAF de @opco/core en
  * sont tirées (parts observées sur un échantillon d'établissements ; méthode et date : spécification, section 5.5).
  * L'adresse est celle que porte chaque suggestion (champ `source`) ; un test le vérifie.
  */

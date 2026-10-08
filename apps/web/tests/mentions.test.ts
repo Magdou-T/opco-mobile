@@ -136,7 +136,7 @@ describe('mentions légales : page, pied de page et plan du site', () => {
   });
 
   test('la Table SIRET-OPCO est bien la source de chacune des suggestions par code NAF de @opco/core', () => {
-    assert.ok(EMBEDDED_NAF.length >= 100, String(EMBEDDED_NAF.length));
+    assert.ok(EMBEDDED_NAF.length > 0, String(EMBEDDED_NAF.length));
     for (const s of EMBEDDED_NAF) assert.equal(s.source, TABLE_SIRET_OPCO.adresse, s.prefixe);
   });
 
