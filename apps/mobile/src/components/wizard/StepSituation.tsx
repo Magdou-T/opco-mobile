@@ -1,4 +1,4 @@
-// Étape 2 — Situation professionnelle.
+// Étape 2 : situation professionnelle.
 // Port RN de opco-funding/src/components/wizard/StepSituation.tsx.
 
 import { Text, View } from 'react-native';
@@ -101,7 +101,7 @@ export function StepSituation({ state, updateState }: Props) {
         value={state.budgetDejaConsomme}
         onChangeNumber={(v) => updateState({ budgetDejaConsomme: v })}
         placeholder="Ex: 1500"
-        helper="Laissez vide si aucune formation financée cette année — ce montant est déduit de votre plafond annuel"
+        helper="Laissez vide si aucune formation financée cette année. Ce montant est déduit de votre plafond annuel."
       />
 
       {/* Situations particulières */}
