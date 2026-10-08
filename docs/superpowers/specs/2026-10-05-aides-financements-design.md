@@ -270,16 +270,31 @@ Types existants étendus : `CertificationType` reçoit `'rs'` et `'aucune'` ; `W
 
 ### 5.5 Identification de l'OPCO
 
-`resoudreOpco(entree, table, suggestionsNaf): ResolutionOpco`
+`resoudreOpco(entree, table, suggestionsNaf): ResolutionOpco` (`packages/core/src/opco-resolver.ts`). La signature n'a aucun paramètre de source officielle ; `entree` porte un champ facultatif `natureJuridique`, que le site doit transmettre (règle 5).
 
 ```ts
 export type CertitudeOpco = 'confirme' | 'fiable' | 'a_confirmer' | 'inconnu';
+export interface EntreeResolution {
+  idccs: string[];                  // conventions de l'entreprise et de ses établissements
+  idccSiege?: string[] | null;      // conventions du siège (présélection entre plusieurs candidats)
+  codeNaf?: string | null;          // activité principale de l'unité légale
+  natureJuridique?: string | null;  // catégorie juridique INSEE (7xxx : droit administratif)
+}
 export interface IdccEntree {
   idcc: string; titre: string; opco: string | null;
   statut: 'actif' | 'fusionne' | 'echappatoire' | 'partage';
-  idcc_cible?: string;          // statut 'fusionne'
+  idcc_cible?: string;          // statut 'fusionne' : convention de remplacement, quand elle est connue
   opcos_possibles?: string[];   // statut 'partage' (ex. filière forêt-bois : OCAPIAT ou AKTO)
+  a_confirmer?: boolean;        // OPCO établi par aucune source officielle propre à cet IDCC (la note dit pourquoi)
   note?: string; source: string;
+}
+export interface SuggestionNaf {
+  prefixe: string;              // division '47', groupe '47.1', classe '47.11' ou sous-classe '47.11F'
+  opco: string;
+  part: number | null;          // part observée (de 0,60 à 1 dans les données embarquées)
+  effectif_etablissements?: number | null;  // taille de l'échantillon (au moins 30)
+  libelle: string;              // intitulé officiel de la NAF rév. 2 (INSEE)
+  source: string;               // https://www.data.gouv.fr/datasets/table-siret-opco
 }
 export interface ResolutionOpco {
   opcoSlug: string | null;
@@ -292,16 +307,24 @@ export interface ResolutionOpco {
 }
 ```
 
-Règles :
-1. Normalisation (4 chiffres), suppression de `0000`. Les IDCC `fusionne` sont redirigés vers `idcc_cible`.
-2. Codes échappatoires officiels (5501, 5100, 9998, 9999) : ne désignent aucun OPCO → passage à l'étape 5 avec l'avertissement correspondant.
-3. Un seul OPCO pour tous les IDCC actifs → `fiable` (« identifié via la convention collective IDCC xxxx »).
-4. Plusieurs OPCO possibles (IDCC différents, ou IDCC `partage`) → `a_confirmer` : tous les candidats sont affichés avec le titre des conventions ; présélection = convention du siège ; rappel de la règle (une convention par entreprise, déterminée par l'activité principale ; exception des établissements autonomes) ; l'utilisateur choisit l'établissement/la convention du salarié concerné.
-5. Aucun IDCC exploitable → suggestion à partir du code NAF (`naf-suggestions.json`, statistiques issues des données ouvertes) → `a_confirmer` avec la part observée ; à défaut → `inconnu` et sélection manuelle.
-6. Toujours : lien « Vérifier sur l'outil officiel » (`https://quel-est-mon-opco.francecompetences.fr/`).
-7. `confirme` est réservé aux données officielles France Compétences (SIRET → OPCO déclaré en DSN), utilisables uniquement après obtention de la licence de réutilisation (art. R. 6123-35 du code du travail). Le résolveur accepte une source « officielle » optionnelle prioritaire, non branchée dans cette version.
+Règles (état du code) :
+1. Normalisation sur 4 chiffres, suppression de `0000`, dédoublonnage. Une convention `fusionne` dont la cible figure dans la table est redirigée vers elle (avertissement). Cible absente de la table, ou convention close sans convention de remplacement (50 entrées de la table, dont 7509, 0438, 1237, 0779, 5545) : l'ancienne convention sert de rattachement si elle a un OPCO, jamais en `fiable`.
+2. Codes échappatoires (5501, 5100, 9998, 9999) : ils ne désignent aucun OPCO (avertissement). La constante `CODES_ECHAPPATOIRES` les reconnaît même quand la table fournie (jeu de données téléchargé) ne les contient pas ; une entrée `echappatoire` de la table vaut de même.
+3. Un seul OPCO candidat → `fiable` seulement si au moins une convention est ferme (en vigueur, avec OPCO, non marquée `a_confirmer` ; une convention redirigée est jugée sur sa cible) et si aucune convention n'est restée non rattachée (absente de la table, ou présente sans OPCO confirmé). Sinon `a_confirmer`, avec « Rattachement à confirmer » (conventions marquées `a_confirmer`), « Rattachement d'après l'ancienne convention ..., fusionnée ou close » et, s'il y a lieu, l'invitation à vérifier les conventions non rattachées. `idccRetenu` : la convention du siège si elle fait partie de celles du candidat, sinon la première convention ferme, sinon la première.
+4. Plusieurs OPCO candidats (conventions d'OPCO différents, ou convention `partage`) → `a_confirmer` : tous les candidats avec le titre de leurs conventions, et le rappel de la règle (une convention par entreprise, déterminée par l'activité principale, sauf établissement autonome). Présélection : le seul candidat qui porte une convention du siège ; à défaut, le candidat que désigne la suggestion par code NAF (règle 6) ; sinon aucune (`opcoSlug` nul) et l'utilisateur choisit.
+5. Aucune convention exploitable et employeur de droit public (catégorie juridique INSEE 7xxx, « personne morale et organisme soumis au droit administratif », nomenclature de septembre 2022 : État, collectivités territoriales, établissements publics administratifs dont les hôpitaux et les établissements sociaux et médico-sociaux publics, autres personnes morales de droit public administratif) → `inconnu`, aucune suggestion par le code NAF ; le motif dit que la plupart des employeurs publics ne cotisent pas à un OPCO et qu'on peut en choisir un dans la liste si l'établissement en a un. Les établissements publics industriels et commerciaux (41xx), les sociétés et les associations suivent la règle 6. Avec une convention exploitable, les règles 3 et 4 s'appliquent comme pour tout employeur.
+6. Aucune convention exploitable, autre employeur → suggestion par le code NAF de l'unité légale (sous-classe, sinon classe, groupe, division) → `a_confirmer`, motif avec la part observée et la taille de l'échantillon (« 88 % des établissements employeurs observés dans ce secteur (échantillon de 33) relèvent de cet OPCO ») ; à défaut → `inconnu` et sélection manuelle.
+7. Toujours : lien « Vérifier sur l'outil officiel » (`https://quel-est-mon-opco.francecompetences.fr/`).
+8. `confirme` n'est jamais produit : il est réservé à une lecture directe du SIRET dans une source officielle, que le produit ne fait pas. La Table SIRET-OPCO de France Compétences, publiée en données ouvertes, permettrait cette lecture ; son intégration au site attend la décision de l'utilisateur. Elle sert seulement, hors ligne, à mesurer les parts des suggestions par code NAF.
 
-**Contrainte juridique** : les tables de correspondance de France Compétences (art. R. 6123-34, arrêté du 15/06/2022) sont protégées ; leur API publique ne doit pas être appelée par l'app sans licence. La table IDCC v2 est reconstruite à partir de sources réutilisables : arrêtés d'agrément des OPCO et modificatifs (Journal officiel / Légifrance), listes de branches publiées par chaque OPCO, liste des IDCC du ministère du Travail (data.gouv.fr).
+**Suggestions par code NAF** (`packages/core/data/idcc/naf-suggestions.json`, 100 entrées) :
+- Source : Table SIRET-OPCO, France Compétences, https://www.data.gouv.fr/datasets/table-siret-opco, Licence Ouverte 2.0 ; fichier `siro-202606.csv` (DSN de juin 2026) mis à jour sur data.gouv.fr le 24/09/2026, lu par l'API tabulaire de data.gouv.fr ; colonne `OPCO_PROPRIETAIRE` (OPCO de rattachement selon le dictionnaire de données de la table). Toute réutilisation mentionne cette source et cette date.
+- Échantillon : unités légales actives de l'API Recherche d'entreprises dont l'activité principale relève du préfixe, employeuses (tranche d'effectif INSEE connue et non nulle), tirées sur des pages au hasard (graine fixe) en deux strates (1 à 9 salariés, 10 salariés et plus) ; le SIRET du siège est cherché dans la table. Comptent les employeurs dont la table donne un OPCO, hors catégories juridiques 7xxx (règle 5). Préparation du 08/10/2026 : 6 749 unités légales lues, 5 857 employeurs comptés, 7 397 requêtes en tout (au plus 4 par seconde, aucune à `api.francecompetences.fr`).
+- Part : proportion de l'OPCO le plus fréquent parmi les établissements que l'entrée sert réellement (ses sous-classes, moins celles qui ont leur propre entrée), arrondie à deux décimales ; `effectif_etablissements` : taille de cet échantillon. Une entrée n'existe que si l'échantillon compte au moins 30 établissements et si la part atteint 0,60 : un secteur partagé entre plusieurs OPCO n'a pas d'entrée et le résolveur dit « non identifié » (commerce de gros 46, holdings 64.20Z et 70.10Z, associations 94.99Z, taxis 49.32Z, aide à domicile 88.10A, par exemple). Une sous-classe ou une classe dont l'OPCO diffère de celui de son parent est une exception observée, déclarée avec sa raison dans `packages/core/tests/naf-suggestions.test.ts` (10.13B, 10.71C, 10.71D, 41.1, 55.30Z).
+- Évaluation sur 240 établissements tirés après avoir figé la table (recherche par mots-clés, aucun SIREN du calibrage), dont 167 que la table rattache à un OPCO : accord 50,3 % avant, 85,6 % après ; « non identifié » 45,5 % puis 10,2 % ; réponses `fiable` inchangées (51, dont 50 exactes) ; réponses `a_confirmer` fausses : 6 sur 41 avant, 6 sur 100 après. Détail : `.superpowers/sdd/final-fix-F1b-report.md`.
+- Mise à jour : à refaire avec une version plus récente de la table quand on veut des parts à jour ; le produit ne lit aucune de ces données à l'exécution.
+
+**Contrainte juridique** : la table de correspondance IDCC → OPCO de France Compétences (art. R. 6123-34, arrêté du 15/06/2022) et son API (`api.francecompetences.fr`) restent hors du produit : leur réutilisation exige une licence (art. R. 6123-35). La table IDCC v2 est reconstruite à partir de sources réutilisables : arrêtés d'agrément des OPCO et modificatifs (Journal officiel, Légifrance), listes de branches publiées par chaque OPCO, liste des IDCC du ministère du Travail (data.gouv.fr). La Table SIRET-OPCO, publiée par France Compétences sous Licence Ouverte 2.0, se réutilise librement avec mention de la source et de la date de mise à jour.
 
 ### 5.6 Corrections du moteur OPCO (`calculateFunding`)
 
