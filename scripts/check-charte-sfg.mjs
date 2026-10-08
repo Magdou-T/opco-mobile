@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 // ============================================================
-// Garde de la charte SFG pour le site (apps/web/src) : Node seul, sans dependance.
+// Garde de la charte SFG pour le site : Node seul, sans dependance.
+//
+// Perimetre de `npm run check:charte` : le code du site (apps/web/src, toutes les regles ci-dessous), ses tests
+// (apps/web/tests : tirets et emojis, ecritures comprises) et son guide de design (apps/web/DESIGN.md : tirets et
+// emojis ecrits tels quels, le guide citant en exemple des classes, des couleurs et des ecritures interdites).
+// `npm run check:tirets` (option --tirets) lit tous les fichiers texte suivis du depot (git ls-files : .ts .tsx .js
+// .mjs .cjs .json .md .yml .yaml .css .txt, hors donnees JSON de datasets/ et de packages/core/data/) et n'y cherche
+// que les tirets cadratins ecrits tels quels.
 //
 // Signale, avec fichier, ligne et colonne :
 //   (a) le tiret cadratin et ses variantes : U+2014, U+2015 (barre horizontale), U+2E3A, U+2E3B, U+FE31 (forme
@@ -42,10 +49,11 @@
 // tiret d'une donnee) est signale : le construire par String.fromCharCode(0x2014) ou String.fromCodePoint(). Les
 // donnees de packages/core sont controlees par packages/core/tests/charte-sfg.test.ts.
 //
-// Usage : node scripts/check-charte-sfg.mjs [--self-test]
-// Code de sortie 1 s'il y a au moins une violation (ou un ecart dans l'autotest).
+// Usage : node scripts/check-charte-sfg.mjs [--self-test | --tirets]
+// Code de sortie 1 s'il y a au moins une violation (ou un ecart dans l'autotest), 2 si git ls-files echoue (--tirets).
 // ============================================================
 
+import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative, extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -53,6 +61,8 @@ import { fileURLToPath } from 'node:url';
 const RACINE = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DOSSIER = join(RACINE, 'apps', 'web', 'src');
 const EXTENSIONS = new Set(['.ts', '.tsx', '.css']);
+const TESTS_DU_SITE = join(RACINE, 'apps', 'web', 'tests');
+const GUIDE_DU_SITE = join(RACINE, 'apps', 'web', 'DESIGN.md');
 
 const TEINTE_MIN = 190;
 const TEINTE_MAX = 320;
@@ -120,14 +130,29 @@ const HEX = /(?<![0-9A-Za-z&#-])#([0-9a-fA-F]{3,8})(?![0-9A-Za-z-])/g;
 // est lu par argumentDe(), var() et calc() imbriques compris.
 const FONCTION = /(?<![A-Za-z0-9.$-])(rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/gi;
 
-/** Texte entre une parenthese ouvrante (`debut` : l'index qui la suit) et sa fermante, ou null faute de fermante. */
-function argumentDe(texte, debut) {
-  let profondeur = 1;
-  for (let i = debut; i < texte.length; i++) {
-    if (texte[i] === '(') profondeur += 1;
-    else if (texte[i] === ')' && --profondeur === 0) return texte.slice(debut, i);
+/**
+ * Fermante de chaque parenthese ouvrante d'un texte (index de la fermante, -1 faute de fermante), en un seul passage :
+ * la recherche est lineaire. Relire le texte depuis chaque fonction de couleur non refermee prenait 9 s pour 1 000
+ * "rgb(" devant 490 000 caracteres.
+ */
+function fermantes(texte) {
+  const fin = new Int32Array(texte.length).fill(-1);
+  const ouvertes = [];
+  for (let i = 0; i < texte.length; i++) {
+    const c = texte.charCodeAt(i);
+    if (c === 40) ouvertes.push(i);
+    else if (c === 41 && ouvertes.length > 0) fin[ouvertes.pop()] = i;
   }
-  return null;
+  return fin;
+}
+
+/**
+ * Texte entre une parenthese ouvrante (`debut` : l'index qui la suit) et sa fermante, ou null faute de fermante ; `fins`
+ * est le resultat de fermantes(texte).
+ */
+function argumentDe(texte, debut, fins) {
+  const fin = fins[debut - 1];
+  return fin === -1 ? null : texte.slice(debut, fin);
 }
 
 // Couleurs nommees CSS (CSS Color 4), avec leur valeur ; seules les bleues ou violettes sont recherchees.
@@ -199,11 +224,17 @@ const ATTRIBUT = /(?:^|[^\w-])(?:fill|stroke|color|stop-?[cC]olor|flood-?[cC]olo
 const ARBITRAIRE = /\[[^\]\s"'`]*$/;
 /** Argument d'un degrade, de color-mix(), light-dark() ou drop-shadow() encore ouvert (un niveau de parentheses). */
 const ARGUMENT = /(?:color-mix|light-dark|(?:repeating-)?(?:linear|radial|conic)-gradient|drop-shadow)\((?:[^()]|\([^()]*\))*$/;
-/** Une chaine "#abc" employee comme ancre ou selecteur, pas comme couleur : affectee ou comparee (===, !==, ==, !=). */
-const ANCRE = /(?:(?:^|[^\w-])(?:href|to|id|htmlFor|for|name|hash|target|aria-[\w-]+|xlinkHref|xlink:href)\s*(?:[!=]==?|[=:])\s*\{?\s*|(?:querySelector(?:All)?|getElementById|closest|matches|scrollIntoView|push|replace|scrollTo|startsWith|endsWith|includes)\(\s*)$/;
+/**
+ * Une chaine "#abc" employee comme ancre ou selecteur, pas comme couleur : affectee ou comparee (===, !==, ==, !=), ou
+ * passee a une fonction de lien ou de selection (querySelector, new URL...).
+ */
+const ANCRE = /(?:(?:^|[^\w-])(?:href|to|id|htmlFor|for|name|hash|target|aria-[\w-]+|xlinkHref|xlink:href)\s*(?:[!=]==?|[=:])\s*\{?\s*|(?:querySelector(?:All)?|getElementById|closest|matches|scrollIntoView|push|replace|scrollTo|startsWith|endsWith|includes|new\s+URL)\(\s*)$/;
+/** url(#id) designe un element de la page (masque, filtre, degrade SVG) par son identifiant : ce n'est pas une couleur. */
+const REFERENCE_URL = /url\(\s*["']?$/i;
 
 function enContexteDeCouleur(texte, debut, fin, chaineSeule) {
   const avant = texte.slice(Math.max(0, debut - 400), debut);
+  if (REFERENCE_URL.test(avant)) return false;
   if (DECLARATION.test(avant) || ATTRIBUT.test(avant) || ARBITRAIRE.test(avant) || ARGUMENT.test(avant)) return true;
   if (!chaineSeule) return false;
   const guillemet = texte[debut - 1];
@@ -484,8 +515,25 @@ function decoder(texte) {
 
 const codes = (s) => [...s].map((c) => `U+${c.codePointAt(0).toString(16).toUpperCase()}`).join(' ');
 
-/** Violations d'un texte : liste de { ligne, colonne, type, extrait }, dans l'ordre du texte. */
-export function analyser(texte) {
+/**
+ * Regles appliquees selon le perimetre :
+ * - toutes : le code du site (apps/web/src), tout est controle ;
+ * - tirets-emojis : les tests du site, tirets et emojis seulement, ecritures comprises (entites, echappements) ;
+ * - bruts : documents et donnees (guide de design, fixtures JSON), tirets et emojis ecrits tels quels seulement : un
+ *   document qui cite &mdash; ou \u{1F389} n'affiche ni tiret ni emoji ;
+ * - tirets : le balayage --tirets de tout le depot, tirets ecrits tels quels seulement.
+ */
+const REGLES = {
+  toutes: { couleurs: true, polices: true, emojis: true, ecritures: true },
+  'tirets-emojis': { couleurs: false, polices: false, emojis: true, ecritures: true },
+  bruts: { couleurs: false, polices: false, emojis: true, ecritures: false },
+  tirets: { couleurs: false, polices: false, emojis: false, ecritures: false },
+};
+
+/** Violations d'un texte : liste de { ligne, colonne, type, extrait }, dans l'ordre du texte (`regles` : voir REGLES). */
+export function analyser(texte, regles = 'toutes') {
+  const r = REGLES[regles];
+  if (!r) throw new Error(`Regles inconnues : ${regles}`);
   const debuts = [0];
   for (let i = 0; i < texte.length; i++) if (texte[i] === '\n') debuts.push(i + 1);
   const position = (index) => {
@@ -504,84 +552,179 @@ export function analyser(texte) {
   for (const m of texte.matchAll(TIRETS)) {
     noter('tiret cadratin', m.index, `${codes(m[0])} : ${texte.slice(Math.max(0, m.index - 20), m.index + 20).replace(/\s+/g, ' ').trim()}`);
   }
-  for (const m of texte.matchAll(TIRETS_ECRITS)) noter('tiret cadratin', m.index, m[0]);
+  if (r.ecritures) for (const m of texte.matchAll(TIRETS_ECRITS)) noter('tiret cadratin', m.index, m[0]);
 
-  for (const m of texte.matchAll(CLASSE_BLEUE)) noter('bleu ou violet (classe Tailwind)', m.index, m[0]);
-  for (const m of texte.matchAll(VARIABLE_BLEUE)) noter('bleu ou violet (variable Tailwind)', m.index, m[0]);
-  for (const m of texte.matchAll(HEX)) {
-    const rvb = hexVersRvb(m[1]);
-    if (!rvb) continue;
-    const h = teinte(...rvb);
-    if (dansLaPlage(h) && enContexteDeCouleur(texte, m.index, m.index + m[0].length, true)) {
-      noter(`bleu ou violet (couleur ${m[0]}, teinte ${Math.round(h)} degres)`, m.index, m[0]);
+  if (r.couleurs) {
+    for (const m of texte.matchAll(CLASSE_BLEUE)) noter('bleu ou violet (classe Tailwind)', m.index, m[0]);
+    for (const m of texte.matchAll(VARIABLE_BLEUE)) noter('bleu ou violet (variable Tailwind)', m.index, m[0]);
+    for (const m of texte.matchAll(HEX)) {
+      const rvb = hexVersRvb(m[1]);
+      if (!rvb) continue;
+      const h = teinte(...rvb);
+      if (dansLaPlage(h) && enContexteDeCouleur(texte, m.index, m.index + m[0].length, true)) {
+        noter(`bleu ou violet (couleur ${m[0]}, teinte ${Math.round(h)} degres)`, m.index, m[0]);
+      }
+    }
+    let fins = null;
+    for (const m of texte.matchAll(FONCTION)) {
+      // Un souligne devant ne separe des mots que dans une valeur arbitraire Tailwind ouverte ; ailleurs (to_rgb),
+      // c'est un identifiant.
+      if (texte[m.index - 1] === '_' && !ARBITRAIRE.test(texte.slice(Math.max(0, m.index - 400), m.index))) continue;
+      fins ??= fermantes(texte);
+      const args = argumentDe(texte, m.index + m[0].length, fins);
+      if (args === null) continue;
+      const rvb = fonctionVersRvb(m[1], args);
+      if (!rvb) continue;
+      const h = teinte(...rvb);
+      const nom = m[1].toLowerCase().replace(/a$/, '').replace(/^hsl$/, 'hsl').replace(/^color$/, 'color()');
+      if (dansLaPlage(h)) noter(`bleu ou violet (${nom}, teinte ${Math.round(h)} degres)`, m.index, `${m[0]}${args})`);
+    }
+    for (const m of texte.matchAll(NOMMEE)) {
+      if (!enContexteDeCouleur(texte, m.index, m.index + m[0].length, false)) continue;
+      const h = teinte(...hexVersRvb(NOMMEES[m[1].toLowerCase()]));
+      noter(`bleu ou violet (couleur nommee ${m[1].toLowerCase()}, teinte ${Math.round(h)} degres)`, m.index, m[0]);
     }
   }
-  for (const m of texte.matchAll(FONCTION)) {
-    // Un souligne devant ne separe des mots que dans une valeur arbitraire Tailwind ouverte ; ailleurs (to_rgb), c'est
-    // un identifiant.
-    if (texte[m.index - 1] === '_' && !ARBITRAIRE.test(texte.slice(Math.max(0, m.index - 400), m.index))) continue;
-    const args = argumentDe(texte, m.index + m[0].length);
-    if (args === null) continue;
-    const rvb = fonctionVersRvb(m[1], args);
-    if (!rvb) continue;
-    const h = teinte(...rvb);
-    const nom = m[1].toLowerCase().replace(/a$/, '').replace(/^hsl$/, 'hsl').replace(/^color$/, 'color()');
-    if (dansLaPlage(h)) noter(`bleu ou violet (${nom}, teinte ${Math.round(h)} degres)`, m.index, `${m[0]}${args})`);
-  }
-  for (const m of texte.matchAll(NOMMEE)) {
-    if (!enContexteDeCouleur(texte, m.index, m.index + m[0].length, false)) continue;
-    const h = teinte(...hexVersRvb(NOMMEES[m[1].toLowerCase()]));
-    noter(`bleu ou violet (couleur nommee ${m[1].toLowerCase()}, teinte ${Math.round(h)} degres)`, m.index, m[0]);
+
+  if (r.polices) {
+    for (const m of texte.matchAll(MONO)) noter('police mono', m.index, m[0]);
+    for (const m of texte.matchAll(FAMILLE_MONO)) {
+      if (CONTEXTE_POLICE.test(texte.slice(Math.max(0, m.index - 400), m.index))) noter('police mono', m.index, m[0]);
+    }
+    for (const m of sansCommentaires(texte).matchAll(BALISE_MONO)) {
+      noter('police mono', m.index, `${m[0]}> (rendu en mono par le navigateur)`);
+    }
   }
 
-  for (const m of texte.matchAll(MONO)) noter('police mono', m.index, m[0]);
-  for (const m of texte.matchAll(FAMILLE_MONO)) {
-    if (CONTEXTE_POLICE.test(texte.slice(Math.max(0, m.index - 400), m.index))) noter('police mono', m.index, m[0]);
-  }
-  for (const m of sansCommentaires(texte).matchAll(BALISE_MONO)) {
-    noter('police mono', m.index, `${m[0]}> (rendu en mono par le navigateur)`);
-  }
-
-  const { decode, origine } = decoder(texte);
-  for (const m of decode.matchAll(EMOJI)) {
-    if (TOLERES.has(m[0])) continue;
-    const debut = origine[m.index];
-    const ecrit = texte.slice(debut, origine[m.index + m[0].length]);
-    noter('emoji', debut, ecrit === m[0] ? codes(m[0]) : `${codes(m[0])} (${ecrit})`);
+  if (r.emojis) {
+    // Sans les ecritures (documents), le texte est lu tel quel : chaque unite est a sa propre place.
+    const { decode, origine } = r.ecritures ? decoder(texte) : { decode: texte, origine: null };
+    for (const m of decode.matchAll(EMOJI)) {
+      if (TOLERES.has(m[0])) continue;
+      const debut = origine ? origine[m.index] : m.index;
+      const ecrit = origine ? texte.slice(debut, origine[m.index + m[0].length]) : m[0];
+      noter('emoji', debut, ecrit === m[0] ? codes(m[0]) : `${codes(m[0])} (${ecrit})`);
+    }
   }
 
   return violations.sort((a, b) => a.index - b.index).map(({ index, ...v }) => v);
 }
 
-function fichiers(dossier) {
+function fichiers(dossier, extensions) {
   const resultat = [];
   for (const entree of readdirSync(dossier, { withFileTypes: true })) {
     const chemin = join(dossier, entree.name);
-    if (entree.isDirectory()) resultat.push(...fichiers(chemin));
-    else if (EXTENSIONS.has(extname(entree.name))) resultat.push(chemin);
+    if (entree.isDirectory()) resultat.push(...fichiers(chemin, extensions));
+    else if (extensions.has(extname(entree.name))) resultat.push(chemin);
   }
   return resultat.sort();
 }
 
-function verifierLeSite() {
-  const liste = fichiers(DOSSIER);
+/** Chemin relatif a la racine du depot, en barres obliques. */
+const relatif = (chemin) => relative(RACINE, chemin).split('\\').join('/');
+
+/**
+ * Fichiers controles par `npm run check:charte`, avec leurs regles : le code du site en entier ; ses tests (tirets et
+ * emojis, ecritures comprises ; fixtures JSON telles quelles) et son guide de design (caracteres tels quels : il cite en
+ * exemple des classes, des couleurs et des ecritures interdites).
+ */
+function perimetreDuSite() {
+  return [
+    ...fichiers(DOSSIER, EXTENSIONS).map((chemin) => ({ chemin, regles: 'toutes' })),
+    ...fichiers(TESTS_DU_SITE, new Set(['.ts', '.tsx', '.json'])).map((chemin) => ({
+      chemin,
+      regles: extname(chemin) === '.json' ? 'bruts' : 'tirets-emojis',
+    })),
+    { chemin: GUIDE_DU_SITE, regles: 'bruts' },
+  ];
+}
+
+/** Affiche chaque violation ; renvoie leur nombre total et leur nombre par famille. */
+function signaler(liste) {
   let total = 0;
   const parType = new Map();
-  for (const chemin of liste) {
-    for (const v of analyser(readFileSync(chemin, 'utf8'))) {
+  for (const { chemin, regles } of liste) {
+    for (const v of analyser(readFileSync(chemin, 'utf8'), regles)) {
       total += 1;
       const famille = v.type.split(' (')[0];
       parType.set(famille, (parType.get(famille) ?? 0) + 1);
-      const fichier = relative(RACINE, chemin).split('\\').join('/');
-      console.log(`${fichier}:${v.ligne}:${v.colonne}  [${v.type}]  ${v.extrait}`);
+      console.log(`${relatif(chemin)}:${v.ligne}:${v.colonne}  [${v.type}]  ${v.extrait}`);
     }
   }
+  return { total, parType };
+}
+
+function verifierLeSite() {
+  const liste = perimetreDuSite();
+  const code = liste.filter((f) => f.regles === 'toutes').length;
+  const { total, parType } = signaler(liste);
   if (total === 0) {
-    console.log(`Charte SFG : aucun probleme dans ${liste.length} fichiers (apps/web/src).`);
+    console.log(
+      `Charte SFG : aucun probleme dans ${code} fichiers (apps/web/src) et ${liste.length - code} fichiers ` +
+        '(apps/web/tests et apps/web/DESIGN.md : tirets et emojis).',
+    );
     return 0;
   }
   const detail = [...parType].map(([type, n]) => `${type} : ${n}`).join(', ');
-  console.log(`\nCharte SFG : ${total} probleme(s) dans apps/web/src (${detail}).`);
+  console.log(`\nCharte SFG : ${total} probleme(s) dans le site (${detail}).`);
+  return 1;
+}
+
+// ------------------------------------------------------------
+// Balayage --tirets : tout le depot, tirets cadratins seulement
+// ------------------------------------------------------------
+const EXTENSIONS_TIRETS = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs', '.json', '.md', '.yml', '.yaml', '.css', '.txt']);
+
+/**
+ * Fichier suivi (chemin de git ls-files, barres obliques) que le balayage --tirets lit : fichier texte des extensions
+ * retenues, sauf les donnees JSON de datasets/ (instantanes publies) et de packages/core/data/ (controlees par
+ * packages/core/tests/charte-sfg.test.ts, qui exempte les extraits cites mot pour mot).
+ */
+export function luParLeBalayageDesTirets(chemin) {
+  const extension = extname(chemin).toLowerCase();
+  if (!EXTENSIONS_TIRETS.has(extension)) return false;
+  if (extension === '.json' && (chemin.startsWith('datasets/') || chemin.startsWith('packages/core/data/'))) return false;
+  return true;
+}
+
+/** Dossier d'un fichier pour le resume : ses deux premiers niveaux (apps/web, packages/core, docs/superpowers...). */
+const dossierDuResume = (chemin) => {
+  const parties = chemin.split('/');
+  return parties.length <= 1 ? '(racine)' : parties.slice(0, Math.min(2, parties.length - 1)).join('/');
+};
+
+function verifierLesTirets() {
+  let suivis;
+  try {
+    suivis = execFileSync('git', ['ls-files', '-z'], { cwd: RACINE, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
+      .split('\0')
+      .filter(Boolean);
+  } catch (erreur) {
+    console.log(`Balayage des tirets impossible : git ls-files a echoue (${erreur.message}).`);
+    return 2;
+  }
+  const lus = suivis.filter(luParLeBalayageDesTirets);
+  let total = 0;
+  let fautifs = 0;
+  const parDossier = new Map();
+  for (const fichier of lus) {
+    const violations = analyser(readFileSync(join(RACINE, fichier), 'utf8'), 'tirets');
+    if (violations.length === 0) continue;
+    total += violations.length;
+    fautifs += 1;
+    for (const v of violations) console.log(`${fichier}:${v.ligne}:${v.colonne}  [${v.type}]  ${v.extrait}`);
+    const dossier = dossierDuResume(fichier);
+    const cumul = parDossier.get(dossier) ?? { fichiers: 0, tirets: 0 };
+    parDossier.set(dossier, { fichiers: cumul.fichiers + 1, tirets: cumul.tirets + violations.length });
+  }
+  if (total === 0) {
+    console.log(`Tirets cadratins : aucun dans ${lus.length} fichiers suivis.`);
+    return 0;
+  }
+  console.log(`\nTirets cadratins : ${total} dans ${fautifs} fichier(s) sur ${lus.length} fichiers suivis lus.`);
+  for (const [dossier, { fichiers: f, tirets }] of [...parDossier].sort()) {
+    console.log(`  ${dossier} : ${tirets} dans ${f} fichier(s)`);
+  }
   return 1;
 }
 
@@ -633,6 +776,11 @@ function autotest() {
     // une comparaison n'exclut que sur une propriete d'ancre (hash, href, id...)
     ['fill: #bad;', ['bleu ou violet (couleur #bad, teinte 260 degres)']],
     ["if (couleur === '#3b82f6') teinter();", ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
+    // url(#id) designe un element (masque, filtre, degrade SVG) : seul ce qui suit la parenthese fermante reste une
+    // couleur ; une fonction autre que new URL( ne fait pas d'une chaine une ancre
+    ['mask-image: url(#bad), linear-gradient(#3b82f6, #fff);', ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
+    ['background: url(x.png) #3b82f6;', ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
+    ["const u = URL_BLEUE('#bad');", ['bleu ou violet (couleur #bad, teinte 260 degres)']],
     // (b) fonctions de couleur, toutes syntaxes
     ['background: rgb(124, 58, 237);', ['bleu ou violet (rgb, teinte 262 degres)']],
     ['color: rgba(14 165 233 / 0.5)', ['bleu ou violet (rgb, teinte 199 degres)']],
@@ -748,6 +896,10 @@ function autotest() {
     "if (location.hash === '#bad') ouvrir();",
     "if (hash !== '#abc') fermer();",
     "if (e.target.hash == '#abd' || lien.href != '#bad') suivre();",
+    // reference a un element par url(#id) (CSS ou attribut SVG) et adresse construite par new URL('#id', base)
+    'mask-image: url(#bad); filter: url("#bad"); fill: url( #decade ); clip-path: url(\'#face\');',
+    '<path fill="url(#bad)" /> <rect style={{ mask: \'url(#bad)\' }} />',
+    "const u = new URL('#bad', base); const v = new URL(\"#decade\", location.href);",
     // (b) fonctions de couleur hors du bleu, gris
     'color: rgb(232, 78, 27); background: rgba(0, 0, 0, 0.1); color: hsl(15 82% 51%);',
     'className="bg-[rgb(232_78_27)] text-[hsl(15_82%_51%)]"',
@@ -819,11 +971,22 @@ function autotest() {
   // jusqu'a sa parenthese fermante.
   const positions = (texte) => analyser(texte).map((v) => `${v.ligne}:${v.colonne}`).join(' ');
   const extraits = (texte) => analyser(texte).map((v) => v.extrait).join(' ');
+  // Duree : chaque fonction de couleur non refermee relisait tout le texte qui la suit (1 000 "rgb(" devant 490 000
+  // caracteres : 9 s) ; la recherche des fermantes est lineaire.
+  const duree = (texte) => {
+    const t0 = performance.now();
+    analyser(texte);
+    return performance.now() - t0;
+  };
+  const enMoinsDe3s = (ms) => (ms < 3000 ? 'moins de 3 s' : `${(ms / 1000).toFixed(1)} s`);
   const controles = [
     ['positions', positions('ligne propre\r\nfont-mono ici\nfin \u2014 la\n.x {\n  background: linear-gradient(\n    #3b82f6 0%,\n    #fff 100%\n  );\n}'), '2:1 3:5 6:5'],
     ['extrait', extraits('color: hsl(250 80% 50% / calc(1 - var(--x)));'), 'hsl(250 80% 50% / calc(1 - var(--x)))'],
     ['positions des emojis decodes', positions('ok &#127881;\n  \\u{1F44D} et \\uD83C\\uDF89'), '1:4 2:3 2:16'],
     ['positions des balises hors commentaire', positions('/* <pre> */ <code>\n// <kbd>\nx <samp>'), '1:13 3:3'],
+    ['extrait apres des fonctions non refermees', extraits('rgb( oklch( color: rgb(124, 58, 237);'), 'rgb(124, 58, 237)'],
+    ['duree (1 000 rgb( non refermes, 490 000 caracteres)', enMoinsDe3s(duree('color: ' + 'rgb('.repeat(1000) + 'x'.repeat(490000))), 'moins de 3 s'],
+    ['duree (5 000 oklch( non refermes, 100 000 caracteres)', enMoinsDe3s(duree('oklch('.repeat(5000) + 'a'.repeat(100000))), 'moins de 3 s'],
   ];
   for (const [nom, obtenu, attendu] of controles) {
     if (obtenu !== attendu) {
@@ -832,15 +995,78 @@ function autotest() {
     }
   }
 
-  const total = fautifs.length + propres.length + controles.length;
+  // Regles d'un perimetre : tests du site (tirets et emojis, ecritures comprises), documents et donnees (caracteres
+  // ecrits tels quels : un document cite &mdash; ou \u{1F389} sans les afficher), balayage --tirets (tirets ecrits tels
+  // quels, dans tout le depot).
+  // Caracteres construits par leur code : ce fichier n'en contient aucun tel quel (le balayage --tirets le lit aussi).
+  const car = (...points) => String.fromCodePoint(...points);
+  const [tiret, barre, demi, fete] = [car(0x2014), car(0x2015), car(0x2013), car(0x1f389)];
+  const toleres = car(0x2713, 0x20, 0x26a0, 0x20, 0x2197, 0x20, 0xa9);
+  const parRegles = [
+    ["color: #3b82f6; font-family: monospace; const s = 'A \\u2014 B \\u{1F389}';", 'tirets-emojis', ['tiret cadratin', 'emoji']],
+    ['color: #3b82f6; <code>x</code> font-mono ; rien a signaler', 'tirets-emojis', []],
+    [`Bravo ${fete}, un tiret ${tiret} ici ; \`&mdash;\` et \`\\u{1F389}\` cites ; bg-blue-500`, 'bruts', ['emoji', 'tiret cadratin']],
+    [`Cites : \`&mdash;\`, \`&#8212;\`, \`\\u2014\`, \`\\2014\`, \`&#x1F389;\` ; signes toleres ${toleres}`, 'bruts', []],
+    [`Un tiret ${tiret} ici, l'echappement '\\u2014' et &mdash; non, ${fete} non plus, bg-blue-500`, 'tirets', ['tiret cadratin']],
+    [`Formes verticales ${car(0xfe31)} et ${car(0xfe58)}, barre ${barre}, demi-cadratin ${demi} admis`, 'tirets', ['tiret cadratin', 'tiret cadratin', 'tiret cadratin']],
+    [`Rien a signaler : ${demi} ${toleres} &mdash; \\u2014`, 'tirets', []],
+  ];
+  for (const [texte, regles, attendus] of parRegles) {
+    const trouves = analyser(texte, regles).map((v) => v.type);
+    if (trouves.length !== attendus.length || attendus.some((t, i) => trouves[i] !== t)) {
+      ecarts += 1;
+      console.log(`ECART (regles ${regles}) : ${JSON.stringify(texte)}\n  attendu : ${JSON.stringify(attendus)}\n  obtenu  : ${JSON.stringify(trouves)}`);
+    }
+  }
+
+  // Fichiers du depot que le balayage --tirets lit (chemins de git ls-files).
+  const selection = [
+    ['apps/web/src/app/page.tsx', true],
+    ['apps/web/src/app/globals.css', true],
+    ['apps/web/DESIGN.md', true],
+    ['apps/mobile/app.json', true],
+    ['package-lock.json', true],
+    ['packages/core/src/data.ts', true],
+    ['packages/core/tests/charte-sfg.test.ts', true],
+    ['scripts/check-charte-sfg.mjs', true],
+    ['backend/scripts/build-sources.js', true],
+    ['.github/workflows/ci.yml', true],
+    ['docs/notes.txt', true],
+    ['datasets/README.md', true],
+    ['datasets/v3.json', false],
+    ['datasets/manifest.json', false],
+    ['packages/core/data/aides/nationales.json', false],
+    ['packages/core/data/idcc/idcc-opco.json', false],
+    ['apps/web/public/logo-sfg.png', false],
+    ['apps/web/public/.htaccess', false],
+    ['.gitignore', false],
+  ];
+  for (const [chemin, attendu] of selection) {
+    if (luParLeBalayageDesTirets(chemin) !== attendu) {
+      ecarts += 1;
+      console.log(`ECART (selection --tirets) : ${chemin} ${attendu ? 'devrait etre lu' : 'ne devrait pas etre lu'}`);
+    }
+  }
+
+  const total = fautifs.length + propres.length + controles.length + parRegles.length + selection.length;
   if (ecarts > 0) {
     console.log(`\nAutotest de la garde de charte : ${ecarts} ecart(s) sur ${total} cas.`);
     return 1;
   }
-  console.log(`Autotest de la garde de charte : ${total} cas, tous conformes (${fautifs.length} violations detectees, ${propres.length} textes propres non signales, ${controles.length} controles de position et d'extrait exacts).`);
+  console.log(
+    `Autotest de la garde de charte : ${total} cas, tous conformes (${fautifs.length} violations detectees, ${propres.length} textes propres non signales, ` +
+      `${controles.length} controles de position, d'extrait et de duree exacts, ${parRegles.length} cas de regles par perimetre, ` +
+      `${selection.length} cas de selection des fichiers du balayage --tirets).`,
+  );
   return 0;
 }
 
 // Execute seulement en ligne de commande : un import (autotest externe, mutants) n'analyse pas le site.
 const lance = process.argv[1] && resolve(process.argv[1]).toLowerCase() === fileURLToPath(import.meta.url).toLowerCase();
-if (lance) process.exitCode = process.argv.includes('--self-test') ? autotest() : verifierLeSite();
+if (lance) {
+  process.exitCode = process.argv.includes('--self-test')
+    ? autotest()
+    : process.argv.includes('--tirets')
+      ? verifierLesTirets()
+      : verifierLeSite();
+}
