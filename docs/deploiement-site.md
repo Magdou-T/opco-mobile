@@ -88,47 +88,63 @@ Le modèle est l'archive de juillet, déposée avec succès : ses 212 entrées s
 
 Ne jamais écrire l'archive dans `apps/web/out` (elle s'y inclurait) ; la garder hors du dépôt, car git n'ignore pas les `.zip`.
 
-Sous Windows, depuis la racine du dépôt (`tar` est le bsdtar livré avec Windows 10 et 11), dans PowerShell :
+Sous Windows, depuis la racine du dépôt, dans PowerShell (`tar` est le bsdtar livré avec Windows 10 et 11) :
+
+```powershell
+$out = (Resolve-Path apps/web/out).Path
+$noms = Get-ChildItem $out -Recurse -File -Force | ForEach-Object { $_.FullName.Substring($out.Length + 1).Replace('\', '/') }
+tar -a -c -f <chemin>\financementOPCO-hostinger-AAAA-MM.zip --no-recursion -C $out $noms
+```
+
+`<chemin>` est un dossier hors du dépôt. La deuxième ligne liste tous les fichiers de `apps/web/out`, `.htaccess` compris (`-Force`), avec leur chemin depuis ce dossier et des barres obliques ordinaires. Dans la troisième, `-a` choisit le format zip d'après l'extension, `-C` se place dans `apps/web/out` et `--no-recursion` n'archive que ces fichiers, sans entrée de dossier : c'est la forme de l'archive de juillet.
+
+Essai du 08/10/2026 sur le build du jour : 210 entrées, autant que de fichiers dans `apps/web/out`, environ 2,6 Mo ; aucune entrée de dossier, aucune en `./`, aucune barre oblique inverse ; `.htaccess`, `404.html`, `index.html`, `robots.txt` et `sitemap.xml` au premier niveau. Extraite par `tar -xf` et par `Expand-Archive`, elle redonne exactement les fichiers de `apps/web/out` (empreintes SHA-256 identiques), `.htaccess` à la racine.
+
+La liste des noms tient sur la ligne de commande (environ 7 000 caractères le 08/10/2026, pour une limite d'environ 32 000). Si elle devenait trop longue, l'écrire dans un fichier sans BOM et la passer à `tar` par `-T` (même archive à l'essai du 08/10/2026). `<liste>` est le chemin complet d'un fichier hors du dépôt : `WriteAllLines` ne suit pas le dossier courant de PowerShell.
+
+```powershell
+[System.IO.File]::WriteAllLines('<liste>', $noms, (New-Object System.Text.UTF8Encoding($false)))
+tar -a -c -f <chemin>\financementOPCO-hostinger-AAAA-MM.zip --no-recursion -C $out -T <liste>
+```
+
+Variantes plus courtes, qui ajoutent une entrée par dossier (56 de plus le 08/10/2026, soit 266 entrées ; même contenu une fois extrait, mais une forme que Hostinger n'a jamais extraite) : dans PowerShell,
 
 ```powershell
 tar -a -c -f <chemin>\financementOPCO-hostinger-AAAA-MM.zip -C apps/web/out (Get-ChildItem apps/web/out -Force -Name)
 ```
 
-ou, dans cmd comme dans PowerShell :
+ou, dans cmd comme dans PowerShell (le bsdtar de Windows développe lui-même `*`, `.htaccess` compris) :
 
 ```bat
 tar -a -c -f <chemin>\financementOPCO-hostinger-AAAA-MM.zip -C apps/web/out *
 ```
 
-`<chemin>` est un dossier hors du dépôt. `-a` choisit le format zip d'après l'extension et `-C` se place dans `apps/web/out`. `Get-ChildItem -Force -Name` donne les noms du premier niveau du dossier, `.htaccess` compris ; dans la seconde forme, le bsdtar de Windows développe lui-même `*`, `.htaccess` compris.
-
-Essai du 08/10/2026 sur le build du jour : les deux commandes produisent la même archive, environ 2,6 Mo. Elle compte une entrée par fichier de `apps/web/out` et une par dossier, sans préfixe `./` ni barre oblique inverse ; extraite par `tar -xf` et par `Expand-Archive`, elle redonne exactement les fichiers de `apps/web/out` (empreintes SHA-256 identiques), `.htaccess` à la racine. L'archive de juillet n'avait pas d'entrée de dossier ; Hostinger n'a pas encore extrait une archive qui en contient : l'étape 7 du § 5 le vérifie.
-
-En secours, la commande avec un point prend aussi tout le contenu, mais chaque nom commence par `./` (`./.htaccess`, `./index.html`) et la liste s'ouvre sur une entrée `./` pour le dossier lui-même (le bsdtar de Windows refuse l'option `-s` qui retirerait ce préfixe) :
+En dernier secours, la commande avec un point prend aussi tout le contenu, mais chaque nom commence par `./` (`./.htaccess`, `./index.html`) et la liste s'ouvre sur une entrée `./` pour le dossier lui-même (le bsdtar de Windows refuse l'option `-s` qui retirerait ce préfixe) :
 
 ```powershell
 tar -a -c -f <chemin>\financementOPCO-hostinger-AAAA-MM.zip -C apps/web/out .
 ```
 
-Sous Linux ou macOS (non testée ici ; contrôler ensuite les noms avec `unzip -l`) :
+Sous Linux ou macOS (non testée ici ; d'après le manuel de zip, `-D` n'ajoute pas d'entrée de dossier ; contrôler ensuite les noms avec `unzip -l`) :
 
 ```bash
-cd apps/web/out && zip -r <chemin>/financementOPCO-hostinger-AAAA-MM.zip .
+cd apps/web/out && zip -r -D <chemin>/financementOPCO-hostinger-AAAA-MM.zip .
 ```
 
-Artefact de la CI : sur GitHub, onglet Actions, workflow « CI » dans la barre latérale, ouvrir un run réussi et télécharger `site-hostinger` dans la rubrique Artifacts (un fichier zip, conservé 30 jours). L'artefact n'existe que si toutes les vérifications du run ont réussi. Sa racine est le contenu de `apps/web/out`, sans dossier englobant, `.htaccess` compris (`include-hidden-files: true` dans `ci.yml`) ; `ci.yml` n'a encore jamais tourné sur GitHub (la branche n'est pas poussée) : le premier run le confirmera, et le zip téléchargé se vérifie comme les autres avant tout dépôt. Une branche sans pull request peut être construite à la main (bouton Run workflow, qui choisit la branche), mais ce bouton n'apparaît qu'une fois `ci.yml` présent sur la branche par défaut, `main`.
+Artefact de la CI : sur GitHub, onglet Actions, workflow « CI » dans la barre latérale, ouvrir un run réussi et télécharger `site-hostinger` dans la rubrique Artifacts (un fichier zip, conservé 30 jours). L'artefact n'existe que si toutes les vérifications du run ont réussi. Sa racine est le contenu de `apps/web/out`, sans dossier englobant, `.htaccess` compris (`include-hidden-files: true` dans `ci.yml`) ; `ci.yml` n'a encore jamais tourné sur GitHub (la branche n'est pas poussée) : le premier run le confirmera. Le zip téléchargé se contrôle comme les autres avant tout dépôt ; s'il contient des entrées de dossier, préférer l'archive de la commande principale. Une branche sans pull request peut être construite à la main (bouton Run workflow, qui choisit la branche), mais ce bouton n'apparaît qu'une fois `ci.yml` présent sur la branche par défaut, `main`.
 
 Contrôler le contenu avant tout dépôt (`tar -tf <archive>` liste les entrées sous Windows, `unzip -l <archive>` sous Linux et macOS). Sous PowerShell, commandes essayées le 08/10/2026 :
 
 ```powershell
+tar -tf <archive> | Where-Object { $_ -like '*/' }            # rien : aucune entrée de dossier
 tar -tf <archive> | Select-String -SimpleMatch '\'           # rien : aucune barre oblique inverse
-tar -tf <archive> | Select-String -Pattern '^\./'             # rien, sauf avec la commande de secours
-tar -tf <archive> | Select-String -Pattern '^(\.htaccess|index\.html|404\.html|robots\.txt|sitemap\.xml|_next/)$'
-(tar -tf <archive> | Where-Object { $_ -notlike '*/' }).Count
+tar -tf <archive> | Select-String -Pattern '^\./'             # rien : aucun préfixe ./
+tar -tf <archive> | Select-String -Pattern '^(\.htaccess|index\.html|404\.html|robots\.txt|sitemap\.xml)$'
+(tar -tf <archive>).Count
 (Get-ChildItem apps/web/out -Recurse -File -Force).Count
 ```
 
-La troisième commande doit afficher six lignes (le premier niveau attendu) et les deux dernières le même nombre (les fichiers de l'archive et ceux de `apps/web/out`). Vérifier aussi que `simulateur/index.html`, `mentions-legales/index.html` et les 11 fiches `opco/<slug>/index.html` sont présents (afdas, akto, atlas, constructys, ocapiat, opco-ep, opco-mobilites, opco-sante, opco2i, opcommerce, uniformation).
+Avec la commande principale, les trois premières n'affichent rien, la quatrième affiche cinq lignes (les fichiers attendus au premier niveau) et les deux dernières donnent le même nombre : une entrée par fichier, rien d'autre. Une variante fait afficher les dossiers à la première et dépasser d'autant le compte de l'archive ; la commande de secours fait afficher toutes les entrées à la troisième. Vérifier aussi que `simulateur/index.html`, `mentions-legales/index.html` et les 11 fiches `opco/<slug>/index.html` sont présents (afdas, akto, atlas, constructys, ocapiat, opco-ep, opco-mobilites, opco-sante, opco2i, opcommerce, uniformation), ainsi que des fichiers sous `_next/`.
 
 ## 5. Déposer sur Hostinger
 
@@ -140,7 +156,7 @@ Les libellés de hPanel viennent des pages d'aide d'Hostinger relues le 08/10/20
 4. Supprimer le contenu précédent du site, `.htaccess` compris. Laisser en place ce que Hostinger y a créé, comme un dossier `.well-known` s'il existe. Supprimer la page d'attente `default.php` que Hostinger crée pour un nouveau domaine, s'il y en a une.
 5. Envoyer l'archive dans ce dossier (bouton d'envoi du Gestionnaire de fichiers ou glisser-déposer).
 6. Clic droit sur l'archive, puis Extraire (Extract). Dans la boîte d'extraction : laisser vide le nom de dossier (Choose folder name ; un nom saisi crée ce dossier, d'après l'aide), choisir `public_html` lui-même comme destination (Select the destination) et cocher l'écrasement des fichiers existants (Overwrite existing files). L'aide ne dit pas ce que fait un nom laissé vide : l'étape suivante le vérifie.
-7. Vérifier que `index.html`, `.htaccess` et le dossier `_next` se trouvent directement dans `public_html`, sans dossier intermédiaire. Le Gestionnaire de fichiers affiche les fichiers cachés par défaut (aide d'Hostinger) : `.htaccess` doit apparaître dans la liste.
+7. Vérifier que `index.html`, `.htaccess` et le dossier `_next` se trouvent directement dans `public_html`, sans dossier intermédiaire : l'archive a la forme de celle de juillet, mais la boîte d'extraction décide où elle la déploie. Le Gestionnaire de fichiers affiche les fichiers cachés par défaut (aide d'Hostinger) : `.htaccess` doit apparaître dans la liste.
 8. Supprimer l'archive du serveur : tant qu'elle y reste, n'importe qui peut la télécharger à son adresse.
 9. Certificat SSL : page SSL du site (l'aide conseille de chercher « SSL » dans la barre latérale du tableau de bord). Le certificat doit être installé et actif sur le domaine final, et sur `www` comme sur le domaine nu si les deux servent. D'après l'aide, HTTPS est forcé par défaut dès qu'un certificat est installé ; vérifier que Forcer HTTPS (Force HTTPS, dans le menu de la ligne du domaine) est actif. Ce réglage vit dans le compte d'hébergement, hors du dépôt : c'est pourquoi le `.htaccess` ne contient aucune redirection vers HTTPS.
 10. Après chaque dépôt, vider le cache du serveur : tableau de bord du site, rubrique Avancé, Gestionnaire de cache (Cache Manager), bouton Purger tout (Purge all). Sans cela, des visiteurs peuvent recevoir les anciennes pages.
@@ -184,7 +200,7 @@ Refaire les étapes 3 à 8 et 10 du § 5 avec l'archive précédente : `financem
 
 - Compléter la page légale, puis reconstruire (§ 3).
 - Réserver le nom de domaine et choisir entre `www` et le domaine nu (§ 3).
-- Construire l'archive sans préfixe et la contrôler (§ 4).
+- Construire l'archive (fichiers seuls, comme celle de juillet) et la contrôler (§ 4).
 - Sauvegarder, déposer, extraire et vérifier sur Hostinger ; certificat SSL et Forcer HTTPS ; purge du gestionnaire de cache (§ 5).
 - Dérouler la liste de contrôle en navigation privée, sur un téléphone Android et sur un iPhone (§ 6).
 - Après le premier push, vérifier que la CI passe sur GitHub et que son artefact `site-hostinger` a la forme attendue (§ 4).

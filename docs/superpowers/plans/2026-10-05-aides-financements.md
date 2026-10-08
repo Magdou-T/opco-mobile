@@ -7589,7 +7589,7 @@ L'utilisateur a choisi le **site financementOPCO** (Next.js 16, export statique,
 **Dépend de :** toutes les tâches précédentes.
 
 - [ ] `npm run build --workspace web` ; contrôle du contenu de `apps/web/out/`.
-- [ ] Archive pour Hostinger : `C:\Users\magdo\Desktop\Claude\Claude_OPCO\financementOPCO-hostinger-2026-10.zip` (contenu de `out/` à la racine de l'archive, `.htaccess` inclus, sans préfixe `./` : commandes dans `docs/deploiement-site.md`, § 4). Ne pas écraser l'archive de juillet.
+- [ ] Archive pour Hostinger : `C:\Users\magdo\Desktop\Claude\Claude_OPCO\financementOPCO-hostinger-2026-10.zip` (contenu de `out/` à la racine de l'archive, `.htaccess` inclus, fichiers seuls sans préfixe `./` comme l'archive de juillet : commandes dans `docs/deploiement-site.md`, § 4). Ne pas écraser l'archive de juillet.
 - [ ] Workflow CI (`.github/workflows/update-dataset.yml`, tâche 20) : ajouter une étape `npm run build --workspace web` après les tests backend. Réalisé dans `.github/workflows/ci.yml`, qui conserve l'export en artefact `site-hostinger`.
 - [ ] `.claude/launch.json` : configuration `site-web` servant `apps/web/out` (`npx serve apps/web/out -l 3000`) ; dérouler les 5 scénarios de la tâche 18 dans le navigateur et capturer le plan de financement de chacun.
 - [ ] `README.md` et `docs/donnees-aides.md` : le site (`apps/web`) est le support principal ; après une mise à jour des données : tests, build du site, nouvelle archive, dépôt sur Hostinger.
