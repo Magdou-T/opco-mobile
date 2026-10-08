@@ -446,8 +446,8 @@ même `String.fromCodePoint()` pour un émoji qu'un code doit reconnaître.
 `npm run check:tirets` (option `--tirets`) cherche les seuls tirets cadratins et leurs variantes dans tous les fichiers
 texte suivis du dépôt (`git ls-files` : `.ts`, `.tsx`, `.js`, `.mjs`, `.cjs`, `.json`, `.md`, `.yml`, `.yaml`, `.css`,
 `.txt`, hors données JSON de `datasets/` et de `packages/core/data/`, contrôlées par un test du cœur) et compte les
-fichiers restants par dossier ; il n'est pas encore branché dans l'intégration continue (le contrôleur le fera quand le
-dépôt entier sera propre).
+fichiers restants par dossier ; il est une étape de l'intégration continue (`.github/workflows/ci.yml`), avec la garde de
+charte.
 
 `node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 213 cas : chaque règle a une violation et un
 jumeau propre ; sept contrôles portent sur les positions, l'extrait signalé et la durée (1 000 `rgb(` ouverts suivis de
@@ -586,8 +586,8 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
 « Textes des données » plus bas) ; un montant d'aide non éligible n'est jamais affiché.
 
 - **Chargement** : `EcranResultats` est chargé à la demande par `WizardContainer` (`next/dynamic`, `ssr: false`) : le
-  catalogue d'aides (lot de 794 036 octets bruts, 149 787 octets gzip, mesures de la revue finale, à rafraîchir après le
-  build final) et le calcul restent hors du lot initial du simulateur. Le parcours ne lui passe que l'état et deux actions ; le calcul est une dérivation pure de l'état
+  catalogue d'aides (lot de 798 691 octets bruts, 150 418 octets gzip, build du 08/10/2026) et le calcul restent hors du
+  lot initial du simulateur. Le parcours ne lui passe que l'état et deux actions ; le calcul est une dérivation pure de l'état
   (`calculer`, en `useMemo`), la date du jour est lue dans le composant, jamais dans `@opco/core`. Le lot est préchargé
   dès l'étape Récapitulatif (`prechargerEcranResultats`, fait par `creerPrechargeur` : la même fonction de chargement que
   `next/dynamic`, une fois par page, échec absorbé) : une coupure de connexion après le récapitulatif ne l'empêche plus
@@ -823,8 +823,8 @@ Composants des fiches : `components/opco/`.
   3 828, 3 843 et 3 852 px), aucune liste de définitions ne sort de son cadre, aucun texte n'est rogné ni hors de la
   page.
 - **Limites connues** : le focus peut s'arrêter à demi masqué sous l'en-tête collant du tableau de barème (critère
-  2.4.11 satisfait, 2.4.12 non). Le HTML de `/opco/akto/` relevé par la revue finale pèse 825 546 octets (58 387 octets
-  en gzip, à rafraîchir après le build final), dont environ 6 Ko de double rendu du barème (tableau et cartes) :
+  2.4.11 satisfait, 2.4.12 non). Le HTML de `/opco/akto/` pèse 838 851 octets (59 028 octets
+  en gzip, build du 08/10/2026), dont environ 6 Ko de double rendu du barème (tableau et cartes) :
   accepté ; un seul tableau mis en cartes
   par CSS le réduirait (hors périmètre). Safari et iOS ne sont pas testés (`::details-content`, `position: sticky` sur
   un `th`).

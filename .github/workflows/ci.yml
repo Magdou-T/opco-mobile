@@ -80,6 +80,9 @@ jobs:
       - name: Autotest de la garde de charte
         run: node scripts/check-charte-sfg.mjs --self-test
 
+      - name: Garde des tirets cadratins (tout le dépôt)
+        run: npm run check:tirets
+
       - name: Tests du site
         run: npm run test:web
 
