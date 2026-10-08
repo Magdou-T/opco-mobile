@@ -8,8 +8,13 @@ export interface EntreeSommaire {
   /** Identifiant de la section visée (ancre). */
   id: string;
   libelle: string;
-  /** Nombre affiché en pastille rouge après le libellé (alertes d'une fiche). */
+  /** Nombre d'alertes d'une fiche, affiché en pastille rouge après le libellé. */
   compte?: number;
+}
+
+/** « 1 alerte », « 12 alertes » : le nombre de la pastille, pour les lecteurs d'écran. */
+function nombreDAlertes(n: number): string {
+  return `${n} ${n > 1 ? 'alertes' : 'alerte'}`;
 }
 
 /**
@@ -105,8 +110,18 @@ export function Sommaire({
                 />
               )}
               <span className="min-w-0 flex-1">{e.libelle}</span>
+              {/* Pastille muette, nombre dit en toutes lettres : le nom du lien est « Alertes (12 alertes) », pas
+                  « Alertes12 ». */}
               {e.compte != null && (
-                <span className="shrink-0 rounded-full bg-rouge-soft px-2 text-xs leading-5 font-semibold text-rouge">{e.compte}</span>
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="shrink-0 rounded-full bg-rouge-soft px-2 text-xs leading-5 font-semibold text-rouge"
+                  >
+                    {e.compte}
+                  </span>
+                  <span className="sr-only"> ({nombreDAlertes(e.compte)})</span>
+                </>
               )}
             </a>
           </li>

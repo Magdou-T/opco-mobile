@@ -198,7 +198,7 @@ export function StepFormation({ state, updateState, updateFormationCosts, repons
             )}
             {enveloppeEpuisee && opco && (
               <Callout tone="avertissement" titre="Enveloppe épuisée dans le barème appliqué">
-                Le barème appliqué {de(opco.name)} affiche un plafond de 0&nbsp;€/h&nbsp;: l&apos;enveloppe est épuisée.
+                Le barème appliqué {de(opco.name)}{' '}affiche un plafond de 0&nbsp;€/h&nbsp;: l&apos;enveloppe est épuisée.
                 Sur ce barème, le coût de la formation resterait à votre charge.
               </Callout>
             )}
