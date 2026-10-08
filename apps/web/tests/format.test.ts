@@ -520,7 +520,8 @@ describe('montantsFr', () => {
         }
       }
     }
-    assert.ok(textes > 2000 && reecrits > 1000, `${textes} textes, ${reecrits} réécrits`);
+    // Le moteur écrit lui-même l'espace insécable avant « € » : un montant entier de moins de 1 000 € n'est plus réécrit.
+    assert.ok(textes > 2000 && reecrits > 500, `${textes} textes, ${reecrits} réécrits`);
   });
 });
 
