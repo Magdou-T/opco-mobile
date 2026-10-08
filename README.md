@@ -2,9 +2,9 @@
 
 Ce dépôt réunit ce qui sert à estimer le financement d'une formation par les OPCO et par les autres aides. Le moteur de calcul et les données vivent dans `packages/core` (`@opco/core`), importé par :
 
-- le site financementOPCO (`apps/web`) : simulateur, fiches des 11 OPCO et guides. C'est un export statique Next.js, déposé sur un hébergement mutualisé Apache (Hostinger) ;
-- l'application Android (`apps/mobile`) : l'estimation du financement par l'OPCO, hors-ligne, avec des montants qui peuvent se mettre à jour par le dataset publié dans `datasets/` ;
-- le backend (`backend`) : le contrôle des liens sources et un pipeline d'extraction par IA, qui peut corriger les montants du dataset mobile (désactivé par défaut aujourd'hui : voir « Contrôle des liens et maintenance »).
+- le site financementOPCO (`apps/web`) : simulateur, fiches des 11 OPCO, guides et page légale. C'est un export statique Next.js, déposé sur un hébergement mutualisé Apache (Hostinger), et la cible finale du projet ;
+- l'application Android (`apps/mobile`) : l'estimation du financement par l'OPCO, hors ligne, avec des montants qui peuvent se mettre à jour par le jeu de données publié dans `datasets/`. Son code n'a pas changé avec la version « aides et financements » (hors configuration de Metro et typographie), mais le cœur qu'elle importe, si : avant toute nouvelle build, lire `datasets/README.md`, section « Compatibilité avec le cœur actuel » ;
+- le backend (`backend`) : le contrôle des liens sources et un pipeline d'extraction par IA, qui peut corriger les montants du jeu de données mobile (désactivé par défaut : voir « Contrôle des liens et maintenance »).
 
 > Spécification de la version « aides et financements » : `docs/superpowers/specs/2026-10-05-aides-financements-design.md`.
 
@@ -12,50 +12,53 @@ Ce dépôt réunit ce qui sert à estimer le financement d'une formation par les
 
 ```
 opco-mobile/
-├── packages/core/      @opco/core : logique métier PARTAGÉE (0 dépendance UI)
+├── packages/core/      @opco/core : logique métier partagée (aucune dépendance d'interface)
 │   ├── src/            types · calculator (pur) · opco-resolver · schema (Zod) · aides (moteur) · entreprise (lecture de l'API recherche-entreprises) · geo (régions, départements) · data
 │   ├── data/           opcos/ (les 11 OPCO sourcés) · idcc/ (idcc-opco.json, naf-suggestions.json) · aides/ (catalogue, portails)
-│   └── tests/          tests du core (moteur, schéma, données, aides, scénarios)
-├── apps/mobile/        Expo / React Native : l'app, l'APK
-│   ├── src/app/        écrans (expo-router) : accueil + wizard
-│   ├── src/components/  wizard 5 étapes · FundingBreakdown · badges
+│   └── tests/          tests du cœur (moteur, schéma, données, aides, scénarios)
+├── apps/mobile/        Expo / React Native : l'application, l'APK
+│   ├── src/app/        écrans (expo-router) : accueil et parcours
+│   ├── src/components/ parcours en 5 étapes · FundingBreakdown · badges
 │   ├── src/lib/        dataset-sync · siren-client
-│   └── eas.json        profil "preview" → APK
+│   └── eas.json        profil « preview » : APK installable
 ├── apps/web/           site financementOPCO : Next.js 16, export statique dans apps/web/out
 │   ├── src/            app/ (pages) · components/ · hooks/ · lib/ ; données de packages/core/data embarquées au build
 │   ├── tests/          tests du site (node:test)
 │   ├── public/         logo-sfg.png · .htaccess (Apache)
 │   └── DESIGN.md       système de design SFG : jetons, primitives, contrastes, interdits
-├── backend/            @opco/backend : pipeline auto-correctif (IA, désactivé par défaut) et contrôle des liens
-│   ├── src/            scrape → extract(IA) → verify → correct → validate → publish · check-sources
-│   ├── sources/        opco-sources.json (URLs officielles par champ)
+├── backend/            @opco/backend : pipeline d'extraction par IA (désactivé par défaut) et contrôle des liens
+│   ├── src/            scrape → extract (IA) → verify → correct → validate → publish · check-sources
+│   ├── sources/        opco-sources.json (adresses officielles par champ)
 │   └── tests/          tests du pipeline et du contrôle des liens
-├── datasets/           dataset publié & versionné pour l'app mobile (manifest + latest + vN)
+├── datasets/           jeu de données publié et versionné pour l'application mobile (manifest, latest, vN)
 ├── docs/               donnees-aides.md (maintenance des données) · deploiement-site.md (dépôt du site sur Hostinger) · demande-licence-france-competences.md (brouillon) · recherche-aides/ (campagne d'octobre 2026, archivée) · superpowers/ (spécification et plan)
-├── scripts/            build-example-dataset.mjs (seed) · integrer-recherches.mjs (catalogue d'aides) · check-charte-sfg.mjs (garde de charte du site) · add-dispositifs.mjs et add-variantes.mjs (injections de juin 2026, à ne pas relancer : voir ci-dessous)
-└── .github/workflows/  ci.yml (vérifications et build du site) · update-dataset.yml (tests et contrôle des liens chaque lundi)
+├── scripts/            build-example-dataset.mjs (jeu de données des barèmes) · integrer-recherches.mjs (catalogue d'aides) · check-charte-sfg.mjs (garde de charte du site et garde des tirets)
+└── .github/workflows/  ci.yml (vérifications et build du site) · update-dataset.yml (liens, fraîcheur et tests chaque lundi ; pipeline IA désactivé)
 ```
 
-Les scripts `add-dispositifs.mjs` et `add-variantes.mjs` remplacent en entier les champs `dispositifs_complementaires` et `variantes_branche` des fichiers OPCO qu'ils citent : relancés, ils effaceraient les ajouts faits depuis juin 2026.
+Les scripts `add-dispositifs.mjs` et `add-variantes.mjs` ont été supprimés le 08/10/2026 : ils remplaçaient en entier les dispositifs complémentaires et les variantes de branche des OPCO qu'ils citaient, et les relancer effaçait tout ce qui avait été ajouté depuis juin 2026.
 
-Le **`packages/core` est la source de vérité** : le site, l'app et le backend l'importent tous les trois → le schéma et le calcul ne peuvent pas diverger.
+`packages/core` est la source de vérité : le site, l'application et le backend l'importent tous les trois, si bien que le schéma et le calcul ne peuvent pas diverger.
 
 ## Démarrage rapide
 
 ```bash
-npm install                         # à la racine (workspaces)
-npm test                            # tests du core
+npm install                              # à la racine (workspaces) ; non testée ici
+npm test                                 # tests du cœur
 npm run test --workspace @opco/backend   # tests du backend
-npm run test:web                    # tests du site
+npm run test:web                         # tests du site
 ```
 
-### Lancer l'app en dev
+### Lancer l'application en développement (non testé ici)
 ```bash
 cd apps/mobile
-npx expo start                      # Expo Go / émulateur Android
+npx expo start                      # Expo Go ou émulateur Android
 ```
 
-### Builder l'APK (nécessite un compte Expo)
+### Construire l'APK (compte Expo nécessaire ; non testé ici)
+
+Lire d'abord `datasets/README.md`, section « Compatibilité avec le cœur actuel » : aucune nouvelle build avant la publication d'un jeu de données v4.
+
 ```bash
 cd apps/mobile
 npx eas-cli login
@@ -65,59 +68,61 @@ npx eas-cli build -p android --profile preview   # APK installable
 ### Site web
 
 ```bash
-npm run dev --workspace web         # serveur de développement : http://localhost:3000
-npm run build --workspace web       # export statique dans apps/web/out
+npm run dev --workspace web         # serveur de développement, http://localhost:3000 (non testée ici)
+npm run build --workspace web       # export statique dans apps/web/out (non testée ici)
 npm run lint --workspace web
-npm run check:charte                # garde de charte SFG sur apps/web/src
+npm run check:charte                # garde de charte SFG du site
+npm run check:tirets                # tirets cadratins dans tout le dépôt
 ```
 
-Le build télécharge les polices Google : il demande une connexion Internet. L'export (`apps/web/out`) se dépose tel quel sur l'hébergement ; la procédure de dépôt sur Hostinger, la liste de contrôle et les limites connues sont dans `docs/deploiement-site.md`. Le workflow `.github/workflows/ci.yml` rejoue les vérifications et construit le site à chaque pull request et à chaque push sur `main`, puis conserve l'export pendant 30 jours (artefact `site-hostinger`).
+Le build télécharge les polices Google : il demande une connexion Internet. L'export (`apps/web/out`) se dépose tel quel sur l'hébergement ; la procédure de dépôt sur Hostinger, ce qu'il faut compléter avant (page légale, nom de domaine), la liste de contrôle et les limites connues sont dans `docs/deploiement-site.md`. Le workflow `.github/workflows/ci.yml` rejoue les vérifications et construit le site à chaque pull request et à chaque push sur `main`, puis conserve l'export pendant 30 jours (artefact `site-hostinger`) ; il n'a encore jamais tourné sur GitHub (rien n'est poussé).
 
-Le système de design est décrit dans `apps/web/DESIGN.md` (jetons, primitives, contrastes, interdits) ; `npm run check:charte` en applique les interdits au code du site : tiret cadratin, bleu, violet, police mono, émojis. Le site a son propre parcours en six étapes (Projet, Entreprise, Bénéficiaire, Formation, Frais, Récapitulatif) et présente le plan de financement. L'app mobile garde son parcours en cinq étapes (`WIZARD_STEPS` dans `@opco/core`) et l'estimation de l'OPCO.
+Le système de design est décrit dans `apps/web/DESIGN.md` (jetons, primitives, contrastes, interdits). `npm run check:charte` en applique les interdits au code du site (`apps/web/src` : tiret cadratin, bleu, violet, police mono, émojis) et cherche tirets et émojis dans `apps/web/tests` et `DESIGN.md`. `npm run check:tirets` cherche le tiret cadratin et ses variantes dans tous les fichiers texte suivis du dépôt ; ce n'est pas encore une étape de la CI : elle y sera ajoutée quand le dépôt n'en contiendra plus. Le site a son propre parcours en six étapes (Projet, Entreprise, Bénéficiaire, Formation, Frais, Récapitulatif) et présente le plan de financement. L'application mobile garde son parcours en cinq étapes (`WIZARD_STEPS` dans `@opco/core`) et l'estimation de l'OPCO.
 
-### Régénérer / corriger le dataset
+### Régénérer ou corriger le jeu de données mobile (non testé ici)
 ```bash
-# Seed local (sans réseau, sans IA) : écrit les 11 barèmes seulement ({version, generatedAt, opcos}),
-# sans aides, table IDCC, suggestions NAF ni portails (voir « Dataset v4 » plus bas) :
+# Écrit dans datasets/ un jeu de données des 11 barèmes ({version, generatedAt, opcos}), sans aides, table IDCC,
+# suggestions NAF ni portails, et incrémente la version : c'est une publication dès que le commit arrive sur main.
+# Lire d'abord datasets/README.md, section « Compatibilité avec le cœur actuel ».
 node scripts/build-example-dataset.mjs
 
-# Pipeline auto-correctif :
+# Pipeline d'extraction par IA :
 cd backend
-npm run dry-run     # cycle complet SANS réseau ni clé → publie dans datasets/_drafts/
-npm run live        # vrai scrape + IA (requiert ANTHROPIC_API_KEY) → publie dans datasets/ ;
+npm run dry-run     # cycle complet sans réseau ni clé : publie dans datasets/_drafts/ (ignoré par git)
+npm run live        # lecture des pages et extraction par IA (ANTHROPIC_API_KEY) : publie dans datasets/ ;
                     # échoue aujourd'hui à la validation de sa base de départ (voir « Contrôle des liens et maintenance »)
 ```
 
-## Comment ça se met à jour & s'autocorrige
+## Mise à jour du jeu de données mobile par le pipeline IA (désactivé)
 
-Ce mécanisme est le pipeline IA du backend. Il est **désactivé par défaut** dans le workflow hebdomadaire et met à jour le dataset de l'app mobile (`datasets/`), pas le site : voir « Contrôle des liens et maintenance » plus bas.
+Ce mécanisme met à jour le jeu de données de l'application mobile (`datasets/`), pas le site. Il est désactivé par défaut : voir « Contrôle des liens et maintenance ».
 
-1. **Cron** (`.github/workflows/update-dataset.yml`, hebdo) exécute le pipeline `--live` seulement si le secret `ANTHROPIC_API_KEY` et la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent.
-2. **scrape** récupère les pages officielles OPCO → **extract** (Claude) en extrait les montants au format `OpcoData` strict (jamais de montant inventé ; citation de la source obligatoire).
-3. **verify** diffe vs le dataset courant → **correct** applique les règles :
-   - confirmé par la source → `value` mise à jour, `confidence='exact'`, note datée ;
-   - non retrouvé → valeur **conservée**, confiance **rétrogradée** (`exact→estimated→depends_on_branche`), note « non confirmé au JJ/MM ». Jamais d'écrasement silencieux.
-4. **validate** (garde-fous) : schéma Zod + bornes + **seuil de variation 50 %** (au-delà → mis en revue, non auto-publié) + non-régression (11 OPCO + scénarios `calculateFunding`).
-5. **publish** écrit `datasets/v<N>.json` + `latest.json` + `manifest.json` (avec SHA-256). Si des changements sont « à revoir », une **PR** est créée au lieu d'un commit direct.
-6. **L'app** lit `manifest.json` au démarrage ; si une version plus récente existe, télécharge `latest.json`, **vérifie le SHA-256**, **valide** via `@opco/core`, puis remplace le cache. En cas d'échec → garde le cache (jamais d'état cassé). Affiche « Données à jour au JJ/MM/AAAA ».
+1. **Planification** (`.github/workflows/update-dataset.yml`, chaque lundi) : le job « pipeline-ia » ne démarre qu'après le job « controle » (liens, fraîcheur, tests) et seulement si le secret `ANTHROPIC_API_KEY` ET la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent.
+2. **scrape** récupère les pages officielles des OPCO, puis **extract** (Claude) en extrait les montants au format `OpcoData` strict : jamais de montant inventé, citation de la source obligatoire.
+3. **verify** compare au jeu de données courant, puis **correct** applique les règles :
+   - confirmé par la source : `value` mise à jour, `confidence='exact'`, note datée ;
+   - non retrouvé : valeur **conservée**, confiance **rétrogradée** (`exact`, puis `estimated`, puis `depends_on_branche`), note « Non confirmé au JJ/MM/AAAA ». Jamais d'écrasement silencieux.
+4. **validate** (garde-fous) : schéma Zod, bornes, **seuil de variation de 50 %** (au-delà, la valeur est mise en revue et non publiée) et non-régression (11 OPCO et scénarios `calculateFunding`).
+5. **publish** écrit `datasets/v<N>.json`, `latest.json` et `manifest.json` (avec l'empreinte SHA-256). Si des changements sont à revoir, le workflow ouvre une pull request au lieu d'un commit direct.
+6. **L'application**, quand l'utilisateur touche « Vérifier les mises à jour », lit `manifest.json` ; si une version plus récente existe, elle télécharge `latest.json`, **vérifie le SHA-256**, **valide** le contenu avec `@opco/core`, puis remplace son cache. En cas d'échec, elle garde le cache (jamais d'état cassé). Elle affiche « Données à jour au JJ/MM/AAAA ».
 
 ## Fonctionnalités « dirigeant de PME » (V2.1 / V2.2)
 
-Ces fonctions viennent du moteur et des données de `@opco/core`. Les intitulés cités sont ceux de l'app mobile ; le site présente les résultats dans son propre écran (voir « Site web »).
+Ces fonctions viennent du moteur et des données de `@opco/core`. Les intitulés cités sont ceux de l'application mobile ; le site présente les résultats dans son propre écran (voir « Site web »).
 
-- **Enveloppe maximale potentielle** : financement PDC + dispositifs cumulables chiffrables, affichée par l'app sous le résultat principal.
-- **Dispositifs complémentaires** (`dispositifs_complementaires` par OPCO) : Boost Compétences, Click&Form, FSE+, transition écologique TP hors budget, abondements CPF/SPSTI, versements volontaires… avec règle de cumul (`hors_budget` / `additif` / `alternatif`), **conditions d'attribution**, **démarches** et source. Tous sourcés.
-- **Barèmes par branche** (`variantes_branche`, V2.2) : les montants d'un OPCO varient selon la convention collective. Une variante (identifiée par codes **IDCC**) surcharge le barème général : budget annuel, coût horaire, **salaire**, frais. Application automatique selon l'IDCC détecté (recherche SIREN) ou le choix manuel de la branche à l'étape d'identification (« Votre OPCO » dans l'app, « Entreprise » sur le site) ; priorité : choix manuel > IDCC détecté > barème général (+ avertissement). Les branches couvertes se lisent dans le champ `variantes_branche` des fichiers `packages/core/data/opcos/*.json`. Extensible par simple ajout de données.
-- **Budget déjà consommé** : saisi à l'étape Situation de l'app et à l'étape Entreprise du site, déduit du plafond annuel.
-- **« Vos démarches, étape par étape »** (app mobile) : checklist concrète générée pour chaque résultat.
+- **Enveloppe maximale potentielle** : financement du plan de développement des compétences et dispositifs cumulables chiffrables, affichée par l'application sous le résultat principal.
+- **Dispositifs complémentaires** (`dispositifs_complementaires` par OPCO) : Boost Compétences, Click&Form, FSE+, transition écologique, versements volontaires, etc., avec leur règle de cumul (`hors_budget`, `additif` ou `alternatif`), leurs **conditions d'attribution**, leurs **démarches** et leur source.
+- **Barèmes par branche** (`variantes_branche`, V2.2) : les montants d'un OPCO varient selon la convention collective. Une variante (identifiée par ses codes **IDCC**) remplace le barème général : budget annuel, coût horaire, **salaire**, frais. Elle s'applique selon l'IDCC détecté (recherche SIREN) ou le choix manuel de la branche à l'étape d'identification (« Votre OPCO » dans l'application, « Entreprise » sur le site) ; priorité : choix manuel, puis IDCC détecté, puis barème général (avec un avertissement). Les branches couvertes se lisent dans le champ `variantes_branche` des fichiers `packages/core/data/opcos/*.json`.
+- **Budget déjà consommé** : saisi à l'étape Situation de l'application et à l'étape Entreprise du site, déduit du plafond annuel.
+- **« Vos démarches, étape par étape »** (application mobile) : liste concrète générée pour chaque résultat.
 
-## Aides et financements (v1.3)
+## Aides et financements (site)
 
-L'estimation du financement par l'OPCO s'accompagne d'un recensement des aides mobilisables pour un projet de formation : Région, CPF, France Travail, Transitions Pro, Agefiph, Union européenne, fonds d'assurance formation des non-salariés, fiscalité. Le catalogue compte 173 aides (46 nationales et européennes, 127 régionales) et un portail officiel par région. Chaque aide cite ses sources (adresse et extrait mot pour mot) et sa date de vérification.
+L'estimation du financement par l'OPCO s'accompagne d'un recensement des aides mobilisables pour un projet de formation : Région, CPF, France Travail, Transitions Pro, Agefiph, Union européenne, fonds d'assurance formation des non-salariés, fiscalité. Le catalogue compte 173 aides, dont 126 financées par une Région, et un portail officiel par région (18). Chaque aide cite ses sources (adresse et extrait mot pour mot) et sa date de vérification.
 
 ### Le parcours en six étapes
 
-Le parcours de saisie, tel que la spécification le définit, compte six étapes. Le moteur n'en dépend pas : il évalue le profil que le parcours produit. Le site suit ce parcours (`apps/web/src/lib/etapes.ts`) ; l'app mobile garde le sien, en cinq étapes.
+Le parcours de saisie, tel que la spécification le définit, compte six étapes. Le moteur n'en dépend pas : il évalue le profil que le parcours produit. Le site suit ce parcours (`apps/web/src/lib/etapes.ts`) ; l'application mobile garde le sien, en cinq étapes.
 
 1. **Votre projet** : former un salarié, reconversion d'un salarié, recruter et former un demandeur d'emploi, recruter en alternance, former le dirigeant.
 2. **Entreprise** : recherche par nom, SIREN ou SIRET ; OPCO identifié avec son niveau de certitude, région, effectif, code NAF et statut (ESS, SIAE, association) pré-remplis et modifiables.
@@ -132,66 +137,89 @@ La spécification complète est dans `docs/superpowers/specs/2026-10-05-aides-fi
 
 | Module | Rôle |
 |---|---|
-| `criteres` | `evaluerCriteres` juge chaque critère d'une aide (région, effectif, âge, RQTH, contrat, type de formation…) : satisfait, non satisfait ou inconnu. |
+| `criteres` | `evaluerCriteres` juge chaque critère d'une aide (région, effectif, âge, RQTH, contrat, type de formation, etc.) : satisfait, non satisfait ou inconnu. |
 | `evaluer` | `evaluerAides` classe chaque aide en `eligible`, `a_verifier` ou `non_eligible`, donne les raisons, estime le montant (forfait, pourcentage, par heure, par mois, solde CPF) et applique les majorations. |
-| `profil` | `profilDepuisWizard` traduit l'état du parcours en profil évalué (bornes d'effectif, région, statut du bénéficiaire…). |
+| `profil` | `profilDepuisWizard` traduit l'état du parcours en profil évalué (bornes d'effectif, région, statut du bénéficiaire, etc.). |
 | `plan` | `construirePlan` empile les aides dans l'ordre sans jamais dépasser le coût de la formation, retient une seule aide parmi des alternatives, partage le solde CPF et présente à part les aides à l'employeur, les rémunérations et les avantages fiscaux et sociaux. |
 
 Le calcul reste pur : mêmes entrées, mêmes sorties.
 
 ### Identification de l'OPCO (v2)
 
-`resoudreOpco` (`packages/core/src/opco-resolver.ts`) part des conventions collectives (IDCC) de l'entreprise et de son code NAF, et renvoie l'OPCO avec un niveau de certitude :
+`resoudreOpco` (`packages/core/src/opco-resolver.ts`) part des conventions collectives (IDCC) de l'entreprise, de son code NAF et de sa catégorie juridique, et renvoie l'OPCO avec un niveau de certitude :
 
 - `fiable` : un seul OPCO possible, établi par au moins une convention en vigueur ;
 - `a_confirmer` : plusieurs OPCO possibles, convention non rattachée ou simple suggestion d'après le code NAF ; l'utilisateur choisit parmi les candidats ;
 - `inconnu` : aucun OPCO identifié, sélection manuelle.
 
-Chaque résultat renvoie vers l'outil officiel de France compétences (`https://quel-est-mon-opco.francecompetences.fr/`). La table IDCC (956 codes) est reconstruite à partir de sources réutilisables : table DSN, Légifrance, arrêtés d'agrément, listes de branches publiées par les OPCO.
+Chaque résultat renvoie vers l'outil officiel de France compétences (`https://quel-est-mon-opco.francecompetences.fr/`). La table IDCC (956 codes) est reconstruite à partir de sources réutilisables : table DSN, Légifrance, arrêtés d'agrément, listes de branches publiées par les OPCO. Sans convention exploitable, `naf-suggestions.json` propose un OPCO d'après le code NAF : 99 préfixes, chacun mesuré sur au moins 30 employeurs de la Table SIRET-OPCO de France compétences, avec une part d'au moins 60 % pour l'OPCO proposé ; les secteurs partagés entre plusieurs OPCO n'en ont pas (méthode et mesures : spécification, section 5.5).
 
-Le niveau `confirme` est réservé aux données officielles de France compétences (SIRET vers OPCO). Leur réutilisation est soumise à licence (art. R. 6123-35 du code du travail) : tant qu'elle n'est pas obtenue, le service n'appelle ni l'API ni les tables de France compétences. Le brouillon de la demande est dans `docs/demande-licence-france-competences.md`.
+Le niveau `confirme` (l'OPCO tel que France compétences le déclare pour un SIRET) n'est jamais produit aujourd'hui. La Table SIRET-OPCO est publiée en données ouvertes sur data.gouv.fr (licence ouverte 2.0) : elle a servi, hors du site, à mesurer et calibrer les suggestions par code NAF, mais le site ne l'interroge pas ; l'y intégrer est une décision en attente de l'utilisateur. L'API de France compétences (`api.francecompetences.fr`), dont la réutilisation demande une licence (art. R. 6123-35 du code du travail), n'est jamais appelée. Le brouillon de demande de licence, `docs/demande-licence-france-competences.md`, n'est plus nécessaire pour identifier l'OPCO à partir du SIRET.
 
-### Dataset v4
+### Jeu de données de l'application mobile
 
-`DatasetSchema` (`packages/core/src/schema.ts`) ajoute aux barèmes des OPCO les sections facultatives `aides`, `idcc`, `naf` et `portails` ; une application qui ne les connaît pas les ignore. Le dataset publié dans `datasets/` est pour l'instant en version 3 (barèmes des OPCO seuls) et n'est pas régénéré.
+`DatasetSchema` (`packages/core/src/schema.ts`) accepte, en plus des barèmes des OPCO, les sections facultatives `aides`, `idcc`, `naf` et `portails`. Le jeu publié dans `datasets/` est en version 3 (barèmes seuls, juin 2026) et le schéma actuel du cœur le rejette (tailles en double dans les plafonds de Constructys). Aucun jeu de données v4 n'est publié par cette branche (décision du 08/10/2026) : une application reconstruite depuis cette branche travaillerait sur ses données embarquées et refuserait le jeu publié à chaque « Vérifier les mises à jour ». Mesures, effet sur les APK 1.2.0 déjà installés et marche à suivre : `datasets/README.md`, section « Compatibilité avec le cœur actuel ».
 
-Le script `scripts/build-example-dataset.mjs` et le pipeline (`backend/src/publish.ts`) n'écrivent aujourd'hui que `{version, generatedAt, opcos}` : la procédure « Publier vers les applications installées » de `docs/donnees-aides.md` ne produit donc ni aides, ni table IDCC, ni suggestions NAF, ni portails. Les étendre est la tâche « dataset v4 » du plan (`docs/superpowers/plans/2026-10-05-aides-financements.md`, tâche 19). Elle est facultative : elle met à jour les applications déjà installées, donc seulement sur décision explicite.
+Le script `scripts/build-example-dataset.mjs` et le pipeline (`backend/src/publish.ts`) n'écrivent que `{version, generatedAt, opcos}` : un v4 « à sections » (aides, table IDCC, suggestions NAF, portails) reste à faire (tâche 19 du plan `docs/superpowers/plans/2026-10-05-aides-financements.md`), et seulement sur décision explicite, puisqu'il met à jour les applications installées.
 
 Le site (`apps/web`) n'est pas concerné : il embarque `packages/core/data` à son build et ne lit jamais `datasets/`.
 
 ### Contrôle des liens et maintenance
 
-- `cd backend && npm run check-sources` vérifie toutes les adresses web des données (barèmes, aides, portails, table IDCC) et écrit `backend/out/liens.md` et `backend/out/liens.json`. Les liens cassés font échouer la commande, les refus anti-robots sont listés « à vérifier », et `api.francecompetences.fr` (sous-domaines compris) n'est jamais contacté.
-- Le workflow hebdomadaire `.github/workflows/update-dataset.yml` lance aujourd'hui les tests puis le contrôle des liens : le rapport est ajouté au résumé du run et joint au run (artefact `rapports`), et un avertissement signale un échec du contrôle sans faire échouer le run. Il ne modifie aucune donnée.
-- Le pipeline d'extraction par IA y est **désactivé par défaut**. Il met à jour le dataset de l'app mobile (`datasets/`), pas le site, et il part de `datasets/latest.json` (version 3), que la validation actuelle rejette (tailles en double dans les plafonds de Constructys) : activé, il paierait l'extraction chaque lundi puis échouerait sans rien publier. Ses étapes ne tournent que si le secret `ANTHROPIC_API_KEY` ET la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent. À n'activer qu'après la publication du dataset v4 (voir `docs/donnees-aides.md`, section « Mise à jour automatique »).
-- Les données du site se mettent à jour à la main : modifier `packages/core/data/**`, lancer les tests du core et le contrôle des liens, reconstruire le site (`apps/web`) puis le redéposer sur l'hébergement (`docs/deploiement-site.md`). Étapes détaillées dans `docs/donnees-aides.md`, section « Mettre à jour les données du site ».
+- `cd backend && npm run check-sources` vérifie toutes les adresses web des données (barèmes, aides, portails, table IDCC, suggestions NAF) et écrit `backend/out/liens.md` et `backend/out/liens.json`. Les liens cassés font échouer la commande, les refus anti-robots sont listés « à vérifier », et `api.francecompetences.fr` (sous-domaines compris) n'est jamais contacté.
+- Le workflow hebdomadaire `.github/workflows/update-dataset.yml` a deux jobs. Le job « controle », en lecture seule, lance d'abord le contrôle des liens (rapport ajouté au résumé du run et joint en artefact `rapports` ; un échec donne un avertissement sans faire échouer le run), puis le contrôle de fraîcheur (`npm run test:fraicheur` du cœur : une dernière vérification de plus de 12 mois donne un avertissement, sans bloquer), puis les tests et le typecheck du cœur et du backend. Il ne modifie aucune donnée.
+- Le job « pipeline-ia » est **désactivé par défaut** : il ne démarre que si le job « controle » a réussi et que le secret `ANTHROPIC_API_KEY` ET la variable de dépôt `PIPELINE_LIVE` (valeur `true`) existent ; son rapport est joint en artefact `rapport-pipeline-ia`. Il met à jour le jeu de données de l'application mobile (`datasets/`), pas le site. Il part de `datasets/latest.json` (version 3), que la validation actuelle rejette : activé tel quel, il paierait l'extraction chaque lundi puis échouerait sans rien publier. Et il ne republie que les barèmes : après un v4 à sections, son premier run écrirait un v5 sans ces sections, commité sur `main` sans revue si aucun écart n'est à revoir (`docs/donnees-aides.md`, « Le pipeline IA : désactivé par défaut »). Marche à suivre pour l'activer : `docs/donnees-aides.md`, section « Mise à jour automatique ».
+- Les données du site se mettent à jour à la main : modifier `packages/core/data/**`, lancer les tests du cœur et le contrôle des liens, reconstruire le site (`apps/web`) puis le redéposer sur l'hébergement (`docs/deploiement-site.md`). Étapes détaillées dans `docs/donnees-aides.md`, section « Mettre à jour les données du site ».
 - Le guide `docs/donnees-aides.md` décrit le format des données, les règles de sourçage, la mise à jour d'une aide, les données du site, le workflow, la revue complète et la publication.
 
 ## Vérifications (état actuel)
 
-Mesuré au commit `7c791cf` le 08/10/2026, dans l'arbre de travail, à réactualiser. Les totaux de tests et d'adresses ne figurent que dans ce tableau.
+Mesures du 08/10/2026 au commit `f7e71c3` (suites, gardes et build de production du même jour), sauf quand une ligne indique un autre état du dépôt. Les nombres de tests, de pages et de fichiers sont exacts ; les tailles changent à chaque build. C'est le seul endroit du dépôt où ces chiffres sont tenus à jour : les autres documents y renvoient.
 
-| Package | Typecheck | Tests |
+| Contrôle | Commande | Résultat |
 |---|---|---|
-| `@opco/core` | OK (`tsc --noEmit`) | OK : 1305 tests dans 18 fichiers (`npx vitest run`) |
-| `apps/mobile` | OK (`tsc --noEmit`) | aucun test |
-| `apps/web` | OK (`tsc --noEmit`), lint OK (`npm run lint --workspace web`) | OK : 218 tests (`npm run test:web`) |
-| Garde de charte du site | sans objet | OK : aucun problème dans 82 fichiers (`npm run check:charte`), autotest de 178 cas (`node scripts/check-charte-sfg.mjs --self-test`) |
-| Build du site | sans objet | OK : 23 pages (`npm run build --workspace web`). `/simulateur/` charge 341 916 octets de JavaScript en gzip (niveau 9, 11 fichiers) ; l'écran de résultats et le catalogue d'aides forment un lot à part de 792 603 octets bruts, chargé à la demande |
-| `@opco/backend` | OK (`tsc --noEmit`) | OK : 97 tests dans 3 fichiers (`npx vitest run`), dry-run du pipeline OK |
-| Contrôle des liens | sans objet | 679 adresses sur 128 sites, comptées hors ligne par `collecterUrls` sur les données embarquées |
+| Cœur `@opco/core` | `cd packages/core && npx vitest run` ; `npx tsc --noEmit` | 1 448 tests dans 23 fichiers, tous verts ; typage sans erreur. Le contrôle de fraîcheur des données est à part : `npm run test:fraicheur` (3 tests, hors de `npm test`) |
+| Backend `@opco/backend` | `cd backend && npx vitest run` ; `npx tsc --noEmit` | 105 tests dans 3 fichiers, tous verts ; typage sans erreur |
+| Site `apps/web` | `npm run test:web` ; `cd apps/web && npx tsc --noEmit` ; `npm run lint --workspace web` | 315 tests (83 suites), tous verts ; typage sans erreur ; lint sans erreur ni avertissement |
+| Application mobile | `cd apps/mobile && npx tsc --noEmit` | typage sans erreur ; l'application n'a pas de tests |
+| Garde de charte | `npm run check:charte` ; `node scripts/check-charte-sfg.mjs --self-test` | aucun problème dans 96 fichiers (`apps/web/src`) et 20 fichiers (`apps/web/tests` et `apps/web/DESIGN.md` : tirets et émojis) ; autotest : 213 cas |
+| Garde des tirets | `npm run check:tirets` | 155 tirets cadratins dans 13 fichiers sur 260 lus au commit `f7e71c3`, tous hors du code du site (application mobile, plan, spécification) ; après la correction de l'application mobile, de son README et du plan, il en reste 5, tous dans la spécification, en cours de correction |
+| Build du site | `npm run build --workspace web` | 24 pages annoncées ; `apps/web/out` : 210 fichiers, 20 351 638 octets. JavaScript chargé d'emblée par `/simulateur/` : 344 860 octets compressés (gzip niveau 9, 11 fichiers). Le catalogue d'aides est dans un lot chargé à la demande : 798 664 octets bruts, 150 407 compressés |
+| Archive pour Hostinger | `tar -a -c -f <chemin>\financementOPCO-hostinger-AAAA-MM.zip -C apps/web/out *` (et la variante PowerShell, identique) | 266 entrées : les 210 fichiers et 56 dossiers, aucune en `./` ; 2 649 608 octets. Extraite par `tar -xf` et `Expand-Archive` : les 210 fichiers à l'identique (SHA-256) |
+| Données embarquées | `collecterUrls` du contrôle des liens, hors ligne, et décompte des données de `packages/core/data` (commit `0bc4a6d`) | 675 adresses sur 129 sites ; 11 OPCO, 173 aides (126 financées par une Région), 18 portails régionaux, 956 codes IDCC, 99 préfixes NAF |
 
-Résultat du contrôle réseau (`npm run check-sources`), lancé le 08/10/2026 depuis un poste de développement (le rapport `liens.md` porte la date UTC du 07/10/2026) : 537 adresses répondent, 133 sont à vérifier à la main (en général des protections anti-robots, dont 111 pages de Légifrance) et 9 sont injoignables depuis ce poste, délai de connexion dépassé : 8 pages de `opcomobilites.fr` et `meformerenregion.fr`. Aucune adresse ne renvoie 404. Ces chiffres varient d'un lancement et d'un réseau à l'autre.
+Résultat du dernier contrôle réseau (`npm run check-sources`), lancé le 08/10/2026 depuis un poste de développement, avant les dernières corrections d'adresses des données (679 adresses à ce moment) : 537 répondent, 133 sont à vérifier à la main (des protections anti-robots, dont 111 pages de Légifrance) et 9 sont injoignables depuis ce poste, délai de connexion dépassé : 8 pages de `opcomobilites.fr` et 1 de `meformerenregion.fr`. Aucune adresse ne renvoie 404. Ces chiffres varient d'un lancement et d'un réseau à l'autre.
+
+## Limites connues
+
+- **Safari et iOS non testés** : les essais du site ont eu lieu dans un navigateur Chromium. À vérifier sur un iPhone après le dépôt (barre collante du parcours, menu mobile). Les limites propres à l'hébergement (préchargements en 404, écran de résultats chargé à la demande) sont dans `docs/deploiement-site.md`, section « Limites connues ».
+- **FSE+** : la carte de l'aide nationale FSE+ peut s'afficher « à vérifier » pour une entreprise d'AKTO alors que l'alerte d'AKTO annonce son dispositif FSE+ terminé (dépôts clos depuis le 1er juillet 2026) : l'opération 2026-2027 de plusieurs OPCO n'est pas encore connue, la carte n'a donc pas été retirée.
+- **CPF, participation forfaitaire** : le montant du CPF repose sur le solde saisi ; la participation forfaitaire de 150 € (demandes depuis le 2 avril 2026, sauf exonération) n'en est pas déduite, et le libellé de l'aide le rappelle.
+- **CléA** : le parcours ne permet pas de désigner la certification CléA ; pour une certification du répertoire spécifique, le CPF est estimé dans la limite de 1 500 €, même quand la formation prépare CléA, qui échappe à ce plafond : l'estimation est prudente et le libellé du CPF le signale.
+- **Convention déclarée et table officielle** : un établissement peut déclarer une convention qui mène à un OPCO autre que celui de la Table SIRET-OPCO. Exemple relevé : GROUPAMA SUPPORTS ET SERVICES, dont l'IDCC 1672 transmis par l'API mène à ATLAS (réponse « fiable ») alors que la table rattache le siège à OCAPIAT. Le lien vers l'outil officiel « Quel est mon OPCO », présent sur chaque résultat, permet de le vérifier.
+- **Suggestions par code NAF** : environ 86 % des suggestions par le seul code NAF sont exactes sur un tirage uniforme de la table officielle ; elles sont toujours présentées comme à confirmer.
+- **Pipeline IA** : une fois activé, il ne vérifiera que les barèmes principaux des 11 OPCO, ni les `variantes_branche` (pages de branche) ni les `dispositifs_complementaires`.
+
+## Sources et licences
+
+- Recherche d'entreprise : API Recherche d'entreprises de la DINUM, qui diffuse les données SIRENE de l'INSEE, sous licence ouverte 2.0 ; le site cite la source sous les résultats et sur sa page légale.
+- Table SIRET-OPCO de France compétences : data.gouv.fr, licence ouverte 2.0, mise à jour du 24/09/2026 ; utilisée hors du site pour mesurer et calibrer les suggestions par code NAF.
+- Barèmes des OPCO et aides : chaque montant cite sa source officielle (adresse, extrait mot pour mot) et sa date de vérification.
+- Polices Montserrat et Inter : licence SIL Open Font License 1.1, auto-hébergées (le build les range dans `_next/static/media/` ; le site n'appelle pas Google).
+- Logo et marque SFG Développement : propriété de SFG Développement.
+- Code du dépôt : aucun fichier `LICENSE` à la racine, donc tous droits réservés par défaut. Choisir une licence est une décision de l'utilisateur.
+- Avis de sécurité : `npm audit --omit=dev` (08/10/2026) signale 50 avis (2 critiques, 34 élevés, 13 modérés, 1 faible). `next` 16.2.1 en porte 31 (npm propose de passer à 16.4.0) : ils visent le serveur de Next (composants et actions serveur, middleware et proxy, optimisation d'images, cache et rendu incrémental, `next/og`, serveur de développement) ou `next/script`, absents d'un export statique servi par Apache ; le site n'utilise ni middleware, ni actions serveur, ni `next/script`, ni `next/og`, et ses images ne passent pas par l'optimiseur (`images.unoptimized`). `next` n'est donc pas mis à jour sur cette branche. Les autres avis viennent surtout des outils de l'application mobile (Expo, React Native, Metro) et du backend (`undici` par `cheerio`) : à revoir avant une nouvelle build de l'application.
 
 ## À configurer côté utilisateur (hors code)
 
-1. **Dépôt du site** : l'archive se dépose à la main sur Hostinger ; le réglage « Forcer HTTPS » (dans hPanel) et le test sur téléphone se font hors du dépôt. Marche à suivre dans `docs/deploiement-site.md`.
-2. **Pipeline IA hebdomadaire** : désactivé par défaut, à n'activer qu'après la publication du dataset v4 (voir « Contrôle des liens et maintenance »). Il demande à la fois le **secret GitHub Actions** `ANTHROPIC_API_KEY` (jamais dans l'app) et la variable de dépôt `PIPELINE_LIVE` valant `true` (Settings > Secrets and variables > Actions) : le secret seul ne lance rien.
-3. **OCAPIAT** : sa source de financement est un **PDF** (non géré par le scraper minimal) → ses champs passeront en `not_found` → rétrogradation de confiance (jamais d'invention). Ajouter un parseur PDF si besoin d'extraction automatique pour cet OPCO.
-4. **Limite connue du pipeline** : la vérification hebdomadaire couvre les barèmes principaux des 11 OPCO, pas encore les `variantes_branche` (pages de branche) ni les `dispositifs_complementaires` : à étendre (voir issues).
+1. **Dépôt du site** : compléter la page légale (`apps/web/src/lib/mentions.ts`), choisir le nom de domaine (`financementopco.fr` n'est pas enregistré au 08/10/2026), construire l'archive sans préfixe, sauvegarder, déposer, vérifier le certificat SSL et « Forcer HTTPS », vider le gestionnaire de cache, puis tester sur un téléphone Android et sur un iPhone. Marche à suivre dans `docs/deploiement-site.md`.
+2. **Application mobile** : aucune nouvelle build avant d'avoir lu `datasets/README.md`, section « Compatibilité avec le cœur actuel » (le jeu de données v3 publié est refusé par le cœur actuel ; les APK 1.2.0 déjà installés continuent avec leur copie).
+3. **Pipeline IA hebdomadaire** : désactivé par défaut, à n'activer qu'après la publication d'un jeu de données v4 compatible. Il faut alors autoriser GitHub Actions à créer des pull requests (Settings, Actions, General, Workflow permissions), puis créer le **secret GitHub Actions** `ANTHROPIC_API_KEY` (jamais dans l'application) ET la variable de dépôt `PIPELINE_LIVE` valant `true` (Settings, Secrets and variables, Actions) : le secret seul ne lance rien. Détail : `docs/donnees-aides.md`, section « Mise à jour automatique ».
+4. **OCAPIAT** : sa source de financement est un **PDF**, que le scraper minimal ne lit pas : ses champs passeront en `not_found`, d'où une confiance rétrogradée (jamais d'invention). Ajouter un lecteur de PDF si l'on veut l'extraction automatique pour cet OPCO.
+5. **Décisions en attente** : licence du code (aucun fichier `LICENSE`), intégration éventuelle de la Table SIRET-OPCO au site, envoi ou non du brouillon de demande de licence.
 
 ## Principes non négociables
 
 - **Aucun montant inventé.** Toute valeur chiffrée vient d'une source officielle citée, sinon `depends_on_branche`.
-- Le **moteur de calcul reste pur** (mêmes entrées → mêmes sorties) et **partagé** web/mobile/backend.
-- Les **données sont des estimations**, pas un engagement de l'OPCO (disclaimer conservé dans l'app).
+- Le **moteur de calcul reste pur** (mêmes entrées, mêmes sorties) et **partagé** entre le site, l'application et le backend.
+- Les **données sont des estimations**, pas un engagement de l'OPCO (avertissement conservé dans l'application et sur le site).
