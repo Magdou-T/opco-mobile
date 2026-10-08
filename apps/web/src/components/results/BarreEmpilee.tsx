@@ -23,7 +23,7 @@ export function BarreEmpilee({ parts, cout }: { parts: PartBarre[]; cout: number
         ))}
       </div>
       <figcaption className="mt-3.5">
-        <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+        <ul role="list" className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
           {parts.map((p) => (
             <li key={p.cle} className="inline-flex items-center gap-2">
               <span aria-hidden="true" className={cx('size-3 shrink-0 rounded-[0.25rem]', classeDePart(p))} />

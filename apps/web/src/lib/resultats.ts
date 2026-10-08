@@ -17,6 +17,7 @@ import {
   evaluerAides,
   getEmbeddedOpcoBySlug,
   profilDepuisWizard,
+  resolveVarianteBranche,
 } from '@opco/core';
 import type {
   AideEvaluee,
@@ -25,9 +26,11 @@ import type {
   Financeur,
   FundingLine,
   FundingResult,
+  LignePlan,
   OptionPlan,
   PlanFinancement,
   SourceAide,
+  VarianteBranche,
   WizardState,
 } from '@opco/core';
 import { ouvreBudgetOpco } from './entreprise';
@@ -44,6 +47,7 @@ import { INSECABLE } from './insecable';
  * - Le plan de développement des compétences de l'OPCO ne finance que les projets salariés (former un salarié,
  *   reconversion : `ouvreBudgetOpco`) ; le dirigeant, l'alternance et le recrutement d'un demandeur d'emploi passent par
  *   les aides, même avec un OPCO connu. Projet non choisi : « former un salarié ».
+ * - `variante` : le barème de branche que le moteur applique (`resolveVarianteBranche`, la même règle que lui), ou null.
  */
 export function calculer(state: WizardState, aujourdhui: string) {
   const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
@@ -53,11 +57,63 @@ export function calculer(state: WizardState, aujourdhui: string) {
   const projet = effectiveState.projetType ?? 'formation_salarie';
   const avecPdc = opco != null && ouvreBudgetOpco(projet);
   const funding = avecPdc ? calculateFunding(opco, effectiveState) : null;
+  const variante = opco ? resolveVarianteBranche(opco, effectiveState) : null;
   const profil = profilDepuisWizard(effectiveState, slug);
   const aidesEvaluees = evaluerAides(EMBEDDED_AIDES, profil, dateDeReference(effectiveState.dateDebutFormation, aujourdhui));
   const plan = construirePlan(funding, aidesEvaluees, profil);
   const portail = EMBEDDED_PORTAILS.find((p) => p.region === profil.regionEntreprise) ?? null;
-  return { opco, projet, funding, profil, aidesEvaluees, plan, portail };
+  return { opco, projet, funding, variante, profil, aidesEvaluees, plan, portail };
+}
+
+// --- Relais du plan conventionnel de la branche --------------------------------------------------------------------
+
+/**
+ * Plan conventionnel de la branche en relais d'un plan de développement des compétences épuisé : l'OPCO et le plafond
+ * annuel par entreprise (euros ; null s'il n'est pas publié).
+ */
+export interface RelaisPlanConventionnel {
+  opco: string;
+  plafondAnnuel: number | null;
+}
+
+/**
+ * Relais du plan conventionnel (`relais_plan_conventionnel` de la variante appliquée : AKTO, organismes de formation) :
+ * le barème calculé est celui du plan conventionnel de la branche, qui finance les demandes que l'enveloppe épuisée du
+ * plan de développement des compétences ne peut plus engager, dans la limite de `budget_annuel_max` par entreprise et par
+ * an. Null sans calcul de l'OPCO, sans relais, ou quand ce plan est fermé aux 50 salariés et plus (le bandeau dit alors
+ * pourquoi).
+ */
+export function relaisDuPlanConventionnel(r: {
+  funding: Pick<FundingResult, 'opcoName' | 'pdcFerme'> | null;
+  variante: Pick<VarianteBranche, 'relais_plan_conventionnel' | 'budget_annuel_max'> | null;
+}): RelaisPlanConventionnel | null {
+  if (!r.funding || r.funding.pdcFerme || r.variante?.relais_plan_conventionnel !== true) return null;
+  return { opco: r.funding.opcoName, plafondAnnuel: r.variante.budget_annuel_max?.value ?? null };
+}
+
+/** Nom du financement porté par la ligne de l'OPCO quand le plan conventionnel de la branche prend le relais. */
+const PLAN_CONVENTIONNEL = 'Plan conventionnel de branche';
+
+/**
+ * Libellés d'une ligne du plan : le nom du poste et le financeur. La ligne du plan de développement des compétences
+ * (`opco-pdc`) d'une branche en relais devient « Plan conventionnel de branche », du même OPCO : c'est sur ce plan que
+ * la demande est financée. Toute autre ligne garde les siens.
+ */
+export function libellesDeLigne(
+  ligne: Pick<LignePlan, 'id' | 'nom' | 'financeurNom'>,
+  relais: RelaisPlanConventionnel | null,
+): { nom: string; financeurNom: string } {
+  return relais && ligne.id === 'opco-pdc'
+    ? { nom: PLAN_CONVENTIONNEL, financeurNom: ligne.financeurNom }
+    : { nom: ligne.nom, financeurNom: ligne.financeurNom };
+}
+
+/** Dispositif nommé en tête du détail de l'OPCO : celui du moteur, ou le plan conventionnel qui prend le relais. */
+export function dispositifAffiche(
+  funding: Pick<FundingResult, 'dispositifPrincipal'>,
+  relais: RelaisPlanConventionnel | null,
+): string {
+  return relais ? `${PLAN_CONVENTIONNEL}, en relais du plan de développement des compétences épuisé` : funding.dispositifPrincipal;
 }
 
 /** Famille de couleur d'un financeur : segment de la barre empilée, pastille des lignes du plan et des groupes d'aides. */

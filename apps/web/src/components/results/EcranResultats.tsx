@@ -7,10 +7,9 @@ import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
 import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
-import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { dateFr, moisAnneeFr, typo, verificationLaPlusRecente } from '@/lib/format';
-import { fondsEpuisesSurLePlan } from '@/lib/encadres-resultats';
-import { calculer, chapeauDetailOpco } from '@/lib/resultats';
+import { ID_DETAIL_OPCO, fondsEpuisesSurLePlan, planFermeDe } from '@/lib/encadres-resultats';
+import { calculer, chapeauDetailOpco, relaisDuPlanConventionnel, titreNoteOpco } from '@/lib/resultats';
 import { AidesList } from './AidesList';
 import { EnTeteResultats, ID_TITRE_RESULTATS, focaliserTitreResultats } from './EtatsResultats';
 import type { ProprietesEcranResultats } from './EtatsResultats';
@@ -40,13 +39,16 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
   useEffect(focaliserTitreResultats, []);
 
   // Calcul (lib/resultats.ts) : dérivation pure de l'état, à la date du jour lue ici.
-  const { opco, projet, funding, aidesEvaluees, plan, portail, aujourdhui } = useMemo(() => {
+  const { opco, projet, funding, variante, aidesEvaluees, plan, portail, aujourdhui } = useMemo(() => {
     const jour = aujourdhuiLocal();
     return { ...calculer(state, jour), aujourdhui: jour };
   }, [state]);
 
   // Chapeau du détail de l'OPCO : seulement avec le tableau des postes (jamais quand le plan est fermé).
   const chapeauOpco = funding ? chapeauDetailOpco(funding) : null;
+  // Plan conventionnel de la branche en relais d'un plan de développement des compétences épuisé (AKTO, organismes de
+  // formation) ; plan fermé aux 50 salariés et plus. Le bandeau dit l'un et l'autre.
+  const relais = relaisDuPlanConventionnel({ funding, variante });
 
   return (
     <div className="space-y-12 sm:space-y-14">
@@ -58,6 +60,8 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
           plan={plan}
           aides={aidesEvaluees}
           fondsEpuises={funding ? { opco: funding.opcoName, branches: fondsEpuisesSurLePlan(plan, funding.alertes) } : null}
+          relais={relais}
+          planFerme={planFermeDe(funding)}
           dispositifs={funding?.dispositifsComplementaires ?? []}
           avecPortail={portail != null}
           apresBandeau={
@@ -75,16 +79,16 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
       <AidesList aides={aidesEvaluees} avecPortail={portail != null} />
 
       {funding && (
-        <section aria-labelledby="titre-detail-opco" className="space-y-6">
+        <section aria-labelledby={ID_DETAIL_OPCO} className="space-y-6">
           <SectionTitle
             as="h2"
             taille="sous-section"
-            id="titre-detail-opco"
+            id={ID_DETAIL_OPCO}
             surtitre={typo(`Votre OPCO : ${funding.opcoName}`)}
             titre="Détail de l'estimation OPCO"
             chapeau={chapeauOpco ? typo(chapeauOpco) : undefined}
           />
-          <FundingBreakdown result={funding} />
+          <FundingBreakdown result={funding} relais={relais} />
         </section>
       )}
 
@@ -121,7 +125,7 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
 /**
  * Le plan ne compte pas le plan de développement des compétences de l'OPCO : soit l'OPCO d'un projet salarié manque
  * (« Aucun OPCO renseigné », avec le retour à l'étape Entreprise), soit le projet est celui du dirigeant, que ce plan ne
- * finance pas (fonds d'assurance formation ; cas de l'assimilé salarié non calculé).
+ * finance pas (fonds d'assurance formation ; cas de l'assimilé salarié non calculé). Titre : `titreNoteOpco`.
  */
 function NoteOpco({
   projet,
@@ -134,9 +138,11 @@ function NoteOpco({
   assimileSalarie: boolean;
   onEdit: ProprietesEcranResultats['onEdit'];
 }) {
+  const titre = titreNoteOpco(projet, sansOpco);
+  if (titre == null) return null;
   if (projet === 'formation_dirigeant') {
     return (
-      <Callout tone="info" titre={sansOpco ? 'Aucun OPCO renseigné' : 'OPCO non compté pour un dirigeant'}>
+      <Callout tone="info" titre={titre}>
         {assimileSalarie ? (
           <>
             Un dirigeant assimilé salarié peut relever du plan de développement des compétences de sa branche, que le
@@ -152,9 +158,8 @@ function NoteOpco({
       </Callout>
     );
   }
-  if (!sansOpco || !ouvreBudgetOpco(projet)) return null;
   return (
-    <Callout tone="info" titre="Aucun OPCO renseigné">
+    <Callout tone="info" titre={titre}>
       <p>
         Le plan ne compte pas encore le plan de développement des compétences de l&apos;OPCO, souvent le premier
         financeur d&apos;une formation de salarié. Indiquez l&apos;OPCO de l&apos;entreprise pour l&apos;estimer.

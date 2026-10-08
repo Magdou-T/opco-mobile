@@ -47,6 +47,9 @@
   /* Anneau de focus : orange fonce sur fond clair, redefini sur les surfaces sombres */
   --focus: var(--orange-deep);
 
+  /* Ombre de l'en-tete collant une fois la page defilee (animation entete-ombre ; etat fixe en mouvement reduit) */
+  --ombre-entete: 0 12px 28px -20px rgb(15 30 27 / 0.45);
+
   /* Hauteur de la ligne collante de l'en-tete, filet compris : 65 px sous 1024 px, 73 px au-dela (la seconde ligne de
      navigation, de 1024 a 1279 px, defile avec la page et ne compte pas) */
   --hauteur-entete: 4.0625rem;
@@ -515,7 +518,7 @@
     box-shadow: 0 0 0 0 rgb(15 30 27 / 0);
   }
   to {
-    box-shadow: 0 12px 28px -20px rgb(15 30 27 / 0.45);
+    box-shadow: var(--ombre-entete);
   }
 }
 
@@ -534,6 +537,12 @@
   .reflet::after,
   .logo-reflet {
     display: none;
+  }
+  /* L'ombre de l'en-tete suit le defilement (animation liee au defilement, que la duree ne coupe pas) : arretee, a son
+     etat final. */
+  .entete-site {
+    animation: none !important;
+    box-shadow: var(--ombre-entete);
   }
 }
 

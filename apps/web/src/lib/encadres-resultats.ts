@@ -7,10 +7,10 @@
 // ============================================================
 
 import type { AideEvaluee, AlerteOpco, FundingResult, PlanFinancement } from '@opco/core';
-import { de } from './format';
+import { de, formatEuro, texteDonnees } from './format';
 import { INSECABLE } from './insecable';
 import { cartesDuPlan, nombreDeLignes } from './resultats';
-import type { CartePlan, EtatEnTete } from './resultats';
+import type { CartePlan, EtatEnTete, RelaisPlanConventionnel } from './resultats';
 
 // --- Plan de développement des compétences fermé (50 salariés et plus) ---------------------------------------------
 
@@ -236,4 +236,45 @@ export function fondsEpuisesSurLePlan(
 ): string[] {
   if (!plan.financements.some((l) => l.id === 'opco-pdc')) return [];
   return [...new Set(alertes.filter((a) => a.type === 'fonds_epuises').map((a) => a.branche))];
+}
+
+/** L'OPCO signale épuisée l'enveloppe de branches dont le plan compte le plan de développement des compétences. */
+export interface FondsEpuises {
+  opco: string;
+  branches: string[];
+}
+
+/** Branches citées entre guillemets, leur nom à la française (`texteDonnees` : dates, montants, espaces insécables). */
+const branchesCitees = (branches: readonly string[]): string =>
+  branches.map((b) => `«${INSECABLE}${texteDonnees(b)}${INSECABLE}»`).join(', ');
+
+/** Titre de l'encadré des fonds épuisés : le relais du plan conventionnel quand la branche en a un. */
+export function titreFondsEpuises(fonds: FondsEpuises, relais: RelaisPlanConventionnel | null): string {
+  return relais ? 'Le plan conventionnel de la branche prend le relais' : `Fonds épuisés selon ${fonds.opco}`;
+}
+
+/**
+ * Texte de l'encadré des fonds épuisés, sous la barre (le bandeau y ajoute le lien vers les alertes de l'OPCO). Sans
+ * relais, la prise en charge sur le plan de développement des compétences peut être refusée. Avec le relais du plan
+ * conventionnel (`relaisDuPlanConventionnel`) : les demandes sont financées sur ce plan, dans la limite de son plafond
+ * annuel par entreprise, sous réserve de l'accord de l'OPCO ; jamais « peut être refusée », que la ligne du plan
+ * contredirait.
+ */
+export function texteFondsEpuises(fonds: FondsEpuises, relais: RelaisPlanConventionnel | null): string {
+  const plusieurs = fonds.branches.length > 1;
+  if (!relais) {
+    return (
+      `${fonds.opco} signale que l'enveloppe du plan de développement des compétences est épuisée pour ` +
+      `${plusieurs ? 'les branches' : 'la branche'} ${branchesCitees(fonds.branches)}${INSECABLE}: la prise en charge peut être refusée.`
+    );
+  }
+  const limite =
+    relais.plafondAnnuel != null
+      ? `dans la limite de ${formatEuro(relais.plafondAnnuel)} par entreprise et par an`
+      : 'dans la limite du plafond annuel par entreprise';
+  return (
+    `${fonds.opco} signale que l'enveloppe du plan de développement des compétences ${plusieurs ? 'des branches' : 'de la branche'} ` +
+    `${branchesCitees(fonds.branches)} est épuisée${INSECABLE}: les demandes sont financées sur le plan conventionnel de la ` +
+    `branche, ${limite}. La prise en charge reste soumise à l'accord ${de(relais.opco)}.`
+  );
 }

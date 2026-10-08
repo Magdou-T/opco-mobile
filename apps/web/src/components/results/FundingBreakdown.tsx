@@ -5,7 +5,8 @@ import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { de, formatEuro, texteDonnees, texteMoteur } from '@/lib/format';
-import { lignesDuDetail, sansMontantEstime } from '@/lib/resultats';
+import { dispositifAffiche, lignesDuDetail, sansMontantEstime } from '@/lib/resultats';
+import type { RelaisPlanConventionnel } from '@/lib/resultats';
 import { BadgeEstimation } from './BadgeEstimation';
 import { TEXTE_SOUPLE } from './classes';
 import { DetailParPoste } from './DetailParPoste';
@@ -13,6 +14,8 @@ import { DispositifsOpco } from './DispositifsOpco';
 
 interface Props {
   result: FundingResult;
+  /** Plan conventionnel de la branche en relais : il nomme le dispositif en tête de la carte (`dispositifAffiche`). */
+  relais?: RelaisPlanConventionnel | null;
 }
 
 function getOverallConfidence(items: { confidence: Confidence }[]): Confidence {
@@ -26,7 +29,7 @@ function getOverallConfidence(items: { confidence: Confidence }[]): Confidence {
  * alertes de l'OPCO, détail par poste (`DetailParPoste`), plafond annuel, points d'attention, financements
  * complémentaires (`DispositifsOpco`), démarches, conditions et prochaines étapes.
  */
-export function FundingBreakdown({ result }: Props) {
+export function FundingBreakdown({ result, relais = null }: Props) {
   const { opcoName } = result;
   const visibleLines = lignesDuDetail(result);
   const lignesChiffrees = visibleLines.filter((l) => !sansMontantEstime(l));
@@ -59,7 +62,7 @@ export function FundingBreakdown({ result }: Props) {
           {result.pdcFerme ? 'Plan de développement des compétences' : 'Estimation de prise en charge'}
         </p>
         <p className="mt-1.5 font-display text-xl leading-snug font-bold text-texte">{opcoName}</p>
-        <p className="mt-1 text-sm leading-snug text-texte-doux">{texteDonnees(result.dispositifPrincipal)}</p>
+        <p className="mt-1 text-sm leading-snug text-texte-doux">{texteDonnees(dispositifAffiche(result, relais))}</p>
         {result.brancheAppliquee && (
           <p className="mt-0.5 text-sm leading-snug text-texte-doux">
             Barème de branche appliqué&nbsp;: {texteDonnees(result.brancheAppliquee)}

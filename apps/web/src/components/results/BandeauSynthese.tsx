@@ -4,28 +4,34 @@ import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
-import { formatEuro, texteDonnees } from '@/lib/format';
-import { ID_SECTION_AIDES, encadreSansFinancement } from '@/lib/encadres-resultats';
+import { formatEuro } from '@/lib/format';
+import {
+  ID_DETAIL_OPCO,
+  ID_SECTION_AIDES,
+  encadrePlanFerme,
+  encadreSansFinancement,
+  texteFondsEpuises,
+  titreFondsEpuises,
+} from '@/lib/encadres-resultats';
+import type { FondsEpuises, PlanFerme } from '@/lib/encadres-resultats';
 import { partFinancee, partsBarre } from '@/lib/resultats';
-import type { EtatEnTete, PartBarre } from '@/lib/resultats';
+import type { EtatEnTete, PartBarre, RelaisPlanConventionnel } from '@/lib/resultats';
 import { BarreEmpilee } from './BarreEmpilee';
 import { FiletTricolore } from './FiletTricolore';
 
-/** L'OPCO signale épuisée l'enveloppe de branches dont le plan compte le plan de développement des compétences. */
-export interface FondsEpuises {
-  opco: string;
-  branches: string[];
-}
-
 /**
  * Bandeau de synthèse du plan, selon l'état de l'en-tête (`etatEnTete`) : coût inconnu, aucun financement chiffré, ou
- * plan chiffré (coût, financé, reste à charge, barre empilée par famille de financeurs).
+ * plan chiffré (coût, financé, reste à charge, barre empilée par famille de financeurs). Plan de développement des
+ * compétences fermé aux 50 salariés et plus (`planFerme`) : sa raison est dite ici, avec un lien vers le détail de
+ * l'OPCO (dans l'encadré sans financement chiffré, sinon dans un encadré à part).
  */
 export function BandeauSynthese({
   plan,
   aides,
   etat,
   fondsEpuises,
+  relais,
+  planFerme,
   avecPortail,
   onModifierFormation,
 }: {
@@ -33,20 +39,44 @@ export function BandeauSynthese({
   aides: readonly AideEvaluee[];
   etat: EtatEnTete;
   fondsEpuises: FondsEpuises | null;
+  /** Plan conventionnel de la branche en relais (`relaisDuPlanConventionnel`) : dit dans l'encadré des fonds épuisés. */
+  relais: RelaisPlanConventionnel | null;
+  planFerme: PlanFerme | null;
   /** Les portails officiels de la région figurent plus bas : l'encadré sans financement chiffré peut y renvoyer. */
   avecPortail: boolean;
   onModifierFormation?: () => void;
 }) {
+  // Coût inconnu ou plan chiffré par d'autres financeurs : la raison du plan fermé dans un encadré à part.
+  const ferme = encadrePlanFerme(etat, planFerme);
+  const encadreFerme = ferme && (
+    <Callout tone="avertissement" titre={ferme.titre} className="mt-6">
+      {ferme.texte}{' '}
+      <a href={`#${ID_DETAIL_OPCO}`} className="lien">
+        Voir le détail de l&apos;OPCO
+      </a>
+    </Callout>
+  );
   return (
     <div className="apparition overflow-hidden rounded-panneau border border-filet bg-white shadow-douce">
       <FiletTricolore />
       <div className="p-5 sm:p-8">
-        {etat === 'cout_inconnu' && <CoutInconnu onModifierFormation={onModifierFormation} />}
+        {etat === 'cout_inconnu' && (
+          <>
+            <CoutInconnu onModifierFormation={onModifierFormation} />
+            {encadreFerme}
+          </>
+        )}
         {etat === 'aucun_financement_chiffre' && (
-          <AucunFinancementChiffre plan={plan} aides={aides} avecPortail={avecPortail} />
+          <AucunFinancementChiffre plan={plan} aides={aides} avecPortail={avecPortail} planFerme={planFerme} />
         )}
         {etat === 'plan_chiffre' && (
-          <PlanChiffre plan={plan} parts={partsBarre(plan, aides)} fondsEpuises={fondsEpuises} />
+          <PlanChiffre
+            plan={plan}
+            parts={partsBarre(plan, aides)}
+            fondsEpuises={fondsEpuises}
+            relais={relais}
+            encadreFerme={encadreFerme}
+          />
         )}
       </div>
     </div>
@@ -80,13 +110,17 @@ function AucunFinancementChiffre({
   plan,
   aides,
   avecPortail,
+  planFerme,
 }: {
   plan: PlanFinancement;
   aides: readonly AideEvaluee[];
   avecPortail: boolean;
+  planFerme: PlanFerme | null;
 }) {
-  const { texte, rappels, aidesAVerifier } = encadreSansFinancement(plan, aides, avecPortail);
+  const { texte, rappels, aidesAVerifier, detailOpco } = encadreSansFinancement(plan, aides, avecPortail, planFerme);
   const liens = [
+    // Plan de l'OPCO fermé : sa raison ouvre le texte, le premier lien mène au détail de l'OPCO.
+    ...(detailOpco ? [{ cle: 'detail-opco', href: `#${ID_DETAIL_OPCO}`, libelle: "Détail de l'OPCO" }] : []),
     ...rappels.map((r) => ({ cle: r.carte, href: `#carte-${r.carte}`, libelle: r.libelle })),
     ...(aidesAVerifier ? [{ cle: 'aides-a-verifier', href: `#${ID_SECTION_AIDES}`, libelle: aidesAVerifier.libelle }] : []),
   ];
@@ -121,10 +155,15 @@ function PlanChiffre({
   plan,
   parts,
   fondsEpuises,
+  relais,
+  encadreFerme,
 }: {
   plan: PlanFinancement;
   parts: PartBarre[];
   fondsEpuises: FondsEpuises | null;
+  relais: RelaisPlanConventionnel | null;
+  /** Raison du plan de l'OPCO fermé, quand d'autres financeurs chiffrent le plan. */
+  encadreFerme: ReactNode;
 }) {
   const part = partFinancee(parts);
   return (
@@ -143,20 +182,14 @@ function PlanChiffre({
       </dl>
       <BarreEmpilee parts={parts} cout={plan.coutFormation} />
       {fondsEpuises && fondsEpuises.branches.length > 0 && (
-        <Callout tone="avertissement" titre={`Fonds épuisés selon ${fondsEpuises.opco}`} className="mt-6">
-          {fondsEpuises.opco} signale que l&apos;enveloppe du plan de développement des compétences est épuisée pour{' '}
-          {fondsEpuises.branches.length > 1 ? 'les branches' : 'la branche'}{' '}
-          {fondsEpuises.branches.map((b, i) => (
-            <span key={b}>
-              {i > 0 && ', '}«&nbsp;{texteDonnees(b)}&nbsp;»
-            </span>
-          ))}
-          &nbsp;: la prise en charge peut être refusée.{' '}
+        <Callout tone="avertissement" titre={titreFondsEpuises(fondsEpuises, relais)} className="mt-6">
+          {texteFondsEpuises(fondsEpuises, relais)}{' '}
           <a href="#alertes-opco" className="lien">
             Voir les alertes de l&apos;OPCO
           </a>
         </Callout>
       )}
+      {encadreFerme}
       <p className="mt-6 flex items-start gap-2.5 text-sm leading-relaxed text-texte-doux">
         <Icon name="info" className="mt-0.5 size-4 shrink-0 text-turquoise-deep" />
         <span>

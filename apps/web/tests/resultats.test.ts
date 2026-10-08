@@ -9,6 +9,7 @@ import {
   REGIONS,
   createInitialWizardState,
   getEmbeddedOpcoBySlug,
+  resolveVarianteBranche,
 } from '@opco/core';
 import type {
   AideEvaluee,
@@ -45,6 +46,9 @@ import {
   partsBarre,
   replierIdcc,
   sansMontantEstime,
+  dispositifAffiche,
+  libellesDeLigne,
+  relaisDuPlanConventionnel,
   sourcesDeLAide,
   titreNoteOpco,
 } from '../src/lib/resultats';
@@ -57,6 +61,8 @@ import {
   planFermeDe,
   raisonPlanFerme,
   rappelsAucunFinancement,
+  texteFondsEpuises,
+  titreFondsEpuises,
 } from '../src/lib/encadres-resultats';
 
 const nb = INSECABLE;
@@ -1229,6 +1235,110 @@ describe("fonds épuisés signalés par l'OPCO", () => {
     assert.deepEqual(fondsEpuisesSurLePlan(avecPdc, alertes), ['Propreté']);
     assert.deepEqual(fondsEpuisesSurLePlan(sansPdc, alertes), []);
     assert.deepEqual(fondsEpuisesSurLePlan(avecPdc, [alerte('dispositif_termine', 'FSE+')]), []);
+  });
+});
+
+describe('relais du plan conventionnel de la branche (AKTO, organismes de formation)', () => {
+  const espaces = (s: string) => s.replace(/\s/g, ' ');
+  /** SFG Développement : AKTO, organismes de formation (IDCC 1516), moins de 11 salariés, 35 h à 1 750 €. */
+  const AKTO_OF: Partial<WizardState> = {
+    projetType: 'formation_salarie', selectedOpcoSlug: 'akto', detectedIdcc: '1516', regionCode: '11', departementCode: '95',
+    companySize: 'less_11', contractType: 'cdi', formationType: 'non_certifiante', ...coutsDeFormation(1750, 35),
+  };
+  const RELAIS =
+    "AKTO signale que l'enveloppe du plan de développement des compétences de la branche « Organismes de formation » est épuisée : " +
+    'les demandes sont financées sur le plan conventionnel de la branche, dans la limite de 10 000 € par entreprise et par an. ' +
+    "La prise en charge reste soumise à l'accord d'AKTO.";
+
+  test('scénario de SFG Développement : la ligne s’appelle « Plan conventionnel de branche », AKTO, et l’encadré dit le relais', () => {
+    const r = calculer(etat(AKTO_OF), DATE);
+    assert.ok(r.funding && r.opco);
+    const relais = relaisDuPlanConventionnel(r);
+    assert.deepEqual(relais, { opco: 'AKTO', plafondAnnuel: 10000 });
+    const ligneOpco = r.plan.financements.find((l) => l.id === 'opco-pdc');
+    assert.ok(ligneOpco);
+    assert.equal(ligneOpco.montant, 1750);
+    assert.deepEqual(libellesDeLigne(ligneOpco, relais), { nom: 'Plan conventionnel de branche', financeurNom: 'AKTO' });
+    const branches = fondsEpuisesSurLePlan(r.plan, r.funding.alertes);
+    assert.deepEqual(branches, ['Organismes de formation']);
+    assert.equal(espaces(texteFondsEpuises({ opco: 'AKTO', branches }, relais)), espaces(RELAIS));
+    assert.equal(titreFondsEpuises({ opco: 'AKTO', branches }, relais), 'Le plan conventionnel de la branche prend le relais');
+    assert.ok(!texteFondsEpuises({ opco: 'AKTO', branches }, relais).includes('peut être refusée'));
+    // Le détail de l'OPCO nomme le même financement.
+    assert.equal(
+      dispositifAffiche(r.funding, relais),
+      'Plan conventionnel de branche, en relais du plan de développement des compétences épuisé',
+    );
+    // Une autre ligne du plan garde ses libellés.
+    assert.deepEqual(libellesDeLigne({ id: 'nat-cpf', nom: 'CPF', financeurNom: 'Caisse des Dépôts' }, relais), {
+      nom: 'CPF',
+      financeurNom: 'Caisse des Dépôts',
+    });
+  });
+
+  test('autre branche d’AKTO dont l’enveloppe est épuisée, sans relais dans les données : texte d’origine inchangé', () => {
+    // Enseignement privé non lucratif (IDCC 3218) : barème général d'AKTO, alerte de fonds épuisés.
+    const r = calculer(etat({ ...AKTO_OF, detectedIdcc: '3218' }), DATE);
+    assert.ok(r.funding);
+    const relais = relaisDuPlanConventionnel(r);
+    assert.equal(relais, null);
+    const branches = fondsEpuisesSurLePlan(r.plan, r.funding.alertes);
+    assert.equal(branches.length, 1);
+    assert.equal(
+      espaces(texteFondsEpuises({ opco: 'AKTO', branches }, relais)),
+      `AKTO signale que l'enveloppe du plan de développement des compétences est épuisée pour la branche « ${branches[0]} » : la prise en charge peut être refusée.`,
+    );
+    assert.equal(titreFondsEpuises({ opco: 'AKTO', branches }, relais), 'Fonds épuisés selon AKTO');
+    const ligneOpco = r.plan.financements.find((l) => l.id === 'opco-pdc');
+    assert.ok(ligneOpco);
+    assert.deepEqual(libellesDeLigne(ligneOpco, relais), { nom: 'Plan de développement des compétences', financeurNom: 'AKTO' });
+    assert.equal(dispositifAffiche(r.funding, relais), r.funding.dispositifPrincipal);
+    // Plusieurs branches : au pluriel.
+    assert.match(espaces(texteFondsEpuises({ opco: 'AKTO', branches: ['A', 'B'] }, null)), /pour les branches « A », « B » : /);
+  });
+
+  test('600 états tirés au hasard (graine 23) : le relais n’apparaît que si la variante appliquée porte le champ', () => {
+    const hasard = generateur(23);
+    const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
+    const akto = getEmbeddedOpcoBySlug('akto');
+    assert.ok(akto);
+    const IDCC = [null, '1516', '1516', '1516', '3218', '0573', '1979', '3043', '1501', '1351', '9999'];
+    const compte = { relais: 0, sans: 0, encadreRelais: 0 };
+    for (let i = 0; i < 600; i++) {
+      const variantes = akto.variantes_branche ?? [];
+      const over: Partial<WizardState> = {
+        ...AKTO_OF,
+        selectedOpcoSlug: un(['akto', 'akto', 'akto', 'atlas', 'opcommerce']),
+        detectedIdcc: un(IDCC),
+        selectedBrancheId: hasard(3) === 0 ? un(variantes).id : null,
+        companySize: un(['less_11', '11_49', '50_299'] as const),
+        ...coutsDeFormation(un([700, 1750, 3500, 9000]), un([7, 35, 140])),
+      };
+      const r = calculer(etat(over), DATE);
+      const variante = r.opco ? resolveVarianteBranche(r.opco, etat(over)) : null;
+      // Le relais vaut pour le plan de développement des compétences que le calcul compte : jamais quand ce plan est
+      // fermé aux 50 salariés et plus (le bandeau dit alors pourquoi).
+      const attendu = variante?.relais_plan_conventionnel === true && r.funding != null && !r.funding.pdcFerme;
+      const relais = relaisDuPlanConventionnel(r);
+      assert.equal(relais != null, attendu, JSON.stringify(over));
+      if (relais) compte.relais++;
+      else compte.sans++;
+      for (const l of r.plan.financements) {
+        const renommee = libellesDeLigne(l, relais).nom !== l.nom;
+        assert.equal(renommee, attendu && l.id === 'opco-pdc', `${JSON.stringify(over)} : ${l.id}`);
+      }
+      if (r.funding) {
+        const branches = fondsEpuisesSurLePlan(r.plan, r.funding.alertes);
+        if (branches.length > 0) {
+          const texte = texteFondsEpuises({ opco: r.funding.opcoName, branches }, relais);
+          assert.equal(texte.includes('plan conventionnel'), attendu, `${JSON.stringify(over)} : ${texte}`);
+          assert.equal(texte.includes('peut être refusée'), !attendu, texte);
+          if (attendu) compte.encadreRelais++;
+        }
+        assert.equal(dispositifAffiche(r.funding, relais) !== r.funding.dispositifPrincipal, attendu);
+      }
+    }
+    assert.ok(compte.relais >= 30 && compte.sans >= 300 && compte.encadreRelais >= 20, JSON.stringify(compte));
   });
 });
 

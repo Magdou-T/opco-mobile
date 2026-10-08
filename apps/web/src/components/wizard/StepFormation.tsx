@@ -16,7 +16,12 @@ import { Icon } from '@/components/ui/Icon';
 import { ChoiceButton, ChoiceGroup, NumberField, OuiNonChoix, SelectField, TextField } from '@/components/ui/forms';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { de, formatEuro } from '@/lib/format';
-import { depassePlafondHoraire, etatDepuisModeFormation, plafondHoraireIndicatif } from '@/lib/parcours';
+import {
+  depassePlafondHoraire,
+  erreurDuMoisDeDebut,
+  etatDepuisModeFormation,
+  plafondHoraireIndicatif,
+} from '@/lib/parcours';
 import type { QuestionAvecInconnu, Repondre } from '@/lib/parcours';
 import { EnTeteEtape } from './EnTeteEtape';
 
@@ -46,10 +51,11 @@ const OPTIONS_NIVEAU = [
 
 /** Étape 4 : la formation. Type, mode, durée et coût sont obligatoires ; le reste affine la recherche des aides. */
 export function StepFormation({ state, updateState, updateFormationCosts, reponsesInconnues, repondre }: Props) {
-  // Saisie du mois de début gardée telle quelle : l'état ne reçoit qu'un mois valide (AAAA-MM), sinon null.
+  // Saisie du mois de début gardée telle quelle : l'état ne reçoit qu'un mois valide (AAAA-MM), sinon null. Comme les
+  // autres champs, une saisie refusée (« 13/2026 », « 2027-03 ») devient une erreur quand on quitte le champ.
   const [saisieDebut, setSaisieDebut] = useState(() => saisieDepuisMois(state.dateDebutFormation));
   const [debutQuitte, setDebutQuitte] = useState(false);
-  const debutInvalide = saisieDebut.trim() !== '' && moisDepuisSaisie(saisieDebut) == null;
+  const erreurDebut = debutQuitte ? erreurDuMoisDeDebut(saisieDebut) : null;
 
   // Plafond horaire indicatif du barème appliqué, pour les projets qui passent par le budget de l'OPCO.
   const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
@@ -212,14 +218,8 @@ export function StepFormation({ state, updateState, updateFormationCosts, repons
           placeholder="Ex&nbsp;: 03/2027"
           autoComplete="off"
           largeur="courte"
-          helper={
-            debutInvalide && !debutQuitte ? (
-              <>Format attendu&nbsp;: MM/AAAA</>
-            ) : (
-              <>Facultatif&nbsp;: sert à vérifier les dates de validité des aides.</>
-            )
-          }
-          erreur={debutInvalide && debutQuitte ? <>Format attendu&nbsp;: MM/AAAA, par exemple 03/2027.</> : undefined}
+          helper={<>Facultatif&nbsp;: sert à vérifier les dates de validité des aides.</>}
+          erreur={erreurDebut ?? undefined}
         />
 
         <OuiNonChoix

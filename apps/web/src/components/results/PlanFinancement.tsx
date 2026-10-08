@@ -7,10 +7,10 @@ import type { IconName } from '@/components/ui/Icon';
 import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
 import { formatEuro, texteDonnees, typo } from '@/lib/format';
-import { cartesDuPlan, confianceDOption, etatEnTete, financeurDeLigne } from '@/lib/resultats';
-import type { CartePlan } from '@/lib/resultats';
+import type { FondsEpuises, PlanFerme } from '@/lib/encadres-resultats';
+import { cartesDuPlan, confianceDOption, etatEnTete, financeurDeLigne, libellesDeLigne } from '@/lib/resultats';
+import type { CartePlan, RelaisPlanConventionnel } from '@/lib/resultats';
 import { BandeauSynthese } from './BandeauSynthese';
-import type { FondsEpuises } from './BandeauSynthese';
 import { PastilleFinanceur } from './Financeur';
 
 /**
@@ -25,6 +25,8 @@ export function PlanFinancementCard({
   aides,
   dispositifs = [],
   fondsEpuises = null,
+  relais = null,
+  planFerme = null,
   avecPortail = false,
   apresBandeau,
   onModifierFormation,
@@ -36,6 +38,10 @@ export function PlanFinancementCard({
   dispositifs?: readonly DispositifEligible[];
   /** Fonds épuisés signalés par l'OPCO (`fondsEpuisesSurLePlan`) : dit à côté du montant financé. */
   fondsEpuises?: FondsEpuises | null;
+  /** Plan conventionnel de la branche en relais : il nomme la ligne de l'OPCO (`libellesDeLigne`) et l'encadré. */
+  relais?: RelaisPlanConventionnel | null;
+  /** Plan de l'OPCO fermé aux 50 salariés et plus : sa raison, dans le bandeau. */
+  planFerme?: PlanFerme | null;
   /** Les portails officiels de la région figurent plus bas sur l'écran. */
   avecPortail?: boolean;
   /** Note posée juste après le bandeau (par exemple « Aucun OPCO renseigné ») : les chiffres restent en tête. */
@@ -51,6 +57,8 @@ export function PlanFinancementCard({
         aides={aides}
         etat={etat}
         fondsEpuises={fondsEpuises}
+        relais={relais}
+        planFerme={planFerme}
         avecPortail={avecPortail}
         onModifierFormation={onModifierFormation}
       />
@@ -62,6 +70,7 @@ export function PlanFinancementCard({
           plan={plan}
           aides={aides}
           dispositifs={dispositifs}
+          relais={relais}
           style={delai(120 + i * 70)}
         />
       ))}
@@ -115,12 +124,14 @@ function CarteDuPlan({
   plan,
   aides,
   dispositifs,
+  relais,
   style,
 }: {
   carte: CartePlan;
   plan: PlanFinancement;
   aides: readonly AideEvaluee[];
   dispositifs: readonly DispositifEligible[];
+  relais: RelaisPlanConventionnel | null;
   style: CSSProperties;
 }) {
   const { titre, icone, aide } = CARTES[carte];
@@ -142,7 +153,7 @@ function CarteDuPlan({
             <p className="mt-1 text-sm leading-relaxed text-texte-doux">{typo(aide)}</p>
           </div>
         </header>
-        <ContenuDeCarte carte={carte} plan={plan} aides={aides} dispositifs={dispositifs} />
+        <ContenuDeCarte carte={carte} plan={plan} aides={aides} dispositifs={dispositifs} relais={relais} />
       </Card>
     </section>
   );
@@ -153,15 +164,17 @@ function ContenuDeCarte({
   plan,
   aides,
   dispositifs,
+  relais,
 }: {
   carte: CartePlan;
   plan: PlanFinancement;
   aides: readonly AideEvaluee[];
   dispositifs: readonly DispositifEligible[];
+  relais: RelaisPlanConventionnel | null;
 }) {
   switch (carte) {
     case 'financements':
-      return <PileDesFinancements plan={plan} aides={aides} />;
+      return <PileDesFinancements plan={plan} aides={aides} relais={relais} />;
     case 'options':
       return (
         <Lignes>
@@ -183,8 +196,16 @@ function ContenuDeCarte({
   }
 }
 
+/**
+ * Lignes d'une carte du plan, en liste : le lecteur d'écran annonce leur nombre. `role="list"` : Safari et VoiceOver
+ * retirent le rôle de liste d'une liste sans puces (`list-style: none`, réglage de base de Tailwind).
+ */
 function Lignes({ children }: { children: ReactNode }) {
-  return <ul className="divide-y divide-filet border-t border-filet">{children}</ul>;
+  return (
+    <ul role="list" className="divide-y divide-filet border-t border-filet">
+      {children}
+    </ul>
+  );
 }
 
 /** Fiabilité d'une ligne : étiquette, et la mention d'estimation quand le montant n'est pas exact. */
@@ -229,11 +250,20 @@ function Montant({ valeur, total = false, className }: { valeur: number; total?:
  * Financement de la formation : les lignes dans l'ordre d'empilement, chacune plafonnée par le moteur à ce qui reste à
  * payer ; avec plusieurs lignes, un fil les relie jusqu'au total, plafonné au coût de la formation (seule carte à total).
  */
-function PileDesFinancements({ plan, aides }: { plan: PlanFinancement; aides: readonly AideEvaluee[] }) {
+function PileDesFinancements({
+  plan,
+  aides,
+  relais,
+}: {
+  plan: PlanFinancement;
+  aides: readonly AideEvaluee[];
+  relais: RelaisPlanConventionnel | null;
+}) {
   const plusieurs = plan.financements.length > 1;
   return (
     <div className="border-t border-filet px-5 py-5 sm:px-6">
-      <ol>
+      {/* Liste ordonnée (l'ordre d'empilement) ; `role="list"` : voir `Lignes`. */}
+      <ol role="list">
         {plan.financements.map((l) => (
           <li key={l.id} className={cx('relative flex items-start gap-4 break-inside-avoid', plusieurs && 'pb-6')}>
             {plusieurs && (
@@ -243,7 +273,7 @@ function PileDesFinancements({ plan, aides }: { plan: PlanFinancement; aides: re
               />
             )}
             <PastilleFinanceur financeur={financeurDeLigne(l.id, aides)} />
-            <Identite nom={l.nom} financeurNom={l.financeurNom} confidence={l.confidence} />
+            <Identite {...libellesDeLigne(l, relais)} confidence={l.confidence} />
             <Montant valeur={l.montant} className="pt-1" />
           </li>
         ))}

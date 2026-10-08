@@ -62,7 +62,9 @@ export function EnTeteResultats({ state, onEdit }: Pick<ProprietesEcranResultats
   const situation = etiquettesDeSituation(state);
   return (
     <>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      {/* `sm:flex-wrap` : quand le titre et les actions ne tiennent pas sur une ligne (zoom de 200 %, espacement de texte
+          agrandi), les actions passent dessous au lieu de déborder. */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <TitreResultats chapeau={state.formationNom ? typo(`Formation : ${state.formationNom}`) : undefined} />
         {/* Sous 640 px, libellés courts sur une ligne (le nom accessible reste complet) : le bandeau monte d'autant. */}
         <div className="-ml-1 flex flex-wrap gap-x-5 print:hidden sm:ml-0 sm:shrink-0">
