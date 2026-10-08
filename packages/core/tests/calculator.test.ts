@@ -150,6 +150,47 @@ describe('calculateFunding, textes du calcul : rien de plus fort que l’estimat
     expect(sansBranche.lines.find((l) => l.poste === 'transport')!.note).toBe('Montant transport selon accord de branche');
   });
 
+  it("données réelles, chaque branche de chaque OPCO, chaque poste non publié (salaires, transport, hébergement, restauration) : « pour la branche » suivi du nom de la branche se lit, jamais « la branche Branches ... »", () => {
+    // Les quatre postes rendus non publiés chez l'OPCO et dans la branche : le moteur écrit, pour chaque poste, sa phrase
+    // « ... non publié(e) pour la branche <nom> ». Le site écrit aussi « Barème de la branche <nom> » et « le barème de la
+    // branche « <nom> » » : un nom de branche qui commence par « Branche(s) » se lit faux partout.
+    const nonPublie = { value: null, confidence: 'depends_on_branche' as const, source_url: 'https://example.opco.fr/criteres' };
+    const phrases: string[] = [];
+    for (const opco of EMBEDDED_OPCOS) {
+      for (const variante of opco.variantes_branche ?? []) {
+        const brancheSansPostes: VarianteBranche = {
+          ...variante,
+          prise_en_charge_salaires: undefined, prise_en_charge_salaires_mode: undefined, frais_transport: undefined,
+          frais_hebergement: undefined, frais_restauration: undefined, frais_annexes_pourcentage: undefined,
+        };
+        const opcoSansPostes: OpcoData = {
+          ...opco,
+          prise_en_charge_salaires: nonPublie, prise_en_charge_salaires_mode: 'selon_accord', frais_transport: nonPublie,
+          frais_hebergement: nonPublie, frais_restauration: nonPublie, frais_annexes_pourcentage: nonPublie,
+          variantes_branche: [brancheSansPostes],
+        };
+        const r = calculateFunding(
+          opcoSansPostes,
+          makeFormationState({
+            selectedOpcoSlug: opco.slug, selectedBrancheId: variante.id, companySize: 'less_11', needsTransport: true,
+            transportMode: 'train', trainingDays: 2, needsAccommodation: true, accommodationNights: 1, accommodationCostPerNight: 90,
+            needsMeals: true, mealCostPerDay: 15,
+          }),
+        );
+        expect(r.brancheAppliquee).toBe(variante.branche_nom);
+        for (const poste of ['salaires', 'transport', 'hebergement', 'restauration'] as const) {
+          const ligne = r.lines.find((l) => l.poste === poste)!;
+          const avecLeNom = [ligne.note ?? '', ...(ligne.details ?? [])].filter((t) => t.includes(`la branche ${variante.branche_nom}`));
+          expect(avecLeNom.length, `${opco.slug} ${variante.id} ${poste}`).toBeGreaterThan(0);
+          phrases.push(...avecLeNom);
+        }
+      }
+    }
+    // 38 branches, 4 postes : au moins une phrase chacun (le contrôle n'est pas vide).
+    expect(phrases.length).toBeGreaterThanOrEqual(38 * 4);
+    expect(phrases.filter((t) => /\bla branche\s+branches?\b/i.test(t))).toEqual([]);
+  });
+
   it("données réelles, tous OPCO et branches, 1 000 états tirés au hasard (graine 61) : ni nombre collé à « h » ou à « % », ni « coûts péda », ni signe d'avertissement U+26A0, ni « de » sans élision devant un nom d'OPCO, ni « L'Opcommerce » au milieu d'une phrase", () => {
     // mulberry32 : tirages indépendants et reproductibles.
     let graine = 61;
