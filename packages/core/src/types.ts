@@ -426,6 +426,11 @@ export interface WizardState {
   regionCode: CodeRegion | null;
   departementCode: string | null;
   codeNaf: string | null;
+  /**
+   * Catégorie juridique INSEE de l'unité légale (recherche entreprise) : un employeur de droit public (7xxx) sans
+   * convention ne reçoit pas d'OPCO d'après son seul code NAF (`resoudreOpco`).
+   */
+  natureJuridique: string | null;
   /** Code de tranche d'effectif INSEE (indicatif, année N-2). */
   trancheEffectifInsee: string | null;
   companySize: CompanySize | null;
@@ -654,6 +659,7 @@ export function createInitialWizardState(): WizardState {
     regionCode: null,
     departementCode: null,
     codeNaf: null,
+    natureJuridique: null,
     trancheEffectifInsee: null,
     companySize: null,
     effectif: null,
