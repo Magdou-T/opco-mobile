@@ -330,6 +330,25 @@ describe('calculateFunding, textes du calcul : rien de plus fort que l’estimat
     expect(deux).toContain(`Calcul : 10${NBSP}€/jour × 2${NBSP}jours = 20.00${NBSP}€`);
     expect(deux).toContain(`Votre coût : 120${NBSP}€/nuit × 2${NBSP}nuits = 240.00${NBSP}€`);
   });
+
+  it("barème par tranches (aucun barème réel ne l'utilise aujourd'hui) : tranches, borne ouverte et heures au-delà du dernier seuil avec l'espace insécable", () => {
+    const detailsDe = (seuils: { max_heures: number | null; valeur: number }[]) =>
+      calculateFunding(
+        makeOpco({ cout_horaire_seuils: seuils, cout_horaire_seuils_mode: 'par_tranche' }),
+        makeFormationState({ durationHours: 200, pedagogyCostPerHour: 9 }),
+      ).lines.find((l) => l.poste === 'pedagogie')!.details ?? [];
+    const bornes = detailsDe([{ max_heures: 70, valeur: 32 }, { max_heures: 140, valeur: 10 }]);
+    expect(bornes).toEqual(
+      expect.arrayContaining([
+        `Tranche 0-70${NBSP}h : 70${NBSP}h × 9${NBSP}€/h (plafond 32${NBSP}€/h) = 630.00${NBSP}€`,
+        `Tranche 70-140${NBSP}h : 70${NBSP}h × 9${NBSP}€/h (plafond 10${NBSP}€/h) = 630.00${NBSP}€`,
+        `60${NBSP}h au-delà du dernier seuil publié : non financées`,
+      ]),
+    );
+    const ouverte = detailsDe([{ max_heures: 70, valeur: 32 }, { max_heures: null, valeur: 10 }]);
+    expect(ouverte).toContain(`Tranche 70-…${NBSP}h : 130${NBSP}h × 9${NBSP}€/h (plafond 10${NBSP}€/h) = 1170.00${NBSP}€`);
+    expect([...bornes, ...ouverte].filter((t) => /[\d…] (?:h|€|%)(?![\p{L}\p{N}])/u.test(t))).toEqual([]);
+  });
 });
 
 describe('calculateFunding, prise en charge salaires', () => {
