@@ -23,6 +23,10 @@ export interface EntrepriseInfo {
   nom: string;
   codeNaf: string | null;
   categorie: string | null;
+  /**
+   * Catégorie juridique INSEE de l'unité légale (4 chiffres). À transmettre au résolveur (`natureJuridique` de
+   * `resoudreOpco`) : une catégorie 7xxx (droit administratif) interdit la suggestion d'un OPCO par le seul code NAF.
+   */
   natureJuridique: string | null;
   /** Code de tranche d'effectif INSEE (null si inconnu). */
   trancheEffectif: string | null;

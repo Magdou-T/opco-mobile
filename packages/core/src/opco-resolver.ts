@@ -1,12 +1,18 @@
 // ============================================================
 // Identification de l'OPCO (v2) : IDCC → OPCO avec niveau de certitude.
 //
-// Table construite à partir de sources réutilisables : table IDCC de la
-// norme DSN, données KALI et Journal officiel (DILA), arrêtés d'agrément
-// des OPCO et listes de branches publiées par les OPCO. Les tables de
-// France Compétences (établies par l'art. R. 6123-34 du code du travail)
-// ne sont PAS utilisées : leur réutilisation exige une licence
-// (art. R. 6123-35). Le niveau 'confirme' leur est réservé.
+// Table IDCC construite à partir de sources réutilisables : table IDCC de
+// la norme DSN, données KALI et Journal officiel (DILA), arrêtés
+// d'agrément des OPCO et listes de branches publiées par les OPCO. La
+// table de correspondance IDCC → OPCO de France Compétences
+// (art. R. 6123-34 du code du travail) et son API ne sont pas utilisées
+// (réutilisation soumise à licence, art. R. 6123-35).
+// Suggestions par code NAF (repli sans convention exploitable) : parts
+// observées sur un échantillon d'établissements employeurs joints à la
+// Table SIRET-OPCO que France Compétences publie en données ouvertes
+// (data.gouv.fr, Licence Ouverte 2.0) ; méthode et date des données :
+// spécification, section 5.5. Le niveau 'confirme' (lecture directe du
+// SIRET dans une source officielle) n'est jamais produit ici.
 // ============================================================
 
 import type { CertitudeOpco } from './types';
@@ -17,7 +23,11 @@ export interface IdccEntree {
   titre: string;
   opco: string | null;
   statut: 'actif' | 'fusionne' | 'echappatoire' | 'partage';
-  /** Statut 'fusionne' : IDCC de rattachement. */
+  /**
+   * Statut 'fusionne' : IDCC de la convention qui remplace celle-ci, quand il est connu. Une convention close sans
+   * convention de remplacement n'en a pas (50 entrées de la table embarquée, dont 7509, 0438, 1237, 0779, 5545) :
+   * son propre OPCO, s'il en a un, sert alors de rattachement « à confirmer » ; sans OPCO, elle n'en désigne aucun.
+   */
   idcc_cible?: string;
   /** Statut 'partage' : OPCO possibles selon l'activité. */
   opcos_possibles?: string[];
@@ -36,9 +46,14 @@ export interface SuggestionNaf {
   /** Code NAF ou préfixe : '47.11F', '47.11', '47.1' ou '47'. */
   prefixe: string;
   opco: string;
-  /** Part des établissements du secteur relevant de cet OPCO (0-1), si connue. */
+  /**
+   * Part observée (0 à 1) : proportion des établissements employeurs de l'échantillon que la Table SIRET-OPCO
+   * rattache à cet OPCO ; `null` si elle n'est pas connue.
+   */
   part: number | null;
+  /** Taille de l'échantillon : établissements employeurs dont la Table SIRET-OPCO donne un OPCO. */
   effectif_etablissements?: number | null;
+  /** Intitulé officiel de la NAF rév. 2 (INSEE) pour ce préfixe. */
   libelle: string;
   source: string;
 }
@@ -59,8 +74,9 @@ export interface ResolutionOpco {
    * `fiable` : un seul OPCO possible, établi par au moins une convention ferme (en vigueur, avec OPCO, non marquée
    * `a_confirmer`) et aucune convention non rattachée. `a_confirmer` : plusieurs OPCO possibles, convention non
    * rattachée, rattachement sans convention ferme (conventions fusionnées ou closes, ou marquées `a_confirmer`)
-   * ou suggestion d'après le code NAF. `inconnu` : aucun OPCO identifié. `confirme` n'est jamais produit ici : il
-   * est réservé aux sources sous licence.
+   * ou suggestion d'après le code NAF. `inconnu` : aucun OPCO identifié (jamais de suggestion par le code NAF pour
+   * un employeur de droit public). `confirme` n'est jamais produit ici : il est réservé à une lecture directe du
+   * SIRET dans une source officielle, non intégrée à ce jour.
    */
   certitude: CertitudeOpco;
   /** Explication de la résolution, destinée à l'utilisateur. */
@@ -81,12 +97,21 @@ export interface ResolutionOpco {
 export interface EntreeResolution {
   /** Tous les IDCC trouvés (entreprise et établissements). */
   idccs: string[];
-  /** IDCC du siège : présélection en cas de pluralité. */
-  idccSiege?: string[];
+  /** IDCC du siège : présélection en cas de pluralité (`null` ou absent : aucun). */
+  idccSiege?: string[] | null;
   codeNaf?: string | null;
+  /**
+   * Catégorie juridique INSEE de l'unité légale (champ `nature_juridique` de l'API Recherche d'entreprises), si
+   * connue. Une catégorie 7xxx (droit administratif) interdit la suggestion d'un OPCO par le seul code NAF.
+   */
+  natureJuridique?: string | null;
 }
 
-/** Codes « échappatoires » de la DSN : ils ne désignent aucun OPCO. */
+/**
+ * Codes « échappatoires » de la DSN : ils ne désignent aucun OPCO. Doublon voulu des entrées `echappatoire` de la
+ * table embarquée : la constante vaut aussi pour une table qui ne les contiendrait pas (jeu de données téléchargé),
+ * et le site s'en sert pour ne pas afficher ces codes comme des conventions.
+ */
 export const CODES_ECHAPPATOIRES: Record<string, string> = {
   '5501': "Convention d'entreprise indépendante ou texte assimilé non précisé",
   '5100': 'Statuts divers ou inconnus',
@@ -96,6 +121,16 @@ export const CODES_ECHAPPATOIRES: Record<string, string> = {
 
 /** Outil officiel de France Compétences (lien de vérification pour l'utilisateur). */
 export const URL_VERIFICATION_OPCO = 'https://quel-est-mon-opco.francecompetences.fr/';
+
+/**
+ * Catégorie juridique INSEE 7xxx : « Personne morale et organisme soumis au droit administratif » (État,
+ * collectivités territoriales, établissements publics administratifs dont les hôpitaux et les établissements
+ * sociaux et médico-sociaux publics, autres personnes morales de droit public administratif). Les établissements
+ * publics industriels et commerciaux (41xx), les sociétés et les associations n'en font pas partie.
+ */
+export function estDroitAdministratif(natureJuridique: string | null | undefined): boolean {
+  return /^7\d{3}$/.test(String(natureJuridique ?? '').trim());
+}
 
 /** Début du motif quand plusieurs OPCO restent possibles ; la phrase de présélection éventuelle s'y ajoute. */
 const MOTIF_PLUSIEURS_OPCO =
@@ -347,13 +382,36 @@ export function resoudreOpco(
     return aConfirmer(null, null, motif);
   }
 
-  // 4. Aucun IDCC exploitable : suggestion par code NAF
+  // 4. Aucun IDCC exploitable. Employeur de droit public (catégorie juridique 7xxx) : la plupart ne cotisent pas à
+  //    un OPCO, le code NAF ne suffit donc pas à en suggérer un.
+  if (estDroitAdministratif(entree.natureJuridique)) {
+    return {
+      opcoSlug: null,
+      certitude: 'inconnu',
+      motif:
+        `Employeur public (catégorie juridique ${String(entree.natureJuridique).trim()}) : la plupart des employeurs ` +
+        'publics ne cotisent pas à un OPCO. Si cet établissement en a un, sélectionnez-le dans la liste ou ' +
+        "vérifiez-le sur l'outil officiel de France Compétences.",
+      candidats: [],
+      idccRetenu: null,
+      avertissements,
+      urlVerificationOfficielle,
+    };
+  }
+
+  // 5. Autres employeurs sans IDCC exploitable : suggestion par code NAF
   const suggestion = suggestionParNaf(entree.codeNaf ?? null, suggestionsNaf);
   if (suggestion) {
+    // Part observée sur un échantillon : sa taille est donnée quand elle est connue (une part de 100 % ne vaut que
+    // pour les établissements observés).
+    const pourcentage = suggestion.part != null ? Math.round(suggestion.part * 100) : null;
+    const echantillon = suggestion.effectif_etablissements;
     const part =
-      suggestion.part != null
-        ? ` : ${Math.round(suggestion.part * 100)} % des établissements de ce secteur relèvent de cet OPCO`
-        : '';
+      pourcentage == null
+        ? ''
+        : echantillon != null && echantillon > 0
+          ? ` : ${pourcentage} % des établissements employeurs observés dans ce secteur (échantillon de ${echantillon}) relèvent de cet OPCO`
+          : ` : ${pourcentage} % des établissements de ce secteur relèvent de cet OPCO`;
     return {
       opcoSlug: suggestion.opco,
       certitude: 'a_confirmer',

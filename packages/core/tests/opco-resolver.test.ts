@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
+  CODES_ECHAPPATOIRES,
+  estDroitAdministratif,
   normaliserIdcc,
   resolveIdccToOpco,
   resoudreOpco,
@@ -522,6 +524,22 @@ describe('resoudreOpco', () => {
     ]);
   });
 
+  it("suggestion NAF dont l'échantillon est connu → la part observée et la taille de l'échantillon figurent dans le motif", () => {
+    const coiffure: SuggestionNaf[] = [
+      { prefixe: '96.02A', opco: 'opco-ep', part: 1, effectif_etablissements: 40, libelle: 'Coiffure', source: 'https://x.fr' },
+      { prefixe: '10.71C', opco: 'opco-ep', part: 0.876, effectif_etablissements: 89, libelle: 'Boulangerie et boulangerie-pâtisserie', source: 'https://x.fr' },
+    ];
+    const r = resoudreOpco({ idccs: [], codeNaf: '9602A' }, TABLE, coiffure);
+    expect(r).toMatchObject({ opcoSlug: 'opco-ep', certitude: 'a_confirmer', idccRetenu: null, candidats: [{ opcoSlug: 'opco-ep', idccs: [] }] });
+    expect(r.motif).toBe(
+      "Aucune convention collective exploitable. Suggestion d'après le code NAF 96.02A (Coiffure) : 100 % des établissements employeurs observés dans ce secteur (échantillon de 40) relèvent de cet OPCO. À confirmer.",
+    );
+    // La part est arrondie au pour cent le plus proche.
+    expect(resoudreOpco({ idccs: [], codeNaf: '10.71C' }, TABLE, coiffure).motif).toContain(
+      ': 88 % des établissements employeurs observés dans ce secteur (échantillon de 89) relèvent de cet OPCO.',
+    );
+  });
+
   it('code échappatoire + NAF → suggestion à confirmer', () => {
     const r = resoudreOpco({ idccs: ['9999'], codeNaf: '85.59A' }, TABLE, NAF);
     expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: null });
@@ -534,6 +552,94 @@ describe('resoudreOpco', () => {
     expect(r.certitude).toBe('inconnu');
     expect(r.opcoSlug).toBeNull();
     expect(r.avertissements.some((a) => a.includes('4242'))).toBe(true);
+  });
+
+  it('codes échappatoires reconnus même quand la table ne les contient pas (constante CODES_ECHAPPATOIRES)', () => {
+    // Table minimale (comme un jeu de données téléchargé incomplet) : seuls les codes de la constante sont connus.
+    const minimale: IdccTable = { '1516': TABLE['1516'] };
+    expect(Object.keys(CODES_ECHAPPATOIRES).sort()).toEqual(['5100', '5501', '9998', '9999']);
+    for (const [code, libelle] of Object.entries(CODES_ECHAPPATOIRES)) {
+      const r = resoudreOpco({ idccs: [code, '1516'] }, minimale);
+      expect(r, code).toMatchObject({ opcoSlug: 'akto', certitude: 'fiable', idccRetenu: '1516' });
+      expect(r.motif, code).toBe('Identifié via la convention collective IDCC 1516 (Organismes de formation).');
+      expect(r.avertissements, code).toEqual([`Code ${code} (${libelle}) : ce code ne permet pas de déterminer l'OPCO.`]);
+      // Seul : aucun OPCO, et le code n'est pas compté parmi les conventions non référencées.
+      const seul = resoudreOpco({ idccs: [code] }, minimale);
+      expect(seul, code).toMatchObject({ opcoSlug: null, certitude: 'inconnu', candidats: [] });
+      expect(seul.avertissements.some((a) => a.includes('non référencé')), code).toBe(false);
+    }
+  });
+});
+
+// Employeurs de droit public (catégorie juridique INSEE 7xxx : État, collectivités, établissements publics
+// administratifs, hôpitaux publics...) : la plupart ne cotisent pas à un OPCO. Sans convention exploitable, aucun
+// OPCO n'est suggéré d'après le seul code NAF.
+describe('resoudreOpco : employeurs de droit public (catégorie juridique 7xxx)', () => {
+  const NAF_SANTE: SuggestionNaf[] = [
+    ...NAF,
+    { prefixe: '87', opco: 'opco-sante', part: 0.9, effectif_etablissements: 40, libelle: 'Hébergement médico-social et social', source: 'test' },
+  ];
+  const MOTIF_PUBLIC =
+    "Employeur public (catégorie juridique 7364) : la plupart des employeurs publics ne cotisent pas à un OPCO. Si cet établissement en a un, sélectionnez-le dans la liste ou vérifiez-le sur l'outil officiel de France Compétences.";
+
+  it('reconnaît les catégories juridiques 7xxx et elles seules', () => {
+    for (const nj of ['7364', '7210', '7366', '7111', '7490', ' 7383 ']) expect(estDroitAdministratif(nj), nj).toBe(true);
+    // Sociétés (5xxx), associations (92xx), EPIC et Banque de France (41xx), entrepreneur individuel, valeurs invalides.
+    for (const nj of ['5710', '5499', '9220', '9300', '4110', '4160', '1000', '7', '73', '73640', 'abcd', '', null, undefined]) {
+      expect(estDroitAdministratif(nj), String(nj)).toBe(false);
+    }
+  });
+
+  it('hôpital public sans convention, NAF suggéré → inconnu, aucune suggestion par le code NAF', () => {
+    const r = resoudreOpco({ idccs: [], codeNaf: '87.10A', natureJuridique: '7364' }, TABLE, NAF_SANTE);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'inconnu', idccRetenu: null, candidats: [], avertissements: [] });
+    expect(r.motif).toBe(MOTIF_PUBLIC);
+    expect(r.urlVerificationOfficielle).toContain('francecompetences');
+  });
+
+  it('établissement public avec un code échappatoire seulement → inconnu, avertissement du code conservé', () => {
+    const r = resoudreOpco({ idccs: ['9999'], codeNaf: '87.10A', natureJuridique: '7366' }, TABLE, NAF_SANTE);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'inconnu', candidats: [] });
+    expect(r.motif).toBe(MOTIF_PUBLIC.replace('7364', '7366'));
+    expect(r.avertissements.some((a) => a.includes('9999'))).toBe(true);
+  });
+
+  it('collectivité sans suggestion NAF → même motif propre aux employeurs publics', () => {
+    const r = resoudreOpco({ idccs: [], codeNaf: '84.11Z', natureJuridique: ' 7210 ' }, TABLE, NAF_SANTE);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'inconnu' });
+    expect(r.motif).toBe(MOTIF_PUBLIC.replace('7364', '7210'));
+  });
+
+  it('établissement public avec une convention connue sans OPCO confirmé → inconnu, sans suggestion NAF', () => {
+    const r = resoudreOpco({ idccs: ['8004'], codeNaf: '87.10A', natureJuridique: '7364' }, TABLE, NAF_SANTE);
+    expect(r).toMatchObject({ opcoSlug: null, certitude: 'inconnu', candidats: [] });
+    expect(r.motif).toBe(MOTIF_PUBLIC);
+    expect(r.avertissements.some((a) => a.includes('aucun OPCO confirmé'))).toBe(true);
+  });
+
+  it('établissement public avec une convention exploitable → la convention fait foi (inchangé)', () => {
+    const avec = resoudreOpco({ idccs: ['1516'], codeNaf: '87.10A', natureJuridique: '7364' }, TABLE, NAF_SANTE);
+    const sans = resoudreOpco({ idccs: ['1516'], codeNaf: '87.10A' }, TABLE, NAF_SANTE);
+    expect(avec).toMatchObject({ opcoSlug: 'akto', certitude: 'fiable', idccRetenu: '1516' });
+    expect(avec).toEqual(sans);
+  });
+
+  it('établissement public avec plusieurs candidats : la présélection par le code NAF parmi eux reste permise', () => {
+    const r = resoudreOpco({ idccs: ['1486', '1516'], codeNaf: '85.59A', natureJuridique: '7331' }, TABLE, NAF_SANTE);
+    expect(r).toEqual(resoudreOpco({ idccs: ['1486', '1516'], codeNaf: '85.59A' }, TABLE, NAF_SANTE));
+    expect(r).toMatchObject({ opcoSlug: 'akto', certitude: 'a_confirmer', idccRetenu: '1516' });
+  });
+
+  it.each([
+    ['société par actions simplifiée', '5710'],
+    ['association déclarée', '9220'],
+    ['établissement public industriel et commercial', '4110'],
+    ['catégorie juridique inconnue', null],
+  ])('%s (%s) sans convention → suggestion par le code NAF inchangée', (_libelle, nj) => {
+    const r = resoudreOpco({ idccs: [], codeNaf: '87.10A', natureJuridique: nj }, TABLE, NAF_SANTE);
+    expect(r).toEqual(resoudreOpco({ idccs: [], codeNaf: '87.10A' }, TABLE, NAF_SANTE));
+    expect(r).toMatchObject({ opcoSlug: 'opco-sante', certitude: 'a_confirmer', idccRetenu: null });
+    expect(r.motif).toContain('% des établissements');
   });
 });
 
