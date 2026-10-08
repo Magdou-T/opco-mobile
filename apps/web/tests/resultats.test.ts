@@ -24,12 +24,10 @@ import {
   chapeauDetailOpco,
   confianceDOption,
   descriptionBarre,
-  encadreSansFinancement,
   enRegion,
   etatEnTete,
   familleCouleur,
   financeurDeLigne,
-  fondsEpuisesSurLePlan,
   groupesAidesVisibles,
   libellePart,
   lignesDuDetail,
@@ -37,12 +35,12 @@ import {
   nommerAides,
   partFinancee,
   partsBarre,
-  rappelsAucunFinancement,
   replierIdcc,
   sansMontantEstime,
   sourcesDeLAide,
 } from '../src/lib/resultats';
 import type { PartBarre } from '../src/lib/resultats';
+import { encadreSansFinancement, fondsEpuisesSurLePlan, rappelsAucunFinancement } from '../src/lib/encadres-resultats';
 
 const nb = INSECABLE;
 
@@ -684,67 +682,129 @@ describe('encadré du bandeau quand aucun financement de la formation n’est ch
   const espaces = (s: string) => s.replace(/\s/g, ' ');
   const option = (id: string, montantEstime: number | null) => ({ id, nom: id, financeurNom: 'F', montantEstime, raison: 'r' });
 
-  test('scénario 3 (demandeur d’emploi) : aides au montant selon dossier, rappels vers leurs cartes', () => {
-    const { texte, rappels } = encadreSansFinancement(simuler(SCENARIOS.demandeur).plan, true);
-    assert.equal(
-      espaces(texte),
-      "Aucun financement de la formation n'est chiffrable à ce stade : les financeurs fixent le montant après étude du dossier. Voici les aides identifiées.",
-    );
-    assert.deepEqual(rappels.map((r) => r.carte), ['non-chiffrees', 'personne']);
-  });
+  /** Phrases attendues (espaces insécables lues comme ordinaires). */
+  const UNE_CHIFFREE =
+    "Le montant d'une aide « à vérifier » listée plus bas n'est pas compté dans le plan : une information manque ou le financeur doit confirmer.";
+  const PLUSIEURS_CHIFFREES =
+    "Les montants des aides « à vérifier » listées plus bas ne sont pas comptés dans le plan : une information manque ou le financeur doit confirmer.";
+  const UNE_SANS_MONTANT = "Une aide « à vérifier » est listée plus bas : une information manque ou le financeur doit confirmer.";
+  const CONSEIL =
+    "Interrogez l'OPCO ou le fonds d'assurance formation compétent, et consultez les portails officiels de la région en bas de page.";
 
-  test('scénario 2 (120 salariés) : options au choix chiffrées et aides au montant selon dossier', () => {
-    const { texte } = encadreSansFinancement(simuler(SCENARIOS.grande).plan, true);
-    assert.equal(
-      espaces(texte),
-      "Aucun financement cumulable n'est chiffré pour cette formation : les options au choix ont un montant, à comparer, et les autres financeurs fixent le montant après étude du dossier.",
-    );
-  });
+  /** Dirigeant assimilé salarié en Île-de-France, formation de 900 € sur 21 h chez un organisme certifié Qualiopi. */
+  const ASSIMILE: Partial<WizardState> = {
+    projetType: 'formation_dirigeant', regionCode: '11', companySize: 'less_11', statutDirigeant: 'assimile_salarie',
+    ageBeneficiaire: 45, formationType: 'non_certifiante', organismeQualiopi: true, ...coutsDeFormation(900, 21),
+  };
 
-  test('dirigeant assimilé salarié en Île-de-France, 900 € : seul le conseil en évolution professionnelle suit, aucun financeur annoncé', () => {
-    const { plan: p } = simuler({
-      projetType: 'formation_dirigeant', regionCode: '11', companySize: 'less_11', statutDirigeant: 'assimile_salarie',
-      ageBeneficiaire: 45, formationType: 'non_certifiante', organismeQualiopi: true, ...coutsDeFormation(900, 21),
-    });
+  /** L'état passé par le calcul de l'écran, puis l'encadré, avec les aides évaluées (celles que la page liste). */
+  function encadreDe(over: Partial<WizardState>) {
+    const { plan: p, aidesEvaluees, portail } = calculer(etat(over), DATE);
+    return { p, aides: aidesEvaluees, ...encadreSansFinancement(p, aidesEvaluees, portail != null) };
+  }
+  const listees = (aides: readonly AideEvaluee[]) => groupesAidesVisibles(aides).flatMap((g) => g.aides);
+
+  test('scénario 5 avec « Organisme certifié Qualiopi : Je ne sais pas » : le FAFCEA « à vérifier » chiffré est cité, lien vers les aides', () => {
+    const { p, aides, texte, rappels, aidesAVerifier } = encadreDe({ ...SCENARIOS.artisan, organismeQualiopi: null });
     assert.equal(etatEnTete(p), 'aucun_financement_chiffre');
+    // Plus bas, « Aides et financements identifiés » : FAFCEA, à vérifier, jusqu'à 735 €.
+    assert.ok(listees(aides).some((a) => a.id === 'faf-fafcea' && a.statut === 'a_verifier' && a.montantEstime === 735));
+    assert.equal(espaces(texte), `Aucun financement de la formation n'est chiffrable à ce stade. ${UNE_CHIFFREE} ${CONSEIL}`);
+    assert.deepEqual(rappels, []);
+    // FAFCEA (735 €), CPF et Pass transitions (sans montant) : trois aides « à vérifier » listées.
+    assert.deepEqual(aidesAVerifier, { nombre: 3, libelle: '3 aides à vérifier' });
+  });
+
+  test('dirigeant assimilé salarié, Île-de-France, 900 €, solde CPF de 2 000 €, éligibilité au CPF inconnue : le CPF « à vérifier » (900 €) est cité', () => {
+    const { aides, texte, aidesAVerifier } = encadreDe({ ...ASSIMILE, soldeCpf: 2000, eligibleCpf: null });
+    assert.ok(listees(aides).some((a) => a.id === 'nat-cpf' && a.statut === 'a_verifier' && a.montantEstime === 900));
+    assert.equal(espaces(texte), `Aucun financement de la formation n'est chiffrable à ce stade. ${UNE_CHIFFREE} ${CONSEIL}`);
+    assert.ok(!texte.includes('aucune autre aide à montant') && !texte.includes('Seuls des services gratuits'), texte);
+    assert.deepEqual(aidesAVerifier, { nombre: 1, libelle: '1 aide à vérifier' });
+  });
+
+  test('dirigeant assimilé salarié, formation non éligible au CPF : aucune aide à vérifier, le texte d’origine reste vrai', () => {
+    const { p, aides, texte, rappels, aidesAVerifier } = encadreDe({ ...ASSIMILE, eligibleCpf: false });
+    assert.equal(etatEnTete(p), 'aucun_financement_chiffre');
+    // Seul le conseil en évolution professionnelle (service gratuit) est listé, et seule sa carte suit.
+    assert.deepEqual(listees(aides).map((a) => a.id), ['nat-cep']);
     assert.deepEqual(cartesDuPlan(p), ['services']);
-    const { texte, rappels } = encadreSansFinancement(p, true);
     assert.equal(
       espaces(texte),
       "Aucun financement de la formation n'est chiffrable et aucune autre aide à montant n'a été identifiée pour cette " +
-        "situation. Seuls des services gratuits sont proposés ci-dessous. Interrogez l'OPCO ou le fonds d'assurance " +
-        'formation compétent, et consultez les portails officiels de la région en bas de page.',
+        `situation. Seuls des services gratuits sont proposés ci-dessous. ${CONSEIL}`,
     );
     assert.deepEqual(rappels, []);
+    assert.equal(aidesAVerifier, null);
+  });
+
+  test('dirigeant assimilé salarié, éligibilité au CPF inconnue sans solde : le CPF « à vérifier » sans montant est cité, jamais « seuls des services gratuits »', () => {
+    const { p, texte, aidesAVerifier } = encadreDe(ASSIMILE);
+    assert.deepEqual(cartesDuPlan(p), ['services']);
+    assert.equal(espaces(texte), `Aucun financement de la formation n'est chiffrable à ce stade. ${UNE_SANS_MONTANT} ${CONSEIL}`);
+    assert.deepEqual(aidesAVerifier, { nombre: 1, libelle: '1 aide à vérifier' });
+  });
+
+  test('scénario 3 (demandeur d’emploi) : aides au montant selon dossier, rappels vers leurs cartes, aides à vérifier chiffrées citées', () => {
+    const { texte, rappels, aidesAVerifier } = encadreDe(SCENARIOS.demandeur);
+    assert.equal(
+      espaces(texte),
+      "Aucun financement de la formation n'est chiffrable à ce stade : les financeurs fixent le montant après étude du dossier. " +
+        `Voici les aides identifiées. ${PLUSIEURS_CHIFFREES}`,
+    );
+    assert.deepEqual(rappels.map((r) => r.carte), ['non-chiffrees', 'personne']);
+    // Aide aux employeurs (contrat de professionnalisation, 2 000 €) et GEIQ (814 €) chiffrées ; CPF et PEC sans montant.
+    assert.deepEqual(aidesAVerifier, { nombre: 4, libelle: '4 aides à vérifier' });
+  });
+
+  test('scénario 2 (120 salariés) : options au choix chiffrées et aides au montant selon dossier, abondement « à vérifier » cité', () => {
+    const { texte, aidesAVerifier } = encadreDe(SCENARIOS.grande);
+    assert.equal(
+      espaces(texte),
+      "Aucun financement cumulable n'est chiffré pour cette formation : les options au choix ont un montant, à comparer, et les " +
+        `autres financeurs fixent le montant après étude du dossier. ${UNE_CHIFFREE}`,
+    );
+    assert.deepEqual(aidesAVerifier, { nombre: 3, libelle: '3 aides à vérifier' });
   });
 
   test('options chiffrées sans aide au montant selon dossier : aucun « autres financeurs »', () => {
-    const p = plan({ coutFormation: 1000, resteACharge: 1000, options: [option('a', 400)], servicesGratuits: [aide({ id: 's' })] });
-    assert.equal(
-      espaces(encadreSansFinancement(p, true).texte),
-      "Aucun financement cumulable n'est chiffré pour cette formation : les options au choix ont un montant, à comparer.",
-    );
+    const s = aide({ id: 's', categorie: 'service_gratuit' });
+    const p = plan({ coutFormation: 1000, resteACharge: 1000, options: [option('a', 400)], servicesGratuits: [s] });
+    const { texte, aidesAVerifier } = encadreSansFinancement(p, [s], true);
+    assert.equal(espaces(texte), "Aucun financement cumulable n'est chiffré pour cette formation : les options au choix ont un montant, à comparer.");
+    assert.equal(aidesAVerifier, null);
     // Une option sans montant est au montant selon dossier : la suite de la phrase redevient vraie.
     const avecDossier = { ...p, options: [option('a', 400), option('b', null)] };
-    assert.match(encadreSansFinancement(avecDossier, true).texte, /les autres financeurs fixent le montant après étude du dossier\.$/);
+    assert.match(encadreSansFinancement(avecDossier, [s], true).texte, /les autres financeurs fixent le montant après étude du dossier\.$/);
   });
 
   test("aides versées à l'employeur seules : aucune « étude du dossier », elles ne réduisent pas le prix", () => {
     const p = plan({ coutFormation: 1000, resteACharge: 1000, aidesEmployeur: [ligne('e', 'E', 300)] });
-    const { texte, rappels } = encadreSansFinancement(p, true);
+    const employeur = aide({ id: 'e', categorie: 'aide_employeur', montantEstime: 300 });
+    const { texte, rappels } = encadreSansFinancement(p, [employeur], true);
     assert.equal(
       espaces(texte),
       "Aucun financement de la formation n'est chiffrable pour cette situation. Voici les aides identifiées, qui ne réduisent pas le prix de la formation.",
     );
     assert.deepEqual(rappels.map((r) => r.libelle), ["1 aide versée à l'employeur"]);
+    // Une aide « à vérifier » chiffrée est listée plus bas : « à ce stade », jamais « pour cette situation », et elle est citée.
+    const aVerifier = aide({ id: 'v', statut: 'a_verifier', montantEstime: 500 });
+    const avec = encadreSansFinancement(p, [employeur, aVerifier], true);
+    assert.equal(
+      espaces(avec.texte),
+      "Aucun financement de la formation n'est chiffrable à ce stade. Voici les aides identifiées, qui ne réduisent pas le prix de la formation. " +
+        UNE_CHIFFREE,
+    );
+    assert.deepEqual(avec.aidesAVerifier, { nombre: 1, libelle: '1 aide à vérifier' });
   });
 
   test('aucune aide à montant : services gratuits dits seulement quand ils sont seuls ; portails seulement quand ils existent', () => {
-    const optionsSansMontant = plan({ coutFormation: 1000, resteACharge: 1000, options: [option('o', null)], servicesGratuits: [aide({ id: 's' })] });
-    const texte = encadreSansFinancement(optionsSansMontant, true).texte;
+    const s = aide({ id: 's', categorie: 'service_gratuit' });
+    const optionsSansMontant = plan({ coutFormation: 1000, resteACharge: 1000, options: [option('o', null)], servicesGratuits: [s] });
+    const texte = encadreSansFinancement(optionsSansMontant, [aide({ id: 'o' }), s], true).texte;
     assert.ok(!texte.includes('Seuls des services gratuits'), texte);
     assert.ok(!texte.includes('Voici les aides identifiées'), texte);
-    const rien = encadreSansFinancement(plan({ coutFormation: 1000, resteACharge: 1000 }), false);
+    const rien = encadreSansFinancement(plan({ coutFormation: 1000, resteACharge: 1000 }), [], false);
     assert.equal(
       espaces(rien.texte),
       "Aucun financement de la formation n'est chiffrable et aucune autre aide à montant n'a été identifiée pour cette " +
@@ -752,14 +812,49 @@ describe('encadré du bandeau quand aucun financement de la formation n’est ch
     );
   });
 
-  test('1 500 états tirés au hasard (graine 19) : le texte ne cite que ce qui suit à l’écran', () => {
-    const hasard = generateur(19);
+  test("aides listées plus bas : une aide éligible chiffrée (avantage fiscal) interdit « aucune autre aide à montant » ; un service « à vérifier » est cité", () => {
+    const avantage = aide({ id: 'a', categorie: 'avantage_fiscal_social', montantEstime: 300 });
+    const p = plan({ coutFormation: 1000, resteACharge: 1000, avantagesFiscauxSociaux: [ligne('a', 'A', 300)] });
+    assert.equal(
+      espaces(encadreSansFinancement(p, [avantage], false).texte),
+      "Aucun financement de la formation n'est chiffrable à ce stade. Interrogez l'OPCO ou le fonds d'assurance formation compétent.",
+    );
+    // Services gratuits seuls, dont un « à vérifier » : les services restent seuls, l'aide à vérifier est citée.
+    const s = aide({ id: 's', categorie: 'service_gratuit' });
+    const t = aide({ id: 't', categorie: 'service_gratuit', statut: 'a_verifier' });
+    const services = encadreSansFinancement(plan({ coutFormation: 1000, resteACharge: 1000, servicesGratuits: [s] }), [s, t], true);
+    assert.equal(
+      espaces(services.texte),
+      `Aucun financement de la formation n'est chiffrable à ce stade. ${UNE_SANS_MONTANT} Seuls des services gratuits sont proposés ci-dessous. ${CONSEIL}`,
+    );
+    // Plusieurs aides « à vérifier » chiffrées : les montants, au pluriel ; une aide non éligible n'est jamais comptée.
+    const deux = encadreSansFinancement(
+      plan({ coutFormation: 1000, resteACharge: 1000 }),
+      [
+        aide({ id: 'v1', statut: 'a_verifier', montantEstime: 200 }),
+        aide({ id: 'v2', statut: 'a_verifier', montantEstime: 300 }),
+        aide({ id: 'v3', statut: 'a_verifier' }),
+        aide({ id: 'n', statut: 'non_eligible', montantEstime: 900 }),
+      ],
+      false,
+    );
+    assert.equal(
+      espaces(deux.texte),
+      `Aucun financement de la formation n'est chiffrable à ce stade. ${PLUSIEURS_CHIFFREES} Interrogez l'OPCO ou le fonds d'assurance formation compétent.`,
+    );
+    assert.deepEqual(deux.aidesAVerifier, { nombre: 3, libelle: '3 aides à vérifier' });
+  });
+
+  test('1 500 états tirés au hasard (graine 29) : chaque affirmation de l’encadré est vraie au regard des aides et des cartes affichées', () => {
+    // Vérification écrite sans la logique de l'encadré : elle lit la liste des aides rendue plus bas (groupesAidesVisibles,
+    // celle d'AidesList) et les cartes du plan (cartesDuPlan), puis confronte chaque phrase écrite à ce qu'elles montrent.
+    const hasard = generateur(29);
     const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
     const PROJETS: ProjetType[] = ['formation_salarie', 'reconversion_salarie', 'recrutement_demandeur_emploi', 'alternance', 'formation_dirigeant'];
     const OPCOS = ['akto', 'atlas', 'afdas', 'constructys', 'ocapiat', 'opco-ep', 'opco-mobilites', 'opco-sante', 'opco2i', 'opcommerce', 'uniformation'];
     const REGIONS_CODES = EMBEDDED_PORTAILS.map((p) => p.region);
     const vus = new Set<string>();
-    let sansFinancement = 0;
+    const compte = { sansFinancement: 0, aVerifierChiffrees: 0, troisiemeAvecAVerifierChiffrees: 0, servicesSeuls: 0, aucuneAideAMontant: 0 };
     for (let i = 0; i < 1500; i++) {
       const projet = un(PROJETS);
       const heures = un([7, 21, 35, 140, 280, 800]);
@@ -776,28 +871,71 @@ describe('encadré du bandeau quand aucun financement de la formation n’est ch
         typeAlternance: un(['apprentissage', 'professionnalisation'] as const),
         inscritFranceTravail: un([true, false]),
         statutDirigeant: un(['artisan', 'commercant', 'profession_liberale', 'assimile_salarie'] as const),
-        soldeCpf: un([null, 0, 800]),
+        microEntrepreneur: un([null, true, false]),
+        soldeCpf: un([null, 0, 800, 2000]),
         ...coutsDeFormation(un([300, 900, 1400, 3500, 7000]), heures),
       };
-      const { plan: p, portail } = calculer(etat(over), DATE);
+      const { plan: p, portail, aidesEvaluees } = calculer(etat(over), DATE);
       if (etatEnTete(p) !== 'aucun_financement_chiffre') continue;
-      sansFinancement++;
-      const { texte, rappels } = encadreSansFinancement(p, portail != null);
-      const cartes = cartesDuPlan(p);
-      const selonDossier = p.nonChiffrees.length > 0 || p.options.some((o) => o.montantEstime == null);
-      const optionsChiffrees = p.options.some((o) => o.montantEstime != null && o.montantEstime > 0);
+      compte.sansFinancement++;
+      const { texte, rappels, aidesAVerifier } = encadreSansFinancement(p, aidesEvaluees, portail != null);
       const contexte = `${JSON.stringify(over)} : ${texte}`;
+
+      // Ce que la page montre sous le bandeau.
+      const listeesPlusBas = listees(aidesEvaluees);
+      const aVerifier = listeesPlusBas.filter((a) => a.statut === 'a_verifier');
+      const aVerifierChiffrees = aVerifier.filter((a) => (a.montantEstime ?? 0) > 0);
+      const cartes = cartesDuPlan(p);
+      const montantsDesCartes = [
+        ...p.options.map((o) => o.montantEstime ?? 0),
+        ...[...p.aidesEmployeur, ...p.remunerations, ...p.avantagesFiscauxSociaux].map((l) => l.montant),
+      ];
+      const aideAMontant = listeesPlusBas.some((a) => (a.montantEstime ?? 0) > 0) || montantsDesCartes.some((m) => m > 0);
+      if (aVerifierChiffrees.length > 0) compte.aVerifierChiffrees++;
+
+      // « aucune autre aide à montant n'a été identifiée » : ni aide listée ni ligne d'une carte n'a de montant.
+      if (texte.includes('aucune autre aide à montant')) {
+        compte.aucuneAideAMontant++;
+        assert.ok(!aideAMontant, contexte);
+      }
+      // « Seuls des services gratuits sont proposés ci-dessous » : toute carte et toute aide listée sont des services gratuits.
+      if (texte.includes('Seuls des services gratuits')) {
+        compte.servicesSeuls++;
+        assert.ok(cartes.length > 0 && cartes.every((c) => c === 'services'), contexte);
+        assert.ok(listeesPlusBas.every((a) => a.categorie === 'service_gratuit'), contexte);
+      }
+      // Des aides « à vérifier » chiffrées sont listées : l'encadré le dit, avec le lien vers la liste et leur nombre.
+      if (aVerifierChiffrees.length > 0) {
+        assert.ok(/aides? «\s?à vérifier\s?»/.test(texte) && texte.includes('montant'), contexte);
+        assert.deepEqual(aidesAVerifier?.nombre, aVerifier.length, contexte);
+        if (rappels.length === 0 && !p.options.some((o) => (o.montantEstime ?? 0) > 0)) compte.troisiemeAvecAVerifierChiffrees++;
+      }
+      // L'encadré ne cite des aides « à vérifier », leur nombre et leurs montants que si la liste les montre.
+      if (texte.includes('à vérifier')) assert.ok(aVerifier.length > 0, contexte);
+      if (aidesAVerifier) assert.equal(aidesAVerifier.nombre, aVerifier.length, contexte);
+      if (texte.includes("Le montant d'une aide")) assert.equal(aVerifierChiffrees.length, 1, contexte);
+      if (texte.includes('Les montants des aides')) assert.ok(aVerifierChiffrees.length >= 2, contexte);
+      if (texte.includes('est listée plus bas') || texte.includes('sont listées plus bas')) assert.equal(aVerifierChiffrees.length, 0, contexte);
+      // « pour cette situation », sans réserve : aucune aide chiffrée n'attend une vérification.
+      if (texte.includes('pour cette situation')) assert.equal(aVerifierChiffrees.length, 0, contexte);
+      // « Voici les aides identifiées » : des cartes d'aides suivent ; « qui ne réduisent pas le prix » : aucune au montant selon dossier.
       assert.deepEqual(rappels, rappelsAucunFinancement(p), contexte);
-      assert.equal(texte.includes('Voici les aides identifiées'), !optionsChiffrees && rappels.length > 0, contexte);
-      assert.equal(texte.includes('après étude du dossier'), selonDossier && (optionsChiffrees || rappels.length > 0), contexte);
-      assert.equal(texte.includes('Seuls des services gratuits'), cartes.length > 0 && cartes.every((c) => c === 'services'), contexte);
-      assert.equal(texte.includes('les portails officiels de la région'), !optionsChiffrees && rappels.length === 0 && portail != null, contexte);
+      if (texte.includes('Voici les aides identifiées')) assert.ok(rappels.length > 0, contexte);
+      if (texte.includes('qui ne réduisent pas le prix')) assert.ok(!cartes.includes('non-chiffrees'), contexte);
+      // « après étude du dossier » : une aide ou une option au montant selon dossier est affichée.
+      if (texte.includes('après étude du dossier')) assert.ok(p.nonChiffrees.length > 0 || p.options.some((o) => o.montantEstime == null), contexte);
+      // « les options au choix ont un montant » : une option chiffrée est affichée.
+      if (texte.includes('options au choix ont un montant')) assert.ok(p.options.some((o) => (o.montantEstime ?? 0) > 0), contexte);
+      // Portails « en bas de page » : seulement s'ils existent.
+      if (texte.includes('les portails officiels de la région')) assert.ok(portail != null, contexte);
       assert.ok(!/ [:;?!]/.test(texte), `espace ordinaire avant une ponctuation haute : ${texte}`);
       vus.add(texte);
     }
-    assert.ok(sansFinancement >= 500, `seulement ${sansFinancement} états sans financement chiffré`);
-    // Les tirages passent par au moins quatre des variantes (options, aides selon dossier, services seuls…).
-    assert.ok(vus.size >= 4, `seulement ${vus.size} textes distincts : ${[...vus].join(' | ')}`);
+    assert.ok(compte.sansFinancement >= 500, JSON.stringify(compte));
+    // Le cas du constat est bien tiré (troisième variante et aides « à vérifier » chiffrées), comme les phrases d'origine.
+    assert.ok(compte.troisiemeAvecAVerifierChiffrees >= 30, JSON.stringify(compte));
+    assert.ok(compte.servicesSeuls >= 10 && compte.aucuneAideAMontant >= 10, JSON.stringify(compte));
+    assert.ok(vus.size >= 8, `seulement ${vus.size} textes distincts : ${[...vus].join(' | ')}`);
   });
 });
 
@@ -861,8 +999,11 @@ describe('fiabilité du montant d’une option au choix (confianceDOption)', () 
     const dispositifs = [dispositif('espace-formation', 'depends_on_branche')];
     assert.equal(confianceDOption(option('opco-espace-formation', 4200), aides, dispositifs), 'depends_on_branche');
     assert.equal(confianceDOption(option('nat-cpf', 800), aides, dispositifs), 'estimated');
-    // L'aide du catalogue l'emporte sur un dispositif homonyme.
-    assert.equal(confianceDOption(option('nat-cpf', 800), aides, [dispositif('nat-cpf', 'exact')]), 'estimated');
+    // Une aide du catalogue et un dispositif de l'OPCO qui désignent la même option (« opco-x » : l'aide porte cet
+    // identifiant, le dispositif « x » le reçoit du plan) : la fiabilité de l'aide l'emporte ; sans l'aide, celle du dispositif.
+    const homonymes = [aide({ id: 'opco-x', confidence: 'estimated' })];
+    assert.equal(confianceDOption(option('opco-x', 800), homonymes, [dispositif('x', 'exact')]), 'estimated');
+    assert.equal(confianceDOption(option('opco-x', 800), [], [dispositif('x', 'exact')]), 'exact');
   });
 
   test('sans montant à qualifier (selon dossier, nul) ou sans source connue : aucune étiquette', () => {

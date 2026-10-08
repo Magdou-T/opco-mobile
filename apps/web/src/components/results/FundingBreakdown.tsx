@@ -4,7 +4,7 @@ import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
-import { de, formatEuro, texteDonnees } from '@/lib/format';
+import { de, formatEuro, texteDonnees, texteMoteur } from '@/lib/format';
 import { lignesDuDetail, sansMontantEstime } from '@/lib/resultats';
 import { BadgeEstimation } from './BadgeEstimation';
 import { TEXTE_SOUPLE } from './classes';
@@ -142,14 +142,14 @@ export function FundingBreakdown({ result }: Props) {
         </Callout>
       )}
 
-      {/* Points d'attention (messages du moteur) */}
+      {/* Points d'attention (messages du moteur : texteMoteur, chaque nombre à point y est décimal) */}
       {result.warnings.length > 0 && (
         <Callout tone="avertissement" titre="Points d'attention">
           <ul className="space-y-1.5">
             {result.warnings.map((w, i) => (
               <li key={i} className="flex gap-2.5">
                 <span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-texte-doux" />
-                <span className={TEXTE_SOUPLE}>{texteDonnees(w)}</span>
+                <span className={TEXTE_SOUPLE}>{texteMoteur(w)}</span>
               </li>
             ))}
           </ul>

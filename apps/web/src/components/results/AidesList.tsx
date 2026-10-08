@@ -8,6 +8,7 @@ import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { cx } from '@/lib/cx';
 import { texteDonnees, typo } from '@/lib/format';
+import { ID_SECTION_AIDES } from '@/lib/encadres-resultats';
 import { aidesNonEligiblesAffichees, groupesAidesVisibles } from '@/lib/resultats';
 import type { GroupeAides } from '@/lib/resultats';
 import { AideCard } from './AideCard';
@@ -27,7 +28,8 @@ export function AidesList({ aides, avecPortail }: { aides: readonly AideEvaluee[
   const nomParId = new Map(aides.map((a) => [a.id, a.nom]));
 
   return (
-    <section aria-labelledby="titre-aides" className="space-y-8">
+    // La section est la cible du lien « N aides à vérifier » du bandeau (encadreSansFinancement).
+    <section id={ID_SECTION_AIDES} aria-labelledby="titre-aides" className="space-y-8">
       <SectionTitle
         as="h2"
         taille="sous-section"

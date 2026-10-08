@@ -17,6 +17,7 @@ import { useReserveBarreCollante } from '@/hooks/useReserveBarreCollante';
 import { useWizard } from '@/hooks/useWizard';
 import { cx } from '@/lib/cx';
 import { ETAPES, enumeration } from '@/lib/etapes';
+import { creerPrechargeur } from '@/lib/prechargement';
 import { ID_TITRE_ETAPE } from './EnTeteEtape';
 import { StepFormation } from './StepFormation';
 import { StepFrais } from './StepFrais';
@@ -32,7 +33,7 @@ const ID_AIDE_SUIVANT = 'aide-suivant';
 export { ID_TITRE_RESULTATS };
 
 /**
- * Lot de l'écran de résultats : le calcul et le catalogue d'aides (environ 135 Ko gzip) ne pèsent pas sur le lot initial
+ * Lot de l'écran de résultats : le calcul et le catalogue d'aides (environ 149 Ko gzip) ne pèsent pas sur le lot initial
  * du simulateur. Une seule fonction de chargement, appelée par `next/dynamic` au premier affichage et, plus tôt, par le
  * préchargement du récapitulatif.
  */
@@ -53,15 +54,11 @@ const EcranResultats = dynamic<ProprietesEcranResultats>(
 
 /**
  * Préchargement du lot dès l'étape Récapitulatif, une seule fois par page : au clic sur « Trouver mes financements », il
- * est déjà là, même si la connexion a été coupée entre-temps. Un échec est absorbé ici : au clic, `next/dynamic` refait
- * l'appel et, s'il échoue encore, affiche l'écran d'échec.
+ * est déjà là, même si la connexion a été coupée entre-temps. Jamais hors ligne (`navigator.onLine` faux) : un lot en
+ * échec le resterait toute la session (`creerPrechargeur`) ; le parcours relance alors le préchargement au retour en
+ * ligne. Un échec est absorbé : au clic, `next/dynamic` refait l'appel et, s'il échoue encore, affiche l'écran d'échec.
  */
-let prechargementLance = false;
-function prechargerEcranResultats() {
-  if (prechargementLance) return;
-  prechargementLance = true;
-  chargerEcranResultats().catch(() => undefined);
-}
+const prechargerEcranResultats = creerPrechargeur(chargerEcranResultats, () => navigator.onLine);
 
 /**
  * « Suivant » tant que l'étape est incomplète : annoncé comme indisponible (aria-disabled) mais toujours atteignable au
@@ -118,10 +115,16 @@ export function WizardContainer() {
   const contenu = useRef<HTMLDivElement>(null);
   useReserveBarreCollante(barre, contenu, `${showResults}-${derniereEtape}`);
 
-  // Récapitulatif : le lot de l'écran de résultats se charge dès maintenant (prechargerEcranResultats).
+  // Récapitulatif : le lot de l'écran de résultats se charge dès maintenant (prechargerEcranResultats). Hors ligne, il
+  // attend le retour en ligne ; l'écouteur est retiré dès que le préchargement est lancé ou que l'étape change.
   const auRecapitulatif = currentStep.key === 'recap' && !showResults;
   useEffect(() => {
-    if (auRecapitulatif) prechargerEcranResultats();
+    if (!auRecapitulatif || prechargerEcranResultats() !== 'hors_ligne') return;
+    const auRetourEnLigne = () => {
+      if (prechargerEcranResultats() !== 'hors_ligne') window.removeEventListener('online', auRetourEnLigne);
+    };
+    window.addEventListener('online', auRetourEnLigne);
+    return () => window.removeEventListener('online', auRetourEnLigne);
   }, [auRecapitulatif]);
 
   // Résultats : l'écran chargé à la demande calcule tout à partir de l'état (aucune donnée ne lui est passée) et pose le

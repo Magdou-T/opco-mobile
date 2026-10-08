@@ -2,6 +2,7 @@
 // Écran « Votre plan de financement » : calcul et logique de présentation, en fonctions pures (tests :
 // tests/resultats.test.ts). Les montants viennent du moteur (@opco/core) ; ces fonctions les classent, les regroupent et
 // calculent les parts de la barre empilée, sans jamais en inventer. Couleurs et emplois : apps/web/DESIGN.md, section 15.
+// Les encadrés du bandeau (aucun financement chiffré, fonds épuisés) sont dans lib/encadres-resultats.ts.
 // Ce module importe le catalogue d'aides : seuls les composants de l'écran, chargé à la demande, l'importent (jamais le
 // lot initial du simulateur).
 // ============================================================
@@ -19,7 +20,6 @@ import {
 } from '@opco/core';
 import type {
   AideEvaluee,
-  AlerteOpco,
   Confidence,
   DispositifEligible,
   Financeur,
@@ -347,7 +347,8 @@ const ORDRE_CHIFFRE: CartePlan[] = ['financements', 'options', 'employeur', 'per
 /** Aucun financement chiffré : d'abord ce qui existe pour la situation (montant selon dossier, employeur, personne). */
 const ORDRE_SANS_FINANCEMENT: CartePlan[] = ['non-chiffrees', 'employeur', 'personne', 'options', 'avantages', 'services', 'financements'];
 
-function nombreDeLignes(plan: PlanFinancement, carte: CartePlan): number {
+/** Nombre de lignes d'une carte du plan (une carte vide n'est pas rendue ; les rappels du bandeau les comptent). */
+export function nombreDeLignes(plan: PlanFinancement, carte: CartePlan): number {
   switch (carte) {
     case 'financements':
       return plan.financements.length;
@@ -372,90 +373,7 @@ export function cartesDuPlan(plan: PlanFinancement): CartePlan[] {
   return ordre.filter((carte) => nombreDeLignes(plan, carte) > 0);
 }
 
-/** Rappel du bandeau vers une carte mise en avant. */
-export interface Rappel {
-  carte: CartePlan;
-  nombre: number;
-  libelle: string;
-}
-
-const ACCORDS: { carte: CartePlan; un: string; plusieurs: string }[] = [
-  { carte: 'non-chiffrees', un: 'aide au montant selon dossier', plusieurs: 'aides au montant selon dossier' },
-  { carte: 'employeur', un: "aide versée à l'employeur", plusieurs: "aides versées à l'employeur" },
-  { carte: 'personne', un: 'revenu ou aide à la personne', plusieurs: 'revenus et aides à la personne' },
-];
-
-/**
- * Quand aucun financement de la formation n'est chiffré, le bandeau renvoie vers les cartes qui portent les aides
- * identifiées : montant selon dossier, aides versées à l'employeur, revenus et aides à la personne (cartes non vides).
- */
-export function rappelsAucunFinancement(plan: PlanFinancement): Rappel[] {
-  return ACCORDS.map(({ carte, un, plusieurs }) => {
-    const nombre = nombreDeLignes(plan, carte);
-    return { carte, nombre, libelle: `${nombre} ${nombre > 1 ? plusieurs : un}` };
-  }).filter((r) => r.nombre > 0);
-}
-
-/** Encadré du bandeau quand aucun financement de la formation n'est chiffré : texte et liens vers les cartes. */
-export interface EncadreSansFinancement {
-  texte: string;
-  rappels: Rappel[];
-}
-
-/**
- * Encadré du bandeau quand aucun financement de la formation n'est chiffré (`aucun_financement_chiffre`). Il ne cite que
- * ce qui suit à l'écran :
- * - des options au choix chiffrées : elles ont un montant, à comparer ; « les autres financeurs fixent le montant après
- *   étude du dossier » seulement si une aide ou une option est au montant selon dossier ;
- * - sinon des aides identifiées (montant selon dossier, aides versées à l'employeur, revenus et aides à la personne) :
- *   « Voici les aides identifiées », avec les liens vers leurs cartes (`rappels`) ; l'étude du dossier n'est citée que
- *   pour des aides au montant selon dossier, sinon le texte dit qu'elles ne réduisent pas le prix de la formation ;
- * - sinon aucune autre aide à montant : le dire, renvoyer à l'OPCO ou au fonds d'assurance formation et aux portails
- *   de la région quand ils existent (`avecPortail`), et préciser quand seuls des services gratuits suivent.
- */
-export function encadreSansFinancement(plan: PlanFinancement, avecPortail: boolean): EncadreSansFinancement {
-  const rappels = rappelsAucunFinancement(plan);
-  const optionsChiffrees = plan.options.some((o) => o.montantEstime != null && o.montantEstime > 0);
-  const selonDossier = plan.nonChiffrees.length > 0 || plan.options.some((o) => o.montantEstime == null);
-  if (optionsChiffrees) {
-    const suite = selonDossier ? ', et les autres financeurs fixent le montant après étude du dossier' : '';
-    return {
-      texte: `Aucun financement cumulable n'est chiffré pour cette formation${INSECABLE}: les options au choix ont un montant, à comparer${suite}.`,
-      rappels,
-    };
-  }
-  if (rappels.length > 0) {
-    return {
-      texte: selonDossier
-        ? `Aucun financement de la formation n'est chiffrable à ce stade${INSECABLE}: les financeurs fixent le montant après étude du dossier. Voici les aides identifiées.`
-        : "Aucun financement de la formation n'est chiffrable pour cette situation. Voici les aides identifiées, qui ne réduisent pas le prix de la formation.",
-      rappels,
-    };
-  }
-  const cartes = cartesDuPlan(plan);
-  const servicesSeuls = cartes.length > 0 && cartes.every((c) => c === 'services');
-  const phrases = [
-    "Aucun financement de la formation n'est chiffrable et aucune autre aide à montant n'a été identifiée pour cette situation.",
-    servicesSeuls ? 'Seuls des services gratuits sont proposés ci-dessous.' : null,
-    `Interrogez l'OPCO ou le fonds d'assurance formation compétent${avecPortail ? ', et consultez les portails officiels de la région en bas de page' : ''}.`,
-  ];
-  return { texte: phrases.filter((p): p is string => p != null).join(' '), rappels };
-}
-
-// --- Alertes de l'OPCO --------------------------------------------------------------------------------------------
-
-/**
- * Branches dont l'OPCO signale l'enveloppe épuisée, quand le plan compte son plan de développement des compétences
- * (ligne `opco-pdc`) : le bandeau le dit à côté du montant, la prise en charge pouvant être refusée. Sans doublon, dans
- * l'ordre des alertes ; aucune quand le plan ne compte pas ce financement.
- */
-export function fondsEpuisesSurLePlan(
-  plan: Pick<PlanFinancement, 'financements'>,
-  alertes: readonly Pick<AlerteOpco, 'type' | 'branche'>[],
-): string[] {
-  if (!plan.financements.some((l) => l.id === 'opco-pdc')) return [];
-  return [...new Set(alertes.filter((a) => a.type === 'fonds_epuises').map((a) => a.branche))];
-}
+// Encadrés du bandeau (aucun financement chiffré, fonds épuisés) : lib/encadres-resultats.ts.
 
 // --- Détail de l'estimation OPCO ----------------------------------------------------------------------------------
 

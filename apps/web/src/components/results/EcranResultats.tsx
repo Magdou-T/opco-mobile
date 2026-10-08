@@ -9,7 +9,8 @@ import { Icon } from '@/components/ui/Icon';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { dateFr, moisAnneeFr, typo } from '@/lib/format';
-import { calculer, chapeauDetailOpco, fondsEpuisesSurLePlan } from '@/lib/resultats';
+import { fondsEpuisesSurLePlan } from '@/lib/encadres-resultats';
+import { calculer, chapeauDetailOpco } from '@/lib/resultats';
 import { AidesList } from './AidesList';
 import { EnTeteResultats, ID_TITRE_RESULTATS, focaliserTitreResultats } from './EtatsResultats';
 import type { ProprietesEcranResultats } from './EtatsResultats';
@@ -19,7 +20,7 @@ import { PortailsRegionaux } from './PortailsRegionaux';
 
 /**
  * Écran « Votre plan de financement », chargé à la demande par le parcours (`next/dynamic`) : le catalogue d'aides
- * (environ 135 Ko gzip) et tout le calcul restent hors du lot initial du simulateur. Le parcours ne lui passe que l'état
+ * (environ 149 Ko gzip) et tout le calcul restent hors du lot initial du simulateur. Le parcours ne lui passe que l'état
  * et deux actions ; le calcul est une dérivation pure de l'état (aucune mise à jour d'état pendant le rendu).
  */
 
@@ -147,8 +148,8 @@ function NoteOpco({
         ) : (
           <>
             Le plan de développement des compétences d&apos;un OPCO finance la formation des salariés. Celle d&apos;un
-            dirigeant non salarié relève de son fonds d&apos;assurance formation, compté dans le plan quand il est
-            identifié.
+            dirigeant non salarié relève de son fonds d&apos;assurance formation, compté dans le plan quand son aide
+            est éligible.
           </>
         )}
       </Callout>

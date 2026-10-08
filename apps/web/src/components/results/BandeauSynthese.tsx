@@ -5,9 +5,11 @@ import { Callout } from '@/components/ui/Callout';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { formatEuro, texteDonnees } from '@/lib/format';
-import { encadreSansFinancement, partFinancee, partsBarre } from '@/lib/resultats';
+import { ID_SECTION_AIDES, encadreSansFinancement } from '@/lib/encadres-resultats';
+import { partFinancee, partsBarre } from '@/lib/resultats';
 import type { EtatEnTete, PartBarre } from '@/lib/resultats';
 import { BarreEmpilee } from './BarreEmpilee';
+import { FiletTricolore } from './FiletTricolore';
 
 /** L'OPCO signale épuisée l'enveloppe de branches dont le plan compte le plan de développement des compétences. */
 export interface FondsEpuises {
@@ -37,15 +39,12 @@ export function BandeauSynthese({
 }) {
   return (
     <div className="apparition overflow-hidden rounded-panneau border border-filet bg-white shadow-douce">
-      {/* Les trois soulignés du slogan de marque, en filet (comme le pied de page) */}
-      <div aria-hidden="true" className="decor flex h-1.5">
-        <span className="flex-1 bg-turquoise" />
-        <span className="flex-1 bg-or" />
-        <span className="flex-1 bg-orange" />
-      </div>
+      <FiletTricolore />
       <div className="p-5 sm:p-8">
         {etat === 'cout_inconnu' && <CoutInconnu onModifierFormation={onModifierFormation} />}
-        {etat === 'aucun_financement_chiffre' && <AucunFinancementChiffre plan={plan} avecPortail={avecPortail} />}
+        {etat === 'aucun_financement_chiffre' && (
+          <AucunFinancementChiffre plan={plan} aides={aides} avecPortail={avecPortail} />
+        )}
         {etat === 'plan_chiffre' && (
           <PlanChiffre plan={plan} parts={partsBarre(plan, aides)} fondsEpuises={fondsEpuises} />
         )}
@@ -74,11 +73,23 @@ function CoutInconnu({ onModifierFormation }: { onModifierFormation?: () => void
 /**
  * Aucun financement de la formation n'est chiffré (alternance, demandeur d'emploi, entreprise de 50 salariés et plus…) :
  * jamais « Financé 0 € » ni « Reste à charge » égal au coût présenté comme un résultat. Le coût reste visible, un encadré
- * dit pourquoi en ne citant que ce qui suit (`encadreSansFinancement`), et des liens mènent aux cartes qui portent les
- * aides identifiées.
+ * dit pourquoi en ne citant que ce que la page montre plus bas (`encadreSansFinancement`), et des liens mènent aux cartes
+ * qui portent les aides identifiées et, quand l'encadré les cite, à la liste des aides « à vérifier ».
  */
-function AucunFinancementChiffre({ plan, avecPortail }: { plan: PlanFinancement; avecPortail: boolean }) {
-  const { texte, rappels } = encadreSansFinancement(plan, avecPortail);
+function AucunFinancementChiffre({
+  plan,
+  aides,
+  avecPortail,
+}: {
+  plan: PlanFinancement;
+  aides: readonly AideEvaluee[];
+  avecPortail: boolean;
+}) {
+  const { texte, rappels, aidesAVerifier } = encadreSansFinancement(plan, aides, avecPortail);
+  const liens = [
+    ...rappels.map((r) => ({ cle: r.carte, href: `#carte-${r.carte}`, libelle: r.libelle })),
+    ...(aidesAVerifier ? [{ cle: 'aides-a-verifier', href: `#${ID_SECTION_AIDES}`, libelle: aidesAVerifier.libelle }] : []),
+  ];
   return (
     <div>
       <dl className="grid sm:grid-cols-3">
@@ -87,15 +98,15 @@ function AucunFinancementChiffre({ plan, avecPortail }: { plan: PlanFinancement;
       <Callout tone="info" className="mt-5">
         {texte}
       </Callout>
-      {rappels.length > 0 && (
+      {liens.length > 0 && (
         <ul className="mt-4 flex flex-wrap gap-2 print:hidden">
-          {rappels.map((r) => (
-            <li key={r.carte}>
+          {liens.map((l) => (
+            <li key={l.cle}>
               <a
-                href={`#carte-${r.carte}`}
+                href={l.href}
                 className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-orange/30 bg-orange-soft px-4 text-sm font-semibold text-orange-deep transition-[border-color] hover:border-orange-deep lg:min-h-9"
               >
-                {r.libelle}
+                {l.libelle}
                 <Icon name="chevron" className="size-4 rotate-90" />
               </a>
             </li>

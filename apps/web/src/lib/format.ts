@@ -117,22 +117,51 @@ const MONTANT_DU_MOTEUR = /(?<![\d.,])(?<!\d\s)(\d+(?:\.\d+)?)\s?€/g;
 const MILLIERS_A_POINT = /^[1-9]\d{0,2}(?:\.\d{3})+$/;
 
 /**
- * Montants en euros d'un texte du moteur réécrits par `formatEuro` : « 840.00 € » devient « 840 € », « 42.86 €/h »
- * devient « 42,86 €/h », « 12600.00 € » devient « 12 600 € ». Un montant déjà écrit à la française reste tel quel ; un
- * nombre ambigu (point de milliers, ou nombre collé à un autre) n'est pas réinterprété.
+ * Qui a écrit le texte : `donnees`, un humain (notes, conditions, démarches des barèmes et du catalogue), qui peut
+ * séparer les milliers par un point (« 2.000 € ») ; `moteur`, le calcul de @opco/core, qui écrit ses nombres par
+ * JavaScript : point décimal, jamais de séparateur de milliers (« 17.875 €/h » vaut 17,875 €/h, pas 17 875 €/h).
  */
-export function montantsFr(s: string): string {
+export type AuteurDuTexte = 'donnees' | 'moteur';
+
+/**
+ * Montants en euros d'un texte réécrits par `formatEuro` : « 840.00 € » devient « 840 € », « 42.86 €/h » devient
+ * « 42,86 €/h », « 12600.00 € » devient « 12 600 € ». Un montant déjà écrit à la française reste tel quel ; un nombre
+ * collé à un autre n'est pas réinterprété. Point de milliers : dans un texte des données, « 2.000 € » reste tel quel
+ * (jamais lu comme 2 €) ; dans un texte du moteur, tout nombre à point est décimal, arrondi au centime par `formatEuro`
+ * (« 17.875 €/h » devient « 17,88 €/h »).
+ */
+export function montantsFr(s: string, auteur: AuteurDuTexte = 'donnees'): string {
   return s.replace(MONTANT_DU_MOTEUR, (montant: string, nombre: string) =>
-    MILLIERS_A_POINT.test(nombre) ? montant : formatEuro(Number(nombre)),
+    auteur === 'donnees' && MILLIERS_A_POINT.test(nombre) ? montant : formatEuro(Number(nombre)),
   );
 }
 
 /**
- * Texte des données ou du moteur prêt à l'affichage : dates au format JJ/MM/AAAA, montants écrits par `formatEuro` et
- * typographie française, hors extraits cités.
+ * Nombre décimal du moteur hors montant, devant une durée, un pourcentage ou une autre unité (« 3.5h », la durée
+ * minimale d'OCAPIAT ; « 12.5% ») : écrit à la française, deux décimales au plus (« 3,5h », « 12,5% »).
+ */
+const DECIMALE_DU_MOTEUR = /(?<![\d.,])\d+\.\d+(?![\d.,])(?=\s?(?:h|%|heures?|jours?|nuits?|km)(?![\p{L}\p{N}]))/gu;
+const decimalesFr = (s: string): string =>
+  s.replace(DECIMALE_DU_MOTEUR, (nombre) =>
+    new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(Number(nombre)),
+  );
+
+/**
+ * Texte des données prêt à l'affichage : dates au format JJ/MM/AAAA, montants écrits par `formatEuro` et typographie
+ * française, hors extraits cités. Un texte écrit par le moteur passe par `texteMoteur`.
  */
 export function texteDonnees(s: string): string {
   return typo(horsCitations(s, (morceau) => montantsFr(datesFr(morceau))));
+}
+
+/**
+ * Texte écrit par le moteur (détail du calcul et notes des postes de l'OPCO, points d'attention) prêt à l'affichage :
+ * comme `texteDonnees`, mais chaque nombre à point est décimal (le moteur n'écrit jamais de séparateur de milliers),
+ * montant arrondi au centime (« 17.875 €/h » devient « 17,88 €/h », comme à l'étape Formation) ou autre nombre à
+ * virgule (« 3.5h » devient « 3,5h »). Les extraits cités entre « » restent mot pour mot.
+ */
+export function texteMoteur(s: string): string {
+  return typo(horsCitations(s, (morceau) => decimalesFr(montantsFr(datesFr(morceau), 'moteur'))));
 }
 
 const MOIS = [

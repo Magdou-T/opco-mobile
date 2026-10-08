@@ -493,8 +493,14 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   1 500 ; la virgule sert aux centimes. »), « 1 5 00 », un nombre trop grand, une virgule dans un champ entier.
 - **Coût horaire** (`coutsDeFormation`, `lib/parcours.ts`) : le coût total divisé par la durée, jamais arrondi dans
   l'état ; le moteur le multiplie par la durée, et arrondi au centime il faisait financer 4 250,40 € pour 4 250 €
-  demandés (30,36 €/h × 140 h). L'affichage l'arrondit (`formatEuro` : « 30,36 €/h ») ; le dépassement du plafond
-  indicatif se juge au centime affiché (`depassePlafondHoraire` : jamais « 30 €/h dépasse le plafond de 30 €/h »).
+  demandés (30,36 €/h × 140 h). L'affichage l'arrondit (`formatEuro` : « 30,36 €/h ») ; à l'étape Formation, le
+  dépassement du plafond indicatif se juge au centime affiché (`depassePlafondHoraire` : jamais « 30 €/h dépasse le
+  plafond de 30 €/h » dans l'encadré de l'étape). Ce « jamais » ne vaut que pour l'étape Formation : le moteur compare le
+  coût non arrondi (4 200,50 € sur 140 h, soit 30,0036 €/h, dépassent de 0,50 € un plafond de 30 €/h, financés 4 200 €)
+  et, quand le coût horaire arrondi au centime égale le plafond, il écrit le dépassement en euros, dans le détail du
+  calcul et les points d'attention (« Le coût demandé dépasse le plafond AKTO (30 €/h) de 0,50 € sur la formation : ce
+  montant reste à charge. »), jamais en €/h. Le texte du moteur écrit le coût horaire à trois décimales ou plus
+  (« 17.875 €/h ») : l'écran l'arrondit comme l'étape Formation (« 17,88 €/h », `texteMoteur`, section 15).
 - **Champs masqués** : un champ que l'écran ne montre plus revient à vide, car le moteur et le profil des aides lisent
   tout l'état : questions d'un autre statut et budget déjà consommé d'un projet qui n'ouvre pas le budget de l'OPCO
   (`etatDepuisProjet`), besoins de frais et nombre de jours quand l'étape Frais est sautée (`etatDepuisModeFormation`).
@@ -518,24 +524,31 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
 
 Composants : `components/results/` (`EcranResultats` ; `PlanFinancement`, `BandeauSynthese`, `BarreEmpilee` ;
 `AidesList`, `AideCard` ; `FundingBreakdown`, `DetailParPoste`, `DispositifsOpco`, `BadgeEstimation` ;
-`PortailsRegionaux`, `Financeur` ; `EtatsResultats`, seul du lot initial). Calcul (`calculer`) et logique de
-présentation en fonctions pures : `lib/resultats.ts` ; étiquettes de la situation : `lib/situation.ts`, sans le
-catalogue (tests : `tests/resultats.test.ts`). Chaque montant vient du moteur (`@opco/core`) et n'est arrondi qu'à
-l'affichage (`formatEuro` : un montant entier sans décimales, tout autre avec deux, « 1 500,50 € », jugé au centime
-près), y compris dans les textes du moteur (voir « Textes des données » plus bas) ; un montant d'aide non éligible
-n'est jamais affiché.
+`PortailsRegionaux`, `Financeur` ; `EtatsResultats` et `FiletTricolore`, seuls du lot initial). Calcul (`calculer`) et
+logique de présentation en fonctions pures : `lib/resultats.ts` ; encadrés du bandeau (aucun financement chiffré, fonds
+épuisés) : `lib/encadres-resultats.ts` ; étiquettes de la situation : `lib/situation.ts`, sans le catalogue ;
+préchargement : `lib/prechargement.ts` (tests : `tests/resultats.test.ts`, `tests/prechargement.test.ts`). Chaque
+montant vient du moteur (`@opco/core`) et n'est arrondi qu'à l'affichage (`formatEuro` : un montant entier sans
+décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y compris dans les textes du moteur (voir
+« Textes des données » plus bas) ; un montant d'aide non éligible n'est jamais affiché.
 
 - **Chargement** : `EcranResultats` est chargé à la demande par `WizardContainer` (`next/dynamic`, `ssr: false`) : le
-  catalogue d'aides (environ 135 Ko gzip) et le calcul restent hors du lot initial du simulateur. Le parcours ne lui
-  passe que l'état et deux actions ; le calcul est une dérivation pure de l'état (`calculer`, en `useMemo`), la date du
-  jour est lue dans le composant, jamais dans `@opco/core`. Le lot est préchargé dès l'étape Récapitulatif
-  (`prechargerEcranResultats` : la même fonction de chargement que `next/dynamic`, une fois par page, échec absorbé) :
-  une coupure de connexion après le récapitulatif ne l'empêche plus de s'afficher.
+  catalogue d'aides (environ 149 Ko gzip, lot de 792 603 octets bruts) et le calcul restent hors du lot initial du
+  simulateur. Le parcours ne lui passe que l'état et deux actions ; le calcul est une dérivation pure de l'état
+  (`calculer`, en `useMemo`), la date du jour est lue dans le composant, jamais dans `@opco/core`. Le lot est préchargé
+  dès l'étape Récapitulatif (`prechargerEcranResultats`, fait par `creerPrechargeur` : la même fonction de chargement que
+  `next/dynamic`, une fois par page, échec absorbé) : une coupure de connexion après le récapitulatif ne l'empêche plus
+  de s'afficher. Jamais hors ligne (`navigator.onLine` faux) : un lot en échec le resterait toute la session ; le
+  préchargement attend alors l'événement `online` (écouteur retiré dès qu'il est lancé ou que l'étape change).
 - **Attente** (`ChargementResultats`) : l'en-tête réel de l'écran (`EnTeteResultats` : titre focalisable, actions,
-  étiquettes de la situation), puis un squelette du bandeau seul (`aria-busy`, « Calcul en cours… », filet tricolore).
-  `next/dynamic` ne passe aucune propriété à son composant d'attente : le parcours les lui donne par `ContexteResultats`.
-  Le bandeau ne bouge plus à l'arrivée de l'écran (scénario 1, haut du bandeau : 728 puis 728 px à 375 px de large, au
-  lieu de 585 puis 728 ; 563 puis 563 px à 1 280 px, au lieu de 514 puis 563).
+  étiquettes de la situation), puis un squelette du bandeau seul (`aria-busy`, « Calcul en cours… », `FiletTricolore`,
+  le même composant que le bandeau). `next/dynamic` ne passe aucune propriété à son composant d'attente : le parcours
+  les lui donne par `ContexteResultats`. Le bandeau ne bouge plus à l'arrivée de l'écran (scénario 1, haut du bandeau :
+  728 puis 728 px à 375 px de large, au lieu de 585 puis 728 ; 563 puis 563 px à 1 280 px, au lieu de 514 puis 563).
+  La zone d'attente occupe au moins la hauteur de l'écran (`min-h-svh`) : à 1 280 × 900, le pied de page sombre restait
+  visible sous le squelette (haut à 631 px) puis sortait de la vue à l'arrivée de l'écran, décalage de mise en page de
+  0,2989 (API `layout-shift`, source `FOOTER`, lot retenu 2,5 s) ; après, pied à 1 101 px pendant l'attente et 0
+  décalage, à 1 280 × 900 comme à 375 × 812 (où il était déjà nul).
 - **Échec du chargement** (`EchecChargementResultats`) : le chargeur de Turbopack garde la promesse d'un lot qui a
   échoué, un nouvel essai sans recharger la page n'émet aucune requête ; les réponses ne sont enregistrées nulle part
   (certaines sont sensibles : âge, handicap), recharger les efface. L'écran le dit (`Callout` alerte « L'écran de
@@ -554,20 +567,32 @@ n'est jamais affiché.
   « 100 % » avec un reste, jamais « 0 % » avec un financement). Sous 640 px, une ligne par chiffre. Aucune phrase sous
   un reste à charge nul : ce n'est qu'une estimation, que l'OPCO peut refuser (fonds épuisés, étude du dossier).
 - **Promesses** : aucune phrase plus forte que le moteur (« entièrement », « garanti », « assuré », « vous
-  obtiendrez »…) dans le bandeau, les cartes, les aides et le détail de l'OPCO ; le moteur écrit lui-même « intégralement
-  pris en charge » dans le détail du calcul d'un poste sous son plafond (texte de `@opco/core`, non modifié ici).
+  obtiendrez »…) dans le bandeau, les cartes, les aides et le détail de l'OPCO. Le moteur non plus : sous son plafond, un
+  poste dit « Votre coût horaire ne dépasse pas le plafond : l'estimation le retient en entier. » (de même « par nuit »
+  pour l'hébergement et « le forfait » pour les repas), et non plus « intégralement pris en charge » ; un test du cœur
+  vérifie qu'aucun texte du calcul ne dit « intégralement », « garanti », « assuré » ou « totalité », toutes données
+  réelles.
 - **`.mark`** : le trait de base vert clair (le souligné du film de marque) sous le seul chiffre Financé, sur fond
   blanc. L'aplat plein ne sert plus sur cet écran (plus de carte sombre) : la règle héritée `.mark.text-ink` est
   retirée de `globals.css`.
 - **États du bandeau** (`etatEnTete`) : coût inconnu (`Callout` « Coût de la formation non renseigné », bouton
   « Indiquer le coût », jamais « 0 € ») ; aucun financement chiffré (coût seul, `Callout`, liens vers les cartes Montant
   selon dossier, Aides versées à l'employeur et Revenus et aides à la personne, placées en tête) ; plan chiffré
-  (chiffres, barre, légende). L'encadré sans financement chiffré ne cite que ce qui suit (`encadreSansFinancement`) :
-  des options au choix chiffrées, « à comparer » ; sinon les aides identifiées (« Voici les aides identifiées »,
-  l'étude du dossier n'étant citée que pour des aides au montant selon dossier) ; sinon aucune autre aide à montant
-  (dirigeant assimilé salarié, par exemple) : il le dit, renvoie à l'OPCO ou au fonds d'assurance formation compétent et
-  aux portails de la région, et précise « Seuls des services gratuits sont proposés ci-dessous » quand c'est le cas.
-  Fonds épuisés
+  (chiffres, barre, légende). L'encadré sans financement chiffré (`encadreSansFinancement`, qui reçoit le plan et les
+  aides évaluées) ne cite que ce que la page montre plus bas, cartes du plan et liste « Aides et financements
+  identifiés », sans rien en nier : des options au choix chiffrées, « à comparer » ; sinon les aides identifiées
+  (« Voici les aides identifiées », l'étude du dossier n'étant citée que pour des aides au montant selon dossier) ; sinon
+  ni option chiffrée ni carte d'aides : « aucune autre aide à montant n'a été identifiée » seulement si la liste ne
+  montre ni aide « à vérifier » ni montant (dirigeant assimilé salarié dont la formation n'est pas éligible au CPF), et
+  « Seuls des services gratuits sont proposés ci-dessous » seulement si toute carte et toute aide de la liste sont des
+  services gratuits ; renvoi à l'OPCO ou au fonds d'assurance formation compétent et aux portails de la région. Des
+  aides « à vérifier » listées avec un montant ne sont jamais tues, quelle que soit la variante : « Le montant d'une aide
+  « à vérifier » listée plus bas n'est pas compté dans le plan : une information manque ou le financeur doit
+  confirmer. » (au pluriel « Les montants des aides… » ; FAFCEA à 735 € quand l'organisme certifié Qualiopi est inconnu,
+  CPF à 900 € d'un assimilé salarié), « à ce stade » au lieu de « pour cette situation », et une pilule « N aides à
+  vérifier » mène à la liste (`#aides-identifiees`, `ID_SECTION_AIDES`) ; dans la dernière variante, des aides « à
+  vérifier » sans montant sont citées de même (« Une aide « à vérifier » est listée plus bas »). Test de propriété sur
+  1 500 états : chaque phrase écrite est confrontée aux aides et aux cartes affichées. Fonds épuisés
   signalés par l'OPCO alors que le plan compte son plan de développement des compétences (`fondsEpuisesSurLePlan`) :
   `Callout` avertissement sous la barre, lien vers les alertes de l'OPCO (`#alertes-opco`).
 - **Familles de couleur** (`familleCouleur`) : pastille ronde des lignes et des groupes, part de la barre, pastille de
@@ -623,10 +648,18 @@ n'est jamais affiché.
   l'étape Entreprise).
 - **Textes des données** : `texteDonnees` (dates JJ/MM/AAAA, montants et `typo` : insécables avant « : ; ? ! », entre
   un nombre et son unité, entre les milliers), jamais à l'intérieur d'un extrait cité. Le moteur écrit les montants de
-  ses textes de calcul à l'anglaise (« 840.00 € », « 42.86 €/h », « 12600.00 € » : détail du calcul, notes de poste,
-  points d'attention) ; `montantsFr` les réécrit par `formatEuro` (« 840 € », « 42,86 €/h », « 12 600 € »). Un montant
-  déjà écrit à la française reste tel quel ; un nombre ambigu (« 2.000 € », point de milliers d'une citation, ou nombre
-  collé à un autre) n'est pas réinterprété. Une adresse web longue passe à la ligne
+  ses textes de calcul à l'anglaise (« 840.00 € », « 42.86 €/h », « 12600.00 € », « 17.875 €/h » : détail du calcul,
+  notes de poste, points d'attention) ; `montantsFr` les réécrit par `formatEuro` (« 840 € », « 42,86 €/h »,
+  « 12 600 € »). Un montant déjà écrit à la française reste tel quel ; un nombre collé à un autre n'est pas
+  réinterprété. Le point de milliers dépend de l'auteur du texte : dans un texte des données (notes, conditions,
+  démarches), « 2.000 € » écrit par un humain reste tel quel, jamais lu 2 € ; un texte du moteur passe par
+  `texteMoteur` (`montantsFr(texte, 'moteur')`), où tout nombre à point est décimal, puisque le moteur n'écrit jamais de
+  séparateur de milliers : « 17.875 €/h » (1 001 € sur 56 h) devient « 17,88 €/h », comme à l'étape Formation, et non
+  plus « 17.875 €/h », que l'on lisait 17 875 €/h ; un nombre décimal hors montant y prend la virgule (« 3,5h », durée
+  minimale d'OCAPIAT). Le seul texte des données que le moteur insère dans un point d'attention, la description d'une
+  enveloppe des 50 salariés et plus, ne contient aucun nombre à point (test). Balayage : 1 000 états tirés, tous OPCO
+  et branches, durées multiples de 8 h et courantes, coûts ronds et à centimes, aucun nombre à point dans un texte du
+  moteur rendu (hors extraits cités et adresses web). Une adresse web longue passe à la ligne
   (`break-words` ; `[overflow-wrap:anywhere]` dans le tableau, pour que la largeur des colonnes n'en dépende pas). Le
   texte d'un élément flexible (puce ou icône suivie d'un texte : conditions, démarches, raisons, points d'attention,
   pages citées, sites sources, prochaines étapes) porte `TEXTE_SOUPLE` (`components/results/classes.ts` :
@@ -639,7 +672,10 @@ n'est jamais affiché.
   (`.devoilement`), trait `.mark` qui se déploie ; tout s'arrête sous `prefers-reduced-motion`.
 - **Impression** : section 7 ; détail des aides, liste des non éligibles et listes de conventions repliées imprimés en
   entier (`hidden print:block`), détail du calcul des postes de l'OPCO aussi (`hidden print:table-row`), boutons
-  masqués, cartes d'aide non coupées (`break-inside-avoid`).
+  masqués, cartes d'aide non coupées (`break-inside-avoid`). Tableau de l'OPCO : un `tbody` par poste
+  (`print:break-inside-avoid`), le poste et le détail de son calcul ne se séparent jamais d'une page à l'autre ; en-tête
+  et pied en `print:table-row-group`, Chrome ne les répète plus en haut et en bas de chaque page (PDF A4 du scénario 1,
+  marge haute de 0,4 à 3,9 pouces : « Total » imprimé une fois, au lieu de deux quand le tableau tombait sur deux pages).
 
 ## 16. Fiches OPCO, liste des OPCO, guides, contact et page 404
 
@@ -867,7 +903,7 @@ emplois : elles expliquent une règle.
 | `#3E6860` | `#FFFFFF` | résultats : total de la pile, total et montants financés de l'OPCO (turquoise foncé) | 6,26:1 | 4,50:1 | conforme |
 | `#5F6E6A` | `#F3F7F6` | résultats : pied de carte d'aide (« Vérifié le », « Sources ») | 4,95:1 | 4,50:1 | conforme |
 | `#C43F13` | `#F3F7F6` | résultats : liens des sites sources en pied de carte d'aide | 4,78:1 | 4,50:1 | conforme |
-| `#C43F13` | `#FDF0EA` | résultats : liens vers les cartes mises en avant (aucun financement chiffré) | 4,63:1 | 4,50:1 | conforme |
+| `#C43F13` | `#FDF0EA` | résultats : liens vers les cartes mises en avant et vers les aides à vérifier (aucun financement chiffré) | 4,63:1 | 4,50:1 | conforme |
 | `#44514E` | `#F8FAFA` | résultats : détail du calcul d'un poste (lin-soft à 60 % sur blanc) | 7,91:1 | 4,50:1 | conforme |
 | `#5F6E6A` | `#F8FAFA` | résultats : surtitre « Détail du calcul » (lin-soft à 60 % sur blanc) | 5,11:1 | 4,50:1 | conforme |
 | `#5F6E6A` | `#F9FBFB` | résultats : dispositif complémentaire (lin-soft à 50 %) : texte discret | 5,15:1 | 4,50:1 | conforme |

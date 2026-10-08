@@ -10,6 +10,7 @@ import { SectionTitle } from '@/components/ui/SectionTitle';
 import type { EtapeSite } from '@/lib/etapes';
 import { typo } from '@/lib/format';
 import { etiquettesDeSituation } from '@/lib/situation';
+import { FiletTricolore } from './FiletTricolore';
 
 /**
  * Titre de l'écran de résultats : il reçoit le focus quand les résultats s'affichent (WizardContainer le cherche par cet
@@ -90,23 +91,21 @@ export function EnTeteResultats({ state, onEdit }: Pick<ProprietesEcranResultats
 /**
  * Attente du code de l'écran de résultats (chargé à la demande, préchargé dès le récapitulatif) : le même en-tête que
  * l'écran (titre focalisable, actions, étiquettes de la situation), pour que le focus posé par le parcours ne retombe pas
- * sur la page et que rien ne bouge à l'arrivée de l'écran ; seul le bandeau de synthèse est un squelette.
+ * sur la page et que rien ne bouge à l'arrivée de l'écran ; seul le bandeau de synthèse est un squelette. La zone d'attente
+ * occupe au moins la hauteur de l'écran (`min-h-svh`) : sur un grand écran, le pied de page sombre restait visible sous le
+ * squelette puis sortait de la vue à l'arrivée de l'écran (décalage de mise en page de 0,23 à 0,30 à 1 280 × 900).
  */
 export function ChargementResultats() {
   const proprietes = useContext(ContexteResultats);
   return (
-    <div className="space-y-12 sm:space-y-14">
+    <div className="min-h-svh space-y-12 sm:space-y-14">
       <section aria-labelledby={ID_TITRE_RESULTATS} className="space-y-6">
         {proprietes ? <EnTeteResultats state={proprietes.state} onEdit={proprietes.onEdit} /> : <TitreResultats />}
         <div
           aria-busy="true"
           className="overflow-hidden rounded-panneau border border-filet bg-white shadow-douce"
         >
-          <div aria-hidden="true" className="decor flex h-1.5">
-            <span className="flex-1 bg-turquoise" />
-            <span className="flex-1 bg-or" />
-            <span className="flex-1 bg-orange" />
-          </div>
+          <FiletTricolore />
           <div className="p-5 sm:p-8">
             <p role="status" className="flex items-center gap-2.5 text-sm font-medium text-texte-doux">
               <span aria-hidden="true" className="size-2 animate-pulse rounded-full bg-orange" />

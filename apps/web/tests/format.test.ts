@@ -12,8 +12,10 @@ import {
   premierePhrase,
   texteDonnees,
   texteFr,
+  texteMoteur,
   typo,
 } from '../src/lib/format';
+import { coutsDeFormation } from '../src/lib/parcours';
 
 /** Espace fine insécable (U+202F), écrite par son code : séparateur des milliers de `formatEuro` (Intl, fr-FR). */
 const FINE = String.fromCharCode(0x202f);
@@ -474,13 +476,179 @@ describe('montantsFr', () => {
           const ecrits = [...resultat.lines.flatMap((l) => [l.note ?? '', ...(l.details ?? [])]), ...resultat.warnings];
           for (const texte of ecrits) {
             textes++;
-            if (montantsFr(texte) !== texte) reecrits++;
-            const sortie = texteDonnees(texte);
+            if (montantsFr(texte, 'moteur') !== texte) reecrits++;
+            const sortie = texteMoteur(texte);
             assert.ok(!/\d\.\d+\s?€|\d{4,}\s?€/.test(sortie), sortie);
           }
         }
       }
     }
     assert.ok(textes > 2000 && reecrits > 1000, `${textes} textes, ${reecrits} réécrits`);
+  });
+});
+
+describe('textes du moteur (texteMoteur) : nombres écrits par JavaScript, point décimal', () => {
+  /** Espaces insécables (fine ou non) lues comme des espaces ordinaires, pour écrire les attendus lisiblement. */
+  const lisible = (s: string) => s.replace(/\s/g, ' ');
+  const AKTO = EMBEDDED_OPCOS.find((o) => o.slug === 'akto');
+  const OPCO_EP = EMBEDDED_OPCOS.find((o) => o.slug === 'opco-ep');
+
+  /** Textes du moteur que l'écran affiche : notes et détails des postes, points d'attention. */
+  const textesDuMoteur = (r: ReturnType<typeof calculateFunding>): string[] =>
+    [...r.lines.flatMap((l) => [l.note ?? '', ...(l.details ?? [])]), ...r.warnings].filter((t) => t !== '');
+
+  /** Calcul de l'OPCO avec le coût horaire que pose le parcours (coutsDeFormation : total / heures, sans arrondi). */
+  const calcul = (opco: (typeof EMBEDDED_OPCOS)[number], total: number, heures: number, over: Partial<WizardState> = {}) =>
+    calculateFunding(opco, {
+      ...createInitialWizardState(),
+      trainingMode: 'presentiel',
+      selectedOpcoSlug: opco.slug,
+      companySize: 'less_11',
+      contractType: 'cdi',
+      formationType: 'non_certifiante',
+      ...coutsDeFormation(total, heures),
+      ...over,
+    });
+
+  test('un nombre à point est une décimale, jamais un séparateur de milliers ; trois décimales ou plus : arrondi à deux', () => {
+    assert.equal(lisible(texteMoteur('Votre coût horaire : 17.875 €/h × 56 h = 1001.00 €')), 'Votre coût horaire : 17,88 €/h × 56 h = 1 001 €');
+    assert.equal(
+      lisible(texteMoteur('Le coût horaire demandé (125.125 €/h) dépasse le plafond AKTO (30 €/h). Le reste à charge est de 761.00 €.')),
+      'Le coût horaire demandé (125,13 €/h) dépasse le plafond AKTO (30 €/h). Le reste à charge est de 761 €.',
+    );
+    assert.equal(lisible(texteMoteur('Calcul : 25.025 €/h × 40 h = 1001.00 €')), 'Calcul : 25,03 €/h × 40 h = 1 001 €');
+    // Trois décimales devant « € » seul ou devant une autre unité : des décimales aussi.
+    assert.equal(
+      lisible(texteMoteur('Forfait : 12.125 € par repas, 2.500 €/nuit, 1.250 €/jour')),
+      'Forfait : 12,13 € par repas, 2,50 €/nuit, 1,25 €/jour',
+    );
+    // Nombre décimal hors montant (durée minimale de 3,5 h publiée par OCAPIAT) : virgule décimale.
+    assert.equal(
+      lisible(texteMoteur('La durée de formation (2h) est inférieure au minimum requis par OCAPIAT (3.5h).')),
+      'La durée de formation (2h) est inférieure au minimum requis par OCAPIAT (3,5h).',
+    );
+    assert.equal(lisible(texteMoteur('Taux : 12.5% des coûts pédagogiques financés')), 'Taux : 12,5% des coûts pédagogiques financés');
+  });
+
+  test('extraits cités, dates et typographie comme texteDonnees ; les textes des données gardent leur lecture', () => {
+    const nb = INSECABLE;
+    assert.equal(
+      texteMoteur("L'enveloppe « Coût : 2.000 € » est épuisée (vérifié le 2026-10-05) : 17.875 €/h"),
+      `L'enveloppe « Coût : 2.000 € » est épuisée (vérifié le 05/10/2026)${nb}: ${formatEuro(17.875)}/h`,
+    );
+    // « 2.000 € » écrit par un humain dans les données : jamais lu comme 2 € ; écrit par le moteur, c'est un nombre décimal.
+    assert.equal(texteDonnees('Plafond de 2.000 € par an'), `Plafond de 2.000${nb}€ par an`);
+    assert.equal(lisible(texteMoteur('Plafond de 2.000 € par an')), 'Plafond de 2 € par an');
+  });
+
+  test("données que le moteur insère dans ses textes (description d'une enveloppe des 50 salariés et plus) : aucun nombre à point", () => {
+    // texteMoteur lit tout nombre à point comme décimal : un « 1.500 € » humain inséré dans un point d'attention serait lu 1,50 €.
+    let descriptions = 0;
+    for (const opco of EMBEDDED_OPCOS) {
+      for (const bareme of [opco, ...(opco.variantes_branche ?? [])]) {
+        for (const plafond of bareme.plafonds_par_taille ?? []) {
+          if (!plafond.description) continue;
+          descriptions++;
+          assert.ok(!/\d\.\d/.test(plafond.description.replace(/«[^»]*»/g, '')), `${opco.slug} : ${plafond.description}`);
+        }
+      }
+    }
+    assert.ok(descriptions > 0, 'aucune description lue');
+  });
+
+  test('parcours réel, AKTO « Organismes de formation » (IDCC 1516) : 1 001 € sur 56 h, « 17,88 €/h » dans le détail du calcul', () => {
+    assert.ok(AKTO);
+    const peda = calcul(AKTO, 1001, 56, { detectedIdcc: '1516' }).lines.find((l) => l.poste === 'pedagogie');
+    const details = (peda?.details ?? []).map((d) => lisible(texteMoteur(d)));
+    assert.ok(details.includes('Votre coût horaire : 17,88 €/h × 56 h = 1 001 €'), details.join(' | '));
+    assert.ok(details.includes('Calcul : 17,88 €/h × 56 h = 1 001 €'), details.join(' | '));
+  });
+
+  test("barème général d'AKTO (30 €/h) : « 125,13 €/h » et « 531,88 €/h » dans les points d'attention, « 25,03 €/h » sous le plafond", () => {
+    assert.ok(AKTO);
+    const attention = (total: number, heures: number) => calcul(AKTO, total, heures).warnings.map((w) => lisible(texteMoteur(w)));
+    const huit = attention(1001, 8);
+    assert.ok(huit.includes('Le coût horaire demandé (125,13 €/h) dépasse le plafond AKTO (30 €/h). Le reste à charge est de 761 €.'), huit.join(' | '));
+    const cher = attention(4255, 8);
+    assert.ok(cher.includes('Le coût horaire demandé (531,88 €/h) dépasse le plafond AKTO (30 €/h). Le reste à charge est de 4 015 €.'), cher.join(' | '));
+    const quarante = (calcul(AKTO, 1001, 40).lines.find((l) => l.poste === 'pedagogie')?.details ?? []).map((d) => lisible(texteMoteur(d)));
+    assert.ok(quarante.includes('Calcul : 25,03 €/h × 40 h = 1 001 €'), quarante.join(' | '));
+  });
+
+  test("plafond de branche dépassé (OPCO EP, coiffure, IDCC 2596 : 15 €/h pour une certification) : « 17,88 €/h » dans le détail et le point d'attention", () => {
+    assert.ok(OPCO_EP);
+    const textes = textesDuMoteur(calcul(OPCO_EP, 1001, 56, { detectedIdcc: '2596', formationType: 'certification' })).map((t) =>
+      lisible(texteMoteur(t)),
+    );
+    assert.ok(textes.some((t) => t.includes('Votre coût (17,88 €/h) dépasse le plafond')), textes.join(' | '));
+    assert.ok(
+      textes.some((t) => t.startsWith('Le coût horaire demandé (17,88 €/h) dépasse le plafond OPCO EP (15 €/h).')),
+      textes.join(' | '),
+    );
+  });
+
+  test('balayage de 1 000 états tirés au hasard (graine 47), tous OPCO et branches : aucun nombre à point dans les textes du moteur rendus', () => {
+    // mulberry32 : tirages indépendants et reproductibles.
+    let graine = 47;
+    const hasard = (n: number) => {
+      graine = (graine + 0x6d2b79f5) | 0;
+      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+    };
+    const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
+    // Durées multiples de 8 h (de 8 à 400 h), durées courantes, et 1 à 3 h (sous la durée minimale de 3,5 h d'OCAPIAT).
+    const DUREES = [...Array.from({ length: 50 }, (_, i) => 8 * (i + 1)), 7, 14, 35, 56, 140, 280, 1, 2, 3];
+    const COUTS_RONDS = [300, 900, 999, 1001, 1400, 2005, 4200, 4255, 7000, 12600];
+    /** Montant écrit à la française (« 17,88 », « 1 001 ») : sa valeur. */
+    const valeur = (ecrit: string) => Number(ecrit.replace(/\s/g, '').replace(',', '.'));
+    let textes = 0;
+    let troisDecimales = 0;
+    let coutsHoraires = 0;
+    const slugs = new Set<string>();
+    for (let i = 0; i < 1000; i++) {
+      const opco = un(EMBEDDED_OPCOS);
+      slugs.add(opco.slug);
+      const idcc = un([null, ...(opco.variantes_branche ?? []).map((v) => v.idcc[0] ?? null)]);
+      const heures = un(DUREES);
+      // Coût rond, ou à centimes (de 1 à 12 000 €).
+      const total = hasard(2) === 0 ? un(COUTS_RONDS) : (100 + hasard(1_200_000)) / 100;
+      const contexte = JSON.stringify({ opco: opco.slug, idcc, total, heures });
+      const r = calcul(opco, total, heures, {
+        detectedIdcc: idcc,
+        companySize: un(['less_11', '11_49', '50_299', '300_plus'] as const),
+        formationType: un(['non_certifiante', 'qualification', 'certification', 'cqp', 'habilitation'] as const),
+        certificationLevel: un([null, 'rncp', 'rs'] as const),
+        trainingDays: un([null, Math.ceil(heures / 7)]),
+        needsTransport: hasard(2) === 0,
+        needsAccommodation: hasard(3) === 0,
+        accommodationNights: un([1, 2, 4]),
+        accommodationCostPerNight: un([85, 95.5, 120.25]),
+        needsMeals: hasard(2) === 0,
+        mealCostPerDay: un([9, 18.5, 25.75]),
+        budgetDejaConsomme: un([null, 0, 1500, 4800.5]),
+      });
+      for (const texte of textesDuMoteur(r)) {
+        textes++;
+        if (/(?<![\d.])\d+\.\d{3}(?!\d)\s?€/.test(texte)) troisDecimales++;
+        const rendu = texteMoteur(texte);
+        // Hors extraits cités et hors identifiants (adresses web).
+        const lu = rendu.replace(/«[^»]*»/g, '').replace(/https?:\/\/\S+/g, '');
+        assert.ok(!/\d\.\d/.test(lu), `${contexte} : ${rendu}`);
+        // Le coût horaire écrit est celui du parcours, au centime près (17,88 €/h pour 1 001 € sur 56 h, jamais 17 875 €/h),
+        // et tel que l'étape Formation l'affiche (`formatEuro`).
+        const cout = /^Votre coût horaire\s:\s([\d\s]+(?:,\d{2})?\s€)\/h/.exec(rendu);
+        if (cout) {
+          coutsHoraires++;
+          assert.ok(Math.abs(valeur(cout[1].replace('€', '')) - total / heures) <= 0.005 + 1e-9, `${contexte} : ${rendu}`);
+          assert.equal(cout[1], formatEuro(total / heures), `${contexte} : ${rendu}`);
+        }
+      }
+    }
+    assert.equal(slugs.size, EMBEDDED_OPCOS.length);
+    // Le coût horaire n'est pas écrit quand le plan est fermé (50 salariés et plus sans enveloppe publiée).
+    assert.ok(textes > 5000 && coutsHoraires > 300, `${textes} textes, ${coutsHoraires} coûts horaires`);
+    // Le cas du constat est bien tiré : des nombres à trois décimales écrits par le moteur devant « € ».
+    assert.ok(troisDecimales >= 50, `seulement ${troisDecimales} textes à trois décimales`);
   });
 });
