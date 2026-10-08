@@ -12,6 +12,14 @@ const SOURCE_TABLE_SIRET_OPCO = 'https://www.data.gouv.fr/datasets/table-siret-o
 const PART_MINIMALE = 0.6;
 const ECHANTILLON_MINIMAL = 30;
 
+/** Nombre de préfixes de la table (100 au calibrage du 08/10/2026, moins 88.91A retiré après un second tirage). */
+const NOMBRE_DE_PREFIXES = 99;
+/**
+ * Préfixes à faible marge (part observée de 0,60 à 0,70) : conformes au seuil, à remesurer en priorité à la prochaine
+ * mise à jour de la table (scripts/calibrer-suggestions-naf.mjs).
+ */
+const MARGES_FAIBLES = ['23', '37', '47.76Z'];
+
 /**
  * Préfixes plus longs dont l'OPCO diffère de celui du préfixe parent le plus proche : chacun est une exception
  * observée (sa propre part et son propre échantillon le justifient). Une contradiction absente de cette liste fait
@@ -61,6 +69,12 @@ describe('suggestions NAF : données', () => {
       const possibles = Array.from({ length: (n as number) + 1 }, (_, k) => Math.round((k / (n as number)) * 100) / 100);
       expect(possibles, s.prefixe).toContain(part);
     }
+  });
+
+  it(`${NOMBRE_DE_PREFIXES} préfixes, dont ${MARGES_FAIBLES.length} à faible marge (part de 0,60 à 0,70) : ${MARGES_FAIBLES.join(', ')}`, () => {
+    expect(EMBEDDED_NAF).toHaveLength(NOMBRE_DE_PREFIXES);
+    const faibles = EMBEDDED_NAF.filter((s) => (s.part as number) <= 0.7).map((s) => s.prefixe);
+    expect(faibles.sort()).toEqual([...MARGES_FAIBLES].sort());
   });
 
   it("OPCO connu, intitulé officiel non vide et source : la Table SIRET-OPCO", () => {
@@ -115,7 +129,6 @@ describe('suggestions NAF : secteurs couverts', () => {
     ['86.23Z', 'opco-ep', 'dentistes'],
     ['86.90A', 'opco-mobilites', 'ambulances'],
     ['87.10A', 'opco-sante', 'hébergement médicalisé pour personnes âgées'],
-    ['88.91A', 'opco-ep', 'accueil de jeunes enfants'],
     ['41.10A', 'opco-ep', 'promotion immobilière de logements'],
     ['41.20A', 'constructys', 'construction de maisons individuelles'],
     ['45.20A', 'opco-mobilites', 'garages'],
@@ -152,6 +165,7 @@ describe('suggestions NAF : secteurs couverts', () => {
     ['86.10Z', 'activités hospitalières : OPCO Santé 63 %, OPCO EP chez les plus petits'],
     ['87.90B', 'hébergement social : OPCO Santé 50 %, Uniformation 31 %'],
     ['88.10A', 'aide à domicile : OPCO EP 58 %, Uniformation 42 %'],
+    ['88.91A', 'accueil de jeunes enfants : OPCO EP 70 % sur 43 établissements, puis 51 % sur un second tirage de 37 (Uniformation 46 %)'],
     ['85.59B', 'autres enseignements : AKTO 59 %'],
     ['96.09Z', 'autres services personnels : OPCO EP et AKTO'],
     ['47.52A', 'quincaillerie : L\'Opcommerce 59 %, AKTO'],

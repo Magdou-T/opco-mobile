@@ -752,14 +752,6 @@
     "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
   },
   {
-    "prefixe": "88.91A",
-    "opco": "opco-ep",
-    "part": 0.7,
-    "effectif_etablissements": 43,
-    "libelle": "Accueil de jeunes enfants",
-    "source": "https://www.data.gouv.fr/datasets/table-siret-opco"
-  },
-  {
     "prefixe": "90",
     "opco": "afdas",
     "part": 0.86,
