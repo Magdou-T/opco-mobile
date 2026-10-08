@@ -43,7 +43,8 @@ export default function OpcoIndexPage() {
 
       <section aria-labelledby="titre-fiches" className="bg-lin-soft">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16">
-          <h2 id="titre-fiches" className="sr-only">
+          {/* Graisse 700 même masqué : Montserrat n'est chargée qu'en 600 et 700. */}
+          <h2 id="titre-fiches" className="sr-only font-bold">
             Fiches des {OPCOS.length} OPCO, par ordre alphabétique
           </h2>
           {/* La liste ne compte que les OPCO ; `contents` range ses cartes dans la grille, à côté de la tuile qui la

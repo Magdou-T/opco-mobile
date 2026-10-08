@@ -10,7 +10,7 @@ import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
 import { texteDonnees, typo } from '@/lib/format';
 import { ID_SECTION_AIDES } from '@/lib/encadres-resultats';
-import { aidesNonEligiblesAffichees, groupesAidesVisibles } from '@/lib/resultats';
+import { aidesNonEligiblesAffichees, groupesAidesVisibles, siglesDesTitres } from '@/lib/resultats';
 import type { GroupeAides } from '@/lib/resultats';
 import { AideCard } from './AideCard';
 import { TEXTE_SOUPLE } from './classes';
@@ -27,6 +27,8 @@ export function AidesList({ aides, avecPortail }: { aides: readonly AideEvaluee[
   const nonEligibles = aidesNonEligiblesAffichees(aides);
   // Toutes les aides évaluées (le catalogue entier) : nom de l'aide que cite un texte par son identifiant.
   const nomParId = new Map(aides.map((a) => [a.id, a.nom]));
+  // Sigle FSE+ défini une fois, dans le titre de la première carte qui le cite.
+  const sigles = siglesDesTitres(groupes);
 
   return (
     // La section est la cible du lien « N aides à vérifier » du bandeau (encadreSansFinancement).
@@ -51,7 +53,13 @@ export function AidesList({ aides, avecPortail }: { aides: readonly AideEvaluee[
         </Callout>
       ) : (
         groupes.map((g, i) => (
-          <GroupeDuFinanceur key={g.financeur} groupe={g} nomParId={nomParId} style={delai(i * 60, 360)} />
+          <GroupeDuFinanceur
+            key={g.financeur}
+            groupe={g}
+            nomParId={nomParId}
+            sigles={sigles}
+            style={delai(i * 60, 360)}
+          />
         ))
       )}
       {nonEligibles.length > 0 && <AidesNonEligibles aides={nonEligibles} />}
@@ -62,10 +70,12 @@ export function AidesList({ aides, avecPortail }: { aides: readonly AideEvaluee[
 function GroupeDuFinanceur({
   groupe,
   nomParId,
+  sigles,
   style,
 }: {
   groupe: GroupeAides;
   nomParId: ReadonlyMap<string, string>;
+  sigles: ReadonlyMap<string, Readonly<Record<string, string>>>;
   style: CSSProperties;
 }) {
   const id = `groupe-${groupe.financeur}`;
@@ -84,7 +94,7 @@ function GroupeDuFinanceur({
       <ul className="mt-4 space-y-4">
         {groupe.aides.map((a) => (
           <li key={a.id}>
-            <AideCard aide={a} nomParId={nomParId} />
+            <AideCard aide={a} nomParId={nomParId} sigles={sigles.get(a.id)} />
           </li>
         ))}
       </ul>

@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { typo } from '@/lib/format';
+import { INSECABLE } from '@/lib/insecable';
 import { PAGES, metadonnees } from '@/lib/metadonnees';
 
 export const metadata: Metadata = metadonnees(PAGES.formerSansBudget);
@@ -32,22 +33,23 @@ const ACTIONS_COLLECTIVES = [
     detail:
       "Formations clés en main choisies par chaque branche, aux critères propres : voir la fiche ATLAS. Branche des bureaux d'études (IDCC 1486) : 100 % des coûts pédagogiques pris en charge, dans la limite de crédits annuels par taille (3 crédits sous 11 salariés, 5 de 11 à 49, 7 de 50 à 299, un nombre de parcours égal à 3 % de l'effectif au-delà), et certaines thématiques en libre accès au-delà des crédits (tutorat, développement durable, harcèlement sexuel, salariés BOETH). Le plan IA-tlas finance à 100 % des modules IA pour les moins de 50 salariés (dossiers du 1er juillet au 15 décembre 2026, dans la limite des fonds disponibles).",
     url: 'https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html',
+    lien: 'campusAtlas sur opco-atlas.fr',
   },
   {
     opco: 'AKTO',
     slug: 'akto',
     dispositif: 'Espace Formation (actions collectives)',
-    detail:
-      'Les formations mobilisées via Espace Formation « ne sont pas déduites de votre budget annuel » (dans la plupart des branches) : coûts pédagogiques entièrement pris en charge pour les moins de 50 salariés, dans la limite des places et des fonds disponibles.',
+    detail: `Les formations mobilisées via Espace Formation «${INSECABLE}ne sont pas déduites de votre budget annuel${INSECABLE}» (dans la plupart des branches) : coûts pédagogiques pris en charge pour les moins de 50 salariés, dans la limite des places et des fonds disponibles.`,
     url: 'https://www.akto.fr/entreprise/financer-une-formation/regles-de-prise-en-charge/',
+    lien: 'Règles de prise en charge sur akto.fr',
   },
   {
     opco: "L'Opcommerce",
     slug: 'opcommerce',
     dispositif: 'Click&Form',
-    detail:
-      "Catalogue de formations sélectionnées par l'Opcommerce, à tarifs négociés. Pour les moins de 50 salariés, la prise en charge dépend de la branche : 100 % des coûts pédagogiques dans la limite d'un quota d'inscriptions par an (de 1 à 5 selon la branche), ou financement sur le budget « Compétences+ » dans d'autres branches (commerces de détail non alimentaires, optique, prédominance alimentaire, par exemple).",
+    detail: `Catalogue de formations sélectionnées par l'Opcommerce, à tarifs négociés. Pour les moins de 50 salariés, la prise en charge dépend de la branche : 100 % des coûts pédagogiques dans la limite d'un quota d'inscriptions par an (de 1 à 5 selon la branche), ou financement sur le budget «${INSECABLE}Compétences+${INSECABLE}» dans d'autres branches (commerces de détail non alimentaires, optique, prédominance alimentaire, par exemple).`,
     url: 'https://clickandform.lopcommerce.com/',
+    lien: 'Catalogue Click&Form sur lopcommerce.com',
   },
   {
     opco: 'OPCO EP',
@@ -56,6 +58,7 @@ const ACTIONS_COLLECTIVES = [
     detail:
       "Sélexion : 36 formations sélectionnées par OPCO EP, dont les coûts pédagogiques sont financés à 100 % en 2026 pour les entreprises de moins de 50 salariés (catalogue fermé aux entreprises de 50 salariés et plus depuis le 1er septembre 2026). Certaines branches financent aussi des actions collectives clés en main hors du plafond annuel de l'entreprise (librairie, détaillants en chaussures, par exemple).",
     url: 'https://www.opcoep.fr/entreprise/offre-de-services/selexion',
+    lien: 'Sélexion sur opcoep.fr',
   },
   {
     opco: 'OCAPIAT',
@@ -64,6 +67,7 @@ const ACTIONS_COLLECTIVES = [
     detail:
       "Plus de 3 500 formations courtes clés en main sélectionnées par OCAPIAT, dont les coûts pédagogiques sont financés à 100 % pour les entreprises de moins de 50 salariés, dans la limite de l'enveloppe annuelle. Le catalogue est réservé aux entreprises du champ d'OCAPIAT, avec une priorité donnée à celles de moins de 50 salariés.",
     url: 'https://www.ocapiat.fr/catalogue-de-formations-et-financement/',
+    lien: 'Catalogue de formations sur ocapiat.fr',
   },
 ];
 
@@ -75,12 +79,14 @@ export default function FormerSansBudgetPage() {
         title={
           <>
             Se former{' '}
-            <span className="mark">sans toucher</span>
+            <span className="mark-groupe">
+              <span className="mark">sans toucher</span>
+            </span>
             <br />
             au budget formation
           </>
         }
-        lead="Les OPCO achètent eux-mêmes des formations et les proposent à leurs adhérents : ces « actions collectives » ne consomment généralement pas l'enveloppe annuelle de votre entreprise. Le CPF du salarié et, selon l'OPCO, le cofinancement FSE+ peuvent compléter ces catalogues."
+        lead="Les OPCO achètent eux-mêmes des formations et les proposent à leurs adhérents : ces «&nbsp;actions collectives&nbsp;» ne consomment généralement pas l'enveloppe annuelle de votre entreprise. Le CPF du salarié et, selon l'OPCO, le cofinancement FSE+ peuvent compléter ces catalogues."
       />
 
       <GuideBody toc={TOC}>
@@ -118,7 +124,9 @@ export default function FormerSansBudgetPage() {
                 <p className="mt-2 text-sm leading-relaxed text-texte-doux">{typo(a.detail)}</p>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-filet pt-3 text-sm">
                   <span className="min-w-0 [overflow-wrap:anywhere]">
-                    <Source href={a.url}>{a.url.replace('https://', '')}</Source>
+                    <Source href={a.url} titre={a.url}>
+                      {a.lien}
+                    </Source>
                   </span>
                   <Button href={`/opco/${a.slug}/`} variant="ghost" fleche>
                     Voir la fiche {a.opco}
@@ -156,7 +164,7 @@ export default function FormerSansBudgetPage() {
             <li>
               <strong>Abondements employeur</strong> : versés via le portail des financeurs
               (EDEF), ils permettent de co-construire un projet en partageant le coût avec le
-              salarié, utile notamment pour les entreprises de 50+ salariés privées de fonds
+              salarié, utile notamment pour les entreprises de 50 salariés et plus, privées de fonds
               mutualisés.
             </li>
             <li>
@@ -219,7 +227,7 @@ export default function FormerSansBudgetPage() {
             <li>
               <Link href="/opco/opco-mobilites/" className="lien">OPCO Mobilités</Link>,{' '}
               <Link href="/opco/uniformation/" className="lien">Uniformation</Link> et{' '}
-              <Link href="/opco/opcommerce/" className="lien">L&apos;Opcommerce</Link>{' '}:
+              <Link href="/opco/opcommerce/" className="lien">l&apos;Opcommerce</Link>{' '}:
               aucune opération ouverte confirmée à ce jour (pour OPCO Mobilités, à vérifier auprès
               de son conseiller).
             </li>

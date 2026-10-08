@@ -37,7 +37,10 @@ export default function ComprendreLesOpcoPage() {
         title={
           <>
             Les OPCO, mode d&apos;emploi&nbsp;:<br />
-            qui finance quoi, <span className="mark">pour qui</span>
+            qui finance quoi,{' '}
+            <span className="mark-groupe">
+              <span className="mark">pour qui</span>
+            </span>
           </>
         }
         lead="Onze opérateurs de compétences se partagent toutes les entreprises françaises. Comprendre le vôtre, et les règles qu'il applique, est la première étape pour faire financer une formation."
@@ -47,8 +50,8 @@ export default function ComprendreLesOpcoPage() {
         <GuideSection id="role" number="01" title="Le rôle des OPCO">
           <p>
             Les <strong>opérateurs de compétences (OPCO)</strong>{' '}sont 11 organismes paritaires
-            agréés par l&apos;État, créés par la loi du 5 septembre 2018 « pour la liberté de
-            choisir son avenir professionnel ». Ils ont remplacé les anciens OPCA. Depuis 2022,{' '}
+            agréés par l&apos;État, créés par la loi du 5 septembre 2018 «&nbsp;pour la liberté de
+            choisir son avenir professionnel&nbsp;». Ils ont remplacé les anciens OPCA. Depuis 2022,{' '}
             <strong>ils ne collectent plus les contributions légales</strong>{' '}: c&apos;est
             l&apos;Urssaf (ou la MSA) qui s&apos;en charge, avant reversement à France compétences
             qui répartit les fonds.
@@ -57,7 +60,7 @@ export default function ComprendreLesOpcoPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong>Financer l&apos;alternance et la reconversion</strong>{' '}: contrats
-              d&apos;apprentissage (aux niveaux de prise en charge « NPEC » fixés par les
+              d&apos;apprentissage (aux niveaux de prise en charge «&nbsp;NPEC&nbsp;» fixés par les
               branches), contrats de professionnalisation et, depuis février 2026, la période de
               reconversion.
             </li>
@@ -129,7 +132,7 @@ export default function ComprendreLesOpcoPage() {
                 <tr className={LIGNE}>
                   <th scope="row" className={TITRE_LIGNE}>Contrat d&apos;apprentissage</th>
                   <td data-label="Pour qui" className={CELLULE}>Toutes tailles</td>
-                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Coût de formation du CFA au niveau « NPEC » fixé par la branche (révision 2026 de France compétences : valeur de référence plafonnée à 11 000 € pour les niveaux 5 à 7, modulable jusqu&apos;à 20 % en plus ou en moins par la branche, sans descendre sous 4 000 €)</td>
+                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Coût de formation du CFA au niveau «&nbsp;NPEC&nbsp;» fixé par la branche (révision 2026 de France compétences : valeur de référence plafonnée à 11 000 € pour les niveaux 5 à 7, modulable jusqu&apos;à 20 % en plus ou en moins par la branche, sans descendre sous 4 000 €)</td>
                 </tr>
                 <tr className={LIGNE}>
                   <th scope="row" className={TITRE_LIGNE}>Contrat de professionnalisation</th>
@@ -183,7 +186,8 @@ export default function ComprendreLesOpcoPage() {
             </li>
             <li>
               <strong>Les contributions conventionnelles</strong> : certaines branches imposent
-              une cotisation supplémentaire qui ouvre des droits, y compris aux 50+.
+              une cotisation supplémentaire qui ouvre des droits, y compris aux entreprises de 50 salariés et
+              plus.
             </li>
             <li>
               <strong>Les dispositifs fléchés</strong> : alternance, période de reconversion et,
@@ -208,7 +212,7 @@ export default function ComprendreLesOpcoPage() {
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong>Financement OPCO</strong> : à défaut d&apos;accord de branche, forfait de{' '}
-              <strong className="amount">9,15 €/heure</strong> ; le montant moyen de prise en charge par OPCO est
+              <strong className="amount">9,15 €/h</strong> ; le montant moyen de prise en charge par OPCO est
               fixé à 5 000 € (art. D.6332-90). Le CPF du salarié peut être mobilisé avec son
               accord.
             </li>

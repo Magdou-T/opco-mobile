@@ -64,7 +64,8 @@ const TOUTES_LES_FAMILLES: Famille[] = [
     financeurs: ['cpf'],
     icone: 'euro',
     titre: 'Le compte personnel de formation',
-    texte: "Droits du salarié, abondement de l'employeur, VAE et bilan de compétences.",
+    texte:
+      "Droits du salarié, abondement de l'employeur, validation des acquis de l'expérience (VAE) et bilan de compétences.",
   },
   {
     financeurs: ['transitions_pro'],
@@ -82,7 +83,7 @@ const TOUTES_LES_FAMILLES: Famille[] = [
     financeurs: ['europe'],
     icone: 'globe',
     titre: "L'Union européenne",
-    texte: 'Cofinancements du FSE+ et mobilité Erasmus+ des apprentis et des alternants.',
+    texte: 'Cofinancements du Fonds social européen plus (FSE+) et mobilité Erasmus+ des apprentis et des alternants.',
   },
   {
     financeurs: ['faf'],
@@ -217,7 +218,10 @@ export default function Home() {
           <h1 className="apparition mt-5 text-affiche font-bold text-texte" style={delai(60)}>
             Votre entreprise cotise.
             <br />
-            Votre formation peut être <span className="mark">prise en charge</span>.
+            Votre formation peut être{' '}
+            <span className="mark-groupe">
+              <span className="mark">prise en charge</span>.
+            </span>
           </h1>
         </div>
         <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 pb-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14 lg:pb-20">
@@ -433,7 +437,13 @@ export default function Home() {
               <Button href="/contact" size="lg" pleineLargeur="mobile">
                 Écrire à SFG Développement
               </Button>
-              <Button href="mailto:contact@sfgdeveloppement.fr" variant="ghost" icone="courriel">
+              {/* Adresse coupée n'importe où plutôt que de sortir de l'écran (espacement de texte à 320 px). */}
+              <Button
+                href="mailto:contact@sfgdeveloppement.fr"
+                variant="ghost"
+                icone="courriel"
+                className="max-w-full [overflow-wrap:anywhere]"
+              >
                 contact@sfgdeveloppement.fr
               </Button>
             </div>

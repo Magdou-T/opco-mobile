@@ -26,7 +26,7 @@ import type {
   TypeStructure,
   WizardState,
 } from '@opco/core';
-import { Abreviation } from '@/components/opco/TexteDonnees';
+import { Abreviation } from '@/components/ui/Abreviation';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { CertitudeBadge } from '@/components/ui/CertitudeBadge';
@@ -47,6 +47,7 @@ import {
 import { texteFr } from '@/lib/format';
 import { INSECABLE } from '@/lib/insecable';
 import { LIEN_MENTIONS, SOURCE_ENTREPRISES, SOURCE_SUGGESTION_NAF } from '@/lib/mentions';
+import { SIGLES } from '@/lib/sigles';
 import { idccAffichables, numeroLisible } from '@/lib/recherche';
 import { EnTeteEtape } from './EnTeteEtape';
 
@@ -417,7 +418,7 @@ function ResultatsDeRecherche({
                   {idccs.length > 0 && (
                     <span className="mt-1 block text-xs font-medium text-turquoise-deep">
                       {rang === premierAvecIdcc ? (
-                        <Abreviation definition="identifiant de la convention collective">IDCC</Abreviation>
+                        <Abreviation definition={SIGLES.IDCC}>IDCC</Abreviation>
                       ) : (
                         'IDCC'
                       )}{' '}
@@ -665,7 +666,7 @@ export function StepIdentification({ state, updateState }: Props) {
               label={
                 opcoRequis(state.projetType)
                   ? 'Votre OPCO'
-                  : 'Votre OPCO (facultatif pour le projet « former le dirigeant »)'
+                  : `Votre OPCO (facultatif pour le projet «${INSECABLE}former le dirigeant${INSECABLE}»)`
               }
               required={opcoRequis(state.projetType)}
             >

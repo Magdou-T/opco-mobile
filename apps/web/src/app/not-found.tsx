@@ -34,7 +34,10 @@ export default function PageIntrouvable() {
         <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-20 sm:px-6 md:pt-20 md:pb-28">
           <p className="surtitre">Erreur 404</p>
           <h1 id="titre-404" className="mt-5 max-w-3xl text-affiche font-bold text-texte">
-            Cette page <span className="mark">n&apos;existe pas</span>
+            Cette page{' '}
+            <span className="mark-groupe">
+              <span className="mark">n&apos;existe pas</span>
+            </span>
           </h1>
           <p className="mt-6 max-w-xl text-chapeau text-texte-doux">
             L&apos;adresse est peut-être mal saisie, ou la page a changé de place.

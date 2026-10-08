@@ -7,8 +7,11 @@ interface AlertesOpcoProps {
   alertes: AlerteOpco[];
   /** Nom court de l'OPCO qui publie les alertes. */
   opcoName: string;
-  /** Niveau du titre selon l'endroit où l'encadré s'insère dans la page. */
-  headingLevel?: 2 | 3;
+  /**
+   * Vrai (écran de résultats) : l'encadré porte son titre `h3` « Alertes publiées par … ». Faux (fiche OPCO) : la
+   * section qui le contient porte ce titre, à l'échelle des autres sections.
+   */
+  titre?: boolean;
   /** Ancre de l'encadré (l'écran de résultats y renvoie depuis son bandeau de synthèse). */
   id?: string;
 }
@@ -20,14 +23,17 @@ interface AlertesOpcoProps {
  * (branche) passent par `texteFr` pour afficher leurs dates au format JJ/MM/AAAA.
  * Couleurs : titre et étiquette rouges sur rouge doux (5,62:1), texte doux (7,28:1), lien orange foncé (4,54:1).
  */
-export function AlertesOpco({ alertes, opcoName, headingLevel = 3, id }: AlertesOpcoProps) {
+export function AlertesOpco({ alertes, opcoName, titre = true, id }: AlertesOpcoProps) {
   if (alertes.length === 0) return null;
-  const Heading = headingLevel === 2 ? 'h2' : 'h3';
+  // Sans titre propre, l'encadré n'est plus une section : la section qui le contient le nomme.
+  const Conteneur = titre ? 'section' : 'div';
 
   return (
-    <section id={id} className="rounded-2xl border border-rouge/25 bg-rouge-soft p-5 break-words break-inside-avoid sm:p-6">
-      <Heading className="font-display text-lg leading-snug font-bold text-rouge">Alertes publiées par {opcoName}</Heading>
-      <p className="mt-1 text-sm leading-relaxed text-texte-doux">
+    <Conteneur id={id} className="rounded-2xl border border-rouge/25 bg-rouge-soft p-5 break-words break-inside-avoid sm:p-6">
+      {titre && (
+        <h3 className="font-display text-lg leading-snug font-bold text-rouge">Alertes publiées par {opcoName}</h3>
+      )}
+      <p className={titre ? 'mt-1 text-sm leading-relaxed text-texte-doux' : 'text-sm leading-relaxed text-texte-doux'}>
         Informations reprises des pages officielles de l&apos;OPCO. Elles peuvent changer à tout moment&nbsp;:
         vérifiez la source avant de déposer une demande.
       </p>
@@ -36,7 +42,7 @@ export function AlertesOpco({ alertes, opcoName, headingLevel = 3, id }: Alertes
           <ElementAlerte key={`${a.type}-${a.branche}-${i}`} alerte={a} />
         ))}
       </ul>
-    </section>
+    </Conteneur>
   );
 }
 

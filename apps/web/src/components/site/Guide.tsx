@@ -85,10 +85,13 @@ export function Callout({
   );
 }
 
-/** Lien vers une source officielle : lien orange foncé souligné, nouvel onglet annoncé aux lecteurs d'écran. */
-export function Source({ href, children }: { href: string; children: ReactNode }) {
+/**
+ * Lien vers une source officielle : lien orange foncé souligné, nouvel onglet annoncé aux lecteurs d'écran. `titre` :
+ * l'adresse complète, en infobulle, quand le lien porte un nom (« campusAtlas sur opco-atlas.fr »).
+ */
+export function Source({ href, titre, children }: { href: string; titre?: string; children: ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="lien">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="lien" title={titre}>
       {children}
       <span className="sr-only"> (nouvel onglet)</span>
     </a>

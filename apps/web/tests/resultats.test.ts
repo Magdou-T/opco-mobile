@@ -38,6 +38,7 @@ import {
   familleCouleur,
   financeurDeLigne,
   groupesAidesVisibles,
+  siglesDesTitres,
   libellePart,
   lignesDuDetail,
   montantAffiche,
@@ -544,6 +545,31 @@ describe('aides par financeur', () => {
 
   test('non éligibles affichées : hors du périmètre jamais', () => {
     assert.deepEqual(aidesNonEligiblesAffichees(liste).map((a) => a.id), ['c1']);
+  });
+
+  test('sigle FSE+ défini une seule fois par écran : dans le titre de la première carte qui le cite', () => {
+    const groupes = groupesAidesVisibles([
+      aide({ id: 'r1', financeur: 'region', nom: 'Chèque formation régional' }),
+      aide({ id: 'u1', financeur: 'europe', nom: 'FSE+ – Cofinancement de la formation des salariés via les OPCO' }),
+      aide({ id: 'u2', financeur: 'europe', nom: 'FSE+ – Formations cofinancées par les programmes FEDER-FSE+' }),
+      aide({ id: 'x1', financeur: 'autre', nom: 'Aide FSE+X sans le sigle', statut: 'a_verifier' }),
+    ]);
+    assert.deepEqual([...siglesDesTitres(groupes)], [['u1', { 'FSE+': 'Fonds social européen plus' }]]);
+    // Aucune carte ne le cite : rien à définir. Le sigle doit être un mot entier, en capitales.
+    assert.equal(siglesDesTitres(groupesAidesVisibles([aide({ id: 'a', nom: 'fse+ ou FSE+X' })])).size, 0);
+    assert.equal(siglesDesTitres([]).size, 0);
+  });
+
+  test('scénarios réels : le sigle FSE+ est défini dans une carte au plus, celle du premier titre qui le cite', () => {
+    let definitions = 0;
+    for (const [nom, parcours] of Object.entries(SCENARIOS)) {
+      const groupes = groupesAidesVisibles(simuler(parcours).aides);
+      const sigles = siglesDesTitres(groupes);
+      const premiere = groupes.flatMap((g) => g.aides).find((a) => /(?<![\p{L}\p{N}])FSE\+(?![\p{L}\p{N}])/u.test(a.nom));
+      assert.deepEqual([...sigles.keys()], premiere ? [premiere.id] : [], nom);
+      definitions += sigles.size;
+    }
+    assert.ok(definitions > 0, 'aucun scénario ne montre une aide FSE+ : le test ne prouve plus rien');
   });
 
   test('scénarios réels : chaque aide visible dans un seul groupe, les groupes dans l’ordre de première apparition', () => {

@@ -17,6 +17,7 @@ import type {
 } from '@opco/core';
 import { UNITE_DISPOSITIF_LABELS, formatEuro, premierePhrase, texteFr } from './format';
 import { INSECABLE } from './insecable';
+import { SIGLES } from './sigles';
 
 /** Nombre à la française (« 1 200 », « 9,15 ») : milliers séparés par une espace fine insécable (Intl, fr-FR). */
 const nombreFr = (n: number): string => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(n);
@@ -507,10 +508,13 @@ export { decoderAncre } from './ancre';
 // --- Abréviations --------------------------------------------------------------------------------------------------
 
 /**
- * Sigles des données définis sur la page officielle de l'OPCO (vérifiés le 07/10/2026) :
- * - Uniformation, page « Plan de développement des compétences : financement » : la section « La demande d'aide
- *   financière » et ses sous-parties « DAF certifications », « DAF handicap »… ;
- * - OPCO Santé, page « Les règles de prise en charge » : intitulés des quatre synthèses de prise en charge.
+ * Sigles des données définis à leur première occurrence dans chaque texte d'une fiche :
+ * - vérifiés sur la page officielle de l'OPCO (07/10/2026) : chez Uniformation, page « Plan de développement des
+ *   compétences : financement », la section « La demande d'aide financière » et ses sous-parties « DAF
+ *   certifications », « DAF handicap »… ; chez OPCO Santé, page « Les règles de prise en charge », les intitulés des
+ *   quatre synthèses de prise en charge ;
+ * - sigles administratifs de définition sûre (`SIGLES`, lib/sigles.ts), cités une seule fois dans les données de
+ *   l'OPCO : NDA chez AKTO (démarche de demande), RQTH chez ATLAS (contrat de professionnalisation).
  * Un sigle qui n'a pas pu être vérifié (BETIC chez ATLAS) n'est pas défini.
  */
 export const ABREVIATIONS_PAR_OPCO: Readonly<Record<string, Readonly<Record<string, string>>>> = {
@@ -521,34 +525,10 @@ export const ABREVIATIONS_PAR_OPCO: Readonly<Record<string, Readonly<Record<stri
     SPSTI: 'services de prévention et santé au travail interentreprises',
     'hors CC': "entreprises ne relevant pas d'une convention collective",
   },
+  akto: { NDA: SIGLES.NDA },
+  atlas: { RQTH: SIGLES.RQTH },
 };
 
-export type MorceauTexte =
-  | { genre: 'texte'; valeur: string }
-  | { genre: 'abreviation'; valeur: string; definition: string };
-
-const echapper = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-/**
- * Découpe un texte autour de ses sigles définis : la première occurrence de chaque sigle (mot entier, casse exacte)
- * devient un morceau `abreviation` qui porte sa définition, le reste du texte est gardé tel quel ; les morceaux
- * recomposent le texte à l'identique. Texte vide : aucun morceau.
- */
-export function definirAbreviations(texte: string, definitions: Readonly<Record<string, string>>): MorceauTexte[] {
-  if (!texte) return [];
-  const sigles = Object.keys(definitions).sort((a, b) => b.length - a.length);
-  if (sigles.length === 0) return [{ genre: 'texte', valeur: texte }];
-  const motif = new RegExp(`(?<![\\p{L}\\p{N}])(?:${sigles.map(echapper).join('|')})(?![\\p{L}\\p{N}])`, 'gu');
-  const definis = new Set<string>();
-  const morceaux: MorceauTexte[] = [];
-  let debut = 0;
-  for (const m of texte.matchAll(motif)) {
-    if (definis.has(m[0])) continue;
-    definis.add(m[0]);
-    if (m.index > debut) morceaux.push({ genre: 'texte', valeur: texte.slice(debut, m.index) });
-    morceaux.push({ genre: 'abreviation', valeur: m[0], definition: definitions[m[0]] });
-    debut = m.index + m[0].length;
-  }
-  if (debut < texte.length) morceaux.push({ genre: 'texte', valeur: texte.slice(debut) });
-  return morceaux;
-}
+/** Découpage d'un texte autour de ses sigles : défini dans lib/sigles.ts, module sans importation. */
+export { definirAbreviations } from './sigles';
+export type { MorceauTexte } from './sigles';

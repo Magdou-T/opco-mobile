@@ -66,8 +66,12 @@ export function Etiquette({
     <Balise
       style={style}
       className={cx(
-        'inline-flex items-center rounded-full border font-semibold whitespace-nowrap',
-        flottante ? 'gap-2 py-1.5 pr-3.5 pl-2.5 text-sm' : 'gap-1.5 py-0.5 pr-2.5 pl-2 text-xs leading-5',
+        'inline-flex items-center rounded-full border font-semibold',
+        // Pilule flottante (liste de domaines qui passe à la ligne) : son texte passe aussi à la ligne s'il est plus
+        // large que la liste (espacement de texte à 320 px), au lieu d'élargir la page.
+        flottante
+          ? 'max-w-full gap-2 py-1.5 pr-3.5 pl-2.5 text-sm'
+          : 'gap-1.5 py-0.5 pr-2.5 pl-2 text-xs leading-5 whitespace-nowrap',
         flottante && 'border-transparent bg-white text-encre shadow-etiquette',
         !flottante && surFondSombre && 'border-white/25 bg-encre/25 text-white',
         !flottante && !surFondSombre && DOUCE[tone],

@@ -311,6 +311,17 @@
     inset: 0.16em -0.12em 0.02em;
     border-radius: 0.18em;
   }
+  /* Groupe d'un surlignage de plusieurs mots et de sa ponctuation (« prise en charge. ») : bloc en ligne qui ne se
+     coupe pas tant qu'il tient sur une ligne (rendu identique a `.mark` seul) ; plus large que la ligne (espacement de
+     texte WCAG 1.4.12 a 320 et 375 px), il prend toute la ligne et ses mots passent a la ligne au lieu d'etre rognes.
+     Le trait suit alors la derniere ligne du groupe. */
+  .mark-groupe {
+    display: inline-block;
+    max-width: 100%;
+  }
+  .mark-groupe .mark {
+    white-space: normal;
+  }
 
   /* Filet de section (ancien filet double) : filet simple teinte, ponctue d'un trait orange */
   .rule-double {

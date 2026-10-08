@@ -12,10 +12,11 @@ import { cx } from '@/lib/cx';
 import { PAGES, metadonnees } from '@/lib/metadonnees';
 
 /* Tableau des taux : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft), contribution en
-   titre de ligne, taux en chiffres clés Montserrat tabulaires. */
-const EN_TETE = 'px-4 py-3 text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase sm:px-5';
-const CONTRIBUTION = 'px-4 py-3.5 text-left leading-snug font-medium text-texte sm:px-5';
-const TAUX = 'amount px-4 py-3.5 text-right text-base whitespace-nowrap text-texte sm:px-5';
+   titre de ligne, taux en chiffres clés Montserrat tabulaires. Retrait intérieur de 14 px sous 360 px : à 320 px, le
+   tableau dépassait sa carte d'un pixel. */
+const EN_TETE = 'px-3.5 py-3 text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase min-[360px]:px-4 sm:px-5';
+const CONTRIBUTION = 'px-3.5 py-3.5 text-left leading-snug font-medium text-texte min-[360px]:px-4 sm:px-5';
+const TAUX = 'amount px-3.5 py-3.5 text-right text-base whitespace-nowrap text-texte min-[360px]:px-4 sm:px-5';
 
 export const metadata: Metadata = metadonnees(PAGES.obligations);
 
@@ -36,7 +37,10 @@ export default function ObligationsPage() {
           <>
             Votre entreprise paie déjà.
             <br />
-            Voici <span className="mark">où va l&apos;argent</span>.
+            Voici{' '}
+            <span className="mark-groupe">
+              <span className="mark">où va l&apos;argent</span>.
+            </span>
           </>
         }
         lead="Contribution formation, taxe d'apprentissage, entretiens obligatoires : le système repose sur des versements que toutes les entreprises font déjà. Selon votre taille, ils ouvrent des droits à demander."
@@ -51,7 +55,8 @@ export default function ObligationsPage() {
             répartit entre OPCO, Caisse des dépôts (CPF), associations Transitions Pro, État et
             Régions.
           </p>
-          <div className="overflow-clip rounded-carte border border-filet bg-white shadow-douce">
+          {/* Défilement horizontal dans la carte, jamais de colonne rognée (espacement de texte à 320 px). */}
+          <div className="overflow-x-auto rounded-carte border border-filet bg-white shadow-douce">
             <table className="w-full text-sm">
               <thead className="bg-lin-soft">
                 <tr>
@@ -152,10 +157,10 @@ export default function ObligationsPage() {
           </Callout>
           <ul className="list-disc space-y-2 pl-5">
             <li>Premier entretien <strong>dans l&apos;année suivant l&apos;embauche</strong> ;</li>
-            <li>Puis un entretien <strong>tous les 4 ans</strong>{' '}(au lieu de 2) ;</li>
-            <li>Un <strong>bilan récapitulatif tous les 8 ans</strong>{' '}(au lieu de 6) ;</li>
+            <li>puis un entretien <strong>tous les 4 ans</strong>{' '}(au lieu de 2) ;</li>
+            <li>un <strong>bilan récapitulatif tous les 8 ans</strong>{' '}(au lieu de 6) ;</li>
             <li>
-              Contenu élargi : compétences, perspectives d&apos;évolution, besoins de formation,
+              contenu élargi : compétences, perspectives d&apos;évolution, besoins de formation,
               information sur le CPF et la VAE.
             </li>
           </ul>
@@ -205,7 +210,7 @@ export default function ObligationsPage() {
           </p>
         </GuideSection>
 
-        <GuideSection id="budget" number="05" title="Légal, volontaire, conventionnel : trois « budgets » différents">
+        <GuideSection id="budget" number="05" title="Légal, volontaire, conventionnel : trois «&nbsp;budgets&nbsp;» différents">
           <ul className="list-disc space-y-3 pl-5">
             <li>
               <strong>Le versement légal (CUFPA)</strong>{' '}est un impôt affecté : il ne revient
@@ -236,7 +241,8 @@ export default function ObligationsPage() {
             Avant de payer une formation sur fonds propres, vérifiez dans l&apos;ordre : les
             fonds mutualisés (si &lt; 50 salariés), les fonds conventionnels de votre branche,
             les <Link href="/former-sans-budget/" className="lien">actions collectives de votre OPCO</Link>,
-            le CPF du salarié, et les cofinancements FSE+ lorsque votre OPCO en propose.
+            le CPF du salarié, et les cofinancements du Fonds social européen plus (FSE+) lorsque votre OPCO
+            en propose.
           </Callout>
         </GuideSection>
       </GuideBody>

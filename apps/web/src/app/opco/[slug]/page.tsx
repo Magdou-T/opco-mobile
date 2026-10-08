@@ -140,10 +140,11 @@ export default async function OpcoFichePage({
               </p>
             </div>
 
+            {/* Libellé, pas un titre : il nomme l'encadré (repère « complémentaire »), hors de l'échelle des sections. */}
             <Card as="aside" tone="teintee" aria-labelledby="titre-secteurs">
-              <h2 id="titre-secteurs" className="surtitre">
+              <p id="titre-secteurs" className="surtitre">
                 Secteurs couverts
-              </h2>
+              </p>
               <p className="mt-3 text-sm leading-relaxed text-texte-doux">{typo(opco.secteurs)}</p>
             </Card>
           </div>
@@ -251,7 +252,14 @@ export default async function OpcoFichePage({
           )}
 
           {/* ================= ALERTES ================= */}
-          {presente('alertes') && <AlertesOpco alertes={alertes} opcoName={opco.name} headingLevel={2} id="alertes" />}
+          {presente('alertes') && (
+            <section id="alertes" aria-labelledby="titre-alertes" className={SECTION}>
+              <TitreDeSection id="titre-alertes" titre={`Alertes publiées par ${opco.name}`} />
+              <div className="mt-6">
+                <AlertesOpco alertes={alertes} opcoName={opco.name} titre={false} />
+              </div>
+            </section>
+          )}
 
           {/* ================= DISPOSITIFS ================= */}
           {presente('dispositifs') && (

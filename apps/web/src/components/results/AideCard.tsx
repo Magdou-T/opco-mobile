@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { AideEvaluee } from '@opco/core';
+import { TexteAvecSigles } from '@/components/ui/Abreviation';
 import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
@@ -21,7 +22,16 @@ import { TEXTE_SOUPLE } from './classes';
  * officielles citées), puis fiabilité, date de vérification et un lien par site source en pied. À l'impression, le
  * détail est toujours visible.
  */
-export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: ReadonlyMap<string, string> }) {
+export function AideCard({
+  aide,
+  nomParId,
+  sigles,
+}: {
+  aide: AideEvaluee;
+  nomParId: ReadonlyMap<string, string>;
+  /** Sigles à définir dans le titre (`siglesDesTitres` : une seule carte par écran pour chaque sigle). */
+  sigles?: Readonly<Record<string, string>>;
+}) {
   const [ouvert, setOuvert] = useState(false);
   const montant = montantAffiche(aide);
   const { pages, sites } = sourcesDeLAide(aide.sources);
@@ -46,7 +56,7 @@ export function AideCard({ aide, nomParId }: { aide: AideEvaluee; nomParId: Read
           <div className="min-w-0">
             <Etiquette tone={eligible ? 'turquoise' : 'or'}>{eligible ? 'Éligible' : 'À vérifier'}</Etiquette>
             <h4 id={idTitre} className="mt-3 text-lg leading-snug font-semibold text-texte">
-              {typo(aide.nom)}
+              {sigles ? <TexteAvecSigles texte={typo(aide.nom)} sigles={sigles} /> : typo(aide.nom)}
             </h4>
             <p className="mt-1 text-sm leading-snug text-texte-doux">{typo(aide.financeurNom)}</p>
           </div>

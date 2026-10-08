@@ -80,8 +80,8 @@ section 13).
 
 ## 3. Typographie
 
-- **Montserrat** 700 (titres, chiffres clés) et 600 (sous-titres, nom de formation). Pas de 800 : les classes
-  `font-extrabold` des pages anciennes s'affichent en 700, seul poids chargé au-dessus.
+- **Montserrat** 700 (titres, chiffres clés) et 600 (sous-titres, nom de formation). Ni 800 (aucune classe
+  `font-extrabold`) ni 400 : un titre, même réservé aux lecteurs d'écran, porte `font-bold` ou `font-semibold`.
 - **Inter** 400 (texte), 500 et 600 (libellés d'interface, boutons, étiquettes). Le gras d'Inter (`<strong>`,
   `font-bold` sur du texte courant) s'affiche avec la graisse 600, la plus forte chargée : il n'y a pas d'Inter 700.
 - Aucune autre famille : `font-mono` et `font-serif` sont retirés du thème, IBM Plex Mono n'est plus chargée. Les balises
@@ -173,7 +173,8 @@ Pilule avec point de couleur : `tone` `neutre`, `orange`, `turquoise`, `or`, `ro
 `douce` (fond teinté) ou `flottante` (pilule blanche à ombre orangée, posée sur un aplat) ; `surFondSombre` pour les
 surfaces sombres (fond encre à 25 %, texte blanc : 6,70:1 au moins sur le point le plus clair de chaque dégradé) ;
 `as` : `span` (défaut) ou `li` ; `style` pour un délai d'apparition (`--delai`). Le texte porte le sens, le point reste
-décoratif.
+décoratif. La pilule douce reste sur une ligne ; la flottante (liste de domaines de l'accueil) passe à la ligne si elle
+est plus large que sa liste (espacement de texte WCAG 1.4.12 à 320 px), au lieu d'élargir la page.
 
 ```tsx
 <Etiquette tone="or">Exemple</Etiquette>
@@ -227,6 +228,8 @@ logo lui-même). Le fichier n'est jamais recoloré : ses couleurs restent lisibl
 
 Sommaire d'une page longue (fiches OPCO, guides), composant client : `entrees` (`id` de la section visée, `libelle`,
 `compte` facultatif en pastille rouge), `etiquette` (nom de la navigation), `numerote` (« 01 », « 02 » des guides).
+La pastille est muette pour les lecteurs d'écran, qui entendent le nombre en toutes lettres : « Alertes (12 alertes) »,
+jamais le libellé et le chiffre accolés.
 Sous 1 024 px, bloc replié `<details>` en tête du contenu (cibles de 44 px) ; à partir de 1 024 px, colonne
 `.sommaire-collant` où la section à l'écran est signalée (pilule lin, point orange, `aria-current="location"`). Les
 liens suivent l'ancre de façon native (sans JavaScript aussi) ; avec lui, le bloc se referme avant le défilement et le
@@ -236,7 +239,19 @@ focus passe au titre de la section. Section 16.
 
 Titre `h2` des pages de contenu (fiches, guides) : Montserrat 700 de 28 à 32 px, focalisable par programme (le sommaire
 y pose le focus), chapeau facultatif ; la section porte au-dessus son filet `.rule-double`. Plus mesuré que
-`SectionTitle` en taille `section` (40 px à 1 280 px), qui reste celui de l'accueil.
+`SectionTitle` en taille `section` (40 px à 1 280 px), qui reste celui de l'accueil. Un mot plus long que la ligne s'y
+coupe (`break-words` : « cofinancement » à 320 px avec l'espacement de texte) au lieu de sortir de l'écran.
+
+### `Abreviation` (`components/ui/Abreviation.tsx`)
+
+Sigle défini à sa première occurrence par une infobulle (`<abbr title>`, souligné en pointillé) ; `TexteAvecSigles`
+rend un texte à l'identique en définissant chaque sigle donné à sa première occurrence (`definirAbreviations`,
+`lib/sigles.ts`). Module léger, sans `lib/fiche.ts` : le simulateur et l'écran de résultats l'importent ;
+`TexteDonnees` (fiches) s'appuie dessus. Définitions sûres dans `SIGLES` (`lib/sigles.ts`) : IDCC (résultats de la
+recherche d'entreprise), FSE+ (titre de la première carte d'aide qui le cite, `siglesDesTitres`), NDA (fiche AKTO),
+RQTH (fiche ATLAS). Une fois par page ; un sigle écrit dans un texte du site l'est en toutes lettres suivies du sigle
+(« validation des acquis de l'expérience (VAE) », « Fonds social européen plus (FSE+) » à l'accueil et dans
+« Obligations »).
 
 ### `BandeAppel` (`components/site/BandeAppel.tsx`)
 
@@ -256,7 +271,8 @@ l'accueil (« Cinq minutes pour chiffrer votre projet ») et chaque guide.
 | `.marginalia` | même famille en texte-discret, 11 px : classe héritée, encore employée par le parcours du simulateur ; les pages de D3 et l'accueil écrivent les utilitaires (`text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase`) |
 | `.amount` | chiffres clés Montserrat 700 tabulaires |
 | `.stamp` | étiquette en pilule, point et bord dans la couleur du texte (`text-*`) |
-| `.mark` | trait vert clair arrondi posé sur la ligne de base, sous un mot ou un chiffre (le souligné du film de marque) ; se déploie à l'affichage ; aplat plein et texte foncé sur une surface sombre ; souligné de texte à l'impression |
+| `.mark` | trait vert clair arrondi posé sur la ligne de base, sous un mot ou un chiffre (le souligné du film de marque) ; se déploie à l'affichage ; aplat plein et texte foncé sur une surface sombre ; souligné de texte à l'impression ; ne se coupe jamais (`nowrap`) |
+| `.mark-groupe` | groupe d'un surlignage de plusieurs mots et de sa ponctuation (`<span class="mark-groupe"><span class="mark">prise en charge</span>.</span>`) : bloc en ligne de largeur maximale 100 %, rendu identique tant qu'il tient sur une ligne ; plus large (espacement de texte WCAG 1.4.12 à 320 et 375 px), ses mots passent à la ligne au lieu d'être rognés, le trait sous la dernière ligne. Garde : `tests/surlignage.test.ts` |
 | `.rule-double` | filet de section teinté, ponctué d'un trait orange de 40 px |
 | `.lien` | lien dans un texte : orange-deep souligné ; vert clair sur fond sombre, blanc sur dégradé |
 | `.lien-etendu` | lien qui couvre sa carte (focus autour d'une carte claire, à l'intérieur d'une carte en dégradé) |
@@ -286,7 +302,14 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
 ## 7. Mouvement, accessibilité, impression
 
 - Mouvement sobre : apparition douce au chargement (0,6 s), surlignage qui se déploie, balayage au survol du bouton
-  primaire et du logo, flèche qui glisse. Sous `prefers-reduced-motion: reduce`, tout s'arrête (état final immédiat).
+  primaire et du logo, flèche qui glisse. Sous `prefers-reduced-motion: reduce`, tout s'arrête (état final immédiat),
+  y compris l'ombre de l'en-tête liée au défilement (`entete-ombre` : animation coupée, ombre `--ombre-entete` posée).
+- Zoom et espacement de texte (WCAG 1.4.10 et 1.4.12, contrôlés à 320, 375 et 640 px avec l'interligne 1,5,
+  l'interlettrage 0,12 em, l'espace entre mots 0,16 em) : aucun texte rogné ni défilement de la page. Un mot plus long
+  que sa ligne se coupe (`break-words`, `[overflow-wrap:anywhere]` pour une adresse électronique), un surlignage de
+  plusieurs mots est dans un `.mark-groupe`, une rangée de boutons passe à la ligne (`flex-wrap`), et un tableau de
+  données trop large défile dans sa carte (`overflow-x-auto` : tableau des taux de « Obligations »), jamais une colonne
+  rognée.
 - Focus visible partout : anneau de 3 px décalé de 2 px, orange-deep sur fond clair, or sur encre et nuit, blanc sur
   les dégradés turquoise et orange (`--focus` par surface). L'anneau est mesuré contre le fond **sur lequel il se
   dessine** : autour d'un bouton posé sur la bande orange, c'est la bande ; autour d'une carte en dégradé, ce serait le
@@ -324,7 +347,9 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
     compris (l'état « ouvert » est remis à zéro dès que le chemin change).
   - Page active : pilule lin et point orange, `aria-current="page"`. Le bouton principal s'efface sur le simulateur.
 - Pied de page (`components/site/SiteFooter.tsx`) : surface encre, filet tricolore turquoise / or / orange (les trois
-  soulignés du slogan de marque), logo en version claire, liens, date des critères dérivée des données des OPCO.
+  soulignés du slogan de marque), logo en version claire, liens, date des critères dérivée des données des OPCO
+  (`verificationLaPlusRecente`, `lib/format.ts`, partagée avec l'écran de résultats), et dans la dernière ligne le lien
+  souligné « Mentions légales et données » (section 16).
 
 ## 9. Rédaction SFG (tout texte visible)
 
@@ -383,8 +408,9 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
 
 ## 12. Garde de charte
 
-`npm run check:charte` (script `scripts/check-charte-sfg.mjs`, Node seul) parcourt `apps/web/src/**/*.{ts,tsx,css}` et
-signale, avec fichier, ligne et colonne (code de sortie 1 en cas de problème) :
+`npm run check:charte` (script `scripts/check-charte-sfg.mjs`, Node seul) parcourt `apps/web/src/**/*.{ts,tsx,css}`
+(toutes les règles) ainsi que `apps/web/tests/` et ce fichier (tirets et émojis seulement), et signale, avec fichier,
+ligne et colonne (code de sortie 1 en cas de problème) :
 
 - le tiret cadratin et ses variantes (U+2014, la barre horizontale U+2015, U+2E3A, U+2E3B, la forme verticale U+FE31,
   U+FE58), écrits tels quels, en entité HTML (`&mdash;`, `&horbar;`, `&#8212;`, `&#x2014;`), en échappement JavaScript
@@ -398,8 +424,9 @@ signale, avec fichier, ligne et colonne (code de sortie 1 en cas de problème) :
   calculé : `rgb(59 130 246 / var(--opacite))`), hexadécimaux et couleurs nommées CSS (`blue`, `navy`,
   `rebeccapurple`…) **dans un contexte de couleur** : déclaration ou objet de style, attribut `fill`, `stroke`,
   `color`, valeur arbitraire `[…]`, argument d'un dégradé ou de `color-mix()`, chaîne qui n'est qu'un hexadécimal (sauf
-  ancre affectée ou comparée : `href="#bad"`, `location.hash === '#bad'` ne sont pas des couleurs). Un gris (chroma
-  OKLCH inférieure à 0,01) n'est pas signalé ;
+  ancre affectée ou comparée : `href="#bad"`, `location.hash === '#bad'`, `url(#bad)` d'un masque ou d'un filtre et
+  `new URL('#bad', base)` ne sont pas des couleurs). Un gris (chroma OKLCH inférieure à 0,01) n'est pas signalé. La
+  lecture des arguments d'une fonction de couleur est linéaire, même pour des milliers de fonctions non refermées ;
 - la police mono : `font-mono`, `monospace`, IBM Plex et, partout, les familles mono dont le nom ne désigne rien
   d'autre (SF Mono, Fira Code, JetBrains Mono, Source Code Pro, Cascadia, Lucida Console, Inconsolata, Iosevka,
   Monaspace, toute famille « … Mono ») ; Monaco, Menlo, Consolas, Courier et Hack seulement dans un contexte de police
@@ -416,9 +443,17 @@ l'écrivant en clair dans une expression régulière est signalé, et une forme 
 caractère : `t.replaceAll(String.fromCharCode(0x2014), ', ')` ou `new RegExp(String.fromCharCode(0x2014), 'g')` ; de
 même `String.fromCodePoint()` pour un émoji qu'un code doit reconnaître.
 
-`node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 178 cas : chaque règle a une violation et un
-jumeau propre, et quatre contrôles portent sur les positions et l'extrait signalés. Les 67 mutants de la garde (copies
-du script dont une règle est retirée ou faussée) font tous échouer cet autotest. Limites : la garde lit le texte
+`npm run check:tirets` (option `--tirets`) cherche les seuls tirets cadratins et leurs variantes dans tous les fichiers
+texte suivis du dépôt (`git ls-files` : `.ts`, `.tsx`, `.js`, `.mjs`, `.cjs`, `.json`, `.md`, `.yml`, `.yaml`, `.css`,
+`.txt`, hors données JSON de `datasets/` et de `packages/core/data/`, contrôlées par un test du cœur) et compte les
+fichiers restants par dossier ; il n'est pas encore branché dans l'intégration continue (le contrôleur le fera quand le
+dépôt entier sera propre).
+
+`node scripts/check-charte-sfg.mjs --self-test` vérifie la garde sur 213 cas : chaque règle a une violation et un
+jumeau propre ; sept contrôles portent sur les positions, l'extrait signalé et la durée (1 000 `rgb(` ouverts suivis de
+490 000 caractères : moins de 3 s), sept sur le périmètre des règles et dix-neuf sur le choix des fichiers du balayage
+`--tirets`. Les 67 mutants de la garde (copies du script dont une règle est retirée ou faussée) ont été essayés lors de
+la tâche D1a-fix2, hors dépôt. Limites : la garde lit le texte
 source, pas le rendu ; une couleur calculée à l'exécution (variable, concaténation, donnée, composante en `var()` ou
 `calc()`), un hexadécimal sans contexte de couleur (commentaire, texte courant), une couleur encodée dans une image SVG
 en data URI (`fill='%233b82f6'`), une police mono sous un nom inconnu ou un nom ambigu rangé dans une constante, un
@@ -530,8 +565,13 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   développement des compétences de sa branche (Afdas : « dirigeants salariés » ; Uniformation : « dirigeants bénévoles
   dans certaines branches ») ; le projet « Former le dirigeant » n'affiche pourtant ni plafond horaire ni budget OPCO,
   et l'écran de résultats ne calcule ce plan que pour les projets salariés (former, reconvertir : `ouvreBudgetOpco`,
-  dans `calculer`, `lib/resultats.ts`). Une note le dit au dirigeant (« Aucun OPCO renseigné » ou « OPCO non compté pour un
-  dirigeant », avec le cas de l'assimilé salarié). Hors périmètre.
+  dans `calculer`, `lib/resultats.ts`). Une note le dit au dirigeant (`titreNoteOpco` : « Pas de calcul du plan de
+  développement des compétences pour ce projet » sans OPCO, la saisie manuelle de ce projet n'en demandant pas ;
+  « OPCO non compté pour un dirigeant » avec un OPCO ; corps inchangé, avec le cas de l'assimilé salarié). Hors
+  périmètre.
+- **Mois de début prévu** (étape Formation, `MM/AAAA`) : un mois inexistant (« 13/2026 ») est une erreur comme une
+  saisie mal formée (`erreurDuMoisDeDebut`, `lib/parcours.ts` : « Ce mois n'existe pas : écrivez un mois de 01 à 12 »),
+  signalée quand on quitte le champ (`aria-invalid`, message relié).
 
 ## 15. Écran de résultats (« Votre plan de financement »)
 
@@ -546,8 +586,8 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
 « Textes des données » plus bas) ; un montant d'aide non éligible n'est jamais affiché.
 
 - **Chargement** : `EcranResultats` est chargé à la demande par `WizardContainer` (`next/dynamic`, `ssr: false`) : le
-  catalogue d'aides (environ 149 Ko gzip, lot de 792 603 octets bruts) et le calcul restent hors du lot initial du
-  simulateur. Le parcours ne lui passe que l'état et deux actions ; le calcul est une dérivation pure de l'état
+  catalogue d'aides (lot de 794 036 octets bruts, 149 787 octets gzip, mesures de la revue finale, à rafraîchir après le
+  build final) et le calcul restent hors du lot initial du simulateur. Le parcours ne lui passe que l'état et deux actions ; le calcul est une dérivation pure de l'état
   (`calculer`, en `useMemo`), la date du jour est lue dans le composant, jamais dans `@opco/core`. Le lot est préchargé
   dès l'étape Récapitulatif (`prechargerEcranResultats`, fait par `creerPrechargeur` : la même fonction de chargement que
   `next/dynamic`, une fois par page, échec absorbé) : une coupure de connexion après le récapitulatif ne l'empêche plus
@@ -567,10 +607,11 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   (certaines sont sensibles : âge, handicap), recharger les efface. L'écran le dit (`Callout` alerte « L'écran de
   résultats n'a pas pu se charger » : connexion peut-être coupée, recharger la page, réponses à saisir de nouveau) et
   ne propose qu'un bouton, « Recharger la page » (`window.location.reload()`) ; le focus va à son titre.
-- **Ordre** : titre `h2` et actions (Modifier, Imprimer : libellés courts sous 640 px, nom accessible complet),
-  étiquettes de la situation (projet, OPCO, région, durée), bandeau de synthèse, note sur l'OPCO s'il y a lieu, cartes
-  du plan, aides par financeur (`h2`), détail de l'estimation OPCO (`h2`), portails de la région (`h2`), mention,
-  date de la simulation et actions. Aucun élément collant.
+- **Ordre** : titre `h2` et actions (Modifier, Imprimer : libellés courts sous 640 px, nom accessible complet ; la
+  rangée passe à la ligne, `flex-wrap`, plutôt que de déborder à 640 px avec l'espacement de texte), étiquettes de la
+  situation (projet, OPCO, région, durée, écrite par `nombreEtUnite` : « 1 500 h »), bandeau de synthèse, note sur
+  l'OPCO s'il y a lieu, cartes du plan, aides par financeur (`h2`), détail de l'estimation OPCO (`h2`), portails de la
+  région (`h2`), mention, date de la simulation et actions. Aucun élément collant.
 - **Bandeau de synthèse** : carte blanche à grands chiffres (`rounded-panneau`, filet turquoise / or / orange en tête),
   pas un dégradé : le reste à charge est en orange foncé (5,16:1 sur blanc ; moins de 2:1 sur le dégradé turquoise), la
   barre empilée a besoin d'un fond clair pour ses couleurs de famille (le turquoise de l'OPCO se perdrait dans un
@@ -608,6 +649,19 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   1 500 états : chaque phrase écrite est confrontée aux aides et aux cartes affichées. Fonds épuisés
   signalés par l'OPCO alors que le plan compte son plan de développement des compétences (`fondsEpuisesSurLePlan`) :
   `Callout` avertissement sous la barre, lien vers les alertes de l'OPCO (`#alertes-opco`).
+- **Plan fermé aux 50 salariés et plus** (`planFermeDe`, `raisonPlanFerme`, `lib/encadres-resultats.ts`) : quand le
+  plan de développement des compétences de l'OPCO est fermé pour la taille (fonds mutualisés réservés aux moins de
+  50 salariés, aucune enveloppe pour cette taille dans le barème appliqué), le bandeau le dit d'emblée : la raison ouvre
+  l'encadré sans financement chiffré (« les autres financeurs » fixent alors le montant après étude du dossier), ou un
+  encadré à part (« Aucune prise en charge estimée sur le plan de développement des compétences d'AKTO ») quand
+  d'autres financeurs chiffrent un montant ; lien vers le détail de l'OPCO (`#titre-detail-opco`). Propriété : 1 000
+  états à plan fermé tirés (graine 41), la raison toujours dans le bandeau.
+- **Relais du plan conventionnel** (AKTO, organismes de formation : variante `relais_plan_conventionnel` du cœur) : la
+  ligne du plan s'appelle « Plan conventionnel de branche », AKTO (`libellesDeLigne`), l'encadré des fonds épuisés
+  dit que les demandes sont financées sur ce plan dans la limite de son budget annuel par entreprise, sous réserve de
+  l'accord de l'OPCO (`texteFondsEpuises`), et le détail de l'OPCO nomme le même financement (`dispositifAffiche`). Une
+  branche épuisée sans relais garde « la prise en charge peut être refusée ». Propriété : 600 états (graine 23), le
+  relais n'apparaît que si la variante appliquée porte le champ.
 - **Familles de couleur** (`familleCouleur`) : pastille ronde des lignes et des groupes, part de la barre, pastille de
   légende. L'icône posée sur la pastille est décorative (le nom du financeur est écrit) mais dépasse 3:1.
 
@@ -628,10 +682,12 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   et vert clair 3,41:1 contre le blanc, au lieu de 1,84:1 et 1,68:1). Jamais seule porteuse d'information :
   `role="img"` et nom accessible complet (`descriptionBarre`), légende écrite (« AKTO 67 % », « moins de 1 % »). Libellé
   d'une part : le nom de financeur commun à ses lignes s'il est court (« AKTO », « FAFCEA »), sinon celui de la famille.
+  La légende est une liste (`role="list"` : Safari et VoiceOver retirent le rôle d'une liste sans puces), comme les
+  lignes du plan.
 - **Plan en pile** : la carte « Financement de la formation » liste les lignes dans l'ordre d'empilement (pastille,
   nom, financeur, étiquette de fiabilité, « estimation à confirmer auprès du financeur » si elle n'est pas exacte,
-  montant à droite) ; avec plusieurs lignes, un fil (`filet`) les relie jusqu'au total, « plafonné au coût de la
-  formation » ; c'est la seule carte à total. Les autres cartes (options au choix, aides versées à l'employeur, revenus
+  montant à droite ; `role="list"`, le nombre de lignes est annoncé) ; avec plusieurs lignes, un fil (`filet`) les
+  relie jusqu'au total, « plafonné au coût de la formation » ; c'est la seule carte à total. Les autres cartes (options au choix, aides versées à l'employeur, revenus
   et aides à la personne, avantages fiscaux et sociaux, montant selon dossier, services gratuits) : en-tête à pastille
   d'icône turquoise et phrase d'aide, aucune somme, aucune carte vide (`cartesDuPlan`). La raison d'une option (« Au
   choix avec « X » ») reste du texte, sans lien. Une option chiffrée porte la fiabilité de sa source, comme une ligne du
@@ -647,16 +703,18 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   (chevron, `aria-expanded`) : conditions, démarches numérotées, « Faire la demande », pages officielles citées (titre
   complet) ; pied : fiabilité, date de vérification, un lien par site source (`sourcesDeLAide` : le catalogue cite
   souvent dix pages d'un même site). Un identifiant technique d'aide cité par le catalogue (« nat-cpf ») devient le
-  nom de l'aide (`nommerAides`). Aides non éligibles : repliées, nom et raisons, jamais de montant ; celles d'un autre
-  projet, public, région ou type de formation ne sont jamais affichées.
+  nom de l'aide (`nommerAides`). Le sigle FSE+ est défini une fois, dans le titre de la première carte qui le cite
+  (`siglesDesTitres`, `Abreviation`). Aides non éligibles : repliées, nom et raisons, jamais de montant ; celles d'un
+  autre projet, public, région ou type de formation ne sont jamais affichées.
 - **Détail de l'estimation OPCO** (`FundingBreakdown`) : total de tous les postes (le plan ne retient que ceux de la
   formation, le chapeau le dit quand salaires ou transport sont financés) ; chapeau « poste par poste » seulement
   avec le tableau des postes (`chapeauDetailOpco` : ni plan fermé, ni tableau vide) ; tableau (`DetailParPoste`,
   lignes `lignesDuDetail`) Poste / Demandé / Financé / Reste / Source ; sous 640 px, « Demandé », « Reste » et la source
   passent dans la colonne du poste (deux colonnes : à trois, le tableau débordait de sa carte de 42 px à 320 px et de
   3 px à 375 px) ; ligne non chiffrée : « à confirmer », reste « - », règle
-  sous le poste ; détail du calcul d'un poste dépliable (`aria-expanded`, `aria-controls`), toujours dans la page :
-  replié, il reste imprimé (`hidden print:table-row`) ; listes de plus de 6 conventions collectives repliées
+  sous le poste ; détail du calcul d'un poste dépliable par son seul bouton chevron (`aria-expanded`, `aria-controls` ;
+  un clic ailleurs sur la ligne ne fait rien), toujours dans la page : replié, il reste imprimé
+  (`hidden print:table-row`) ; listes de plus de 6 conventions collectives repliées
   (`replierIdcc`) ; 50 salariés et plus : `Callout` avertissement (barème général ou de la branche ; choisir sa branche à
   l'étape Entreprise).
 - **Textes des données** : `texteDonnees` (dates JJ/MM/AAAA, montants et `typo` : insécables avant « : ; ? ! », entre
@@ -703,10 +761,13 @@ Composants des fiches : `components/opco/`.
   par `TitreDeSection`.
 - **Fiche OPCO, ordre** : fil d'Ariane, nom, nom complet, « Barèmes vérifiés le JJ/MM/AAAA » (étiquette turquoise),
   « Estimer pour cet OPCO » (primaire) et « Site d'AKTO » (secondaire, nouvel onglet annoncé), une phrase qui dit comment
-  retrouver l'OPCO dans le simulateur (il n'est pas présélectionné), carte teintée « Secteurs couverts » ; encadré des
-  alertes (type et nombre, lien vers la liste) ; barème général du plan de développement des compétences (PDC) ; selon
-  la taille de l'entreprise ; barèmes par branche professionnelle ; alertes publiées (`AlertesOpco`, partagé avec l'écran
-  de résultats, inchangé) ; financements complémentaires ; alternance, CPF et VAE ; en pratique. Une section sans
+  retrouver l'OPCO dans le simulateur (il n'est pas présélectionné), carte teintée « Secteurs couverts » (repère
+  complémentaire nommé par un libellé `.surtitre`, pas un titre : il n'entre pas dans l'échelle des sections) ; encadré
+  des alertes (type et nombre, lien vers la liste) ; barème général du plan de développement des compétences (PDC) ;
+  selon la taille de l'entreprise ; barèmes par branche professionnelle ; « Alertes publiées par AKTO », section à
+  part entière (`TitreDeSection`, `h2` de 28 à 32 px comme les autres) dont l'encadré rouge `AlertesOpco` n'a plus de
+  titre propre (`titre={false}` ; l'écran de résultats garde son `h3`) ; financements complémentaires ; alternance, CPF
+  et VAE ; en pratique. Une section sans
   contenu n'existe pas, ni son lien de sommaire (`sectionsDeLaFiche`). Les secteurs restent une phrase : ce texte libre
   ne se découpe pas sans erreur en étiquettes (chez OPCO Santé, « sanitaire, social et médico-social privé à but non
   lucratif » est un seul secteur).
@@ -721,7 +782,8 @@ Composants des fiches : `components/opco/`.
   (« 14,50 €/h »). Dans les deux présentations, « Voir la précision » ne montre que le reste de la note
   (`restePrecision` : extraits cités qui l'ouvrent, phrases suivantes, parenthèse de source, date de vérification, dans
   leur ordre), jamais la règle déjà affichée, et n'existe pas quand la note ne dit rien d'autre (`precisionDuPoste`,
-  `reste` nul). Testé sur les 245 notes des 11 OPCO : la règle et le reste redonnent la note, aux espaces près.
+  `reste` nul). Testé sur les 257 notes des 11 OPCO (le test en exige au moins 240) : la règle et le reste redonnent la
+  note, aux espaces près.
 - **Montant absent et légende** : « non publié », « incluse dans le plafond horaire », « sans montant fixe », ou un renvoi
   à la précision qui cite ce qui est visible : « montant précisé dans la colonne Précision » dans le tableau,
   « montant précisé ci-dessous » dans les cartes. La légende, une par présentation, n'explique que les libellés affichés
@@ -761,8 +823,9 @@ Composants des fiches : `components/opco/`.
   3 828, 3 843 et 3 852 px), aucune liste de définitions ne sort de son cadre, aucun texte n'est rogné ni hors de la
   page.
 - **Limites connues** : le focus peut s'arrêter à demi masqué sous l'en-tête collant du tableau de barème (critère
-  2.4.11 satisfait, 2.4.12 non). Le HTML de `/opco/akto/` relevé par la revue de D3 pèse 840 869 octets (58 736 octets
-  en gzip), dont environ 6 Ko de double rendu du barème (tableau et cartes) : accepté ; un seul tableau mis en cartes
+  2.4.11 satisfait, 2.4.12 non). Le HTML de `/opco/akto/` relevé par la revue finale pèse 825 546 octets (58 387 octets
+  en gzip, à rafraîchir après le build final), dont environ 6 Ko de double rendu du barème (tableau et cartes) :
+  accepté ; un seul tableau mis en cartes
   par CSS le réduirait (hors périmètre). Safari et iOS ne sont pas testés (`::details-content`, `position: sticky` sur
   un `th`).
 - **Liste des OPCO** : 12 cases (11 cartes triées par `trierParNom`, article élidé ignoré : L'Opcommerce se range à O,
@@ -771,17 +834,23 @@ Composants des fiches : `components/opco/`.
   lien est celui de l'OPCO).
 - **Guides** (`Guide.tsx`) : texte courant mesuré à 34 rem (66 à 69 caractères par ligne pleine en Inter 16 px, mesurés
   dans Chrome), tableaux et cartes sur toute la colonne ; numéro de section en jalon turquoise ; encadrés en `Callout`
-  (information, avertissement, confirmation) ; sources en `.lien`, nouvel onglet annoncé ; tableau « Ce que finance un
-  OPCO » empilé en cartes sous 640 px (en-tête repris devant chaque cellule par `data-label`) ; `typoDesEnfants` pose les
-  espaces insécables des textes écrits dans le JSX (nombre et unité, « : ») sans changer un mot ; `BandeAppel` en fin
-  de page, la même que l'accueil.
+  (information, avertissement, confirmation) ; sources en `.lien`, nouvel onglet annoncé ; un lien vers un catalogue
+  porte un nom (« campusAtlas sur opco-atlas.fr », « Sélexion sur opcoep.fr »), l'adresse complète en infobulle
+  (`Source`, propriété `titre`) ; tableau « Ce que finance un OPCO » empilé en cartes sous 640 px (en-tête repris devant
+  chaque cellule par `data-label`) ; `typoDesEnfants` pose les espaces insécables des textes écrits dans le JSX (nombre
+  et unité, « : ») sans changer un mot ; les guillemets s'écrivent avec leurs espaces insécables (`«&nbsp;…&nbsp;»`,
+  ou `INSECABLE` dans une chaîne), que `typo` ne pose pas (il ne touche jamais l'intérieur d'une citation) ;
+  `BandeAppel` en fin de page, la même que l'accueil.
 - **Contact** : formulaire en carte, champs au dessin du simulateur (`FieldLabel`, contour filet-fort), erreurs entre le
   libellé et le champ (`aria-invalid`, `aria-describedby`, zone `aria-live`) quand on quitte le champ ou à l'envoi,
   focus sur le premier champ à corriger ; même lien `mailto` qu'avant (`lienMailto` : destinataire, objet, corps), le
   bouton dit ce qui se passe (« Ouvrir ma messagerie ») ; carte SFG Développement (logo, domaines de formation aux
-  couleurs de la charte, adresse e-mail). `FieldLabel` vit dans `components/ui/FieldLabel.tsx`, sans `'use client'`
-  (composant sans état) ; `forms.tsx` le réexporte : le formulaire de contact n'embarque plus les champs du simulateur
-  (`RegionPicker`, `OpcoPicker`, `NumberField`, `lib/saisie`). Liste « Sujet » à libellés courts (`LIBELLES_DES_SUJETS` :
+  couleurs de la charte, `DOMAINES_DE_FORMATION` de `lib/domaines.ts`, partagés avec l'accueil ; adresse e-mail).
+  `FieldLabel` vit dans `components/ui/FieldLabel.tsx`, sans `'use client'` (composant sans état), et le dessin du
+  champ comme sa zone d'erreur dans `components/ui/Champ.tsx` (`CHAMP`, `ZoneErreur`), partagés avec les champs du
+  simulateur ; le formulaire de contact les importe directement et n'embarque ni les champs du simulateur (`OpcoPicker`,
+  `NumberField`, `lib/saisie`) ni `lib/format.ts` (`lib/contact.ts` ne prend que l'espace insécable de
+  `lib/insecable.ts`). Liste « Sujet » à libellés courts (`LIBELLES_DES_SUJETS` :
   « Financement OPCO », « Former mes salariés »… ; 153 px au plus en Inter 16 px, le champ en montre 162 à 320 px avec
   une barre de défilement classique) ; la valeur choisie reste le sujet complet, si bien que l'objet et le corps du
   message sont mot pour mot ceux d'avant (testé sujet par sujet contre 7c791cf).
@@ -906,10 +975,6 @@ emplois : elles expliquent une règle.
 | `#44514E` | `#F3F7F6` | tuile teintée : texte-doux sur lin-soft | 7,68:1 | 4,50:1 | conforme |
 | `#44514E` | `#FBEDEE` | AlertesOpco : texte ink-soft sur alert-soft | 7,28:1 | 4,50:1 | conforme |
 | `#C43F13` | `#FBEDEE` | AlertesOpco : lien « Voir la source » cobalt sur alert-soft | 4,54:1 | 4,50:1 | conforme |
-| `#9FA5A4` | `#0F1E1B` | FundingBreakdown : paper 60 % sur navy | 6,87:1 | 4,50:1 | conforme |
-| `#B7BCBB` | `#0F1E1B` | FundingBreakdown : paper 70 % sur navy | 8,94:1 | 4,50:1 | conforme |
-| `#C3C7C6` | `#0F1E1B` | FundingBreakdown : paper 75 % sur navy | 10,07:1 | 4,50:1 | conforme |
-| `#CFD2D1` | `#0F1E1B` | FundingBreakdown : paper 80 % sur navy | 11,29:1 | 4,50:1 | conforme |
 | `#1A1A1A` | `#FDF0EA` | simulateur, choix sélectionné (carte, carte de projet, case cochée) : libellé sur orange-soft | 15,60:1 | 4,50:1 | conforme |
 | `#44514E` | `#FDF0EA` | simulateur, choix sélectionné : description texte-doux sur orange-soft | 7,43:1 | 4,50:1 | conforme |
 | `#3E6860` | `#FDF0EA` | simulateur, branche choisie : « Détectée via votre convention collective » sur orange-soft | 5,61:1 | 4,50:1 | conforme |

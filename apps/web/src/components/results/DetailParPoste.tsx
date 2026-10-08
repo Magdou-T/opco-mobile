@@ -95,19 +95,15 @@ export function DetailParPoste({
                 key={`${line.poste}-${i}`}
                 className={cx('divide-y divide-filet print:break-inside-avoid', i > 0 && 'border-t border-filet')}
               >
-                <tr
-                  data-poste={line.poste}
-                  className={cx(
-                    'align-top transition-[background-color] hover:bg-vert-clair-soft/50',
-                    detaillee && 'cursor-pointer',
-                  )}
-                  onClick={() => detaillee && toggleLine(i)}
-                >
+                {/* Seul le bouton déplie le calcul : un clic sur la ligne ne fait rien (il dépliait aussi, et deux
+                    zones devaient arrêter ce clic). */}
+                <tr data-poste={line.poste} className="align-top transition-[background-color] hover:bg-vert-clair-soft/50">
                   <td className="px-4 py-4 sm:px-6">
                     <div className="flex items-start gap-1.5 font-semibold text-texte">
                       {detaillee && (
                         <button
                           type="button"
+                          onClick={() => toggleLine(i)}
                           aria-expanded={ouverte}
                           aria-controls={idDetail}
                           aria-label={`Calcul détaillé${INSECABLE}: ${line.label}`}
@@ -144,7 +140,7 @@ export function DetailParPoste({
                       <p className="text-xs text-texte-discret sm:hidden">
                         Reste&nbsp;: {!sansMontant && line.remainder > 0 ? formatEuro(line.remainder) : '-'}
                       </p>
-                      <div className="sm:hidden print:hidden" onClick={(e) => e.stopPropagation()}>
+                      <div className="sm:hidden print:hidden">
                         <SourceBadge url={line.sourceUrl} />
                       </div>
                     </div>
@@ -163,10 +159,7 @@ export function DetailParPoste({
                     {/* Ligne non chiffrée : jamais son coût complet présenté comme un reste. */}
                     {!sansMontant && line.remainder > 0 ? formatEuro(line.remainder) : '-'}
                   </td>
-                  <td
-                    className="hidden px-4 py-4 text-center sm:table-cell sm:px-6 print:hidden"
-                    onClick={(e) => e.stopPropagation()}
-                  >
+                  <td className="hidden px-4 py-4 text-center sm:table-cell sm:px-6 print:hidden">
                     <SourceBadge url={line.sourceUrl} />
                   </td>
                 </tr>

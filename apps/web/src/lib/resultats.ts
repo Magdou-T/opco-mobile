@@ -36,6 +36,7 @@ import type {
 import { ouvreBudgetOpco } from './entreprise';
 import { formatEuro, horsCitations } from './format';
 import { INSECABLE } from './insecable';
+import { SIGLES, citeLeSigle } from './sigles';
 
 // --- Calcul -------------------------------------------------------------------------------------------------------
 
@@ -324,6 +325,23 @@ export function groupesAidesVisibles(aides: readonly AideEvaluee[]): GroupeAides
     g.titre = nomPropre ?? FINANCEUR_LABELS[g.financeur];
   }
   return groupes;
+}
+
+/** Sigles définis dans le titre d'une carte d'aide (les aides du Fonds social européen plus portent « FSE+ »). */
+const SIGLES_DES_TITRES = ['FSE+'] as const;
+
+/**
+ * Sigles à définir dans le titre des cartes d'aide, une seule fois par écran : chacun dans la première carte, dans
+ * l'ordre d'affichage des groupes, dont le titre le cite (mot entier, casse exacte). Clé : identifiant de l'aide.
+ */
+export function siglesDesTitres(groupes: readonly GroupeAides[]): Map<string, Record<string, string>> {
+  const resultat = new Map<string, Record<string, string>>();
+  const cartes = groupes.flatMap((g) => g.aides);
+  for (const sigle of SIGLES_DES_TITRES) {
+    const premiere = cartes.find((a) => citeLeSigle(a.nom, sigle));
+    if (premiere) resultat.set(premiere.id, { ...resultat.get(premiere.id), [sigle]: SIGLES[sigle] });
+  }
+  return resultat;
 }
 
 /** Aides non éligibles montrées (repliées, sans montant) : jamais celles d'un autre projet, public, région ou type. */
