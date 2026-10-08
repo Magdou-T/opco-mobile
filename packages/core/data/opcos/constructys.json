@@ -38,7 +38,7 @@
     "value": 15,
     "confidence": "estimated",
     "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-    "note": "« Entreprises de moins de 11 salariés Plafond : 15 € HT / heure / stagiaire. Sauf FEEBAT plafond : 100 € HT / jour / stagiaire. » ; « Plafond : 10 € HT / heure / stagiaire uniquement pour les actions qualifiantes. » Valeur exacte pour le Bâtiment de moins de 11 salariés uniquement. Bâtiment 11-49 : 10 € HT/h pour les seules actions qualifiantes, 0 € dans l'estimation pour les autres formations (15 € HT/h pour la création, la reprise ou la transmission d'entreprise et les heures en AFEST, non comptés). TP : 15 €/h hors budget ; Négoce : non publié. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; condition des actions qualifiantes relue le 2026-10-08)"
+    "note": "« Entreprises de moins de 11 salariés Plafond : 15 € HT / heure / stagiaire. Sauf FEEBAT plafond : 100 € HT / jour / stagiaire. » ; « Plafond : 10 € HT / heure / stagiaire uniquement pour les actions qualifiantes. » Valeur exacte pour le Bâtiment de moins de 11 salariés uniquement. Bâtiment 11-49 : 10 € HT/h pour les seules actions qualifiantes, 0 € dans l'estimation pour les autres formations (15 € HT/h pour la création, la reprise ou la transmission d'entreprise et les heures en AFEST, non comptés). TP : 15 €/h hors budget, moins de 11 salariés seulement ; Négoce : non publié. (fiche Modalites_Batiment_PDC_2026.pdf datée de septembre 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/BATIMENT-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; condition des actions qualifiantes relue le 2026-10-08)"
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
   "frais_transport": {
@@ -91,7 +91,7 @@
   "alternance_apprentissage": "Niveaux de prise en charge par certification (NPEC BTP) ; frais versés au CFA : 6 €/nuitée, 3 €/repas, 1er équipement 500 € (niveaux 3-4) ou 300 € (niveau 5, contrats depuis le 30 juillet 2026) ; aide à la fonction de maître d'apprentissage (Bâtiment) : 250 €/an/entreprise pour un CAP technique conclu en 2026.",
   "alternance_professionnalisation": "Bâtiment : forfait de 13 € HT/h (métiers techniques du BTP), 16 € HT/h (maintenance, conduite d'engins) ou 7 € HT/h (tertiaire) ; publics prioritaires et GEIQ : 19 €, 22 € ou 13 € HT/h ; moins de 11 salariés (hors GEIQ) : complément de 6 € HT/h versé à l'entreprise (hors tertiaire) ; aide tutorale 230 € HT/mois pendant 6 mois.",
   "cpf_abondement": true,
-  "cpf_details": "Travaux publics, moins de 50 salariés : CPF co-construit (accord du 11 mai 2023) avec remboursement de la dotation ou de l'abondement versé à la Caisse des dépôts et participation à la rémunération de 15 € HT/h pour les heures sur le temps de travail.",
+  "cpf_details": "Travaux publics, moins de 50 salariés : CPF co-construit (accord du 11 mai 2023) avec remboursement de la dotation ou de l'abondement versé à la Caisse des dépôts ; pour les moins de 11 salariés, participation à la rémunération de 15 € HT/h pour les heures sur le temps de travail.",
   "vae_possible": true,
   "vae_details": "Accompagnement VAE : plafond 2 000 € HT ; bilan de compétences : 2 000 € HT ; évaluations CléA : 500 € HT (préalable) et 250 € HT (finale).",
   "limite_dossiers_an": "Bâtiment qualifiant : 3 stagiaires par an et par entreprise (1 200 h maximum par stagiaire) ; TP et Négoce : dans la limite du budget annuel",
@@ -173,7 +173,7 @@
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": null,
-      "description": "Remboursement à l'entreprise de la dotation ou de l'abondement versé à la Caisse des dépôts sur le CPF du salarié, dans le cadre de la co-construction prévue par l'accord TP du 11 mai 2023, et participation à la rémunération (15 € HT/h) pour les heures sur le temps de travail.",
+      "description": "Remboursement à l'entreprise de la dotation ou de l'abondement versé à la Caisse des dépôts sur le CPF du salarié, dans le cadre de la co-construction prévue par l'accord TP du 11 mai 2023 ; pour les entreprises de moins de 11 salariés, participation à la rémunération (15 € HT/h) pour les heures sur le temps de travail.",
       "conditions": [
         "Entreprise relevant des Travaux publics, moins de 50 salariés",
         "Projet CPF co-construit avec le salarié et dotation versée à la Caisse des dépôts"
@@ -566,7 +566,7 @@
       ],
       "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
       "confidence": "exact",
-      "note": "« ▪ Plafond de 32 € HT / heure / stagiaire. » ; « Coût pédagogique : Entreprises de moins de 50 salariés 4 000 € HT. » ; « Budget annuel porté à 8 000 € * pour les entreprises bénéficiant d’un accord validé ou d’un document unilatéral homologué » Rémunération (15 € HT/h) et formations transition écologique/numérique des moins de 11 salariés financées hors budget annuel. (fiche Modalites_TP_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/TP-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)",
+      "note": "« ▪ Plafond de 32 € HT / heure / stagiaire. » ; « Coût pédagogique : Entreprises de moins de 50 salariés 4 000 € HT. » ; « Budget annuel porté à 8 000 € * pour les entreprises bénéficiant d’un accord validé ou d’un document unilatéral homologué » Moins de 11 salariés seulement : rémunération (15 € HT/h) et formations transition écologique/numérique financées hors budget annuel. (fiche Modalites_TP_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/TP-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; colonne des moins de 11 salariés relue le 2026-10-08)",
       "cout_horaire_inter": {
         "value": 32,
         "confidence": "exact",
@@ -583,7 +583,7 @@
         "value": 15,
         "confidence": "exact",
         "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
-        "note": "« FINANCEMENTS SPÉCIFIQUES (HORS BUDGET ANNUEL) » ; « Dans la limite de 15 € HT / heure / stagiaire (sur conventionnelle). » Participation à la rémunération hors budget annuel (fonds conventionnels). (fiche Modalites_TP_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/TP-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
+        "note": "« UNIQUEMENT POUR LES ENTREPRISES DE MOINS DE 11 SALARIES » ; « Participation à la rémunération Dans la limite de 15 € HT / heure / stagiaire (sur conventionnelle). » Participation à la rémunération des entreprises de moins de 11 salariés seulement, sur les fonds conventionnels (hors budget annuel) ; aucune de 11 à 49 salariés. (fiche Modalites_TP_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/TP-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05 ; colonne des moins de 11 salariés relue le 2026-10-08)"
       },
       "prise_en_charge_salaires_mode": "euro_par_heure",
       "frais_annexes_pourcentage": {
@@ -599,7 +599,7 @@
         "note": "« Coût pédagogique : Entreprises de moins de 50 salariés 4 000 € HT. » ; « Budget annuel porté à 8 000 € * pour les entreprises bénéficiant d’un accord validé ou d’un document unilatéral homologué » Coûts pédagogiques ; 8 000 € avec accord APLD-R validé. (fiche Modalites_TP_PDC_2026.pdf datée de juillet 2026 du fichier zip : https://www.constructys.fr/wp-content/uploads/TP-Modalites-2026.zip, lié depuis cette page) (vérifié le 2026-10-05)"
       },
       "budget_annuel_portee": "pedagogie",
-      "budget_annuel_description": "Travaux publics, moins de 50 salariés : budget annuel de 4 000 € HT de coûts pédagogiques (8 000 € avec un accord APLD-R validé ou un document unilatéral homologué), 32 € HT/h ; rémunération 15 € HT/h et formations transition écologique/numérique (moins de 11 salariés) hors budget.",
+      "budget_annuel_description": "Travaux publics, moins de 50 salariés : budget annuel de 4 000 € HT de coûts pédagogiques (8 000 € avec un accord APLD-R validé ou un document unilatéral homologué), 32 € HT/h ; moins de 11 salariés seulement : rémunération 15 € HT/h et formations transition écologique/numérique hors budget.",
       "plafonds_par_taille": [
         {
           "taille": "less_11",
@@ -613,21 +613,24 @@
           "cout_horaire_max": null,
           "budget_annuel_max": 4000,
           "quota_horaire_max": null,
-          "description": "TP 11 à 49 salariés : 32 € HT/h, budget 4 000 € HT/an (8 000 € avec APLD-R) ; rémunération 15 € HT/h hors budget."
+          "description": "TP 11 à 49 salariés : 32 € HT/h, budget 4 000 € HT/an (8 000 € avec APLD-R) ; pas de participation à la rémunération (réservée aux moins de 11 salariés).",
+          "prise_en_charge_salaires_horaire": null
         },
         {
           "taille": "50_299",
           "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "TP 50 salariés et plus : pas de participation publiée au titre du PDC (hors Diag Performance cofinancé)."
+          "description": "TP 50 salariés et plus : pas de participation publiée au titre du PDC (hors Diag Performance cofinancé).",
+          "prise_en_charge_salaires_horaire": null
         },
         {
           "taille": "300_plus",
           "cout_horaire_max": null,
           "budget_annuel_max": null,
           "quota_horaire_max": null,
-          "description": "TP 300 salariés et plus : pas de participation publiée au titre du PDC."
+          "description": "TP 300 salariés et plus : pas de participation publiée au titre du PDC.",
+          "prise_en_charge_salaires_horaire": null
         }
       ]
     },

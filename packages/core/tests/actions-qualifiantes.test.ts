@@ -462,6 +462,24 @@ describe('Constructys (données réelles) : salaires et forfait réservés aux a
     }
   });
 
+  // Fiche « Modalites_TP_PDC_2026.pdf » (Constructys, juillet 2026, archive TP-Modalites-2026.zip), relue le 2026-10-08 : la
+  // colonne « UNIQUEMENT POUR LES ENTREPRISES DE MOINS DE 11 SALARIES » porte « Participation à la rémunération Dans la
+  // limite de 15 € HT / heure / stagiaire (sur conventionnelle). »
+  it('Travaux publics : la participation à la rémunération (15 €/h) n’est due qu’aux entreprises de moins de 11 salariés', () => {
+    const tp = (companySize: WizardState['companySize']) =>
+      calculateFunding(constructys, profil({ selectedBrancheId: 'travaux-publics', companySize, formationType: 'certification', certificationLevel: 'rncp' }));
+    expect(montants(tp('less_11'))).toEqual({ pedagogie: 672, salaires: 315, forfait: null, total: 987 });
+    expect(montants(tp('11_49'))).toEqual({ pedagogie: 672, salaires: 0, forfait: null, total: 672 });
+    expect(poste(tp('11_49'), 'salaires')!.note).toBe("Pas de prise en charge des salaires pour cette taille d'entreprise");
+    const tailles = constructys.variantes_branche!.find((v) => v.id === 'travaux-publics')!.plafonds_par_taille!;
+    expect(Object.fromEntries(tailles.map((p) => [p.taille, p.prise_en_charge_salaires_horaire]))).toEqual({
+      less_11: undefined,
+      '11_49': null,
+      '50_299': null,
+      '300_plus': null,
+    });
+  });
+
   it('le point d’attention affiché nomme les deux postes, leurs taux et la condition (Bâtiment, 11 à 49 salariés, formation courte)', () => {
     const r = calculateFunding(constructys, profil({ formationType: 'non_certifiante' }));
     expect(avertissementsQualifiants(r)).toEqual([
