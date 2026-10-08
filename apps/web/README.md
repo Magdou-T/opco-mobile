@@ -35,7 +35,7 @@ La documentation de la version de Next installée (16.2.1) est dans `node_module
 
 La page `/mentions-legales/` (liée depuis le pied de page) lit ses informations dans `src/lib/mentions.ts`. Tant qu'un champ vaut `null`, elle l'écrit « [à compléter : libellé] » et affiche en tête l'encadré « Page à compléter avant publication ». Les informations que seul l'éditeur peut fournir (capital, greffe, TVA, téléphone, directeur de la publication, hébergeur, base légale et durée de conservation des messages de contact, exercice des droits, délégué à la protection des données) sont encore vides : ne pas publier avant de les avoir remplies. Liste et marche à suivre : `docs/deploiement-site.md`, section 3.
 
-L'adresse du site (`ADRESSE_DU_SITE`, `src/lib/metadonnees.ts`) fixe les adresses canoniques, les aperçus de partage et le plan du site ; `src/app/robots.ts` la répète. Elle vaut `https://www.financementopco.fr`, un domaine qui n'était pas enregistré le 08/10/2026 : le choix du domaine est à faire avant la publication (même section du guide).
+L'adresse du site (`ADRESSE_DU_SITE`, `src/lib/metadonnees.ts`) fixe les adresses canoniques, les aperçus de partage, le plan du site et l'adresse du plan que `robots.txt` annonce : c'est la seule constante à changer avec le domaine. Elle vaut `https://www.financementopco.fr`, un domaine qui n'était pas enregistré le 08/10/2026 : le choix du domaine est à faire avant la publication (même section du guide).
 
 ## Lien avec @opco/core
 

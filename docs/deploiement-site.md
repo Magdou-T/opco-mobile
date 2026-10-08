@@ -59,11 +59,11 @@ La page « Mentions légales et données » (`/mentions-legales/`, liée depuis 
 
 Les informations déjà remplies (dénomination, forme juridique, SIREN, SIRET et adresse du siège) viennent du répertoire SIRENE : les confirmer sur l'extrait Kbis.
 
-Ne publiez pas tant que la page affiche une information à compléter. Une fois les champs remplis, mettre à jour les deux tests de `apps/web/tests/mentions.test.ts` qui attendent aujourd'hui ces champs à `null` (« les informations que seul l'éditeur peut fournir sont vides » et « aucune donnée légale devinée » : directeur de la publication et hébergeur), lancer `npm run test:web`, reconstruire le site, puis produire une nouvelle archive (§ 4).
+Ne publiez pas tant que la page affiche une information à compléter. Une fois les champs remplis, lancer `npm run test:web` (les tests de la page ne dépendent pas des champs vides : ils passent avant comme après la saisie), reconstruire le site, puis produire une nouvelle archive (§ 4).
 
 ### Choisir le nom de domaine du site
 
-L'adresse du site est fixée par la constante `ADRESSE_DU_SITE` de `apps/web/src/lib/metadonnees.ts` (ligne 12) : `https://www.financementopco.fr`. Elle donne l'adresse canonique de chaque page, celle des aperçus de partage et celles du plan du site ; `apps/web/src/app/robots.ts` (ligne 8) la répète pour annoncer le plan du site. Rien ne redirige le domaine nu (`financementopco.fr`) vers `www`.
+L'adresse du site est fixée par la constante `ADRESSE_DU_SITE` de `apps/web/src/lib/metadonnees.ts` (ligne 12) : `https://www.financementopco.fr`. Elle donne l'adresse canonique de chaque page, celle des aperçus de partage, celles du plan du site et l'adresse du plan que `robots.txt` annonce : aucune autre constante ne répète le nom de domaine dans le code du site. Rien ne redirige le domaine nu (`financementopco.fr`) vers `www`.
 
 Vérifié le 08/10/2026 : `financementopco.fr` n'est pas enregistré (registre de l'AFNIC) et aucun des deux noms ne répond dans le DNS public. Le domaine est donc à réserver, ou un autre à choisir, avant la publication.
 
@@ -78,7 +78,7 @@ C'est une décision de l'utilisateur, entre deux options :
   ```
 
   Cet extrait n'est pas actif dans le fichier livré et n'a pas été testé ici (le serveur de test local ne lit pas le `.htaccess`) : la liste de contrôle du § 6 le vérifie après dépôt.
-- (b) Choisir le domaine nu, ou un autre nom : remplacer l'adresse dans `ADRESSE_DU_SITE` et dans `robots.ts`, mettre à jour les tests qui la vérifient (`apps/web/tests/metadonnees.test.ts`, qui compare `ADRESSE_DU_SITE` à l'adresse actuelle, et le test « plan du site » de `apps/web/tests/mentions.test.ts`), lancer `npm run test:web`, puis reconstruire. Le brouillon de lettre `docs/demande-licence-france-competences.md` cite aussi `www.financementopco.fr`.
+- (b) Choisir le domaine nu, ou un autre nom : remplacer l'adresse dans `ADRESSE_DU_SITE` (une seule constante), mettre à jour la ligne de `apps/web/tests/metadonnees.test.ts` qui la compare à l'adresse actuelle, lancer `npm run test:web`, puis reconstruire. Le brouillon de lettre `docs/demande-licence-france-competences.md` cite aussi `www.financementopco.fr`.
 
 ## 4. Construire l'archive
 
