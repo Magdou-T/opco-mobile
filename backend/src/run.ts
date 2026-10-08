@@ -22,7 +22,7 @@ import { extractAmounts, hasApiKey, simulateExtractionFromCurrent, getExtractMod
 import { diffOpco, reviewDiffsWithModel, summarizeDiff } from './verify';
 import { applyCorrections, formatChangelog } from './correct';
 import { getMaxDeltaPct, validatePipeline } from './validate';
-import { publishDataset, verifyPublishedSha } from './publish';
+import { publishDataset, readCurrentVersion, verifyPublishedSha } from './publish';
 import { deepClone } from './util';
 import type { ChangelogEntry, ExtractionResult, OpcoDiff, OpcoSources, RunReport } from './types';
 
@@ -154,8 +154,8 @@ async function runPipeline(mode: 'dry-run' | 'live'): Promise<RunReport> {
     }
   }
 
-  // 5) VALIDATE (garde-fous obligatoires)
-  const validation = validatePipeline({ current, corrected });
+  // 5) VALIDATE (garde-fous obligatoires), avec la version que publishDataset écrira (même calcul, même manifest).
+  const validation = validatePipeline({ current, corrected, version: readCurrentVersion(datasetsDir) + 1 });
 
   console.log('\n--- VALIDATE ---');
   console.log(`ok=${validation.ok} | issues=${validation.issues.length} | needsReview=${validation.needsReview.length}`);

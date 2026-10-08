@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { EMBEDDED_OPCOS, getEmbeddedOpcoBySlug } from '@opco/core';
+import { EMBEDDED_OPCOS, calculateFunding, createInitialWizardState, getEmbeddedOpcoBySlug } from '@opco/core';
 import type { OpcoData } from '@opco/core';
 import { diffOpco } from '../src/verify';
 import { applyCorrections } from '../src/correct';
@@ -89,6 +89,32 @@ describe('verify.diffOpco', () => {
     const d = diffOpco(opco, ext).diffs.find((x) => x.field === 'cout_horaire_inter')!;
     expect(d.status).toBe('not_found');
     expect(d.oldValue).toBe(25);
+  });
+
+  it('valeur extraite null alors que le montant publié existe -> not_found (jamais modified), valeur conservée', () => {
+    const opco = atlas(); // cout_horaire_inter = 25
+    const ext = identityExtraction(opco);
+    ext.fields.find((f) => f.field === 'cout_horaire_inter')!.value = null;
+    const diff = diffOpco(opco, ext);
+    const d = diff.diffs.find((x) => x.field === 'cout_horaire_inter')!;
+    expect(d.status).toBe('not_found');
+    expect(d.oldValue).toBe(25);
+    expect(d.newValue).toBeNull();
+    // Classé modified, le montant serait effacé par applyCorrections.
+    const { opco: out } = applyCorrections(opco, diff, { now: new Date(2026, 5, 10) });
+    expect(out.cout_horaire_inter.value).toBe(25);
+  });
+
+  it('plafond extrait null alors que le plafond publié existe -> not_found (jamais modified)', () => {
+    const opco = atlas();
+    opco.plafonds_par_taille = [
+      { taille: 'less_11', cout_horaire_max: 20, budget_annuel_max: 8000, quota_horaire_max: null, description: 'Moins de 11 (fixture)' },
+    ];
+    const ext = identityExtraction(opco);
+    ext.plafonds_par_taille[0].budget_annuel_max = null;
+    const d = diffOpco(opco, ext).diffs.find((x) => x.field === 'plafonds_par_taille[0:less_11].budget_annuel_max')!;
+    expect(d.status).toBe('not_found');
+    expect(d.oldValue).toBe(8000);
   });
 
   it('compare les plafonds_par_taille (clé indexée)', () => {
@@ -189,9 +215,12 @@ describe('correct.applyCorrections', () => {
 // --- VALIDATE -----------------------------------------------------------------
 
 describe('validate.validatePipeline', () => {
+  // Version qui serait publiée après datasets/manifest.json (version 3).
+  const version = 4;
+
   it('dataset embarqué inchangé -> ok, aucun needsReview', () => {
     const current = deepClone(EMBEDDED_OPCOS);
-    const report = validatePipeline({ current, corrected: deepClone(current) });
+    const report = validatePipeline({ current, corrected: deepClone(current), version });
     expect(report.ok).toBe(true);
     expect(report.issues).toHaveLength(0);
     expect(report.needsReview).toHaveLength(0);
@@ -206,7 +235,7 @@ describe('validate.validatePipeline', () => {
     const a = corrected.find((o) => o.slug === 'atlas')!;
     a.budget_annuel_max.value = 16000; // 8000 -> 16000 = +100 %
 
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 50 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
     expect(report.ok).toBe(true); // pas une erreur : changement mis de côté
     const review = report.needsReview.find((r) => r.slug === 'atlas' && r.field === 'budget_annuel_max');
     expect(review).toBeDefined();
@@ -220,16 +249,48 @@ describe('validate.validatePipeline', () => {
     current.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 25;
     const corrected = deepClone(current);
     corrected.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 28; // +12 %
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 50 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
     expect(report.needsReview).toHaveLength(0);
     expect(report.opcos.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value).toBe(28);
+  });
+
+  it('variation exactement égale au seuil -> auto-publiée (le seuil est inclus)', () => {
+    const current = deepClone(EMBEDDED_OPCOS);
+    current.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 20;
+    const corrected = deepClone(current);
+    corrected.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 30; // 20 -> 30 = +50 % exactement
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
+    expect(report.issues).toEqual([]);
+    expect(report.needsReview).toHaveLength(0);
+    expect(report.opcos.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value).toBe(30);
+  });
+
+  it('plafond par taille hors seuil -> needsReview et ancienne valeur ramenée ; au seuil exact -> publié', () => {
+    const current = deepClone(EMBEDDED_OPCOS);
+    current.find((o) => o.slug === 'atlas')!.plafonds_par_taille = [
+      { taille: 'less_11', cout_horaire_max: 20, budget_annuel_max: 8000, quota_horaire_max: null, description: 'Moins de 11 (fixture)' },
+      { taille: '11_49', cout_horaire_max: 20, budget_annuel_max: 8000, quota_horaire_max: null, description: '11 à 49 (fixture)' },
+    ];
+    const corrected = deepClone(current);
+    const plafonds = corrected.find((o) => o.slug === 'atlas')!.plafonds_par_taille!;
+    plafonds[0].budget_annuel_max = 16000; // +100 % : hors seuil
+    plafonds[1].budget_annuel_max = 12000; // +50 % exactement : dans le seuil
+
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
+    expect(report.issues).toEqual([]);
+    expect(report.needsReview).toEqual([
+      expect.objectContaining({ slug: 'atlas', field: 'plafonds_par_taille[0:less_11].budget_annuel_max', oldValue: 8000, newValue: 16000 }),
+    ]);
+    const publies = report.opcos.find((o) => o.slug === 'atlas')!.plafonds_par_taille!;
+    expect(publies[0].budget_annuel_max).toBe(8000); // ancienne valeur ramenée
+    expect(publies[1].budget_annuel_max).toBe(12000); // variation au seuil : publiée
   });
 
   it('nouveau montant sans référence (null -> valeur) -> needsReview, pas auto-publié', () => {
     const current = deepClone(EMBEDDED_OPCOS);
     const corrected = deepClone(current);
     corrected.find((o) => o.slug === 'atlas')!.frais_transport.value = 12;
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 50 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
     expect(report.needsReview.some((r) => r.field === 'frais_transport')).toBe(true);
     expect(report.opcos.find((o) => o.slug === 'atlas')!.frais_transport.value).toBeNull();
   });
@@ -241,14 +302,72 @@ describe('validate.validatePipeline', () => {
     // 250 €/h > borne 200 de sanityCheckOpco mais variation sous seuil impossible…
     // -> on force avec un seuil élevé pour atteindre le sanity check.
     corrected.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 250;
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 10_000 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 10_000, version });
     expect(report.ok).toBe(false);
     expect(report.issues.some((i) => i.includes('cout_horaire_inter'))).toBe(true);
+  });
+
+  it('dataset de 10 OPCO -> rejeté par validateDataset (11 OPCO exigés)', () => {
+    const current = deepClone(EMBEDDED_OPCOS).slice(0, 10);
+    const report = validatePipeline({ current, corrected: deepClone(current), version });
+    expect(report.ok).toBe(false);
+    expect(report.issues).toContainEqual(expect.stringContaining('Dataset incomplet : 10 OPCO, minimum attendu 11'));
+  });
+
+  it('valide le dataset avec la version qui sera publiée, et non une version écrite en dur', () => {
+    const current = deepClone(EMBEDDED_OPCOS);
+    expect(validatePipeline({ current, corrected: deepClone(current), version }).issues).toEqual([]);
+    // Une version impossible (0) est refusée : preuve que la version transmise est bien celle que l'on valide.
+    const report = validatePipeline({ current, corrected: deepClone(current), version: 0 });
+    expect(report.ok).toBe(false);
+    expect(report.issues).toEqual([expect.stringMatching(/^validateDataset a rejeté le dataset : [\s\S]*"version"/)]);
   });
 
   it('scénarios calculateFunding : aucun ne lève, totaux plausibles', () => {
     const issues: string[] = [];
     runFundingScenarios(deepClone(EMBEDDED_OPCOS), issues);
+    expect(issues).toEqual([]);
+  });
+
+  it('scénarios : un total négatif (plafond horaire négatif dans les données) est signalé', () => {
+    const opcos = deepClone(EMBEDDED_OPCOS);
+    for (const o of opcos) {
+      o.cout_horaire_inter.value = -10;
+      for (const p of o.plafonds_par_taille ?? []) p.cout_horaire_max = -10;
+    }
+    const issues: string[] = [];
+    runFundingScenarios(opcos, issues);
+    expect(issues.length).toBeGreaterThan(0);
+    expect(issues.every((i) => i.includes('total négatif'))).toBe(true);
+  });
+
+  it("scénarios : un total nul (budget annuel publié à 0) n'est pas une anomalie", () => {
+    const opcos = deepClone(EMBEDDED_OPCOS);
+    for (const o of opcos) {
+      o.budget_annuel_max.value = 0;
+      o.budget_annuel_portee = 'global';
+      for (const p of o.plafonds_par_taille ?? []) p.budget_annuel_max = 0;
+    }
+    // Prémisse : avec un budget à 0, la prise en charge calculée est bien nulle.
+    const akto = opcos.find((o) => o.slug === 'akto')!;
+    const etat = {
+      ...createInitialWizardState(),
+      opcoKnown: true,
+      selectedOpcoSlug: akto.slug,
+      contractType: 'cdi' as const,
+      companySize: '11_49' as const,
+      formationNom: 'Total nul',
+      formationType: 'qualification' as const,
+      durationHours: 35,
+      pedagogyCostPerHour: 30,
+      pedagogyCostTotal: 30 * 35,
+      trainingMode: 'presentiel' as const,
+      trainingDays: 5,
+    };
+    expect(calculateFunding(akto, etat).totalFunded).toBe(0);
+
+    const issues: string[] = [];
+    runFundingScenarios(opcos, issues);
     expect(issues).toEqual([]);
   });
 });

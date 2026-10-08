@@ -35,6 +35,8 @@ export interface ValidateInput {
   /** Dataset corrigé candidat à la publication. */
   corrected: OpcoData[];
   maxDeltaPct?: number;
+  /** Version qui sera publiée (readCurrentVersion(datasetsDir) + 1) : validée avec le reste du dataset. */
+  version: number;
 }
 
 // --- Seuil de variation ------------------------------------------------------
@@ -248,7 +250,7 @@ export function validatePipeline(input: ValidateInput): ValidationReport {
   // 4) Non-régression : dataset complet (11 OPCO) + scénarios de calcul.
   try {
     validateDataset(
-      { version: 1, generatedAt: new Date().toISOString(), opcos: safeOpcos },
+      { version: input.version, generatedAt: new Date().toISOString(), opcos: safeOpcos },
       { minOpcoCount: 11 },
     );
   } catch (err) {
