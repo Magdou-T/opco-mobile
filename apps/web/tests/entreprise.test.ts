@@ -16,6 +16,7 @@ import {
 } from '@opco/core';
 import type { CompanySize, EntrepriseInfo, WizardState } from '@opco/core';
 import {
+  entreeDeResolution,
   etatDepuisEffectif,
   etatDepuisEntreprise,
   etatSansEntreprise,
@@ -35,7 +36,11 @@ const parSiren = (siren: string): EntrepriseInfo => {
   return e;
 };
 const resoudre = (e: EntrepriseInfo) =>
-  resoudreOpco({ idccs: e.idccs, idccSiege: e.idccSiege, codeNaf: e.codeNaf }, EMBEDDED_IDCC, EMBEDDED_NAF);
+  resoudreOpco(
+    { idccs: e.idccs, idccSiege: e.idccSiege, codeNaf: e.codeNaf, natureJuridique: e.natureJuridique },
+    EMBEDDED_IDCC,
+    EMBEDDED_NAF,
+  );
 const appliquer = (etat: WizardState, maj: Partial<WizardState>): WizardState => ({ ...etat, ...maj });
 const choisir = (etat: WizardState, e: EntrepriseInfo): WizardState => appliquer(etat, etatDepuisEntreprise(e, resoudre(e)));
 
@@ -62,6 +67,7 @@ const ETABLIS_PAR_LA_RECHERCHE = [
   'idccEtablissements',
   'idccSiege',
   'codeNaf',
+  'natureJuridique',
   'trancheEffectifInsee',
   'structures',
   'selectedBrancheId',
@@ -111,6 +117,7 @@ describe("sélection d'une entreprise (etatDepuisEntreprise)", () => {
       regionCode: '11',
       departementCode: '95',
       codeNaf: '85.59A',
+      natureJuridique: '5710',
       trancheEffectifInsee: '01',
       structures: [],
       companySize: 'less_11',
@@ -138,6 +145,7 @@ describe("sélection d'une entreprise (etatDepuisEntreprise)", () => {
       assert.equal(maj.regionCode, e.siege.region);
       assert.equal(maj.departementCode, e.siege.departement);
       assert.equal(maj.codeNaf, e.codeNaf);
+      assert.equal(maj.natureJuridique, e.natureJuridique);
       assert.equal(maj.trancheEffectifInsee, e.trancheEffectif);
       assert.deepEqual(maj.structures, e.structures);
       assert.equal(maj.companySize, e.tailleSuggeree ?? null, `${e.siren} : taille`);
@@ -345,5 +353,65 @@ describe('règles par projet', () => {
     for (const p of ['recrutement_demandeur_emploi', 'alternance', 'formation_dirigeant'] as const) {
       assert.equal(ouvreBudgetOpco(p), false);
     }
+  });
+});
+
+describe("entrée du résolveur d'OPCO (entreeDeResolution) : la catégorie juridique suit l'entreprise", () => {
+  /** Réponse de l'API pour un EHPAD (NAF 87.10A) sans convention collective, de catégorie juridique `nature`. */
+  const ehpad = (nature: string): EntrepriseInfo => {
+    const brut = structuredClone(reponses[0]) as Record<string, unknown> & {
+      complements: Record<string, unknown>;
+      siege: Record<string, unknown>;
+      matching_etablissements?: Record<string, unknown>[];
+    };
+    brut.nature_juridique = nature;
+    brut.activite_principale = '87.10A';
+    brut.complements.liste_idcc = [];
+    brut.siege.liste_idcc = [];
+    for (const e of brut.matching_etablissements ?? []) e.liste_idcc = [];
+    return parseResultatRechercheEntreprises(brut);
+  };
+  /** Ce que fait l'étape Entreprise quand elle revient : la résolution recalculée depuis l'état. */
+  const depuisLEtat = (etat: WizardState) =>
+    resoudreOpco(
+      entreeDeResolution({
+        idccs: etat.idccEtablissements,
+        idccSiege: etat.idccSiege,
+        codeNaf: etat.codeNaf,
+        natureJuridique: etat.natureJuridique,
+      }),
+      EMBEDDED_IDCC,
+      EMBEDDED_NAF,
+    );
+
+  test('conventions, NAF et catégorie juridique de l’entreprise, copiés', () => {
+    const sfg = parSiren('814739728');
+    const entree = entreeDeResolution(sfg);
+    assert.deepEqual(entree, { idccs: ['1516'], idccSiege: ['1516'], codeNaf: '85.59A', natureJuridique: '5710' });
+    assert.notEqual(entree.idccs, sfg.idccs);
+    assert.equal(entreeDeResolution({ ...sfg, idccSiege: null }).idccSiege, null);
+  });
+
+  test('non-régression : un EHPAD public (7366) sans convention ne reçoit aucun OPCO d’après son seul code NAF, une société au même code NAF en reçoit un', () => {
+    const publique = ehpad('7366');
+    const resolue = resoudreOpco(entreeDeResolution(publique), EMBEDDED_IDCC, EMBEDDED_NAF);
+    assert.deepEqual([resolue.opcoSlug, resolue.certitude], [null, 'inconnu']);
+    assert.match(resolue.motif, /employeurs publics/);
+    const etat = choisir(createInitialWizardState(), publique);
+    assert.equal(etat.natureJuridique, '7366');
+    assert.equal(etat.detectedOpcoSlug, null);
+    assert.equal(etat.opcoCertitude, 'inconnu');
+    // Quand l'étape revient, la carte recalcule la même résolution depuis l'état.
+    assert.deepEqual([depuisLEtat(etat).opcoSlug, depuisLEtat(etat).certitude], [null, 'inconnu']);
+
+    const societe = choisir(createInitialWizardState(), ehpad('5710'));
+    assert.equal(societe.detectedOpcoSlug, 'opco-sante');
+    assert.equal(societe.opcoCertitude, 'a_confirmer');
+    assert.deepEqual([depuisLEtat(societe).opcoSlug, depuisLEtat(societe).certitude], ['opco-sante', 'a_confirmer']);
+  });
+
+  test('entreprise écartée : la catégorie juridique revient à vide avec le reste de la recherche', () => {
+    const etat = appliquer(choisir(createInitialWizardState(), ehpad('7366')), etatSansEntreprise());
+    assert.equal(etat.natureJuridique, null);
   });
 });

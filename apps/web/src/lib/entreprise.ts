@@ -2,8 +2,8 @@
 // Étape « Entreprise » : constructeurs purs (ni React ni effet de bord) des mises à jour de l'état du parcours quand
 // une entreprise est choisie ou écartée, et quand l'effectif exact change.
 //
-// Tout ce que la recherche d'entreprise établit (SIREN, statuts, IDCC, NAF, effectif INSEE, OPCO détecté...) se pose et
-// s'efface d'un seul bloc. profilDepuisWizard (@opco/core) tient les statuts de la structure (`structures`) pour connus
+// Tout ce que la recherche d'entreprise établit (SIREN, statuts, IDCC, NAF, catégorie juridique, effectif INSEE, OPCO
+// détecté...) se pose et s'efface d'un seul bloc. profilDepuisWizard (@opco/core) tient les statuts de la structure (`structures`) pour connus
 // dès que `sirenNumber` est renseigné et lit `idccEtablissements`, `detectedIdcc` et `codeNaf` pour évaluer les aides :
 // aucun de ces champs ne doit survivre à l'entreprise qui l'a produit, ni être posé sans les autres.
 //
@@ -13,7 +13,7 @@
 // ============================================================
 
 import { createInitialWizardState } from '@opco/core';
-import type { CompanySize, EntrepriseInfo, ProjetType, ResolutionOpco, WizardState } from '@opco/core';
+import type { CompanySize, EntreeResolution, EntrepriseInfo, ProjetType, ResolutionOpco, WizardState } from '@opco/core';
 
 /**
  * Tranche de taille d'un effectif exact, avec les bornes du moteur d'aides (`bornesEffectif` de @opco/core) :
@@ -57,6 +57,7 @@ export function etatDepuisEntreprise(entreprise: EntrepriseInfo, resolution: Res
     regionCode: siege.region,
     departementCode: siege.departement,
     codeNaf: entreprise.codeNaf,
+    natureJuridique: entreprise.natureJuridique,
     trancheEffectifInsee: entreprise.trancheEffectif,
     structures: [...entreprise.structures],
     // Tranche à cheval sur deux tailles (10 à 19, 250 à 499 salariés) : aucune suggestion, l'utilisateur choisit.
@@ -89,9 +90,30 @@ export function etatSansEntreprise(): Partial<WizardState> {
     idccEtablissements: initial.idccEtablissements,
     idccSiege: initial.idccSiege,
     codeNaf: initial.codeNaf,
+    natureJuridique: initial.natureJuridique,
     trancheEffectifInsee: initial.trancheEffectifInsee,
     structures: initial.structures,
     selectedBrancheId: initial.selectedBrancheId,
+  };
+}
+
+/**
+ * Entrée de `resoudreOpco` (@opco/core), pour une entreprise des résultats comme pour l'état du parcours : conventions,
+ * code NAF et catégorie juridique, tableaux copiés. La catégorie juridique compte : un employeur de droit public
+ * (7xxx) sans convention ne reçoit aucun OPCO d'après son seul code NAF. L'étape Entreprise appelle le résolveur à la
+ * sélection et quand elle recalcule sa carte depuis l'état : les deux appels passent par ici, avec les mêmes champs.
+ */
+export function entreeDeResolution(source: {
+  idccs: readonly string[];
+  idccSiege: readonly string[] | null;
+  codeNaf: string | null;
+  natureJuridique: string | null;
+}): EntreeResolution {
+  return {
+    idccs: [...source.idccs],
+    idccSiege: source.idccSiege == null ? null : [...source.idccSiege],
+    codeNaf: source.codeNaf,
+    natureJuridique: source.natureJuridique,
   };
 }
 

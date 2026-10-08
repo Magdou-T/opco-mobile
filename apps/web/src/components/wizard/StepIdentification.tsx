@@ -34,6 +34,7 @@ import type { IconName } from '@/components/ui/Icon';
 import { ChampRegion, ChoiceButton, ChoiceGroup, NumberField, OpcoPicker, TextField } from '@/components/ui/forms';
 import { useSirenLookup } from '@/hooks/useSirenLookup';
 import {
+  entreeDeResolution,
   etatDepuisEffectif,
   etatDepuisEntreprise,
   etatSansEntreprise,
@@ -383,12 +384,17 @@ export function StepIdentification({ state, updateState }: Props) {
     () =>
       state.sirenNumber
         ? resoudreOpco(
-            { idccs: state.idccEtablissements, idccSiege: state.idccSiege, codeNaf: state.codeNaf },
+            entreeDeResolution({
+              idccs: state.idccEtablissements,
+              idccSiege: state.idccSiege,
+              codeNaf: state.codeNaf,
+              natureJuridique: state.natureJuridique,
+            }),
             EMBEDDED_IDCC,
             EMBEDDED_NAF,
           )
         : null,
-    [state.sirenNumber, state.idccEtablissements, state.idccSiege, state.codeNaf],
+    [state.sirenNumber, state.idccEtablissements, state.idccSiege, state.codeNaf, state.natureJuridique],
   );
   const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
   const opco = slug ? getEmbeddedOpcoBySlug(slug) : undefined;
@@ -420,11 +426,7 @@ export function StepIdentification({ state, updateState }: Props) {
   };
 
   const choisirEntreprise = (entreprise: EntrepriseInfo) => {
-    const resolue = resoudreOpco(
-      { idccs: entreprise.idccs, idccSiege: entreprise.idccSiege, codeNaf: entreprise.codeNaf },
-      EMBEDDED_IDCC,
-      EMBEDDED_NAF,
-    );
+    const resolue = resoudreOpco(entreeDeResolution(entreprise), EMBEDDED_IDCC, EMBEDDED_NAF);
     updateState(etatDepuisEntreprise(entreprise, resolue));
     setRecherche(entreprise.nom);
     setCodePostal('');

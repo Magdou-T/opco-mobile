@@ -400,7 +400,7 @@ describe('audit : aucun champ invisible ne pèse sur le résultat', () => {
     const pourTous = [
       'opcoKnown', 'selectedOpcoSlug', 'companyName', 'sirenNumber', 'siret', 'detectedOpcoSlug', 'detectedIdcc',
       'detectedCompanyName', 'selectedBrancheId', 'opcoCertitude', 'idccEtablissements', 'idccSiege', 'regionCode',
-      'departementCode', 'codeNaf', 'trancheEffectifInsee', 'companySize', 'effectif', 'structures',
+      'departementCode', 'codeNaf', 'natureJuridique', 'trancheEffectifInsee', 'companySize', 'effectif', 'structures',
     ];
     assert.deepEqual([...champs].sort(), [...pourTous, 'budgetDejaConsomme'].sort());
   });
