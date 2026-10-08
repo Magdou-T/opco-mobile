@@ -224,7 +224,7 @@ export interface AideEvaluee {
   /** non_eligible : critères non remplis ; a_verifier : informations à confirmer. */
   raisons: string[];
   /**
-   * true : aide sans rapport avec la situation (autre projet, autre public, autre région, autre type de formation) —
+   * true : aide sans rapport avec la situation (autre projet, autre public, autre région, autre type de formation),
    * masquée à l'écran. Une information inconnue (région, type de formation) ne rend jamais une aide hors périmètre.
    */
   horsPerimetre: boolean;

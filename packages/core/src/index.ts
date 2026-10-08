@@ -1,5 +1,5 @@
 // ============================================================
-// @opco/core — logique métier PARTAGÉE (web, mobile, backend).
+// @opco/core : logique métier PARTAGÉE (web, mobile, backend).
 // Aucune dépendance UI. Source de vérité du schéma et du calcul.
 // ============================================================
 

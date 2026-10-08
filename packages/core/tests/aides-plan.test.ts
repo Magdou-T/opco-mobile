@@ -13,7 +13,7 @@ const evaluer = (aides: Aide[]) => aides.map((a) => evaluerAide(a, profil, AUJOU
 const forfait = (id: string, financeur: Aide['financeur'], valeur: number, over: Partial<Aide> = {}) =>
   makeAide({ id, financeur, montant: { ...makeAide().montant, valeur }, ...over });
 
-describe('construirePlan — empilement', () => {
+describe('construirePlan, empilement', () => {
   it("empile dans l'ordre des financeurs et plafonne au coût", () => {
     const aides = evaluer([
       forfait('nat-cpf', 'cpf', 1500),
@@ -44,7 +44,7 @@ describe('construirePlan — empilement', () => {
   });
 });
 
-describe('construirePlan — alternatives et catégories', () => {
+describe('construirePlan, alternatives et catégories', () => {
   it("garde l'alternative la mieux chiffrée, l'autre devient une option", () => {
     const aides = evaluer([
       forfait('nat-a', 'etat', 1000, { cumul: { cumulable: true, alternatives: ['nat-b'] } }),
@@ -113,7 +113,7 @@ describe('construirePlan — alternatives et catégories', () => {
   });
 });
 
-describe('construirePlan — intégration du calcul OPCO', () => {
+describe('construirePlan, intégration du calcul OPCO', () => {
   it('pédagogie dans le financement, salaires côté employeur, dispositif alternatif en option', () => {
     const opco = makeOpco({
       cout_horaire_inter: { value: 40, confidence: 'exact', source_url: 'x' },
@@ -213,7 +213,7 @@ const resultatOpco = (
   ...over,
 });
 
-describe('construirePlan — seules les aides éligibles comptent', () => {
+describe('construirePlan, seules les aides éligibles comptent', () => {
   // Une aide de chaque sorte, toutes éligibles : le plan de référence.
   const eligibles = () =>
     evaluer([
@@ -262,7 +262,7 @@ describe('construirePlan — seules les aides éligibles comptent', () => {
   });
 });
 
-describe('construirePlan — coût nul ou inconnu', () => {
+describe('construirePlan, coût nul ou inconnu', () => {
   it.each<[string, ProfilAides, number[]]>([
     ['inconnu (null)', makeProfil({ coutPedagogique: null, coutFraisAnnexes: 0 }), [500, 1000]],
     ['inconnu (null) avec 300 € de frais annexes (jamais les frais annexes seuls)', makeProfil({ coutPedagogique: null, coutFraisAnnexes: 300 }), [500, 1000]],
@@ -314,7 +314,7 @@ describe('construirePlan — coût nul ou inconnu', () => {
   });
 });
 
-describe("construirePlan — ordre d'empilement et plafond au reste à charge", () => {
+describe("construirePlan, ordre d'empilement et plafond au reste à charge", () => {
   it("empile par ordre croissant, l'ordre explicite d'une aide l'emportant sur celui de son financeur", () => {
     const aides = evaluer([
       forfait('nat-cpf', 'cpf', 100), // 90 par défaut
@@ -401,7 +401,7 @@ describe("construirePlan — ordre d'empilement et plafond au reste à charge", 
   });
 });
 
-describe('construirePlan — ce qui ne réduit pas le coût de la formation', () => {
+describe('construirePlan, ce qui ne réduit pas le coût de la formation', () => {
   it('une rémunération du bénéficiaire, même élevée, ne diminue jamais le reste à charge', () => {
     const aides = evaluer([
       forfait('nat-remu', 'france_travail', 99999, { categorie: 'remuneration_beneficiaire' }),
@@ -500,7 +500,7 @@ describe('construirePlan — ce qui ne réduit pas le coût de la formation', ()
   });
 });
 
-describe("construirePlan — chaque catégorie d'aide a sa liste", () => {
+describe("construirePlan, chaque catégorie d'aide a sa liste", () => {
   type ListePlan = 'financements' | 'aidesEmployeur' | 'remunerations' | 'avantagesFiscauxSociaux' | 'servicesGratuits';
   const LISTES: ListePlan[] = ['financements', 'aidesEmployeur', 'remunerations', 'avantagesFiscauxSociaux', 'servicesGratuits'];
   // Typée par l'union des catégories : une nouvelle catégorie oblige à la ranger ici ET dans construirePlan, dont le `switch`
@@ -526,7 +526,7 @@ describe("construirePlan — chaque catégorie d'aide a sa liste", () => {
   );
 });
 
-describe('construirePlan — aides au choix : détails', () => {
+describe('construirePlan, aides au choix : détails', () => {
   it("l'option nomme l'aide retenue et garde le nom, le financeur et le montant de l'aide écartée", () => {
     const aides = evaluer([
       forfait('nat-a', 'etat', 1000, { nom: 'Aide A', financeur_nom: 'État', cumul: { cumulable: true, alternatives: ['r11-b'] } }),
@@ -589,7 +589,7 @@ describe('construirePlan — aides au choix : détails', () => {
   });
 });
 
-describe("construirePlan — aides au choix à montants égaux : le pivot passe d'abord", () => {
+describe("construirePlan, aides au choix à montants égaux : le pivot passe d'abord", () => {
   // Pivot : l'aide que le plus grand nombre d'AUTRES aides éligibles déclarent comme alternative. Dans un graphe « en étoile »
   // (les aides spécialisées ne citent que l'aide générale, comme nat-vae, nat-bilan-competences et nat-clea citent nat-cpf),
   // retenir le pivot d'abord écarte toutes les feuilles ; retenir une feuille d'abord laisserait deux feuilles côte à côte.
@@ -691,7 +691,7 @@ describe("construirePlan — aides au choix à montants égaux : le pivot passe 
   });
 });
 
-describe("construirePlan — un solde CPF ne finance qu'une fois", () => {
+describe("construirePlan, un solde CPF ne finance qu'une fois", () => {
   const FINANCEUR_CPF = 'Compte personnel de formation';
   /** Aide qui prélève sur le solde CPF (mode solde_cpf) : financeur CPF, donc ordre d'empilement 90 par défaut. */
   const surSolde = (id: string, over: Partial<Aide> = {}) =>
@@ -859,7 +859,7 @@ describe("construirePlan — un solde CPF ne finance qu'une fois", () => {
   });
 });
 
-describe('construirePlan — arrondi au centime', () => {
+describe('construirePlan, arrondi au centime', () => {
   const troisDixiemes = makeProfil({ coutPedagogique: 0.1, coutFraisAnnexes: 0.2 });
   const unEuro = makeProfil({ coutPedagogique: 1, coutFraisAnnexes: 0 });
 
@@ -903,7 +903,7 @@ describe('construirePlan — arrondi au centime', () => {
   });
 });
 
-describe('construirePlan — calcul OPCO', () => {
+describe('construirePlan, calcul OPCO', () => {
   const coutDe4500 = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 300 });
 
   it('pédagogie, hébergement, restauration et frais annexes financés forment UNE ligne opco-pdc : la somme des montants financés', () => {
@@ -1183,7 +1183,7 @@ describe('construirePlan — calcul OPCO', () => {
   });
 });
 
-describe('construirePlan — avec le vrai calcul OPCO', () => {
+describe('construirePlan, avec le vrai calcul OPCO', () => {
   const sourcee = (value: number) => ({ value, confidence: 'exact' as const, source_url: 'x' });
   const etat = (over: Parameters<typeof makeFormationState>[0] = {}) =>
     makeFormationState({ durationHours: 100, pedagogyCostPerHour: 30, pedagogyCostTotal: 3000, ...over });
@@ -1251,7 +1251,7 @@ describe('construirePlan — avec le vrai calcul OPCO', () => {
   });
 });
 
-describe('construirePlan — invariants sur des cas pseudo-aléatoires', () => {
+describe('construirePlan, invariants sur des cas pseudo-aléatoires', () => {
   // Générateur déterministe (mulberry32) : les mêmes cas à chaque exécution.
   const generateur = (graine: number) => (): number => {
     graine = (graine + 0x6d2b79f5) | 0;
@@ -1302,7 +1302,7 @@ describe('construirePlan — invariants sur des cas pseudo-aléatoires', () => {
   });
 });
 
-describe('construirePlan — pureté', () => {
+describe('construirePlan, pureté', () => {
   const geler = <T>(valeur: T): T => {
     if (valeur !== null && typeof valeur === 'object') {
       Object.values(valeur).forEach((v) => geler(v));

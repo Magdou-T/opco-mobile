@@ -9,7 +9,7 @@ const montant = (over: Partial<MontantAide>): MontantAide => ({
   mode: 'forfait', valeur: null, pourcentage: null, base: null, plafond: null, duree_max_mois: null, libelle: 'règle', ...over,
 });
 
-describe('evaluerAide — statut', () => {
+describe('evaluerAide, statut', () => {
   it('éligible quand tout est rempli', () => {
     const r = evaluerAide(makeAide(), makeProfil(), AUJOURDHUI);
     expect(r).toMatchObject({ statut: 'eligible', montantEstime: 1000, raisons: [] });
@@ -88,7 +88,7 @@ describe('evaluerAide — statut', () => {
   });
 });
 
-describe('evaluerAide — période de validité (bornes incluses)', () => {
+describe('evaluerAide, période de validité (bornes incluses)', () => {
   // Date de référence : 2026-10-05.
   const avecValidite = (debut: string | null, fin: string | null) =>
     evaluerAide(makeAide({ validite: { debut, fin } }), makeProfil(), AUJOURDHUI);
@@ -120,7 +120,7 @@ describe('evaluerAide — période de validité (bornes incluses)', () => {
   });
 });
 
-describe('evaluerAide — raisons', () => {
+describe('evaluerAide, raisons', () => {
   it("une aide non éligible n'expose que les exclusions, pas les doutes", () => {
     // Critère région ko, et âge inconnu sur un autre critère : seule l'exclusion est affichée.
     const aide = makeAide({ criteres: { regions: ['84'], age_max: 29 } });
@@ -162,7 +162,7 @@ describe('evaluerAide — raisons', () => {
   });
 });
 
-describe("evaluerAide — ordre d'empilement et périmètre", () => {
+describe("evaluerAide, ordre d'empilement et périmètre", () => {
   it("un ordre d'empilement de 0 explicite est conservé (pas la valeur par défaut du financeur)", () => {
     expect(evaluerAide(makeAide({ financeur: 'cpf', ordre_empilement: 0 }), makeProfil(), AUJOURDHUI).ordreEmpilement).toBe(0);
   });
@@ -183,7 +183,7 @@ describe("evaluerAide — ordre d'empilement et périmètre", () => {
   });
 });
 
-describe('evaluerAide — type de formation (aide propre à un type, par exemple la VAE)', () => {
+describe('evaluerAide, type de formation (aide propre à un type, par exemple la VAE)', () => {
   const TYPES = Object.keys(TRAINING_TYPE_LABELS) as TrainingType[];
   const RAISON_VAE = "Réservé aux formations de type : VAE (Validation des Acquis de l'Expérience)";
   const aideVae = makeAide({ criteres: { types_formation: ['vae'] } });
@@ -298,7 +298,7 @@ describe('evaluerAide — type de formation (aide propre à un type, par exemple
   });
 });
 
-describe("evaluerAide — recopie des champs de l'aide", () => {
+describe("evaluerAide, recopie des champs de l'aide", () => {
   it("reprend les champs descriptifs de l'aide, avec le montant et le statut évalués", () => {
     const aide = makeAide({
       id: 'nat-exemple',
@@ -378,7 +378,7 @@ describe("evaluerAide — recopie des champs de l'aide", () => {
   });
 });
 
-describe('evaluerAide — limite au coût de la formation (coût pédagogique + frais annexes)', () => {
+describe('evaluerAide, limite au coût de la formation (coût pédagogique + frais annexes)', () => {
   const MENTION = '(limité au coût de la formation)';
   // Coût connu de la formation : 2 000 € de coût pédagogique + 500 € de frais annexes = 2 500 €.
   const profil = makeProfil({ coutPedagogique: 2000, coutFraisAnnexes: 500 });
@@ -450,7 +450,7 @@ describe('evaluerAide — limite au coût de la formation (coût pédagogique + 
   });
 });
 
-describe('evaluerAide — lien régional et région de référence', () => {
+describe('evaluerAide, lien régional et région de référence', () => {
   const lienIdf = 'https://www.transitionspro-idf.fr';
   const lienOccitanie = 'https://www.transitionspro-occitanie.fr';
   const lienNational = 'https://www.example.gouv.fr/demande';
