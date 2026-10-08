@@ -160,6 +160,17 @@ describe('table IDCC v2 : conventions partagées, provenance et hygiène des tex
     }
   });
 
+  it("les notes affichées par le résolveur (conventions partagées ou marquées à confirmer) nomment chaque OPCO, jamais par son identifiant technique", () => {
+    const affichees = entrees.filter((e) => e.statut === 'partage' || e.a_confirmer);
+    expect(affichees.length).toBeGreaterThan(0);
+    for (const e of affichees) {
+      const texte = (e.note ?? '').replace(/https?:\/\/\S+/g, '');
+      for (const slug of SLUGS) {
+        expect(texte, `${e.idcc} : ${slug}`).not.toMatch(new RegExp(`(^|[^\\w-])${slug}([^\\w-]|$)`));
+      }
+    }
+  });
+
   it("aucun titre ne se termine par des points de suspension et aucun titre ni aucune note ne contient d'apostrophe courbe", () => {
     // U+2019, construite par son code pour rester visible dans le source (les textes affichés n'ont que des apostrophes droites).
     const apostropheCourbe = String.fromCharCode(0x2019);
