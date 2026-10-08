@@ -451,6 +451,27 @@ describe('dry-run.choisirCiblesDryRun', () => {
     expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: opcos[1].slug, doublement: opcos[2].slug });
   });
 
+  it('le premier OPCO est visé quand il a les deux valeurs (aucun OPCO sauté)', () => {
+    const opcos = troisOpco();
+    opcos[0].cout_horaire_inter.value = 20;
+    opcos[0].budget_annuel_max.value = 2000;
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: opcos[0].slug, doublement: opcos[0].slug });
+  });
+
+  it('un montant à 0 n’est pas une cible : la hausse de 12 % et le doublement ne le changent pas', () => {
+    const opcos = troisOpco();
+    opcos[0].cout_horaire_inter.value = 0;
+    opcos[0].budget_annuel_max.value = 0;
+    // Les valeurs à 0 du premier OPCO sont ignorées : les cibles restent celles des suivants.
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: opcos[1].slug, doublement: opcos[2].slug });
+    // Seuls des montants à 0 : aucune cible.
+    for (const o of opcos) {
+      o.cout_horaire_inter.value = 0;
+      o.budget_annuel_max.value = 0;
+    }
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: null, doublement: null });
+  });
+
   it('aucune valeur renseignée -> aucune cible', () => {
     const opcos = troisOpco();
     for (const o of opcos) {
@@ -464,7 +485,7 @@ describe('dry-run.choisirCiblesDryRun', () => {
     // Sans montant, la mutation ne change rien et le dry-run ne traverse plus le garde-fou de variation (atlas, écrit en
     // dur jusqu'en octobre 2026, avait perdu ses deux valeurs).
     const { hausse, doublement } = choisirCiblesDryRun(EMBEDDED_OPCOS);
-    expect(EMBEDDED_OPCOS.find((o) => o.slug === hausse)?.cout_horaire_inter.value).toEqual(expect.any(Number));
-    expect(EMBEDDED_OPCOS.find((o) => o.slug === doublement)?.budget_annuel_max.value).toEqual(expect.any(Number));
+    expect(EMBEDDED_OPCOS.find((o) => o.slug === hausse)?.cout_horaire_inter.value).toBeGreaterThan(0);
+    expect(EMBEDDED_OPCOS.find((o) => o.slug === doublement)?.budget_annuel_max.value).toBeGreaterThan(0);
   });
 });
