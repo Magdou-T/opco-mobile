@@ -47,7 +47,7 @@ export function raisonPlanFerme(p: PlanFerme): string {
 }
 
 /** Encadré du plan fermé : titre et texte (la raison) ; le bandeau y ajoute le lien vers le détail de l'OPCO. */
-export interface EncadrePlanFerme {
+interface EncadrePlanFerme {
   titre: string;
   texte: string;
 }
@@ -94,14 +94,14 @@ export function rappelsAucunFinancement(plan: PlanFinancement): Rappel[] {
 // --- Encadré sans financement chiffré -----------------------------------------------------------------------------
 
 /** Lien du bandeau vers la liste des aides (`ID_SECTION_AIDES`) quand l'encadré cite des aides « à vérifier ». */
-export interface LienAidesAVerifier {
+interface LienAidesAVerifier {
   /** Aides « à vérifier » de la liste, chiffrées ou non. */
   nombre: number;
   libelle: string;
 }
 
 /** Encadré du bandeau quand aucun financement de la formation n'est chiffré : texte et liens vers les cartes et les aides. */
-export interface EncadreSansFinancement {
+interface EncadreSansFinancement {
   texte: string;
   rappels: Rappel[];
   /** Aides « à vérifier » citées par le texte : lien vers la section des aides ; null quand le texte n'en cite aucune. */

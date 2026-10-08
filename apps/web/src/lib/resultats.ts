@@ -365,7 +365,7 @@ export function montantAffiche(aide: Pick<AideEvaluee, 'statut' | 'montantEstime
 
 // --- Sources ------------------------------------------------------------------------------------------------------
 
-export interface SourcesDeLAide {
+interface SourcesDeLAide {
   /** Pages citées, une fois par adresse (le catalogue cite souvent une page pour plusieurs extraits), titre complet. */
   pages: { url: string; titre: string }[];
   /** Un lien par site (« service-public.gouv.fr »), vers la première page citée de ce site : libellés courts et distincts. */
@@ -501,7 +501,7 @@ export function confianceDOption(
 
 // --- Listes de conventions collectives ----------------------------------------------------------------------------
 
-export type MorceauIdcc = { genre: 'texte'; valeur: string } | { genre: 'idcc'; codes: string[] };
+type MorceauIdcc = { genre: 'texte'; valeur: string } | { genre: 'idcc'; codes: string[] };
 
 /** Nombre de codes au-delà duquel une liste « IDCC … » se replie (« 12 conventions collectives », dépliable). */
 const CODES_AVANT_REPLI = 6;

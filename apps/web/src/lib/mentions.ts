@@ -112,7 +112,7 @@ export const LIBELLES_DES_CHAMPS: { [G in Groupe]: { [C in keyof MentionsLegales
 };
 
 /** Un champ à compléter : son chemin (« editeur.capitalSocial ») et son libellé. */
-export interface ChampACompleter {
+interface ChampACompleter {
   champ: string;
   libelle: string;
 }
