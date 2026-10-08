@@ -101,16 +101,18 @@ describe('calculateFunding, textes du calcul : rien de plus fort que l’estimat
     const peda = pedagogie(r);
     // (4 200,50 / 140 - 30) x 140 = 0,50 € au-dessus du plafond : 4 200 € financés, 0,50 € de reste.
     expect(peda).toMatchObject({ requestedAmount: 4200.5, fundedAmount: 4200, remainder: 0.5 });
-    expect(peda.details).toContain('Votre coût dépasse le plafond de 0.50 € sur la formation → taux appliqué : 30 €/h');
-    expect(r.warnings).toContain('Le coût demandé dépasse le plafond Test OPCO (30 €/h) de 0.50 € sur la formation : ce montant reste à charge.');
-    // Jamais un coût horaire qui s'affiche 30 €/h présenté au-dessus d'un plafond de 30 €/h.
-    expect([...(peda.details ?? []), ...r.warnings].filter((t) => /\(30(?:\.\d+)? €\/h\) dépasse/.test(t))).toEqual([]);
+    expect(peda.details).toContain(`Votre coût dépasse le plafond de 0.50${NBSP}€ sur la formation → taux appliqué : 30${NBSP}€/h`);
+    expect(r.warnings).toContain(`Le coût demandé dépasse le plafond Test OPCO (30${NBSP}€/h) de 0.50${NBSP}€ sur la formation : ce montant reste à charge.`);
+    // Jamais un coût horaire qui s'affiche 30 €/h présenté au-dessus d'un plafond de 30 €/h (espace ordinaire ou insécable).
+    expect([...(peda.details ?? []), ...r.warnings].filter((t) => /\(30(?:\.\d+)?\s€\/h\) dépasse/.test(t))).toEqual([]);
   });
 
   it('coût horaire au-dessus du plafond une fois arrondi (30,10 €/h) : le dépassement reste écrit en €/h', () => {
     const r = calculateFunding(opcoA(30), makeFormationState({ durationHours: 140, pedagogyCostTotal: 4214, pedagogyCostPerHour: 4214 / 140 }));
-    expect(pedagogie(r).details).toContain('Votre coût (30.1 €/h) dépasse le plafond → taux appliqué : 30 €/h');
-    expect(r.warnings).toContain('Le coût horaire demandé (30.1 €/h) dépasse le plafond Test OPCO (30 €/h). Le reste à charge est de 14.00 €.');
+    expect(pedagogie(r).details).toContain(`Votre coût (30.1${NBSP}€/h) dépasse le plafond → taux appliqué : 30${NBSP}€/h`);
+    expect(r.warnings).toContain(
+      `Le coût horaire demandé (30.1${NBSP}€/h) dépasse le plafond Test OPCO (30${NBSP}€/h). Le reste à charge est de 14.00${NBSP}€.`,
+    );
     expect(pedagogie(r)).toMatchObject({ fundedAmount: 4200, remainder: 14 });
   });
 
@@ -206,6 +208,87 @@ describe('calculateFunding, textes du calcul : rien de plus fort que l’estimat
     const exemples = ['15 €/h × 140h', 'Taux : 50% des coûts', 'coûts péda financés', `${String.fromCharCode(0x26a0)} Votre coût`, 'auprès de AKTO', "auprès de L'Opcommerce"];
     expect(exemples.map((e) => defauts.filter(([, d]) => d(e)).map(([n]) => n))).toEqual(defauts.map(([n]) => [n]));
   });
+
+  it("données réelles, 11 OPCO et toutes leurs branches, trois projets, trois durées : entre un nombre et son unité (h, €, €/h, €/jour, €/nuit, € par repas, %, jours, nuits), l'espace des notes, des détails et des messages du calcul est insécable", () => {
+    // Espace ordinaire (U+0020) entre un nombre (ou la borne ouverte « … » d'une tranche) et son unité : « 140 h », « 30 €/h »,
+    // « 4200.00 € », « 20 € par repas », « 50 % », « 5 jours », « 2 nuits ».
+    const ESPACE_ORDINAIRE_AVANT_UNITE = /[\d…] (?:h|€|%|jours?|nuits?)(?![\p{L}\p{N}])/u;
+    const fautes = new Map<string, string>();
+    let textes = 0;
+    for (const opco of EMBEDDED_OPCOS) {
+      for (const variante of [null, ...(opco.variantes_branche ?? [])]) {
+        // Textes des données que les messages reprennent tels quels (enveloppe des 50 salariés et plus) : le moteur ne les écrit pas.
+        const donnees = [...(opco.plafonds_par_taille ?? []), ...(variante?.plafonds_par_taille ?? [])]
+          .map((p) => p.description)
+          .filter((d): d is string => !!d);
+        for (const projetType of ['formation_salarie', 'reconversion_salarie', null] as const) {
+          for (const heures of [3, 140, 1300]) {
+            for (const coutHoraire of [9, 95]) {
+              for (const companySize of ['less_11', '11_49', '50_299', '300_plus'] as const) {
+                for (const formationType of ['non_certifiante', 'certification'] as const) {
+                  const bas = coutHoraire < 50;
+                  const r = calculateFunding(
+                    opco,
+                    makeFormationState({
+                      projetType, selectedOpcoSlug: opco.slug, selectedBrancheId: variante?.id ?? null, trainingMode: 'presentiel',
+                      companySize, formationType, certificationLevel: formationType === 'certification' ? 'rncp' : null,
+                      durationHours: heures, pedagogyCostTotal: coutHoraire * heures, pedagogyCostPerHour: coutHoraire,
+                      needsTransport: true, transportMode: 'train', trainingDays: Math.ceil(heures / 7),
+                      needsAccommodation: true, accommodationNights: bas ? 1 : 2, accommodationCostPerNight: bas ? 40 : 160,
+                      needsMeals: true, mealCostPerDay: bas ? 8 : 40, budgetDejaConsomme: bas ? null : 500,
+                    }),
+                  );
+                  const duMoteur = [
+                    ...r.lines.flatMap((l) => [l.note ?? '', ...(l.details ?? [])]),
+                    ...r.warnings.map((w) => donnees.reduce((t, d) => t.split(d).join(''), w).replace(/«[^»]*»/g, '« »')),
+                  ];
+                  for (const t of duMoteur) {
+                    textes++;
+                    if (ESPACE_ORDINAIRE_AVANT_UNITE.test(t) && fautes.size < 12 && !fautes.has(t)) {
+                      fautes.set(t, `${opco.slug} ${variante?.id ?? 'sans branche'} ${heures} h`);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    expect(textes).toBeGreaterThan(100000);
+    expect(Object.fromEntries(fautes)).toEqual({});
+    // Le contrôle n'est pas vide : chaque unité est reconnue après une espace ordinaire, jamais après une espace insécable.
+    const exemples = ['140 h', '30 €/h', '4200.00 €', '20 € par repas', '50 %', '5 jours', '1 jour', '2 nuits', '… h'];
+    expect(exemples.filter((e) => !ESPACE_ORDINAIRE_AVANT_UNITE.test(e))).toEqual([]);
+    expect(exemples.filter((e) => ESPACE_ORDINAIRE_AVANT_UNITE.test(e.replace(' ', NBSP)))).toEqual([]);
+    expect(['moins de 50 salariés', 'PDC 2026 est épuisée', '15 heures'].filter((e) => ESPACE_ORDINAIRE_AVANT_UNITE.test(e))).toEqual([]);
+  });
+
+  it("un jour, une nuit : singulier dans le calcul du transport, de l'hébergement et de la restauration ; pluriel à partir de deux", () => {
+    const opco = makeOpco({
+      frais_transport: { value: 10, confidence: 'exact', source_url: 'x' },
+      frais_hebergement: { value: 100, confidence: 'exact', source_url: 'x' },
+      frais_restauration: { value: 20, confidence: 'exact', source_url: 'x' },
+    });
+    const textes = (jours: number, nuits: number): string[] => {
+      const r = calculateFunding(
+        opco,
+        makeFormationState({
+          durationHours: 7, needsTransport: true, transportMode: 'train', trainingDays: jours,
+          needsAccommodation: true, accommodationNights: nuits, accommodationCostPerNight: 120, needsMeals: true, mealCostPerDay: 15,
+        }),
+      );
+      return r.lines.flatMap((l) => [l.note ?? '', ...(l.details ?? [])]);
+    };
+    const un = textes(1, 1);
+    expect(un).toContain(`Calcul : 10${NBSP}€/jour × 1${NBSP}jour = 10.00${NBSP}€`);
+    expect(un).toContain(`Calcul : 100${NBSP}€/nuit × 1${NBSP}nuit = 100.00${NBSP}€`);
+    expect(un).toContain(`15${NBSP}€/jour × 1${NBSP}jour`);
+    expect(un.filter((t) => /\b1\s(?:jours|nuits)\b/u.test(t))).toEqual([]);
+    const deux = textes(2, 2);
+    expect(deux).toContain(`Calcul : 10${NBSP}€/jour × 2${NBSP}jours = 20.00${NBSP}€`);
+    expect(deux).toContain(`Votre coût : 120${NBSP}€/nuit × 2${NBSP}nuits = 240.00${NBSP}€`);
+  });
 });
 
 describe('calculateFunding, prise en charge salaires', () => {
@@ -268,15 +351,15 @@ describe('calculateFunding, prise en charge des salaires propre à la taille d\'
   it('moins de 11 salariés : 15 €/h', () => {
     const sal = salaires(opcoSalairesParTaille(taillesConstructys()), 'less_11');
     expect(sal.fundedAmount).toBe(1500);
-    expect(sal.note).toBe(`15 €/h × 100${NBSP}h`);
+    expect(sal.note).toBe(`15${NBSP}€/h × 100${NBSP}h`);
   });
 
   it('de 11 à 49 salariés : 10 €/h, avec le détail du taux propre à la taille', () => {
     const sal = salaires(opcoSalairesParTaille(taillesConstructys()), '11_49');
     expect(sal.fundedAmount).toBe(1000);
-    expect(sal.note).toBe(`10 €/h × 100${NBSP}h`);
-    expect(sal.details).toContain('Taux propre à votre taille d\'entreprise : 10 €/h');
-    expect(sal.details).toContain(`Calcul : 10 €/h × 100${NBSP}h = 1000.00 €`);
+    expect(sal.note).toBe(`10${NBSP}€/h × 100${NBSP}h`);
+    expect(sal.details).toContain(`Taux propre à votre taille d'entreprise : 10${NBSP}€/h`);
+    expect(sal.details).toContain(`Calcul : 10${NBSP}€/h × 100${NBSP}h = 1000.00${NBSP}€`);
   });
 
   it('une taille à null : aucune prise en charge des salaires, avec la note explicative', () => {
@@ -309,7 +392,7 @@ describe('calculateFunding, prise en charge des salaires propre à la taille d\'
     const opco = opcoSalairesParTaille([plafondTaille('less_11', { prise_en_charge_salaires_horaire: 0 })]);
     const sal = salaires(opco, 'less_11');
     expect(sal.fundedAmount).toBe(0);
-    expect(sal.note).toBe(`0 €/h × 100${NBSP}h`);
+    expect(sal.note).toBe(`0${NBSP}€/h × 100${NBSP}h`);
   });
 
   it('le taux propre à la taille ne concerne que le mode euro_par_heure', () => {
@@ -803,7 +886,7 @@ describe('calculateFunding, barème dégressif', () => {
     const state = makeFormationState({ durationHours: 140, pedagogyCostPerHour: 40 });
     const r = calculateFunding(opco, state);
     // coût 5600 − financé 4725
-    expect(r.warnings.some((w) => w.includes('laisse un reste à charge de 875.00 €'))).toBe(true);
+    expect(r.warnings.some((w) => w.includes(`laisse un reste à charge de 875.00${NBSP}€`))).toBe(true);
   });
 
   describe('variante de branche et barème dégressif de l\'OPCO', () => {
@@ -879,7 +962,7 @@ describe('calculateFunding, barème dégressif réservé aux formations certifia
   it('formation non certifiante : le plafond horaire habituel s\'applique, pas le barème', () => {
     const peda = pedagogie(opcoCertifiant(), { certificationLevel: 'aucune' });
     expect(peda.fundedAmount).toBe(PLAFOND_HABITUEL);
-    expect(peda.note).toBe('Plafond horaire : 40 €/h');
+    expect(peda.note).toBe(`Plafond horaire : 40${NBSP}€/h`);
   });
 
   it('formation certifiante (RNCP) : le barème dégressif s\'applique', () => {
@@ -920,7 +1003,7 @@ describe('calculateFunding, barème dégressif réservé aux formations certifia
 
   it('formation non certifiante : l\'avertissement du plafond horaire remplace celui du barème dégressif', () => {
     const r = calcul(opcoCertifiant(), { certificationLevel: 'aucune' });
-    expect(r.warnings.some((w) => w.includes('dépasse le plafond Test OPCO (40 €/h)'))).toBe(true);
+    expect(r.warnings.some((w) => w.includes(`dépasse le plafond Test OPCO (40${NBSP}€/h)`))).toBe(true);
     expect(r.warnings.some((w) => w.includes('Le barème dégressif'))).toBe(false);
   });
 
@@ -1517,8 +1600,8 @@ describe('calculateFunding, frais annexes plafonnés au coût déclaré', () => 
       expect(repas.requestedAmount).toBe(75); // 15 €/jour × 5 jours
       expect(repas.fundedAmount).toBe(75); // coût réel, et non le forfait 20 €/jour × 5 jours = 100
       expect(repas.remainder).toBe(0);
-      expect(repas.details).toContain('Votre coût (15 €/jour) est inférieur au forfait : prise en charge au coût réel');
-      expect(repas.details).toContain('Calcul : 15 €/jour × 5 jours = 75.00 €');
+      expect(repas.details).toContain(`Votre coût (15${NBSP}€/jour) est inférieur au forfait : prise en charge au coût réel`);
+      expect(repas.details).toContain(`Calcul : 15${NBSP}€/jour × 5${NBSP}jours = 75.00${NBSP}€`);
     });
 
     it('forfait supérieur au coût déclaré : le financé ne dépasse pas le demandé et l\'enveloppe reste cohérente', () => {
@@ -1530,14 +1613,14 @@ describe('calculateFunding, frais annexes plafonnés au coût déclaré', () => 
 
     it('la note courte de la ligne affiche le taux réellement appliqué : le coût réel quand il est sous le forfait', () => {
       const repas = calculateFunding(opcoForfaitRepas(), stateRepas(15)).lines.find((l) => l.poste === 'restauration')!;
-      expect(repas.note).toContain('15 €/jour × 5 jours'); // et non « 20 €/jour × 5 jours » à côté de 75 € financés
-      expect(repas.note).not.toContain('20 €/jour');
+      expect(repas.note).toContain(`15${NBSP}€/jour × 5${NBSP}jours`); // et non « 20 €/jour × 5 jours » à côté de 75 € financés
+      expect(repas.note).not.toMatch(/20\s€\/jour/);
     });
 
     it('la note courte affiche le forfait quand le coût déclaré le dépasse', () => {
       const repas = calculateFunding(opcoForfaitRepas(), stateRepas(28)).lines.find((l) => l.poste === 'restauration')!;
       expect(repas.fundedAmount).toBe(100); // forfait 20 €/jour × 5 jours
-      expect(repas.note).toContain('20 €/jour × 5 jours');
+      expect(repas.note).toContain(`20${NBSP}€/jour × 5${NBSP}jours`);
     });
   });
 
@@ -1742,7 +1825,7 @@ describe('calculateFunding, habilitation au taux « métier » : jamais « exact
     const peda = pedagogie(opcoMetier(25), 'habilitation');
     expect(peda.requestedAmount).toBe(400);
     expect(peda.fundedAmount).toBe(250); // 10 h × 25 €/h : le montant ne change pas
-    expect(peda.note).toBe('Plafond horaire : 25 €/h');
+    expect(peda.note).toBe(`Plafond horaire : 25${NBSP}€/h`);
     expect(peda.confidence).toBe('estimated');
     expect(peda.sourceUrl).toBe(SOURCE_METIER);
   });
@@ -1900,16 +1983,16 @@ describe('calculateFunding, forfait de restauration : unité du forfait (repas o
       const repas = restauration(opcoParRepas(), 28);
       expect(repas.requestedAmount).toBe(140); // 28 € × 5 jours
       expect(repas.fundedAmount).toBe(100); // 20 € par repas × 5 jours
-      expect(repas.details).toContain('Forfait restauration Test OPCO : 20 € par repas (un repas par jour de formation retenu)');
-      expect(repas.details).toContain('Calcul : 20 € par repas × 5 jours = 100.00 €');
-      expect(repas.note).toBe('20 € par repas × 5 jours');
+      expect(repas.details).toContain(`Forfait restauration Test OPCO : 20${NBSP}€ par repas (un repas par jour de formation retenu)`);
+      expect(repas.details).toContain(`Calcul : 20${NBSP}€ par repas × 5${NBSP}jours = 100.00${NBSP}€`);
+      expect(repas.note).toBe(`20${NBSP}€ par repas × 5${NBSP}jours`);
     });
 
     it('coût déclaré inférieur au forfait : financé au coût réel, avec des textes « par repas »', () => {
       const repas = restauration(opcoParRepas(), 15);
       expect(repas.fundedAmount).toBe(75);
-      expect(repas.details).toContain('Calcul : 15 € par repas × 5 jours = 75.00 €');
-      expect(repas.note).toBe('15 € par repas × 5 jours');
+      expect(repas.details).toContain(`Calcul : 15${NBSP}€ par repas × 5${NBSP}jours = 75.00${NBSP}€`);
+      expect(repas.note).toBe(`15${NBSP}€ par repas × 5${NBSP}jours`);
     });
 
     it('aucun texte du forfait ne parle de « €/jour » quand le coût déclaré dépasse le forfait', () => {
@@ -1926,9 +2009,9 @@ describe('calculateFunding, forfait de restauration : unité du forfait (repas o
       (_libelle, unite) => {
         const repas = restauration(opcoRestauration({ frais_restauration_unite: unite }), 28);
         expect(repas.fundedAmount).toBe(100);
-        expect(repas.details).toContain('Forfait restauration Test OPCO : 20 €/jour');
-        expect(repas.details).toContain('Calcul : 20 €/jour × 5 jours = 100.00 €');
-        expect(repas.note).toBe('20 €/jour × 5 jours');
+        expect(repas.details).toContain(`Forfait restauration Test OPCO : 20${NBSP}€/jour`);
+        expect(repas.details).toContain(`Calcul : 20${NBSP}€/jour × 5${NBSP}jours = 100.00${NBSP}€`);
+        expect(repas.note).toBe(`20${NBSP}€/jour × 5${NBSP}jours`);
       },
     );
   });
@@ -1947,7 +2030,7 @@ describe('calculateFunding, forfait de restauration : unité du forfait (repas o
     it('la variante hérite de l\'unité de l\'OPCO quand elle n\'en déclare pas', () => {
       const opco = opcoRestauration({ frais_restauration_unite: 'repas', variantes_branche: [variante()] });
       const repas = calculateFunding(opco, etat(28)).lines.find((l) => l.poste === 'restauration')!;
-      expect(repas.note).toBe('20 € par repas × 5 jours');
+      expect(repas.note).toBe(`20${NBSP}€ par repas × 5${NBSP}jours`);
     });
 
     it('la variante peut surcharger l\'unité (et son forfait) : par jour chez l\'OPCO, par repas dans la branche', () => {
@@ -1959,7 +2042,7 @@ describe('calculateFunding, forfait de restauration : unité du forfait (repas o
       });
       const repas = calculateFunding(opco, etat(30)).lines.find((l) => l.poste === 'restauration')!;
       expect(repas.fundedAmount).toBe(125);
-      expect(repas.note).toBe('25 € par repas × 5 jours');
+      expect(repas.note).toBe(`25${NBSP}€ par repas × 5${NBSP}jours`);
     });
 
     it('une variante « par jour » chez un OPCO « par repas » repasse aux textes « €/jour »', () => {
@@ -1968,7 +2051,7 @@ describe('calculateFunding, forfait de restauration : unité du forfait (repas o
         variantes_branche: [variante({ frais_restauration_unite: 'jour' })],
       });
       const repas = calculateFunding(opco, etat(28)).lines.find((l) => l.poste === 'restauration')!;
-      expect(repas.note).toBe('20 €/jour × 5 jours');
+      expect(repas.note).toBe(`20${NBSP}€/jour × 5${NBSP}jours`);
     });
 
     it('applyVarianteBranche : l\'unité de la variante remplace celle de l\'OPCO, sinon elle est héritée', () => {
@@ -1999,7 +2082,7 @@ describe('calculateFunding, plafond annuel estimé : mention « à confirmer » 
     expect(r.budgetCapApplied).toBe(true);
     const messages = messagesDePlafond(r.warnings);
     expect(messages).toHaveLength(2); // calcPedagogy (montant) et generateWarnings (plafond appliqué)
-    expect(messages.some((m) => m.startsWith('Plafond annuel appliqué aux coûts pédagogiques : 2000.00 €'))).toBe(true);
+    expect(messages.some((m) => m.startsWith(`Plafond annuel appliqué aux coûts pédagogiques : 2000.00${NBSP}€`))).toBe(true);
     expect(messages.some((m) => m.startsWith('Le plafond budgétaire annuel de Test OPCO a été appliqué aux coûts pédagogiques'))).toBe(true);
     for (const m of messages) expect(m.endsWith(MENTION), m).toBe(true);
   });

@@ -17,7 +17,7 @@ import type {
   VarianteBranche,
   PosteFinancement,
 } from './types';
-import { INSECABLE, apposition, dansLaPhrase, de } from './texte';
+import { apposition, avecUnite, compte, dansLaPhrase, de } from './texte';
 
 /** Texte de référence de la règle des 50 salariés (fonds mutualisés du PDC). */
 export const REFERENCE_REGLE_50_SALARIES = 'art. L. 6332-17 du code du travail';
@@ -221,8 +221,8 @@ function financementDegressif(
     return {
       finance: taux * heures,
       details: [
-        `Barème selon la durée totale (${heures} h) : plafond ${tranche.valeur} €/h`,
-        `Calcul : ${taux} €/h × ${heures} h = ${(taux * heures).toFixed(2)} €`,
+        `Barème selon la durée totale (${avecUnite(heures, 'h')}) : plafond ${avecUnite(tranche.valeur, '€/h')}`,
+        `Calcul : ${avecUnite(taux, '€/h')} × ${avecUnite(heures, 'h')} = ${avecUnite((taux * heures).toFixed(2), '€')}`,
       ],
     };
   }
@@ -239,13 +239,14 @@ function financementDegressif(
       const taux = Math.min(tauxDemande, t.valeur);
       finance += taux * h;
       details.push(
-        `Tranche ${borneBasse}-${t.max_heures ?? '…'} h : ${h} h × ${taux} €/h (plafond ${t.valeur} €/h) = ${(taux * h).toFixed(2)} €`,
+        `Tranche ${borneBasse}-${avecUnite(t.max_heures ?? '…', 'h')} : ${avecUnite(h, 'h')} × ${avecUnite(taux, '€/h')} ` +
+          `(plafond ${avecUnite(t.valeur, '€/h')}) = ${avecUnite((taux * h).toFixed(2), '€')}`,
       );
       restant -= h;
     }
     if (t.max_heures != null) borneBasse = t.max_heures;
   }
-  if (restant > 0) details.push(`${restant} h au-delà du dernier seuil publié : non financées`);
+  if (restant > 0) details.push(`${avecUnite(restant, 'h')} au-delà du dernier seuil publié : non financées`);
   return { finance, details };
 }
 
@@ -267,7 +268,7 @@ function calcPedagogy(
   const userCostPerHour = state.pedagogyCostPerHour ?? 0;
   const requestedTotal = state.pedagogyCostTotal ?? userCostPerHour * hours;
   const details: string[] = [
-    `Votre coût horaire : ${userCostPerHour} €/h × ${hours} h = ${(userCostPerHour * hours).toFixed(2)} €`,
+    `Votre coût horaire : ${avecUnite(userCostPerHour, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((userCostPerHour * hours).toFixed(2), '€')}`,
   ];
 
   let funded: number;
@@ -287,7 +288,7 @@ function calcPedagogy(
     const reste = arrondi(userCostPerHour * hours - funded);
     if (reste > 0) {
       warnings.push(
-        `Le barème dégressif ${de(opco.name)} laisse un reste à charge de ${reste.toFixed(2)} € sur les coûts pédagogiques.`,
+        `Le barème dégressif ${de(opco.name)} laisse un reste à charge de ${avecUnite(reste.toFixed(2), '€')} sur les coûts pédagogiques.`,
       );
     }
   } else {
@@ -297,8 +298,8 @@ function calcPedagogy(
       const ceiling = ceilingInfo.ceiling;
       confidence = ceilingInfo.confidence;
       funded = Math.min(userCostPerHour, ceiling) * hours;
-      note = `Plafond horaire : ${ceiling} €/h`;
-      details.push(`Plafond horaire ${apposition(opco.name)} : ${ceiling} €/h`);
+      note = `Plafond horaire : ${avecUnite(ceiling, '€/h')}`;
+      details.push(`Plafond horaire ${apposition(opco.name)} : ${avecUnite(ceiling, '€/h')}`);
       if (userCostPerHour > ceiling) {
         const reste = (userCostPerHour - ceiling) * hours;
         // Coût horaire égal au plafond une fois arrondi au centime (4 200,50 € sur 140 h : 30,0036 €/h, qui s'affiche
@@ -306,21 +307,21 @@ function calcPedagogy(
         const egalAuCentime = Math.round(userCostPerHour * 100) === Math.round(ceiling * 100);
         details.push(
           egalAuCentime
-            ? `Votre coût dépasse le plafond de ${reste.toFixed(2)} € sur la formation → taux appliqué : ${ceiling} €/h`
-            : `Votre coût (${userCostPerHour} €/h) dépasse le plafond → taux appliqué : ${ceiling} €/h`,
+            ? `Votre coût dépasse le plafond de ${avecUnite(reste.toFixed(2), '€')} sur la formation → taux appliqué : ${avecUnite(ceiling, '€/h')}`
+            : `Votre coût (${avecUnite(userCostPerHour, '€/h')}) dépasse le plafond → taux appliqué : ${avecUnite(ceiling, '€/h')}`,
         );
-        details.push(`Calcul : ${ceiling} €/h × ${hours} h = ${(ceiling * hours).toFixed(2)} €`);
-        details.push(`Reste à charge sur ce poste : ${reste.toFixed(2)} €`);
+        details.push(`Calcul : ${avecUnite(ceiling, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((ceiling * hours).toFixed(2), '€')}`);
+        details.push(`Reste à charge sur ce poste : ${avecUnite(reste.toFixed(2), '€')}`);
         warnings.push(
           egalAuCentime
-            ? `Le coût demandé dépasse le plafond ${apposition(opco.name)} (${ceiling} €/h) de ${reste.toFixed(2)} € sur la formation : ce montant reste à charge.`
-            : `Le coût horaire demandé (${userCostPerHour} €/h) dépasse le plafond ${apposition(opco.name)} (${ceiling} €/h). ` +
-                `Le reste à charge est de ${reste.toFixed(2)} €.`,
+            ? `Le coût demandé dépasse le plafond ${apposition(opco.name)} (${avecUnite(ceiling, '€/h')}) de ${avecUnite(reste.toFixed(2), '€')} sur la formation : ce montant reste à charge.`
+            : `Le coût horaire demandé (${avecUnite(userCostPerHour, '€/h')}) dépasse le plafond ${apposition(opco.name)} (${avecUnite(ceiling, '€/h')}). ` +
+                `Le reste à charge est de ${avecUnite(reste.toFixed(2), '€')}.`,
         );
       } else {
         // Une estimation : l'OPCO peut refuser la prise en charge (fonds épuisés, étude du dossier).
         details.push("Votre coût horaire ne dépasse pas le plafond : l'estimation le retient en entier.");
-        details.push(`Calcul : ${userCostPerHour} €/h × ${hours} h = ${(userCostPerHour * hours).toFixed(2)} €`);
+        details.push(`Calcul : ${avecUnite(userCostPerHour, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((userCostPerHour * hours).toFixed(2), '€')}`);
       }
     } else if (budgetAnnuelPublie) {
       // Pas de plafond horaire publié, mais un budget annuel : il borne la prise en charge (appliqué plus bas et par calculateFunding).
@@ -341,13 +342,15 @@ function calcPedagogy(
 
   let capApplique = false;
   if (capPedagogie != null && funded > capPedagogie) {
-    details.push(`Plafond annuel applicable aux coûts pédagogiques : ${capPedagogie.toFixed(2)} €`);
-    details.push(`Le montant calculé (${funded.toFixed(2)} €) dépasse ce plafond → ramené à ${capPedagogie.toFixed(2)} €`);
+    details.push(`Plafond annuel applicable aux coûts pédagogiques : ${avecUnite(capPedagogie.toFixed(2), '€')}`);
+    details.push(
+      `Le montant calculé (${avecUnite(funded.toFixed(2), '€')}) dépasse ce plafond → ramené à ${avecUnite(capPedagogie.toFixed(2), '€')}`,
+    );
     funded = capPedagogie;
     capApplique = true;
     if (!budgetAnnuelNul) {
       warnings.push(
-        `Plafond annuel appliqué aux coûts pédagogiques : ${capPedagogie.toFixed(2)} € (salaires et frais annexes financés en plus)${finMessagePlafondAnnuel(opco)}`,
+        `Plafond annuel appliqué aux coûts pédagogiques : ${avecUnite(capPedagogie.toFixed(2), '€')} (salaires et frais annexes financés en plus)${finMessagePlafondAnnuel(opco)}`,
       );
     }
   }
@@ -391,21 +394,21 @@ function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number, 
       }
       const taux = tauxTaille !== undefined ? tauxTaille : rate;
       funded = (taux ?? 0) * hours;
-      note = taux != null ? `${taux} €/h × ${hours}${INSECABLE}h` : undefined;
+      note = taux != null ? `${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')}` : undefined;
       if (taux != null) {
-        if (tauxTaille !== undefined) details.push(`Taux propre à votre taille d'entreprise : ${taux} €/h`);
-        details.push(`Taux de prise en charge : ${taux} €/h`);
-        details.push(`Calcul : ${taux} €/h × ${hours}${INSECABLE}h = ${funded.toFixed(2)} €`);
+        if (tauxTaille !== undefined) details.push(`Taux propre à votre taille d'entreprise : ${avecUnite(taux, '€/h')}`);
+        details.push(`Taux de prise en charge : ${avecUnite(taux, '€/h')}`);
+        details.push(`Calcul : ${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite(funded.toFixed(2), '€')}`);
       }
       break;
     }
     case 'pourcentage_pedagogique':
       funded = pedagogyFunded * ((rate ?? 0) / 100);
-      note = rate != null ? `${rate}${INSECABLE}% des coûts pédagogiques pris en charge` : undefined;
+      note = rate != null ? `${avecUnite(rate, '%')} des coûts pédagogiques pris en charge` : undefined;
       details.push(`Mode de calcul ${apposition(opco.name)} : pourcentage des coûts pédagogiques`);
       if (rate != null) {
-        details.push(`Taux : ${rate}${INSECABLE}% des coûts pédagogiques financés (${pedagogyFunded.toFixed(2)} €)`);
-        details.push(`Calcul : ${pedagogyFunded.toFixed(2)} € × ${rate}${INSECABLE}% = ${funded.toFixed(2)} €`);
+        details.push(`Taux : ${avecUnite(rate, '%')} des coûts pédagogiques financés (${avecUnite(pedagogyFunded.toFixed(2), '€')})`);
+        details.push(`Calcul : ${avecUnite(pedagogyFunded.toFixed(2), '€')} × ${avecUnite(rate, '%')} = ${avecUnite(funded.toFixed(2), '€')}`);
       }
       break;
     case 'selon_accord':
@@ -440,9 +443,10 @@ function calcTransport(opco: OpcoData, state: WizardState, branche: string | nul
 
   if (rate != null && rate > 0) {
     const funded = rate * days;
-    return line('transport', 'Transport', funded, funded, confidence, sourceUrl, `${rate} €/jour × ${days} jours`, [
-      `Forfait transport journalier ${apposition(opco.name)} : ${rate} €/jour`,
-      `Calcul : ${rate} €/jour × ${days} jours = ${funded.toFixed(2)} €`,
+    const calcul = `${avecUnite(rate, '€/jour')} × ${compte(days, 'jour', 'jours')}`;
+    return line('transport', 'Transport', funded, funded, confidence, sourceUrl, calcul, [
+      `Forfait transport journalier ${apposition(opco.name)} : ${avecUnite(rate, '€/jour')}`,
+      `Calcul : ${calcul} = ${avecUnite(funded.toFixed(2), '€')}`,
     ]);
   }
 
@@ -474,16 +478,16 @@ function calcAccommodation(opco: OpcoData, state: WizardState, branche: string |
   if (ceiling != null && ceiling > 0) {
     const funded = Math.min(userCostPerNight, ceiling) * nights;
     const details = [
-      `Votre coût : ${userCostPerNight} €/nuit × ${nights} nuits = ${requested.toFixed(2)} €`,
-      `Plafond hébergement ${apposition(opco.name)} : ${ceiling} €/nuit`,
+      `Votre coût : ${avecUnite(userCostPerNight, '€/nuit')} × ${compte(nights, 'nuit', 'nuits')} = ${avecUnite(requested.toFixed(2), '€')}`,
+      `Plafond hébergement ${apposition(opco.name)} : ${avecUnite(ceiling, '€/nuit')}`,
     ];
     if (userCostPerNight > ceiling) {
-      details.push(`Votre coût dépasse le plafond → taux appliqué : ${ceiling} €/nuit`);
-      details.push(`Calcul : ${ceiling} €/nuit × ${nights} nuits = ${funded.toFixed(2)} €`);
+      details.push(`Votre coût dépasse le plafond → taux appliqué : ${avecUnite(ceiling, '€/nuit')}`);
+      details.push(`Calcul : ${avecUnite(ceiling, '€/nuit')} × ${compte(nights, 'nuit', 'nuits')} = ${avecUnite(funded.toFixed(2), '€')}`);
     } else {
       details.push("Votre coût par nuit ne dépasse pas le plafond : l'estimation le retient en entier.");
     }
-    return line('hebergement', 'Hébergement', requested, funded, confidence, sourceUrl, `Plafond : ${ceiling} €/nuit`, details);
+    return line('hebergement', 'Hébergement', requested, funded, confidence, sourceUrl, `Plafond : ${avecUnite(ceiling, '€/nuit')}`, details);
   }
 
   // Aucun plafond exploitable : jamais de montant inventé, le coût saisi reste entièrement à charge.
@@ -526,22 +530,23 @@ function calcMeals(opco: OpcoData, state: WizardState, branche: string | null): 
     const funded = tauxApplique * days;
     // Forfait par repas : l'estimation retient un repas par jour de formation (le coût déclaré reste saisi par jour).
     const parRepas = opco.frais_restauration_unite === 'repas';
-    const tarif = (montant: number): string => (parRepas ? `${montant} € par repas` : `${montant} €/jour`);
+    const tarif = (montant: number): string => (parRepas ? `${avecUnite(montant, '€')} par repas` : avecUnite(montant, '€/jour'));
     const details = [
       parRepas
-        ? `Forfait restauration ${apposition(opco.name)} : ${rate} € par repas (un repas par jour de formation retenu)`
-        : `Forfait restauration ${apposition(opco.name)} : ${rate} €/jour`,
+        ? `Forfait restauration ${apposition(opco.name)} : ${tarif(rate)} (un repas par jour de formation retenu)`
+        : `Forfait restauration ${apposition(opco.name)} : ${tarif(rate)}`,
     ];
     if (userCostPerDay < rate) {
-      details.push(`Votre coût (${userCostPerDay} €/jour) est inférieur au forfait : prise en charge au coût réel`);
+      details.push(`Votre coût (${avecUnite(userCostPerDay, '€/jour')}) est inférieur au forfait : prise en charge au coût réel`);
     }
+    const calcul = `${tarif(tauxApplique)} × ${compte(days, 'jour', 'jours')}`;
     details.push(
-      `Calcul : ${tarif(tauxApplique)} × ${days} jours = ${funded.toFixed(2)} €`,
+      `Calcul : ${calcul} = ${avecUnite(funded.toFixed(2), '€')}`,
       requested > funded
-        ? `Reste à charge : ${(requested - funded).toFixed(2)} €`
+        ? `Reste à charge : ${avecUnite((requested - funded).toFixed(2), '€')}`
         : "Votre coût ne dépasse pas le forfait : l'estimation le retient en entier.",
     );
-    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, `${tarif(tauxApplique)} × ${days} jours`, details);
+    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, calcul, details);
   }
 
   // Aucun forfait publié : le coût déclaré reste affiché comme demandé (comme l'hébergement), rien n'est financé.
@@ -572,11 +577,11 @@ function calcFraisAnnexesPourcentage(opco: OpcoData, pedagogyFunded: number): Fu
     funded,
     opco.frais_annexes_pourcentage.confidence,
     opco.frais_annexes_pourcentage.source_url,
-    `${pct}${INSECABLE}% des coûts pédagogiques`,
+    `${avecUnite(pct, '%')} des coûts pédagogiques`,
     [
       `${opco.name} utilise un forfait global pour les frais annexes`,
-      `Taux : ${pct}${INSECABLE}% des coûts pédagogiques financés`,
-      `Calcul : ${pedagogyFunded.toFixed(2)} € × ${pct}${INSECABLE}% = ${funded.toFixed(2)} €`,
+      `Taux : ${avecUnite(pct, '%')} des coûts pédagogiques financés`,
+      `Calcul : ${avecUnite(pedagogyFunded.toFixed(2), '€')} × ${avecUnite(pct, '%')} = ${avecUnite(funded.toFixed(2), '€')}`,
       'Ce forfait couvre transport, hébergement et restauration',
     ],
   );
@@ -623,23 +628,23 @@ function generateWarnings(
 
   if (opco.quota_horaire_min != null && state.durationHours != null && state.durationHours < opco.quota_horaire_min) {
     warnings.push(
-      `La durée de formation (${state.durationHours}${INSECABLE}h) est inférieure au minimum requis par ${dansLaPhrase(opco.name)} ` +
-        `(${opco.quota_horaire_min}${INSECABLE}h). La prise en charge pourrait être refusée.`,
+      `La durée de formation (${avecUnite(state.durationHours, 'h')}) est inférieure au minimum requis par ${dansLaPhrase(opco.name)} ` +
+        `(${avecUnite(opco.quota_horaire_min, 'h')}). La prise en charge pourrait être refusée.`,
     );
   }
 
   const plafond = resolvePlafondForSize(opco, state.companySize);
   if (plafond?.quota_horaire_max != null && state.durationHours != null && state.durationHours > plafond.quota_horaire_max) {
     warnings.push(
-      `La durée de formation (${state.durationHours}${INSECABLE}h) dépasse le plafond horaire pour votre taille d'entreprise ` +
-        `(${plafond.quota_horaire_max}${INSECABLE}h). Les heures au-delà ne seront pas prises en charge.`,
+      `La durée de formation (${avecUnite(state.durationHours, 'h')}) dépasse le plafond horaire pour votre taille d'entreprise ` +
+        `(${avecUnite(plafond.quota_horaire_max, 'h')}). Les heures au-delà ne seront pas prises en charge.`,
     );
   }
 
   if (plafond == null && opco.quota_horaire_max != null && state.durationHours != null && state.durationHours > opco.quota_horaire_max) {
     warnings.push(
-      `La durée de formation (${state.durationHours}${INSECABLE}h) dépasse le plafond horaire ${apposition(opco.name)} ` +
-        `(${opco.quota_horaire_max}${INSECABLE}h).`,
+      `La durée de formation (${avecUnite(state.durationHours, 'h')}) dépasse le plafond horaire ${apposition(opco.name)} ` +
+        `(${avecUnite(opco.quota_horaire_max, 'h')}).`,
     );
   }
 
@@ -948,8 +953,8 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
   }
   if (!pdcFerme && budgetDejaConsomme > 0 && annualCap != null && annualCap > 0) {
     warnings.push(
-      `Budget déjà consommé cette année (${budgetDejaConsomme.toFixed(0)} €) déduit du plafond annuel ` +
-        `(${annualCap.toFixed(0)} €) : enveloppe restante ${Math.max(0, annualCap - budgetDejaConsomme).toFixed(0)} €.`,
+      `Budget déjà consommé cette année (${avecUnite(budgetDejaConsomme.toFixed(0), '€')}) déduit du plafond annuel ` +
+        `(${avecUnite(annualCap.toFixed(0), '€')}) : enveloppe restante ${avecUnite(Math.max(0, annualCap - budgetDejaConsomme).toFixed(0), '€')}.`,
     );
     if (annualCap - budgetDejaConsomme <= 0) {
       warnings.push(
