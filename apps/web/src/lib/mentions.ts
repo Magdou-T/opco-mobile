@@ -67,9 +67,11 @@ export const MENTIONS: MentionsLegales = {
     courriel: 'contact@sfgdeveloppement.fr',
     telephone: ['01', '82', '41', '02', '41'].join(INSECABLE),
   },
+  // Aucun nom de personne (choix de l'éditeur, 09/10/2026) : la rubrique désigne le représentant légal. `fonction` vide
+  // veut dire « pas de personne nommée » : `nom` complète alors la phrase « Le directeur de la publication est ... ».
   directeurPublication: {
-    nom: null,
-    fonction: null,
+    nom: 'le représentant légal de SFG Développement',
+    fonction: '',
   },
   hebergeur: {
     denomination: 'OVH SAS (OVHcloud)',

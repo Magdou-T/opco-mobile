@@ -85,17 +85,24 @@ export default function MentionsLegalesPage() {
         />
       </>
     ),
-    publication: (
-      <Informations
-        lignes={[
-          ['Nom', <Valeur key="n" champ={directeurPublication.nom} libelle={libelles.directeurPublication.nom} />],
-          [
-            'Fonction',
-            <Valeur key="f" champ={directeurPublication.fonction} libelle={libelles.directeurPublication.fonction} />,
-          ],
-        ]}
-      />
-    ),
+    // Fonction vide : aucune personne n'est nommée, `nom` complète la phrase (« le représentant légal de ... »).
+    publication:
+      directeurPublication.fonction === '' ? (
+        <p>
+          Le directeur de la publication est{' '}
+          <Valeur champ={directeurPublication.nom} libelle={libelles.directeurPublication.nom} />.
+        </p>
+      ) : (
+        <Informations
+          lignes={[
+            ['Nom', <Valeur key="n" champ={directeurPublication.nom} libelle={libelles.directeurPublication.nom} />],
+            [
+              'Fonction',
+              <Valeur key="f" champ={directeurPublication.fonction} libelle={libelles.directeurPublication.fonction} />,
+            ],
+          ]}
+        />
+      ),
     hebergement: (
       <>
         <p>Le site est fait de pages statiques, déposées chez l&apos;hébergeur et servies telles quelles.</p>
