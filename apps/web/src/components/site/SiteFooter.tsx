@@ -36,7 +36,7 @@ const LIEN =
 
 export function SiteFooter() {
   return (
-    <footer className="surface-encre mt-16 print:hidden">
+    <footer className="pied-site surface-encre mt-16 print:hidden">
       {/* Les trois couleurs du slogan de marque, en filet */}
       <div aria-hidden="true" className="flex h-1">
         <span className="flex-1 bg-turquoise" />

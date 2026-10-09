@@ -350,6 +350,14 @@ jalons ronds turquoise à numéro #1A1A1A, cerclés de la couleur du fond). La p
   soulignés du slogan de marque), logo en version claire, liens, date des critères dérivée des données des OPCO
   (`verificationLaPlusRecente`, `lib/format.ts`, partagée avec l'écran de résultats), et dans la dernière ligne le lien
   souligné « Mentions légales et données » (section 16).
+- **Mode intégré** (site affiché dans un cadre d'une autre page, par exemple la page WordPress de SFG Développement,
+  `docs/integration-wordpress.md`) : un script de deux lignes (`lib/integration.ts`, posé dans `<head>` par
+  `layout.tsx`, avant l'affichage) pose `data-integre` sur `<html>` quand la fenêtre n'est pas celle du sommet, ou
+  quand le navigateur refuse de lire le sommet. La feuille de style masque alors `.entete-site`, `.entete-seconde-ligne`
+  et `.pied-site`, et ramène `--hauteur-entete` à 0 (les ancres et les décalages collants ne laissent pas de vide). Le
+  site ouvert seul n'est pas touché. Le script ne lit ni ne pose rien d'autre que l'attribut : aucun stockage, aucun
+  cookie, aucune requête (`tests/integration.test.ts`). Dans le cadre, la barre collante du parcours se cale en bas du
+  cadre : donnez au cadre une hauteur fixe (82 vh, 680 px au moins) plutôt qu'une hauteur qui suit le contenu.
 
 ## 9. Rédaction SFG (tout texte visible)
 

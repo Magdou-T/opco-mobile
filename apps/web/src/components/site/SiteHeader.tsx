@@ -58,7 +58,7 @@ export function SiteHeader() {
 
       {/* De 1 024 à 1 279 px, la navigation tient sur une seconde ligne, hors de l'en-tête collant : elle défile avec la
           page et l'en-tête ne garde que 72 px en haut de l'écran. */}
-      <nav aria-label="Navigation principale" className="hidden border-b border-filet/70 bg-white lg:block xl:hidden print:hidden">
+      <nav aria-label="Navigation principale" className="entete-seconde-ligne hidden border-b border-filet/70 bg-white lg:block xl:hidden print:hidden">
         <LiensNavigation variante="seconde-ligne" />
       </nav>
     </>

@@ -557,6 +557,18 @@
   }
 }
 
+/* Mode integre : le site affiche dans un cadre d'un autre site (page WordPress de SFG Developpement) n'a ni en-tete, ni
+   seconde ligne de navigation, ni pied de page ; la hauteur de l'en-tete, que les decalages collants et les ancres
+   lisent, tombe a zero. L'attribut est pose avant l'affichage par le script de layout.tsx (lib/integration.ts). */
+html[data-integre] .entete-site,
+html[data-integre] .entete-seconde-ligne,
+html[data-integre] .pied-site {
+  display: none;
+}
+html[data-integre] {
+  --hauteur-entete: 0rem;
+}
+
 /* Impression : fond blanc, texte fonce, ni degrade ni ombre */
 @media print {
   body {
