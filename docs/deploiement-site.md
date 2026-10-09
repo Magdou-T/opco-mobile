@@ -50,14 +50,9 @@ La procédure de mise à jour des données est dans `docs/donnees-aides.md`, sec
 
 ### Compléter la page légale
 
-La page « Mentions légales et données » (`/mentions-legales/`, liée depuis le pied de page) lit ses informations dans `apps/web/src/lib/mentions.ts`, objet `MENTIONS`. Chaque champ qui vaut `null` s'affiche « [à compléter : libellé] » sur un fond doré, et tant qu'il en reste un, l'encadré « Page à compléter avant publication » s'affiche en tête de la page. Le build du 08/10/2026 en compte 13, à fournir par l'éditeur :
+La page « Mentions légales et données » (`/mentions-legales/`, liée depuis le pied de page) lit ses informations dans `apps/web/src/lib/mentions.ts`, objet `MENTIONS`. Chaque champ qui vaut `null` s'affiche « [à compléter : libellé] » sur un fond doré, et tant qu'il en reste un, l'encadré « Page à compléter avant publication » s'affiche en tête de la page. Il en reste un à fournir par l'éditeur : le numéro de téléphone de l'hébergeur (OVH ne le donne pas dans sa notice officielle : à relever dans l'espace client OVHcloud). Le directeur de la publication n'est pas nommé, au choix de l'éditeur (09/10/2026) : la rubrique dit que c'est le représentant légal de SFG Développement ; pour afficher un nom, remplir `nom` et `fonction` dans `MENTIONS`.
 
-- éditeur : capital social, ville du greffe (RCS), numéro de TVA intracommunautaire, téléphone ;
-- directeur de la publication : nom et fonction ;
-- hébergeur : dénomination exacte, adresse et téléphone, à confirmer dans hPanel ou dans les conditions de service d'Hostinger (le commentaire du fichier cite Hostinger International Ltd, Chypre, comme piste, pas comme fait vérifié) ;
-- données personnelles : base légale et durée de conservation des messages du formulaire de contact, adresse où exercer ses droits, délégué à la protection des données (s'il n'y en a pas, écrire « non désigné » : le champ reste « à compléter » tant qu'il vaut `null`).
-
-Les informations déjà remplies (dénomination, forme juridique, SIREN, SIRET et adresse du siège) viennent du répertoire SIRENE : les confirmer sur l'extrait Kbis.
+Les autres sont remplis, à confirmer par l'éditeur : dénomination, forme juridique, SIREN, SIRET et adresse du siège (répertoire SIRENE, à confirmer sur l'extrait Kbis) ; capital, greffe, exonération de TVA, téléphone, base légale, durée de conservation, coordonnées pour exercer ses droits et absence de délégué (pages « Conditions générales de ventes » et « Politique de confidentialité » de sfgdeveloppement.fr, relues le 09/10/2026) ; hébergeur OVH SAS (OVHcloud) et son adresse (notice officielle d'OVHcloud). Si l'application est hébergée ailleurs (Hostinger, par exemple), changer la dénomination, l'adresse et le téléphone de l'hébergeur dans `MENTIONS`.
 
 Ne publiez pas tant que la page affiche une information à compléter. Une fois les champs remplis, lancer `npm run test:web` (les tests de la page ne dépendent pas des champs vides : ils passent avant comme après la saisie), reconstruire le site, puis produire une nouvelle archive (§ 4).
 

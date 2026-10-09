@@ -133,6 +133,16 @@ describe('mentions légales : page, pied de page et plan du site', () => {
     assert.match(page, /les champs entre crochets attendent les informations légales de l(?:'|&apos;)éditeur/i);
   });
 
+  test('fonction vide : la rubrique du directeur de la publication s’écrit en une phrase, sans nom de personne', () => {
+    const page = source('../src/app/mentions-legales/page.tsx');
+    assert.match(page, /directeurPublication\.fonction === ''/);
+    assert.match(page, /Le directeur de la publication est\{' '\}/);
+    // Une fonction vide est une information fournie : elle ne rouvre pas le champ « à compléter ».
+    const sansPersonne = completes();
+    sansPersonne.directeurPublication = { nom: 'le représentant légal de la société', fonction: '' };
+    assert.deepEqual(mentionsIncompletes(sansPersonne), []);
+  });
+
   test('le pied de page renvoie aux mentions légales (adresse à barre finale)', () => {
     assert.equal(LIEN_MENTIONS.href, '/mentions-legales/');
     assert.equal(LIEN_MENTIONS.libelle, 'Mentions légales et données');

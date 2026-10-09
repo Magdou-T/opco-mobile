@@ -2,9 +2,9 @@
 // Mentions légales et information sur les données (page /mentions-legales/), en données typées. Un champ `null` attend
 // une information que seul l'éditeur peut fournir : la page l'écrit entre crochets (« [à compléter : capital social] ») et
 // signale en tête qu'elle est incomplète tant qu'il en reste (`mentionsIncompletes`). Aucune donnée légale n'est devinée :
-// seuls les faits publics du répertoire SIRENE sont préremplis (API Recherche d'entreprises, relus le 08/10/2026 : SIREN,
-// SIRET et adresse du siège, nature juridique 5710), à confirmer sur l'extrait Kbis. Module sans dépendance (tests :
-// tests/mentions.test.ts). Voir apps/web/DESIGN.md, section 16.
+// sont préremplis les faits publics du répertoire SIRENE (API Recherche d'entreprises, relus le 08/10/2026 : SIREN, SIRET
+// et adresse du siège, nature juridique 5710) et ce que l'éditeur publie lui-même sur son site (voir `MENTIONS`), à
+// confirmer sur l'extrait Kbis. Module sans dépendance (tests : tests/mentions.test.ts). Voir apps/web/DESIGN.md, section 16.
 // ============================================================
 
 import { INSECABLE } from './insecable';
@@ -48,33 +48,43 @@ export interface MentionsLegales {
 }
 
 /** Les informations publiées. Le contrôleur remplace chaque `null` par l'information fournie par l'éditeur. */
+// Valeurs de l'éditeur reprises de ses propres pages publiques (conditions générales de vente et politique de
+// confidentialité de sfgdeveloppement.fr, relues le 09/10/2026) : capital, greffe, téléphone, exonération de TVA,
+// coordonnées pour exercer ses droits, durée de conservation, absence de délégué. L'hébergeur est celui du sous-domaine
+// qui porte l'application (OVHcloud, comme le site WordPress) : identité et adresse de la notice officielle d'OVH
+// (ovhcloud.com/fr/terms-and-conditions/), qui ne donne pas de numéro de téléphone. Ce qui n'est écrit nulle part (directeur
+// de la publication, téléphone de l'hébergeur) reste à `null`, donc « à compléter » sur la page.
 export const MENTIONS: MentionsLegales = {
   editeur: {
     denomination: 'SFG Développement',
     formeJuridique: 'Société par actions simplifiée (SAS)',
-    capitalSocial: null,
+    capitalSocial: `500${INSECABLE}€`,
     siren: '814 739 728',
     siretSiege: '814 739 728 00024',
     adresseSiege: '20 avenue Gabriel Péri, 95870 Bezons',
-    villeRcs: null,
-    tvaIntracommunautaire: null,
+    villeRcs: 'Pontoise',
+    tvaIntracommunautaire: 'Exonération de TVA (article 261-4-4° du CGI)',
     courriel: 'contact@sfgdeveloppement.fr',
-    telephone: null,
+    telephone: ['01', '82', '41', '02', '41'].join(INSECABLE),
   },
+  // Aucun nom de personne (choix de l'éditeur, 09/10/2026) : la rubrique désigne le représentant légal. `fonction` vide
+  // veut dire « pas de personne nommée » : `nom` complète alors la phrase « Le directeur de la publication est ... ».
   directeurPublication: {
-    nom: null,
-    fonction: null,
+    nom: 'le représentant légal de SFG Développement',
+    fonction: '',
   },
   hebergeur: {
-    denomination: null,
-    adresse: null,
+    denomination: 'OVH SAS (OVHcloud)',
+    adresse: '2 rue Kellermann, 59100 Roubaix',
     telephone: null,
   },
   donnees: {
-    baseLegaleContact: null,
-    dureeConservationContact: null,
-    adresseExerciceDroits: null,
-    delegueProtectionDonnees: null,
+    baseLegaleContact: "Intérêt légitime de répondre à votre demande (article 6, paragraphe 1, point f, du RGPD)",
+    dureeConservationContact: `3${INSECABLE}ans à compter du dernier contact`,
+    adresseExerciceDroits:
+      'contact@sfgdeveloppement.fr, ou par courrier : DPO / Référent protection des données, SFG Développement, 20 avenue Gabriel Péri, 95870 Bezons',
+    delegueProtectionDonnees:
+      'Non désigné. Un référent à la protection des données traite les demandes, aux coordonnées ci-dessus.',
   },
 };
 
