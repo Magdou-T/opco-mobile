@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { evaluerAide } from '../src/aides/evaluer';
 import { construirePlan } from '../src/aides/plan';
-import type { LignePlan, PlanFinancement } from '../src/aides/plan';
+import type { LignePlan, OptionPlan, PlanFinancement } from '../src/aides/plan';
 import type { Aide } from '../src/aides/types';
 import { calculateFunding } from '../src/calculator';
 import {
@@ -464,6 +464,14 @@ const soldeCpf = makeAide({
   financeur: 'cpf',
   montant: { ...makeAide().montant, mode: 'solde_cpf', valeur: null, libelle: 'Solde CPF disponible' },
 });
+/** Aide du catalogue d'une catégorie donnée : un forfait de `valeur` euros, ou sans montant quand `valeur` est nulle. */
+const aideDe = (id: string, categorie: Aide['categorie'], valeur: number | null, over: Partial<Aide> = {}) =>
+  makeAide({
+    id,
+    categorie,
+    montant: { ...makeAide().montant, mode: valeur == null ? 'non_chiffre' : 'forfait', valeur },
+    ...over,
+  });
 
 describe("plan d'un profil (bloc de personnes)", () => {
   const profil = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 1500 });
@@ -512,6 +520,107 @@ describe("plan d'un profil (bloc de personnes)", () => {
       expect(plan.resteACharge).toBeGreaterThanOrEqual(0);
       expect(Math.round((plan.coutFormation - plan.resteACharge) * 100)).toBe(Math.round(plan.totalFinance * 100));
     }
+  });
+
+  it("un effectif d'une personne ou moins se lit comme une personne : le plan de construirePlan, avec ou sans part de l'OPCO, sans personnes", () => {
+    const part = calculateFunding(opcoGroupe(), etatGroupe(), 1);
+    const p = makeProfil({ coutPedagogique: 5000, coutFraisAnnexes: 555, soldeCpf: 1500 });
+    // Le plan comparé n'est pas vide : avec la part de l'OPCO, il a une ligne OPCO et des aides à l'employeur.
+    const avecOpco = construirePlan(part, evaluees(p), p);
+    expect(avecOpco.financements.map((l) => l.id)).toContain('opco-pdc');
+    expect(avecOpco.aidesEmployeur).not.toHaveLength(0);
+    for (const opco of [null, part]) {
+      const attendu = construirePlan(opco, evaluees(p), p);
+      for (const nombre of [1, 0, -2]) {
+        const plan = construirePlanDuBloc(opco, evaluees(p), p, nombre);
+        expect(plan, `effectif ${nombre}`).toEqual(attendu);
+        expect([...plan.financements, ...plan.aidesEmployeur].some((l) => 'personnes' in l), `effectif ${nombre}`).toBe(false);
+      }
+    }
+  });
+
+  it("n personnes identiques : n fois chaque montant de l'empilement d'une personne, pour 2, 7 ou 99 personnes", () => {
+    for (const nombre of [2, 7, 99]) {
+      const plan = construirePlanDuBloc(null, evaluees(), profil, nombre);
+      expect(paires(plan.financements), `effectif ${nombre}`).toEqual([
+        ['r11-region', 1000 * nombre],
+        ['nat-etat', 3000 * nombre],
+        ['nat-cpf', 200 * nombre],
+      ]);
+      expect(plan.financements.every((l) => l.personnes === nombre)).toBe(true);
+      expect(plan).toMatchObject({ coutFormation: 4200 * nombre, totalFinance: 4200 * nombre, resteACharge: 0 });
+    }
+  });
+
+  it("chaque catégorie d'aide est multipliée par l'effectif, et les quatre listes de lignes disent pour combien de personnes", () => {
+    const catalogue = [
+      forfait('nat-etat', 'etat', 3000),
+      aideDe('nat-embauche', 'aide_employeur', 700),
+      aideDe('nat-rfft', 'remuneration_beneficiaire', 450),
+      aideDe('fis-credit', 'avantage_fiscal_social', 475),
+      aideDe('nat-seule', 'cout_formation', 600, { cumul: { cumulable: false } }),
+      aideDe('nat-flou', 'cout_formation', null),
+      aideDe('nat-service', 'service_gratuit', null),
+    ].map((a) => evaluerAide(a, profil, AUJOURDHUI));
+    const plan = construirePlanDuBloc(null, catalogue, profil, 3);
+    const lignes = (liste: LignePlan[]) => liste.map((l) => [l.id, l.montant, l.personnes]);
+    expect(lignes(plan.financements)).toEqual([['nat-etat', 9000, 3]]);
+    expect(lignes(plan.aidesEmployeur)).toEqual([['nat-embauche', 2100, 3]]);
+    expect(lignes(plan.remunerations)).toEqual([['nat-rfft', 1350, 3]]);
+    expect(lignes(plan.avantagesFiscauxSociaux)).toEqual([['fis-credit', 1425, 3]]);
+    // Une option garde son montant (multiplié), un montant inconnu reste inconnu, un service gratuit reste un service.
+    expect(plan.options.map((o) => [o.id, o.montantEstime])).toEqual([['nat-seule', 1800]]);
+    expect(plan.nonChiffrees.map((a) => [a.id, a.montantEstime])).toEqual([['nat-flou', null]]);
+    expect(plan.servicesGratuits.map((a) => a.id)).toEqual(['nat-service']);
+  });
+
+  it("le produit par l'effectif est arrondi au centime : 0,07 € × 3, 0,29 € × 3, 47,55 € × 3 et 70,70 € × 3 ne gardent aucun bruit de flottants", () => {
+    const catalogue = [
+      aideDe('nat-embauche', 'aide_employeur', 0.07),
+      aideDe('nat-rfft', 'remuneration_beneficiaire', 0.29),
+      aideDe('fis-credit', 'avantage_fiscal_social', 47.55),
+      aideDe('nat-seule', 'cout_formation', 70.7, { cumul: { cumulable: false } }),
+    ].map((a) => evaluerAide(a, profil, AUJOURDHUI));
+    const plan = construirePlanDuBloc(null, catalogue, profil, 3);
+    // En flottants : 0,07 × 3 = 0,21000000000000002 ; 0,29 × 3 = 0,8699999999999999 ; 47,55 × 3 = 142,64999999999998 ; 70,7 × 3 = 212,10000000000002.
+    expect(plan.aidesEmployeur[0].montant).toBe(0.21);
+    expect(plan.remunerations[0].montant).toBe(0.87);
+    expect(plan.avantagesFiscauxSociaux[0].montant).toBe(142.65);
+    expect(plan.options[0].montantEstime).toBe(212.1);
+  });
+
+  it("coût pédagogique inconnu : le coût du bloc est nul, jamais les frais annexes seuls, et rien n'est financé", () => {
+    const inconnu = makeProfil({ coutPedagogique: null, coutFraisAnnexes: 300, soldeCpf: 1500 });
+    const plan = construirePlanDuBloc(null, evaluees(inconnu), inconnu, 3);
+    expect(plan).toMatchObject({ coutFormation: 0, financements: [], totalFinance: 0, resteACharge: 0 });
+  });
+
+  it("solde CPF inconnu : l'aide prélevée sur le solde n'est pas chiffrée, pour un bloc comme pour une personne", () => {
+    const sansSolde = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: null });
+    for (const nombre of [1, 3]) {
+      const plan = construirePlanDuBloc(null, evaluees(sansSolde), sansSolde, nombre);
+      expect(plan.nonChiffrees.map((a) => [a.id, a.montantEstime]), `effectif ${nombre}`).toEqual([['nat-cpf', null]]);
+      expect(plan.financements.map((l) => l.id), `effectif ${nombre}`).toEqual(['r11-region', 'nat-etat']);
+    }
+  });
+
+  it("la part de l'OPCO passe d'abord, les aides du catalogue sont plafonnées au reste du bloc", () => {
+    const part = repartirFinancement(calculateFunding(opcoGroupe(), etatGroupe(), 3), [3])[0];
+    const p = makeProfil({ coutPedagogique: 5000, coutFraisAnnexes: 555, soldeCpf: 1500 });
+    const plan = construirePlanDuBloc(part, evaluees(p), p, 3);
+    // Coût du bloc 16 665 € : l'OPCO en prend 13 425, il reste 3 240 € ; la Région en prend 3 000 (3 × 1 000), l'État le reste (240 €), le CPF rien.
+    expect(paires(plan.financements)).toEqual([['opco-pdc', 13425], ['r11-region', 3000], ['nat-etat', 240]]);
+    expect(plan.financements.every((l) => l.personnes === 3)).toBe(true);
+    expect(plan).toMatchObject({ coutFormation: 16665, totalFinance: 16665, resteACharge: 0 });
+  });
+
+  it("ne modifie ni les aides, ni le profil, ni la part de l'OPCO reçus, quel que soit l'effectif", () => {
+    const part = repartirFinancement(calculateFunding(opcoGroupe(), etatGroupe(), 3), [3])[0];
+    const p = makeProfil({ coutPedagogique: 5000, coutFraisAnnexes: 555, soldeCpf: 1500 });
+    const aides = evaluees(p);
+    const avant = JSON.stringify({ part, p, aides });
+    for (const nombre of [1, 3]) construirePlanDuBloc(part, aides, p, nombre);
+    expect(JSON.stringify({ part, p, aides })).toBe(avant);
   });
 });
 
@@ -609,5 +718,185 @@ describe('fusion des plans des profils', () => {
     expect(Math.round((fusion.coutFormation - fusion.resteACharge) * 100)).toBe(Math.round(fusion.totalFinance * 100));
     expect(fusion.resteACharge).toBeGreaterThanOrEqual(0);
     expect(fusion.financements.find((l) => l.id === 'nat-etat')).toMatchObject({ montant: 15000, personnes: 5 });
+  });
+
+  const optionDe = (id: string, montantEstime: number | null, over: Partial<OptionPlan> = {}): OptionPlan => ({
+    id,
+    nom: id,
+    financeurNom: 'F',
+    montantEstime,
+    raison: 'Au choix avec « X »',
+    ...over,
+  });
+  const LISTES_DE_LIGNES = ['financements', 'aidesEmployeur', 'remunerations', 'avantagesFiscauxSociaux'] as const;
+  /** Un plan dont seule la liste de lignes `liste` est renseignée. */
+  const avec = (liste: (typeof LISTES_DE_LIGNES)[number], lignes: LignePlan[]): PlanFinancement => ({ ...plan({}), [liste]: lignes });
+
+  it('aucun plan : un plan vide', () => {
+    expect(fusionnerPlans([], ordres)).toEqual(plan({}));
+  });
+
+  it("trois plans : coût, financé et reste s'additionnent en centimes entiers (0,1 + 0,2 + 0,3 = 0,6)", () => {
+    const fusion = fusionnerPlans(
+      [plan({ coutFormation: 0.1, totalFinance: 0.1 }), plan({ coutFormation: 0.2, resteACharge: 0.2 }), plan({ coutFormation: 0.3, totalFinance: 0.3 })],
+      ordres,
+    );
+    expect(fusion).toMatchObject({ coutFormation: 0.6, totalFinance: 0.4, resteACharge: 0.2 });
+  });
+
+  it('la fiabilité de deux lignes de même identifiant est la plus faible des deux, pour chaque paire et dans les deux sens', () => {
+    const echelle = ['depends_on_branche', 'estimated', 'exact'] as const; // du plus faible au plus fort
+    for (const a of echelle) {
+      for (const b of echelle) {
+        const fusion = fusionnerPlans(
+          [plan({ financements: [ligne('x', 1, { confidence: a })] }), plan({ financements: [ligne('x', 1, { confidence: b })] })],
+          ordres,
+        );
+        expect(fusion.financements[0].confidence, `${a} puis ${b}`).toBe(echelle[Math.min(echelle.indexOf(a), echelle.indexOf(b))]);
+      }
+    }
+  });
+
+  it('chacune des quatre listes de lignes : montants en centimes, effectifs (une personne par défaut), nom et financeur de la première occurrence', () => {
+    for (const liste of LISTES_DE_LIGNES) {
+      const a = avec(liste, [ligne('x', 0.1, { nom: 'Premier', financeurNom: 'F1', personnes: 2 }), ligne('z', 7)]);
+      const b = avec(liste, [ligne('x', 0.2, { nom: 'Second', financeurNom: 'F2' }), ligne('y', 5), ligne('z', 8)]);
+      const fusion = fusionnerPlans([a, b], ordres)[liste];
+      expect(fusion.find((l) => l.id === 'x'), liste).toMatchObject({ montant: 0.3, personnes: 3, nom: 'Premier', financeurNom: 'F1' });
+      expect(fusion.find((l) => l.id === 'y'), liste).toMatchObject({ montant: 5, personnes: 1 });
+      expect(fusion.find((l) => l.id === 'z'), liste).toMatchObject({ montant: 15, personnes: 2 });
+    }
+  });
+
+  it("aides à l'employeur, rémunérations et avantages restent dans l'ordre d'arrivée, ni triés par montant ni par identifiant", () => {
+    for (const liste of LISTES_DE_LIGNES.slice(1)) {
+      const a = avec(liste, [ligne('m', 500), ligne('z', 10), ligne('a', 200)]);
+      const b = avec(liste, [ligne('k', 1), ligne('a', 20)]);
+      expect(fusionnerPlans([a, b], ordres)[liste].map((l) => l.id), liste).toEqual(['m', 'z', 'a', 'k']);
+    }
+  });
+
+  it("ordre d'empilement exact : opco-pdc vaut 10, un dispositif de l'OPCO 12, une ligne sans aide connue 85", () => {
+    const catalogue = [9, 11, 13, 84, 86].map((ordreEmpilement) => ({ id: `nat-${ordreEmpilement}`, ordreEmpilement }));
+    // Chaque ligne pèse plus que son voisin d'ordre inférieur et moins que son voisin d'ordre supérieur : à ordre égal, elle serait mal placée.
+    const a = plan({ financements: [ligne('nat-86', 300), ligne('opco-dispositif', 400), ligne('nat-9', 100), ligne('inconnue', 200)] });
+    const b = plan({ financements: [ligne('nat-13', 500), ligne('opco-pdc', 200), ligne('nat-84', 100), ligne('nat-11', 300)] });
+    expect(fusionnerPlans([a, b], catalogue).financements.map((l) => l.id)).toEqual([
+      'nat-9',
+      'opco-pdc',
+      'nat-11',
+      'opco-dispositif',
+      'nat-13',
+      'nat-84',
+      'inconnue',
+      'nat-86',
+    ]);
+  });
+
+  it("à ordre égal, le plus gros montant d'abord, quel que soit l'ordre d'arrivée", () => {
+    const catalogue = ['nat-a', 'nat-b', 'nat-c'].map((id) => ({ id, ordreEmpilement: 50 }));
+    const a = plan({ financements: [ligne('nat-a', 100), ligne('nat-b', 500)] });
+    const b = plan({ financements: [ligne('nat-c', 300)] });
+    expect(fusionnerPlans([a, b], catalogue).financements.map((l) => l.id)).toEqual(['nat-b', 'nat-c', 'nat-a']);
+  });
+
+  it("un ordre d'empilement nul est un ordre, et l'ordre d'une aide du catalogue l'emporte sur la règle des identifiants opco-", () => {
+    const catalogue = [
+      { id: 'nat-zero', ordreEmpilement: 0 },
+      { id: 'nat-30', ordreEmpilement: 30 },
+      { id: 'opco-du-catalogue', ordreEmpilement: 40 },
+    ];
+    const lignes = [ligne('opco-du-catalogue', 100), ligne('nat-30', 50), ligne('opco-pdc', 10), ligne('nat-zero', 5)];
+    expect(fusionnerPlans([plan({ financements: lignes }), plan({})], catalogue).financements.map((l) => l.id)).toEqual([
+      'nat-zero',
+      'opco-pdc',
+      'nat-30',
+      'opco-du-catalogue',
+    ]);
+  });
+
+  it("options sur trois plans : somme en centimes, un montant connu seul n'est jamais arrondi, nom, financeur et raison de la première occurrence, ordre d'arrivée", () => {
+    const a = plan({
+      options: [optionDe('o-b', 0.1, { nom: 'Premier', financeurNom: 'F1', raison: 'R1' }), optionDe('o-c', null), optionDe('o-a', 7.005)],
+    });
+    const b = plan({
+      options: [
+        optionDe('o-b', 0.2, { nom: 'Second', financeurNom: 'F2', raison: 'R2' }),
+        optionDe('o-c', 12.345),
+        optionDe('o-a', null),
+        optionDe('o-d', null),
+      ],
+    });
+    const c = plan({ options: [optionDe('o-b', 0.3, { nom: 'Troisième' }), optionDe('o-d', 2), optionDe('o-e', 4)] });
+    expect(fusionnerPlans([a, b, c], ordres).options).toEqual([
+      optionDe('o-b', 0.6, { nom: 'Premier', financeurNom: 'F1', raison: 'R1' }),
+      optionDe('o-c', 12.345),
+      optionDe('o-a', 7.005),
+      optionDe('o-d', 2),
+      optionDe('o-e', 4),
+    ]);
+  });
+
+  it('aides sans montant et services gratuits sur trois plans : réunion sans doublon, la première occurrence est gardée', () => {
+    const variante = (id: string, nom: string) => ({ ...aide(id), nom });
+    const a = plan({ nonChiffrees: [variante('nat-a', 'Première')], servicesGratuits: [variante('nat-s', 'Premier')] });
+    const b = plan({
+      nonChiffrees: [variante('nat-a', 'Seconde'), variante('nat-b', 'Autre')],
+      servicesGratuits: [variante('nat-s', 'Second')],
+    });
+    const c = plan({
+      nonChiffrees: [variante('nat-a', 'Troisième'), variante('nat-c', 'Dernière')],
+      servicesGratuits: [variante('nat-t', 'Troisième')],
+    });
+    const fusion = fusionnerPlans([a, b, c], ordres);
+    expect(fusion.nonChiffrees.map((x) => [x.id, x.nom])).toEqual([['nat-a', 'Première'], ['nat-b', 'Autre'], ['nat-c', 'Dernière']]);
+    expect(fusion.servicesGratuits.map((x) => [x.id, x.nom])).toEqual([['nat-s', 'Premier'], ['nat-t', 'Troisième']]);
+  });
+
+  it('ne modifie aucun des plans reçus (lignes et options de même identifiant comprises)', () => {
+    const a = plan({
+      financements: [ligne('x', 10, { personnes: 2 })],
+      aidesEmployeur: [ligne('y', 20)],
+      remunerations: [ligne('z', 30)],
+      avantagesFiscauxSociaux: [ligne('w', 40)],
+      options: [optionDe('o', 5)],
+      nonChiffrees: [aide('nat-a')],
+      servicesGratuits: [aide('nat-s')],
+    });
+    const b = plan({
+      financements: [ligne('x', 1, { confidence: 'estimated' })],
+      aidesEmployeur: [ligne('y', 2)],
+      remunerations: [ligne('z', 3)],
+      avantagesFiscauxSociaux: [ligne('w', 4)],
+      options: [optionDe('o', 6)],
+      nonChiffrees: [aide('nat-a')],
+      servicesGratuits: [aide('nat-s')],
+    });
+    const avant = JSON.stringify([a, b]);
+    fusionnerPlans([a, b], ordres);
+    expect(JSON.stringify([a, b])).toBe(avant);
+  });
+
+  it("n profils identiques : la fusion de n plans d'une personne est le plan du bloc de n personnes", () => {
+    const p = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 1500 });
+    const catalogue = [
+      soldeCpf,
+      forfait('r11-region', 'region', 1000),
+      forfait('nat-etat', 'etat', 2000),
+      forfait('nat-etat-bis', 'etat', 1000),
+      aideDe('nat-embauche', 'aide_employeur', 700),
+      aideDe('nat-rfft', 'remuneration_beneficiaire', 450),
+      aideDe('fis-credit', 'avantage_fiscal_social', 475),
+      aideDe('nat-seule', 'cout_formation', 600, { cumul: { cumulable: false } }),
+      aideDe('nat-flou', 'cout_formation', null),
+      aideDe('nat-service', 'service_gratuit', null),
+    ].map((a) => evaluerAide(a, p, AUJOURDHUI));
+    const une = construirePlan(null, catalogue, p);
+    // Une personne : Région 1 000, État 2 000 puis 1 000, CPF plafonné au reste (200) ; le plan contient les sept rubriques.
+    expect(une.financements.map((l) => [l.id, l.montant])).toEqual([['r11-region', 1000], ['nat-etat', 2000], ['nat-etat-bis', 1000], ['nat-cpf', 200]]);
+    for (const nombre of [2, 3, 7, 99]) {
+      const fusion = fusionnerPlans(Array.from({ length: nombre }, () => une), catalogue);
+      expect(construirePlanDuBloc(null, catalogue, p, nombre), `effectif ${nombre}`).toEqual(fusion);
+    }
   });
 });
