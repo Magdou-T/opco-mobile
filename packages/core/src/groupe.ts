@@ -4,10 +4,11 @@
 // la fusion des résultats des profils sont dans le même fichier.
 // ============================================================
 
+import { trierAidesEvaluees } from './aides/evaluer';
 import { construirePlan } from './aides/plan';
 import type { LignePlan, OptionPlan, PlanFinancement } from './aides/plan';
 import { ORDRE_EMPILEMENT_DEFAUT } from './aides/types';
-import type { AideEvaluee, ProfilAides } from './aides/types';
+import type { AideEvaluee, ProfilAides, StatutEligibilite } from './aides/types';
 import { MAX_PERSONNES } from './types';
 import type { ChampsProfil, Confidence, FundingResult, WizardState } from './types';
 
@@ -269,4 +270,71 @@ export function fusionnerPlans(
     nonChiffrees: uniques(plans.map((p) => p.nonChiffrees)),
     servicesGratuits: uniques(plans.map((p) => p.servicesGratuits)),
   };
+}
+
+// --- Fusion des aides du catalogue ---------------------------------------------------------------------------------
+
+const RANG_STATUT: Record<StatutEligibilite, number> = { eligible: 0, a_verifier: 1, non_eligible: 2 };
+
+interface VueDeLAide {
+  profil: ProfilDuGroupe;
+  aide: AideEvaluee;
+}
+
+/** Une aide vue par plusieurs profils : le meilleur statut, le plus grand montant par personne, les profils concernés. */
+function fusionnerUneAide(vues: VueDeLAide[]): AideEvaluee {
+  // Meilleur statut d'abord, puis plus grand montant : c'est cette vue qui fournit tout ce qui ne dépend pas du profil.
+  const meilleure = [...vues].sort(
+    (a, b) => RANG_STATUT[a.aide.statut] - RANG_STATUT[b.aide.statut] || (b.aide.montantEstime ?? -1) - (a.aide.montantEstime ?? -1),
+  )[0];
+  const statut = meilleure.aide.statut;
+  const concernees = vues.filter((v) => v.aide.statut !== 'non_eligible');
+  const montants = concernees.map((v) => v.aide.montantEstime).filter((m): m is number => m != null);
+  const montantMax = montants.length > 0 ? Math.max(...montants) : null;
+  // Le profil qui porte le plus grand montant donne le libellé et le lien de la demande.
+  const porteuse = montantMax == null ? meilleure : (concernees.find((v) => v.aide.montantEstime === montantMax) ?? meilleure);
+  // Éligible : rien à confirmer. Sinon, les raisons des profils qui portent le statut retenu (jamais celles d'un profil pour
+  // lequel l'aide est hors périmètre : « Ne concerne pas ce type de projet » n'a rien à faire dans la liste).
+  const raisons =
+    statut === 'eligible'
+      ? []
+      : [
+          ...new Set(
+            vues.filter((v) => v.aide.statut === statut && (statut !== 'non_eligible' || !v.aide.horsPerimetre)).flatMap((v) => v.aide.raisons),
+          ),
+        ];
+  return {
+    ...meilleure.aide,
+    raisons,
+    horsPerimetre: vues.every((v) => v.aide.horsPerimetre),
+    montantEstime: statut === 'non_eligible' ? meilleure.aide.montantEstime : montantMax,
+    libelleMontant: porteuse.aide.libelleMontant,
+    urlDemarche: porteuse.aide.urlDemarche,
+    profils: concernees.map((v) => ({
+      profilId: v.profil.id,
+      nombre: v.profil.nombre,
+      statut: v.aide.statut,
+      montantEstime: v.aide.montantEstime,
+    })),
+  };
+}
+
+/**
+ * Aides du catalogue d'un groupe : une entrée par aide, fusion de ce que chaque profil en voit. Un seul profil : sa liste
+ * telle quelle, sans champ `profils`. Plusieurs profils : le meilleur statut (éligible, puis à vérifier, puis non éligible) ;
+ * `horsPerimetre` seulement si l'aide l'est pour tous les profils ; le plus grand montant PAR PERSONNE parmi les profils
+ * éligibles ou à vérifier (« jusqu'à »), avec son libellé et son lien ; les raisons réunies sans doublon quand l'aide n'est
+ * pas éligible ; `profils` : un élément par profil éligible ou à vérifier. La liste est triée comme une liste évaluée.
+ */
+export function fusionnerAides(blocs: readonly { profil: ProfilDuGroupe; aides: readonly AideEvaluee[] }[]): AideEvaluee[] {
+  if (blocs.length === 1) return [...blocs[0].aides];
+  const vuesParId = new Map<string, VueDeLAide[]>();
+  for (const bloc of blocs) {
+    for (const aide of bloc.aides) {
+      const vues = vuesParId.get(aide.id);
+      if (vues) vues.push({ profil: bloc.profil, aide });
+      else vuesParId.set(aide.id, [{ profil: bloc.profil, aide }]);
+    }
+  }
+  return trierAidesEvaluees([...vuesParId.values()].map(fusionnerUneAide));
 }

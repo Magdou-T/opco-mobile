@@ -213,6 +213,16 @@ export interface ProfilAides {
   soldeCpf: number | null;
 }
 
+/** Profil d'un groupe concerné par une aide : son effectif, son statut et son montant estimé par personne. */
+export interface ConcerneParAide {
+  profilId: string;
+  /** Nombre de personnes qui ont ce profil. */
+  nombre: number;
+  statut: StatutEligibilite;
+  /** Montant estimé par personne de ce profil (nul : non chiffré). */
+  montantEstime: number | null;
+}
+
 export interface AideEvaluee {
   id: string;
   nom: string;
@@ -246,6 +256,11 @@ export interface AideEvaluee {
   derniereVerification: string;
   confidence: Confidence;
   ordreEmpilement: number;
+  /**
+   * Groupe de plusieurs profils seulement : les profils pour lesquels l'aide est éligible ou à vérifier, avec leur effectif,
+   * leur statut et leur montant par personne. Absent pour une personne seule ou un seul profil.
+   */
+  profils?: ConcerneParAide[];
 }
 
 /** Ordre d'empilement par défaut dans le plan de financement (petit = d'abord). */

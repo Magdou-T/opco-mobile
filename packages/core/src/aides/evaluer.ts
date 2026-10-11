@@ -180,17 +180,21 @@ const RANG: Record<StatutEligibilite, number> = { eligible: 0, a_verifier: 1, no
 const comparer = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
 /**
- * Évalue toutes les aides et les trie : éligibles, puis à vérifier, puis non éligibles ; à statut égal, montant estimé
+ * Trie une liste d'aides évaluées : éligibles, puis à vérifier, puis non éligibles ; à statut égal, montant estimé
  * décroissant (un montant non chiffré après un montant de 0 €), puis nom (sans tenir compte de la casse), puis identifiant.
+ * Rend une nouvelle liste.
  */
+export function trierAidesEvaluees(aides: readonly AideEvaluee[]): AideEvaluee[] {
+  return [...aides].sort(
+    (a, b) =>
+      RANG[a.statut] - RANG[b.statut] ||
+      (b.montantEstime ?? -1) - (a.montantEstime ?? -1) ||
+      comparer(a.nom.toLowerCase(), b.nom.toLowerCase()) ||
+      comparer(a.id, b.id),
+  );
+}
+
+/** Évalue toutes les aides et les trie (`trierAidesEvaluees`). */
 export function evaluerAides(aides: Aide[], p: ProfilAides, dateRef: string): AideEvaluee[] {
-  return aides
-    .map((a) => evaluerAide(a, p, dateRef))
-    .sort(
-      (a, b) =>
-        RANG[a.statut] - RANG[b.statut] ||
-        (b.montantEstime ?? -1) - (a.montantEstime ?? -1) ||
-        comparer(a.nom.toLowerCase(), b.nom.toLowerCase()) ||
-        comparer(a.id, b.id),
-    );
+  return trierAidesEvaluees(aides.map((a) => evaluerAide(a, p, dateRef)));
 }

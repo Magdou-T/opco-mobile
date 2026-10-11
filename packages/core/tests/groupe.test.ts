@@ -1,14 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { evaluerAide } from '../src/aides/evaluer';
+import { evaluerAide, evaluerAides, trierAidesEvaluees } from '../src/aides/evaluer';
 import { construirePlan } from '../src/aides/plan';
 import type { LignePlan, OptionPlan, PlanFinancement } from '../src/aides/plan';
 import type { Aide } from '../src/aides/types';
 import { calculateFunding } from '../src/calculator';
+import { EMBEDDED_AIDES } from '../src/data';
 import {
   ID_PROFIL_PRINCIPAL,
   champsDuProfilPrincipal,
   construirePlanDuBloc,
   etatDuProfil,
+  fusionnerAides,
   fusionnerPlans,
   nombreDePersonnes,
   profilsDuGroupe,
@@ -948,5 +950,117 @@ describe('fusion des plans des profils', () => {
       const fusion = fusionnerPlans(Array.from({ length: nombre }, () => une), catalogue);
       expect(construirePlanDuBloc(null, catalogue, p, nombre), `effectif ${nombre}`).toEqual(fusion);
     }
+  });
+});
+
+describe('fusion des aides du catalogue', () => {
+  const [pA, pB] = profilsDuGroupe(groupe()); // principal (3 personnes), profil-2 (2 personnes)
+  const profilAidesA = makeProfil({ age: 35, rqth: false, niveauDiplome: null });
+  const profilAidesB = makeProfil({
+    projet: 'formation_dirigeant',
+    statutBeneficiaire: 'dirigeant',
+    age: 52,
+    rqth: true,
+    niveauDiplome: 'bac',
+  });
+  const ouvertes = {
+    projets: ['formation_salarie', 'formation_dirigeant'],
+    beneficiaires: ['salarie', 'dirigeant'],
+  } satisfies Pick<Aide, 'projets' | 'beneficiaires'>;
+  const evaluer = (aide: Aide) => [
+    { profil: pA, aides: [evaluerAide(aide, profilAidesA, AUJOURDHUI)] },
+    { profil: pB, aides: [evaluerAide(aide, profilAidesB, AUJOURDHUI)] },
+  ];
+
+  it("éligible pour un profil, non éligible pour l'autre : éligible, avec le seul profil concerné", () => {
+    const [a] = fusionnerAides(evaluer(makeAide({ ...ouvertes, id: 'nat-seniors', criteres: { age_min: 50 } })));
+    expect(a).toMatchObject({ id: 'nat-seniors', statut: 'eligible', raisons: [], horsPerimetre: false });
+    expect(a.profils).toEqual([{ profilId: 'profil-2', nombre: 2, statut: 'eligible', montantEstime: 1000 }]);
+  });
+
+  it('éligible pour les deux profils avec des montants différents : le plus grand montant par personne, son libellé, le montant de chaque profil', () => {
+    const aide = makeAide({
+      ...ouvertes,
+      id: 'nat-rqth',
+      montant: {
+        ...makeAide().montant,
+        valeur: 1000,
+        libelle: '1 000 €',
+        majorations: [{ criteres: { rqth: true }, valeur: 2000, libelle: '2 000 € (RQTH)' }],
+      },
+    });
+    const [a] = fusionnerAides(evaluer(aide));
+    expect(a).toMatchObject({ statut: 'eligible', montantEstime: 2000, libelleMontant: '2 000 € (RQTH)' });
+    expect(a.profils?.map((p) => [p.profilId, p.nombre, p.montantEstime])).toEqual([
+      ['principal', 3, 1000],
+      ['profil-2', 2, 2000],
+    ]);
+  });
+
+  it("à vérifier pour un profil, éligible pour l'autre : éligible ; à vérifier pour les deux : à vérifier, raisons réunies sans doublon", () => {
+    const exigeDiplome = makeAide({ ...ouvertes, id: 'nat-diplome', criteres: { niveaux_diplome: ['bac'] } });
+    const [une] = fusionnerAides(evaluer(exigeDiplome));
+    expect(une).toMatchObject({ statut: 'eligible', raisons: [] });
+    const [deux] = fusionnerAides([
+      { profil: pA, aides: [evaluerAide(exigeDiplome, profilAidesA, AUJOURDHUI)] },
+      { profil: pB, aides: [evaluerAide(exigeDiplome, { ...profilAidesB, niveauDiplome: null }, AUJOURDHUI)] },
+    ]);
+    expect(deux.statut).toBe('a_verifier');
+    expect(deux.raisons).toEqual(['Précisez le niveau de diplôme du bénéficiaire']);
+    expect(deux.profils?.map((p) => p.statut)).toEqual(['a_verifier', 'a_verifier']);
+  });
+
+  it('non éligible pour tous : raisons réunies, aucun profil concerné ; hors périmètre seulement si tous les profils le sont', () => {
+    const [a] = fusionnerAides(evaluer(makeAide({ ...ouvertes, id: 'nat-aines', criteres: { age_min: 70 } })));
+    expect(a).toMatchObject({ statut: 'non_eligible', horsPerimetre: false });
+    expect(a.raisons).toEqual(['Réservé aux personnes de 70 ans et plus']);
+    expect(a.profils).toEqual([]);
+    // Aide du seul projet salarié : hors périmètre pour le dirigeant, non éligible par l'âge pour le salarié. Elle reste
+    // visible, avec la seule raison du salarié (jamais « Ne concerne pas ce type de projet » du dirigeant).
+    const [b] = fusionnerAides(evaluer(makeAide({ id: 'nat-salaries', criteres: { age_min: 70 } })));
+    expect(b).toMatchObject({ statut: 'non_eligible', horsPerimetre: false });
+    expect(b.raisons).toEqual(['Réservé aux personnes de 70 ans et plus']);
+    const [c] = fusionnerAides(evaluer(makeAide({ id: 'nat-autre', projets: ['alternance'], beneficiaires: ['alternant'] })));
+    expect(c).toMatchObject({ statut: 'non_eligible', horsPerimetre: true });
+  });
+
+  it("la liste fusionnée est triée comme une liste évaluée : éligibles d'abord, montant décroissant, puis nom", () => {
+    const aides = [
+      makeAide({ ...ouvertes, id: 'nat-b', nom: 'B', criteres: { age_min: 70 } }),
+      makeAide({ ...ouvertes, id: 'nat-a', nom: 'A', montant: { ...makeAide().montant, valeur: 500 } }),
+      makeAide({ ...ouvertes, id: 'nat-c', nom: 'C', montant: { ...makeAide().montant, valeur: 1500 } }),
+    ];
+    const fusion = fusionnerAides([
+      { profil: pA, aides: aides.map((a) => evaluerAide(a, profilAidesA, AUJOURDHUI)) },
+      { profil: pB, aides: aides.map((a) => evaluerAide(a, profilAidesB, AUJOURDHUI)) },
+    ]);
+    expect(fusion.map((a) => a.id)).toEqual(['nat-c', 'nat-a', 'nat-b']);
+  });
+
+  it('un seul profil : la liste est rendue telle quelle, sans champ « profils »', () => {
+    const liste = [evaluerAide(makeAide(), profilAidesA, AUJOURDHUI)];
+    const fusion = fusionnerAides([{ profil: pA, aides: liste }]);
+    expect(fusion).toEqual(liste);
+    expect(fusion[0].profils).toBeUndefined();
+  });
+
+  it("catalogue entier, deux profils : une entrée par aide, jamais d'aide perdue", () => {
+    const p = makeProfil();
+    const q = makeProfil({ projet: 'formation_dirigeant', statutBeneficiaire: 'dirigeant', statutDirigeant: 'artisan', age: 52, rqth: true });
+    const fusion = fusionnerAides([
+      { profil: pA, aides: evaluerAides(EMBEDDED_AIDES, p, AUJOURDHUI) },
+      { profil: pB, aides: evaluerAides(EMBEDDED_AIDES, q, AUJOURDHUI) },
+    ]);
+    expect(fusion).toHaveLength(EMBEDDED_AIDES.length);
+    expect(new Set(fusion.map((a) => a.id)).size).toBe(EMBEDDED_AIDES.length);
+    // Une aide ouverte au salarié comme au dirigeant concerne les deux profils (éligible ou à vérifier).
+    expect(fusion.some((a) => (a.profils?.length ?? 0) === 2)).toBe(true);
+  });
+});
+
+describe("tri d'une liste évaluée", () => {
+  it("trierAidesEvaluees redonne l'ordre d'evaluerAides, quel que soit l'ordre d'entrée", () => {
+    const evaluees = evaluerAides(EMBEDDED_AIDES, makeProfil(), AUJOURDHUI);
+    expect(trierAidesEvaluees([...evaluees].reverse())).toEqual(evaluees);
   });
 });
