@@ -240,7 +240,7 @@ La liste fusionnée est triée comme `evaluerAides` (statut, montant décroissan
 
 ### 7.4 Cohérence de l'état (`apps/web/src/lib/groupe.ts`, fonctions pures)
 
-- `normaliserGroupe(etat)` : ramène les effectifs dans les bornes, retire les profils au-delà de 5, réduit le dernier profil si le total dépasse 99, remet `prixDuGroupe` à vide sous 2 personnes, recalcule `pedagogyCostTotal` et `pedagogyCostPerHour` quand `prixDuGroupe` est renseigné. Idempotente.
+- `normaliserGroupe(etat)` : ramène les effectifs dans les bornes, retire les profils au-delà de 5, réduit le dernier profil si le total dépasse 99, remet `prixDuGroupe` à vide sous 2 personnes, recalcule `pedagogyCostTotal` et `pedagogyCostPerHour` quand `prixDuGroupe` est renseigné, vide `budgetDejaConsomme` quand plus aucun profil ne relève d'un projet salarié (7.1). Idempotente.
 - `ajouterProfil`, `retirerProfil`, `majProfil`, `definirNombre` (l'identifiant `principal` désigne le profil principal) : chacune rend un état normalisé.
 - `useWizard` applique `normaliserGroupe` après chaque mise à jour et expose ces actions ; « Nouvelle simulation » remet tout à l'état initial.
 - L'audit « aucun champ invisible ne pèse sur le résultat » de `tests/parcours.test.ts` couvre les nouveaux champs : `prixDuGroupe` ne survit pas à un groupe réduit à une personne, les réponses d'un profil retiré disparaissent avec lui.
