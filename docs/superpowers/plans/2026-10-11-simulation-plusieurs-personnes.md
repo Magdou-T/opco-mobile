@@ -1663,7 +1663,8 @@ export function repartirCentimes(total: number, effectifs: readonly number[]): n
  * demandé d'une part est leur somme : il ne passe jamais sous le financé), puis le montant estimé de chaque dispositif et
  * l'enveloppe maximale. La somme des parts égale le groupe, poste par poste, au centime. Les totaux de chaque part se
  * recalculent à partir de ses lignes ; le plafond annuel, le budget déjà consommé, les textes et les drapeaux sont repris
- * tels quels ; `personnes` vaut l'effectif de la part.
+ * tels quels ; `personnes` vaut l'effectif de la part. Les textes de détail restent ceux du groupe entier (« Coût pour
+ * 5 personnes : … ») : une part ne s'affiche jamais, seul le plan de son profil en lit les montants.
  */
 export function repartirFinancement(r: FundingResult, effectifs: readonly number[]): FundingResult[] {
   const lignes = r.lines.map((l) => ({
