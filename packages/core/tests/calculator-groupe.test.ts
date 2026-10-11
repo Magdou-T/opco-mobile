@@ -17,17 +17,17 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     expect((poste(r, 'pedagogie').details ?? []).some((d) => d.includes('personne'))).toBe(false);
   });
 
-  it('un appel explicite à 1 personne rend exactement le résultat de l’appel sans paramètre', () => {
+  it("un appel explicite à 1 personne rend exactement le résultat de l'appel sans paramètre", () => {
     expect(calculateFunding(opcoGroupe(), etatGroupe(), 1)).toEqual(calculateFunding(opcoGroupe(), etatGroupe()));
   });
 
-  it('quatre personnes : le coût demandé et le financement valent 4 fois ceux d’une personne', () => {
+  it("quatre personnes : le coût demandé et le financement valent 4 fois ceux d'une personne", () => {
     const r = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     expect(r.personnes).toBe(4);
     expect(poste(r, 'pedagogie')).toMatchObject({ requestedAmount: 20000, fundedAmount: 16000, remainder: 4000 });
   });
 
-  it('le détail du calcul garde la ligne d’une personne et ajoute celle du groupe', () => {
+  it("le détail du calcul garde la ligne d'une personne et ajoute celle du groupe", () => {
     const details = poste(calculateFunding(opcoGroupe(), etatGroupe(), 4), 'pedagogie').details ?? [];
     expect(details).toContain(`Coût pour 4${NBSP}personnes : 5000.00${NBSP}€ × 4 = 20000.00${NBSP}€`);
     expect(details).toContain(`Financement pour 4${NBSP}personnes : 4000.00${NBSP}€ × 4 = 16000.00${NBSP}€`);
@@ -49,7 +49,7 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     expect(poste(calculateFunding(opco, etatGroupe(), 2), 'pedagogie')).toMatchObject({ requestedAmount: 10000, fundedAmount: 10000, remainder: 0 });
   });
 
-  it('l’avertissement de dépassement donne le reste à charge du groupe et dit pour combien de personnes', () => {
+  it("l'avertissement de dépassement donne le reste à charge du groupe et dit pour combien de personnes", () => {
     const r = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     expect(r.warnings).toContain(
       `Le coût horaire demandé (50${NBSP}€/h) dépasse le plafond Test OPCO (40${NBSP}€/h). Le reste à charge est de 4000.00${NBSP}€ pour 4${NBSP}personnes.`,
@@ -73,7 +73,7 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     );
   });
 
-  it('un nombre de personnes invalide (0, négatif, décimal, NaN, infini) est ramené à un entier d’au moins 1', () => {
+  it("un nombre de personnes invalide (0, négatif, décimal, NaN, infini) est ramené à un entier d'au moins 1", () => {
     const base = calculateFunding(opcoGroupe(), etatGroupe());
     for (const n of [0, -3, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, 0.4]) {
       expect(calculateFunding(opcoGroupe(), etatGroupe(), n), String(n)).toEqual(base);
@@ -105,7 +105,7 @@ describe('calculateFunding pour n personnes : plafond annuel de portée « péda
     expect(r.budgetDejaConsomme).toBe(4000);
   });
 
-  it('plafond à 0 € ou déjà consommé : rien n’est financé, aucun montant négatif, un seul message de budget nul', () => {
+  it("plafond à 0 € ou déjà consommé : rien n'est financé, aucun montant négatif, un seul message de budget nul", () => {
     for (const [plafond, consomme] of [[0, null], [10000, 10000], [10000, 25000]] as const) {
       const r = calculateFunding(avecPlafond(plafond), etatGroupe({ budgetDejaConsomme: consomme }), 5);
       expect(poste(r, 'pedagogie')).toMatchObject({ requestedAmount: 25000, fundedAmount: 0, remainder: 25000 });
@@ -128,7 +128,7 @@ describe('calculateFunding pour n personnes : plan fermé aux 50 salariés et pl
 });
 
 describe('calculateFunding pour n personnes : salaires et frais annexes', () => {
-  it('quatre personnes : chaque poste vaut 4 fois celui d’une personne', () => {
+  it("quatre personnes : chaque poste vaut 4 fois celui d'une personne", () => {
     const un = calculateFunding(opcoGroupe(), etatGroupe());
     const quatre = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     // Une personne : salaires 12 €/h × 100 h ; transport 30 € × 5 jours ; nuit à 120 € plafonnée à 100 € ; repas à 15 €, sous le forfait.
@@ -144,7 +144,7 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     expect(quatre).toMatchObject({ totalRequested: 27620, totalFunded: 23300, totalRemainder: 4320 });
   });
 
-  it('le détail de chaque poste garde la ligne d’une personne et ajoute celle du groupe', () => {
+  it("le détail de chaque poste garde la ligne d'une personne et ajoute celle du groupe", () => {
     const r = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     expect(poste(r, 'salaires').details).toContain(`Pour 4${NBSP}personnes : 1200.00${NBSP}€ × 4 = 4800.00${NBSP}€`);
     expect(poste(r, 'transport').details).toContain(`Pour 4${NBSP}personnes : 150.00${NBSP}€ × 4 = 600.00${NBSP}€`);
@@ -157,7 +157,7 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     }
   });
 
-  it('restauration au-dessus du forfait : le reste à charge du groupe suit celui d’une personne', () => {
+  it("restauration au-dessus du forfait : le reste à charge du groupe suit celui d'une personne", () => {
     const details = poste(calculateFunding(opcoGroupe(), etatGroupe({ mealCostPerDay: 25 }), 4), 'restauration').details ?? [];
     expect(details).toContain(`Reste à charge : 25.00${NBSP}€`);
     expect(details).toContain(`Reste à charge pour 4${NBSP}personnes : 25.00${NBSP}€ × 4 = 100.00${NBSP}€`);
@@ -166,7 +166,7 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     expect(un.some((d) => d.includes('personne'))).toBe(false);
   });
 
-  it('hébergement : le coût d’une personne est suivi de celui du groupe, que la nuit dépasse le plafond ou non', () => {
+  it("hébergement : le coût d'une personne est suivi de celui du groupe, que la nuit dépasse le plafond ou non", () => {
     const audessus = poste(calculateFunding(opcoGroupe(), etatGroupe(), 4), 'hebergement').details ?? [];
     expect(audessus).toContain(`Coût pour 4${NBSP}personnes : 480.00${NBSP}€ × 4 = 1920.00${NBSP}€`);
     const sous = poste(calculateFunding(opcoGroupe(), etatGroupe({ accommodationCostPerNight: 80 }), 4), 'hebergement');
@@ -175,7 +175,7 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     expect(sous.details).toContain(`Pour 4${NBSP}personnes : 320.00${NBSP}€ × 4 = 1280.00${NBSP}€`);
   });
 
-  it('tout montant d’une personne énoncé dans un détail a sa ligne de groupe, dans chaque poste (spécification 5.2)', () => {
+  it("tout montant d'une personne énoncé dans un détail a sa ligne de groupe, dans chaque poste (spécification 5.2)", () => {
     const situations = [
       etatGroupe(),
       etatGroupe({ accommodationCostPerNight: 80, mealCostPerDay: 25 }),
@@ -226,7 +226,7 @@ describe('calculateFunding pour n personnes : plafond annuel de portée « globa
   });
 });
 
-describe('calculateFunding pour n personnes : dispositifs complémentaires de l’OPCO', () => {
+describe("calculateFunding pour n personnes : dispositifs complémentaires de l'OPCO", () => {
   const dispositif = (id: string, over: Partial<DispositifComplementaire>): DispositifComplementaire => ({
     id,
     nom: `Dispositif ${id}`,
@@ -272,7 +272,7 @@ describe('calculateFunding pour n personnes : dispositifs complémentaires de l�
 });
 
 describe('calculateFunding pour n personnes : données réelles', () => {
-  it('sans plafond annuel atteint, chaque ligne du groupe vaut n fois celle d’une personne (au demi-centime par personne)', () => {
+  it("sans plafond annuel atteint, chaque ligne du groupe vaut n fois celle d'une personne (au demi-centime par personne)", () => {
     let comparaisons = 0;
     for (const opco of EMBEDDED_OPCOS) {
       const idccs = [null, ...(opco.variantes_branche ?? []).map((v) => v.idcc[0] ?? null)];
@@ -317,7 +317,7 @@ describe('calculateFunding pour n personnes : données réelles', () => {
     expect(comparaisons).toBeGreaterThan(150);
   });
 
-  it('aucun texte du calcul d’un groupe ne promet plus que l’estimation', () => {
+  it("aucun texte du calcul d'un groupe ne promet plus que l'estimation", () => {
     const PROMESSES = /intégralement|garanti|assuré|totalité/i;
     let textes = 0;
     for (const opco of EMBEDDED_OPCOS) {

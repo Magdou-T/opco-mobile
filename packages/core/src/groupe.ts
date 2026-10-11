@@ -83,7 +83,8 @@ const enEuros = (centimes: number): number => centimes / 100;
  * Répartit `total` centimes entre des parts proportionnelles aux `effectifs`, en centimes entiers : chaque part reçoit
  * `floor(total × effectif / somme)`, puis les centimes qui restent vont aux parts qui ont la plus grande part décimale
  * (à égalité, à la première de la liste). La somme des parts égale toujours `total`. Des effectifs vides ou de somme nulle
- * donnent des parts nulles.
+ * donnent des parts nulles. Un total négatif est réparti comme sa valeur absolue, puis chaque part reprend le signe :
+ * c'est une troncature vers zéro de la fraction entière, les centimes restants se distribuant comme pour un total positif.
  */
 export function repartirCentimes(total: number, effectifs: readonly number[]): number[] {
   const somme = effectifs.reduce((s, e) => s + e, 0);
@@ -107,10 +108,17 @@ export function repartirCentimes(total: number, effectifs: readonly number[]): n
  * Répartit le résultat de l'OPCO d'un groupe entre ses profils salariés (`effectifs` : le nombre de personnes de chacun,
  * dans l'ordre des profils). Chaque ligne se répartit en centimes entiers, le financé et le reste à charge séparément (le
  * demandé d'une part est leur somme : il ne passe jamais sous le financé), puis le montant estimé de chaque dispositif et
- * l'enveloppe maximale. La somme des parts égale le groupe, poste par poste, au centime. Les totaux de chaque part se
- * recalculent à partir de ses lignes ; le plafond annuel, le budget déjà consommé, les textes et les drapeaux sont repris
- * tels quels ; `personnes` vaut l'effectif de la part. Les textes de détail restent ceux du groupe entier (« Coût pour
- * 5 personnes : … ») : une part ne s'affiche jamais, seul le plan de son profil en lit les montants.
+ * l'enveloppe maximale. La somme des parts égale le groupe, poste par poste, au centime. Le reste à charge d'une part est
+ * son demandé moins son financé, et non le `remainder` de la ligne du groupe : le moteur arrondit `remainder` sur les
+ * montants bruts, donc `remainder` peut différer d'un centime de demandé moins financé. Seul demandé moins financé conserve
+ * à la fois la somme des demandés et celle des financés des parts. Les totaux de chaque part se recalculent à partir de ses
+ * lignes. Sous le plafond annuel global, le moteur pose `totalFunded` au plafond restant alors que ses lignes sont arrondies
+ * une à une : leur somme peut s'en écarter de quelques centimes, et la somme des totaux des parts peut alors s'écarter de
+ * même du total du groupe. L'identité avec le groupe pour un seul profil ne vaut donc que pour les lignes. L'enveloppe d'une
+ * part, répartie seule, peut s'écarter de quelques centimes de son financé et de son demandé : ne pas l'y comparer. Le
+ * plafond annuel, le budget déjà consommé, les textes et les drapeaux sont repris tels quels ; `personnes` vaut l'effectif
+ * de la part. Les textes de détail restent ceux du groupe entier (« Coût pour 5 personnes : … ») : une part ne s'affiche
+ * jamais, seul le plan de son profil en lit les montants.
  */
 export function repartirFinancement(r: FundingResult, effectifs: readonly number[]): FundingResult[] {
   const lignes = r.lines.map((l) => ({

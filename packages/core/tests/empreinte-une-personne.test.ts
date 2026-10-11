@@ -91,7 +91,7 @@ function casDeReference(): { opco: OpcoData; state: WizardState }[] {
   return cas;
 }
 
-describe('une personne : le moteur de l’OPCO rend ce qu’il rendait avant l’évolution', () => {
+describe("une personne : le moteur de l'OPCO rend ce qu'il rendait avant l'évolution", () => {
   // Délai de 30 s : le calcul prend de 1 à 5 secondes selon la machine, et Vitest coupe un test à 5 secondes par défaut.
   it.skipIf(!BAREMES_DE_REFERENCE)(
     `empreinte de ${NOMBRE_DE_CALCULS} calculs`,
