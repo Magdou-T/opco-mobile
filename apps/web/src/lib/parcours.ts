@@ -15,7 +15,7 @@ import {
   moisDepuisSaisie,
   resolveVarianteBranche,
 } from '@opco/core';
-import type { OpcoData, ProjetType, StatutBeneficiaire, TrainingMode, TrainingType, WizardState } from '@opco/core';
+import type { ChampsProfil, OpcoData, ProjetType, StatutBeneficiaire, TrainingMode, TrainingType, WizardState } from '@opco/core';
 import { ouvreBudgetOpco } from './entreprise';
 import { INSECABLE } from './insecable';
 
@@ -33,24 +33,34 @@ export const QUESTIONS_COMMUNES: readonly (keyof WizardState)[] = ['ageBeneficia
 const QUESTIONS_PROPRES = [...new Set(Object.values(QUESTIONS_PAR_STATUT).flat())];
 
 /**
- * Mise à jour quand l'utilisateur choisit un projet. Les réponses aux questions propres à un autre statut reviennent à
- * leur valeur initiale ; les questions communes (âge, diplôme, RQTH) et celles du nouveau statut sont gardées. Le type de
- * contrat suit le statut : « alternance » n'existe que pour l'alternant, qui l'obtient en choisissant son type de
- * contrat ; un salarié ne garde jamais « alternance ». Le budget déjà consommé auprès de l'OPCO, que l'étape Entreprise
- * ne montre qu'aux projets qui ouvrent ce budget (`ouvreBudgetOpco`), revient à vide pour les autres.
+ * Réponses d'un profil (le profil principal ou un profil supplémentaire) quand son projet change. Celles qui répondent à
+ * une question propre à un autre statut reviennent à leur valeur initiale ; les questions communes (âge, diplôme, RQTH) et
+ * celles du nouveau statut sont gardées. Le type de contrat suit le statut : « alternance » n'existe que pour l'alternant,
+ * qui l'obtient en choisissant son type de contrat ; un salarié ne garde jamais « alternance ».
  */
-export function etatDepuisProjet(state: WizardState, projet: ProjetType): Partial<WizardState> {
+export function champsDepuisProjet(champs: ChampsProfil, projet: ProjetType): Partial<ChampsProfil> {
   const statut = STATUT_PAR_PROJET[projet];
   const gardees = new Set(QUESTIONS_PAR_STATUT[statut]);
   const initial = createInitialWizardState();
-  const maj: Partial<WizardState> = { projetType: projet };
-  const remettre = <K extends keyof WizardState>(champ: K) => {
+  const maj: Partial<ChampsProfil> = { projetType: projet };
+  const remettre = <K extends keyof ChampsProfil>(champ: K) => {
     maj[champ] = initial[champ];
   };
-  for (const champ of QUESTIONS_PROPRES) if (!gardees.has(champ)) remettre(champ);
-  if (statut === 'alternant') maj.contractType = state.typeAlternance ? 'alternance' : null;
-  else if (statut === 'salarie' && state.contractType === 'alternance') maj.contractType = null;
-  if (!ouvreBudgetOpco(projet)) remettre('budgetDejaConsomme');
+  for (const champ of QUESTIONS_PROPRES) if (!gardees.has(champ)) remettre(champ as keyof ChampsProfil);
+  if (statut === 'alternant') maj.contractType = champs.typeAlternance ? 'alternance' : null;
+  else if (statut === 'salarie' && champs.contractType === 'alternance') maj.contractType = null;
+  return maj;
+}
+
+/**
+ * Mise à jour quand l'utilisateur choisit le projet du profil principal : `champsDepuisProjet`, plus le budget. Le budget
+ * déjà consommé auprès de l'OPCO, que l'étape Entreprise ne montre qu'aux projets qui ouvrent ce budget
+ * (`ouvreBudgetOpco`), revient à vide quand aucun profil du groupe ne relève d'un tel projet.
+ */
+export function etatDepuisProjet(state: WizardState, projet: ProjetType): Partial<WizardState> {
+  const maj: Partial<WizardState> = champsDepuisProjet(state, projet);
+  const projetsDuGroupe = [projet, ...state.autresProfils.map((p) => p.projetType)];
+  if (!projetsDuGroupe.some(ouvreBudgetOpco)) maj.budgetDejaConsomme = createInitialWizardState().budgetDejaConsomme;
   return maj;
 }
 
