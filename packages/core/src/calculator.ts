@@ -98,6 +98,26 @@ export function applyVarianteBranche(opco: OpcoData, variante: VarianteBranche):
 
 const arrondi = (n: number): number => Math.round(n * 100) / 100;
 
+/** Nombre de personnes chiffrées : un entier d'au moins 1 (toute autre valeur, non finie comprise, donne 1). */
+function personnesChiffrees(personnes: number): number {
+  return Number.isFinite(personnes) ? Math.max(1, Math.floor(personnes)) : 1;
+}
+
+/** Fin d'une phrase qui donne le montant d'un groupe : « pour 4 personnes » (vide pour une personne seule). */
+function pourLeGroupe(n: number): string {
+  return n > 1 ? ` pour ${compte(n, 'personne', 'personnes')}` : '';
+}
+
+/**
+ * Ligne de détail d'un calcul de groupe, à la suite de la ligne du calcul d'une personne :
+ * « Pour 4 personnes : 1050.00 € × 4 = 4200.00 € ». Rien pour une personne seule.
+ */
+function detailDeGroupe(n: number, parPersonne: number, total: number, debut = 'Pour'): string[] {
+  return n > 1
+    ? [`${debut} ${compte(n, 'personne', 'personnes')} : ${avecUnite(parPersonne.toFixed(2), '€')} × ${n} = ${avecUnite(total.toFixed(2), '€')}`]
+    : [];
+}
+
 /** 'AAAA-MM-JJ' → 'JJ/MM/AAAA' par découpage de chaîne (le moteur ne lit pas l'horloge) ; toute autre forme est rendue telle quelle. */
 function dateFr(iso: string): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
@@ -325,14 +345,19 @@ function calcPedagogy(
   budgetAnnuelPublie: boolean,
   /** Budget annuel publié à 0 : le message « aucun budget » remplace le message de plafond appliqué. */
   budgetAnnuelNul: boolean,
+  /** Nombre de personnes chiffrées : tout montant de l'état est celui d'une personne. */
+  n: number,
 ): { ligne: FundingLine; capApplique: boolean } {
   const hours = state.durationHours ?? 0;
   const userCostPerHour = state.pedagogyCostPerHour ?? 0;
-  const requestedTotal = state.pedagogyCostTotal ?? userCostPerHour * hours;
+  const requestedTotal = (state.pedagogyCostTotal ?? userCostPerHour * hours) * n;
+  const pour = pourLeGroupe(n);
   const details: string[] = [
     `Votre coût horaire : ${avecUnite(userCostPerHour, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((userCostPerHour * hours).toFixed(2), '€')}`,
+    ...detailDeGroupe(n, userCostPerHour * hours, userCostPerHour * hours * n, 'Coût pour'),
   ];
 
+  // Le financement se calcule pour UNE personne, puis se multiplie par n avant le plafond annuel (celui de l'entreprise).
   let funded: number;
   let confidence: Confidence;
   let sourceUrl: string;
@@ -347,10 +372,10 @@ function calcPedagogy(
     sourceUrl = opco.cout_horaire_inter.source_url;
     note = 'Barème dégressif selon la durée';
     details.push(...degressif.details);
-    const reste = arrondi(userCostPerHour * hours - funded);
+    const reste = arrondi((userCostPerHour * hours - funded) * n);
     if (reste > 0) {
       warnings.push(
-        `Le barème dégressif ${de(opco.name)} laisse un reste à charge de ${avecUnite(reste.toFixed(2), '€')} sur les coûts pédagogiques.`,
+        `Le barème dégressif ${de(opco.name)} laisse un reste à charge de ${avecUnite(reste.toFixed(2), '€')} sur les coûts pédagogiques${pour}.`,
       );
     }
   } else {
@@ -363,22 +388,23 @@ function calcPedagogy(
       note = `Plafond horaire : ${avecUnite(ceiling, '€/h')}`;
       details.push(`Plafond horaire ${apposition(opco.name)} : ${avecUnite(ceiling, '€/h')}`);
       if (userCostPerHour > ceiling) {
-        const reste = (userCostPerHour - ceiling) * hours;
+        const resteParPersonne = (userCostPerHour - ceiling) * hours;
+        const reste = resteParPersonne * n;
         // Coût horaire égal au plafond une fois arrondi au centime (4 200,50 € sur 140 h : 30,0036 €/h, qui s'affiche
         // 30 €/h) : le dépassement s'écrit en euros, jamais « 30 €/h dépasse le plafond de 30 €/h ». Montants inchangés.
         const egalAuCentime = Math.round(userCostPerHour * 100) === Math.round(ceiling * 100);
         details.push(
           egalAuCentime
-            ? `Votre coût dépasse le plafond de ${avecUnite(reste.toFixed(2), '€')} sur la formation → taux appliqué : ${avecUnite(ceiling, '€/h')}`
+            ? `Votre coût dépasse le plafond de ${avecUnite(resteParPersonne.toFixed(2), '€')} sur la formation → taux appliqué : ${avecUnite(ceiling, '€/h')}`
             : `Votre coût (${avecUnite(userCostPerHour, '€/h')}) dépasse le plafond → taux appliqué : ${avecUnite(ceiling, '€/h')}`,
         );
         details.push(`Calcul : ${avecUnite(ceiling, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((ceiling * hours).toFixed(2), '€')}`);
-        details.push(`Reste à charge sur ce poste : ${avecUnite(reste.toFixed(2), '€')}`);
+        details.push(`Reste à charge sur ce poste : ${avecUnite(resteParPersonne.toFixed(2), '€')}`);
         warnings.push(
           egalAuCentime
-            ? `Le coût demandé dépasse le plafond ${apposition(opco.name)} (${avecUnite(ceiling, '€/h')}) de ${avecUnite(reste.toFixed(2), '€')} sur la formation : ce montant reste à charge.`
+            ? `Le coût demandé dépasse le plafond ${apposition(opco.name)} (${avecUnite(ceiling, '€/h')}) de ${avecUnite(reste.toFixed(2), '€')} sur la formation${pour} : ce montant reste à charge.`
             : `Le coût horaire demandé (${avecUnite(userCostPerHour, '€/h')}) dépasse le plafond ${apposition(opco.name)} (${avecUnite(ceiling, '€/h')}). ` +
-                `Le reste à charge est de ${avecUnite(reste.toFixed(2), '€')}.`,
+                `Le reste à charge est de ${avecUnite(reste.toFixed(2), '€')}${pour}.`,
         );
       } else {
         // Une estimation : l'OPCO peut refuser la prise en charge (fonds épuisés, étude du dossier).
@@ -401,6 +427,10 @@ function calcPedagogy(
       details.push("Aucun montant n'est compté tant que l'OPCO ne l'a pas confirmé");
     }
   }
+
+  const financeParPersonne = funded;
+  funded = financeParPersonne * n;
+  if (financeParPersonne > 0) details.push(...detailDeGroupe(n, financeParPersonne, funded, 'Financement pour'));
 
   let capApplique = false;
   if (capPedagogie != null && funded > capPedagogie) {
@@ -685,9 +715,9 @@ function calcFraisAnnexesPourcentage(opco: OpcoData, state: WizardState, pedagog
 }
 
 /** Lignes à 0 € quand le PDC mutualisé n'est pas accessible (50 salariés et plus). */
-function lignesPdcFerme(opco: OpcoData, state: WizardState): FundingLine[] {
+function lignesPdcFerme(opco: OpcoData, state: WizardState, n: number): FundingLine[] {
   const hours = state.durationHours ?? 0;
-  const requested = state.pedagogyCostTotal ?? (state.pedagogyCostPerHour ?? 0) * hours;
+  const requested = (state.pedagogyCostTotal ?? (state.pedagogyCostPerHour ?? 0) * hours) * n;
   const note = 'Fonds mutualisés réservés aux entreprises de moins de 50 salariés';
   const details = [
     `Les fonds mutualisés ${de(opco.name)} pour le plan de développement des compétences sont réservés aux entreprises de moins de 50 salariés (${REFERENCE_REGLE_50_SALARIES}).`,
@@ -699,12 +729,12 @@ function lignesPdcFerme(opco: OpcoData, state: WizardState): FundingLine[] {
   ];
   if (state.needsAccommodation) {
     lignes.push(
-      line('hebergement', 'Hébergement', (state.accommodationCostPerNight ?? 0) * (state.accommodationNights ?? 0), 0, 'exact', opco.url_finance_page, note),
+      line('hebergement', 'Hébergement', (state.accommodationCostPerNight ?? 0) * (state.accommodationNights ?? 0) * n, 0, 'exact', opco.url_finance_page, note),
     );
   }
   if (state.needsMeals) {
     lignes.push(
-      line('restauration', 'Restauration', (state.mealCostPerDay ?? 0) * (state.trainingDays ?? 0), 0, 'exact', opco.url_finance_page, note),
+      line('restauration', 'Restauration', (state.mealCostPerDay ?? 0) * (state.trainingDays ?? 0) * n, 0, 'exact', opco.url_finance_page, note),
     );
   }
   return lignes;
@@ -928,9 +958,15 @@ function demarchesPdcFerme(opco: OpcoData): string[] {
 
 /**
  * Calculate OPCO funding estimate (plan de développement des compétences).
- * Pure function: same OpcoData + WizardState → same FundingResult.
+ * Pure function: same OpcoData + WizardState (+ same number of people) → same FundingResult.
+ *
+ * `personnes` : nombre de personnes qui suivent la même formation (1 par défaut). Tout montant de `state` (coût de la
+ * formation, nuit d'hôtel, repas) est celui d'UNE personne ; les lignes et les totaux du résultat valent pour `personnes`
+ * personnes, et le plafond annuel de l'OPCO, qui est celui de l'entreprise, s'applique une seule fois à ce total.
+ * Le calcul ne lit ni `nombrePersonnes`, ni `autresProfils`, ni `prixDuGroupe` : l'appelant choisit qui est chiffré.
  */
-export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): FundingResult {
+export function calculateFunding(rawOpcoData: OpcoData, state: WizardState, personnes = 1): FundingResult {
+  const n = personnesChiffrees(personnes);
   const earlyWarnings: string[] = [];
 
   // ---- 0. Barème de branche (variante) ----
@@ -967,7 +1003,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
   let allLines: FundingLine[];
   let capPedagogieApplique = false;
   if (pdcFerme) {
-    allLines = lignesPdcFerme(opcoData, state);
+    allLines = lignesPdcFerme(opcoData, state, n);
   } else {
     const { ligne: pedagogyLine, capApplique } = calcPedagogy(
       opcoData,
@@ -976,6 +1012,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
       portee === 'pedagogie' ? capRestant : null,
       budgetAnnuelPublie,
       budgetAnnuelNul,
+      n,
     );
     capPedagogieApplique = capApplique;
     const salaryLine = calcSalary(opcoData, state, pedagogyLine.fundedAmount, brancheAppliquee);
@@ -1114,5 +1151,6 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState): Fun
     // Champ libre de l'OPCO (texte, objet détaillé ou null) : le résultat reste une chaîne, comme dans les démarches.
     delaiValidation: typeof opcoData.delai_validation === 'string' ? opcoData.delai_validation : '',
     modePaiement: opcoData.mode_paiement,
+    personnes: n,
   };
 }

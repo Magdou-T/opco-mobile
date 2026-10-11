@@ -626,6 +626,8 @@ export interface FundingResult {
   /** Délai de validation publié par l'OPCO, en texte ; chaîne vide quand son champ libre est un objet détaillé ou null. */
   delaiValidation: string;
   modePaiement: string;
+  /** Nombre de personnes chiffrées : les lignes et les totaux valent pour ce nombre de personnes (1 pour une personne seule). */
+  personnes: number;
 }
 
 // --- SIREN API Types ---

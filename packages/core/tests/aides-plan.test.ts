@@ -210,6 +210,7 @@ const resultatOpco = (
   nextSteps: [],
   delaiValidation: '2-3 semaines',
   modePaiement: 'Tiers-payant',
+  personnes: 1,
   ...over,
 });
 
