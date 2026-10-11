@@ -350,11 +350,13 @@ function calcPedagogy(
 ): { ligne: FundingLine; capApplique: boolean } {
   const hours = state.durationHours ?? 0;
   const userCostPerHour = state.pedagogyCostPerHour ?? 0;
-  const requestedTotal = (state.pedagogyCostTotal ?? userCostPerHour * hours) * n;
+  // Coût demandé pour UNE personne : le total saisi, à défaut coût horaire × heures (la ligne de groupe en part aussi).
+  const coutParPersonne = state.pedagogyCostTotal ?? userCostPerHour * hours;
+  const requestedTotal = coutParPersonne * n;
   const pour = pourLeGroupe(n);
   const details: string[] = [
     `Votre coût horaire : ${avecUnite(userCostPerHour, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((userCostPerHour * hours).toFixed(2), '€')}`,
-    ...detailDeGroupe(n, userCostPerHour * hours, userCostPerHour * hours * n, 'Coût pour'),
+    ...detailDeGroupe(n, coutParPersonne, requestedTotal, 'Coût pour'),
   ];
 
   // Le financement se calcule pour UNE personne, puis se multiplie par n avant le plafond annuel (celui de l'entreprise).
@@ -400,6 +402,7 @@ function calcPedagogy(
         );
         details.push(`Calcul : ${avecUnite(ceiling, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((ceiling * hours).toFixed(2), '€')}`);
         details.push(`Reste à charge sur ce poste : ${avecUnite(resteParPersonne.toFixed(2), '€')}`);
+        details.push(...detailDeGroupe(n, resteParPersonne, reste, 'Reste à charge pour'));
         warnings.push(
           egalAuCentime
             ? `Le coût demandé dépasse le plafond ${apposition(opco.name)} (${avecUnite(ceiling, '€/h')}) de ${avecUnite(reste.toFixed(2), '€')} sur la formation${pour} : ce montant reste à charge.`
