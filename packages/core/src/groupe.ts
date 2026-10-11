@@ -5,7 +5,7 @@
 // ============================================================
 
 import { MAX_PERSONNES } from './types';
-import type { ChampsProfil, WizardState } from './types';
+import type { ChampsProfil, FundingResult, WizardState } from './types';
 
 /** Identifiant du profil principal (les champs de l'étape « Participants » de l'état). */
 export const ID_PROFIL_PRINCIPAL = 'principal';
@@ -72,4 +72,76 @@ export function nombreDePersonnes(state: Pick<WizardState, 'nombrePersonnes' | '
  */
 export function etatDuProfil(state: WizardState, profil: ProfilDuGroupe): WizardState {
   return { ...state, ...profil.champs, nombrePersonnes: 1, autresProfils: [], prixDuGroupe: null };
+}
+
+// --- Répartition du résultat de l'OPCO entre les profils salariés ---------------------------------------------------
+
+const enCentimes = (euros: number): number => Math.round(euros * 100);
+const enEuros = (centimes: number): number => centimes / 100;
+
+/**
+ * Répartit `total` centimes entre des parts proportionnelles aux `effectifs`, en centimes entiers : chaque part reçoit
+ * `floor(total × effectif / somme)`, puis les centimes qui restent vont aux parts qui ont la plus grande part décimale
+ * (à égalité, à la première de la liste). La somme des parts égale toujours `total`. Des effectifs vides ou de somme nulle
+ * donnent des parts nulles.
+ */
+export function repartirCentimes(total: number, effectifs: readonly number[]): number[] {
+  const somme = effectifs.reduce((s, e) => s + e, 0);
+  if (effectifs.length === 0 || somme <= 0) return effectifs.map(() => 0);
+  const signe = total < 0 ? -1 : 1;
+  const montant = Math.abs(Math.round(total));
+  const parts = effectifs.map((e) => Math.floor((montant * e) / somme));
+  let reste = montant - parts.reduce((s, p) => s + p, 0);
+  const parDecimale = effectifs
+    .map((e, i) => ({ i, decimale: (montant * e) % somme }))
+    .sort((a, b) => b.decimale - a.decimale || a.i - b.i);
+  for (const { i } of parDecimale) {
+    if (reste <= 0) break;
+    parts[i] += 1;
+    reste -= 1;
+  }
+  return parts.map((p) => (p === 0 ? 0 : signe * p));
+}
+
+/**
+ * Répartit le résultat de l'OPCO d'un groupe entre ses profils salariés (`effectifs` : le nombre de personnes de chacun,
+ * dans l'ordre des profils). Chaque ligne se répartit en centimes entiers, le financé et le reste à charge séparément (le
+ * demandé d'une part est leur somme : il ne passe jamais sous le financé), puis le montant estimé de chaque dispositif et
+ * l'enveloppe maximale. La somme des parts égale le groupe, poste par poste, au centime. Les totaux de chaque part se
+ * recalculent à partir de ses lignes ; le plafond annuel, le budget déjà consommé, les textes et les drapeaux sont repris
+ * tels quels ; `personnes` vaut l'effectif de la part. Les textes de détail restent ceux du groupe entier (« Coût pour
+ * 5 personnes : … ») : une part ne s'affiche jamais, seul le plan de son profil en lit les montants.
+ */
+export function repartirFinancement(r: FundingResult, effectifs: readonly number[]): FundingResult[] {
+  const lignes = r.lines.map((l) => ({
+    finance: repartirCentimes(enCentimes(l.fundedAmount), effectifs),
+    reste: repartirCentimes(enCentimes(l.requestedAmount) - enCentimes(l.fundedAmount), effectifs),
+  }));
+  const dispositifs = r.dispositifsComplementaires.map((d) =>
+    d.montantEstime == null ? null : repartirCentimes(enCentimes(d.montantEstime), effectifs),
+  );
+  const enveloppe = repartirCentimes(enCentimes(r.enveloppeMaxPotentielle), effectifs);
+
+  return effectifs.map((effectif, k) => {
+    const lines = r.lines.map((l, j) => {
+      const finance = lignes[j].finance[k];
+      const reste = lignes[j].reste[k];
+      return { ...l, requestedAmount: enEuros(finance + reste), fundedAmount: enEuros(finance), remainder: enEuros(reste) };
+    });
+    const demande = lines.reduce((s, l) => s + enCentimes(l.requestedAmount), 0);
+    const finance = lines.reduce((s, l) => s + enCentimes(l.fundedAmount), 0);
+    return {
+      ...r,
+      personnes: effectif,
+      lines,
+      totalRequested: enEuros(demande),
+      totalFunded: enEuros(finance),
+      totalRemainder: enEuros(demande - finance),
+      dispositifsComplementaires: r.dispositifsComplementaires.map((d, j) => {
+        const parts = dispositifs[j];
+        return { ...d, montantEstime: parts == null ? null : enEuros(parts[k]) };
+      }),
+      enveloppeMaxPotentielle: enEuros(enveloppe[k]),
+    };
+  });
 }
