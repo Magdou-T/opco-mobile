@@ -280,6 +280,9 @@ export const ORDRE_EMPILEMENT_DEFAUT: Record<Financeur, number> = {
   cpf: 90,
 };
 
+/** Rang d'un statut d'éligibilité dans les tris (petit = d'abord) : éligible, puis à vérifier, puis non éligible. */
+export const RANG_STATUT: Record<StatutEligibilite, number> = { eligible: 0, a_verifier: 1, non_eligible: 2 };
+
 export const FINANCEUR_LABELS: Record<Financeur, string> = {
   etat: 'État',
   region: 'Région',

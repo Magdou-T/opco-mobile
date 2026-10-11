@@ -1099,6 +1099,28 @@ describe('fusion des aides du catalogue', () => {
     expect(fusionnerAides([{ profil: pA, aides: [enAuvergne] }, { profil: pB, aides: [enIleDeFrance] }])[0]).toMatchObject(attendu);
     expect(fusionnerAides([{ profil: pB, aides: [enIleDeFrance] }, { profil: pA, aides: [enAuvergne] }])[0]).toMatchObject(attendu);
   });
+
+  it('à montant égal, le lien de la demande est celui du profil éligible, même placé après un profil à vérifier', () => {
+    const aide = makeAide({
+      ...ouvertes,
+      id: 'nat-regionale-diplome',
+      criteres: { perimetre_region: 'beneficiaire', niveaux_diplome: ['bac'] },
+      url_demarche: 'https://www.example.gouv.fr/national',
+      liens_par_region: {
+        '11': 'https://www.example.gouv.fr/ile-de-france',
+        '84': 'https://www.example.gouv.fr/auvergne-rhone-alpes',
+      },
+    });
+    // Même forfait de 1 000 € pour les deux profils : le profil sans niveau de diplôme est à vérifier, l'autre est éligible.
+    const aVerifier = evaluerAide(aide, { ...profilAidesA, regionBeneficiaire: '84' }, AUJOURDHUI);
+    const eligible = evaluerAide(aide, { ...profilAidesB, regionBeneficiaire: '11' }, AUJOURDHUI);
+    expect([aVerifier.statut, aVerifier.montantEstime, eligible.statut, eligible.montantEstime]).toEqual(['a_verifier', 1000, 'eligible', 1000]);
+    expect(aVerifier.urlDemarche).toBe('https://www.example.gouv.fr/auvergne-rhone-alpes');
+    // Le lien dépend de la région du profil : l'aide est éligible, son lien est celui du profil éligible, quel que soit l'ordre des blocs.
+    const attendu = { statut: 'eligible', montantEstime: 1000, urlDemarche: 'https://www.example.gouv.fr/ile-de-france' };
+    expect(fusionnerAides([{ profil: pA, aides: [aVerifier] }, { profil: pB, aides: [eligible] }])[0]).toMatchObject(attendu);
+    expect(fusionnerAides([{ profil: pB, aides: [eligible] }, { profil: pA, aides: [aVerifier] }])[0]).toMatchObject(attendu);
+  });
 });
 
 describe('fusion des aides du catalogue : règles de chaque champ', () => {
@@ -1182,6 +1204,25 @@ describe('fusion des aides du catalogue : règles de chaque champ', () => {
     });
     expect(fusion(eligible(3000, 'a'), eligible(1000, 'b'), eligible(2000, 'c'))).toMatchObject({ montantEstime: 3000, libelleMontant: 'a' });
     expect(fusion(eligible(1000, 'a'), eligible(2000, 'b'), eligible(3000, 'c'))).toMatchObject({ montantEstime: 3000, libelleMontant: 'c' });
+  });
+
+  it("à montant maximal égal, le libellé et le lien sont ceux du profil au meilleur statut, puis du premier dans l'ordre des blocs", () => {
+    const aVerifier = (nom: string) => chiffree('a_verifier', 1000, nom);
+    const eligible = (nom: string) => chiffree('eligible', 1000, nom);
+    // Un profil à vérifier avant un profil éligible au même montant : l'éligible donne le libellé et le lien, dans les deux ordres.
+    const attendu = { statut: 'eligible', montantEstime: 1000, libelleMontant: 'eligible', urlDemarche: 'https://exemple.test/eligible' };
+    expect(fusion(aVerifier('a-verifier'), eligible('eligible'))).toMatchObject(attendu);
+    expect(fusion(eligible('eligible'), aVerifier('a-verifier'))).toMatchObject(attendu);
+    // Plusieurs profils de chaque statut : le premier profil éligible dans l'ordre des blocs.
+    expect(fusion(aVerifier('v1'), eligible('e1'), aVerifier('v2'), eligible('e2'))).toMatchObject({ libelleMontant: 'e1', urlDemarche: 'https://exemple.test/e1' });
+    // Aucun profil éligible : le premier profil à vérifier.
+    expect(fusion(aVerifier('v1'), aVerifier('v2'))).toMatchObject({ statut: 'a_verifier', libelleMontant: 'v1', urlDemarche: 'https://exemple.test/v1' });
+    // Le montant prime sur le statut : parmi les profils au plus grand montant, c'est le meilleur statut qui compte, pas le premier rencontré.
+    expect(fusion(chiffree('eligible', 1000, 'mille'), chiffree('a_verifier', 2000, 'deux-mille-a-verifier'), chiffree('eligible', 2000, 'deux-mille-eligible'))).toMatchObject({
+      statut: 'eligible',
+      montantEstime: 2000,
+      libelleMontant: 'deux-mille-eligible',
+    });
   });
 
   it('un montant de 0 € est un montant connu : il passe avant un montant non chiffré, seul ou non', () => {
@@ -1345,6 +1386,9 @@ describe('fusion des aides du catalogue : règles de chaque champ', () => {
       aide('nat-4', 'Refusée', { statut: 'non_eligible', montantEstime: 5000 }),
       aide('nat-1', 'Zebre', { statut: 'eligible', montantEstime: 1000 }),
       aide('nat-2', 'abeille', { statut: 'eligible', montantEstime: 1000 }),
+      // Deux noms qui ne diffèrent que par la casse : l'identifiant les départage (nat-8 avant nat-9, quel que soit l'ordre d'arrivée).
+      aide('nat-9', 'Même nom', { statut: 'eligible', montantEstime: 1000 }),
+      aide('nat-8', 'même nom', { statut: 'eligible', montantEstime: 1000 }),
       aide('nat-3', 'Doutes', { statut: 'a_verifier', montantEstime: 9000 }),
       aide('nat-5', 'Non chiffrée', { statut: 'eligible', montantEstime: null }),
       aide('nat-6', 'Gratuite', { statut: 'eligible', montantEstime: 0 }),
@@ -1352,7 +1396,7 @@ describe('fusion des aides du catalogue : règles de chaque champ', () => {
       aide('nat-7', 'Fusionnée', { statut: 'non_eligible', montantEstime: 0 }, { statut: 'eligible', montantEstime: 2500 }),
     ];
     const r = fusionnerAides(blocs(aides.map((a) => a.p1), aides.map((a) => a.p2)));
-    expect(r.map((a) => a.id)).toEqual(['nat-7', 'nat-2', 'nat-1', 'nat-6', 'nat-5', 'nat-3', 'nat-4']);
+    expect(r.map((a) => a.id)).toEqual(['nat-7', 'nat-2', 'nat-8', 'nat-9', 'nat-1', 'nat-6', 'nat-5', 'nat-3', 'nat-4']);
   });
 
   it('un seul profil : une autre liste, les mêmes aides dans le même ordre, jamais retriée', () => {
@@ -1385,23 +1429,23 @@ describe('fusion des aides du catalogue : règles de chaque champ', () => {
       }
       return valeur;
     };
-    const entrees = geler(
-      blocs(
-        [
-          vue({ id: 'nat-c', nom: 'C', statut: 'a_verifier', montantEstime: 300, raisons: ['Doute B', 'Doute A'] }),
-          vue({ id: 'nat-b', nom: 'B', statut: 'non_eligible', montantEstime: 200, horsPerimetre: true, raisons: ['Exclusion B', 'Exclusion A'] }),
-          vue({ id: 'nat-a', nom: 'A', statut: 'eligible', montantEstime: 100 }),
-          vue({ id: 'nat-d', nom: 'D', statut: 'non_eligible', montantEstime: 400, raisons: ['Exclusion F', 'Exclusion E'] }),
-        ],
-        [
-          vue({ id: 'nat-a', nom: 'A', statut: 'non_eligible', montantEstime: 150, raisons: ['Exclusion D', 'Exclusion C'] }),
-          vue({ id: 'nat-b', nom: 'B', statut: 'non_eligible', montantEstime: 250, raisons: ['Exclusion A', 'Exclusion E'] }),
-          vue({ id: 'nat-c', nom: 'C', statut: 'a_verifier', montantEstime: 50, raisons: ['Doute C', 'Doute A'] }),
-          vue({ id: 'nat-d', nom: 'D', statut: 'non_eligible', montantEstime: 450, raisons: ['Exclusion E', 'Exclusion G'] }),
-        ],
-        [vue({ id: 'nat-b', nom: 'B', statut: 'a_verifier', montantEstime: 10, raisons: ['Doute Z', 'Doute Y'] })],
-      ),
+    const brutes = blocs(
+      [
+        vue({ id: 'nat-c', nom: 'C', statut: 'a_verifier', montantEstime: 300, raisons: ['Doute B', 'Doute A'] }),
+        vue({ id: 'nat-b', nom: 'B', statut: 'non_eligible', montantEstime: 200, horsPerimetre: true, raisons: ['Exclusion B', 'Exclusion A'] }),
+        vue({ id: 'nat-a', nom: 'A', statut: 'eligible', montantEstime: 100 }),
+        vue({ id: 'nat-d', nom: 'D', statut: 'non_eligible', montantEstime: 400, raisons: ['Exclusion F', 'Exclusion E'] }),
+      ],
+      [
+        vue({ id: 'nat-a', nom: 'A', statut: 'non_eligible', montantEstime: 150, raisons: ['Exclusion D', 'Exclusion C'] }),
+        vue({ id: 'nat-b', nom: 'B', statut: 'non_eligible', montantEstime: 250, raisons: ['Exclusion A', 'Exclusion E'] }),
+        vue({ id: 'nat-c', nom: 'C', statut: 'a_verifier', montantEstime: 50, raisons: ['Doute C', 'Doute A'] }),
+        vue({ id: 'nat-d', nom: 'D', statut: 'non_eligible', montantEstime: 450, raisons: ['Exclusion E', 'Exclusion G'] }),
+      ],
+      [vue({ id: 'nat-b', nom: 'B', statut: 'a_verifier', montantEstime: 10, raisons: ['Doute Z', 'Doute Y'] })],
     );
+    // Copie profonde gelée : les tableaux et objets partagés avec les autres tests (`base`, `modele`) ne sont jamais gelés.
+    const entrees = geler(structuredClone(brutes));
     const avant = JSON.stringify(entrees);
     const resultat = fusionnerAides(entrees);
     expect(JSON.stringify(entrees)).toBe(avant);

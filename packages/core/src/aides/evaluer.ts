@@ -6,6 +6,7 @@
 import { evaluerCriteres, regionDeReference } from './criteres';
 import {
   ORDRE_EMPILEMENT_DEFAUT,
+  RANG_STATUT,
   type Aide,
   type AideEvaluee,
   type MontantAide,
@@ -174,8 +175,6 @@ export function evaluerAide(aide: Aide, p: ProfilAides, dateRef: string): AideEv
   };
 }
 
-const RANG: Record<StatutEligibilite, number> = { eligible: 0, a_verifier: 1, non_eligible: 2 };
-
 /** Comparaison par valeur de code, sans Intl : le même ordre sur tous les moteurs (l'ordre des accents n'a pas d'importance). */
 const comparer = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
@@ -187,7 +186,7 @@ const comparer = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 export function trierAidesEvaluees(aides: readonly AideEvaluee[]): AideEvaluee[] {
   return [...aides].sort(
     (a, b) =>
-      RANG[a.statut] - RANG[b.statut] ||
+      RANG_STATUT[a.statut] - RANG_STATUT[b.statut] ||
       (b.montantEstime ?? -1) - (a.montantEstime ?? -1) ||
       comparer(a.nom.toLowerCase(), b.nom.toLowerCase()) ||
       comparer(a.id, b.id),

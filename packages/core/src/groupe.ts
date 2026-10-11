@@ -7,8 +7,8 @@
 import { trierAidesEvaluees } from './aides/evaluer';
 import { construirePlan } from './aides/plan';
 import type { LignePlan, OptionPlan, PlanFinancement } from './aides/plan';
-import { ORDRE_EMPILEMENT_DEFAUT } from './aides/types';
-import type { AideEvaluee, ProfilAides, StatutEligibilite } from './aides/types';
+import { ORDRE_EMPILEMENT_DEFAUT, RANG_STATUT } from './aides/types';
+import type { AideEvaluee, ProfilAides } from './aides/types';
 import { MAX_PERSONNES } from './types';
 import type { ChampsProfil, Confidence, FundingResult, WizardState } from './types';
 
@@ -274,8 +274,6 @@ export function fusionnerPlans(
 
 // --- Fusion des aides du catalogue ---------------------------------------------------------------------------------
 
-const RANG_STATUT: Record<StatutEligibilite, number> = { eligible: 0, a_verifier: 1, non_eligible: 2 };
-
 interface VueDeLAide {
   profil: ProfilDuGroupe;
   aide: AideEvaluee;
@@ -283,16 +281,20 @@ interface VueDeLAide {
 
 /** Une aide vue par plusieurs profils : le meilleur statut, le plus grand montant par personne, les profils concernés. */
 function fusionnerUneAide(vues: VueDeLAide[]): AideEvaluee {
-  // Meilleur statut d'abord, puis plus grand montant : c'est cette vue qui fournit tout ce qui ne dépend pas du profil.
-  const meilleure = [...vues].sort(
+  // Vues triées : meilleur statut d'abord, puis plus grand montant, puis ordre des blocs (le tri est stable). La première fournit
+  // tout ce qui ne dépend pas du profil.
+  const triees = [...vues].sort(
     (a, b) => RANG_STATUT[a.aide.statut] - RANG_STATUT[b.aide.statut] || (b.aide.montantEstime ?? -1) - (a.aide.montantEstime ?? -1),
-  )[0];
+  );
+  const meilleure = triees[0];
   const statut = meilleure.aide.statut;
   const concernees = vues.filter((v) => v.aide.statut !== 'non_eligible');
   const montants = concernees.map((v) => v.aide.montantEstime).filter((m): m is number => m != null);
   const montantMax = montants.length > 0 ? Math.max(...montants) : null;
-  // Le profil qui porte le plus grand montant donne le libellé et le lien de la demande.
-  const porteuse = montantMax == null ? meilleure : (concernees.find((v) => v.aide.montantEstime === montantMax) ?? meilleure);
+  // Le profil qui porte le plus grand montant donne le libellé et le lien de la demande. À montant égal, c'est celui du meilleur
+  // statut, puis le premier dans l'ordre des blocs : le premier de `triees` à ce montant, car les profils non éligibles y viennent
+  // après tous les autres et le maximum est atteint par un profil éligible ou à vérifier.
+  const porteuse = montantMax == null ? meilleure : (triees.find((v) => v.aide.montantEstime === montantMax) ?? meilleure);
   // Éligible : rien à confirmer. Sinon, les raisons des profils qui portent le statut retenu (jamais celles d'un profil pour
   // lequel l'aide est hors périmètre : « Ne concerne pas ce type de projet » n'a rien à faire dans la liste).
   const raisons =
@@ -323,8 +325,11 @@ function fusionnerUneAide(vues: VueDeLAide[]): AideEvaluee {
  * Aides du catalogue d'un groupe : une entrée par aide, fusion de ce que chaque profil en voit. Un seul profil : sa liste
  * telle quelle, sans champ `profils`. Plusieurs profils : le meilleur statut (éligible, puis à vérifier, puis non éligible) ;
  * `horsPerimetre` seulement si l'aide l'est pour tous les profils ; le plus grand montant PAR PERSONNE parmi les profils
- * éligibles ou à vérifier (« jusqu'à »), avec son libellé et son lien ; les raisons réunies sans doublon quand l'aide n'est
- * pas éligible ; `profils` : un élément par profil éligible ou à vérifier. La liste est triée comme une liste évaluée.
+ * éligibles ou à vérifier (« jusqu'à »), avec son libellé et son lien : à montant égal, ceux du profil au meilleur statut, puis
+ * du premier dans l'ordre des blocs ; les raisons réunies sans doublon quand l'aide n'est pas éligible, sans celles des profils
+ * pour lesquels elle est hors périmètre ; `profils` : un élément par profil éligible ou à vérifier. Une aide non éligible pour
+ * tous les profils garde le montant, le libellé et le lien de sa meilleure vue (le plus grand montant, la première à égalité),
+ * que l'écran n'affiche jamais. La liste est triée comme une liste évaluée.
  */
 export function fusionnerAides(blocs: readonly { profil: ProfilDuGroupe; aides: readonly AideEvaluee[] }[]): AideEvaluee[] {
   if (blocs.length === 1) return [...blocs[0].aides];
