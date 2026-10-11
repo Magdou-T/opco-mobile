@@ -15,3 +15,4 @@ export * from './aides/criteres';
 export * from './aides/evaluer';
 export * from './aides/profil';
 export * from './aides/plan';
+export * from './groupe';
