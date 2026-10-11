@@ -18,7 +18,7 @@
 - `@opco/core` reste **pur** : aucune E/S, aucune lecture de l'horloge. Nouveaux exports additifs seulement : l'app mobile et le backend compilent sans modification.
 - **Aucun montant inventé.** L'incertitude ne s'additionne jamais : une règle qu'on ne sait pas étendre à un groupe reste prudente ou non chiffrée.
 - Une personne seule donne exactement les mêmes résultats qu'avant : l'empreinte de la tâche 2 s'exécute (« 1 passed », jamais « skipped ») et reste verte, comme les suites existantes, sauf les trois mises à jour de la spécification (section 10.3).
-- Charte SFG, pour tout texte et tout code du site : **jamais de tiret cadratin** (U+2014, U+2015, U+2E3A, U+2E3B, U+FE31, U+FE58), aucun émoji, ni bleu ni violet, Montserrat et Inter seulement (aucune police à chasse fixe), apostrophes droites `'` dans le code, ton direct de collègue expert (ni « il est important de noter », ni « de plus », ni « n'hésitez pas »).
+- Charte SFG, pour tout texte et tout code du site : **jamais de tiret cadratin** (U+2014, U+2015, U+2E3A, U+2E3B, U+FE31, U+FE58), aucun émoji, ni bleu ni violet, Montserrat et Inter seulement (aucune police à chasse fixe), apostrophes droites `'` dans le code, titres de tests compris (un titre qui contient une apostrophe s'écrit entre guillemets doubles ; jamais U+2019), ton direct de collègue expert (ni « il est important de noter », ni « de plus », ni « n'hésitez pas »).
 - Typographie du site : espace insécable avant « : ; ? ! » et entre un nombre et son unité (`typo`, `nombreEtUnite`, `INSECABLE`, entité `&nbsp;` en JSX). Un texte JSX sur plusieurs lignes qui contient une entité commence par `{' '}` quand il suit une balise (garde `tests/jsx-espaces.test.ts`).
 - Textes écrits par le moteur : nombres à point décimal et `avecUnite` (`packages/core/src/texte.ts`) ; l'écran les réécrit par `texteMoteur`.
 - Pas de nouvelle dépendance npm.
@@ -111,7 +111,7 @@ import { describe, expect, it } from 'vitest';
 import { MAX_PERSONNES, MAX_PROFILS, createInitialWizardState } from '../src/types';
 import type { WizardState } from '../src/types';
 
-describe('état initial d’un groupe', () => {
+describe("état initial d'un groupe", () => {
   it('une personne, aucun profil supplémentaire, prix saisi par personne', () => {
     const etat = createInitialWizardState();
     expect(etat.nombrePersonnes).toBe(1);
@@ -130,7 +130,7 @@ describe('état initial d’un groupe', () => {
     expect(a.autresProfils).not.toBe(b.autresProfils);
   });
 
-  it('un état enregistré avant l’évolution reste valide une fois fusionné sur l’état initial (app mobile)', () => {
+  it("un état enregistré avant l'évolution reste valide une fois fusionné sur l'état initial (app mobile)", () => {
     const ancien: Partial<WizardState> = { projetType: 'formation_salarie', ageBeneficiaire: 40, soldeCpf: 800 };
     const etat = { ...createInitialWizardState(), ...ancien };
     expect(etat.nombrePersonnes).toBe(1);
@@ -373,7 +373,7 @@ function casDeReference(): { opco: OpcoData; state: WizardState }[] {
   return cas;
 }
 
-describe('une personne : le moteur de l’OPCO rend ce qu’il rendait avant l’évolution', () => {
+describe("une personne : le moteur de l'OPCO rend ce qu'il rendait avant l'évolution", () => {
   // Délai de 30 s : le calcul prend de 1 à 5 secondes selon la machine, et Vitest coupe un test à 5 secondes par défaut.
   it.skipIf(!BAREMES_DE_REFERENCE)(
     `empreinte de ${NOMBRE_DE_CALCULS} calculs`,
@@ -482,17 +482,17 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     expect((poste(r, 'pedagogie').details ?? []).some((d) => d.includes('personne'))).toBe(false);
   });
 
-  it('un appel explicite à 1 personne rend exactement le résultat de l’appel sans paramètre', () => {
+  it("un appel explicite à 1 personne rend exactement le résultat de l'appel sans paramètre", () => {
     expect(calculateFunding(opcoGroupe(), etatGroupe(), 1)).toEqual(calculateFunding(opcoGroupe(), etatGroupe()));
   });
 
-  it('quatre personnes : le coût demandé et le financement valent 4 fois ceux d’une personne', () => {
+  it("quatre personnes : le coût demandé et le financement valent 4 fois ceux d'une personne", () => {
     const r = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     expect(r.personnes).toBe(4);
     expect(poste(r, 'pedagogie')).toMatchObject({ requestedAmount: 20000, fundedAmount: 16000, remainder: 4000 });
   });
 
-  it('le détail du calcul garde la ligne d’une personne et ajoute celle du groupe', () => {
+  it("le détail du calcul garde la ligne d'une personne et ajoute celle du groupe", () => {
     const details = poste(calculateFunding(opcoGroupe(), etatGroupe(), 4), 'pedagogie').details ?? [];
     expect(details).toContain(`Coût pour 4${NBSP}personnes : 5000.00${NBSP}€ × 4 = 20000.00${NBSP}€`);
     expect(details).toContain(`Financement pour 4${NBSP}personnes : 4000.00${NBSP}€ × 4 = 16000.00${NBSP}€`);
@@ -514,7 +514,7 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     expect(poste(calculateFunding(opco, etatGroupe(), 2), 'pedagogie')).toMatchObject({ requestedAmount: 10000, fundedAmount: 10000, remainder: 0 });
   });
 
-  it('l’avertissement de dépassement donne le reste à charge du groupe et dit pour combien de personnes', () => {
+  it("l'avertissement de dépassement donne le reste à charge du groupe et dit pour combien de personnes", () => {
     const r = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     expect(r.warnings).toContain(
       `Le coût horaire demandé (50${NBSP}€/h) dépasse le plafond Test OPCO (40${NBSP}€/h). Le reste à charge est de 4000.00${NBSP}€ pour 4${NBSP}personnes.`,
@@ -538,7 +538,7 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     );
   });
 
-  it('un nombre de personnes invalide (0, négatif, décimal, NaN, infini) est ramené à un entier d’au moins 1', () => {
+  it("un nombre de personnes invalide (0, négatif, décimal, NaN, infini) est ramené à un entier d'au moins 1", () => {
     const base = calculateFunding(opcoGroupe(), etatGroupe());
     for (const n of [0, -3, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, 0.4]) {
       expect(calculateFunding(opcoGroupe(), etatGroupe(), n), String(n)).toEqual(base);
@@ -570,7 +570,7 @@ describe('calculateFunding pour n personnes : plafond annuel de portée « péda
     expect(r.budgetDejaConsomme).toBe(4000);
   });
 
-  it('plafond à 0 € ou déjà consommé : rien n’est financé, aucun montant négatif, un seul message de budget nul', () => {
+  it("plafond à 0 € ou déjà consommé : rien n'est financé, aucun montant négatif, un seul message de budget nul", () => {
     for (const [plafond, consomme] of [[0, null], [10000, 10000], [10000, 25000]] as const) {
       const r = calculateFunding(avecPlafond(plafond), etatGroupe({ budgetDejaConsomme: consomme }), 5);
       expect(poste(r, 'pedagogie')).toMatchObject({ requestedAmount: 25000, fundedAmount: 0, remainder: 25000 });
@@ -815,7 +815,7 @@ et ajouter à la fin du fichier :
 
 ```ts
 describe('calculateFunding pour n personnes : salaires et frais annexes', () => {
-  it('quatre personnes : chaque poste vaut 4 fois celui d’une personne', () => {
+  it("quatre personnes : chaque poste vaut 4 fois celui d'une personne", () => {
     const un = calculateFunding(opcoGroupe(), etatGroupe());
     const quatre = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     // Une personne : salaires 12 €/h × 100 h ; transport 30 € × 5 jours ; nuit à 120 € plafonnée à 100 € ; repas à 15 €, sous le forfait.
@@ -831,7 +831,7 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     expect(quatre).toMatchObject({ totalRequested: 27620, totalFunded: 23300, totalRemainder: 4320 });
   });
 
-  it('le détail de chaque poste garde la ligne d’une personne et ajoute celle du groupe', () => {
+  it("le détail de chaque poste garde la ligne d'une personne et ajoute celle du groupe", () => {
     const r = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     expect(poste(r, 'salaires').details).toContain(`Pour 4${NBSP}personnes : 1200.00${NBSP}€ × 4 = 4800.00${NBSP}€`);
     expect(poste(r, 'transport').details).toContain(`Pour 4${NBSP}personnes : 150.00${NBSP}€ × 4 = 600.00${NBSP}€`);
@@ -844,7 +844,7 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     }
   });
 
-  it('restauration au-dessus du forfait : le reste à charge du groupe suit celui d’une personne', () => {
+  it("restauration au-dessus du forfait : le reste à charge du groupe suit celui d'une personne", () => {
     const details = poste(calculateFunding(opcoGroupe(), etatGroupe({ mealCostPerDay: 25 }), 4), 'restauration').details ?? [];
     expect(details).toContain(`Reste à charge : 25.00${NBSP}€`);
     expect(details).toContain(`Reste à charge pour 4${NBSP}personnes : 25.00${NBSP}€ × 4 = 100.00${NBSP}€`);
@@ -877,7 +877,7 @@ describe('calculateFunding pour n personnes : plafond annuel de portée « globa
   });
 });
 
-describe('calculateFunding pour n personnes : dispositifs complémentaires de l’OPCO', () => {
+describe("calculateFunding pour n personnes : dispositifs complémentaires de l'OPCO", () => {
   const dispositif = (id: string, over: Partial<DispositifComplementaire>): DispositifComplementaire => ({
     id,
     nom: `Dispositif ${id}`,
@@ -917,7 +917,7 @@ describe('calculateFunding pour n personnes : dispositifs complémentaires de l�
 });
 
 describe('calculateFunding pour n personnes : données réelles', () => {
-  it('sans plafond annuel atteint, chaque ligne du groupe vaut n fois celle d’une personne (au demi-centime par personne)', () => {
+  it("sans plafond annuel atteint, chaque ligne du groupe vaut n fois celle d'une personne (au demi-centime par personne)", () => {
     let comparaisons = 0;
     for (const opco of EMBEDDED_OPCOS) {
       const idccs = [null, ...(opco.variantes_branche ?? []).map((v) => v.idcc[0] ?? null)];
@@ -962,7 +962,7 @@ describe('calculateFunding pour n personnes : données réelles', () => {
     expect(comparaisons).toBeGreaterThan(150);
   });
 
-  it('aucun texte du calcul d’un groupe ne promet plus que l’estimation', () => {
+  it("aucun texte du calcul d'un groupe ne promet plus que l'estimation", () => {
     const PROMESSES = /intégralement|garanti|assuré|totalité/i;
     let textes = 0;
     for (const opco of EMBEDDED_OPCOS) {
@@ -1291,7 +1291,7 @@ const CHAMPS_D_UN_PROFIL = [
 ];
 
 describe('profils du groupe', () => {
-  it('le profil principal vient d’abord, avec les champs de l’étape Participants', () => {
+  it("le profil principal vient d'abord, avec les champs de l'étape Participants", () => {
     const [principal, second] = profilsDuGroupe(groupe());
     expect(principal).toMatchObject({ id: ID_PROFIL_PRINCIPAL, nombre: 3, principal: true });
     expect(principal.champs).toMatchObject({ projetType: 'formation_salarie', contractType: 'cdi', ageBeneficiaire: 35 });
@@ -1299,7 +1299,7 @@ describe('profils du groupe', () => {
     expect(second.champs).toMatchObject({ projetType: 'formation_dirigeant', statutDirigeant: 'artisan', isHandicap: true });
   });
 
-  it('les champs d’un profil sont exactement les douze réponses de l’étape (ni identifiant, ni effectif)', () => {
+  it("les champs d'un profil sont exactement les douze réponses de l'étape (ni identifiant, ni effectif)", () => {
     const [principal, second] = profilsDuGroupe(groupe());
     expect(Object.keys(champsDuProfilPrincipal(groupe())).sort()).toEqual(CHAMPS_D_UN_PROFIL);
     expect(Object.keys(principal.champs).sort()).toEqual(CHAMPS_D_UN_PROFIL);
@@ -1317,7 +1317,7 @@ describe('profils du groupe', () => {
     expect(nombreDePersonnes(createInitialWizardState())).toBe(1);
   });
 
-  it('le total ignore les effectifs invalides : chacun est ramené à un entier de 1 à 99 avant d’être additionné', () => {
+  it("le total ignore les effectifs invalides : chacun est ramené à un entier de 1 à 99 avant d'être additionné", () => {
     const invalides = groupe({
       nombrePersonnes: Number.NaN,
       autresProfils: [supplementaire({ nombre: 0 }), supplementaire({ id: 'profil-3', nombre: 3.7 })],
@@ -1326,7 +1326,7 @@ describe('profils du groupe', () => {
     expect(nombreDePersonnes({ ...invalides, nombrePersonnes: undefined as unknown as number })).toBe(5);
   });
 
-  it('le profil principal reprend chacune des douze réponses de l’état, chacune à sa place', () => {
+  it("le profil principal reprend chacune des douze réponses de l'état, chacune à sa place", () => {
     const reponses = {
       projetType: 'alternance',
       contractType: 'alternance',
@@ -1361,8 +1361,8 @@ describe('profils du groupe', () => {
   });
 });
 
-describe('état d’une personne d’un profil', () => {
-  it('reprend l’entreprise, la formation et les frais, et remplace les réponses du bénéficiaire par celles du profil', () => {
+describe("état d'une personne d'un profil", () => {
+  it("reprend l'entreprise, la formation et les frais, et remplace les réponses du bénéficiaire par celles du profil", () => {
     const etat = groupe({ prixDuGroupe: 4200 });
     const [, second] = profilsDuGroupe(etat);
     const une = etatDuProfil(etat, second);
@@ -1388,7 +1388,7 @@ describe('état d’une personne d’un profil', () => {
     expect(etatDuProfil(etat, principal)).toEqual({ ...etat, nombrePersonnes: 1, autresProfils: [], prixDuGroupe: null });
   });
 
-  it('ne modifie pas l’état reçu', () => {
+  it("ne modifie pas l'état reçu", () => {
     const etat = groupe();
     const avant = JSON.stringify(etat);
     etatDuProfil(etat, profilsDuGroupe(etat)[1]);
@@ -1572,7 +1572,7 @@ describe('répartition en centimes', () => {
     }
   });
 
-  it('les centimes restants vont à la plus grande part décimale, même quand ce n’est ni la première ni la plus nombreuse', () => {
+  it("les centimes restants vont à la plus grande part décimale, même quand ce n'est ni la première ni la plus nombreuse", () => {
     expect(repartirCentimes(10, [1, 2])).toEqual([3, 7]); // 3,33 et 6,67 : le centime va à la seconde
     expect(repartirCentimes(2, [4, 3])).toEqual([1, 1]); // 1,14 et 0,86 : le centime va à la plus petite part
   });
@@ -1617,7 +1617,7 @@ describe('répartition en centimes', () => {
   });
 });
 
-describe('répartition du résultat de l’OPCO entre profils', () => {
+describe("répartition du résultat de l'OPCO entre profils", () => {
   // 5 personnes : 5 × 5 825 € = 29 125 €, ramenés à 20 000 € par le plafond annuel : des centimes qui ne tombent pas juste.
   const resultat = () => calculateFunding(opcoGroupe({ budget_annuel_max: sourced(20000) }), etatGroupe(), 5);
   const centimes = (euros: number) => Math.round(euros * 100);
@@ -1647,7 +1647,7 @@ describe('répartition du résultat de l’OPCO entre profils', () => {
     }
   });
 
-  it('un seul profil : les lignes du groupe sont rendues à l’identique', () => {
+  it("un seul profil : les lignes du groupe sont rendues à l'identique", () => {
     const r = resultat();
     const [seule] = repartirFinancement(r, [5]);
     const montants = (x: typeof r) => x.lines.map((l) => [l.poste, l.requestedAmount, l.fundedAmount, l.remainder]);
@@ -1655,7 +1655,7 @@ describe('répartition du résultat de l’OPCO entre profils', () => {
     expect(seule.personnes).toBe(5);
   });
 
-  it('ce qui n’est pas un montant est repris tel quel', () => {
+  it("ce qui n'est pas un montant est repris tel quel", () => {
     const r = resultat();
     for (const part of repartirFinancement(r, [3, 2])) {
       expect(part).toMatchObject({
@@ -1670,7 +1670,7 @@ describe('répartition du résultat de l’OPCO entre profils', () => {
     }
   });
 
-  it('le montant estimé de chaque dispositif et l’enveloppe maximale se répartissent aussi, au centime ; un montant inconnu reste inconnu', () => {
+  it("le montant estimé de chaque dispositif et l'enveloppe maximale se répartissent aussi, au centime ; un montant inconnu reste inconnu", () => {
     const dispositif = (id: string, montant_max: number | null) => ({
       id,
       nom: id,
@@ -1695,7 +1695,7 @@ describe('répartition du résultat de l’OPCO entre profils', () => {
     expect(centimes(a.enveloppeMaxPotentielle + b.enveloppeMaxPotentielle)).toBe(centimes(r.enveloppeMaxPotentielle));
   });
 
-  it('le demandé d’une part ne passe jamais sous son financé, même avec un seul centime de reste à charge pour trois profils', () => {
+  it("le demandé d'une part ne passe jamais sous son financé, même avec un seul centime de reste à charge pour trois profils", () => {
     // Répartis séparément, 0,11 € de demandé donnent 5, 5 et 1 centimes et 0,10 € de financé 4, 4 et 2 : la troisième part aurait un reste négatif.
     const base = resultat();
     const r = { ...base, lines: [{ ...base.lines[0], requestedAmount: 0.11, fundedAmount: 0.1, remainder: 0.01 }] };
@@ -1709,7 +1709,7 @@ describe('répartition du résultat de l’OPCO entre profils', () => {
     expect(centimes(parts.reduce((s, p) => s + p.lines[0].fundedAmount, 0))).toBe(10);
   });
 
-  it('les totaux d’une part restent la somme de ses lignes, même quand les parts des lignes ne suivent pas celle du total', () => {
+  it("les totaux d'une part restent la somme de ses lignes, même quand les parts des lignes ne suivent pas celle du total", () => {
     // Deux lignes de 0,01 € et 0,03 € pour 3 et 2 personnes : les lignes donnent 0,03 € et 0,01 € à chaque part, le total du groupe réparti seul 0,02 € et 0,02 €.
     const base = resultat();
     const ligne = (montant: number) => ({ ...base.lines[0], requestedAmount: montant, fundedAmount: montant, remainder: 0 });
@@ -1720,7 +1720,7 @@ describe('répartition du résultat de l’OPCO entre profils', () => {
     expect([a.totalRemainder, b.totalRemainder]).toEqual([0, 0]);
   });
 
-  it('un montant dont le produit par 100 n’est pas un entier exact (4,35 € et 8,20 €) ne perd pas de centime', () => {
+  it("un montant dont le produit par 100 n'est pas un entier exact (4,35 € et 8,20 €) ne perd pas de centime", () => {
     const base = resultat();
     const r = { ...base, lines: [{ ...base.lines[0], requestedAmount: 8.2, fundedAmount: 4.35, remainder: 3.85 }] };
     const [seule] = repartirFinancement(r, [5]);
@@ -1903,7 +1903,7 @@ const soldeCpf = makeAide({
   montant: { ...makeAide().montant, mode: 'solde_cpf', valeur: null, libelle: 'Solde CPF disponible' },
 });
 
-describe('plan d’un profil (bloc de personnes)', () => {
+describe("plan d'un profil (bloc de personnes)", () => {
   const profil = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 1500 });
   const evaluees = (p = profil) =>
     [soldeCpf, forfait('r11-region', 'region', 1000), forfait('nat-etat', 'etat', 3000)].map((a) => evaluerAide(a, p, AUJOURDHUI));
@@ -1913,7 +1913,7 @@ describe('plan d’un profil (bloc de personnes)', () => {
     expect(construirePlanDuBloc(null, evaluees(), profil, 1)).toEqual(construirePlan(null, evaluees(), profil));
   });
 
-  it('trois personnes sans OPCO : l’empilement vaut 3 fois celui d’une personne, chaque ligne dit pour combien', () => {
+  it("trois personnes sans OPCO : l'empilement vaut 3 fois celui d'une personne, chaque ligne dit pour combien", () => {
     const un = construirePlanDuBloc(null, evaluees(), profil, 1);
     const trois = construirePlanDuBloc(null, evaluees(), profil, 3);
     // Une personne : Région 1 000, État 3 000, CPF plafonné au reste (200) ; trois personnes : trois fois chaque montant.
@@ -1923,7 +1923,7 @@ describe('plan d’un profil (bloc de personnes)', () => {
     expect(trois).toMatchObject({ coutFormation: 12600, totalFinance: 12600, resteACharge: 0 });
   });
 
-  it('le solde CPF est celui de chaque personne : multiplié par l’effectif, jamais dépassé', () => {
+  it("le solde CPF est celui de chaque personne : multiplié par l'effectif, jamais dépassé", () => {
     const maigre = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 100 });
     const trois = construirePlanDuBloc(null, evaluees(maigre), maigre, 3);
     // 3 × 100 € de solde pour un reste de 600 € : le CPF finance 300 €, il reste 300 €.
@@ -1931,7 +1931,7 @@ describe('plan d’un profil (bloc de personnes)', () => {
     expect(trois).toMatchObject({ totalFinance: 12300, resteACharge: 300 });
   });
 
-  it('la part de l’OPCO est reprise telle quelle (déjà valable pour le bloc), les aides à l’employeur aussi', () => {
+  it("la part de l'OPCO est reprise telle quelle (déjà valable pour le bloc), les aides à l'employeur aussi", () => {
     const part = repartirFinancement(calculateFunding(opcoGroupe(), etatGroupe(), 3), [3])[0];
     const plan = construirePlanDuBloc(part, [], makeProfil({ coutPedagogique: 5000, coutFraisAnnexes: 555 }), 3);
     expect(plan.coutFormation).toBe(16665);
@@ -1943,7 +1943,7 @@ describe('plan d’un profil (bloc de personnes)', () => {
     expect(plan.resteACharge).toBe(3240);
   });
 
-  it('jamais plus que le coût du bloc, jamais de reste négatif, quel que soit l’effectif', () => {
+  it("jamais plus que le coût du bloc, jamais de reste négatif, quel que soit l'effectif", () => {
     for (const nombre of [1, 2, 7, 99]) {
       const plan = construirePlanDuBloc(null, evaluees(), profil, nombre);
       expect(plan.totalFinance).toBeLessThanOrEqual(plan.coutFormation);
@@ -1987,7 +1987,7 @@ describe('fusion des plans des profils', () => {
     expect(fusionnerPlans([seul], ordres)).toBe(seul);
   });
 
-  it('coût, financé et reste s’additionnent en centimes entiers', () => {
+  it("coût, financé et reste s'additionnent en centimes entiers", () => {
     const fusion = fusionnerPlans(
       [plan({ coutFormation: 0.1, totalFinance: 0.1, resteACharge: 0 }), plan({ coutFormation: 0.2, totalFinance: 0, resteACharge: 0.2 })],
       ordres,
@@ -1995,7 +1995,7 @@ describe('fusion des plans des profils', () => {
     expect(fusion).toMatchObject({ coutFormation: 0.3, totalFinance: 0.1, resteACharge: 0.2 });
   });
 
-  it('les lignes de même identifiant s’additionnent, la fiabilité la plus faible l’emporte, les effectifs s’ajoutent', () => {
+  it("les lignes de même identifiant s'additionnent, la fiabilité la plus faible l'emporte, les effectifs s'ajoutent", () => {
     const a = plan({ financements: [ligne('opco-pdc', 3150, { personnes: 3 }), ligne('nat-cpf', 600, { personnes: 3 })] });
     const b = plan({ financements: [ligne('faf-fafcea', 1225, { personnes: 1 }), ligne('nat-cpf', 200, { confidence: 'estimated' })] });
     const fusion = fusionnerPlans([a, b], ordres);
@@ -2006,7 +2006,7 @@ describe('fusion des plans des profils', () => {
     ]);
   });
 
-  it('tri par ordre d’empilement (OPCO 10, dispositif de l’OPCO 12, aide du catalogue), puis par montant décroissant', () => {
+  it("tri par ordre d'empilement (OPCO 10, dispositif de l'OPCO 12, aide du catalogue), puis par montant décroissant", () => {
     const a = plan({ financements: [ligne('nat-cpf', 100), ligne('opco-catalogue', 50), ligne('opco-pdc', 10)] });
     const b = plan({ financements: [ligne('r11-region', 70), ligne('faf-fafcea', 500)] });
     expect(fusionnerPlans([a, b], ordres).financements.map((l) => l.id)).toEqual([
@@ -2018,7 +2018,7 @@ describe('fusion des plans des profils', () => {
     ]);
   });
 
-  it('aides à l’employeur, rémunérations et avantages : même fusion par identifiant', () => {
+  it("aides à l'employeur, rémunérations et avantages : même fusion par identifiant", () => {
     const a = plan({ aidesEmployeur: [ligne('opco-salaires', 1200)], remunerations: [ligne('nat-rfft', 700)] });
     const b = plan({ aidesEmployeur: [ligne('opco-salaires', 300), ligne('nat-embauche', 5000)], avantagesFiscauxSociaux: [ligne('fis-credit', 475)] });
     const fusion = fusionnerPlans([a, b], ordres);
@@ -2027,7 +2027,7 @@ describe('fusion des plans des profils', () => {
     expect(fusion.avantagesFiscauxSociaux.map((l) => l.id)).toEqual(['fis-credit']);
   });
 
-  it('options : somme des montants connus, nulle si aucun profil n’en a ; aides sans montant et services : réunion sans doublon', () => {
+  it("options : somme des montants connus, nulle si aucun profil n'en a ; aides sans montant et services : réunion sans doublon", () => {
     const option = (id: string, montantEstime: number | null) => ({ id, nom: id, financeurNom: 'F', montantEstime, raison: 'Au choix avec « X »' });
     const a = plan({ options: [option('o1', 100), option('o2', null)], nonChiffrees: [aide('nat-a')], servicesGratuits: [aide('nat-s')] });
     const b = plan({ options: [option('o1', 50), option('o2', null), option('o3', 20)], nonChiffrees: [aide('nat-a'), aide('nat-b')], servicesGratuits: [aide('nat-s')] });
@@ -2277,7 +2277,7 @@ describe('fusion des aides du catalogue', () => {
     { profil: pB, aides: [evaluerAide(aide, profilAidesB, AUJOURDHUI)] },
   ];
 
-  it('éligible pour un profil, non éligible pour l’autre : éligible, avec le seul profil concerné', () => {
+  it("éligible pour un profil, non éligible pour l'autre : éligible, avec le seul profil concerné", () => {
     const [a] = fusionnerAides(evaluer(makeAide({ ...ouvertes, id: 'nat-seniors', criteres: { age_min: 50 } })));
     expect(a).toMatchObject({ id: 'nat-seniors', statut: 'eligible', raisons: [], horsPerimetre: false });
     expect(a.profils).toEqual([{ profilId: 'profil-2', nombre: 2, statut: 'eligible', montantEstime: 1000 }]);
@@ -2302,7 +2302,7 @@ describe('fusion des aides du catalogue', () => {
     ]);
   });
 
-  it('à vérifier pour un profil, éligible pour l’autre : éligible ; à vérifier pour les deux : à vérifier, raisons réunies sans doublon', () => {
+  it("à vérifier pour un profil, éligible pour l'autre : éligible ; à vérifier pour les deux : à vérifier, raisons réunies sans doublon", () => {
     const exigeDiplome = makeAide({ ...ouvertes, id: 'nat-diplome', criteres: { niveaux_diplome: ['bac'] } });
     const [une] = fusionnerAides(evaluer(exigeDiplome));
     expect(une).toMatchObject({ statut: 'eligible', raisons: [] });
@@ -2329,7 +2329,7 @@ describe('fusion des aides du catalogue', () => {
     expect(c).toMatchObject({ statut: 'non_eligible', horsPerimetre: true });
   });
 
-  it('la liste fusionnée est triée comme une liste évaluée : éligibles d’abord, montant décroissant, puis nom', () => {
+  it("la liste fusionnée est triée comme une liste évaluée : éligibles d'abord, montant décroissant, puis nom", () => {
     const aides = [
       makeAide({ ...ouvertes, id: 'nat-b', nom: 'B', criteres: { age_min: 70 } }),
       makeAide({ ...ouvertes, id: 'nat-a', nom: 'A', montant: { ...makeAide().montant, valeur: 500 } }),
@@ -2349,7 +2349,7 @@ describe('fusion des aides du catalogue', () => {
     expect(fusion[0].profils).toBeUndefined();
   });
 
-  it('catalogue entier, deux profils : une entrée par aide, jamais d’aide perdue', () => {
+  it("catalogue entier, deux profils : une entrée par aide, jamais d'aide perdue", () => {
     const p = makeProfil();
     const q = makeProfil({ projet: 'formation_dirigeant', statutBeneficiaire: 'dirigeant', statutDirigeant: 'artisan', age: 52, rqth: true });
     const fusion = fusionnerAides([
@@ -2363,8 +2363,8 @@ describe('fusion des aides du catalogue', () => {
   });
 });
 
-describe('tri d’une liste évaluée', () => {
-  it('trierAidesEvaluees redonne l’ordre d’evaluerAides, quel que soit l’ordre d’entrée', () => {
+describe("tri d'une liste évaluée", () => {
+  it("trierAidesEvaluees redonne l'ordre d'evaluerAides, quel que soit l'ordre d'entrée", () => {
     const evaluees = evaluerAides(EMBEDDED_AIDES, makeProfil(), AUJOURDHUI);
     expect(trierAidesEvaluees([...evaluees].reverse())).toEqual(evaluees);
   });
@@ -3071,7 +3071,7 @@ Dans `apps/web/tests/parcours.test.ts`, remplacer `test("six étapes dans l'ordr
 Dans le même fichier, ajouter `champsDuProfilPrincipal` à l'importation de `@opco/core`, puis, juste après le test « garde : chaque champ du bénéficiaire est commun, propre à un statut, du groupe, ou non posé par le site » (dans le même `describe`, où `CHAMPS_BENEFICIAIRE` est lu), ajouter :
 
 ```ts
-  test('garde : un profil reprend toutes les questions de l’étape Participants (une question ajoutée à l’état sans l’ajouter au profil serait lue sur le profil principal pour tout le groupe)', () => {
+  test("garde : un profil reprend toutes les questions de l'étape Participants (une question ajoutée à l'état sans l'ajouter au profil serait lue sur le profil principal pour tout le groupe)", () => {
     const attendus = [
       ...CHAMPS_BENEFICIAIRE.filter((c) => !CHAMPS_NON_POSES.includes(c) && !CHAMPS_DU_GROUPE.includes(c)),
       'projetType', // posé à l'étape 0 dans types.ts, réponse de chaque profil
@@ -3094,8 +3094,8 @@ import { etiquettesDeSituation } from '../src/lib/situation';
 (`champsDuProfilPrincipal` rejoint l'importation de `@opco/core` existante.) Ajouter à la fin du fichier :
 
 ```ts
-describe('champs manquants d’un groupe (étape Participants)', () => {
-  test('un seul profil : les textes d’une personne seule, sans nom de profil, quel que soit l’effectif', () => {
+describe("champs manquants d'un groupe (étape Participants)", () => {
+  test("un seul profil : les textes d'une personne seule, sans nom de profil, quel que soit l'effectif", () => {
     assert.deepEqual(champsManquants('situation', etat()), ['le type de contrat']);
     assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi' })), []);
     assert.deepEqual(champsManquants('situation', etat({ nombrePersonnes: 4, contractType: 'cdi' })), []);
@@ -3122,7 +3122,7 @@ describe('champs manquants d’un groupe (étape Participants)', () => {
     ]);
   });
 
-  test('OPCO : requis dès qu’un profil n’est pas un dirigeant', () => {
+  test("OPCO : requis dès qu'un profil n'est pas un dirigeant", () => {
     const dirigeantSeul = etat({ projetType: 'formation_dirigeant', regionCode: '11', companySize: 'less_11' });
     assert.deepEqual(champsManquants('identification', dirigeantSeul), []);
     assert.deepEqual(champsManquants('identification', { ...dirigeantSeul, autresProfils: [extra('profil-2')] }), ["l'OPCO"]);
@@ -3133,10 +3133,10 @@ describe('champs manquants d’un groupe (étape Participants)', () => {
   });
 });
 
-describe('libellé d’un profil', () => {
+describe("libellé d'un profil", () => {
   const champs = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
 
-  test('statut, puis ce qui le précise, l’âge et la reconnaissance de travailleur handicapé', () => {
+  test("statut, puis ce qui le précise, l'âge et la reconnaissance de travailleur handicapé", () => {
     assert.equal(libelleDuProfil(champs({ projetType: 'formation_salarie', contractType: 'cdi', ageBeneficiaire: 35 })), `Salarié en CDI, 35${INSECABLE}ans`);
     assert.equal(
       libelleDuProfil(champs({ projetType: 'formation_dirigeant', statutDirigeant: 'artisan', ageBeneficiaire: 52, isHandicap: true })),
@@ -3155,13 +3155,13 @@ describe('libellé d’un profil', () => {
     assert.equal(libelleDuProfil(champs({ projetType: 'recrutement_demandeur_emploi' })), "Demandeur d'emploi");
   });
 
-  test('projet non choisi ou contrat « alternance » d’un reste de saisie : « Salarié » seul', () => {
+  test("projet non choisi ou contrat « alternance » d'un reste de saisie : « Salarié » seul", () => {
     assert.equal(libelleDuProfil(champs({ projetType: null })), 'Salarié');
     assert.equal(libelleDuProfil(champs({ projetType: 'formation_salarie', contractType: 'alternance' })), 'Salarié');
   });
 });
 
-describe('étiquettes de la situation d’un groupe', () => {
+describe("étiquettes de la situation d'un groupe", () => {
   test('rien pour une personne ; « N personnes » avec un profil ; « N personnes · M profils » avec plusieurs', () => {
     assert.deepEqual(etiquettesDeSituation(etat()), ['Former un salarié']);
     assert.deepEqual(etiquettesDeSituation(etat({ nombrePersonnes: 3 })), ['Former un salarié', `3${INSECABLE}personnes`]);
@@ -3542,7 +3542,7 @@ const plan = (over: Partial<PlanFinancement>): PlanFinancement => ({
   ...over,
 });
 
-describe('une personne : le calcul de l’écran rend ce qu’il rendait avant les groupes', () => {
+describe("une personne : le calcul de l'écran rend ce qu'il rendait avant les groupes", () => {
   test('les cinq scénarios', () => {
     for (const [nom, parcours] of Object.entries(SCENARIOS)) {
       const { groupe, ...apres } = calculer(etat(parcours), DATE);
@@ -3552,7 +3552,7 @@ describe('une personne : le calcul de l’écran rend ce qu’il rendait avant l
     }
   });
 
-  test('400 états tirés au hasard (graine 5), un seul profil d’une personne', () => {
+  test("400 états tirés au hasard (graine 5), un seul profil d'une personne", () => {
     const hasard = generateur(5);
     for (let i = 0; i < 400; i++) {
       const e = groupeAleatoire(hasard);
@@ -3568,7 +3568,7 @@ describe('un groupe de profils identiques', () => {
   const quatre = () => calculer(etat({ ...SCENARIOS.akto, nombrePersonnes: 4 }), DATE);
   const une = () => calculer(etat(SCENARIOS.akto), DATE);
 
-  test('quatre salariés : un profil, quatre personnes, le calcul de l’OPCO pour quatre', () => {
+  test("quatre salariés : un profil, quatre personnes, le calcul de l'OPCO pour quatre", () => {
     const r = quatre();
     assert.deepEqual([r.groupe.personnes, r.groupe.personnesPdc, r.groupe.blocs.length], [4, 4, 1]);
     assert.equal(r.funding?.personnes, 4);
@@ -3577,13 +3577,13 @@ describe('un groupe de profils identiques', () => {
     assert.ok(r.plan.financements.every((l) => l.personnes === 4));
   });
 
-  test('sans plafond annuel atteint, le financement de l’OPCO vaut 4 fois celui d’une personne ; sinon il ne le dépasse pas', () => {
+  test("sans plafond annuel atteint, le financement de l'OPCO vaut 4 fois celui d'une personne ; sinon il ne le dépasse pas", () => {
     const pdc = (r: ReturnType<typeof calculer>) => r.plan.financements.find((l) => l.id === 'opco-pdc')!.montant;
     if (quatre().funding?.budgetCapApplied) assert.ok(pdc(quatre()) <= 4 * pdc(une()) + 0.01);
     else assert.equal(pdc(quatre()), 4 * pdc(une()));
   });
 
-  test('une aide du catalogue : son montant par personne est celui d’une personne, le plan le multiplie', () => {
+  test("une aide du catalogue : son montant par personne est celui d'une personne, le plan le multiplie", () => {
     const r = quatre();
     const cpf = r.aidesEvaluees.find((a) => a.id === 'nat-cpf');
     const seul = une().aidesEvaluees.find((a) => a.id === 'nat-cpf');
@@ -3609,7 +3609,7 @@ describe('un groupe mixte : trois salariés et un dirigeant artisan', () => {
     return majProfil(e, 'profil-2', { statutDirigeant: 'artisan', microEntrepreneur: false, ageBeneficiaire: 45 });
   };
 
-  test('l’OPCO est calculé pour les trois salariés seulement, le dirigeant passe par ses aides', () => {
+  test("l'OPCO est calculé pour les trois salariés seulement, le dirigeant passe par ses aides", () => {
     const r = calculer(mixte(), DATE);
     assert.deepEqual([r.groupe.personnes, r.groupe.personnesPdc, r.groupe.blocs.length], [4, 3, 2]);
     assert.equal(r.funding?.personnes, 3);
@@ -3618,7 +3618,7 @@ describe('un groupe mixte : trois salariés et un dirigeant artisan', () => {
     assert.equal(r.plan.coutFormation, 3600); // 4 × 900 €
   });
 
-  test('le plan du groupe cumule la ligne de l’OPCO (3 personnes) et le fonds du dirigeant (1 personne)', () => {
+  test("le plan du groupe cumule la ligne de l'OPCO (3 personnes) et le fonds du dirigeant (1 personne)", () => {
     const r = calculer(mixte(), DATE);
     assert.equal(r.plan.financements.find((l) => l.id === 'opco-pdc')?.personnes, 3);
     assert.deepEqual(
@@ -3636,8 +3636,8 @@ describe('un groupe mixte : trois salariés et un dirigeant artisan', () => {
   });
 });
 
-describe('situations limites d’un groupe', () => {
-  test('aucun salarié (dirigeant et alternant) : pas de calcul de l’OPCO, même avec un OPCO connu', () => {
+describe("situations limites d'un groupe", () => {
+  test("aucun salarié (dirigeant et alternant) : pas de calcul de l'OPCO, même avec un OPCO connu", () => {
     let e = etat({ ...SCENARIOS.artisan, selectedOpcoSlug: 'akto', nombrePersonnes: 2 });
     e = ajouterProfil(e);
     e = changerProjetDuProfil(e, 'profil-2', 'alternance');
@@ -3649,7 +3649,7 @@ describe('situations limites d’un groupe', () => {
     assert.equal(r.groupe.personnes, 3);
   });
 
-  test('sans OPCO connu : pas de calcul de l’OPCO pour les salariés non plus', () => {
+  test("sans OPCO connu : pas de calcul de l'OPCO pour les salariés non plus", () => {
     const r = calculer(etat({ ...SCENARIOS.akto, selectedOpcoSlug: null, nombrePersonnes: 3 }), DATE);
     assert.equal(r.opco, undefined);
     assert.equal(r.funding, null);
@@ -3664,7 +3664,7 @@ describe('situations limites d’un groupe', () => {
     for (const n of [r.plan.coutFormation, r.plan.totalFinance, r.plan.resteACharge]) assert.ok(Number.isFinite(n));
   });
 
-  test('plafond annuel épuisé par le budget déjà consommé : rien de financé par l’OPCO pour le groupe, jamais de montant négatif', () => {
+  test("plafond annuel épuisé par le budget déjà consommé : rien de financé par l'OPCO pour le groupe, jamais de montant négatif", () => {
     const r = calculer(etat({ ...SCENARIOS.akto, nombrePersonnes: 5, budgetDejaConsomme: 10_000_000 }), DATE);
     assert.equal(r.plan.financements.find((l) => l.id === 'opco-pdc'), undefined);
     assert.ok(r.plan.resteACharge >= 0 && r.plan.totalFinance >= 0);
@@ -3672,7 +3672,7 @@ describe('situations limites d’un groupe', () => {
 });
 
 describe('1 000 groupes tirés au hasard (graine 17) : cohérence du plan, des parts et des textes', () => {
-  test('les profils s’additionnent en centimes, aucun plan ne dépasse son coût, rien n’est invalide', () => {
+  test("les profils s'additionnent en centimes, aucun plan ne dépasse son coût, rien n'est invalide", () => {
     const hasard = generateur(17);
     let avecPlusieursProfils = 0;
     let avecPlusieursSalaries = 0;
@@ -3711,7 +3711,7 @@ describe('1 000 groupes tirés au hasard (graine 17) : cohérence du plan, des p
     assert.ok(avecPlusieursSalaries >= 60, String(avecPlusieursSalaries));
   });
 
-  test('les textes du calcul d’un groupe, une fois rendus, ne contiennent aucun nombre à point (hors adresses et citations)', () => {
+  test("les textes du calcul d'un groupe, une fois rendus, ne contiennent aucun nombre à point (hors adresses et citations)", () => {
     const hasard = generateur(23);
     let textes = 0;
     for (let i = 0; i < 300; i++) {
@@ -3726,7 +3726,7 @@ describe('1 000 groupes tirés au hasard (graine 17) : cohérence du plan, des p
     assert.ok(textes > 1000, String(textes));
   });
 
-  test('l’encadré « aucun financement chiffré » ne dit rien de faux sur un groupe', () => {
+  test("l'encadré « aucun financement chiffré » ne dit rien de faux sur un groupe", () => {
     const hasard = generateur(29);
     let controles = 0;
     for (let i = 0; i < 600; i++) {
@@ -3747,7 +3747,7 @@ describe('1 000 groupes tirés au hasard (graine 17) : cohérence du plan, des p
 });
 
 describe('notes sous le bandeau pour un groupe (notesOpco)', () => {
-  test('un seul projet : les notes d’une personne seule', () => {
+  test("un seul projet : les notes d'une personne seule", () => {
     assert.deepEqual(notesOpco(['formation_salarie'], true), [{ genre: 'sans-opco', titre: 'Aucun OPCO renseigné' }]);
     assert.deepEqual(notesOpco(['formation_salarie', 'formation_salarie'], false), []);
     assert.deepEqual(notesOpco(['formation_dirigeant'], true), [
@@ -3760,7 +3760,7 @@ describe('notes sous le bandeau pour un groupe (notesOpco)', () => {
     assert.deepEqual(notesOpco([null], true), [{ genre: 'sans-opco', titre: 'Aucun OPCO renseigné' }]);
   });
 
-  test('plusieurs projets : chaque note qui s’applique, une fois', () => {
+  test("plusieurs projets : chaque note qui s'applique, une fois", () => {
     assert.deepEqual(notesOpco(['formation_salarie', 'formation_dirigeant'], false), [
       { genre: 'dirigeant', titre: 'OPCO non compté pour le dirigeant du groupe' },
     ]);
@@ -4135,7 +4135,7 @@ Dans `apps/web/tests/groupe.test.ts`, ajouter aux importations `inconnuesApresMa
 describe('réponses « Je ne sais pas » par profil', () => {
   const vides = champsDuProfilPrincipal(createInitialWizardState());
 
-  test('une réponse « Je ne sais pas » s’ajoute au profil concerné, sans toucher aux autres', () => {
+  test("une réponse « Je ne sais pas » s'ajoute au profil concerné, sans toucher aux autres", () => {
     const a = inconnuesApresMaj({}, 'profil-2', { inscritFranceTravail: null }, 'inscritFranceTravail');
     assert.deepEqual([...a['profil-2']], ['inscritFranceTravail']);
     const b = inconnuesApresMaj(a, 'profil-3', { microEntrepreneur: null }, 'microEntrepreneur');
@@ -5214,7 +5214,7 @@ describe('prix du groupe : coutDuGroupe et aideDuPrix', () => {
   const nb = INSECABLE;
   const avec = (over: Partial<WizardState>): WizardState => ({ ...createInitialWizardState(), ...over });
 
-  test('coutDuGroupe : le prix saisi pour le groupe, sinon le coût d’une personne multiplié par l’effectif, au centime', () => {
+  test("coutDuGroupe : le prix saisi pour le groupe, sinon le coût d'une personne multiplié par l'effectif, au centime", () => {
     assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: 933.33, nombrePersonnes: 6 })), 5599.98);
     assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: 933.3333333333334, nombrePersonnes: 6, prixDuGroupe: 5600 })), 5600);
     assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: null, nombrePersonnes: 6 })), null);
@@ -5222,7 +5222,7 @@ describe('prix du groupe : coutDuGroupe et aideDuPrix', () => {
     assert.equal(coutDuGroupe(deuxProfils), 5000);
   });
 
-  test('aideDuPrix : le prix de l’autre mode ; rien sous deux personnes, sans prix ou avec un prix invalide', () => {
+  test("aideDuPrix : le prix de l'autre mode ; rien sous deux personnes, sans prix ou avec un prix invalide", () => {
     assert.equal(aideDuPrix(6, 933.33, false), `Soit ${formatEuro(5599.98)} pour les 6${nb}personnes.`);
     assert.equal(aideDuPrix(6, 933.3333333333334, true), `Soit ${formatEuro(933.33)} par personne.`);
     assert.equal(aideDuPrix(4, 2800, false), `Soit ${formatEuro(11200)} pour les 4${nb}personnes.`);
@@ -5968,7 +5968,7 @@ L'écran garde ses composants : un groupe n'ajoute que le détail par profil, de
 Dans `apps/web/tests/resultats-groupe.test.ts`, ajouter `concerneAAfficher` à l'importation de `../src/lib/resultats`, puis ajouter à la fin du fichier :
 
 ```ts
-describe('bloc « Concerne » d’une carte d’aide (concerneAAfficher)', () => {
+describe("bloc « Concerne » d'une carte d'aide (concerneAAfficher)", () => {
   const libelles = new Map([
     ['principal', 'Profil 1 · Salarié en CDI'],
     ['profil-2', 'Profil 2 · Dirigeant artisan'],
@@ -5983,7 +5983,7 @@ describe('bloc « Concerne » d’une carte d’aide (concerneAAfficher)', () =>
     );
   });
 
-  test('un profil au moins n’est pas concerné : le bloc nomme les profils concernés', () => {
+  test("un profil au moins n'est pas concerné : le bloc nomme les profils concernés", () => {
     assert.deepEqual(concerneAAfficher({ statut: 'eligible', profils: [vue('profil-2', 1, 'eligible')] }, 2, libelles), [
       `Profil 2 · Dirigeant artisan, 1${nb}personne${nb}: éligible`,
     ]);
