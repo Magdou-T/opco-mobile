@@ -474,6 +474,17 @@ export interface WizardState {
   /** Région de résidence du bénéficiaire, si différente de celle de l'entreprise. */
   regionBeneficiaireCode: CodeRegion | null;
 
+  // Étape 2 bis : personnes formées (plusieurs personnes, profils différents)
+  /** Personnes qui ont le profil principal (les champs de l'étape 2 ci-dessus) ; 1 par défaut. */
+  nombrePersonnes: number;
+  /** Profils supplémentaires du groupe, dans l'ordre de saisie ; vide par défaut. */
+  autresProfils: ProfilSupplementaire[];
+  /**
+   * Prix de la formation pour tout le groupe (euros) ; null : `pedagogyCostTotal` est saisi par personne. Renseigné, il
+   * impose `pedagogyCostTotal = prixDuGroupe / personnes` (le parcours du site le maintient) ; le moteur ne le lit jamais.
+   */
+  prixDuGroupe: number | null;
+
   // Étape 3 : formation
   formationNom: string | null;
   formationType: TrainingType | null;
@@ -499,6 +510,38 @@ export interface WizardState {
   needsMeals: boolean;
   mealCostPerDay: number | null;
   trainingDays: number | null;
+}
+
+// --- Plusieurs personnes formées en même temps ---
+
+/** Profils au plus dans un groupe (le profil principal et cinq autres). */
+export const MAX_PROFILS = 6;
+/** Personnes au plus dans un groupe, tous profils confondus. */
+export const MAX_PERSONNES = 99;
+
+/** Ce qui décrit une personne formée : les réponses de l'étape « Participants », projet compris. */
+export type ChampsProfil = Pick<
+  WizardState,
+  | 'projetType'
+  | 'contractType'
+  | 'anciennete_mois'
+  | 'isHandicap'
+  | 'ageBeneficiaire'
+  | 'niveauDiplome'
+  | 'typeAlternance'
+  | 'inscritFranceTravail'
+  | 'statutDirigeant'
+  | 'microEntrepreneur'
+  | 'soldeCpf'
+  | 'regionBeneficiaireCode'
+>;
+
+/** Profil supplémentaire d'un groupe : ses réponses, son identifiant et le nombre de personnes qui l'ont. */
+export interface ProfilSupplementaire extends ChampsProfil {
+  /** 'profil-2', 'profil-3'… : stable tant que le profil existe (clé d'affichage, lien profil / aide). */
+  id: string;
+  /** Nombre de personnes qui ont ce profil, de 1 à MAX_PERSONNES. */
+  nombre: number;
 }
 
 // --- Calculation Result Types ---
@@ -695,6 +738,9 @@ export function createInitialWizardState(): WizardState {
     microEntrepreneur: null,
     soldeCpf: null,
     regionBeneficiaireCode: null,
+    nombrePersonnes: 1,
+    autresProfils: [],
+    prixDuGroupe: null,
     formationNom: null,
     formationType: null,
     certificationLevel: null,

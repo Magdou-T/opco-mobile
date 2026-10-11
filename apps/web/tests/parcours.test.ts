@@ -49,6 +49,8 @@ import { texteDonnees } from '../src/lib/format';
 
 /** Champs de l'app mobile que le site ne pose plus : ils restent à leur valeur initiale. */
 const CHAMPS_NON_POSES = ['isReconversion', 'isSortieChomage'];
+/** Champs du groupe (étape Participants) : posés par l'étape 3 pour tous les projets, jamais masqués par un projet. */
+const CHAMPS_DU_GROUPE = ['nombrePersonnes', 'autresProfils', 'prixDuGroupe'];
 
 const PROJETS: ProjetType[] = [
   'formation_salarie',
@@ -247,9 +249,9 @@ describe('changement de projet (etatDepuisProjet)', () => {
     assert.deepEqual([...QUESTIONS_COMMUNES].sort(), ['ageBeneficiaire', 'isHandicap', 'niveauDiplome']);
   });
 
-  test('garde : chaque champ du bénéficiaire est commun, propre à un statut, ou non posé par le site', () => {
+  test('garde : chaque champ du bénéficiaire est commun, propre à un statut, du groupe, ou non posé par le site', () => {
     assert.ok(CHAMPS_BENEFICIAIRE.length >= 10, `seulement ${CHAMPS_BENEFICIAIRE.length} champs lus`);
-    const classes = [...QUESTIONS_COMMUNES, ...PROPRES, ...CHAMPS_NON_POSES];
+    const classes = [...QUESTIONS_COMMUNES, ...PROPRES, ...CHAMPS_NON_POSES, ...CHAMPS_DU_GROUPE];
     assert.equal(new Set(classes).size, classes.length, 'un champ est classé deux fois');
     assert.deepEqual([...classes].sort(), [...CHAMPS_BENEFICIAIRE].sort());
   });
