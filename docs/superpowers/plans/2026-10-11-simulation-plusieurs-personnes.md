@@ -4258,7 +4258,7 @@ import type { PlanFinancement, ProjetType, WizardState } from '@opco/core';
 import { ouvreBudgetOpco } from '../src/lib/entreprise';
 import { formatEuro, texteMoteur } from '../src/lib/format';
 import { INSECABLE } from '../src/lib/insecable';
-import { ajouterProfil, changerProjetDuProfil, definirNombre, majProfil } from '../src/lib/groupe';
+import { ajouterProfil, changerProjetDuProfil, definirNombre, etatDepuisPrix, majProfil } from '../src/lib/groupe';
 import { coutsDeFormation } from '../src/lib/parcours';
 import {
   calculer,
@@ -4472,6 +4472,41 @@ describe('un groupe mixte : trois salariés et un dirigeant artisan', () => {
     const r = calculer(mixte(), DATE);
     const faf = r.aidesEvaluees.find((a) => a.id === 'faf-fafcea');
     assert.deepEqual(faf?.profils?.map((p) => [p.profilId, p.nombre, p.statut, p.montantEstime]), [['profil-2', 1, 'eligible', 735]]);
+  });
+});
+
+describe('le coût de la formation du groupe est exactement le prix saisi', () => {
+  // Trois profils d'une personne (le profil principal et deux profils supplémentaires de même statut), prix saisi pour le groupe.
+  const profilsD = (n: number, prixDuGroupe: number) => {
+    let e = etat({ ...SCENARIOS.akto, selectedOpcoSlug: null, nombrePersonnes: 1 });
+    for (let i = 1; i < n; i++) e = ajouterProfil(e);
+    return etatDepuisPrix(e, prixDuGroupe, 140, true);
+  };
+
+  test("1 000 € pour trois profils d'une personne : le plan coûte 1 000 €, réparti 333,34 / 333,33 / 333,33 (jamais 999,99 €)", () => {
+    const r = calculer(profilsD(3, 1000), DATE);
+    assert.equal(r.plan.coutFormation, 1000);
+    assert.deepEqual(r.groupe.blocs.map((b) => b.plan.coutFormation), [333.34, 333.33, 333.33]);
+  });
+
+  test("1 000 € pour six profils d'une personne : le plan coûte 1 000 €, jamais 1 000,02 €", () => {
+    const r = calculer(profilsD(6, 1000), DATE);
+    assert.equal(r.plan.coutFormation, 1000);
+    assert.deepEqual(r.groupe.blocs.map((b) => b.plan.coutFormation), [166.67, 166.67, 166.67, 166.67, 166.66, 166.66]);
+  });
+
+  test("un seul profil de trois personnes : le coût d'une personne multiplié par trois, sans répartition", () => {
+    let e = etat({ ...SCENARIOS.akto, selectedOpcoSlug: null, nombrePersonnes: 3 });
+    e = etatDepuisPrix(e, 1000, 140, true);
+    const r = calculer(e, DATE);
+    assert.equal(r.plan.coutFormation, 1000);
+    assert.equal(r.groupe.blocs.length, 1);
+  });
+
+  test("coût par personne au centime : le plan du groupe vaut ce coût multiplié par l'effectif, quels que soient les profils", () => {
+    let e = etat({ ...SCENARIOS.akto, selectedOpcoSlug: null, nombrePersonnes: 2, ...coutsDeFormation(800.2, 35) });
+    e = definirNombre(ajouterProfil(e), 'profil-2', 3);
+    assert.equal(calculer(e, DATE).plan.coutFormation, 4001);
   });
 });
 
@@ -4707,6 +4742,7 @@ import {
   getEmbeddedOpcoBySlug,
   profilDepuisWizard,
   profilsDuGroupe,
+  repartirCentimes,
   repartirFinancement,
   resolveVarianteBranche,
 } from '@opco/core';
@@ -4770,6 +4806,10 @@ export interface ResultatGroupe {
  *   de l'entreprise) ; son résultat se répartit entre ces profils en centimes entiers ; chaque profil construit son plan
  *   (`construirePlanDuBloc`) ; `plan` et `aidesEvaluees` sont les fusions de ceux des profils. `funding` est le calcul de
  *   l'OPCO du groupe entier. Pour une personne seule, tout est ce que l'écran calculait avant les groupes.
+ * - Coût pédagogique : avec plusieurs profils, le coût du groupe (celui d'une personne multiplié par l'effectif, au centime)
+ *   se répartit entre les profils en centimes entiers (plus grands restes, comme le résultat de l'OPCO), pour que la somme
+ *   des plans des profils soit exactement le prix du groupe (1 000 € pour trois profils d'une personne : 333,34, 333,33 et
+ *   333,33 €, jamais 999,99 €). Les aides se jugent sur le coût réel d'une personne ; seul le plan du profil porte la part.
  */
 export function calculer(state: WizardState, aujourdhui: string) {
   const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
@@ -4792,12 +4832,24 @@ export function calculer(state: WizardState, aujourdhui: string) {
     : [];
   const variante = opco ? resolveVarianteBranche(opco, effectiveState) : null;
   const dateRef = dateDeReference(effectiveState.dateDebutFormation, aujourdhui);
-  const blocs: BlocResultat[] = profils.map((profil) => {
+  const personnes = profils.reduce((somme, p) => somme + p.nombre, 0);
+  // Plusieurs profils : le coût pédagogique du groupe, réparti en centimes entiers ; un seul profil : rien à répartir.
+  const coutsPedagogiques =
+    profils.length > 1 && effectiveState.pedagogyCostTotal != null
+      ? repartirCentimes(
+          Math.round(effectiveState.pedagogyCostTotal * personnes * 100),
+          profils.map((p) => p.nombre),
+        )
+      : null;
+  const blocs: BlocResultat[] = profils.map((profil, i) => {
     const profilAides = profilDepuisWizard(etatDuProfil(effectiveState, profil), slug);
     const aides = evaluerAides(EMBEDDED_AIDES, profilAides, dateRef);
     const rang = profilsPdc.indexOf(profil);
     const part = rang >= 0 ? parts[rang] : null;
-    return { profil, profilAides, aides, funding: part, plan: construirePlanDuBloc(part, aides, profilAides, profil.nombre) };
+    const profilDuPlan = coutsPedagogiques
+      ? { ...profilAides, coutPedagogique: coutsPedagogiques[i] / 100 / profil.nombre }
+      : profilAides;
+    return { profil, profilAides, aides, funding: part, plan: construirePlanDuBloc(part, aides, profilDuPlan, profil.nombre) };
   });
   const aidesEvaluees = fusionnerAides(blocs.map((b) => ({ profil: b.profil, aides: b.aides })));
   const plan = fusionnerPlans(
@@ -4806,11 +4858,7 @@ export function calculer(state: WizardState, aujourdhui: string) {
   );
   const profil = blocs[0].profilAides;
   const portail = EMBEDDED_PORTAILS.find((p) => p.region === profil.regionEntreprise) ?? null;
-  const groupe: ResultatGroupe = {
-    personnes: profils.reduce((somme, p) => somme + p.nombre, 0),
-    personnesPdc,
-    blocs,
-  };
+  const groupe: ResultatGroupe = { personnes, personnesPdc, blocs };
   return { opco, projet, funding, variante, profil, aidesEvaluees, plan, portail, groupe };
 }
 ```
@@ -6046,7 +6094,7 @@ EOF
 
 - [ ] **Step 1 : écrire les tests qui échouent**
 
-Dans `apps/web/tests/groupe.test.ts`, ajouter aux importations `aideDuPrix` et `coutDuGroupe` (de `../src/lib/groupe`), `import { formatEuro } from '../src/lib/format';` et `import { INSECABLE } from '../src/lib/insecable';`, puis ajouter à la fin du fichier :
+Dans `apps/web/tests/groupe.test.ts`, ajouter aux importations `aideDuPrix`, `auCentime` et `coutDuGroupe` (de `../src/lib/groupe`), `import { formatEuro } from '../src/lib/format';` et `import { INSECABLE } from '../src/lib/insecable';`, puis ajouter à la fin du fichier :
 
 ```ts
 describe('prix du groupe : coutDuGroupe et aideDuPrix', () => {
@@ -6069,6 +6117,17 @@ describe('prix du groupe : coutDuGroupe et aideDuPrix', () => {
     assert.equal(aideDuPrix(4, null, true), null);
     assert.equal(aideDuPrix(4, 0, false), null);
     assert.equal(aideDuPrix(4, Number.NaN, true), null);
+  });
+
+  test("auCentime : l'état garde le coût réel, le champ du prix n'affiche que des centimes (aller-retour par personne, groupe, par personne)", () => {
+    const parPersonne = etatDepuisPrix(avec({ nombrePersonnes: 3 }), 800.2, 35, false);
+    const groupe = basculerModePrix(parPersonne, true);
+    assert.equal(groupe.prixDuGroupe, 2400.6);
+    const retour = basculerModePrix(groupe, false);
+    assert.notEqual(retour.pedagogyCostTotal, 800.2); // 800.1999999999999 : le coût réel garde son reste de virgule flottante
+    assert.equal(auCentime(retour.pedagogyCostTotal), 800.2);
+    assert.equal(auCentime(333.3333333333333), 333.33);
+    assert.equal(auCentime(null), null);
   });
 });
 ```
@@ -6103,6 +6162,13 @@ export function coutDuGroupe(
   if (etat.pedagogyCostTotal == null) return null;
   return Math.round(etat.pedagogyCostTotal * nombreDePersonnes(etat) * 100) / 100;
 }
+
+/**
+ * Montant arrondi au centime pour le champ du prix. L'état garde le coût réel, non arrondi (le prix du groupe divisé par
+ * l'effectif, 800,1999999999999 € pour 2 400,60 € et 3 personnes) : le champ n'en affiche que les centimes (« 800,2 »)
+ * et n'écrit jamais dans l'état le nombre affiché.
+ */
+export const auCentime = (montant: number | null): number | null => (montant == null ? null : Math.round(montant * 100) / 100);
 
 /**
  * Aide sous le champ du prix à partir de deux personnes : le prix de l'autre mode. Prix saisi pour le groupe : « Soit
@@ -6140,7 +6206,7 @@ par
 ```tsx
 import type { ActionsDuGroupe } from '@/hooks/useWizard';
 import { de, formatEuro } from '@/lib/format';
-import { aideDuPrix, ouvreBudgetPourLeGroupe } from '@/lib/groupe';
+import { aideDuPrix, auCentime, ouvreBudgetPourLeGroupe } from '@/lib/groupe';
 import { INSECABLE } from '@/lib/insecable';
 ```
 
@@ -6283,7 +6349,7 @@ par
             required
             decimal
             euros
-            value={prixSaisi}
+            value={auCentime(prixSaisi)}
             onChange={(saisie) => updateFormationCosts(saisie, state.durationHours, pourLeGroupe)}
             min={1}
             placeholder="Ex&nbsp;: 5600"
