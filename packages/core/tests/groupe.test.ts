@@ -539,17 +539,62 @@ describe("plan d'un profil (bloc de personnes)", () => {
     }
   });
 
-  it("n personnes identiques : n fois chaque montant de l'empilement d'une personne, pour 2, 7 ou 99 personnes", () => {
-    for (const nombre of [2, 7, 99]) {
-      const plan = construirePlanDuBloc(null, evaluees(), profil, nombre);
-      expect(paires(plan.financements), `effectif ${nombre}`).toEqual([
-        ['r11-region', 1000 * nombre],
-        ['nat-etat', 3000 * nombre],
-        ['nat-cpf', 200 * nombre],
+  it("un effectif hors de 1 à 99 est ramené à un entier de 1 à 99 : NaN, l'infini, 0 et -2 valent 1, 2,5 vaut 2, 150 vaut 99", () => {
+    // 4 000 € de pédagogie et 200 € de frais par personne ; un solde CPF de 100 € par personne, partagé entre deux aides : il borne
+    // le CPF à 100 € par personne (la seconde aide n'a plus rien à prélever), donc il doit suivre l'effectif ramené.
+    const p = makeProfil({ coutPedagogique: 4000, coutFraisAnnexes: 200, soldeCpf: 100 });
+    const secondSoldeCpf = makeAide({
+      id: 'nat-vae',
+      financeur: 'cpf',
+      montant: { ...makeAide().montant, mode: 'solde_cpf', valeur: null, libelle: 'Solde CPF disponible (VAE)' },
+    });
+    const catalogue = [soldeCpf, secondSoldeCpf, forfait('r11-region', 'region', 1000), forfait('nat-etat', 'etat', 3000)].map((a) =>
+      evaluerAide(a, p, AUJOURDHUI),
+    );
+    const ramenes: [number, number][] = [
+      [Number.NaN, 1],
+      [Number.POSITIVE_INFINITY, 1],
+      [2.5, 2],
+      [150, 99],
+      [0, 1],
+      [-2, 1],
+    ];
+    for (const [saisi, n] of ramenes) {
+      const plan = construirePlanDuBloc(null, catalogue, p, saisi);
+      // Par personne : Région 1 000 €, État 3 000 €, CPF 100 € sur 4 200 € de coût ; pour n personnes, n fois chaque montant.
+      expect(paires(plan.financements), `effectif ${saisi}`).toEqual([
+        ['r11-region', 1000 * n],
+        ['nat-etat', 3000 * n],
+        ['nat-cpf', 100 * n],
       ]);
-      expect(plan.financements.every((l) => l.personnes === nombre)).toBe(true);
-      expect(plan).toMatchObject({ coutFormation: 4200 * nombre, totalFinance: 4200 * nombre, resteACharge: 0 });
+      expect(plan, `effectif ${saisi}`).toMatchObject({ coutFormation: 4200 * n, totalFinance: 4100 * n, resteACharge: 100 * n });
+      // `personnes` vaut l'effectif ramené à partir de deux personnes ; pour une personne, la ligne n'en porte pas.
+      expect(plan.financements.map((l) => l.personnes), `effectif ${saisi}`).toEqual(n > 1 ? [n, n, n] : [undefined, undefined, undefined]);
     }
+  });
+
+  it("montants décimaux : 3 × (0,10 € + 0,20 €) font exactement 0,90 €, l'État verse 0,30 €, il reste 0,60 € et coût moins reste égale financé", () => {
+    const decimal = makeProfil({ coutPedagogique: 0.1, coutFraisAnnexes: 0.2, soldeCpf: null });
+    const catalogue = [forfait('nat-etat', 'etat', 0.1)].map((a) => evaluerAide(a, decimal, AUJOURDHUI));
+    const plan = construirePlanDuBloc(null, catalogue, decimal, 3);
+    // Calcul à la main, en centimes : coût 3 × (10 + 20) = 90 ; l'État verse 3 × 10 = 30 ; il reste 90 - 30 = 60 ; financé 90 - 60 = 30.
+    // En flottants, chaque étape garde un bruit que le plan doit arrondir : 0,1 × 3 + 0,2 × 3 = 0,9000000000000001 ; 0,9 - 0,3 = 0,6000000000000001 ;
+    // 0,9 - 0,6 = 0,30000000000000004.
+    expect(plan.coutFormation).toBe(0.9);
+    expect(plan.financements.map((l) => [l.id, l.montant, l.personnes])).toEqual([['nat-etat', 0.3, 3]]);
+    expect(plan.resteACharge).toBe(0.6);
+    expect(plan.totalFinance).toBe(0.3);
+    expect(Math.round((plan.coutFormation - plan.resteACharge) * 100)).toBe(Math.round(plan.totalFinance * 100));
+  });
+
+  it('solde CPF décimal : 3 × 0,29 € de solde font exactement 0,87 € prélevés sur le CPF', () => {
+    const decimal = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 0.29 });
+    const plan = construirePlanDuBloc(null, evaluees(decimal), decimal, 3);
+    // Coût du bloc 12 600 € : Région 3 000 €, État 9 000 €, il reste 600 € ; le solde du bloc est 3 × 0,29 = 0,87 € (en flottants 0,8699999999999999),
+    // le CPF en prélève 0,87 €, il reste 599,13 € et 12 000,87 € sont financés.
+    expect(paires(plan.financements).at(-1)).toEqual(['nat-cpf', 0.87]);
+    expect(plan.resteACharge).toBe(599.13);
+    expect(plan.totalFinance).toBe(12000.87);
   });
 
   it("chaque catégorie d'aide est multipliée par l'effectif, et les quatre listes de lignes disent pour combien de personnes", () => {
@@ -736,14 +781,6 @@ describe('fusion des plans des profils', () => {
     expect(fusionnerPlans([], ordres)).toEqual(plan({}));
   });
 
-  it("trois plans : coût, financé et reste s'additionnent en centimes entiers (0,1 + 0,2 + 0,3 = 0,6)", () => {
-    const fusion = fusionnerPlans(
-      [plan({ coutFormation: 0.1, totalFinance: 0.1 }), plan({ coutFormation: 0.2, resteACharge: 0.2 }), plan({ coutFormation: 0.3, totalFinance: 0.3 })],
-      ordres,
-    );
-    expect(fusion).toMatchObject({ coutFormation: 0.6, totalFinance: 0.4, resteACharge: 0.2 });
-  });
-
   it('la fiabilité de deux lignes de même identifiant est la plus faible des deux, pour chaque paire et dans les deux sens', () => {
     const echelle = ['depends_on_branche', 'estimated', 'exact'] as const; // du plus faible au plus fort
     for (const a of echelle) {
@@ -815,23 +852,30 @@ describe('fusion des plans des profils', () => {
     ]);
   });
 
-  it("options sur trois plans : somme en centimes, un montant connu seul n'est jamais arrondi, nom, financeur et raison de la première occurrence, ordre d'arrivée", () => {
+  it("options sur trois plans : somme des montants connus, nulle si aucun profil n'en a, nom, financeur et raison de la première occurrence, ordre d'arrivée", () => {
     const a = plan({
-      options: [optionDe('o-b', 0.1, { nom: 'Premier', financeurNom: 'F1', raison: 'R1' }), optionDe('o-c', null), optionDe('o-a', 7.005)],
+      options: [
+        optionDe('o-b', 0.1, { nom: 'Premier', financeurNom: 'F1', raison: 'R1' }),
+        optionDe('o-c', null),
+        optionDe('o-a', 7.01),
+        optionDe('o-f', null),
+      ],
     });
     const b = plan({
       options: [
         optionDe('o-b', 0.2, { nom: 'Second', financeurNom: 'F2', raison: 'R2' }),
-        optionDe('o-c', 12.345),
+        optionDe('o-c', 12.35),
         optionDe('o-a', null),
         optionDe('o-d', null),
+        optionDe('o-f', null),
       ],
     });
     const c = plan({ options: [optionDe('o-b', 0.3, { nom: 'Troisième' }), optionDe('o-d', 2), optionDe('o-e', 4)] });
     expect(fusionnerPlans([a, b, c], ordres).options).toEqual([
       optionDe('o-b', 0.6, { nom: 'Premier', financeurNom: 'F1', raison: 'R1' }),
-      optionDe('o-c', 12.345),
-      optionDe('o-a', 7.005),
+      optionDe('o-c', 12.35),
+      optionDe('o-a', 7.01),
+      optionDe('o-f', null),
       optionDe('o-d', 2),
       optionDe('o-e', 4),
     ]);
@@ -877,7 +921,7 @@ describe('fusion des plans des profils', () => {
     expect(JSON.stringify([a, b])).toBe(avant);
   });
 
-  it("n profils identiques : la fusion de n plans d'une personne est le plan du bloc de n personnes", () => {
+  it("n profils identiques, aides chiffrées au centime par personne et services gratuits sans montant : la fusion de n plans d'une personne est le plan du bloc de n personnes", () => {
     const p = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 1500 });
     const catalogue = [
       soldeCpf,
@@ -892,7 +936,13 @@ describe('fusion des plans des profils', () => {
       aideDe('nat-service', 'service_gratuit', null),
     ].map((a) => evaluerAide(a, p, AUJOURDHUI));
     const une = construirePlan(null, catalogue, p);
-    // Une personne : Région 1 000, État 2 000 puis 1 000, CPF plafonné au reste (200) ; le plan contient les sept rubriques.
+    // Garde de non-vide : chacune des sept rubriques du plan d'une personne est renseignée, sinon le test perdrait sa couverture en silence si une fixture changeait.
+    for (const rubrique of ['financements', 'aidesEmployeur', 'remunerations', 'avantagesFiscauxSociaux', 'options', 'nonChiffrees', 'servicesGratuits'] as const) {
+      expect(une[rubrique], rubrique).not.toHaveLength(0);
+    }
+    // Condition du titre pour les services : aucun n'a de montant (le plan d'un bloc multiplierait celui qu'il aurait).
+    expect(une.servicesGratuits.every((s) => s.montantEstime == null)).toBe(true);
+    // Une personne : Région 1 000, État 2 000 puis 1 000, CPF plafonné au reste (200).
     expect(une.financements.map((l) => [l.id, l.montant])).toEqual([['r11-region', 1000], ['nat-etat', 2000], ['nat-etat-bis', 1000], ['nat-cpf', 200]]);
     for (const nombre of [2, 3, 7, 99]) {
       const fusion = fusionnerPlans(Array.from({ length: nombre }, () => une), catalogue);

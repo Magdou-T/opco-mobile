@@ -168,7 +168,9 @@ export function repartirFinancement(r: FundingResult, effectifs: readonly number
  * (une aide limitée au coût d'une personne le reste au coût du bloc), de sorte que l'empilement (ordre, plafond au reste
  * à charge, solde CPF partagé, aides « au choix ») suit les règles d'une personne, appliquées aux montants du bloc.
  * Pour une seule personne, c'est exactement `construirePlan`. Chaque ligne du plan d'un bloc de plusieurs personnes porte
- * `personnes`.
+ * `personnes`. Comme partout dans ce fichier, `nombre` est ramené à un entier de 1 à MAX_PERSONNES (99) : une valeur non
+ * finie, nulle ou négative vaut une personne, une valeur décimale est arrondie à l'entier inférieur (2,5 vaut 2), une valeur
+ * supérieure à 99 vaut 99 ; `personnes` porte cet effectif ramené.
  */
 export function construirePlanDuBloc(
   opco: FundingResult | null,
@@ -176,19 +178,20 @@ export function construirePlanDuBloc(
   profil: ProfilAides,
   nombre: number,
 ): PlanFinancement {
-  if (nombre <= 1) return construirePlan(opco, [...aides], profil);
-  const fois = (montant: number | null): number | null => (montant == null ? null : enEuros(enCentimes(montant * nombre)));
+  const n = effectifValide(nombre);
+  if (n <= 1) return construirePlan(opco, [...aides], profil);
+  const fois = (montant: number | null): number | null => (montant == null ? null : enEuros(enCentimes(montant * n)));
   const plan = construirePlan(
     opco,
     aides.map((a) => ({ ...a, montantEstime: fois(a.montantEstime) })),
     {
       ...profil,
-      coutPedagogique: profil.coutPedagogique == null ? null : profil.coutPedagogique * nombre,
-      coutFraisAnnexes: profil.coutFraisAnnexes * nombre,
-      soldeCpf: profil.soldeCpf == null ? null : profil.soldeCpf * nombre,
+      coutPedagogique: profil.coutPedagogique == null ? null : profil.coutPedagogique * n,
+      coutFraisAnnexes: profil.coutFraisAnnexes * n,
+      soldeCpf: profil.soldeCpf == null ? null : profil.soldeCpf * n,
     },
   );
-  const marquer = (lignes: LignePlan[]): LignePlan[] => lignes.map((l) => ({ ...l, personnes: nombre }));
+  const marquer = (lignes: LignePlan[]): LignePlan[] => lignes.map((l) => ({ ...l, personnes: n }));
   return {
     ...plan,
     financements: marquer(plan.financements),
@@ -202,12 +205,14 @@ const POIDS_FIABILITE: Record<Confidence, number> = { depends_on_branche: 0, est
 const plusFaible = (a: Confidence, b: Confidence): Confidence => (POIDS_FIABILITE[a] <= POIDS_FIABILITE[b] ? a : b);
 
 /**
- * Plan du groupe : la fusion des plans de ses profils. Un seul plan : rendu tel quel. Sinon, coût, financé et reste
- * s'additionnent en centimes entiers ; les lignes de même identifiant s'additionnent (montant, `personnes`, la fiabilité
- * la plus faible l'emporte, le nom et le financeur sont ceux de la première occurrence) ; les financements sont triés par
- * ordre d'empilement (`ordreEmpilement` d'une aide de `aides`, 10 pour `opco-pdc`, 12 pour un dispositif de l'OPCO), puis
- * par montant décroissant ; les options s'additionnent (montants connus seulement, nul si aucun profil n'en a) ; les aides
- * sans montant et les services gratuits sont réunis sans doublon.
+ * Plan du groupe : la fusion des plans de ses profils. Aucun plan : un plan vide. Un seul plan : rendu tel quel. Sinon,
+ * coût, financé et reste s'additionnent en centimes entiers ; les lignes de même identifiant s'additionnent (montant,
+ * `personnes`, la fiabilité la plus faible l'emporte, le nom et le financeur sont ceux de la première occurrence) ; les
+ * financements sont triés par ordre d'empilement, puis par montant décroissant. L'ordre d'une ligne est d'abord
+ * l'`ordreEmpilement` de l'aide de `aides` qui porte le même identifiant (il l'emporte sur la règle suivante, même pour un
+ * identifiant qui commence par `opco-`), sinon 10 pour `opco-pdc` et 12 pour un dispositif de l'OPCO (`opco-` suivi de son
+ * identifiant), sinon `ORDRE_EMPILEMENT_DEFAUT.autre` (85) pour un identifiant inconnu. Les options s'additionnent (montants
+ * connus seulement, nul si aucun profil n'en a) ; les aides sans montant et les services gratuits sont réunis sans doublon.
  */
 export function fusionnerPlans(
   plans: readonly PlanFinancement[],
