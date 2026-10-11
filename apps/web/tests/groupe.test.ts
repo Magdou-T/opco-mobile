@@ -2,8 +2,16 @@
 // changement de statut, prix du groupe, OPCO et budget du groupe. Fonctions pures ; attentes écrites à la main.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { MAX_PERSONNES, MAX_PROFILS, createInitialWizardState, nombreDePersonnes, profilsDuGroupe } from '@opco/core';
+import {
+  MAX_PERSONNES,
+  MAX_PROFILS,
+  champsDuProfilPrincipal,
+  createInitialWizardState,
+  nombreDePersonnes,
+  profilsDuGroupe,
+} from '@opco/core';
 import type { ChampsProfil, ProfilSupplementaire, ProjetType, WizardState } from '@opco/core';
+import { champsManquants, manquantsDuProfil } from '../src/lib/etapes';
 import {
   ajouterProfil,
   basculerModePrix,
@@ -20,7 +28,10 @@ import {
   projetsDuGroupe,
   retirerProfil,
 } from '../src/lib/groupe';
+import { INSECABLE } from '../src/lib/insecable';
 import { champsDepuisProjet, etatDepuisProjet } from '../src/lib/parcours';
+import { STATUT_DU_PROFIL, libelleDuProfil } from '../src/lib/profils';
+import { etiquettesDeSituation } from '../src/lib/situation';
 
 const etat = (maj: Partial<WizardState> = {}): WizardState => ({
   ...createInitialWizardState(),
@@ -1057,5 +1068,303 @@ describe("suites d'opérations tirées au hasard (graine 2026)", () => {
     }
     const tous = { cinqProfils: true, quatreVingtDixNeuf: true, prixDuGroupe: true, sansEffet: true, budgetGarde: true, budgetVide: true };
     assert.deepEqual(vus, tous, 'les suites doivent visiter les cas limites');
+  });
+});
+
+describe("champs manquants d'un groupe (étape Participants)", () => {
+  test("un seul profil : les textes d'une personne seule, sans nom de profil, quel que soit l'effectif", () => {
+    assert.deepEqual(champsManquants('situation', etat()), ['le type de contrat']);
+    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi' })), []);
+    assert.deepEqual(champsManquants('situation', etat({ nombrePersonnes: 4, contractType: 'cdi' })), []);
+  });
+
+  test('plusieurs profils : chaque manque nomme son profil', () => {
+    const e = etat({
+      contractType: null,
+      autresProfils: [extra('profil-2', { projetType: 'formation_dirigeant' }), extra('profil-3', { projetType: 'alternance' })],
+    });
+    assert.deepEqual(champsManquants('situation', e), [
+      'le type de contrat (profil 1)',
+      'le statut du dirigeant (profil 2)',
+      "le type de contrat d'alternance (profil 3)",
+      "l'âge de l'alternant (profil 3)",
+    ]);
+  });
+
+  test('un profil supplémentaire incomplet empêche de continuer, un profil complet non', () => {
+    const complet = extra('profil-2', { contractType: 'cdd' });
+    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi', autresProfils: [complet] })), []);
+    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi', autresProfils: [extra('profil-2')] })), [
+      'le type de contrat (profil 2)',
+    ]);
+  });
+
+  test("OPCO : requis dès qu'un profil n'est pas un dirigeant", () => {
+    const dirigeantSeul = etat({ projetType: 'formation_dirigeant', regionCode: '11', companySize: 'less_11' });
+    assert.deepEqual(champsManquants('identification', dirigeantSeul), []);
+    assert.deepEqual(champsManquants('identification', { ...dirigeantSeul, autresProfils: [extra('profil-2')] }), ["l'OPCO"]);
+  });
+
+  test('manquantsDuProfil : un projet non choisi manque au profil', () => {
+    assert.deepEqual(manquantsDuProfil({ ...champsDuProfilPrincipal(createInitialWizardState()), projetType: null }), ['votre projet (étape 1)']);
+  });
+});
+
+describe("libellé d'un profil", () => {
+  const champs = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
+
+  test("statut, puis ce qui le précise, l'âge et la reconnaissance de travailleur handicapé", () => {
+    assert.equal(libelleDuProfil(champs({ projetType: 'formation_salarie', contractType: 'cdi', ageBeneficiaire: 35 })), `Salarié en CDI, 35${INSECABLE}ans`);
+    assert.equal(
+      libelleDuProfil(champs({ projetType: 'formation_dirigeant', statutDirigeant: 'artisan', ageBeneficiaire: 52, isHandicap: true })),
+      `Dirigeant artisan, 52${INSECABLE}ans, RQTH`,
+    );
+    assert.equal(libelleDuProfil(champs({ projetType: 'reconversion_salarie', contractType: 'cdd' })), 'Salarié en reconversion, CDD');
+    assert.equal(libelleDuProfil(champs({ projetType: 'formation_salarie', contractType: 'interim' })), 'Salarié en intérim');
+    assert.equal(
+      libelleDuProfil(champs({ projetType: 'alternance', typeAlternance: 'apprentissage', ageBeneficiaire: 19 })),
+      `Alternant en apprentissage, 19${INSECABLE}ans`,
+    );
+    assert.equal(
+      libelleDuProfil(champs({ projetType: 'alternance', typeAlternance: 'professionnalisation' })),
+      'Alternant en contrat de professionnalisation',
+    );
+    assert.equal(libelleDuProfil(champs({ projetType: 'recrutement_demandeur_emploi' })), "Demandeur d'emploi");
+  });
+
+  test("projet non choisi ou contrat « alternance » d'un reste de saisie : « Salarié » seul", () => {
+    assert.equal(libelleDuProfil(champs({ projetType: null })), 'Salarié');
+    assert.equal(libelleDuProfil(champs({ projetType: 'formation_salarie', contractType: 'alternance' })), 'Salarié');
+  });
+});
+
+describe("étiquettes de la situation d'un groupe", () => {
+  test('rien pour une personne ; « N personnes » avec un profil ; « N personnes · M profils » avec plusieurs', () => {
+    assert.deepEqual(etiquettesDeSituation(etat()), ['Former un salarié']);
+    assert.deepEqual(etiquettesDeSituation(etat({ nombrePersonnes: 3 })), ['Former un salarié', `3${INSECABLE}personnes`]);
+    assert.deepEqual(
+      etiquettesDeSituation(etat({ nombrePersonnes: 3, autresProfils: [extra('profil-2', { nombre: 2 })] })),
+      ['Former un salarié', `5${INSECABLE}personnes · 2${INSECABLE}profils`],
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Compléments aux trois blocs ci-dessus, attentes écrites à la main : chaque branche de `manquantsDuProfil` et son texte,
+// numéro de profil et effectif dans `champsManquants`, OPCO selon tous les profils, chaque statut et chaque reste de saisie
+// du libellé d'un profil, `STATUT_DU_PROFIL`, cas limites des étiquettes du groupe.
+// ---------------------------------------------------------------------------------------------------------------------
+
+describe('manquantsDuProfil : chaque statut, champ par champ', () => {
+  const sur = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
+  const manque = (projetType: ProjetType | null, maj: Partial<ChampsProfil> = {}): string[] => manquantsDuProfil(sur({ projetType, ...maj }));
+
+  test("salarié : le type de contrat, que « alternance » (reste d'une saisie) ne remplace pas ; aucune ancienneté demandée", () => {
+    assert.deepEqual(manque('formation_salarie'), ['le type de contrat']);
+    assert.deepEqual(manque('formation_salarie', { contractType: 'alternance' }), ['le type de contrat']);
+    for (const contractType of ['cdi', 'cdd', 'interim'] as const) {
+      assert.deepEqual(manque('formation_salarie', { contractType }), [], contractType);
+    }
+  });
+
+  test("reconversion : le type de contrat, puis l'ancienneté ; zéro mois est une réponse", () => {
+    assert.deepEqual(manque('reconversion_salarie'), ['le type de contrat', "l'ancienneté"]);
+    assert.deepEqual(manque('reconversion_salarie', { contractType: 'alternance' }), ['le type de contrat', "l'ancienneté"]);
+    assert.deepEqual(manque('reconversion_salarie', { contractType: 'cdd' }), ["l'ancienneté"]);
+    assert.deepEqual(manque('reconversion_salarie', { anciennete_mois: 18 }), ['le type de contrat']);
+    assert.deepEqual(manque('reconversion_salarie', { contractType: 'cdi', anciennete_mois: 18 }), []);
+    assert.deepEqual(manque('reconversion_salarie', { contractType: 'cdi', anciennete_mois: 0 }), []);
+  });
+
+  test("demandeur d'emploi : l'inscription à France Travail ; « non » est une réponse", () => {
+    assert.deepEqual(manque('recrutement_demandeur_emploi'), ["l'inscription à France Travail"]);
+    assert.deepEqual(manque('recrutement_demandeur_emploi', { inscritFranceTravail: true }), []);
+    assert.deepEqual(manque('recrutement_demandeur_emploi', { inscritFranceTravail: false }), []);
+  });
+
+  test("alternance : le type de contrat d'alternance puis l'âge, chacun seul quand il est le seul à manquer", () => {
+    assert.deepEqual(manque('alternance'), ["le type de contrat d'alternance", "l'âge de l'alternant"]);
+    assert.deepEqual(manque('alternance', { typeAlternance: 'apprentissage' }), ["l'âge de l'alternant"]);
+    assert.deepEqual(manque('alternance', { ageBeneficiaire: 19 }), ["le type de contrat d'alternance"]);
+    assert.deepEqual(manque('alternance', { typeAlternance: 'professionnalisation', ageBeneficiaire: 19 }), []);
+    // Un âge est une réponse dès qu'il est posé, même à zéro (présence, pas valeur).
+    assert.deepEqual(manque('alternance', { typeAlternance: 'apprentissage', ageBeneficiaire: 0 }), []);
+  });
+
+  test('dirigeant : son statut', () => {
+    assert.deepEqual(manque('formation_dirigeant'), ['le statut du dirigeant']);
+    assert.deepEqual(manque('formation_dirigeant', { statutDirigeant: 'assimile_salarie' }), []);
+  });
+
+  /** Toutes les réponses des statuts à la fois : un profil complet, quel que soit son projet, avec celles d'un autre projet en plus. */
+  const toutes = {
+    contractType: 'cdi',
+    anciennete_mois: 12,
+    inscritFranceTravail: true,
+    typeAlternance: 'apprentissage',
+    ageBeneficiaire: 19,
+    statutDirigeant: 'artisan',
+  } as const;
+
+  test('un profil complet ne manque de rien, avec les réponses laissées par un autre projet en plus', () => {
+    for (const projet of PROJETS) assert.deepEqual(manque(projet, toutes), [], projet);
+  });
+
+  test('un projet non choisi manque, quelles que soient les autres réponses', () => {
+    assert.deepEqual(manque(null, toutes), ['votre projet (étape 1)']);
+  });
+});
+
+describe("champs manquants d'un groupe : numéros de profil, effectifs, OPCO", () => {
+  test("avec un seul profil, l'effectif ne nomme aucun profil", () => {
+    assert.deepEqual(champsManquants('situation', etat({ nombrePersonnes: 4 })), ['le type de contrat']);
+    assert.deepEqual(champsManquants('situation', etat({ nombrePersonnes: 99, projetType: 'alternance' })), [
+      "le type de contrat d'alternance",
+      "l'âge de l'alternant",
+    ]);
+  });
+
+  test("le numéro est la position dans le groupe (le principal est le profil 1), pas l'identifiant du profil", () => {
+    const complet = (id: string) => extra(id, { contractType: 'cdd' });
+    const e = etat({
+      contractType: 'cdi',
+      autresProfils: [complet('profil-4'), complet('profil-2'), extra('profil-7'), complet('profil-3'), extra('profil-5')],
+    });
+    assert.deepEqual(champsManquants('situation', e), ['le type de contrat (profil 4)', 'le type de contrat (profil 6)']);
+  });
+
+  test("OPCO : facultatif tant que tous les profils sont des dirigeants, requis dès qu'un seul ne l'est pas, quel que soit son rang", () => {
+    const entreprise = { regionCode: '11', companySize: 'less_11' } as const;
+    const identification = (e: WizardState): string[] => champsManquants('identification', { ...e, ...entreprise });
+    assert.deepEqual(identification(avec('formation_dirigeant', 'formation_dirigeant')), []);
+    for (const projets of [
+      ['formation_dirigeant', 'alternance'],
+      ['alternance', 'formation_dirigeant'],
+      ['formation_dirigeant', 'formation_dirigeant', 'recrutement_demandeur_emploi'],
+      ['formation_dirigeant', null],
+    ] as const) {
+      assert.deepEqual(identification(avec(...projets)), ["l'OPCO"], projets.join());
+    }
+    // Choisi ou détecté, l'OPCO suffit.
+    assert.deepEqual(identification({ ...avec('formation_dirigeant', 'alternance'), selectedOpcoSlug: 'akto' }), []);
+    assert.deepEqual(identification({ ...avec('formation_dirigeant', 'alternance'), detectedOpcoSlug: 'akto' }), []);
+  });
+});
+
+describe("libellé d'un profil : chaque statut, restes de saisie, morceaux absents", () => {
+  const champs = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
+  const libelle = (projetType: ProjetType | null, maj: Partial<ChampsProfil> = {}): string => libelleDuProfil(champs({ projetType, ...maj }));
+
+  test('salarié et reconversion : chaque contrat, après « en » pour le salarié, après une virgule pour la reconversion', () => {
+    for (const [contractType, salarie, reconversion] of [
+      ['cdi', 'Salarié en CDI', 'Salarié en reconversion, CDI'],
+      ['cdd', 'Salarié en CDD', 'Salarié en reconversion, CDD'],
+      ['interim', 'Salarié en intérim', 'Salarié en reconversion, intérim'],
+    ] as const) {
+      assert.equal(libelle('formation_salarie', { contractType }), salarie, contractType);
+      assert.equal(libelle('reconversion_salarie', { contractType }), reconversion, contractType);
+    }
+  });
+
+  test("sans contrat, ou avec le contrat « alternance » d'un reste de saisie : le statut seul", () => {
+    assert.equal(libelle('formation_salarie'), 'Salarié');
+    assert.equal(libelle('reconversion_salarie'), 'Salarié en reconversion');
+    assert.equal(libelle('reconversion_salarie', { contractType: 'alternance' }), 'Salarié en reconversion');
+  });
+
+  test('dirigeant : chacun des cinq statuts, ou « Dirigeant » seul', () => {
+    const attendus: Record<NonNullable<ChampsProfil['statutDirigeant']>, string> = {
+      commercant: 'Dirigeant commerçant',
+      artisan: 'Dirigeant artisan',
+      profession_liberale: 'Dirigeant profession libérale',
+      exploitant_agricole: 'Dirigeant exploitant agricole',
+      assimile_salarie: 'Dirigeant assimilé salarié',
+    };
+    for (const [statutDirigeant, attendu] of Object.entries(attendus) as [keyof typeof attendus, string][]) {
+      assert.equal(libelle('formation_dirigeant', { statutDirigeant }), attendu, statutDirigeant);
+    }
+    assert.equal(libelle('formation_dirigeant'), 'Dirigeant');
+  });
+
+  test("alternant : le type de contrat d'alternance, ou « Alternant » seul ; le contrat « alternance » de l'état n'est pas lu", () => {
+    assert.equal(libelle('alternance'), 'Alternant');
+    assert.equal(libelle('alternance', { contractType: 'alternance' }), 'Alternant');
+    assert.equal(
+      libelle('alternance', { contractType: 'alternance', typeAlternance: 'professionnalisation', ageBeneficiaire: 22 }),
+      `Alternant en contrat de professionnalisation, 22${INSECABLE}ans`,
+    );
+  });
+
+  test("l'âge et la RQTH se disent seuls, séparés par une virgule et une espace, sans morceau vide", () => {
+    assert.equal(libelle('formation_salarie', { contractType: 'cdi', isHandicap: true }), 'Salarié en CDI, RQTH');
+    assert.equal(libelle('recrutement_demandeur_emploi', { ageBeneficiaire: 30 }), `Demandeur d'emploi, 30${INSECABLE}ans`);
+    assert.equal(
+      libelle('recrutement_demandeur_emploi', { ageBeneficiaire: 30, isHandicap: true }),
+      `Demandeur d'emploi, 30${INSECABLE}ans, RQTH`,
+    );
+    assert.equal(libelle(null, { isHandicap: true, ageBeneficiaire: 41 }), `Salarié, 41${INSECABLE}ans, RQTH`);
+    // Un âge est dit dès qu'il est posé, même à zéro (présence, pas valeur).
+    assert.equal(libelle('formation_salarie', { contractType: 'cdi', ageBeneficiaire: 0 }), `Salarié en CDI, 0${INSECABLE}ans`);
+  });
+
+  test("un profil ne dit que les réponses de son statut : celles d'un autre projet sont ignorées", () => {
+    const restes = { contractType: 'cdi', typeAlternance: 'apprentissage', statutDirigeant: 'artisan' } as const;
+    assert.equal(libelle('formation_salarie', restes), 'Salarié en CDI');
+    assert.equal(libelle('reconversion_salarie', restes), 'Salarié en reconversion, CDI');
+    assert.equal(libelle('recrutement_demandeur_emploi', restes), "Demandeur d'emploi");
+    assert.equal(libelle('alternance', restes), 'Alternant en apprentissage');
+    assert.equal(libelle('formation_dirigeant', restes), 'Dirigeant artisan');
+    // Sans contrat, ni le type d'alternance ni le statut de dirigeant n'ont de place chez un salarié ou un demandeur d'emploi.
+    const sansContrat = { typeAlternance: 'professionnalisation', statutDirigeant: 'artisan' } as const;
+    assert.equal(libelle('formation_salarie', sansContrat), 'Salarié');
+    assert.equal(libelle('reconversion_salarie', sansContrat), 'Salarié en reconversion');
+    assert.equal(libelle('recrutement_demandeur_emploi', sansContrat), "Demandeur d'emploi");
+    assert.equal(libelle('alternance', { statutDirigeant: 'artisan' }), 'Alternant');
+    assert.equal(libelle('formation_dirigeant', { typeAlternance: 'apprentissage' }), 'Dirigeant');
+  });
+});
+
+describe('statut du profil (STATUT_DU_PROFIL)', () => {
+  test('une entrée par projet, dite en un ou deux mots', () => {
+    assert.deepEqual(STATUT_DU_PROFIL, {
+      formation_salarie: 'Salarié',
+      reconversion_salarie: 'Salarié en reconversion',
+      recrutement_demandeur_emploi: "Demandeur d'emploi",
+      alternance: 'Alternant',
+      formation_dirigeant: 'Dirigeant',
+    });
+    assert.deepEqual(Object.keys(STATUT_DU_PROFIL).sort(), [...PROJETS].sort());
+  });
+});
+
+describe("étiquettes de la situation d'un groupe : cas limites", () => {
+  test('deux personnes suffisent, avec un profil comme avec deux', () => {
+    assert.deepEqual(etiquettesDeSituation(etat({ nombrePersonnes: 2 })), ['Former un salarié', `2${INSECABLE}personnes`]);
+    assert.deepEqual(etiquettesDeSituation(groupeDe(1, [1])), ['Former un salarié', `2${INSECABLE}personnes · 2${INSECABLE}profils`]);
+  });
+
+  test("l'étiquette du groupe vient après le projet, l'OPCO, la région et la durée", () => {
+    const e = groupeDe(3, [1], { selectedOpcoSlug: 'akto', regionCode: '11', durationHours: 35 });
+    assert.deepEqual(etiquettesDeSituation(e), [
+      'Former un salarié',
+      'AKTO',
+      'Île-de-France',
+      `35${INSECABLE}h`,
+      `4${INSECABLE}personnes · 2${INSECABLE}profils`,
+    ]);
+  });
+
+  test('six profils au plus, 99 personnes au plus', () => {
+    assert.deepEqual(etiquettesDeSituation(groupeDe(1, [1, 1, 1, 1, 1])), ['Former un salarié', `6${INSECABLE}personnes · 6${INSECABLE}profils`]);
+    assert.deepEqual(etiquettesDeSituation(groupeDe(50, [49])), ['Former un salarié', `99${INSECABLE}personnes · 2${INSECABLE}profils`]);
+  });
+
+  test('projet non choisi : « Former un salarié », comme pour une personne seule', () => {
+    assert.deepEqual(etiquettesDeSituation(etat({ projetType: null, nombrePersonnes: 3 })), ['Former un salarié', `3${INSECABLE}personnes`]);
+  });
+
+  test('un état ancien, sans tableau de profils supplémentaires, compte un seul profil', () => {
+    const ancien = { ...etat({ nombrePersonnes: 3 }), autresProfils: undefined } as unknown as WizardState;
+    assert.deepEqual(etiquettesDeSituation(ancien), ['Former un salarié', `3${INSECABLE}personnes`]);
   });
 });

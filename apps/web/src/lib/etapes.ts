@@ -3,8 +3,9 @@
 // @opco/core) et le moteur n'en impose aucun. Fonctions pures : ni React ni effet de bord.
 // ============================================================
 
-import type { WizardState } from '@opco/core';
-import { opcoRequis } from './entreprise';
+import { profilsDuGroupe } from '@opco/core';
+import type { ChampsProfil, WizardState } from '@opco/core';
+import { opcoRequisPourLeGroupe } from './groupe';
 
 export type EtapeSite = 'projet' | 'identification' | 'situation' | 'formation' | 'frais' | 'recap';
 
@@ -12,7 +13,7 @@ export type EtapeSite = 'projet' | 'identification' | 'situation' | 'formation' 
 export const ETAPES: { key: EtapeSite; label: string }[] = [
   { key: 'projet', label: 'Projet' },
   { key: 'identification', label: 'Entreprise' },
-  { key: 'situation', label: 'Bénéficiaire' },
+  { key: 'situation', label: 'Participants' },
   { key: 'formation', label: 'Formation' },
   { key: 'frais', label: 'Frais' },
   { key: 'recap', label: 'Récapitulatif' },
@@ -38,49 +39,64 @@ export function indexPrecedent(index: number, state: Pick<WizardState, 'training
 }
 
 /**
+ * Ce qui manque à UN profil pour quitter l'étape Participants, dans l'ordre des champs à l'écran : salarié, le type de
+ * contrat (et l'ancienneté pour une reconversion) ; demandeur d'emploi, l'inscription à France Travail ; alternance, le
+ * type de contrat d'alternance et l'âge ; dirigeant, son statut. Un projet non choisi manque au profil.
+ */
+export function manquantsDuProfil(champs: ChampsProfil): string[] {
+  const manquants: string[] = [];
+  switch (champs.projetType) {
+    case 'formation_salarie':
+    case 'reconversion_salarie':
+      // « Alternance » n'est pas un contrat proposé au salarié : un reste d'un autre projet ne compte pas.
+      if (champs.contractType == null || champs.contractType === 'alternance') manquants.push('le type de contrat');
+      if (champs.projetType === 'reconversion_salarie' && champs.anciennete_mois == null) manquants.push("l'ancienneté");
+      break;
+    case 'recrutement_demandeur_emploi':
+      if (champs.inscritFranceTravail == null) manquants.push("l'inscription à France Travail");
+      break;
+    case 'alternance':
+      if (champs.typeAlternance == null) manquants.push("le type de contrat d'alternance");
+      if (champs.ageBeneficiaire == null) manquants.push("l'âge de l'alternant");
+      break;
+    case 'formation_dirigeant':
+      if (champs.statutDirigeant == null) manquants.push('le statut du dirigeant');
+      break;
+    default:
+      manquants.push('votre projet (étape 1)');
+  }
+  return manquants;
+}
+
+/**
  * Ce qui manque pour passer à l'étape suivante, dans l'ordre des champs à l'écran (vide : l'étape est complète).
  * Une seule source pour l'activation du bouton « Suivant » et pour le texte qui dit ce qui manque.
  * - Projet : le projet.
- * - Entreprise : l'OPCO (choisi ou détecté ; facultatif pour « former le dirigeant »), la région, la taille.
- * - Bénéficiaire, selon le projet : salarié, le type de contrat (et l'ancienneté pour une reconversion) ; demandeur
- *   d'emploi, l'inscription à France Travail ; alternance, le type de contrat d'alternance et l'âge ; dirigeant, son statut.
+ * - Entreprise : l'OPCO (choisi ou détecté ; facultatif tant que tous les profils sont des dirigeants), la région, la taille.
+ * - Participants : ce que `manquantsDuProfil` demande à chaque profil ; avec plusieurs profils, chaque manque nomme son
+ *   profil (« le type de contrat (profil 2) »), avec un seul les textes restent ceux d'une personne seule.
  * - Formation : le type, le mode, la durée et le coût total (durée et coût supérieurs à zéro).
  * - Frais et récapitulatif : rien d'obligatoire.
  */
 export function champsManquants(etape: EtapeSite, state: WizardState): string[] {
   const manquants: string[] = [];
-  const projet = state.projetType;
   switch (etape) {
     case 'projet':
-      if (projet == null) manquants.push('votre projet');
+      if (state.projetType == null) manquants.push('votre projet');
       break;
     case 'identification':
-      if (opcoRequis(projet) && !(state.selectedOpcoSlug || state.detectedOpcoSlug)) manquants.push("l'OPCO");
+      if (opcoRequisPourLeGroupe(state) && !(state.selectedOpcoSlug || state.detectedOpcoSlug)) manquants.push("l'OPCO");
       if (state.regionCode == null) manquants.push('la région');
       if (state.companySize == null) manquants.push("la taille de l'entreprise");
       break;
-    case 'situation':
-      switch (projet) {
-        case 'formation_salarie':
-        case 'reconversion_salarie':
-          // « Alternance » n'est pas un contrat proposé au salarié : un reste d'un autre projet ne compte pas.
-          if (state.contractType == null || state.contractType === 'alternance') manquants.push('le type de contrat');
-          if (projet === 'reconversion_salarie' && state.anciennete_mois == null) manquants.push("l'ancienneté");
-          break;
-        case 'recrutement_demandeur_emploi':
-          if (state.inscritFranceTravail == null) manquants.push("l'inscription à France Travail");
-          break;
-        case 'alternance':
-          if (state.typeAlternance == null) manquants.push("le type de contrat d'alternance");
-          if (state.ageBeneficiaire == null) manquants.push("l'âge de l'alternant");
-          break;
-        case 'formation_dirigeant':
-          if (state.statutDirigeant == null) manquants.push('le statut du dirigeant');
-          break;
-        default:
-          manquants.push('votre projet (étape 1)');
-      }
+    case 'situation': {
+      const profils = profilsDuGroupe(state);
+      profils.forEach((profil, i) => {
+        const manques = manquantsDuProfil(profil.champs);
+        manquants.push(...(profils.length > 1 ? manques.map((m) => `${m} (profil ${i + 1})`) : manques));
+      });
       break;
+    }
     case 'formation':
       if (!state.formationType) manquants.push('le type de formation');
       if (!state.trainingMode) manquants.push('le mode de formation');

@@ -9,6 +9,7 @@ import {
   EMBEDDED_OPCOS,
   STATUT_PAR_PROJET,
   calculateFunding,
+  champsDuProfilPrincipal,
   createInitialWizardState,
   getEmbeddedOpcoBySlug,
   moisDepuisSaisie,
@@ -104,13 +105,13 @@ function peutContinuerSelonLaBrief(etape: EtapeSite, state: WizardState): boolea
 }
 
 describe('étapes du parcours', () => {
-  test("six étapes dans l'ordre : Projet, Entreprise, Bénéficiaire, Formation, Frais, Récapitulatif", () => {
+  test("six étapes dans l'ordre : Projet, Entreprise, Participants, Formation, Frais, Récapitulatif", () => {
     assert.deepEqual(
       ETAPES.map((e) => [e.key, e.label]),
       [
         ['projet', 'Projet'],
         ['identification', 'Entreprise'],
-        ['situation', 'Bénéficiaire'],
+        ['situation', 'Participants'],
         ['formation', 'Formation'],
         ['frais', 'Frais'],
         ['recap', 'Récapitulatif'],
@@ -254,6 +255,14 @@ describe('changement de projet (etatDepuisProjet)', () => {
     const classes = [...QUESTIONS_COMMUNES, ...PROPRES, ...CHAMPS_NON_POSES, ...CHAMPS_DU_GROUPE];
     assert.equal(new Set(classes).size, classes.length, 'un champ est classé deux fois');
     assert.deepEqual([...classes].sort(), [...CHAMPS_BENEFICIAIRE].sort());
+  });
+
+  test("garde : un profil reprend toutes les questions de l'étape Participants (une question ajoutée à l'état sans l'ajouter au profil serait lue sur le profil principal pour tout le groupe)", () => {
+    const attendus = [
+      ...CHAMPS_BENEFICIAIRE.filter((c) => !CHAMPS_NON_POSES.includes(c) && !CHAMPS_DU_GROUPE.includes(c)),
+      'projetType', // posé à l'étape 0 dans types.ts, réponse de chaque profil
+    ];
+    assert.deepEqual(Object.keys(champsDuProfilPrincipal(createInitialWizardState())).sort(), attendus.sort());
   });
 
   /** Un état où toutes les questions du bénéficiaire ont une réponse (y compris celles d'autres projets). */
