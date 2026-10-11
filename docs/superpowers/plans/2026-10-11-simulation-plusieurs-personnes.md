@@ -17,7 +17,7 @@
 - Avant la tâche 1, commiter ce plan lui-même (`git add docs/superpowers/plans/2026-10-11-simulation-plusieurs-personnes.md`, message « documents : plan d'implémentation de la simulation de plusieurs personnes ») : la garde `check:tirets` ne lit que les fichiers suivis par git.
 - `@opco/core` reste **pur** : aucune E/S, aucune lecture de l'horloge. Nouveaux exports additifs seulement : l'app mobile et le backend compilent sans modification.
 - **Aucun montant inventé.** L'incertitude ne s'additionne jamais : une règle qu'on ne sait pas étendre à un groupe reste prudente ou non chiffrée.
-- Une personne seule donne exactement les mêmes résultats qu'avant : l'empreinte de la tâche 2 et les suites existantes restent vertes, sauf les trois mises à jour de la spécification (section 10.3).
+- Une personne seule donne exactement les mêmes résultats qu'avant : l'empreinte de la tâche 2 s'exécute (« 1 passed », jamais « skipped ») et reste verte, comme les suites existantes, sauf les trois mises à jour de la spécification (section 10.3).
 - Charte SFG, pour tout texte et tout code du site : **jamais de tiret cadratin** (U+2014, U+2015, U+2E3A, U+2E3B, U+FE31, U+FE58), aucun émoji, ni bleu ni violet, Montserrat et Inter seulement (aucune police à chasse fixe), apostrophes droites `'` dans le code, ton direct de collègue expert (ni « il est important de noter », ni « de plus », ni « n'hésitez pas »).
 - Typographie du site : espace insécable avant « : ; ? ! » et entre un nombre et son unité (`typo`, `nombreEtUnite`, `INSECABLE`, entité `&nbsp;` en JSX). Un texte JSX sur plusieurs lignes qui contient une entité commence par `{' '}` quand il suit une balise (garde `tests/jsx-espaces.test.ts`).
 - Textes écrits par le moteur : nombres à point décimal et `avecUnite` (`packages/core/src/texte.ts`) ; l'écran les réécrit par `texteMoteur`.
@@ -273,7 +273,7 @@ Cette tâche s'écrit **avant** toute modification du moteur : elle fige ce que 
 
 **Interfaces:**
 - Consumes: `calculateFunding(opco, state)` (signature actuelle), `EMBEDDED_OPCOS`, `makeFormationState`.
-- Produces: la garde `empreinte-une-personne.test.ts` (3 072 calculs, SHA-256 `18d94f96…8430`).
+- Produces: la garde `empreinte-une-personne.test.ts` (3 072 calculs, SHA-256 `18d94f96…8430`, appliquée tant que les barèmes embarqués ont l'empreinte `d235ee3f…ab2e`, dates de vérification exclues, délai de 30 s).
 
 - [ ] **Step 1 : écrire le test (il passe dès maintenant)**
 
@@ -283,7 +283,15 @@ Créer `packages/core/tests/empreinte-une-personne.test.ts` :
 // Garde de non-régression : pour UNE personne, le moteur de l'OPCO rend ce qu'il rendait avant l'évolution « plusieurs
 // personnes ». L'empreinte (SHA-256) porte sur le JSON de 3 072 calculs : les onze OPCO, leurs branches, quatre tailles,
 // quatre types de formation, sans frais puis avec frais, deux coûts, un budget déjà consommé sur trois. Elle a été relevée
-// au commit c21b924, avant toute modification du moteur ; le champ `personnes`, ajouté depuis, en est retiré.
+// au commit c21b924, avant toute modification du moteur ; le champ `personnes` que l'évolution ajoute en est retiré.
+// Elle ne couvre que cette grille (présentiel, un seul mode de transport, deux durées) : le reste repose sur les autres
+// tests du cœur.
+// Les barèmes embarqués sont une entrée du calcul : une mise à jour légitime des données change l'empreinte des résultats
+// sans qu'aucune régression du moteur n'existe. La garde ne s'applique donc que tant que les barèmes sont ceux du commit de
+// référence (empreinte des données ci-dessous, dates de vérification exclues : le contrôle de fraîcheur les renouvelle
+// chaque année et le moteur ne les lit pas) ; dès que les barèmes changent, le test est ignoré (« skipped » dans la
+// sortie), et celui qui met les données à jour décide de retirer cette garde ou d'en relever une nouvelle avec un moteur de
+// référence. Un « skipped » n'est pas un succès : les tâches du plan exigent « 1 passed ».
 // Si ce test échoue, relire d'abord la différence : une personne seule ne doit changer ni un montant ni un caractère.
 // Ne remplacer l'empreinte qu'après accord de l'utilisateur, jamais pour « faire passer » la suite.
 import { createHash } from 'node:crypto';
@@ -294,7 +302,17 @@ import type { CompanySize, FundingResult, OpcoData, TrainingType, WizardState } 
 import { makeFormationState } from './fixtures';
 
 const EMPREINTE_AU_COMMIT_C21B924 = '18d94f9697450f9bec1467cbdecaec8bd5ac1bb933e540be4fd3b9f7f9548430';
+const EMPREINTE_DES_BAREMES_AU_COMMIT_C21B924 = 'd235ee3fbd615390ba7a46c55b7ca7e9e9b4e6950789b27383970916e1cfab2e';
 const NOMBRE_DE_CALCULS = 3072;
+
+/** Dates de vérification des barèmes : renouvelées chaque année par le contrôle de fraîcheur, jamais lues par le moteur. */
+const DATES_DE_VERIFICATION = new Set(['derniere_verification', 'derniere_mise_a_jour']);
+const empreinte = (valeur: unknown, ignorees: ReadonlySet<string> = new Set()): string =>
+  createHash('sha256')
+    .update(JSON.stringify(valeur, (cle, v: unknown) => (ignorees.has(cle) ? undefined : v)))
+    .digest('hex');
+/** Vrai tant que les barèmes embarqués (`EMBEDDED_OPCOS`) sont ceux du commit de référence, dates de vérification mises à part. */
+const BAREMES_DE_REFERENCE = empreinte(EMBEDDED_OPCOS, DATES_DE_VERIFICATION) === EMPREINTE_DES_BAREMES_AU_COMMIT_C21B924;
 
 const TAILLES: CompanySize[] = ['less_11', '11_49', '50_299', '300_plus'];
 const TYPES: { formationType: TrainingType; certificationLevel: WizardState['certificationLevel'] }[] = [
@@ -356,23 +374,28 @@ function casDeReference(): { opco: OpcoData; state: WizardState }[] {
 }
 
 describe('une personne : le moteur de l’OPCO rend ce qu’il rendait avant l’évolution', () => {
-  it(`empreinte de ${NOMBRE_DE_CALCULS} calculs`, () => {
-    const cas = casDeReference();
-    expect(cas).toHaveLength(NOMBRE_DE_CALCULS);
-    const sortie = cas.map(({ opco, state }) => {
-      // `personnes` n'existait pas au commit de référence : il est retiré avant de calculer l'empreinte.
-      const { personnes: _personnes, ...reste } = calculateFunding(opco, state) as FundingResult & { personnes?: number };
-      return reste;
-    });
-    expect(createHash('sha256').update(JSON.stringify(sortie)).digest('hex')).toBe(EMPREINTE_AU_COMMIT_C21B924);
-  });
+  // Délai de 30 s : le calcul prend de 1 à 5 secondes selon la machine, et Vitest coupe un test à 5 secondes par défaut.
+  it.skipIf(!BAREMES_DE_REFERENCE)(
+    `empreinte de ${NOMBRE_DE_CALCULS} calculs`,
+    () => {
+      const cas = casDeReference();
+      expect(cas).toHaveLength(NOMBRE_DE_CALCULS);
+      const sortie = cas.map(({ opco, state }) => {
+        // `personnes` n'existait pas au commit de référence : il est retiré avant de calculer l'empreinte.
+        const { personnes: _personnes, ...reste } = calculateFunding(opco, state) as FundingResult & { personnes?: number };
+        return reste;
+      });
+      expect(empreinte(sortie)).toBe(EMPREINTE_AU_COMMIT_C21B924);
+    },
+    30_000,
+  );
 });
 ```
 
 - [ ] **Step 2 : vérifier qu'il passe sur le moteur actuel**
 
 Run: `cd /c/Users/magdo/Desktop/Claude/Claude_OPCO/opco-mobile/packages/core && npx vitest run tests/empreinte-une-personne.test.ts`
-Expected: PASS (1 test). S'il échoue, **ne pas continuer** : l'état de départ n'est pas celui du commit `c21b924` (relire `git status` et `git diff -- packages/core/src/calculator.ts`).
+Expected: PASS (1 test, **aucun test ignoré** : si la sortie dit « skipped », l'empreinte des barèmes ne correspond pas aux données du dépôt, il faut s'arrêter et relire `git status` et `git diff -- packages/core/data`). S'il échoue, **ne pas continuer** : l'état de départ n'est pas celui du commit `c21b924` (relire `git status` et `git diff -- packages/core/src/calculator.ts`).
 
 - [ ] **Step 3 : commit**
 
@@ -727,7 +750,7 @@ puis `allLines = lignesPdcFerme(opcoData, state);` devient `allLines = lignesPdc
 - [ ] **Step 4 : vérifier que tout passe**
 
 Run: `cd /c/Users/magdo/Desktop/Claude/Claude_OPCO/opco-mobile/packages/core && npx vitest run tests/calculator-groupe.test.ts tests/empreinte-une-personne.test.ts`
-Expected: PASS. **L'empreinte doit rester verte** : c'est la preuve qu'une personne seule ne change pas.
+Expected: PASS. **L'empreinte doit s'exécuter et rester verte (« 1 passed », aucun « skipped »)** : c'est la preuve qu'une personne seule ne change pas.
 
 Run: `cd /c/Users/magdo/Desktop/Claude/Claude_OPCO/opco-mobile/packages/core && npx vitest run && npx tsc --noEmit`
 Expected: suite entière verte, typage sans erreur.
@@ -1145,7 +1168,7 @@ Run: `cd /c/Users/magdo/Desktop/Claude/Claude_OPCO/opco-mobile/packages/core && 
 Expected: PASS. Si le seuil « plus de 150 comparaisons » n'est pas atteint, relever combien de calculs sautent par plafond annuel avant de toucher au seuil.
 
 Run: `cd /c/Users/magdo/Desktop/Claude/Claude_OPCO/opco-mobile/packages/core && npx vitest run && npx tsc --noEmit`
-Expected: tout vert, **empreinte comprise**.
+Expected: tout vert, **empreinte comprise et exécutée (« 1 passed », aucun « skipped »)**.
 
 - [ ] **Step 5 : commit**
 
@@ -2855,7 +2878,7 @@ EOF
 - Modify: `apps/web/src/lib/etapes.ts`
 - Create: `apps/web/src/lib/profils.ts`
 - Modify: `apps/web/src/lib/situation.ts`
-- Modify: `apps/web/tests/parcours.test.ts` (libellé de l'étape)
+- Modify: `apps/web/tests/parcours.test.ts` (libellé de l'étape, garde de complétude de `ChampsProfil`)
 - Modify: `apps/web/tests/groupe.test.ts`
 
 **Interfaces:**
@@ -2865,6 +2888,18 @@ EOF
 - [ ] **Step 1 : écrire les tests qui échouent**
 
 Dans `apps/web/tests/parcours.test.ts`, remplacer `test("six étapes dans l'ordre : Projet, Entreprise, Bénéficiaire, Formation, Frais, Récapitulatif", () => {` par `test("six étapes dans l'ordre : Projet, Entreprise, Participants, Formation, Frais, Récapitulatif", () => {` et `['situation', 'Bénéficiaire'],` par `['situation', 'Participants'],`.
+
+Dans le même fichier, ajouter `champsDuProfilPrincipal` à l'importation de `@opco/core`, puis, juste après le test « garde : chaque champ du bénéficiaire est commun, propre à un statut, du groupe, ou non posé par le site » (dans le même `describe`, où `CHAMPS_BENEFICIAIRE` est lu), ajouter :
+
+```ts
+  test('garde : un profil reprend toutes les questions de l’étape Participants (une question ajoutée à l’état sans l’ajouter au profil serait lue sur le profil principal pour tout le groupe)', () => {
+    const attendus = [
+      ...CHAMPS_BENEFICIAIRE.filter((c) => !CHAMPS_NON_POSES.includes(c) && !CHAMPS_DU_GROUPE.includes(c)),
+      'projetType', // posé à l'étape 0 dans types.ts, réponse de chaque profil
+    ];
+    assert.deepEqual(Object.keys(champsDuProfilPrincipal(createInitialWizardState())).sort(), attendus.sort());
+  });
+```
 
 Dans `apps/web/tests/groupe.test.ts`, ajouter aux importations :
 
@@ -2962,7 +2997,7 @@ describe('étiquettes de la situation d’un groupe', () => {
 - [ ] **Step 2 : vérifier l'échec**
 
 Run: `cd /c/Users/magdo/Desktop/Claude/Claude_OPCO/opco-mobile && node --import tsx --test apps/web/tests/groupe.test.ts apps/web/tests/parcours.test.ts`
-Expected: FAIL (module `lib/profils` absent, libellé de l'étape encore « Bénéficiaire », champs manquants d'un seul profil).
+Expected: FAIL (module `lib/profils` absent, libellé de l'étape encore « Bénéficiaire », champs manquants d'un seul profil). La garde de complétude du profil ajoutée plus haut passe dès maintenant : elle verrouille l'existant, elle ne fait pas partie des échecs attendus.
 
 - [ ] **Step 3 : écrire le code**
 
