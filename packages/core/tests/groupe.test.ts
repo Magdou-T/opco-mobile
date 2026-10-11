@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { ID_PROFIL_PRINCIPAL, champsDuProfilPrincipal, etatDuProfil, nombreDePersonnes, profilsDuGroupe } from '../src/groupe';
+import {
+  ID_PROFIL_PRINCIPAL,
+  champsDuProfilPrincipal,
+  effectifValide,
+  etatDuProfil,
+  nombreDePersonnes,
+  profilsDuGroupe,
+} from '../src/groupe';
 import { MAX_PERSONNES, MAX_PROFILS, createInitialWizardState } from '../src/types';
 import type { WizardState } from '../src/types';
 import { groupe, supplementaire } from './fixtures-groupe';
@@ -115,6 +122,32 @@ describe('profils du groupe', () => {
       expect(profilsDuGroupe(groupe({ autresProfils: [supplementaire({ nombre: saisi })] }))[1].nombre, `second ${saisi}`).toBe(attendu);
     }
     expect(MAX_PROFILS).toBe(6);
+  });
+});
+
+describe('effectif valide (effectifValide)', () => {
+  // La fonction accepte n'importe quelle valeur : un état enregistré avant l'évolution, une saisie, un champ absent. Le site s'en
+  // sert aussi (`normaliserGroupe`) : le prix du groupe est divisé par le nombre que le moteur multiplie.
+  it('une valeur absente, périmée ou non finie vaut 1 ; un décimal est tronqué ; au-delà de 99, 99', () => {
+    const cas: [unknown, number][] = [
+      [Number.NaN, 1],
+      [Number.POSITIVE_INFINITY, 1],
+      [Number.NEGATIVE_INFINITY, 1],
+      [2.5, 2],
+      [150, 99],
+      [0, 1],
+      [-2, 1],
+      ['3', 1], // une chaîne n'est pas lue comme un nombre
+      [null, 1],
+      [undefined, 1],
+    ];
+    for (const [valeur, attendu] of cas) expect(effectifValide(valeur), String(valeur)).toBe(attendu);
+  });
+
+  it('un entier de 1 à 99 est rendu tel quel', () => {
+    for (const valeur of [1, 2, 7, 98, 99]) expect(effectifValide(valeur), String(valeur)).toBe(valeur);
+    expect(effectifValide(99.9)).toBe(99);
+    expect(effectifValide(100)).toBe(99);
   });
 });
 

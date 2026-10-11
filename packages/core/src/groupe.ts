@@ -24,7 +24,7 @@ export interface ProfilDuGroupe {
 }
 
 /** Effectif ramené à un entier de 1 à MAX_PERSONNES (valeur absente, périmée ou non finie : 1). */
-function effectifValide(valeur: unknown): number {
+export function effectifValide(valeur: unknown): number {
   return typeof valeur === 'number' && Number.isFinite(valeur) ? Math.min(MAX_PERSONNES, Math.max(1, Math.floor(valeur))) : 1;
 }
 
