@@ -1571,6 +1571,50 @@ describe('répartition en centimes', () => {
       expect(parts.every((p) => Number.isInteger(p) && p >= 0)).toBe(true);
     }
   });
+
+  it('les centimes restants vont à la plus grande part décimale, même quand ce n’est ni la première ni la plus nombreuse', () => {
+    expect(repartirCentimes(10, [1, 2])).toEqual([3, 7]); // 3,33 et 6,67 : le centime va à la seconde
+    expect(repartirCentimes(2, [4, 3])).toEqual([1, 1]); // 1,14 et 0,86 : le centime va à la plus petite part
+  });
+
+  it('deux centimes restants vont à deux parts différentes, un chacune', () => {
+    expect(repartirCentimes(101, [1, 1, 1])).toEqual([34, 34, 33]);
+  });
+
+  it('une seule part reçoit tout, y compris quand elle compte une seule personne', () => {
+    expect(repartirCentimes(100, [1])).toEqual([100]);
+    expect(repartirCentimes(1, [1])).toEqual([1]);
+  });
+
+  it('un total négatif se répartit de la même façon, sans zéro négatif', () => {
+    expect(repartirCentimes(-100, [1, 1, 1])).toEqual([-34, -33, -33]);
+    expect(repartirCentimes(-1, [1, 1])).toEqual([-1, 0]);
+  });
+
+  it('1 000 répartitions tirées (autre graine) : chaque part vaut sa fraction entière ou un centime de plus, et le centime va à la plus grande décimale (à égalité, à la première)', () => {
+    let graine = 54321;
+    const hasard = (n: number) => {
+      graine = (Math.imul(graine, 1103515245) + 12345) & 0x7fffffff;
+      return graine % n;
+    };
+    for (let i = 0; i < 1000; i++) {
+      const total = hasard(5_000_000);
+      const effectifs = Array.from({ length: 1 + hasard(6) }, () => 1 + hasard(99));
+      const somme = effectifs.reduce((s, e) => s + e, 0);
+      const entiere = effectifs.map((e) => Math.floor((total * e) / somme));
+      const decimale = effectifs.map((e) => (total * e) % somme);
+      const parts = repartirCentimes(total, effectifs);
+      const message = `${total} ${effectifs}`;
+      parts.forEach((p, a) => {
+        expect([entiere[a], entiere[a] + 1], message).toContain(p);
+        parts.forEach((q, b) => {
+          if (p === entiere[a] + 1 && q === entiere[b]) {
+            expect(decimale[a] > decimale[b] || (decimale[a] === decimale[b] && a < b), message).toBe(true);
+          }
+        });
+      });
+    }
+  });
 });
 
 describe('répartition du résultat de l’OPCO entre profils', () => {
@@ -1649,6 +1693,71 @@ describe('répartition du résultat de l’OPCO entre profils', () => {
     expect(a.dispositifsComplementaires[1].montantEstime).toBeNull();
     expect(b.dispositifsComplementaires[1].montantEstime).toBeNull();
     expect(centimes(a.enveloppeMaxPotentielle + b.enveloppeMaxPotentielle)).toBe(centimes(r.enveloppeMaxPotentielle));
+  });
+
+  it('le demandé d’une part ne passe jamais sous son financé, même avec un seul centime de reste à charge pour trois profils', () => {
+    // Répartis séparément, 0,11 € de demandé donnent 5, 5 et 1 centimes et 0,10 € de financé 4, 4 et 2 : la troisième part aurait un reste négatif.
+    const base = resultat();
+    const r = { ...base, lines: [{ ...base.lines[0], requestedAmount: 0.11, fundedAmount: 0.1, remainder: 0.01 }] };
+    const parts = repartirFinancement(r, [6, 6, 2]);
+    for (const part of parts) {
+      const [ligne] = part.lines;
+      expect(ligne.remainder).toBeGreaterThanOrEqual(0);
+      expect(centimes(ligne.requestedAmount)).toBeGreaterThanOrEqual(centimes(ligne.fundedAmount));
+    }
+    expect(centimes(parts.reduce((s, p) => s + p.lines[0].requestedAmount, 0))).toBe(11);
+    expect(centimes(parts.reduce((s, p) => s + p.lines[0].fundedAmount, 0))).toBe(10);
+  });
+
+  it('les totaux d’une part restent la somme de ses lignes, même quand les parts des lignes ne suivent pas celle du total', () => {
+    // Deux lignes de 0,01 € et 0,03 € pour 3 et 2 personnes : les lignes donnent 0,03 € et 0,01 € à chaque part, le total du groupe réparti seul 0,02 € et 0,02 €.
+    const base = resultat();
+    const ligne = (montant: number) => ({ ...base.lines[0], requestedAmount: montant, fundedAmount: montant, remainder: 0 });
+    const r = { ...base, lines: [ligne(0.01), ligne(0.03)], totalRequested: 0.04, totalFunded: 0.04, totalRemainder: 0 };
+    const [a, b] = repartirFinancement(r, [3, 2]);
+    expect([a.totalRequested, b.totalRequested]).toEqual([0.03, 0.01]);
+    expect([a.totalFunded, b.totalFunded]).toEqual([0.03, 0.01]);
+    expect([a.totalRemainder, b.totalRemainder]).toEqual([0, 0]);
+  });
+
+  it('un montant dont le produit par 100 n’est pas un entier exact (4,35 € et 8,20 €) ne perd pas de centime', () => {
+    const base = resultat();
+    const r = { ...base, lines: [{ ...base.lines[0], requestedAmount: 8.2, fundedAmount: 4.35, remainder: 3.85 }] };
+    const [seule] = repartirFinancement(r, [5]);
+    expect([seule.lines[0].requestedAmount, seule.lines[0].fundedAmount, seule.lines[0].remainder]).toEqual([8.2, 4.35, 3.85]);
+  });
+
+  it('un montant estimé de 0 € reste un montant connu, et un dispositif garde tout le reste de sa fiche', () => {
+    const eligible = (id: string, montantEstime: number | null) => ({
+      id,
+      nom: `Dispositif ${id}`,
+      cumul: 'additif' as const,
+      montantEstime,
+      description: 'd',
+      conditions: ['c'],
+      demarches: 'm',
+      publics: 'p',
+      note: 'n',
+      confidence: 'exact' as const,
+      sourceUrl: 'https://example.opco.fr/d',
+    });
+    const r = { ...resultat(), dispositifsComplementaires: [eligible('zero', 0), eligible('connu', 0.05)] };
+    for (const part of repartirFinancement(r, [3, 2])) {
+      expect(part.dispositifsComplementaires[0].montantEstime).toBe(0);
+      part.dispositifsComplementaires.forEach((d, i) => {
+        expect({ ...d, montantEstime: null }).toEqual({ ...r.dispositifsComplementaires[i], montantEstime: null });
+      });
+    }
+  });
+
+  it('le budget déjà consommé, les libellés, les sources et les textes de détail sont repris tels quels', () => {
+    const r = calculateFunding(opcoGroupe({ budget_annuel_max: sourced(20000) }), etatGroupe({ budgetDejaConsomme: 3000 }), 5);
+    expect(r.budgetDejaConsomme).toBe(3000);
+    for (const part of repartirFinancement(r, [3, 2])) {
+      expect(part.budgetDejaConsomme).toBe(3000);
+      expect(part.budgetCapAmount).toBe(r.budgetCapAmount);
+      expect(part.lines.map((l) => [l.label, l.sourceUrl, l.details])).toEqual(r.lines.map((l) => [l.label, l.sourceUrl, l.details]));
+    }
   });
 });
 ```
