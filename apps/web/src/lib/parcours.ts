@@ -59,8 +59,8 @@ export function champsDepuisProjet(champs: ChampsProfil, projet: ProjetType): Pa
  */
 export function etatDepuisProjet(state: WizardState, projet: ProjetType): Partial<WizardState> {
   const maj: Partial<WizardState> = champsDepuisProjet(state, projet);
-  const projetsDuGroupe = [projet, ...state.autresProfils.map((p) => p.projetType)];
-  if (!projetsDuGroupe.some(ouvreBudgetOpco)) maj.budgetDejaConsomme = createInitialWizardState().budgetDejaConsomme;
+  const projetsApres = [projet, ...state.autresProfils.map((p) => p.projetType)];
+  if (!projetsApres.some(ouvreBudgetOpco)) maj.budgetDejaConsomme = createInitialWizardState().budgetDejaConsomme;
   return maj;
 }
 

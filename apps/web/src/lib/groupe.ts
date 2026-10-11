@@ -11,6 +11,7 @@ import {
   MAX_PROFILS,
   champsDuProfilPrincipal,
   createInitialWizardState,
+  effectifValide,
   nombreDePersonnes,
   profilsDuGroupe,
 } from '@opco/core';
@@ -21,28 +22,32 @@ import { champsDepuisProjet, coutsDeFormation } from './parcours';
 // --- Saisie du nombre de personnes --------------------------------------------------------------------------------
 
 /**
- * Lit le nombre de personnes saisi : un entier de 1 à 99. Au-delà de 99, 99. Vide, zéro, négatif, décimal, texte ou
- * notation scientifique : null (la saisie est refusée, l'état garde sa valeur). Jamais NaN.
+ * Lit le nombre de personnes saisi : un entier de 1 à 99. Une saisie hors bornes est ramenée à la borne, quel que soit le
+ * nombre de chiffres : « 150 » et une suite de 400 chiffres donnent 99 (`Number` lit une très longue suite de chiffres comme
+ * Infinity, que `Math.min` plafonne). Vide, zéro, négatif, décimal, texte, notation scientifique ou chiffre autre que 0 à 9
+ * (`\d` ne lit que ceux-là : pas d'arabo-indiens ni de pleine chasse) : null, la saisie est refusée et l'état garde sa
+ * valeur. Jamais NaN.
  */
 export function lireEffectif(texte: string): number | null {
   const propre = texte.trim();
-  if (!/^\d{1,4}$/.test(propre)) return null;
+  if (!/^\d+$/.test(propre)) return null;
   const n = Number(propre);
   return n < 1 ? null : Math.min(n, MAX_PERSONNES);
 }
 
 // --- Cohérence de l'état ------------------------------------------------------------------------------------------
 
-const borner = (n: number): number => (Number.isFinite(n) ? Math.min(MAX_PERSONNES, Math.max(1, Math.floor(n))) : 1);
-
 /**
- * Ramène l'état d'un groupe à ses invariants : effectifs entiers de 1 à 99, au plus 5 profils supplémentaires, au plus 99
- * personnes (le surplus se retire du dernier profil, puis des précédents, puis du profil principal), prix du groupe vidé sous
- * deux personnes, coût d'une personne et coût horaire recalculés quand le prix du groupe est renseigné. Idempotente.
+ * Ramène l'état d'un groupe à ses invariants : effectifs entiers de 1 à 99 (`effectifValide` du cœur, la fonction que le
+ * moteur lit aussi : le prix du groupe est divisé par le nombre de personnes que le moteur multiplie), au plus 5 profils
+ * supplémentaires, au plus 99 personnes (le surplus se retire du dernier profil, puis des précédents, puis du profil
+ * principal), prix du groupe vidé sous deux personnes, coût d'une personne et coût horaire recalculés quand le prix du
+ * groupe est renseigné, budget déjà consommé vidé quand aucun profil du groupe ne relève d'un projet salarié
+ * (`ouvreBudgetPourLeGroupe`). Idempotente.
  */
 export function normaliserGroupe(etat: WizardState): WizardState {
-  const autres = etat.autresProfils.slice(0, MAX_PROFILS - 1).map((p) => ({ ...p, nombre: borner(p.nombre) }));
-  let principal = borner(etat.nombrePersonnes);
+  const autres = etat.autresProfils.slice(0, MAX_PROFILS - 1).map((p) => ({ ...p, nombre: effectifValide(p.nombre) }));
+  let principal = effectifValide(etat.nombrePersonnes);
   let exces = principal + autres.reduce((somme, p) => somme + p.nombre, 0) - MAX_PERSONNES;
   for (let i = autres.length - 1; i >= 0 && exces > 0; i--) {
     const retrait = Math.min(exces, autres[i].nombre - 1);
@@ -56,6 +61,7 @@ export function normaliserGroupe(etat: WizardState): WizardState {
   if (suite.prixDuGroupe != null) {
     suite = { ...suite, ...coutsDeFormation(suite.prixDuGroupe / personnes, suite.durationHours) };
   }
+  if (suite.budgetDejaConsomme != null && !ouvreBudgetPourLeGroupe(suite)) suite = { ...suite, budgetDejaConsomme: null };
   return suite;
 }
 

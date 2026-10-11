@@ -2,7 +2,7 @@
 // changement de statut, prix du groupe, OPCO et budget du groupe. Fonctions pures ; attentes écrites à la main.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { MAX_PERSONNES, MAX_PROFILS, createInitialWizardState, nombreDePersonnes } from '@opco/core';
+import { MAX_PERSONNES, MAX_PROFILS, createInitialWizardState, nombreDePersonnes, profilsDuGroupe } from '@opco/core';
 import type { ChampsProfil, ProfilSupplementaire, ProjetType, WizardState } from '@opco/core';
 import {
   ajouterProfil,
@@ -32,6 +32,11 @@ const extra = (id: string, maj: Partial<ProfilSupplementaire> = {}): ProfilSuppl
   id,
   ...maj,
 });
+/** Un état dont les profils ont ces projets, d'une personne chacun : le premier est le projet du profil principal. */
+const avec = (...projets: WizardState['projetType'][]): WizardState => {
+  const [principal, ...autres] = projets;
+  return etat({ projetType: principal, autresProfils: autres.map((p, i) => extra(`profil-${i + 2}`, { projetType: p })) });
+};
 
 describe('saisie du nombre de personnes (lireEffectif)', () => {
   test('un entier de 1 à 99 est lu tel quel, les espaces autour sont ignorés', () => {
@@ -41,14 +46,30 @@ describe('saisie du nombre de personnes (lireEffectif)', () => {
     assert.equal(lireEffectif('99'), 99);
   });
 
-  test('au-delà de 99 : 99', () => {
+  test('au-delà de 99 : 99, quel que soit le nombre de chiffres', () => {
     assert.equal(lireEffectif('150'), MAX_PERSONNES);
     assert.equal(lireEffectif('9999'), MAX_PERSONNES);
+    assert.equal(lireEffectif('12345'), MAX_PERSONNES);
+    assert.equal(lireEffectif('9'.repeat(400)), MAX_PERSONNES); // Number lit cette suite comme Infinity
+    assert.equal(lireEffectif('1'.repeat(400)), MAX_PERSONNES);
   });
 
-  test('zéro, vide, négatif, décimal, texte, notation scientifique, nombre trop long : refusés (null), jamais NaN', () => {
-    for (const saisie of ['0', '0000', '', ' ', '-3', '3,7', '3.7', 'abc', '1e2', '1 2', '12345']) {
+  test('zéro, vide, négatif, décimal, texte, notation scientifique : refusés (null), jamais NaN', () => {
+    for (const saisie of ['0', '0000', '', ' ', '-3', '3,7', '3.7', 'abc', '1e2', '1 2']) {
       assert.equal(lireEffectif(saisie), null, JSON.stringify(saisie));
+    }
+    assert.equal(lireEffectif('0'.repeat(400)), null); // zéro, même écrit avec 400 chiffres
+    assert.equal(lireEffectif(`${'0'.repeat(400)}7`), 7); // les zéros devant ne comptent pas
+  });
+
+  test('les chiffres autres que 0 à 9 (arabo-indiens, indiens, pleine chasse) sont refusés', () => {
+    // Le zéro de chaque série : arabo-indien (U+0660), arabo-indien étendu (U+06F0), devanagari (U+0966), pleine chasse (U+FF10).
+    for (const zero of [0x0660, 0x06f0, 0x0966, 0xff10]) {
+      const chiffre = (n: number): string => String.fromCharCode(zero + n);
+      const nom = `U+${zero.toString(16).toUpperCase()}`;
+      assert.equal(lireEffectif(chiffre(3)), null, nom);
+      assert.equal(lireEffectif(chiffre(1) + chiffre(2)), null, `${nom} sur deux chiffres`);
+      assert.equal(lireEffectif(`1${chiffre(3)}`), null, `${nom} après un chiffre ASCII`);
     }
   });
 });
@@ -241,11 +262,6 @@ describe('prix de la formation', () => {
 });
 
 describe('OPCO et budget du groupe', () => {
-  const avec = (...projets: WizardState['projetType'][]): WizardState => {
-    const [principal, ...autres] = projets;
-    return etat({ projetType: principal, autresProfils: autres.map((p, i) => extra(`profil-${i + 2}`, { projetType: p })) });
-  };
-
   test('dirigeant seul : OPCO facultatif, aucun budget', () => {
     assert.equal(opcoRequisPourLeGroupe(avec('formation_dirigeant')), false);
     assert.equal(ouvreBudgetPourLeGroupe(avec('formation_dirigeant')), false);
@@ -274,9 +290,18 @@ describe('OPCO et budget du groupe', () => {
 });
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Compléments aux tests ci-dessus : limites, ordre du retrait du surplus, identifiants repris, arrondi au centime, cas sans
-// effet (l'état reçu est rendu tel quel), profil dont on lit les réponses, rang d'un profil dans l'OPCO et le budget, état
-// toujours normalisé, suites d'opérations tirées au hasard. Chaque attente est écrite à la main.
+// Compléments aux tests ci-dessus : limites, ordre du retrait du surplus, identifiants repris, arrondi au centime, profil dont
+// on lit les réponses, rang d'un profil dans l'OPCO et le budget, état toujours normalisé, suites d'opérations tirées au hasard.
+//
+// Cas sans effet : `ajouterProfil` à 6 profils ou à 99 personnes, `definirNombre` et `changerProjetDuProfil` avec un identifiant
+// inconnu, `basculerModePrix` vers le groupe sans prix saisi rendent l'état reçu lui-même (le même objet) : le crochet de la
+// tâche 12 s'en sert dans `setState`, et un état identique n'y provoque aucun nouveau rendu. `retirerProfil` et `majProfil`,
+// eux, rendent toujours un état normalisé neuf, même quand rien ne change : leurs tests comparent par valeur.
+//
+// Oracle : les attentes des cas écrits à la main sont écrites à la main. Les suites tirées au hasard recopient en revanche
+// quelques formules de production pour vérifier chaque pas : l'expression régulière de `lireEffectif`, le coût horaire, la
+// garde d'`ajouterProfil`, la borne de `definirNombre`, la condition d'`etatDepuisPrix` et les projets qui ouvrent le budget.
+// Les cas écrits à la main les figent déjà.
 // ---------------------------------------------------------------------------------------------------------------------
 
 const PROJETS: ProjetType[] = [
@@ -293,10 +318,17 @@ const total = (e: WizardState): number => effectifs(e).reduce((somme, n) => somm
 /** Un état dont le profil principal compte `principal` personnes, suivi de profils supplémentaires (profil-2, profil-3...) de ces effectifs. */
 const groupeDe = (principal: number, autres: number[], maj: Partial<WizardState> = {}): WizardState =>
   etat({ ...maj, nombrePersonnes: principal, autresProfils: autres.map((nombre, i) => extra(`profil-${i + 2}`, { nombre })) });
-/** Un état dont les profils ont ces projets, d'une personne chacun : le premier est le projet du profil principal. */
-const groupeDeProjets = (...projets: WizardState['projetType'][]): WizardState => {
-  const [principal, ...autres] = projets;
-  return etat({ projetType: principal, autresProfils: autres.map((p, i) => extra(`profil-${i + 2}`, { projetType: p })) });
+/** Le même état que `avec(...projets)`, avec 2 000 € de budget déjà consommé. */
+const avecBudget = (...projets: WizardState['projetType'][]): WizardState => ({ ...avec(...projets), budgetDejaConsomme: 2000 });
+/** mulberry32 : tirages reproductibles dans [0, 1[ pour une graine donnée. */
+const hasardFixe = (graine: number): (() => number) => {
+  let g = graine;
+  return () => {
+    g = (g + 0x6d2b79f5) | 0;
+    let t = Math.imul(g ^ (g >>> 15), 1 | g);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 };
 
 describe('saisie du nombre de personnes : limites', () => {
@@ -309,21 +341,15 @@ describe('saisie du nombre de personnes : limites', () => {
   });
 
   test('3 000 saisies tirées au hasard (graine 11) : null ou un entier de 1 à 99, jamais NaN', () => {
-    // mulberry32 : tirages reproductibles.
-    let graine = 11;
-    const hasard = (): number => {
-      graine = (graine + 0x6d2b79f5) | 0;
-      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
+    const hasard = hasardFixe(11);
     const signes = ['0', '1', '2', '5', '9', ' ', '\t', '-', '+', '.', ',', 'e', 'x'];
     for (let i = 0; i < 3000; i++) {
       const saisie = Array.from({ length: Math.floor(hasard() * 8) }, () => signes[Math.floor(hasard() * signes.length)]).join('');
       const lu = lireEffectif(saisie);
       assert.ok(lu === null || (Number.isInteger(lu) && lu >= 1 && lu <= MAX_PERSONNES), JSON.stringify(saisie));
-      // Acceptée exactement quand elle est faite de 1 à 4 chiffres, espaces autour mis à part, et que sa valeur n'est pas 0.
-      const attendue = /^[0-9]{1,4}$/.test(saisie.trim()) && Number(saisie.trim()) >= 1;
+      // Acceptée exactement quand elle est faite de chiffres de 0 à 9 seulement (un au moins), espaces autour mis à part, et que
+      // sa valeur n'est pas 0.
+      const attendue = /^[0-9]+$/.test(saisie.trim()) && Number(saisie.trim()) >= 1;
       assert.equal(lu !== null, attendue, JSON.stringify(saisie));
     }
   });
@@ -340,6 +366,27 @@ describe('normaliserGroupe : effectifs, surplus et prix du groupe', () => {
     assert.deepEqual(effectifs(normaliserGroupe(groupeDe(4.9, [2.9]))), [4, 2]);
   });
 
+  test('pour un état dans les bornes, les effectifs sont ceux de profilsDuGroupe, que le moteur lit', () => {
+    // Le cœur ramène chaque effectif par `effectifValide` ; le site doit en faire autant, valeur par valeur (4 000 états tirés,
+    // graine 7, effectifs absents, non finis, décimaux, négatifs ou trop grands compris).
+    const hasard = hasardFixe(7);
+    const valeurs: unknown[] = [Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, -2, 0, 0.5, 1, 2.5, 3.9, 7, 20, 99, 150, null, undefined, '3'];
+    const choisir = (): number => valeurs[Math.floor(hasard() * valeurs.length)] as number;
+    let comparees = 0;
+    for (let i = 0; i < 4000; i++) {
+      const e = etat({
+        nombrePersonnes: choisir(),
+        autresProfils: Array.from({ length: Math.floor(hasard() * 6) }, (_, k) => extra(`profil-${k + 2}`, { nombre: choisir() })),
+      });
+      const duCoeur = profilsDuGroupe(e).map((p) => p.nombre);
+      // Au-delà de 99 personnes, le site retire le surplus (autres tests) : ces états ne se comparent pas.
+      if (duCoeur.reduce((somme, n) => somme + n, 0) > MAX_PERSONNES) continue;
+      assert.deepEqual(effectifs(normaliserGroupe(e)), duCoeur, [e.nombrePersonnes, ...e.autresProfils.map((p) => p.nombre)].map(String).join());
+      comparees++;
+    }
+    assert.ok(comparees > 1000, `${comparees} états comparés seulement`);
+  });
+
   test('99 personnes tiennent ; à 100, une personne est retirée du dernier profil', () => {
     assert.deepEqual(effectifs(normaliserGroupe(groupeDe(60, [20, 19]))), [60, 20, 19]);
     assert.deepEqual(effectifs(normaliserGroupe(groupeDe(60, [20, 20]))), [60, 20, 19]);
@@ -350,7 +397,7 @@ describe('normaliserGroupe : effectifs, surplus et prix du groupe', () => {
     assert.deepEqual(effectifs(normaliserGroupe(groupeDe(40, [40, 40, 40]))), [40, 40, 18, 1]);
   });
 
-  test('puis du profil principal, qui garde au moins une personne', () => {
+  test('puis du profil principal', () => {
     // 199 personnes, 100 de trop : les deux profils supplémentaires tombent à 1 (98 retirées), le principal perd les 2 autres.
     assert.deepEqual(effectifs(normaliserGroupe(groupeDe(99, [50, 50]))), [97, 1, 1]);
   });
@@ -367,7 +414,7 @@ describe('normaliserGroupe : effectifs, surplus et prix du groupe', () => {
   });
 
   test("le coût d'une personne n'est pas arrondi : 10 000 € pour 3 personnes", () => {
-    assert.equal(normaliserGroupe(etat({ nombrePersonnes: 3, prixDuGroupe: 10000 })).pedagogyCostTotal, 3333.3333333333335);
+    assert.equal(normaliserGroupe(etat({ nombrePersonnes: 3, prixDuGroupe: 10000 })).pedagogyCostTotal, 10000 / 3);
   });
 
   test('un état hors bornes revient dans les bornes, et normaliser de nouveau ne change plus rien', () => {
@@ -583,7 +630,7 @@ describe('prix de la formation : cas limites', () => {
   });
 
   test("pour le groupe, le coût d'une personne n'est pas arrondi", () => {
-    assert.equal(etatDepuisPrix(etat({ nombrePersonnes: 3 }), 10000, 35, true).pedagogyCostTotal, 3333.3333333333335);
+    assert.equal(etatDepuisPrix(etat({ nombrePersonnes: 3 }), 10000, 35, true).pedagogyCostTotal, 10000 / 3);
   });
 
   test("pour le groupe sans durée : le coût d'une personne est calculé, le coût horaire est vide", () => {
@@ -595,7 +642,7 @@ describe('prix de la formation : cas limites', () => {
     const groupe = etatDepuisPrix(etat({ nombrePersonnes: 4, companyName: 'Atelier Martin' }), 11200, 35, true);
     const parPersonne = etatDepuisPrix(groupe, 2400, 35, false);
     assert.deepEqual([parPersonne.prixDuGroupe, parPersonne.pedagogyCostTotal], [null, 2400]);
-    assert.equal(parPersonne.pedagogyCostPerHour, 68.57142857142857);
+    assert.equal(parPersonne.pedagogyCostPerHour, 2400 / 35);
     assert.equal(parPersonne.companyName, 'Atelier Martin');
   });
 
@@ -642,7 +689,7 @@ describe('prix de la formation : cas limites', () => {
 
 describe('OPCO et budget du groupe : tous les rangs comptent', () => {
   test("projetsDuGroupe : le profil principal d'abord, puis les autres dans l'ordre, projet non choisi compris", () => {
-    assert.deepEqual(projetsDuGroupe(groupeDeProjets('formation_dirigeant', 'alternance', null, 'formation_salarie')), [
+    assert.deepEqual(projetsDuGroupe(avec('formation_dirigeant', 'alternance', null, 'formation_salarie')), [
       'formation_dirigeant',
       'alternance',
       null,
@@ -657,19 +704,19 @@ describe('OPCO et budget du groupe : tous les rangs comptent', () => {
       ['formation_dirigeant', 'formation_salarie', 'formation_dirigeant'],
       [...dirigeants, 'reconversion_salarie'],
     ] as const) {
-      assert.equal(opcoRequisPourLeGroupe(groupeDeProjets(...projets)), true, projets.join());
-      assert.equal(ouvreBudgetPourLeGroupe(groupeDeProjets(...projets)), true, projets.join());
+      assert.equal(opcoRequisPourLeGroupe(avec(...projets)), true, projets.join());
+      assert.equal(ouvreBudgetPourLeGroupe(avec(...projets)), true, projets.join());
     }
   });
 
   test('six dirigeants : OPCO facultatif, aucun budget', () => {
-    const six = groupeDeProjets(...Array<'formation_dirigeant'>(6).fill('formation_dirigeant'));
+    const six = avec(...Array<'formation_dirigeant'>(6).fill('formation_dirigeant'));
     assert.equal(opcoRequisPourLeGroupe(six), false);
     assert.equal(ouvreBudgetPourLeGroupe(six), false);
   });
 
   test('un profil au projet non choisi compte comme un salarié, à son rang', () => {
-    const groupe = groupeDeProjets('formation_dirigeant', 'formation_dirigeant', null);
+    const groupe = avec('formation_dirigeant', 'formation_dirigeant', null);
     assert.equal(opcoRequisPourLeGroupe(groupe), true);
     assert.equal(ouvreBudgetPourLeGroupe(groupe), true);
   });
@@ -753,7 +800,6 @@ describe('champsDepuisProjet', () => {
 describe('etatDepuisProjet avec un groupe : le budget déjà consommé', () => {
   /** Budget de l'état après le choix de `vers` pour le profil principal. */
   const budgetApres = (groupe: WizardState, vers: ProjetType) => ({ ...groupe, ...etatDepuisProjet(groupe, vers) }).budgetDejaConsomme;
-  const avecBudget = (...projets: WizardState['projetType'][]): WizardState => ({ ...groupeDeProjets(...projets), budgetDejaConsomme: 2000 });
 
   test("gardé tant qu'un profil supplémentaire relève d'un projet salarié, quel que soit son rang", () => {
     for (const autres of [
@@ -776,6 +822,101 @@ describe('etatDepuisProjet avec un groupe : le budget déjà consommé', () => {
   test("vidé quand aucun profil du groupe ne l'ouvre", () => {
     assert.equal(budgetApres(avecBudget('formation_salarie', 'alternance', 'recrutement_demandeur_emploi'), 'formation_dirigeant'), null);
     assert.equal(budgetApres(avecBudget('formation_dirigeant', 'formation_dirigeant'), 'alternance'), null);
+  });
+});
+
+describe("normaliserGroupe : le budget déjà consommé se garde tant qu'un profil relève d'un projet salarié", () => {
+  test('retirer le dernier profil salarié vide le budget ; retirer un autre profil le laisse', () => {
+    assert.equal(retirerProfil(avecBudget('formation_dirigeant', 'formation_salarie'), 'profil-2').budgetDejaConsomme, null);
+    const trois = avecBudget('formation_dirigeant', 'formation_salarie', 'formation_dirigeant');
+    assert.equal(retirerProfil(trois, 'profil-3').budgetDejaConsomme, 2000);
+    assert.equal(retirerProfil(trois, 'profil-2').budgetDejaConsomme, null);
+  });
+
+  test('passer le dernier profil salarié à un projet sans budget le vide, par changerProjetDuProfil comme par majProfil', () => {
+    const groupe = avecBudget('formation_dirigeant', 'formation_salarie');
+    for (const projet of ['formation_dirigeant', 'alternance', 'recrutement_demandeur_emploi'] as const) {
+      assert.equal(changerProjetDuProfil(groupe, 'profil-2', projet).budgetDejaConsomme, null, projet);
+      assert.equal(majProfil(groupe, 'profil-2', { projetType: projet }).budgetDejaConsomme, null, projet);
+    }
+    // Un autre projet salarié l'ouvre aussi : le budget reste.
+    assert.equal(changerProjetDuProfil(groupe, 'profil-2', 'reconversion_salarie').budgetDejaConsomme, 2000);
+  });
+
+  test("il reste tant qu'un profil relève d'un projet salarié, quel que soit son rang", () => {
+    const cas: [WizardState['projetType'][], string][] = [
+      [['formation_salarie', 'formation_dirigeant', 'formation_dirigeant'], 'principal'],
+      [['formation_dirigeant', 'formation_salarie', 'formation_dirigeant'], 'profil-2'],
+      [['formation_dirigeant', 'formation_dirigeant', 'reconversion_salarie'], 'profil-3'],
+    ];
+    for (const [projets, salarie] of cas) {
+      const groupe = avecBudget(...projets);
+      const nom = projets.join();
+      assert.equal(normaliserGroupe(groupe).budgetDejaConsomme, 2000, nom);
+      // Les deux autres profils ne l'ouvrent pas : changer leurs réponses ou leur projet, ou les retirer, laisse le budget.
+      for (const autre of ['principal', 'profil-2', 'profil-3'].filter((id) => id !== salarie)) {
+        assert.equal(majProfil(groupe, autre, { ageBeneficiaire: 40 }).budgetDejaConsomme, 2000, `${nom} : âge de ${autre}`);
+        assert.equal(changerProjetDuProfil(groupe, autre, 'alternance').budgetDejaConsomme, 2000, `${nom} : ${autre} en alternance`);
+        if (autre !== 'principal') assert.equal(retirerProfil(groupe, autre).budgetDejaConsomme, 2000, `${nom} : ${autre} retiré`);
+      }
+      // Le profil salarié est le seul : le quitter, ou le retirer, vide le budget.
+      assert.equal(changerProjetDuProfil(groupe, salarie, 'formation_dirigeant').budgetDejaConsomme, null, `${nom} : ${salarie} dirigeant`);
+      if (salarie !== 'principal') assert.equal(retirerProfil(groupe, salarie).budgetDejaConsomme, null, `${nom} : ${salarie} retiré`);
+    }
+  });
+
+  test("un projet non choisi compte comme ouvert : le budget reste, jusqu'à ce que tous les projets soient choisis", () => {
+    assert.equal(normaliserGroupe(avecBudget(null)).budgetDejaConsomme, 2000);
+    const groupe = avecBudget('formation_dirigeant', null);
+    assert.equal(normaliserGroupe(groupe).budgetDejaConsomme, 2000);
+    assert.equal(majProfil(groupe, 'principal', { ageBeneficiaire: 40 }).budgetDejaConsomme, 2000);
+    assert.equal(majProfil(groupe, 'profil-2', { projetType: 'alternance' }).budgetDejaConsomme, null);
+  });
+
+  test("dirigeant, alternance et demandeur d'emploi n'ouvrent pas le budget : vidé, même à zéro", () => {
+    for (const projets of [
+      ['formation_dirigeant'],
+      ['alternance'],
+      ['recrutement_demandeur_emploi'],
+      ['formation_dirigeant', 'alternance', 'recrutement_demandeur_emploi'],
+    ] as const) {
+      assert.equal(normaliserGroupe(avecBudget(...projets)).budgetDejaConsomme, null, projets.join());
+    }
+    assert.equal(normaliserGroupe({ ...avec('formation_dirigeant'), budgetDejaConsomme: 0 }).budgetDejaConsomme, null);
+  });
+
+  test('un profil au-delà du cinquième supplémentaire ne compte pas : retiré par la normalisation, il ne garde pas le budget', () => {
+    const dirigeants = Array<'formation_dirigeant'>(5).fill('formation_dirigeant');
+    const groupe = avecBudget('formation_dirigeant', ...dirigeants, 'formation_salarie', 'formation_salarie');
+    assert.equal(groupe.autresProfils.length, 7);
+    const normalise = normaliserGroupe(groupe);
+    assert.equal(normalise.autresProfils.length, 5);
+    assert.equal(normalise.budgetDejaConsomme, null);
+  });
+
+  test("changerProjetDuProfil du profil principal donne le budget d'etatDepuisProjet pour le même changement", () => {
+    const groupes = [
+      avecBudget('formation_salarie'),
+      avecBudget('formation_salarie', 'formation_dirigeant'),
+      avecBudget('formation_dirigeant', 'formation_salarie'),
+      avecBudget('formation_dirigeant', 'alternance', null),
+      avecBudget('alternance', 'recrutement_demandeur_emploi'),
+      avecBudget('formation_dirigeant', 'formation_dirigeant'),
+    ];
+    for (const groupe of groupes) {
+      for (const projet of PROJETS) {
+        const attendu = { ...groupe, ...etatDepuisProjet(groupe, projet) }.budgetDejaConsomme;
+        const nom = `${projetsDuGroupe(groupe).join()} -> ${projet}`;
+        assert.equal(changerProjetDuProfil(groupe, 'principal', projet).budgetDejaConsomme, attendu, nom);
+      }
+    }
+  });
+
+  test('idempotente, budget compris', () => {
+    for (const projets of [['formation_dirigeant'], ['formation_dirigeant', 'formation_salarie'], [null], ['alternance', 'formation_dirigeant']] as const) {
+      const une = normaliserGroupe(avecBudget(...projets));
+      assert.deepEqual(normaliserGroupe(une), une, projets.join());
+    }
   });
 });
 
@@ -812,16 +953,12 @@ describe("toutes les opérations : un état normalisé en sortie, l'état reçu 
 });
 
 describe("suites d'opérations tirées au hasard (graine 2026)", () => {
-  test('40 suites de 100 opérations : effectifs, profils, prix du groupe et coûts restent cohérents', () => {
-    // mulberry32 : tirages reproductibles.
-    let graine = 2026;
-    const hasard = (): number => {
-      graine = (graine + 0x6d2b79f5) | 0;
-      let t = Math.imul(graine ^ (graine >>> 15), 1 | graine);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
+  test('40 suites de 100 opérations : effectifs, profils, prix du groupe, coûts et budget restent cohérents', () => {
+    const hasard = hasardFixe(2026);
     const choisir = <T>(valeurs: readonly T[]): T => valeurs[Math.floor(hasard() * valeurs.length)];
+    /** Un profil au moins relève d'un projet qui ouvre le budget : salarié, reconversion, ou projet non choisi. */
+    const ouvreLeBudget = (e: WizardState): boolean =>
+      [e.projetType, ...e.autresProfils.map((p) => p.projetType)].some((p) => p == null || p === 'formation_salarie' || p === 'reconversion_salarie');
 
     /** Invariants d'un état de groupe, écrits à la main. */
     const verifier = (e: WizardState, contexte: string): void => {
@@ -840,13 +977,14 @@ describe("suites d'opérations tirées au hasard (graine 2026)", () => {
       const cout = e.pedagogyCostTotal;
       const heures = e.durationHours;
       assert.equal(e.pedagogyCostPerHour, cout && heures && heures > 0 ? cout / heures : null, `${contexte} : coût horaire`);
-      for (const v of [e.prixDuGroupe, e.pedagogyCostTotal, e.pedagogyCostPerHour, e.durationHours]) {
+      for (const v of [e.prixDuGroupe, e.pedagogyCostTotal, e.pedagogyCostPerHour, e.durationHours, e.budgetDejaConsomme]) {
         assert.ok(v === null || Number.isFinite(v), `${contexte} : ${v}`);
       }
+      if (e.budgetDejaConsomme != null) assert.ok(ouvreLeBudget(e), `${contexte} : budget ${e.budgetDejaConsomme} sans projet salarié`);
       assert.deepEqual(normaliserGroupe(e), e, `${contexte} : état non normalisé`);
     };
 
-    const vus = { cinqProfils: false, quatreVingtDixNeuf: false, prixDuGroupe: false, sansEffet: false };
+    const vus = { cinqProfils: false, quatreVingtDixNeuf: false, prixDuGroupe: false, sansEffet: false, budgetGarde: false, budgetVide: false };
     for (let suite = 0; suite < 40; suite++) {
       let e = etat();
       for (let pas = 0; pas < 100; pas++) {
@@ -855,7 +993,7 @@ describe("suites d'opérations tirées au hasard (graine 2026)", () => {
         const id = choisir(['principal', ...avant.autresProfils.map((p) => p.id), 'profil-42']);
         const profil = avant.autresProfils.find((p) => p.id === id);
         const connu = id === 'principal' || profil != null;
-        const operation = Math.floor(hasard() * 7);
+        const operation = Math.floor(hasard() * 8);
         const contexte = `suite ${suite}, pas ${pas}, opération ${operation}`;
         if (operation === 0) {
           e = ajouterProfil(avant);
@@ -895,17 +1033,29 @@ describe("suites d'opérations tirées au hasard (graine 2026)", () => {
           e = etatDepuisPrix(avant, saisie, heures, pourLeGroupe);
           assert.equal(e.prixDuGroupe, pourLeGroupe && total(avant) >= 2 ? saisie : null, contexte);
           assert.equal(e.durationHours, heures, contexte);
+        } else if (operation === 6) {
+          // Saisie du budget déjà consommé : gardé si un profil relève d'un projet salarié, vidé sinon.
+          const budget = choisir([null, 0, 500, 2000]);
+          e = normaliserGroupe({ ...avant, budgetDejaConsomme: budget });
+          assert.equal(e.budgetDejaConsomme, ouvreLeBudget(avant) ? budget : null, contexte);
         } else {
           e = basculerModePrix(avant, hasard() < 0.5);
         }
         assert.deepEqual(avant, copie, `${contexte} : l'état reçu a été modifié`);
+        // Les autres opérations gardent le budget tant qu'un profil relève d'un projet salarié, et le vident sinon.
+        if (operation !== 6) assert.equal(e.budgetDejaConsomme, ouvreLeBudget(e) ? avant.budgetDejaConsomme : null, `${contexte} : budget`);
         verifier(e, contexte);
         if (e.autresProfils.length === MAX_PROFILS - 1) vus.cinqProfils = true;
         if (total(e) === MAX_PERSONNES) vus.quatreVingtDixNeuf = true;
         if (e.prixDuGroupe != null && total(e) >= 2) vus.prixDuGroupe = true;
         if (e === avant) vus.sansEffet = true;
+        if (operation !== 6 && avant.budgetDejaConsomme != null) {
+          if (e.budgetDejaConsomme == null) vus.budgetVide = true;
+          else vus.budgetGarde = true;
+        }
       }
     }
-    assert.deepEqual(vus, { cinqProfils: true, quatreVingtDixNeuf: true, prixDuGroupe: true, sansEffet: true }, 'les suites doivent visiter les cas limites');
+    const tous = { cinqProfils: true, quatreVingtDixNeuf: true, prixDuGroupe: true, sansEffet: true, budgetGarde: true, budgetVide: true };
+    assert.deepEqual(vus, tous, 'les suites doivent visiter les cas limites');
   });
 });
