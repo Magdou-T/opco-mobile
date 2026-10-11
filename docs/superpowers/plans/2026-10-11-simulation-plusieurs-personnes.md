@@ -1541,7 +1541,7 @@ et ajouter à la fin du fichier :
 
 ```ts
 describe('répartition en centimes', () => {
-  it('chaque part reçoit sa fraction entière, les centimes restants vont aux plus grandes parts décimales', () => {
+  it('chaque part reçoit sa fraction entière, et à égalité de décimales le centime restant va à la première part', () => {
     expect(repartirCentimes(100, [1, 1, 1])).toEqual([34, 33, 33]);
     expect(repartirCentimes(100, [3, 1])).toEqual([75, 25]);
     expect(repartirCentimes(1, [1, 1])).toEqual([1, 0]);
@@ -1555,11 +1555,7 @@ describe('répartition en centimes', () => {
   });
 
   it('1 000 répartitions tirées (graine fixe) : la somme des parts égale toujours le total, chaque part est un entier non négatif', () => {
-    let graine = 12345;
-    const hasard = (n: number) => {
-      graine = (Math.imul(graine, 1103515245) + 12345) & 0x7fffffff;
-      return graine % n;
-    };
+    const hasard = generateur(12345);
     for (let i = 0; i < 1000; i++) {
       const total = hasard(5_000_000);
       const effectifs = Array.from({ length: 1 + hasard(6) }, () => 1 + hasard(99));
@@ -1591,12 +1587,8 @@ describe('répartition en centimes', () => {
     expect(repartirCentimes(-1, [1, 1])).toEqual([-1, 0]);
   });
 
-  it('1 000 répartitions tirées (autre graine) : chaque part vaut sa fraction entière ou un centime de plus, et le centime va à la plus grande décimale (à égalité, à la première)', () => {
-    let graine = 54321;
-    const hasard = (n: number) => {
-      graine = (Math.imul(graine, 1103515245) + 12345) & 0x7fffffff;
-      return graine % n;
-    };
+  it('1 000 répartitions tirées (autre graine) : la somme des parts égale le total, chaque part vaut sa fraction entière ou un centime de plus, et le centime va à la plus grande décimale (à égalité, à la première)', () => {
+    const hasard = generateur(54321);
     for (let i = 0; i < 1000; i++) {
       const total = hasard(5_000_000);
       const effectifs = Array.from({ length: 1 + hasard(6) }, () => 1 + hasard(99));
@@ -1605,6 +1597,7 @@ describe('répartition en centimes', () => {
       const decimale = effectifs.map((e) => (total * e) % somme);
       const parts = repartirCentimes(total, effectifs);
       const message = `${total} ${effectifs}`;
+      expect(parts.reduce((s, p) => s + p, 0), message).toBe(total);
       parts.forEach((p, a) => {
         expect([entiere[a], entiere[a] + 1], message).toContain(p);
         parts.forEach((q, b) => {
@@ -1655,19 +1648,34 @@ describe("répartition du résultat de l'OPCO entre profils", () => {
     expect(seule.personnes).toBe(5);
   });
 
-  it("ce qui n'est pas un montant est repris tel quel", () => {
+  it('tout ce que la répartition ne recalcule pas est repris tel quel, dans le résultat comme dans ses lignes', () => {
     const r = resultat();
+    // Ce que la répartition recalcule : le nombre de personnes, les lignes (trois montants chacune), les totaux, les dispositifs et l'enveloppe.
+    const sansRecalcules = ({ personnes, lines, totalRequested, totalFunded, totalRemainder, dispositifsComplementaires, enveloppeMaxPotentielle, ...reste }: typeof r) => reste;
+    const sansMontants = ({ requestedAmount, fundedAmount, remainder, ...reste }: (typeof r)['lines'][number]) => reste;
     for (const part of repartirFinancement(r, [3, 2])) {
-      expect(part).toMatchObject({
-        opcoName: r.opcoName,
-        pdcFerme: r.pdcFerme,
-        budgetCapApplied: r.budgetCapApplied,
-        budgetCapAmount: r.budgetCapAmount,
-        budgetDejaConsomme: r.budgetDejaConsomme,
-      });
-      expect(part.warnings).toEqual(r.warnings);
-      expect(part.lines.map((l) => [l.poste, l.confidence, l.note])).toEqual(r.lines.map((l) => [l.poste, l.confidence, l.note]));
+      expect(sansRecalcules(part)).toEqual(sansRecalcules(r));
+      expect(part.lines.map(sansMontants)).toEqual(r.lines.map(sansMontants));
     }
+  });
+
+  it('ne modifie pas le résultat du groupe reçu', () => {
+    const dispositif = {
+      id: 'd',
+      nom: 'D',
+      cumul: 'additif' as const,
+      montantEstime: 1000.01,
+      description: 'd',
+      conditions: ['c'],
+      demarches: 'm',
+      publics: null,
+      confidence: 'exact' as const,
+      sourceUrl: 'x',
+    };
+    const r = { ...resultat(), dispositifsComplementaires: [dispositif] };
+    const avant = JSON.stringify(r);
+    repartirFinancement(r, [3, 2]);
+    expect(JSON.stringify(r)).toBe(avant);
   });
 
   it("le montant estimé de chaque dispositif et l'enveloppe maximale se répartissent aussi, au centime ; un montant inconnu reste inconnu", () => {
@@ -1707,6 +1715,20 @@ describe("répartition du résultat de l'OPCO entre profils", () => {
     }
     expect(centimes(parts.reduce((s, p) => s + p.lines[0].requestedAmount, 0))).toBe(11);
     expect(centimes(parts.reduce((s, p) => s + p.lines[0].fundedAmount, 0))).toBe(10);
+  });
+
+  it("le reste d'une part est son demandé moins son financé, même quand le reste de la ligne du groupe s'écarte d'un centime", () => {
+    // Le moteur arrondit le reste sur les montants bruts : 15,75 €/h × 10,5 h × 5 = 826,875 € financés sur 1 000 € demandés donnent
+    // 826,88 € et un reste de 173,125 € arrondi à 173,13 €, alors que 1 000,00 - 826,88 = 173,12 €. Attendus calculés à la main pour
+    // 3 et 1 personnes, en centimes : financé 82 688 = 62 016 + 20 672 ; reste 17 312 = 12 984 + 4 328 ; demandé 100 000 = 75 000 + 25 000.
+    const base = resultat();
+    const r = { ...base, lines: [{ ...base.lines[0], requestedAmount: 1000, fundedAmount: 826.88, remainder: 173.13 }] };
+    const [a, b] = repartirFinancement(r, [3, 1]);
+    expect([a.lines[0].requestedAmount, a.lines[0].fundedAmount, a.lines[0].remainder]).toEqual([750, 620.16, 129.84]);
+    expect([b.lines[0].requestedAmount, b.lines[0].fundedAmount, b.lines[0].remainder]).toEqual([250, 206.72, 43.28]);
+    expect(centimes(a.lines[0].requestedAmount + b.lines[0].requestedAmount)).toBe(100000);
+    expect(centimes(a.lines[0].fundedAmount + b.lines[0].fundedAmount)).toBe(82688);
+    expect(centimes(a.lines[0].remainder + b.lines[0].remainder)).toBe(17312); // et non 17313, le reste de la ligne du groupe
   });
 
   it("les totaux d'une part restent la somme de ses lignes, même quand les parts des lignes ne suivent pas celle du total", () => {
@@ -1782,7 +1804,8 @@ const enEuros = (centimes: number): number => centimes / 100;
  * Répartit `total` centimes entre des parts proportionnelles aux `effectifs`, en centimes entiers : chaque part reçoit
  * `floor(total × effectif / somme)`, puis les centimes qui restent vont aux parts qui ont la plus grande part décimale
  * (à égalité, à la première de la liste). La somme des parts égale toujours `total`. Des effectifs vides ou de somme nulle
- * donnent des parts nulles.
+ * donnent des parts nulles. Un total négatif est réparti comme sa valeur absolue, puis chaque part reprend le signe :
+ * c'est une troncature vers zéro de la fraction entière, les centimes restants se distribuant comme pour un total positif.
  */
 export function repartirCentimes(total: number, effectifs: readonly number[]): number[] {
   const somme = effectifs.reduce((s, e) => s + e, 0);
@@ -1806,10 +1829,18 @@ export function repartirCentimes(total: number, effectifs: readonly number[]): n
  * Répartit le résultat de l'OPCO d'un groupe entre ses profils salariés (`effectifs` : le nombre de personnes de chacun,
  * dans l'ordre des profils). Chaque ligne se répartit en centimes entiers, le financé et le reste à charge séparément (le
  * demandé d'une part est leur somme : il ne passe jamais sous le financé), puis le montant estimé de chaque dispositif et
- * l'enveloppe maximale. La somme des parts égale le groupe, poste par poste, au centime. Les totaux de chaque part se
- * recalculent à partir de ses lignes ; le plafond annuel, le budget déjà consommé, les textes et les drapeaux sont repris
- * tels quels ; `personnes` vaut l'effectif de la part. Les textes de détail restent ceux du groupe entier (« Coût pour
- * 5 personnes : … ») : une part ne s'affiche jamais, seul le plan de son profil en lit les montants.
+ * l'enveloppe maximale. La somme des parts égale le groupe, poste par poste, au centime, pour le demandé et le financé. Le
+ * reste à charge d'une part est son demandé moins son financé, et non le `remainder` de la ligne du groupe : le moteur
+ * arrondit `remainder` sur les montants bruts, donc `remainder` peut différer d'un centime de demandé moins financé. Seul
+ * demandé moins financé conserve à la fois la somme des demandés et celle des financés des parts. Les totaux de chaque
+ * part se recalculent à partir de ses lignes. Sous le plafond annuel global, le moteur pose `totalFunded` au plafond
+ * restant alors que ses lignes sont arrondies une à une : leur somme peut s'en écarter de quelques centimes, et la somme
+ * des totaux des parts peut alors s'écarter de même du total du groupe. L'identité avec le groupe pour un seul profil ne
+ * vaut donc que pour les lignes, hors `remainder` d'une ligne incohérente. L'enveloppe d'une part, répartie seule, peut
+ * s'écarter de quelques centimes de son financé et de son demandé : ne pas l'y comparer. Le plafond annuel, le budget déjà
+ * consommé, les textes et les drapeaux sont repris tels quels ; `personnes` vaut l'effectif de la part. Les textes de
+ * détail restent ceux du groupe entier (« Coût pour 5 personnes : … ») : une part ne s'affiche jamais, seul le plan de son
+ * profil en lit les montants.
  */
 export function repartirFinancement(r: FundingResult, effectifs: readonly number[]): FundingResult[] {
   const lignes = r.lines.map((l) => ({
