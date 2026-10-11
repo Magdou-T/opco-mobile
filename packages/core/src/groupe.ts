@@ -326,9 +326,9 @@ function fusionnerUneAide(vues: VueDeLAide[]): AideEvaluee {
  * telle quelle, sans champ `profils`. Plusieurs profils : le meilleur statut (éligible, puis à vérifier, puis non éligible) ;
  * `horsPerimetre` seulement si l'aide l'est pour tous les profils ; le plus grand montant PAR PERSONNE parmi les profils
  * éligibles ou à vérifier (« jusqu'à »), avec son libellé et son lien : à montant égal, ceux du profil au meilleur statut, puis
- * du premier dans l'ordre des blocs ; les raisons réunies sans doublon quand l'aide n'est pas éligible, sans celles des profils
- * pour lesquels elle est hors périmètre ; `profils` : un élément par profil éligible ou à vérifier. Une aide non éligible pour
- * tous les profils garde le montant, le libellé et le lien de sa meilleure vue (le plus grand montant, la première à égalité),
+ * du premier dans l'ordre des blocs ; les raisons réunies sans doublon quand l'aide n'est pas éligible, et, pour une aide non
+ * éligible, sans celles des profils pour lesquels elle est hors périmètre ; `profils` : un élément par profil éligible ou à
+ * vérifier. Une aide non éligible pour tous les profils garde le montant, le libellé et le lien de sa meilleure vue (le plus grand montant, la première à égalité),
  * que l'écran n'affiche jamais. La liste est triée comme une liste évaluée.
  */
 export function fusionnerAides(blocs: readonly { profil: ProfilDuGroupe; aides: readonly AideEvaluee[] }[]): AideEvaluee[] {
