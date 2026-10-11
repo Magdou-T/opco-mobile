@@ -479,7 +479,11 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     const r = calculateFunding(opcoGroupe(), etatGroupe());
     expect(r.personnes).toBe(1);
     expect(poste(r, 'pedagogie')).toMatchObject({ requestedAmount: 5000, fundedAmount: 4000, remainder: 1000 });
-    expect((poste(r, 'pedagogie').details ?? []).some((d) => d.includes('personnes'))).toBe(false);
+    expect((poste(r, 'pedagogie').details ?? []).some((d) => d.includes('personne'))).toBe(false);
+  });
+
+  it('un appel explicite à 1 personne rend exactement le résultat de l’appel sans paramètre', () => {
+    expect(calculateFunding(opcoGroupe(), etatGroupe(), 1)).toEqual(calculateFunding(opcoGroupe(), etatGroupe()));
   });
 
   it('quatre personnes : le coût demandé et le financement valent 4 fois ceux d’une personne', () => {
@@ -492,7 +496,22 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
     const details = poste(calculateFunding(opcoGroupe(), etatGroupe(), 4), 'pedagogie').details ?? [];
     expect(details).toContain(`Coût pour 4${NBSP}personnes : 5000.00${NBSP}€ × 4 = 20000.00${NBSP}€`);
     expect(details).toContain(`Financement pour 4${NBSP}personnes : 4000.00${NBSP}€ × 4 = 16000.00${NBSP}€`);
+    expect(details).toContain(`Reste à charge pour 4${NBSP}personnes : 1000.00${NBSP}€ × 4 = 4000.00${NBSP}€`);
     expect(details).toContain(`Calcul : 40${NBSP}€/h × 100${NBSP}h = 4000.00${NBSP}€`);
+  });
+
+  it('la ligne « Coût pour » part du coût saisi, comme le coût demandé (coût horaire arrondi : 4250 € sur 140 h)', () => {
+    const r = calculateFunding(opcoGroupe(), etatGroupe({ pedagogyCostTotal: 4250, pedagogyCostPerHour: 30.36, durationHours: 140 }), 4);
+    expect(poste(r, 'pedagogie').requestedAmount).toBe(17000);
+    expect(poste(r, 'pedagogie').details).toContain(`Coût pour 4${NBSP}personnes : 4250.00${NBSP}€ × 4 = 17000.00${NBSP}€`);
+  });
+
+  it('budget publié sans plafond horaire : le groupe est financé à hauteur du budget, une seule fois', () => {
+    const opco = opcoGroupe({ cout_horaire_inter: sourced(null), budget_annuel_max: sourced(12000), budget_annuel_portee: 'pedagogie' });
+    const trois = calculateFunding(opco, etatGroupe(), 3);
+    expect(poste(trois, 'pedagogie')).toMatchObject({ requestedAmount: 15000, fundedAmount: 12000, remainder: 3000 });
+    expect(trois.budgetCapApplied).toBe(true);
+    expect(poste(calculateFunding(opco, etatGroupe(), 2), 'pedagogie')).toMatchObject({ requestedAmount: 10000, fundedAmount: 10000, remainder: 0 });
   });
 
   it('l’avertissement de dépassement donne le reste à charge du groupe et dit pour combien de personnes', () => {
@@ -521,10 +540,8 @@ describe('calculateFunding pour n personnes : coûts pédagogiques', () => {
 
   it('un nombre de personnes invalide (0, négatif, décimal, NaN, infini) est ramené à un entier d’au moins 1', () => {
     const base = calculateFunding(opcoGroupe(), etatGroupe());
-    for (const n of [0, -3, Number.NaN, Number.POSITIVE_INFINITY, 0.4]) {
-      const r = calculateFunding(opcoGroupe(), etatGroupe(), n);
-      expect(r.personnes).toBe(1);
-      expect(poste(r, 'pedagogie')).toEqual(poste(base, 'pedagogie'));
+    for (const n of [0, -3, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, 0.4]) {
+      expect(calculateFunding(opcoGroupe(), etatGroupe(), n), String(n)).toEqual(base);
     }
     expect(calculateFunding(opcoGroupe(), etatGroupe(), 3.9).personnes).toBe(3);
   });
@@ -556,7 +573,7 @@ describe('calculateFunding pour n personnes : plafond annuel de portée « péda
   it('plafond à 0 € ou déjà consommé : rien n’est financé, aucun montant négatif, un seul message de budget nul', () => {
     for (const [plafond, consomme] of [[0, null], [10000, 10000], [10000, 25000]] as const) {
       const r = calculateFunding(avecPlafond(plafond), etatGroupe({ budgetDejaConsomme: consomme }), 5);
-      expect(poste(r, 'pedagogie').fundedAmount).toBe(0);
+      expect(poste(r, 'pedagogie')).toMatchObject({ requestedAmount: 25000, fundedAmount: 0, remainder: 25000 });
       expect(r.lines.every((l) => l.fundedAmount >= 0 && l.remainder >= 0)).toBe(true);
     }
     const nul = calculateFunding(avecPlafond(0), etatGroupe(), 5);
@@ -643,11 +660,13 @@ par
 ): { ligne: FundingLine; capApplique: boolean } {
   const hours = state.durationHours ?? 0;
   const userCostPerHour = state.pedagogyCostPerHour ?? 0;
-  const requestedTotal = (state.pedagogyCostTotal ?? userCostPerHour * hours) * n;
+  // Coût demandé pour UNE personne : le total saisi, à défaut coût horaire × heures (la ligne de groupe en part aussi).
+  const coutParPersonne = state.pedagogyCostTotal ?? userCostPerHour * hours;
+  const requestedTotal = coutParPersonne * n;
   const pour = pourLeGroupe(n);
   const details: string[] = [
     `Votre coût horaire : ${avecUnite(userCostPerHour, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite((userCostPerHour * hours).toFixed(2), '€')}`,
-    ...detailDeGroupe(n, userCostPerHour * hours, userCostPerHour * hours * n, 'Coût pour'),
+    ...detailDeGroupe(n, coutParPersonne, requestedTotal, 'Coût pour'),
   ];
 
   // Le financement se calcule pour UNE personne, puis se multiplie par n avant le plafond annuel (celui de l'entreprise).
@@ -686,7 +705,7 @@ par
 puis, dans les lignes qui suivent, quatre remplacements de texte :
 
 - `? \`Votre coût dépasse le plafond de ${avecUnite(reste.toFixed(2), '€')} sur la formation → taux appliqué` devient `? \`Votre coût dépasse le plafond de ${avecUnite(resteParPersonne.toFixed(2), '€')} sur la formation → taux appliqué` (une personne dans le détail) ;
-- `details.push(\`Reste à charge sur ce poste : ${avecUnite(reste.toFixed(2), '€')}\`);` devient `details.push(\`Reste à charge sur ce poste : ${avecUnite(resteParPersonne.toFixed(2), '€')}\`);` ;
+- `details.push(\`Reste à charge sur ce poste : ${avecUnite(reste.toFixed(2), '€')}\`);` devient `details.push(\`Reste à charge sur ce poste : ${avecUnite(resteParPersonne.toFixed(2), '€')}\`);` suivi, sur la ligne d'après, de `details.push(...detailDeGroupe(n, resteParPersonne, reste, 'Reste à charge pour'));` (le reste du groupe suit celui d'une personne, comme les lignes « Coût pour » et « Financement pour » ; rien pour une personne seule) ;
 - `de ${avecUnite(reste.toFixed(2), '€')} sur la formation : ce montant reste à charge.\`` devient `de ${avecUnite(reste.toFixed(2), '€')} sur la formation${pour} : ce montant reste à charge.\`` ;
 - `\`Le reste à charge est de ${avecUnite(reste.toFixed(2), '€')}.\`,` devient `\`Le reste à charge est de ${avecUnite(reste.toFixed(2), '€')}${pour}.\`,`.
 
@@ -821,8 +840,17 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     expect(poste(r, 'salaires').note).toBe(`12${NBSP}€/h × 100${NBSP}h × 4${NBSP}personnes`);
     for (const p of ['salaires', 'transport', 'hebergement', 'restauration']) {
       const details = poste(calculateFunding(opcoGroupe(), etatGroupe()), p).details ?? [];
-      expect(details.some((d) => d.includes('personnes')), p).toBe(false);
+      expect(details.some((d) => d.includes('personne')), p).toBe(false);
     }
+  });
+
+  it('restauration au-dessus du forfait : le reste à charge du groupe suit celui d’une personne', () => {
+    const details = poste(calculateFunding(opcoGroupe(), etatGroupe({ mealCostPerDay: 25 }), 4), 'restauration').details ?? [];
+    expect(details).toContain(`Reste à charge : 25.00${NBSP}€`);
+    expect(details).toContain(`Reste à charge pour 4${NBSP}personnes : 25.00${NBSP}€ × 4 = 100.00${NBSP}€`);
+    const un = poste(calculateFunding(opcoGroupe(), etatGroupe({ mealCostPerDay: 25 })), 'restauration').details ?? [];
+    expect(un).toContain(`Reste à charge : 25.00${NBSP}€`);
+    expect(un.some((d) => d.includes('personne'))).toBe(false);
   });
 });
 
@@ -1123,12 +1151,17 @@ function calcMeals(opco: OpcoData, state: WizardState, branche: string | null, n
       details.push(`Votre coût (${avecUnite(userCostPerDay, '€/jour')}) est inférieur au forfait : prise en charge au coût réel`);
     }
     const calcul = `${tarif(tauxApplique)} × ${compte(days, 'jour', 'jours')}`;
+    const resteParPersonne = demandeParPersonne - financeParPersonne;
+    // Chaque ligne d'une personne est suivie de celle du groupe (rien pour une personne seule) : le reste à charge aussi.
     details.push(
       `Calcul : ${calcul} = ${avecUnite(financeParPersonne.toFixed(2), '€')}`,
-      demandeParPersonne > financeParPersonne
-        ? `Reste à charge : ${avecUnite((demandeParPersonne - financeParPersonne).toFixed(2), '€')}`
-        : "Votre coût ne dépasse pas le forfait : l'estimation le retient en entier.",
       ...detailDeGroupe(n, financeParPersonne, funded),
+      ...(demandeParPersonne > financeParPersonne
+        ? [
+            `Reste à charge : ${avecUnite(resteParPersonne.toFixed(2), '€')}`,
+            ...detailDeGroupe(n, resteParPersonne, resteParPersonne * n, 'Reste à charge pour'),
+          ]
+        : ["Votre coût ne dépasse pas le forfait : l'estimation le retient en entier."]),
     );
     const note = n > 1 ? `${calcul} × ${compte(n, 'personne', 'personnes')}` : calcul;
     return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, note, details);
