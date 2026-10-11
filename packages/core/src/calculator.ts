@@ -465,7 +465,7 @@ function nonPublieePourLaBranche(opco: OpcoData, branche: string): string {
 }
 
 /** `branche` : nom de la branche appliquée (variante), null sans variante. */
-function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number, branche: string | null): FundingLine {
+function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number, branche: string | null, n: number): FundingLine {
   const hours = state.durationHours ?? 0;
   const mode = opco.prise_en_charge_salaires_mode;
   const rate = opco.prise_en_charge_salaires.value;
@@ -499,15 +499,20 @@ function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number, 
         );
         break;
       }
-      funded = (taux ?? 0) * hours;
-      note = taux != null ? `${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')}` : undefined;
+      const parPersonne = (taux ?? 0) * hours;
+      funded = parPersonne * n;
+      note =
+        taux != null
+          ? `${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')}${n > 1 ? ` × ${compte(n, 'personne', 'personnes')}` : ''}`
+          : undefined;
       if (taux != null) {
         if (tauxTaille !== undefined) details.push(`Taux propre à votre taille d'entreprise : ${avecUnite(taux, '€/h')}`);
         if (plafond?.prise_en_charge_salaires_qualifiant && taux > 0) {
           details.push(`Taux réservé aux actions qualifiantes : ${FORMATION_QUALIFIANTE}`);
         }
         details.push(`Taux de prise en charge : ${avecUnite(taux, '€/h')}`);
-        details.push(`Calcul : ${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite(funded.toFixed(2), '€')}`);
+        details.push(`Calcul : ${avecUnite(taux, '€/h')} × ${avecUnite(hours, 'h')} = ${avecUnite(parPersonne.toFixed(2), '€')}`);
+        details.push(...detailDeGroupe(n, parPersonne, funded));
       }
       break;
     }
@@ -542,7 +547,7 @@ function calcSalary(opco: OpcoData, state: WizardState, pedagogyFunded: number, 
   return line('salaires', 'Prise en charge salaires', funded, funded, effectiveConfidence, sourceUrl, note, details);
 }
 
-function calcTransport(opco: OpcoData, state: WizardState, branche: string | null): FundingLine {
+function calcTransport(opco: OpcoData, state: WizardState, branche: string | null, n: number): FundingLine {
   if (!state.needsTransport) return line('transport', 'Transport', 0, 0, 'exact', opco.url_finance_page);
 
   const days = state.trainingDays ?? 0;
@@ -551,11 +556,14 @@ function calcTransport(opco: OpcoData, state: WizardState, branche: string | nul
   const sourceUrl = opco.frais_transport.source_url;
 
   if (rate != null && rate > 0) {
-    const funded = rate * days;
-    const calcul = `${avecUnite(rate, '€/jour')} × ${compte(days, 'jour', 'jours')}`;
+    const parPersonne = rate * days;
+    const funded = parPersonne * n;
+    const calculParPersonne = `${avecUnite(rate, '€/jour')} × ${compte(days, 'jour', 'jours')}`;
+    const calcul = n > 1 ? `${calculParPersonne} × ${compte(n, 'personne', 'personnes')}` : calculParPersonne;
     return line('transport', 'Transport', funded, funded, confidence, sourceUrl, calcul, [
       `Forfait transport journalier ${apposition(opco.name)} : ${avecUnite(rate, '€/jour')}`,
-      `Calcul : ${calcul} = ${avecUnite(funded.toFixed(2), '€')}`,
+      `Calcul : ${calculParPersonne} = ${avecUnite(parPersonne.toFixed(2), '€')}`,
+      ...detailDeGroupe(n, parPersonne, funded),
     ]);
   }
 
@@ -574,28 +582,33 @@ function calcTransport(opco: OpcoData, state: WizardState, branche: string | nul
   );
 }
 
-function calcAccommodation(opco: OpcoData, state: WizardState, branche: string | null): FundingLine {
+function calcAccommodation(opco: OpcoData, state: WizardState, branche: string | null, n: number): FundingLine {
   if (!state.needsAccommodation) return line('hebergement', 'Hébergement', 0, 0, 'exact', opco.url_finance_page);
 
   const nights = state.accommodationNights ?? 0;
   const userCostPerNight = state.accommodationCostPerNight ?? 0;
-  const requested = userCostPerNight * nights;
+  const demandeParPersonne = userCostPerNight * nights;
+  const requested = demandeParPersonne * n;
   const ceiling = opco.frais_hebergement.value;
   const confidence = opco.frais_hebergement.confidence;
   const sourceUrl = opco.frais_hebergement.source_url;
 
   if (ceiling != null && ceiling > 0) {
-    const funded = Math.min(userCostPerNight, ceiling) * nights;
+    const financeParPersonne = Math.min(userCostPerNight, ceiling) * nights;
+    const funded = financeParPersonne * n;
     const details = [
-      `Votre coût : ${avecUnite(userCostPerNight, '€/nuit')} × ${compte(nights, 'nuit', 'nuits')} = ${avecUnite(requested.toFixed(2), '€')}`,
+      `Votre coût : ${avecUnite(userCostPerNight, '€/nuit')} × ${compte(nights, 'nuit', 'nuits')} = ${avecUnite(demandeParPersonne.toFixed(2), '€')}`,
+      // Chaque ligne d'une personne est suivie de celle du groupe (rien pour une personne seule) : le coût aussi.
+      ...detailDeGroupe(n, demandeParPersonne, requested, 'Coût pour'),
       `Plafond hébergement ${apposition(opco.name)} : ${avecUnite(ceiling, '€/nuit')}`,
     ];
     if (userCostPerNight > ceiling) {
       details.push(`Votre coût dépasse le plafond → taux appliqué : ${avecUnite(ceiling, '€/nuit')}`);
-      details.push(`Calcul : ${avecUnite(ceiling, '€/nuit')} × ${compte(nights, 'nuit', 'nuits')} = ${avecUnite(funded.toFixed(2), '€')}`);
+      details.push(`Calcul : ${avecUnite(ceiling, '€/nuit')} × ${compte(nights, 'nuit', 'nuits')} = ${avecUnite(financeParPersonne.toFixed(2), '€')}`);
     } else {
       details.push("Votre coût par nuit ne dépasse pas le plafond : l'estimation le retient en entier.");
     }
+    details.push(...detailDeGroupe(n, financeParPersonne, funded));
     return line('hebergement', 'Hébergement', requested, funded, confidence, sourceUrl, `Plafond : ${avecUnite(ceiling, '€/nuit')}`, details);
   }
 
@@ -623,12 +636,13 @@ function calcAccommodation(opco: OpcoData, state: WizardState, branche: string |
   );
 }
 
-function calcMeals(opco: OpcoData, state: WizardState, branche: string | null): FundingLine {
+function calcMeals(opco: OpcoData, state: WizardState, branche: string | null, n: number): FundingLine {
   if (!state.needsMeals) return line('restauration', 'Restauration', 0, 0, 'exact', opco.url_finance_page);
 
   const days = state.trainingDays ?? 0;
   const userCostPerDay = state.mealCostPerDay ?? 0;
-  const requested = userCostPerDay * days;
+  const demandeParPersonne = userCostPerDay * days;
+  const requested = demandeParPersonne * n;
   const rate = opco.frais_restauration.value;
   const confidence = opco.frais_restauration.confidence;
   const sourceUrl = opco.frais_restauration.source_url;
@@ -636,7 +650,8 @@ function calcMeals(opco: OpcoData, state: WizardState, branche: string | null): 
   if (rate != null && rate > 0) {
     // Le forfait plafonne la prise en charge, il ne la garantit pas : jamais plus que le coût déclaré.
     const tauxApplique = Math.min(userCostPerDay, rate);
-    const funded = tauxApplique * days;
+    const financeParPersonne = tauxApplique * days;
+    const funded = financeParPersonne * n;
     // Forfait par repas : l'estimation retient un repas par jour de formation (le coût déclaré reste saisi par jour).
     const parRepas = opco.frais_restauration_unite === 'repas';
     const tarif = (montant: number): string => (parRepas ? `${avecUnite(montant, '€')} par repas` : avecUnite(montant, '€/jour'));
@@ -649,13 +664,20 @@ function calcMeals(opco: OpcoData, state: WizardState, branche: string | null): 
       details.push(`Votre coût (${avecUnite(userCostPerDay, '€/jour')}) est inférieur au forfait : prise en charge au coût réel`);
     }
     const calcul = `${tarif(tauxApplique)} × ${compte(days, 'jour', 'jours')}`;
+    const resteParPersonne = demandeParPersonne - financeParPersonne;
+    // Chaque ligne d'une personne est suivie de celle du groupe (rien pour une personne seule) : le reste à charge aussi.
     details.push(
-      `Calcul : ${calcul} = ${avecUnite(funded.toFixed(2), '€')}`,
-      requested > funded
-        ? `Reste à charge : ${avecUnite((requested - funded).toFixed(2), '€')}`
-        : "Votre coût ne dépasse pas le forfait : l'estimation le retient en entier.",
+      `Calcul : ${calcul} = ${avecUnite(financeParPersonne.toFixed(2), '€')}`,
+      ...detailDeGroupe(n, financeParPersonne, funded),
+      ...(demandeParPersonne > financeParPersonne
+        ? [
+            `Reste à charge : ${avecUnite(resteParPersonne.toFixed(2), '€')}`,
+            ...detailDeGroupe(n, resteParPersonne, resteParPersonne * n, 'Reste à charge pour'),
+          ]
+        : ["Votre coût ne dépasse pas le forfait : l'estimation le retient en entier."]),
     );
-    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, calcul, details);
+    const note = n > 1 ? `${calcul} × ${compte(n, 'personne', 'personnes')}` : calcul;
+    return line('restauration', 'Restauration', requested, funded, confidence, sourceUrl, note, details);
   }
 
   // Aucun forfait publié : le coût déclaré reste affiché comme demandé (comme l'hébergement), rien n'est financé.
@@ -866,6 +888,8 @@ function concerneEntreprise(idccVises: string[] | undefined, idccDeLEntreprise: 
  * globale est plafonnée au coût par calculateFunding.
  * Un dispositif réservé à des conventions collectives (`idcc`) est écarté
  * quand l'entreprise n'en relève pas ou que sa convention est inconnue.
+ * Pour `n` personnes, les montants de coût sont ceux du groupe et seul un
+ * plafond d'unité `par_stagiaire` est multiplié par `n`.
  */
 function evaluateDispositifs(
   opco: OpcoData,
@@ -873,6 +897,7 @@ function evaluateDispositifs(
   pedagogyRequested: number,
   pedagogyFunded: number,
   idccDeLEntreprise: string[],
+  n: number,
 ): DispositifEligible[] {
   const results: DispositifEligible[] = [];
 
@@ -882,12 +907,14 @@ function evaluateDispositifs(
     }
     if (!concerneEntreprise(d.idcc, idccDeLEntreprise)) continue;
 
+    // Un plafond « par stagiaire » vaut n fois sa valeur ; les autres unités ne se multiplient pas (prudence).
+    const plafondMax = d.montant_max != null ? d.montant_max * (d.unite === 'par_stagiaire' ? n : 1) : null;
     let montantEstime: number | null = null;
     if (d.pourcentage_couts != null) {
       const base = d.cumul === 'alternatif' ? pedagogyRequested : Math.max(0, pedagogyRequested - pedagogyFunded);
       if (pedagogyRequested > 0) {
         montantEstime = base * (d.pourcentage_couts / 100);
-        if (d.montant_max != null) montantEstime = Math.min(montantEstime, d.montant_max);
+        if (plafondMax != null) montantEstime = Math.min(montantEstime, plafondMax);
       }
     } else if (d.montant_max != null) {
       switch (d.unite) {
@@ -898,7 +925,7 @@ function evaluateDispositifs(
           montantEstime = state.trainingDays != null ? d.montant_max * state.trainingDays : null;
           break;
         default:
-          montantEstime = d.montant_max;
+          montantEstime = plafondMax;
       }
     }
 
@@ -1018,7 +1045,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState, pers
       n,
     );
     capPedagogieApplique = capApplique;
-    const salaryLine = calcSalary(opcoData, state, pedagogyLine.fundedAmount, brancheAppliquee);
+    const salaryLine = calcSalary(opcoData, state, pedagogyLine.fundedAmount, brancheAppliquee, n);
 
     const usePercentageModel =
       opcoData.frais_annexes_pourcentage.value != null && opcoData.frais_annexes_pourcentage.value > 0;
@@ -1033,9 +1060,9 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState, pers
       if (state.needsAccommodation) ancillaryLines.push(line('hebergement', 'Hébergement', 0, 0, 'exact', opcoData.url_finance_page, inclus));
       if (state.needsMeals) ancillaryLines.push(line('restauration', 'Restauration', 0, 0, 'exact', opcoData.url_finance_page, inclus));
     } else {
-      ancillaryLines.push(calcTransport(opcoData, state, brancheAppliquee));
-      ancillaryLines.push(calcAccommodation(opcoData, state, brancheAppliquee));
-      ancillaryLines.push(calcMeals(opcoData, state, brancheAppliquee));
+      ancillaryLines.push(calcTransport(opcoData, state, brancheAppliquee, n));
+      ancillaryLines.push(calcAccommodation(opcoData, state, brancheAppliquee, n));
+      ancillaryLines.push(calcMeals(opcoData, state, brancheAppliquee, n));
     }
     // Postes réservés aux actions qualifiantes et retirés à cette formation : un point d'attention en donne la règle.
     const avertissementQualifiant = avertissementActionsQualifiantes(
@@ -1074,6 +1101,7 @@ export function calculateFunding(rawOpcoData: OpcoData, state: WizardState, pers
     pedagogyLine.requestedAmount,
     pedagogyLine.fundedAmount,
     idccDeLEntreprise,
+    n,
   );
   const cumulable = dispositifsComplementaires
     .filter((d) => d.cumul !== 'alternatif')
