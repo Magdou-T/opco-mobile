@@ -7904,8 +7904,9 @@ Vérifier l'unicité de chaque ligne d'ancrage avec `grep -n` avant de la rempla
   (`aideDuPrix` : « Soit 2 800 € par personne. »). Changer de mode convertit le prix sans le ressaisir
   (`basculerModePrix`). Le coût horaire, le plafond indicatif et l'avertissement de dépassement sont ceux d'une personne
   et le disent. L'état garde `prixDuGroupe` tant qu'un prix de groupe est saisi ; `pedagogyCostTotal` reste le coût
-  d'une personne, que le moteur lit (`normaliserGroupe`, `etatDepuisPrix`, `lib/groupe.ts`). Les frais annexes saisis
-  sont ceux d'une personne, comptés pour chacune.
+  d'une personne, que le moteur lit (`normaliserGroupe`, `etatDepuisPrix`, `lib/groupe.ts`) ; le champ du prix n'affiche
+  que des centimes (`auCentime`) sans réécrire dans l'état le nombre affiché. Les frais annexes saisis sont ceux d'une
+  personne, comptés pour chacune.
 ```
 
 2. Remplacer la ligne `  (\`etatDepuisProjet\`), besoins de frais et nombre de jours quand l'étape Frais est sautée (\`etatDepuisModeFormation\`).` par :
@@ -7940,10 +7941,12 @@ Vérifier l'unicité de chaque ligne d'ancrage avec `grep -n` avant de la rempla
 ```
 - **Groupe de plusieurs personnes** (`calculer(...).groupe`, `lib/resultats.ts` ; `ParProfil`) : le moteur de l'OPCO est
   appelé une fois pour les personnes qui relèvent du plan de développement des compétences (un seul plafond annuel),
-  son résultat est réparti entre les profils au centime, et le plan du groupe fusionne ceux des profils. L'étiquette
-  « 4 personnes · 2 profils » suit la durée dans la situation. Les trois chiffres du bandeau sont ceux du groupe, avec
-  « 4 × 2 800 € » sous le coût et « 1 706,25 € par personne en moyenne » sous le reste à charge (`detailsDuBandeau` :
-  rien pour une personne seule ni pour un coût inconnu). Chaque ligne chiffrée du plan dit pour combien de personnes elle
+  son résultat est réparti entre les profils au centime, et le plan du groupe fusionne ceux des profils. Avec plusieurs
+  profils, le coût pédagogique du groupe est réparti de la même façon : le plan du groupe coûte exactement le prix saisi
+  (1 000 € pour trois profils d'une personne : 333,34, 333,33 et 333,33 €). L'étiquette « 4 personnes · 2 profils » suit
+  la durée dans la situation. Les trois chiffres du bandeau sont ceux du groupe, avec « 4 × 2 800 € » sous le coût
+  (« 333,33 € par personne en moyenne » quand le coût ne se divise pas au centime) et « 1 706,25 € par personne en
+  moyenne » sous le reste à charge (`detailsDuBandeau` : rien pour une personne seule ni pour un coût inconnu). Chaque ligne chiffrée du plan dit pour combien de personnes elle
   vaut, sous le nom du financeur (« pour 3 personnes », `pourPersonnes`) ; la carte des options, dont les lignes n'ont
   pas cette mention, dit que ses montants sont ceux de tout le groupe. Avec plusieurs profils, une section `h2` « Détail
   par profil » suit le plan : tableau Profil / Personnes / Coût / Financé / Reste à charge et ligne « Total » à partir de
