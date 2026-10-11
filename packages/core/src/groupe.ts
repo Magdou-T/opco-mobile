@@ -168,9 +168,10 @@ export function repartirFinancement(r: FundingResult, effectifs: readonly number
  * (une aide limitée au coût d'une personne le reste au coût du bloc), de sorte que l'empilement (ordre, plafond au reste
  * à charge, solde CPF partagé, aides « au choix ») suit les règles d'une personne, appliquées aux montants du bloc.
  * Pour une seule personne, c'est exactement `construirePlan`. Chaque ligne du plan d'un bloc de plusieurs personnes porte
- * `personnes`. Comme partout dans ce fichier, `nombre` est ramené à un entier de 1 à MAX_PERSONNES (99) : une valeur non
- * finie, nulle ou négative vaut une personne, une valeur décimale est arrondie à l'entier inférieur (2,5 vaut 2), une valeur
- * supérieure à 99 vaut 99 ; `personnes` porte cet effectif ramené.
+ * `personnes`. `nombre` est ramené à un entier de 1 à MAX_PERSONNES (99), comme les effectifs de `profilsDuGroupe` et de
+ * `nombreDePersonnes` : une valeur non finie (NaN ou Infinity), nulle ou négative vaut une personne, une valeur décimale est
+ * arrondie à l'entier inférieur (2,5 vaut 2), une valeur finie supérieure à 99 vaut 99 ; `personnes` porte cet effectif
+ * ramené.
  */
 export function construirePlanDuBloc(
   opco: FundingResult | null,
