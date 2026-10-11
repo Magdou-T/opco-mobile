@@ -44,6 +44,7 @@ describe('saisie du nombre de personnes (lireEffectif)', () => {
     assert.equal(lireEffectif(' 12 '), 12);
     assert.equal(lireEffectif('0005'), 5);
     assert.equal(lireEffectif('99'), 99);
+    assert.equal(lireEffectif(`${'0'.repeat(400)}7`), 7); // les zéros devant ne comptent pas, même nombreux
   });
 
   test('au-delà de 99 : 99, quel que soit le nombre de chiffres', () => {
@@ -59,7 +60,6 @@ describe('saisie du nombre de personnes (lireEffectif)', () => {
       assert.equal(lireEffectif(saisie), null, JSON.stringify(saisie));
     }
     assert.equal(lireEffectif('0'.repeat(400)), null); // zéro, même écrit avec 400 chiffres
-    assert.equal(lireEffectif(`${'0'.repeat(400)}7`), 7); // les zéros devant ne comptent pas
   });
 
   test('les chiffres autres que 0 à 9 (arabo-indiens, indiens, pleine chasse) sont refusés', () => {
@@ -294,9 +294,9 @@ describe('OPCO et budget du groupe', () => {
 // on lit les réponses, rang d'un profil dans l'OPCO et le budget, état toujours normalisé, suites d'opérations tirées au hasard.
 //
 // Cas sans effet : `ajouterProfil` à 6 profils ou à 99 personnes, `definirNombre` et `changerProjetDuProfil` avec un identifiant
-// inconnu, `basculerModePrix` vers le groupe sans prix saisi rendent l'état reçu lui-même (le même objet) : le crochet de la
-// tâche 12 s'en sert dans `setState`, et un état identique n'y provoque aucun nouveau rendu. `retirerProfil` et `majProfil`,
-// eux, rendent toujours un état normalisé neuf, même quand rien ne change : leurs tests comparent par valeur.
+// inconnu, `basculerModePrix` vers le groupe (à partir de deux personnes) sans prix saisi rendent l'état reçu lui-même (le même
+// objet) : `useWizard` s'en sert dans `setState`, et un état identique n'y provoque aucun nouveau rendu. `retirerProfil` et
+// `majProfil`, eux, rendent toujours un état normalisé neuf, même quand rien ne change : leurs tests comparent par valeur.
 //
 // Oracle : les attentes des cas écrits à la main sont écrites à la main. Les suites tirées au hasard recopient en revanche
 // quelques formules de production pour vérifier chaque pas : l'expression régulière de `lireEffectif`, le coût horaire, la
@@ -366,7 +366,7 @@ describe('normaliserGroupe : effectifs, surplus et prix du groupe', () => {
     assert.deepEqual(effectifs(normaliserGroupe(groupeDe(4.9, [2.9]))), [4, 2]);
   });
 
-  test('pour un état dans les bornes, les effectifs sont ceux de profilsDuGroupe, que le moteur lit', () => {
+  test("pour un total d'au plus 99 personnes, les effectifs sont ceux de profilsDuGroupe, que le moteur lit", () => {
     // Le cœur ramène chaque effectif par `effectifValide` ; le site doit en faire autant, valeur par valeur (4 000 états tirés,
     // graine 7, effectifs absents, non finis, décimaux, négatifs ou trop grands compris).
     const hasard = hasardFixe(7);
