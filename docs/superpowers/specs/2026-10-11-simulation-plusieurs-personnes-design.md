@@ -202,7 +202,7 @@ Un seul profil : la liste est rendue telle quelle, sans champ `profils`. Plusieu
 
 - le **statut** le meilleur (éligible, puis à vérifier, puis non éligible) ;
 - `horsPerimetre` vrai seulement si l'aide est hors périmètre pour tous les profils ;
-- `raisons` : vides si l'aide est éligible pour un profil au moins ; sinon la réunion sans doublon des raisons des profils qui portent le statut retenu ;
+- `raisons` : vides si l'aide est éligible pour un profil au moins ; sinon la réunion sans doublon des raisons des profils qui portent le statut retenu, sauf, pour une aide non éligible, celles des profils pour lesquels elle est hors périmètre (« Ne concerne pas ce type de projet » n'apprend rien sur les autres profils, et l'écran ne liste jamais une aide hors périmètre pour tous) ;
 - `montantEstime` : le plus grand montant **par personne** parmi les profils éligibles ou à vérifier (« jusqu'à »), nul s'il n'y en a pas ; `libelleMontant` et `urlDemarche` sont ceux de ce profil ;
 - `profils` : un élément par profil éligible ou à vérifier, avec son effectif, son statut et son montant par personne.
 
