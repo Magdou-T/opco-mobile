@@ -66,7 +66,9 @@ export function nombreDePersonnes(state: Pick<WizardState, 'nombrePersonnes' | '
 
 /**
  * L'état d'UNE personne de ce profil : l'entreprise, la formation et les frais de l'état, les réponses du bénéficiaire
- * remplacées par celles du profil. Aucun groupe ni prix de groupe : c'est ce que lisent `profilDepuisWizard` et le moteur.
+ * remplacées par celles du profil (les deux drapeaux de l'application mobile, `isReconversion` et `isSortieChomage`, que le
+ * site ne pose pas, gardent la valeur de l'état). Aucun groupe ni prix de groupe : c'est ce que lisent `profilDepuisWizard`
+ * et le moteur.
  */
 export function etatDuProfil(state: WizardState, profil: ProfilDuGroupe): WizardState {
   return { ...state, ...profil.champs, nombrePersonnes: 1, autresProfils: [], prixDuGroupe: null };

@@ -105,6 +105,33 @@ describe('profils du groupe', () => {
     expect(nombreDePersonnes(createInitialWizardState())).toBe(1);
   });
 
+  it('le total ignore les effectifs invalides : chacun est ramené à un entier de 1 à 99 avant d’être additionné', () => {
+    const invalides = groupe({
+      nombrePersonnes: Number.NaN,
+      autresProfils: [supplementaire({ nombre: 0 }), supplementaire({ id: 'profil-3', nombre: 3.7 })],
+    });
+    expect(nombreDePersonnes(invalides)).toBe(5); // 1 + 1 + 3
+    expect(nombreDePersonnes({ ...invalides, nombrePersonnes: undefined as unknown as number })).toBe(5);
+  });
+
+  it('le profil principal reprend chacune des douze réponses de l’état, chacune à sa place', () => {
+    const reponses = {
+      projetType: 'alternance',
+      contractType: 'alternance',
+      anciennete_mois: 7,
+      isHandicap: true,
+      ageBeneficiaire: 19,
+      niveauDiplome: 'bac',
+      typeAlternance: 'apprentissage',
+      inscritFranceTravail: false,
+      statutDirigeant: 'commercant',
+      microEntrepreneur: true,
+      soldeCpf: 321,
+      regionBeneficiaireCode: '84',
+    } as const;
+    expect(champsDuProfilPrincipal(groupe({ ...reponses, regionCode: '11', autresProfils: [] }))).toEqual(reponses);
+  });
+
   it('un effectif invalide est ramené à un entier de 1 à 99', () => {
     const valeurs: [number, number][] = [
       [0, 1],
@@ -124,7 +151,7 @@ describe('profils du groupe', () => {
 
 describe('état d’une personne d’un profil', () => {
   it('reprend l’entreprise, la formation et les frais, et remplace les réponses du bénéficiaire par celles du profil', () => {
-    const etat = groupe();
+    const etat = groupe({ prixDuGroupe: 4200 });
     const [, second] = profilsDuGroupe(etat);
     const une = etatDuProfil(etat, second);
     expect(une).toMatchObject({
@@ -140,6 +167,13 @@ describe('état d’une personne d’un profil', () => {
     expect(une.nombrePersonnes).toBe(1);
     expect(une.autresProfils).toEqual([]);
     expect(une.prixDuGroupe).toBeNull();
+    expect(champsDuProfilPrincipal(une)).toEqual(second.champs);
+  });
+
+  it('le profil principal passe aussi par là : même état, réduit à une personne sans groupe ni prix de groupe', () => {
+    const etat = groupe({ prixDuGroupe: 4200 });
+    const [principal] = profilsDuGroupe(etat);
+    expect(etatDuProfil(etat, principal)).toEqual({ ...etat, nombrePersonnes: 1, autresProfils: [], prixDuGroupe: null });
   });
 
   it('ne modifie pas l’état reçu', () => {
