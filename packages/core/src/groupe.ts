@@ -4,8 +4,12 @@
 // la fusion des résultats des profils sont dans le même fichier.
 // ============================================================
 
+import { construirePlan } from './aides/plan';
+import type { LignePlan, OptionPlan, PlanFinancement } from './aides/plan';
+import { ORDRE_EMPILEMENT_DEFAUT } from './aides/types';
+import type { AideEvaluee, ProfilAides } from './aides/types';
 import { MAX_PERSONNES } from './types';
-import type { ChampsProfil, FundingResult, WizardState } from './types';
+import type { ChampsProfil, Confidence, FundingResult, WizardState } from './types';
 
 /** Identifiant du profil principal (les champs de l'étape « Participants » de l'état). */
 export const ID_PROFIL_PRINCIPAL = 'principal';
@@ -153,4 +157,110 @@ export function repartirFinancement(r: FundingResult, effectifs: readonly number
       enveloppeMaxPotentielle: enEuros(enveloppe[k]),
     };
   });
+}
+
+// --- Plan de financement d'un profil, fusion des plans --------------------------------------------------------------
+
+/**
+ * Plan de financement d'un profil du groupe : celui de `construirePlan` appliqué à un bloc de `nombre` personnes.
+ * `opco` est la part de ce profil dans le résultat de l'OPCO (déjà valable pour `nombre` personnes) ; `aides` et `profil`
+ * sont ceux d'UNE personne. Le coût de la formation, le solde CPF et les montants des aides sont multipliés par `nombre`
+ * (une aide limitée au coût d'une personne le reste au coût du bloc), de sorte que l'empilement (ordre, plafond au reste
+ * à charge, solde CPF partagé, aides « au choix ») suit les règles d'une personne, appliquées aux montants du bloc.
+ * Pour une seule personne, c'est exactement `construirePlan`. Chaque ligne du plan d'un bloc de plusieurs personnes porte
+ * `personnes`.
+ */
+export function construirePlanDuBloc(
+  opco: FundingResult | null,
+  aides: readonly AideEvaluee[],
+  profil: ProfilAides,
+  nombre: number,
+): PlanFinancement {
+  if (nombre <= 1) return construirePlan(opco, [...aides], profil);
+  const fois = (montant: number | null): number | null => (montant == null ? null : enEuros(enCentimes(montant * nombre)));
+  const plan = construirePlan(
+    opco,
+    aides.map((a) => ({ ...a, montantEstime: fois(a.montantEstime) })),
+    {
+      ...profil,
+      coutPedagogique: profil.coutPedagogique == null ? null : profil.coutPedagogique * nombre,
+      coutFraisAnnexes: profil.coutFraisAnnexes * nombre,
+      soldeCpf: profil.soldeCpf == null ? null : profil.soldeCpf * nombre,
+    },
+  );
+  const marquer = (lignes: LignePlan[]): LignePlan[] => lignes.map((l) => ({ ...l, personnes: nombre }));
+  return {
+    ...plan,
+    financements: marquer(plan.financements),
+    aidesEmployeur: marquer(plan.aidesEmployeur),
+    remunerations: marquer(plan.remunerations),
+    avantagesFiscauxSociaux: marquer(plan.avantagesFiscauxSociaux),
+  };
+}
+
+const POIDS_FIABILITE: Record<Confidence, number> = { depends_on_branche: 0, estimated: 1, exact: 2 };
+const plusFaible = (a: Confidence, b: Confidence): Confidence => (POIDS_FIABILITE[a] <= POIDS_FIABILITE[b] ? a : b);
+
+/**
+ * Plan du groupe : la fusion des plans de ses profils. Un seul plan : rendu tel quel. Sinon, coût, financé et reste
+ * s'additionnent en centimes entiers ; les lignes de même identifiant s'additionnent (montant, `personnes`, la fiabilité
+ * la plus faible l'emporte, le nom et le financeur sont ceux de la première occurrence) ; les financements sont triés par
+ * ordre d'empilement (`ordreEmpilement` d'une aide de `aides`, 10 pour `opco-pdc`, 12 pour un dispositif de l'OPCO), puis
+ * par montant décroissant ; les options s'additionnent (montants connus seulement, nul si aucun profil n'en a) ; les aides
+ * sans montant et les services gratuits sont réunis sans doublon.
+ */
+export function fusionnerPlans(
+  plans: readonly PlanFinancement[],
+  aides: readonly Pick<AideEvaluee, 'id' | 'ordreEmpilement'>[],
+): PlanFinancement {
+  if (plans.length === 1) return plans[0];
+  const ordreParId = new Map(aides.map((a) => [a.id, a.ordreEmpilement]));
+  const ordreDe = (id: string): number =>
+    ordreParId.get(id) ?? (id === 'opco-pdc' ? 10 : id.startsWith('opco-') ? 12 : ORDRE_EMPILEMENT_DEFAUT.autre);
+  const somme = (valeur: (p: PlanFinancement) => number): number => enEuros(plans.reduce((s, p) => s + enCentimes(valeur(p)), 0));
+
+  const fusionnerLignes = (listes: readonly LignePlan[][]): LignePlan[] => {
+    const parId = new Map<string, LignePlan>();
+    for (const l of listes.flat()) {
+      const deja = parId.get(l.id);
+      if (!deja) {
+        parId.set(l.id, { ...l, personnes: l.personnes ?? 1 });
+      } else {
+        deja.montant = enEuros(enCentimes(deja.montant) + enCentimes(l.montant));
+        deja.confidence = plusFaible(deja.confidence, l.confidence);
+        deja.personnes = (deja.personnes ?? 1) + (l.personnes ?? 1);
+      }
+    }
+    return [...parId.values()];
+  };
+
+  const options = new Map<string, OptionPlan>();
+  for (const o of plans.flatMap((p) => p.options)) {
+    const deja = options.get(o.id);
+    if (!deja) options.set(o.id, { ...o });
+    else if (o.montantEstime != null) {
+      deja.montantEstime = deja.montantEstime == null ? o.montantEstime : enEuros(enCentimes(deja.montantEstime) + enCentimes(o.montantEstime));
+    }
+  }
+
+  const uniques = (listes: readonly AideEvaluee[][]): AideEvaluee[] => {
+    const vues = new Map<string, AideEvaluee>();
+    for (const a of listes.flat()) if (!vues.has(a.id)) vues.set(a.id, a);
+    return [...vues.values()];
+  };
+
+  return {
+    coutFormation: somme((p) => p.coutFormation),
+    financements: fusionnerLignes(plans.map((p) => p.financements)).sort(
+      (x, y) => ordreDe(x.id) - ordreDe(y.id) || y.montant - x.montant,
+    ),
+    totalFinance: somme((p) => p.totalFinance),
+    resteACharge: somme((p) => p.resteACharge),
+    aidesEmployeur: fusionnerLignes(plans.map((p) => p.aidesEmployeur)),
+    remunerations: fusionnerLignes(plans.map((p) => p.remunerations)),
+    avantagesFiscauxSociaux: fusionnerLignes(plans.map((p) => p.avantagesFiscauxSociaux)),
+    options: [...options.values()],
+    nonChiffrees: uniques(plans.map((p) => p.nonChiffrees)),
+    servicesGratuits: uniques(plans.map((p) => p.servicesGratuits)),
+  };
 }

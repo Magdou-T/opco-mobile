@@ -14,6 +14,8 @@ export interface LignePlan {
   financeurNom: string;
   montant: number;
   confidence: Confidence;
+  /** Nombre de personnes pour lesquelles la ligne vaut : renseigné seulement à partir de deux personnes (plan d'un groupe). */
+  personnes?: number;
 }
 
 export interface OptionPlan {

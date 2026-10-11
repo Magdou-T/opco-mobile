@@ -1,9 +1,15 @@
 import { describe, expect, it } from 'vitest';
+import { evaluerAide } from '../src/aides/evaluer';
+import { construirePlan } from '../src/aides/plan';
+import type { LignePlan, PlanFinancement } from '../src/aides/plan';
+import type { Aide } from '../src/aides/types';
 import { calculateFunding } from '../src/calculator';
 import {
   ID_PROFIL_PRINCIPAL,
   champsDuProfilPrincipal,
+  construirePlanDuBloc,
   etatDuProfil,
+  fusionnerPlans,
   nombreDePersonnes,
   profilsDuGroupe,
   repartirCentimes,
@@ -12,6 +18,7 @@ import {
 import { MAX_PERSONNES, MAX_PROFILS, createInitialWizardState } from '../src/types';
 import type { ProfilSupplementaire, WizardState } from '../src/types';
 import { etatGroupe, opcoGroupe, sourced } from './fixtures';
+import { makeAide, makeProfil } from './fixtures-aides';
 
 describe("état initial d'un groupe", () => {
   it('une personne, aucun profil supplémentaire, prix saisi par personne', () => {
@@ -445,5 +452,162 @@ describe("répartition du résultat de l'OPCO entre profils", () => {
       expect(part.budgetCapAmount).toBe(r.budgetCapAmount);
       expect(part.lines.map((l) => [l.label, l.sourceUrl, l.details])).toEqual(r.lines.map((l) => [l.label, l.sourceUrl, l.details]));
     }
+  });
+});
+
+const AUJOURDHUI = '2026-10-05';
+const forfait = (id: string, financeur: Aide['financeur'], valeur: number) =>
+  makeAide({ id, financeur, montant: { ...makeAide().montant, valeur } });
+/** Aide prélevée sur le solde CPF de la personne : son montant est le solde connu du profil. */
+const soldeCpf = makeAide({
+  id: 'nat-cpf',
+  financeur: 'cpf',
+  montant: { ...makeAide().montant, mode: 'solde_cpf', valeur: null, libelle: 'Solde CPF disponible' },
+});
+
+describe("plan d'un profil (bloc de personnes)", () => {
+  const profil = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 1500 });
+  const evaluees = (p = profil) =>
+    [soldeCpf, forfait('r11-region', 'region', 1000), forfait('nat-etat', 'etat', 3000)].map((a) => evaluerAide(a, p, AUJOURDHUI));
+  const paires = (lignes: { id: string; montant: number }[]) => lignes.map((l) => [l.id, l.montant]);
+
+  it('une personne : exactement le plan de construirePlan', () => {
+    expect(construirePlanDuBloc(null, evaluees(), profil, 1)).toEqual(construirePlan(null, evaluees(), profil));
+  });
+
+  it("trois personnes sans OPCO : l'empilement vaut 3 fois celui d'une personne, chaque ligne dit pour combien", () => {
+    const un = construirePlanDuBloc(null, evaluees(), profil, 1);
+    const trois = construirePlanDuBloc(null, evaluees(), profil, 3);
+    // Une personne : Région 1 000, État 3 000, CPF plafonné au reste (200) ; trois personnes : trois fois chaque montant.
+    expect(paires(un.financements)).toEqual([['r11-region', 1000], ['nat-etat', 3000], ['nat-cpf', 200]]);
+    expect(paires(trois.financements)).toEqual([['r11-region', 3000], ['nat-etat', 9000], ['nat-cpf', 600]]);
+    expect(trois.financements.every((l) => l.personnes === 3)).toBe(true);
+    expect(trois).toMatchObject({ coutFormation: 12600, totalFinance: 12600, resteACharge: 0 });
+  });
+
+  it("le solde CPF est celui de chaque personne : multiplié par l'effectif, jamais dépassé", () => {
+    const maigre = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 100 });
+    const trois = construirePlanDuBloc(null, evaluees(maigre), maigre, 3);
+    // 3 × 100 € de solde pour un reste de 600 € : le CPF finance 300 €, il reste 300 €.
+    expect(paires(trois.financements).at(-1)).toEqual(['nat-cpf', 300]);
+    expect(trois).toMatchObject({ totalFinance: 12300, resteACharge: 300 });
+  });
+
+  it("la part de l'OPCO est reprise telle quelle (déjà valable pour le bloc), les aides à l'employeur aussi", () => {
+    const part = repartirFinancement(calculateFunding(opcoGroupe(), etatGroupe(), 3), [3])[0];
+    const plan = construirePlanDuBloc(part, [], makeProfil({ coutPedagogique: 5000, coutFraisAnnexes: 555 }), 3);
+    expect(plan.coutFormation).toBe(16665);
+    expect(plan.financements).toEqual([expect.objectContaining({ id: 'opco-pdc', montant: 13425, personnes: 3 })]);
+    expect(plan.aidesEmployeur.map((l) => [l.id, l.montant, l.personnes])).toEqual([
+      ['opco-salaires', 3600, 3],
+      ['opco-transport', 450, 3],
+    ]);
+    expect(plan.resteACharge).toBe(3240);
+  });
+
+  it("jamais plus que le coût du bloc, jamais de reste négatif, quel que soit l'effectif", () => {
+    for (const nombre of [1, 2, 7, 99]) {
+      const plan = construirePlanDuBloc(null, evaluees(), profil, nombre);
+      expect(plan.totalFinance).toBeLessThanOrEqual(plan.coutFormation);
+      expect(plan.resteACharge).toBeGreaterThanOrEqual(0);
+      expect(Math.round((plan.coutFormation - plan.resteACharge) * 100)).toBe(Math.round(plan.totalFinance * 100));
+    }
+  });
+});
+
+describe('fusion des plans des profils', () => {
+  const ligne = (id: string, montant: number, over: Partial<LignePlan> = {}): LignePlan => ({
+    id,
+    nom: `Ligne ${id}`,
+    financeurNom: 'Financeur',
+    montant,
+    confidence: 'exact',
+    ...over,
+  });
+  const plan = (over: Partial<PlanFinancement>): PlanFinancement => ({
+    coutFormation: 0,
+    financements: [],
+    totalFinance: 0,
+    resteACharge: 0,
+    aidesEmployeur: [],
+    remunerations: [],
+    avantagesFiscauxSociaux: [],
+    options: [],
+    nonChiffrees: [],
+    servicesGratuits: [],
+    ...over,
+  });
+  const ordres = [
+    { id: 'nat-cpf', ordreEmpilement: 90 },
+    { id: 'faf-fafcea', ordreEmpilement: 60 },
+    { id: 'r11-region', ordreEmpilement: 20 },
+  ];
+  const aide = (id: string) => evaluerAide(makeAide({ id }), makeProfil(), '2026-10-05');
+
+  it('un seul plan : rendu tel quel', () => {
+    const seul = plan({ coutFormation: 100 });
+    expect(fusionnerPlans([seul], ordres)).toBe(seul);
+  });
+
+  it("coût, financé et reste s'additionnent en centimes entiers", () => {
+    const fusion = fusionnerPlans(
+      [plan({ coutFormation: 0.1, totalFinance: 0.1, resteACharge: 0 }), plan({ coutFormation: 0.2, totalFinance: 0, resteACharge: 0.2 })],
+      ordres,
+    );
+    expect(fusion).toMatchObject({ coutFormation: 0.3, totalFinance: 0.1, resteACharge: 0.2 });
+  });
+
+  it("les lignes de même identifiant s'additionnent, la fiabilité la plus faible l'emporte, les effectifs s'ajoutent", () => {
+    const a = plan({ financements: [ligne('opco-pdc', 3150, { personnes: 3 }), ligne('nat-cpf', 600, { personnes: 3 })] });
+    const b = plan({ financements: [ligne('faf-fafcea', 1225, { personnes: 1 }), ligne('nat-cpf', 200, { confidence: 'estimated' })] });
+    const fusion = fusionnerPlans([a, b], ordres);
+    expect(fusion.financements.map((l) => [l.id, l.montant, l.personnes, l.confidence])).toEqual([
+      ['opco-pdc', 3150, 3, 'exact'],
+      ['faf-fafcea', 1225, 1, 'exact'],
+      ['nat-cpf', 800, 4, 'estimated'],
+    ]);
+  });
+
+  it("tri par ordre d'empilement (OPCO 10, dispositif de l'OPCO 12, aide du catalogue), puis par montant décroissant", () => {
+    const a = plan({ financements: [ligne('nat-cpf', 100), ligne('opco-catalogue', 50), ligne('opco-pdc', 10)] });
+    const b = plan({ financements: [ligne('r11-region', 70), ligne('faf-fafcea', 500)] });
+    expect(fusionnerPlans([a, b], ordres).financements.map((l) => l.id)).toEqual([
+      'opco-pdc',
+      'opco-catalogue',
+      'r11-region',
+      'faf-fafcea',
+      'nat-cpf',
+    ]);
+  });
+
+  it("aides à l'employeur, rémunérations et avantages : même fusion par identifiant", () => {
+    const a = plan({ aidesEmployeur: [ligne('opco-salaires', 1200)], remunerations: [ligne('nat-rfft', 700)] });
+    const b = plan({ aidesEmployeur: [ligne('opco-salaires', 300), ligne('nat-embauche', 5000)], avantagesFiscauxSociaux: [ligne('fis-credit', 475)] });
+    const fusion = fusionnerPlans([a, b], ordres);
+    expect(fusion.aidesEmployeur.map((l) => [l.id, l.montant])).toEqual([['opco-salaires', 1500], ['nat-embauche', 5000]]);
+    expect(fusion.remunerations.map((l) => l.id)).toEqual(['nat-rfft']);
+    expect(fusion.avantagesFiscauxSociaux.map((l) => l.id)).toEqual(['fis-credit']);
+  });
+
+  it("options : somme des montants connus, nulle si aucun profil n'en a ; aides sans montant et services : réunion sans doublon", () => {
+    const option = (id: string, montantEstime: number | null) => ({ id, nom: id, financeurNom: 'F', montantEstime, raison: 'Au choix avec « X »' });
+    const a = plan({ options: [option('o1', 100), option('o2', null)], nonChiffrees: [aide('nat-a')], servicesGratuits: [aide('nat-s')] });
+    const b = plan({ options: [option('o1', 50), option('o2', null), option('o3', 20)], nonChiffrees: [aide('nat-a'), aide('nat-b')], servicesGratuits: [aide('nat-s')] });
+    const fusion = fusionnerPlans([a, b], ordres);
+    expect(fusion.options.map((o) => [o.id, o.montantEstime])).toEqual([['o1', 150], ['o2', null], ['o3', 20]]);
+    expect(fusion.nonChiffrees.map((x) => x.id)).toEqual(['nat-a', 'nat-b']);
+    expect(fusion.servicesGratuits.map((x) => x.id)).toEqual(['nat-s']);
+  });
+
+  it('plans réels de deux profils : coût moins reste égale financé, jamais de reste négatif', () => {
+    const p1 = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: 1500 });
+    const p2 = makeProfil({ coutPedagogique: 4200, coutFraisAnnexes: 0, soldeCpf: null });
+    const aides1 = [forfait('nat-etat', 'etat', 3000), soldeCpf].map((a) => evaluerAide(a, p1, '2026-10-05'));
+    const aides2 = [forfait('nat-etat', 'etat', 3000)].map((a) => evaluerAide(a, p2, '2026-10-05'));
+    const fusion = fusionnerPlans([construirePlanDuBloc(null, aides1, p1, 3), construirePlanDuBloc(null, aides2, p2, 2)], aides1);
+    expect(fusion.coutFormation).toBe(21000);
+    expect(Math.round((fusion.coutFormation - fusion.resteACharge) * 100)).toBe(Math.round(fusion.totalFinance * 100));
+    expect(fusion.resteACharge).toBeGreaterThanOrEqual(0);
+    expect(fusion.financements.find((l) => l.id === 'nat-etat')).toMatchObject({ montant: 15000, personnes: 5 });
   });
 });
