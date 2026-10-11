@@ -1246,7 +1246,7 @@ describe('fusion des aides du catalogue : règles de chaque champ', () => {
       vue({ statut: 'eligible', raisons: [] }),
     );
     expect(r).toMatchObject({ statut: 'eligible', raisons: [] });
-    // Le résultat éligible n'a jamais de raison, quoi que porte la vue : une vue éligible qui en garderait n'en transmet aucune.
+    // Entrée construite : le moteur ne rend jamais de raison pour une aide éligible. Le résultat n'en garde aucune, quoi que porte la vue.
     expect(fusion(vue({ statut: 'eligible', raisons: ['Reste'] }), vue({ statut: 'a_verifier', raisons: ['Un doute'] })).raisons).toEqual([]);
   });
 
@@ -1285,6 +1285,8 @@ describe('fusion des aides du catalogue : règles de chaque champ', () => {
   });
 
   it("l'écart des profils hors périmètre ne vaut que pour une aide non éligible : un profil à vérifier garde ses raisons", () => {
+    // Entrée construite : le moteur ne rend jamais une vue à vérifier hors périmètre (hors périmètre entraîne une exclusion, donc non éligible).
+    // La règle de la spécification ne vise que l'aide non éligible : ici, la vue à vérifier garde ses raisons.
     const r = fusion(vue({ statut: 'a_verifier', horsPerimetre: true, raisons: ['Un doute'] }), vue({ statut: 'non_eligible', raisons: ['Une exclusion'] }));
     expect(r).toMatchObject({ statut: 'a_verifier', raisons: ['Un doute'] });
   });
