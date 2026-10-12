@@ -430,8 +430,8 @@ export type MontantAffiche = { genre: 'jusqua'; montant: number } | { genre: 'se
 
 /**
  * Montant d'une aide éligible ou à vérifier : « jusqu'à » le montant estimé, « Montant selon dossier » sans estimation,
- * « Aucun montant estimé pour ce profil » à 0. Jamais pour une aide non éligible (son montant est ce qu'elle verserait si
- * le profil y avait droit) : null.
+ * « Aucun montant estimé pour ce profil » à 0 (« … pour ce groupe » sur la carte d'un groupe de plusieurs personnes).
+ * Jamais pour une aide non éligible (son montant est ce qu'elle verserait si le profil y avait droit) : null.
  */
 export function montantAffiche(aide: Pick<AideEvaluee, 'statut' | 'montantEstime'>): MontantAffiche | null {
   if (aide.statut === 'non_eligible') return null;
