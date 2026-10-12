@@ -17,7 +17,8 @@ import {
 } from '@opco/core';
 import type { ChampsProfil, ProfilSupplementaire, ProjetType, WizardState } from '@opco/core';
 import { opcoRequis, ouvreBudgetOpco } from './entreprise';
-import { champsDepuisProjet, coutsDeFormation } from './parcours';
+import { champsDepuisProjet, coutsDeFormation, reponsesInconnuesApres } from './parcours';
+import type { QuestionAvecInconnu, QuestionDeProfil } from './parcours';
 
 // --- Saisie du nombre de personnes --------------------------------------------------------------------------------
 
@@ -149,3 +150,38 @@ export const opcoRequisPourLeGroupe = (etat: WizardState): boolean => projetsDuG
 
 /** Le budget déjà consommé s'affiche et se garde tant qu'un profil relève d'un projet salarié (`ouvreBudgetOpco`). */
 export const ouvreBudgetPourLeGroupe = (etat: WizardState): boolean => projetsDuGroupe(etat).some((p) => ouvreBudgetOpco(p));
+
+// --- Réponses « Je ne sais pas » de chaque profil -----------------------------------------------------------------
+
+/**
+ * Réponses « Je ne sais pas » de chaque profil supplémentaire, par identifiant. Celles du profil principal restent avec
+ * celles de la formation, dans `useWizard` : la valeur reste null pour le moteur, le site retient seulement que
+ * l'utilisateur a répondu.
+ */
+export type InconnuesParProfil = Readonly<Record<string, ReadonlySet<QuestionAvecInconnu>>>;
+
+const AUCUNE_REPONSE: ReadonlySet<QuestionAvecInconnu> = new Set();
+
+/**
+ * Réponses « Je ne sais pas » d'un profil après une mise à jour `maj` de ses réponses : toute écriture d'une de ces
+ * questions efface la sienne, `inconnue` ajoute la question à laquelle l'utilisateur vient de répondre « Je ne sais pas ».
+ * Rend l'objet reçu, inchangé, quand rien ne change.
+ */
+export function inconnuesApresMaj(
+  avant: InconnuesParProfil,
+  id: string,
+  maj: Partial<ChampsProfil>,
+  inconnue?: QuestionDeProfil,
+): InconnuesParProfil {
+  const courant = avant[id] ?? AUCUNE_REPONSE;
+  const suite = reponsesInconnuesApres(courant, maj, inconnue);
+  return suite === courant ? avant : { ...avant, [id]: suite };
+}
+
+/** Le profil retiré perd ses réponses « Je ne sais pas » : son identifiant peut resservir sans rien garder. */
+export function inconnuesSansProfil(avant: InconnuesParProfil, id: string): InconnuesParProfil {
+  if (!(id in avant)) return avant;
+  const suite = { ...avant };
+  delete suite[id];
+  return suite;
+}

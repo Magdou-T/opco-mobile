@@ -90,6 +90,8 @@ export const QUESTIONS_AVEC_INCONNU = [
   'niveauFormationVise',
 ] as const satisfies readonly (keyof WizardState)[];
 export type QuestionAvecInconnu = (typeof QUESTIONS_AVEC_INCONNU)[number];
+/** Questions à réponse « Je ne sais pas » qui portent sur une personne et non sur la formation : celles de chaque profil. */
+export type QuestionDeProfil = Extract<QuestionAvecInconnu, keyof ChampsProfil>;
 
 /** Réponse à une question qui admet « Je ne sais pas » : `null` est cette réponse (voir `useWizard`). */
 export type Repondre = <K extends QuestionAvecInconnu>(question: K, valeur: WizardState[K]) => void;
