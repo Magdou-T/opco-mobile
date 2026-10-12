@@ -527,32 +527,38 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   profil, l'étape garde l'allure d'une personne seule (les questions de son statut) et ajoute le compteur « Nombre de
   personnes » et le bouton secondaire « Ajouter un profil différent ». Dès qu'il y a plusieurs profils, une `Card` par
   profil : titre `h3` que le focus atteint par programme (« Profil 2 »), étiquette du statut, résumé en puces
-  (`pucesDuProfil` : contrat ou statut du dirigeant, âge, diplôme, RQTH, solde CPF), compteur (sous le titre sur téléphone : la colonne du
-  titre garde au moins 12 rem), puis les questions dans un volet qui se replie sur son
-  résumé (`aria-expanded` ; le volet reste dans la page, `hidden`, et ses champs gardent leur état). Un seul profil est
-  déplié à la fois ; replié, un profil dit ce qui lui manque (« À compléter : le type de contrat », `manquantsDuProfil`).
-  Le compteur est un champ texte entier de 1 à 99 entre deux boutons ronds de 44 px, 40 px dès 1 024 px (« Retirer une personne », « Ajouter
-  une personne », `aria-disabled` aux bornes pour que le focus ne se perde pas) ; une saisie refusée (vide, zéro,
-  négatif, décimal, texte) laisse la valeur retenue, que le champ reprend en le quittant (`lireEffectif`). Une zone
-  `role="status"` annonce « Profil 2 ajouté. 4 personnes au total. » ; le focus va au titre du profil ajouté puis, au
-  retrait, à celui du profil précédent (au bouton d'ajout quand il ne reste qu'un profil). À 6 profils ou 99 personnes,
-  le bouton porte `aria-disabled` et une phrase dit la limite. Un profil supplémentaire démarre au statut du profil
-  principal et sa première question est ce statut ; en changer remet à vide les réponses du statut quitté (`champsDepuisProjet`).
+  (`pucesDuProfil` : contrat, type d'alternance ou statut du dirigeant, puis âge, diplôme, RQTH, solde CPF), compteur
+  (sous le titre quand la place manque, donc sur téléphone : la colonne du titre garde au moins 12 rem), puis les
+  questions dans un volet qui se replie sur son résumé (`aria-expanded` ; le volet reste dans la page, `hidden`, et ses
+  champs gardent leur état). Un seul profil est déplié à la fois ; replié, un profil dit ce qui lui manque
+  (« À compléter : le type de contrat », `manquantsDuProfil`). Au-delà d'une personne, une phrase en tête rappelle que
+  les réponses valent pour chacune, et l'aide du solde CPF conseille de prendre le plus bas ou de créer un profil par
+  solde. Le compteur est un champ texte entier de 1 à 99 entre deux boutons ronds de 44 px, 40 px dès 1 024 px
+  (« Retirer une personne », « Ajouter une personne », `aria-disabled` aux bornes pour que le focus ne se perde pas) ;
+  une saisie refusée (vide, zéro, négatif, décimal, texte) laisse la valeur retenue, que le champ reprend en le
+  quittant, et une saisie au-delà de 99 (ou de la place que laissent les autres profils) est ramenée à cette borne
+  (`lireEffectif`). Chaque compteur porte sa propre zone `role="status"` (une par compteur, donc une par carte de
+  profil) qui dit le nombre retenu ; la zone d'annonce de l'étape, elle aussi `role="status"`, dit « Profil 2 ajouté.
+  4 personnes au total. » ou « Profil 2 retiré. 3 personnes au total. ». Le focus va au titre du profil ajouté puis,
+  au retrait, à celui du profil précédent (au bouton d'ajout quand il ne reste qu'un profil). À 6 profils ou
+  99 personnes, le bouton porte `aria-disabled` et une phrase dit la limite. Un profil supplémentaire démarre au statut
+  du profil principal et sa première question est ce statut ; en changer remet à vide les réponses que le nouveau
+  statut ne pose pas (`champsDepuisProjet` ; l'âge, le diplôme et la RQTH sont gardés).
 - **Prix d'un groupe** (étape Formation) : à partir de deux personnes, « Le prix saisi est » propose « Par personne »
-  (par défaut) et « Pour le groupe » ; le libellé du coût suit le mode et une aide donne le prix de l'autre
-  (`aideDuPrix` : « Soit 2 800 € par personne. »). Changer de mode convertit le prix sans le ressaisir
-  (`basculerModePrix`). Le coût horaire, le plafond indicatif et l'avertissement de dépassement sont ceux d'une personne
-  et le disent. L'état garde `prixDuGroupe` tant qu'un prix de groupe est saisi ; `pedagogyCostTotal` reste le coût
-  d'une personne, que le moteur lit (`normaliserGroupe`, `etatDepuisPrix`, `lib/groupe.ts`) ; le champ du prix n'affiche
-  que des centimes (`auCentime`) sans réécrire dans l'état le nombre affiché. Les frais annexes saisis sont ceux d'une
-  personne, comptés pour chacune.
+  (par défaut, sauf si un prix de groupe est déjà saisi) et « Pour le groupe » ; le libellé du coût suit le mode et une
+  aide donne le prix de l'autre (`aideDuPrix` : « Soit 2 800 € par personne. » ou « Soit 11 200 € pour les
+  4 personnes. »). Changer de mode convertit le prix sans le ressaisir (`basculerModePrix`). Le coût horaire, le plafond
+  indicatif et l'avertissement de dépassement sont ceux d'une personne et le disent. L'état garde `prixDuGroupe` tant
+  qu'un prix de groupe est saisi ; `pedagogyCostTotal` reste le coût d'une personne, que le moteur lit
+  (`normaliserGroupe`, `etatDepuisPrix`, `lib/groupe.ts`) ; le champ du prix n'affiche que des centimes (`auCentime`)
+  sans réécrire dans l'état le nombre affiché. Les frais annexes saisis sont ceux d'une personne, comptés pour chacune.
 - **Largeurs étroites** : sous 360 px, la grille des modes de transport passe à une colonne et les cartes Entreprise et
   OPCO posent leur pastille au-dessus du titre ; la liste des régions décide sur la largeur de son conteneur (requête de
-  conteneur, `@min-[18.5rem]` : deux colonnes à partir de 296 px de grille et jusqu'à 767 px de fenêtre, trois dès 768 px,
-  règles exclusives par `max-md`), car celle d'une carte de profil est plus
-  étroite que celle de l'étape Entreprise à la même largeur de fenêtre. Aucun mot n'est coupé (« Guadeloupe »,
-  « Bourgogne- », « Normandie » ou « SFG DEVELOPPEMENT » ne tenaient plus sur leur ligne). `break-words` ne reste
-  qu'en dernier recours, pour un mot plus long que la carte.
+  conteneur, `@min-[18.5rem]` : deux colonnes à partir de 296 px de grille et jusqu'à 767 px de fenêtre, trois dès
+  768 px, règles exclusives par `max-md`), car celle d'une carte de profil est plus étroite que celle de l'étape
+  Entreprise à la même largeur de fenêtre. Aucun mot n'est coupé (« Guadeloupe », « Bourgogne- », « Normandie » ou
+  « SFG DEVELOPPEMENT » ne tenaient plus sur leur ligne). `break-words` ne reste qu'en dernier recours, pour un mot plus
+  long que la carte.
 - **Champs** : 48 px, rayon 12 px, contour filet-fort, orange-deep au focus, rouge en erreur. Libellé Inter 600, aide
   en texte-discret et erreur en rouge avec icône, entre le libellé et le champ ; l'erreur paraît quand on quitte le
   champ et s'annonce poliment. Les nombres se lisent à la française (`lib/saisie.ts`) : milliers collés ou groupés par
@@ -598,16 +604,18 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   « Non renseigné » en texte-discret, jamais un tiret ; une réponse « Je ne sais pas » ou « Ne sait pas » s'écrit telle
   quelle. Libellés propres à la section : « Objectif » (section Projet), « Intitulé » (nom de la formation). Le lot de
   l'écran de résultats s'y précharge (section 15). Un groupe de plusieurs profils a une section « Participants » (le
-  total des personnes et des profils) puis une section « Profil N » par profil (personnes, statut, réponses), et la
-  section Formation écrit le coût par personne et pour le groupe.
+  total, « 4 personnes · 2 profils », comme à l'étape Participants) puis une section « Profil N » par profil
+  (personnes, statut, réponses) ; un groupe d'un seul profil garde la section « Participants » avec une ligne
+  « Personnes » de plus. Dès deux personnes, la section Formation écrit le coût par personne, le coût pour le groupe et
+  le coût horaire par personne.
 - **Limite connue** : un dirigeant « assimilé salarié » dont l'entreprise relève d'un OPCO peut relever du plan de
   développement des compétences de sa branche (Afdas : « dirigeants salariés » ; Uniformation : « dirigeants bénévoles
   dans certaines branches ») ; le projet « Former le dirigeant » n'affiche pourtant ni plafond horaire ni budget OPCO,
   et l'écran de résultats ne calcule ce plan que pour les projets salariés (former, reconvertir : `ouvreBudgetOpco`,
   dans `calculer`, `lib/resultats.ts`). Une note le dit au dirigeant (`titreNoteOpco` : « Pas de calcul du plan de
   développement des compétences pour ce projet » sans OPCO, la saisie manuelle de ce projet n'en demandant pas ;
-  « OPCO non compté pour un dirigeant » avec un OPCO ; corps inchangé, avec le cas de l'assimilé salarié). Hors
-  périmètre.
+  « OPCO non compté pour un dirigeant » avec un OPCO ; corps inchangé, avec le cas de l'assimilé salarié ; un groupe,
+  `notesOpco`, section 15). Hors périmètre.
 - **Mois de début prévu** (étape Formation, `MM/AAAA`) : un mois inexistant (« 13/2026 ») est une erreur comme une
   saisie mal formée (`erreurDuMoisDeDebut`, `lib/parcours.ts` : « Ce mois n'existe pas : écrivez un mois de 01 à 12 »),
   signalée quand on quitte le champ (`aria-invalid`, message relié).
@@ -649,9 +657,9 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
 - **Ordre** : titre `h2` et actions (Modifier, Imprimer : libellés courts sous 640 px, nom accessible complet ; la
   rangée passe à la ligne, `flex-wrap`, plutôt que de déborder à 640 px avec l'espacement de texte), étiquettes de la
   situation (projet, OPCO, région, durée, écrite par `nombreEtUnite` : « 1 500 h »), bandeau de synthèse, note sur
-  l'OPCO s'il y a lieu, cartes du plan, détail par profil (`h2`, plusieurs profils seulement), aides par financeur
-  (`h2`), détail de l'estimation OPCO (`h2`), portails de la
-  région (`h2`), mention, date de la simulation et actions. Aucun élément collant.
+  l'OPCO s'il y a lieu, cartes du plan, détail par profil (`h2`, à partir de deux profils et d'un coût connu), aides par
+  financeur (`h2`), détail de l'estimation OPCO (`h2`), portails de la région (`h2`), mention, date de la simulation et
+  actions. Aucun élément collant.
 - **Bandeau de synthèse** : carte blanche à grands chiffres (`rounded-panneau`, filet turquoise / or / orange en tête),
   pas un dégradé : le reste à charge est en orange foncé (5,16:1 sur blanc ; moins de 2:1 sur le dégradé turquoise), la
   barre empilée a besoin d'un fond clair pour ses couleurs de famille (le turquoise de l'OPCO se perdrait dans un
@@ -660,27 +668,46 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   **Financé** (le plus grand), Reste à charge (orange foncé) ; sous Financé, la part du coût (`partFinancee` : jamais
   « 100 % » avec un reste, jamais « 0 % » avec un financement). Sous 640 px, une ligne par chiffre. Aucune phrase sous
   un reste à charge nul : ce n'est qu'une estimation, que l'OPCO peut refuser (fonds épuisés, étude du dossier).
-- **Groupe de plusieurs personnes** (`calculer(...).groupe`, `lib/resultats.ts` ; `ParProfil`) : le moteur de l'OPCO est
-  appelé une fois pour les personnes qui relèvent du plan de développement des compétences (un seul plafond annuel),
-  son résultat est réparti entre les profils au centime, et le plan du groupe fusionne ceux des profils. Avec plusieurs
-  profils, le coût pédagogique du groupe est réparti de la même façon : le plan du groupe coûte exactement le prix saisi
-  (1 000 € pour trois profils d'une personne : 333,34, 333,33 et 333,33 €). L'étiquette « 4 personnes · 2 profils » suit
-  la durée dans la situation. Les trois chiffres du bandeau sont ceux du groupe, avec « 4 × 2 800 € » sous le coût
-  (« 333,33 € par personne en moyenne » quand le coût ne se divise pas au centime) et « 1 706,25 € par personne en
-  moyenne » sous le reste à charge (`detailsDuBandeau` : rien pour une personne seule ni pour un coût inconnu). Chaque ligne chiffrée du plan dit pour combien de personnes elle
-  vaut, sous le nom du financeur (« pour 3 personnes », `pourPersonnes`) ; la carte des options, dont les lignes n'ont
-  pas cette mention, dit que ses montants sont ceux de tout le groupe. Avec plusieurs profils, une section `h2` « Détail
-  par profil » suit le plan : tableau Profil / Personnes / Coût / Financé / Reste à charge et ligne « Total » à partir de
-  640 px et à l'impression (aucune ligne ne se coupe, `break-inside-avoid`), un bloc empilé par profil en dessous ; les
-  chiffres sont ceux du plan de chaque profil (`lignesParProfil`), jamais recalculés. Les aides du catalogue sont
-  fusionnées (`fusionnerAides` : meilleur statut, plus grand montant par personne, « jusqu'à … par personne ») ; une
-  carte dont l'aide ne vaut pas, au même statut, pour tous les profils porte un bloc « Concerne » (`concerneAAfficher` :
-  « Profil 2 · Dirigeant artisan, 52 ans, 1 personne : éligible »). Le détail de l'OPCO est un calcul unique, dont le
-  chapeau dit pour qui (`mentionOpcoDuGroupe` : « Calcul pour les 3 salariés du groupe (4 personnes au total). ») et dont
-  la carte de total dit « pour 3 personnes ». Les notes sous le bandeau s'additionnent, une fois chacune (`notesOpco` :
-  « Aucun OPCO renseigné », « OPCO non compté pour le dirigeant du groupe »). Fonds épuisés, relais du plan conventionnel
-  et plan fermé aux 50 salariés et plus sont jugés une fois, pour l'entreprise. Tests : `tests/resultats-groupe.test.ts`
-  (identité avec l'ancien calcul pour une personne, 1 000 groupes tirés, graine 17).
+- **Groupe de plusieurs personnes** (`calculer(...).groupe`, `lib/resultats.ts`) : le moteur de l'OPCO est appelé une
+  fois pour les personnes qui relèvent du plan de développement des compétences (un seul plafond annuel), son résultat
+  est réparti au centime entre les profils qui en relèvent, et le plan du groupe fusionne ceux des profils. Avec
+  plusieurs profils, le coût pédagogique du groupe est réparti de la même façon : le plan du groupe coûte exactement le
+  prix du groupe (1 000 € pour trois profils d'une personne : 333,34, 333,33 et 333,33 €). L'étiquette « 4 personnes ·
+  2 profils » suit la durée dans la situation (« 5 personnes » pour un seul profil). Les trois chiffres du bandeau sont
+  ceux du groupe, avec « 4 × 2 800 € » sous le coût (« 333,33 € par personne en moyenne » quand le coût ne se divise pas
+  au centime) et « 1 706,25 € par personne en moyenne » sous le reste à charge (`detailsDuBandeau` : rien pour une
+  personne seule, un coût inconnu ou une moyenne qui s'arrondit à zéro ; sans financement chiffré, le coût seul).
+  Chaque ligne chiffrée du plan dit pour combien de personnes elle vaut, sous le nom du financeur (« pour 3 personnes »,
+  `pourPersonnes`) ; la carte des options, dont les lignes n'ont pas cette mention, dit « Les montants valent pour les
+  personnes du groupe qu'elles concernent. » (une option vaut pour les seuls profils qui l'ont). Les aides du catalogue
+  sont fusionnées (`fusionnerAides` : meilleur statut, plus grand montant par personne, « jusqu'à … par personne ») ;
+  une carte dont l'aide ne concerne pas tous les profils, ou pas au même statut, porte un bloc « Concerne »
+  (`concerneAAfficher` : « Profil 2 · Dirigeant artisan, 52 ans, 1 personne : éligible »). Tests :
+  `tests/resultats-groupe.test.ts` (identité avec l'ancien calcul pour une personne, 1 000 groupes tirés, graine 17).
+- **Détail par profil** (`ParProfil`, `colonnesParProfil`, `lignesParProfil`) : avec plusieurs profils, une section `h2`
+  « Détail par profil » suit les cartes du plan. L'état du plan du groupe (`etatEnTete`) en gouverne les colonnes, parce
+  que le bandeau n'écrit jamais « Financé 0 € » ni « 0 € » pour un coût inconnu : le tableau suit la même règle. Coût
+  inconnu, aucune section ; aucun financement chiffré, les seules colonnes Profil, Personnes et Coût (le chapeau et la
+  légende du tableau ne parlent alors que du coût) ; plan chiffré, les cinq colonnes Profil / Personnes / Coût / Financé
+  / Reste à charge, où une ligne dont le propre plan n'est pas chiffré (`chiffre` de `LigneParProfil` : un apprenti
+  parmi des salariés, un dirigeant assimilé salarié parmi des artisans) écrit « Non chiffré » à la place de « Financé »
+  et de « Reste à charge ». La ligne « Total » reste celle du plan du groupe, égale aux chiffres du bandeau. Le tableau
+  paraît à partir de 640 px et à l'impression (aucune ligne ne se coupe, `break-inside-avoid`) ; sous 640 px, un bloc
+  empilé par profil suit les mêmes règles, « Total » en dernier. Les chiffres sont ceux du plan de chaque profil, jamais
+  recalculés.
+- **Détail de l'OPCO et notes d'un groupe** : le détail de l'OPCO est un calcul unique, dont la carte de total dit
+  « Total estimé, tous postes, pour 3 personnes ». Son chapeau « poste par poste » n'existe qu'avec le tableau des postes
+  (`chapeauDetailOpco`) et c'est à lui que s'ajoute la mention de qui est calculé (`mentionOpcoDuGroupe` : « Calcul pour
+  les 3 salariés du groupe (4 personnes au total). », ou « Calcul pour les 4 personnes du groupe. » quand toutes relèvent
+  du plan) : jamais seule, donc jamais quand le plan est fermé aux 50 salariés et plus, ni sans ligne à afficher. Les
+  notes sous le bandeau (`notesOpco`) s'additionnent, une fois chacune. Avec un seul projet dans le groupe, c'est la
+  note d'une personne seule (`titreNoteOpco`) : des seuls dirigeants lisent « OPCO non compté pour un dirigeant »,
+  ou « Pas de calcul du plan de développement des compétences pour ce projet » sans OPCO. Avec des projets mêlés,
+  « Aucun OPCO renseigné » quand un projet salarié est sans OPCO, puis « OPCO non compté pour le dirigeant du groupe »
+  quand le groupe compte un dirigeant, avec ou sans OPCO. Le corps de la note du dirigeant est celui de l'assimilé
+  salarié dès qu'un dirigeant du groupe l'est (`assimileSalarie`) : un groupe de dirigeants de régimes différents ne lit
+  que ce texte-là. Fonds épuisés, relais du plan conventionnel et plan fermé aux 50 salariés et plus sont jugés une
+  fois, pour l'entreprise.
 - **Promesses** : aucune phrase plus forte que le moteur (« entièrement », « garanti », « assuré », « vous
   obtiendrez »…) dans le bandeau, les cartes, les aides et le détail de l'OPCO. Le moteur non plus : sous son plafond, un
   poste dit « Votre coût horaire ne dépasse pas le plafond : l'estimation le retient en entier. » (de même « par nuit »
