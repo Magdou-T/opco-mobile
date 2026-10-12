@@ -11,7 +11,7 @@ import { prochainIdProfil } from '@/lib/groupe';
 import type { InconnuesParProfil } from '@/lib/groupe';
 import { INSECABLE } from '@/lib/insecable';
 import type { QuestionAvecInconnu } from '@/lib/parcours';
-import { libelleDuProfil } from '@/lib/profils';
+import { pucesDuProfil } from '@/lib/profils';
 import { CarteProfil, idTitreProfil } from './CarteProfil';
 import { CompteurPersonnes } from './CompteurPersonnes';
 import { EnTeteEtape } from './EnTeteEtape';
@@ -175,7 +175,7 @@ export function StepSituation({ state, reponsesInconnues, inconnuesProfils, grou
               <CarteProfil
                 profil={profil}
                 rang={rang}
-                resume={libelleDuProfil(profil.champs)}
+                puces={pucesDuProfil(profil.champs)}
                 manquants={manquantsDuProfil(profil.champs)}
                 ouvert={ouvert === profil.id}
                 onBasculer={() => setOuvert(ouvert === profil.id ? '' : profil.id)}

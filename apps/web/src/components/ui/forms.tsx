@@ -425,8 +425,14 @@ const OUTRE_MER = (code: CodeRegion) => code.startsWith('0');
 
 /**
  * Choix de la région : les 18 régions, métropole puis outre-mer. Avec `focusInitial`, le bouton de la région choisie
- * (à défaut le premier) prend le focus à l'ouverture. À placer dans un `ChoiceGroup`. Une seule colonne sous 360 px :
- * à deux colonnes, « Guadeloupe » (82 px) ou « Bourgogne- » ne tenaient plus dans le bouton et se coupaient en deux.
+ * (à défaut le premier) prend le focus à l'ouverture. À placer dans un `ChoiceGroup`. Les colonnes se décident sur la
+ * largeur de la grille (requête de conteneur, `@container`) et non sur celle de la fenêtre : la même liste se pose dans
+ * l'étape Entreprise (environ 309 px à 375 px de fenêtre) et dans une carte de profil (environ 275 px). Une colonne tant
+ * que la grille mesure moins de 18,5 rem (296 px), deux de là jusqu'à 768 px de fenêtre, trois au-delà (`md`). Un bouton
+ * compact prend 62 px de bordures, de pastille et d'espaces, plus 82 px pour « Guadeloupe » : 144 px par colonne, 296 px
+ * pour deux colonnes et leur espace ; plus étroit, « Guadeloupe » ou « Bourgogne- » se coupent en deux. `max-md` laisse
+ * `md:grid-cols-3` l'emporter : Tailwind émet la requête de conteneur après le point d'arrêt de fenêtre, et à égalité de
+ * spécificité elle donnerait deux colonnes à 768 px et plus.
  */
 function RegionPicker({
   selected,
@@ -448,11 +454,11 @@ function RegionPicker({
     { titre: 'Outre-mer', regions: REGIONS_TRIEES.filter((r) => OUTRE_MER(r.code)) },
   ];
   return (
-    <div ref={grille} className="space-y-4">
+    <div ref={grille} className="@container space-y-4">
       {groupes.map((g) => (
         <div key={g.titre}>
           <p className="marginalia mb-2">{g.titre}</p>
-          <div className="grid gap-2 min-[360px]:grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-2 @min-[18.5rem]:max-md:grid-cols-2 md:grid-cols-3">
             {g.regions.map(({ code, nom }) => (
               <ChoiceButton key={code} label={nom} selected={selected === code} onClick={() => onSelect(code)} compact />
             ))}

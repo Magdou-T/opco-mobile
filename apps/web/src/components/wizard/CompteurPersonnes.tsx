@@ -10,7 +10,7 @@ import { lireEffectif } from '@/lib/groupe';
 
 /** Bouton rond de 44 px (40 px au-delà de 1 024 px) ; grisé par `aria-disabled` sans quitter l'ordre du clavier. */
 const BOUTON =
-  'grid size-11 shrink-0 place-items-center rounded-full border-2 border-filet-fort bg-white text-texte transition-colors hover:border-texte-doux aria-disabled:cursor-not-allowed aria-disabled:border-filet aria-disabled:text-texte-discret aria-disabled:hover:border-filet lg:size-10';
+  'grid size-11 shrink-0 place-items-center rounded-full border-2 border-filet-fort bg-white text-texte transition-[color,background-color,border-color] hover:border-texte-doux aria-disabled:cursor-not-allowed aria-disabled:border-filet aria-disabled:text-texte-discret aria-disabled:hover:border-filet lg:size-10';
 
 /** Moins (un trait) ou plus (un trait et sa croix), dessinés en CSS : le jeu d'icônes du site n'en compte pas de plus. */
 function Signe({ plus = false }: { plus?: boolean }) {

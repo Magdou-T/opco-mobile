@@ -17,8 +17,8 @@ interface Props {
   profil: ProfilDuGroupe;
   /** Position du profil dans la liste, à partir de 1 : « Profil 2 ». */
   rang: number;
-  /** Libellé du profil (`libelleDuProfil`), en résumé sous le titre. */
-  resume: string;
+  /** Ce que le profil a déjà répondu (`pucesDuProfil`), en puces sous le titre : le statut n'y est pas, l'étiquette le dit. */
+  puces: readonly string[];
   /** Ce qui manque encore à ce profil (`manquantsDuProfil`) ; dit sur la carte repliée. */
   manquants: string[];
   ouvert: boolean;
@@ -32,14 +32,16 @@ interface Props {
 }
 
 /**
- * Carte d'un profil du groupe : titre (focalisable par programme), statut, résumé, compteur de personnes, puis les questions
- * du profil dans un volet qui se replie sur son résumé. Le volet reste dans la page quand il est replié (`hidden`) : les
- * champs gardent leur état. Le profil principal ne se retire pas.
+ * Carte d'un profil du groupe : titre (focalisable par programme), statut, puces de ce que le profil a répondu, compteur de
+ * personnes, puis les questions du profil dans un volet qui se replie sur ces puces. Le volet reste dans la page quand il est
+ * replié (`hidden`) : les champs gardent leur état. Le profil principal ne se retire pas. Sur téléphone, le compteur passe
+ * sous le titre : la colonne du titre garde au moins 12 rem (`min-w-48`), car `flex-1` seul a une base de 0 et ne laisserait
+ * jamais le compteur passer à la ligne (la colonne tombait à environ 70 px à 375 px).
  */
 export function CarteProfil({
   profil,
   rang,
-  resume,
+  puces,
   manquants,
   ouvert,
   onBasculer,
@@ -52,7 +54,7 @@ export function CarteProfil({
   return (
     <Card as="section" aria-labelledby={idTitreProfil(profil.id)} padding="none">
       <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4 p-4 sm:p-5">
-        <div className="min-w-0 flex-1">
+        <div className="min-w-48 flex-1">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             <h3
               id={idTitreProfil(profil.id)}
@@ -63,7 +65,16 @@ export function CarteProfil({
             </h3>
             <Etiquette tone="turquoise">{STATUT_DU_PROFIL[profil.champs.projetType ?? 'formation_salarie']}</Etiquette>
           </div>
-          <p className="mt-1 text-sm leading-snug text-texte-doux">{resume}</p>
+          {puces.length > 0 && (
+            <ul role="list" className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-sm leading-snug text-texte-doux">
+              {puces.map((puce) => (
+                <li key={puce} className="flex items-start gap-1.5">
+                  <span aria-hidden="true" className="mt-[0.5em] size-1.5 shrink-0 rounded-full bg-texte-doux" />
+                  {puce}
+                </li>
+              ))}
+            </ul>
+          )}
           {!ouvert && manquants.length > 0 && (
             <p className="mt-2 flex items-start gap-1.5 text-sm font-medium text-orange-deep">
               <Icon name="info" className="mt-0.5 size-4 shrink-0" />
