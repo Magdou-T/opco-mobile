@@ -7931,7 +7931,8 @@ Vérifier l'unicité de chaque ligne d'ancrage avec `grep -n` avant de la rempla
 ```
 - **Largeurs étroites** : sous 360 px, la grille des modes de transport passe à une colonne et les cartes Entreprise et
   OPCO posent leur pastille au-dessus du titre ; la liste des régions décide sur la largeur de son conteneur (requête de
-  conteneur, `@min-[18.5rem]` : deux colonnes à partir de 296 px de grille), car celle d'une carte de profil est plus
+  conteneur, `@min-[18.5rem]` : deux colonnes à partir de 296 px de grille et jusqu'à 767 px de fenêtre, trois dès 768 px,
+  règles exclusives par `max-md`), car celle d'une carte de profil est plus
   étroite que celle de l'étape Entreprise à la même largeur de fenêtre. Aucun mot n'est coupé (« Guadeloupe »,
   « Bourgogne- », « Normandie » ou « SFG DEVELOPPEMENT » ne tenaient plus sur leur ligne). `break-words` ne reste
   qu'en dernier recours, pour un mot plus long que la carte.
