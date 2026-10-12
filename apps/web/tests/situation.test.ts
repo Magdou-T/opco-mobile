@@ -1,6 +1,6 @@
 // Étiquettes de la situation d'un groupe, en tête de l'écran de résultats (lib/situation.ts) : « N personnes » avec un profil,
-// « N personnes · M profils » avec plusieurs, et leur place après le projet, l'OPCO, la région et la durée.
-// Fonction pure ; attentes écrites à la main.
+// « N personnes · M profils » avec plusieurs, et leur place après le projet, l'OPCO, la région et la durée. Celles d'une
+// personne seule (projet, OPCO, région, durée) sont dans resultats.test.ts. Fonction pure ; attentes écrites à la main.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { WizardState } from '@opco/core';
@@ -36,7 +36,7 @@ describe("étiquettes de la situation d'un groupe : cas limites", () => {
     ]);
   });
 
-  test('six profils au plus, 99 personnes au plus', () => {
+  test("aux plus grands groupes (six profils, 99 personnes) : l'étiquette dit le nombre de personnes et de profils", () => {
     assert.deepEqual(etiquettesDeSituation(groupeDe(1, [1, 1, 1, 1, 1])), ['Former un salarié', `6${INSECABLE}personnes · 6${INSECABLE}profils`]);
     assert.deepEqual(etiquettesDeSituation(groupeDe(50, [49])), ['Former un salarié', `99${INSECABLE}personnes · 2${INSECABLE}profils`]);
   });

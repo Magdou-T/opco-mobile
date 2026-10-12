@@ -1,7 +1,7 @@
 // ============================================================
 // En-tête de l'écran de résultats : étiquettes de la situation. Fonction pure, sans le catalogue d'aides ni le calcul :
 // elle est dans le lot initial du simulateur, pour que l'attente du chargement affiche déjà l'en-tête réel (aucun saut
-// de mise en page quand l'écran arrive). Tests : tests/resultats.test.ts.
+// de mise en page quand l'écran arrive). Tests : tests/resultats.test.ts (une personne seule), tests/situation.test.ts (groupe).
 // ============================================================
 
 import { PROJET_LABELS, REGIONS, estCodeRegion, getEmbeddedOpcoBySlug, nombreDePersonnes } from '@opco/core';

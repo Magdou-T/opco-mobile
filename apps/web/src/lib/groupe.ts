@@ -198,7 +198,7 @@ export function coutDuGroupe(
 ): number | null {
   if (etat.prixDuGroupe != null) return etat.prixDuGroupe;
   if (etat.pedagogyCostTotal == null) return null;
-  return Math.round(etat.pedagogyCostTotal * nombreDePersonnes(etat) * 100) / 100;
+  return auCentime(etat.pedagogyCostTotal * nombreDePersonnes(etat));
 }
 
 /**
@@ -206,7 +206,11 @@ export function coutDuGroupe(
  * l'effectif, 800,1999999999999 € pour 2 400,60 € et 3 personnes) : le champ n'en affiche que les centimes (« 800,2 »)
  * et n'écrit jamais dans l'état le nombre affiché.
  */
-export const auCentime = (montant: number | null): number | null => (montant == null ? null : Math.round(montant * 100) / 100);
+export function auCentime(montant: number): number;
+export function auCentime(montant: number | null): number | null;
+export function auCentime(montant: number | null): number | null {
+  return montant == null ? null : Math.round(montant * 100) / 100;
+}
 
 /**
  * Aide sous le champ du prix à partir de deux personnes : le prix de l'autre mode. Prix saisi pour le groupe : « Soit
@@ -217,5 +221,5 @@ export function aideDuPrix(personnes: number, coutParPersonne: number | null, po
   if (personnes < 2 || coutParPersonne == null || !(coutParPersonne > 0)) return null;
   return pourLeGroupe
     ? `Soit ${formatEuro(coutParPersonne)} par personne.`
-    : `Soit ${formatEuro(Math.round(coutParPersonne * personnes * 100) / 100)} pour les ${nombreEtUnite(personnes, 'personnes')}.`;
+    : `Soit ${formatEuro(auCentime(coutParPersonne * personnes))} pour les ${nombreEtUnite(personnes, 'personnes')}.`;
 }

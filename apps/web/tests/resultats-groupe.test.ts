@@ -405,7 +405,7 @@ describe("situations limites d'un groupe", () => {
   });
 });
 
-describe('1 000 groupes tirés au hasard (graine 17) : cohérence du plan, des parts et des textes', () => {
+describe('groupes tirés au hasard : cohérence du plan et des parts (1 000, graine 17), textes du calcul (300, graine 23), encadré sans financement (2 500, graine 29)', () => {
   test("les profils s'additionnent en centimes, aucun plan ne dépasse son coût, rien n'est invalide", () => {
     const hasard = generateur(17);
     let avecPlusieursProfils = 0;
@@ -549,7 +549,8 @@ describe('1 000 groupes tirés au hasard (graine 17) : cohérence du plan, des p
     }
     assert.ok(compte.sansFinancement >= 500, JSON.stringify(compte));
     assert.ok(compte.plusieursProfils >= 500 && compte.sansPortail >= 30, JSON.stringify(compte));
-    // Le cas du constat est bien tiré (troisième variante et aides « à vérifier » chiffrées), comme les phrases d'origine.
+    // Les tirages atteignent au moins 30 fois la troisième variante de l'encadré (ni option chiffrée ni carte d'aides) avec des aides
+    // « à vérifier » chiffrées : les conditions ci-dessus s'y exercent aussi, pas seulement sur les deux premières variantes.
     assert.ok(compte.troisiemeAvecAVerifierChiffrees >= 30, JSON.stringify(compte));
     assert.ok(compte.servicesSeuls >= 10 && compte.aucuneAideAMontant >= 10, JSON.stringify(compte));
     assert.ok(vus.size >= 8, `seulement ${vus.size} textes distincts : ${[...vus].join(' | ')}`);

@@ -240,7 +240,7 @@ export function StepRecap({ state, onEdit, reponsesInconnues, inconnuesProfils }
           {
             titre: 'Participants',
             lignes: [
-              ['Personnes', `${pluriel(personnes, 'personne', 'personnes')}, ${pluriel(profils.length, 'profil', 'profils')}`],
+              ['Personnes', `${pluriel(personnes, 'personne', 'personnes')} · ${pluriel(profils.length, 'profil', 'profils')}`],
             ],
           },
           ...profils.map((p, i) => ({

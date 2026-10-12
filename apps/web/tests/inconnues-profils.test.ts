@@ -1,19 +1,19 @@
 // Réponses « Je ne sais pas » de chaque profil du groupe (lib/groupe.ts : `inconnuesApresMaj`, `inconnuesSansProfil`) : elles
 // suivent les règles de `reponsesInconnuesApres` (lib/parcours.ts), profil par profil, sans toucher aux autres profils.
-// Fonctions pures ; attentes écrites à la main.
+// Fonctions pures. Oracle : les attentes des deux premiers blocs sont écrites à la main ; le troisième prend
+// `reponsesInconnuesApres` pour référence, y compris dans le modèle de sa suite tirée au hasard (graine 12). Il vérifie que
+// le registre applique cette fonction à chaque profil, sans entrée de trop, et non ses règles : leurs attentes écrites à la
+// main sont dans parcours.test.ts.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { champsDuProfilPrincipal, createInitialWizardState } from '@opco/core';
 import type { ChampsProfil, ProjetType } from '@opco/core';
 import { ajouterProfil, inconnuesApresMaj, inconnuesSansProfil, prochainIdProfil, retirerProfil } from '../src/lib/groupe';
 import type { InconnuesParProfil } from '../src/lib/groupe';
 import { champsDepuisProjet, reponsesInconnuesApres } from '../src/lib/parcours';
 import type { QuestionAvecInconnu, QuestionDeProfil } from '../src/lib/parcours';
-import { PROJETS, etat, hasardFixe } from './fixtures-groupe';
+import { PROJETS, etat, hasardFixe, vides } from './fixtures-groupe';
 
 describe('réponses « Je ne sais pas » par profil', () => {
-  const vides = champsDuProfilPrincipal(createInitialWizardState());
-
   test("une réponse « Je ne sais pas » s'ajoute au profil concerné, sans toucher aux autres", () => {
     const a = inconnuesApresMaj({}, 'profil-2', { inscritFranceTravail: null }, 'inscritFranceTravail');
     assert.deepEqual([...a['profil-2']], ['inscritFranceTravail']);
@@ -51,7 +51,6 @@ describe('réponses « Je ne sais pas » par profil', () => {
 });
 
 describe('réponses « Je ne sais pas » par profil : cas limites', () => {
-  const vides = champsDuProfilPrincipal(createInitialWizardState());
   /** profil-2 a répondu « Je ne sais pas » à inscritFranceTravail, profil-3 à microEntrepreneur. */
   const deuxProfils = (): InconnuesParProfil =>
     inconnuesApresMaj(
@@ -195,7 +194,6 @@ describe('réponses « Je ne sais pas » par profil : cas limites', () => {
 });
 
 describe('réponses « Je ne sais pas » par profil : même comportement que celles du profil principal', () => {
-  const vides = champsDuProfilPrincipal(createInitialWizardState());
   /** Mises à jour d'un profil : les réponses écrites et, le cas échéant, la question à laquelle l'utilisateur répond « Je ne sais pas ». */
   const etapes: [Partial<ChampsProfil>, QuestionDeProfil?][] = [
     [{ inscritFranceTravail: null }, 'inscritFranceTravail'],

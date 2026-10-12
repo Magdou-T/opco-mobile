@@ -1,7 +1,8 @@
-// Aides partagées par les tests du groupe : états de test (profil principal et profils supplémentaires), liste des projets,
-// générateur du hasard à graine fixe. Ce fichier n'est pas un test : sans suffixe `.test.ts`, `npm run test:web` ne le lit pas.
-import { createInitialWizardState } from '@opco/core';
-import type { ProfilSupplementaire, ProjetType, WizardState } from '@opco/core';
+// Aides partagées par les tests du groupe : états de test (profil principal et profils supplémentaires), réponses d'un profil,
+// liste des projets, générateur du hasard à graine fixe. Ce fichier n'est pas un test : sans suffixe `.test.ts`,
+// `npm run test:web` ne le lit pas.
+import { champsDuProfilPrincipal, createInitialWizardState } from '@opco/core';
+import type { ChampsProfil, ProfilSupplementaire, ProjetType, WizardState } from '@opco/core';
 import { nouveauProfil } from '../src/lib/groupe';
 
 export const etat = (maj: Partial<WizardState> = {}): WizardState => ({
@@ -19,6 +20,11 @@ export const avec = (...projets: WizardState['projetType'][]): WizardState => {
   const [principal, ...autres] = projets;
   return etat({ projetType: principal, autresProfils: autres.map((p, i) => extra(`profil-${i + 2}`, { projetType: p })) });
 };
+
+/** Les réponses d'un profil neuf : celles du profil principal d'un état initial. */
+export const vides: ChampsProfil = champsDuProfilPrincipal(createInitialWizardState());
+/** Les réponses d'un profil neuf, avec ces mises à jour. */
+export const champs = (maj: Partial<ChampsProfil> = {}): ChampsProfil => ({ ...vides, ...maj });
 
 export const PROJETS: ProjetType[] = [
   'formation_salarie',

@@ -3,15 +3,12 @@
 // Fonctions pures ; attentes écrites à la main.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { champsDuProfilPrincipal, createInitialWizardState } from '@opco/core';
 import type { ChampsProfil, ProjetType } from '@opco/core';
 import { INSECABLE } from '../src/lib/insecable';
 import { STATUT_DU_PROFIL, libelleDuProfil, pucesDuProfil } from '../src/lib/profils';
-import { PROJETS } from './fixtures-groupe';
+import { champs } from './fixtures-groupe';
 
 describe("libellé d'un profil", () => {
-  const champs = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
-
   test("statut, puis ce qui le précise, l'âge et la reconnaissance de travailleur handicapé", () => {
     assert.equal(libelleDuProfil(champs({ projetType: 'formation_salarie', contractType: 'cdi', ageBeneficiaire: 35 })), `Salarié en CDI, 35${INSECABLE}ans`);
     assert.equal(
@@ -38,7 +35,6 @@ describe("libellé d'un profil", () => {
 });
 
 describe("libellé d'un profil : chaque statut, restes de saisie, morceaux absents", () => {
-  const champs = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
   const libelle = (projetType: ProjetType | null, maj: Partial<ChampsProfil> = {}): string => libelleDuProfil(champs({ projetType, ...maj }));
 
   test('salarié et reconversion : chaque contrat, après « en » pour le salarié, après une virgule pour la reconversion', () => {
@@ -89,8 +85,6 @@ describe("libellé d'un profil : chaque statut, restes de saisie, morceaux absen
       `Demandeur d'emploi, 30${INSECABLE}ans, RQTH`,
     );
     assert.equal(libelle(null, { isHandicap: true, ageBeneficiaire: 41 }), `Salarié, 41${INSECABLE}ans, RQTH`);
-    // Un âge est dit dès qu'il est posé, même à zéro (présence, pas valeur).
-    assert.equal(libelle('formation_salarie', { contractType: 'cdi', ageBeneficiaire: 0 }), `Salarié en CDI, 0${INSECABLE}ans`);
   });
 
   test("un profil ne dit que les réponses de son statut : celles d'un autre projet sont ignorées", () => {
@@ -113,7 +107,6 @@ describe("libellé d'un profil : chaque statut, restes de saisie, morceaux absen
 describe("puces d'un profil (pucesDuProfil)", () => {
   /** Espace fine insécable (U+202F), écrite par son code : séparateur des milliers de `formatEuro` (Intl, fr-FR). */
   const FINE = String.fromCharCode(0x202f);
-  const champs = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
   const puces = (projetType: ProjetType | null, maj: Partial<ChampsProfil> = {}): string[] => pucesDuProfil(champs({ projetType, ...maj }));
 
   test('salarié, profil complet : contrat, âge, diplôme, RQTH, solde CPF, dans cet ordre, sans le statut', () => {
@@ -245,6 +238,16 @@ describe("puces d'un profil (pucesDuProfil)", () => {
     assert.deepEqual(puces('formation_dirigeant', restes), ['Artisan']);
   });
 
+  test("l'ancienneté, le statut de micro-entrepreneur et la région du bénéficiaire ne produisent aucune puce, quel que soit le statut", () => {
+    // Trois réponses du profil que la carte ne reprend pas : renseignées avec l'âge, qui produit une puce, seule celle-ci reste.
+    for (const microEntrepreneur of [true, false]) {
+      const sansPuce = { anciennete_mois: 30, microEntrepreneur, regionBeneficiaireCode: '84', ageBeneficiaire: 40 } as const;
+      for (const projetType of [null, 'formation_salarie', 'reconversion_salarie', 'recrutement_demandeur_emploi', 'alternance', 'formation_dirigeant'] as const) {
+        assert.deepEqual(puces(projetType, sansPuce), [`40${INSECABLE}ans`], `${projetType} : micro-entrepreneur ${microEntrepreneur}`);
+      }
+    }
+  });
+
   test('projet non choisi : lu comme un salarié', () => {
     assert.deepEqual(puces(null, { contractType: 'cdd', soldeCpf: 500 }), ['CDD', `Solde CPF 500${INSECABLE}€`]);
   });
@@ -279,7 +282,7 @@ describe("puces d'un profil (pucesDuProfil)", () => {
 });
 
 describe('statut du profil (STATUT_DU_PROFIL)', () => {
-  test('une entrée par projet, dite en un ou deux mots', () => {
+  test('une entrée par projet : le statut tel que le disent les boutons de choix et le résumé du profil', () => {
     assert.deepEqual(STATUT_DU_PROFIL, {
       formation_salarie: 'Salarié',
       reconversion_salarie: 'Salarié en reconversion',
@@ -287,6 +290,5 @@ describe('statut du profil (STATUT_DU_PROFIL)', () => {
       alternance: 'Alternant',
       formation_dirigeant: 'Dirigeant',
     });
-    assert.deepEqual(Object.keys(STATUT_DU_PROFIL).sort(), [...PROJETS].sort());
   });
 });

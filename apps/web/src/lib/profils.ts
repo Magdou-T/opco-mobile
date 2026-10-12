@@ -1,15 +1,16 @@
 // ============================================================
 // Libellés d'un profil du groupe (étape Participants, récapitulatif, tableau « Par profil », cartes d'aides). Fonctions
-// pures. Le statut se dit en un ou deux mots ; le libellé complet l'accompagne de ce qui le précise, de l'âge et de la
-// reconnaissance de travailleur handicapé : « Salarié en CDI, 35 ans », « Dirigeant artisan, 52 ans, RQTH ». Les puces
-// d'une carte de profil (`pucesDuProfil`) disent le reste de ce que le profil a répondu, sans le statut.
+// pures. Le statut se dit par un libellé court (« Salarié », « Salarié en reconversion », « Dirigeant ») ; le libellé complet
+// l'accompagne de ce qui le précise, de l'âge et de la reconnaissance de travailleur handicapé : « Salarié en CDI, 35 ans »,
+// « Dirigeant artisan, 52 ans, RQTH ». Les puces d'une carte de profil (`pucesDuProfil`) disent le reste de ce que le profil
+// a répondu, sans le statut.
 // ============================================================
 
 import { NIVEAU_DIPLOME_LABELS, STATUT_PAR_PROJET } from '@opco/core';
 import type { ChampsProfil, ContractType, ProjetType, StatutDirigeant, TypeAlternance } from '@opco/core';
 import { formatEuro, nombreEtUnite } from './format';
 
-/** Le statut du profil, en un ou deux mots (boutons de choix du statut, résumé du profil). */
+/** Le statut du profil, dit par un libellé court (boutons de choix du statut, résumé du profil). */
 export const STATUT_DU_PROFIL: Record<ProjetType, string> = {
   formation_salarie: 'Salarié',
   reconversion_salarie: 'Salarié en reconversion',
@@ -19,6 +20,14 @@ export const STATUT_DU_PROFIL: Record<ProjetType, string> = {
 };
 
 const CONTRAT_COURT: Record<Exclude<ContractType, 'alternance'>, string> = { cdi: 'CDI', cdd: 'CDD', interim: 'intérim' };
+
+/**
+ * Le contrat d'un salarié, dans les mots de `libelleDuProfil` (« CDI »), ou null : le contrat « alternance » d'un reste de
+ * saisie n'est pas une précision de statut.
+ */
+function contratCourt(champs: ChampsProfil): string | null {
+  return champs.contractType && champs.contractType !== 'alternance' ? CONTRAT_COURT[champs.contractType] : null;
+}
 
 const STATUT_DIRIGEANT_COURT: Record<StatutDirigeant, string> = {
   commercant: 'commerçant',
@@ -41,13 +50,12 @@ const TYPE_ALTERNANCE_COURT: Record<TypeAlternance, string> = {
  */
 export function libelleDuProfil(champs: ChampsProfil): string {
   const projet = champs.projetType ?? 'formation_salarie';
-  const contrat = champs.contractType && champs.contractType !== 'alternance' ? CONTRAT_COURT[champs.contractType] : null;
+  const contrat = contratCourt(champs);
   let tete = STATUT_DU_PROFIL[projet];
   if (projet === 'formation_salarie' && contrat) tete += ` en ${contrat}`;
   else if (projet === 'reconversion_salarie' && contrat) tete += `, ${contrat}`;
-  else if (projet === 'alternance' && champs.typeAlternance) {
-    tete += champs.typeAlternance === 'apprentissage' ? ' en apprentissage' : ' en contrat de professionnalisation';
-  } else if (projet === 'formation_dirigeant' && champs.statutDirigeant) tete += ` ${STATUT_DIRIGEANT_COURT[champs.statutDirigeant]}`;
+  else if (projet === 'alternance' && champs.typeAlternance) tete += ` en ${TYPE_ALTERNANCE_COURT[champs.typeAlternance]}`;
+  else if (projet === 'formation_dirigeant' && champs.statutDirigeant) tete += ` ${STATUT_DIRIGEANT_COURT[champs.statutDirigeant]}`;
   return [tete, champs.ageBeneficiaire != null ? nombreEtUnite(champs.ageBeneficiaire, 'ans') : null, champs.isHandicap ? 'RQTH' : null]
     .filter((morceau): morceau is string => !!morceau)
     .join(', ');
@@ -58,7 +66,7 @@ function precisionDuStatut(champs: ChampsProfil, projet: ProjetType): string | n
   switch (projet) {
     case 'formation_salarie':
     case 'reconversion_salarie':
-      return champs.contractType && champs.contractType !== 'alternance' ? CONTRAT_COURT[champs.contractType] : null;
+      return contratCourt(champs);
     case 'alternance':
       return champs.typeAlternance ? TYPE_ALTERNANCE_COURT[champs.typeAlternance] : null;
     case 'formation_dirigeant':

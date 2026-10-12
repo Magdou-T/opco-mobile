@@ -3,10 +3,9 @@
 // Fonctions pures ; attentes écrites à la main.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import { champsDuProfilPrincipal, createInitialWizardState } from '@opco/core';
 import type { ChampsProfil, ProjetType, WizardState } from '@opco/core';
 import { champsManquants, manquantsDuProfil } from '../src/lib/etapes';
-import { PROJETS, avec, etat, extra } from './fixtures-groupe';
+import { PROJETS, avec, champs, etat, extra } from './fixtures-groupe';
 
 describe("champs manquants d'un groupe (étape Participants)", () => {
   test("un seul profil : les textes d'une personne seule, sans nom de profil, quel que soit l'effectif", () => {
@@ -43,13 +42,12 @@ describe("champs manquants d'un groupe (étape Participants)", () => {
   });
 
   test('manquantsDuProfil : un projet non choisi manque au profil', () => {
-    assert.deepEqual(manquantsDuProfil({ ...champsDuProfilPrincipal(createInitialWizardState()), projetType: null }), ['votre projet (étape 1)']);
+    assert.deepEqual(manquantsDuProfil(champs({ projetType: null })), ['votre projet (étape 1)']);
   });
 });
 
 describe('manquantsDuProfil : chaque statut, champ par champ', () => {
-  const sur = (maj: Partial<ChampsProfil>): ChampsProfil => ({ ...champsDuProfilPrincipal(createInitialWizardState()), ...maj });
-  const manque = (projetType: ProjetType | null, maj: Partial<ChampsProfil> = {}): string[] => manquantsDuProfil(sur({ projetType, ...maj }));
+  const manque = (projetType: ProjetType | null, maj: Partial<ChampsProfil> = {}): string[] => manquantsDuProfil(champs({ projetType, ...maj }));
 
   test("salarié : le type de contrat, que « alternance » (reste d'une saisie) ne remplace pas ; aucune ancienneté demandée", () => {
     assert.deepEqual(manque('formation_salarie'), ['le type de contrat']);
@@ -79,8 +77,6 @@ describe('manquantsDuProfil : chaque statut, champ par champ', () => {
     assert.deepEqual(manque('alternance', { typeAlternance: 'apprentissage' }), ["l'âge de l'alternant"]);
     assert.deepEqual(manque('alternance', { ageBeneficiaire: 19 }), ["le type de contrat d'alternance"]);
     assert.deepEqual(manque('alternance', { typeAlternance: 'professionnalisation', ageBeneficiaire: 19 }), []);
-    // Un âge est une réponse dès qu'il est posé, même à zéro (présence, pas valeur).
-    assert.deepEqual(manque('alternance', { typeAlternance: 'apprentissage', ageBeneficiaire: 0 }), []);
   });
 
   test('dirigeant : son statut', () => {

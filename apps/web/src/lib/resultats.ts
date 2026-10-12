@@ -706,8 +706,8 @@ export function mentionOpcoDuGroupe(personnesPdc: number, personnes: number): st
 
 /**
  * Une ligne du tableau « Détail par profil » : le rang du profil, son libellé, son effectif et ses trois montants. `chiffre` :
- * le plan de ce profil est chiffré (`etatEnTete` de son plan vaut `plan_chiffre`) ; sinon son financé et son reste à charge
- * sont des zéros que le bandeau refuse, et l'écran écrit « Non chiffré » à leur place.
+ * le plan de ce profil est chiffré (`etatEnTete` de son plan vaut `plan_chiffre`) ; sinon son financé est nul et son reste à
+ * charge égale son coût ; l'écran écrit « Non chiffré » à la place.
  */
 export interface LigneParProfil {
   id: string;

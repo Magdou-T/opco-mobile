@@ -85,9 +85,10 @@ function Cellule({ valeur, couleur, marge }: { valeur: number | null; couleur: s
  * plan du groupe (celui du bandeau). Les chiffres sont ceux du plan de chaque profil (`lignesParProfil`), jamais recalculés
  * ici. L'état du bandeau du groupe (`etat`) gouverne les colonnes (`colonnesParProfil`), pour ne jamais écrire ce que le
  * bandeau refuse : coût inconnu, rien (le bandeau explique) ; aucun financement chiffré, le coût seul ; plan chiffré, les
- * trois montants, où un profil dont le propre plan n'est pas chiffré (un apprenti parmi des salariés) dit « Non chiffré » au
- * lieu d'un « 0 € ». À partir de 640 px et à l'impression, un tableau (une ligne ne se coupe pas entre deux pages) ; en
- * dessous, un bloc empilé par profil. Un seul profil : rien (le bandeau dit déjà tout).
+ * trois montants, où un profil dont le propre plan n'est pas chiffré (un apprenti parmi des salariés) a un financé nul et un
+ * reste à charge égal à son coût : l'écran écrit « Non chiffré » à la place. À partir de 640 px et à l'impression, un tableau
+ * (une ligne ne se coupe pas entre deux pages) ; en dessous, un bloc empilé par profil. Un seul profil : rien (le bandeau dit
+ * déjà tout).
  */
 export function ParProfil({
   blocs,

@@ -959,9 +959,9 @@ describe('prix du groupe : coutDuGroupe et aideDuPrix', () => {
     assert.equal(auCentime(null), null);
   });
 
-  // Tests ajoutés à ceux de la fiche. La preuve par mutation (rapport de la tâche 14) a montré que les trois tests ci-dessus
-  // laissent vivre la priorité du prix du groupe, le seuil exact de deux personnes et les arrondis vers le bas, vers le haut
-  // ou au millime : les valeurs ci-dessous sont celles où ces arrondis se séparent du centime le plus proche.
+  // Les quatre tests suivants fixent la priorité du prix saisi pour le groupe sur le coût d'une personne multiplié par l'effectif,
+  // le seuil exact de deux personnes pour l'aide, et l'arrondi au centime le plus proche (jamais vers le bas, jamais vers le haut,
+  // jamais au millime d'abord). Leurs valeurs sont celles où ces arrondis se séparent du centime le plus proche.
 
   test("coutDuGroupe : le prix saisi pour le groupe l'emporte, même sans coût d'une personne ou avec un coût qui ne correspond plus", () => {
     assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: null, nombrePersonnes: 6, prixDuGroupe: 5600 })), 5600);

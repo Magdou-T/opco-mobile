@@ -34,7 +34,12 @@ export interface ActionsDuGroupe {
   retirerProfil: (id: string) => void;
   /** Met à jour les réponses d'un profil (l'identifiant `principal` désigne le profil principal). */
   majProfil: (id: string, maj: Partial<ChampsProfil>) => void;
-  /** Change le statut d'un profil : seules les réponses du nouveau statut et les questions communes restent. */
+  /**
+   * Change le statut d'un profil supplémentaire : seules les réponses du nouveau statut et les questions communes restent, et
+   * les réponses « Je ne sais pas » des questions remises à vide sont effacées. Le statut du profil principal se choisit à
+   * l'étape Projet (`updateState(etatDepuisProjet(...))`, qui efface aussi ses réponses « Je ne sais pas ») : pour `principal`,
+   * cette action change l'état mais n'efface pas ces réponses, qui restent dans `reponsesInconnues`.
+   */
   changerProjetProfil: (id: string, projet: ProjetType) => void;
   definirNombre: (id: string, nombre: number) => void;
   /** Réponse à une question qui admet « Je ne sais pas » : `null` est cette réponse, retenue par le profil. */
