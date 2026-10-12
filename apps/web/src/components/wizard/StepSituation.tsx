@@ -1,240 +1,199 @@
 'use client';
 
-import {
-  CONTRACT_TYPE_LABELS,
-  NIVEAU_DIPLOME_LABELS,
-  REGIONS,
-  STATUT_DIRIGEANT_LABELS,
-  STATUT_PAR_PROJET,
-  TYPE_ALTERNANCE_LABELS,
-} from '@opco/core';
-import type {
-  CodeRegion,
-  ContractType,
-  NiveauDiplome,
-  StatutBeneficiaire,
-  StatutDirigeant,
-  TypeAlternance,
-  WizardState,
-} from '@opco/core';
-import {
-  ChampRegion,
-  CheckboxRow,
-  ChoiceButton,
-  ChoiceGroup,
-  NumberField,
-  OuiNonChoix,
-} from '@/components/ui/forms';
-import type { QuestionAvecInconnu, Repondre } from '@/lib/parcours';
+import { useEffect, useRef, useState } from 'react';
+import { ID_PROFIL_PRINCIPAL, MAX_PERSONNES, MAX_PROFILS, STATUT_PAR_PROJET, nombreDePersonnes, profilsDuGroupe } from '@opco/core';
+import type { ProfilDuGroupe, StatutBeneficiaire, WizardState } from '@opco/core';
+import { Button } from '@/components/ui/Button';
+import type { ActionsDuGroupe } from '@/hooks/useWizard';
+import { manquantsDuProfil } from '@/lib/etapes';
+import { nombreEtUnite } from '@/lib/format';
+import { prochainIdProfil } from '@/lib/groupe';
+import type { InconnuesParProfil } from '@/lib/groupe';
+import { INSECABLE } from '@/lib/insecable';
+import type { QuestionAvecInconnu } from '@/lib/parcours';
+import { libelleDuProfil } from '@/lib/profils';
+import { CarteProfil, idTitreProfil } from './CarteProfil';
+import { CompteurPersonnes } from './CompteurPersonnes';
 import { EnTeteEtape } from './EnTeteEtape';
+import { FormulaireProfil } from './FormulaireProfil';
 
 interface Props {
   state: WizardState;
-  updateState: (updates: Partial<WizardState>) => void;
-  /** Questions auxquelles l'utilisateur a répondu « Je ne sais pas » (la valeur reste null). */
+  /** Questions auxquelles l'utilisateur a répondu « Je ne sais pas » (profil principal et formation ; la valeur reste null). */
   reponsesInconnues: ReadonlySet<QuestionAvecInconnu>;
-  repondre: Repondre;
+  /** Les mêmes réponses pour chaque profil supplémentaire. */
+  inconnuesProfils: InconnuesParProfil;
+  /** Actions du groupe ; `repondreProfil` couvre aussi le profil principal (identifiant `principal`). */
+  groupe: ActionsDuGroupe;
 }
 
-/** Titre, introduction et libellé de l'âge selon la personne concernée par le projet. */
-const ENTETES: Record<StatutBeneficiaire, { titre: string; chapeau: string; age: string }> = {
+/** Titre et introduction de l'étape pour une seule personne, selon le statut du projet. */
+const ENTETES: Record<StatutBeneficiaire, { titre: string; chapeau: string }> = {
   salarie: {
     titre: 'Le salarié concerné',
     chapeau: "Ces informations déterminent les aides ouvertes au salarié et à l'entreprise.",
-    age: 'Âge du salarié',
   },
   demandeur_emploi: {
     titre: 'La personne à recruter',
     chapeau: "Les aides au recrutement dépendent de la situation du demandeur d'emploi.",
-    age: 'Âge de la personne',
   },
   alternant: {
     titre: "L'alternant",
     chapeau: "Le type de contrat et l'âge conditionnent la plupart des aides à l'alternance.",
-    age: "Âge de l'alternant",
   },
   dirigeant: {
     titre: 'Le dirigeant',
     chapeau: 'Le statut du dirigeant détermine son fonds de formation et ses avantages fiscaux.',
-    age: 'Âge du dirigeant',
   },
 };
 
-/** Contrats proposés au salarié : l'alternance est un projet à part entière. */
-const CONTRATS_SALARIE = (Object.entries(CONTRACT_TYPE_LABELS) as [ContractType, string][]).filter(
-  ([contrat]) => contrat !== 'alternance',
-);
+/** Introduction de l'étape dès qu'il y a plusieurs personnes ou plusieurs profils. */
+const CHAPEAU_GROUPE = `Indiquez combien de personnes suivent la formation. Ajoutez un profil quand certaines ont une situation différente${INSECABLE}: statut, contrat, âge, handicap ou solde CPF.`;
+
+const AUCUNE_REPONSE: ReadonlySet<QuestionAvecInconnu> = new Set();
+const ID_AJOUT = 'ajouter-profil';
 
 /**
- * Région de résidence (demandeur d'emploi, alternant) : les aides régionales dépendent de la région où vit la
- * personne, pas de celle de l'entreprise. Par défaut, celle de l'entreprise (le moteur fait de même).
+ * Étape 3 : les personnes formées. Avec un seul profil, l'étape garde son allure d'une personne seule (les questions du
+ * statut) et ajoute un compteur et le bouton « Ajouter un profil différent ». Dès qu'il y a plusieurs profils, une carte
+ * par profil (statut, compteur, questions) ; un seul profil est déplié à la fois. À l'ajout d'un profil, le focus va à son
+ * titre ; au retrait, au titre du profil précédent (ou au bouton d'ajout quand il ne reste qu'un profil). Une zone polie
+ * annonce le nombre de personnes.
  */
-function RegionDeResidence({
-  label,
-  state,
-  updateState,
-}: {
-  label: string;
-  state: WizardState;
-  updateState: (updates: Partial<WizardState>) => void;
-}) {
-  return (
-    <ChampRegion
-      label={label}
-      valeur={state.regionBeneficiaireCode ?? state.regionCode}
-      onChange={(code: CodeRegion) => updateState({ regionBeneficiaireCode: code })}
-      aide={state.regionCode ? `Par défaut, celle de l'entreprise (${REGIONS[state.regionCode]}).` : undefined}
+export function StepSituation({ state, reponsesInconnues, inconnuesProfils, groupe }: Props) {
+  const profils = profilsDuGroupe(state);
+  const total = nombreDePersonnes(state);
+  const [ouvert, setOuvert] = useState(ID_PROFIL_PRINCIPAL);
+  const [annonce, setAnnonce] = useState('');
+  // Élément qui prend le focus au rendu qui suit un ajout ou un retrait : le titre d'un profil, ou le bouton d'ajout.
+  const aFocaliser = useRef<string | null>(null);
+  useEffect(() => {
+    if (aFocaliser.current) {
+      document.getElementById(aFocaliser.current)?.focus();
+      aFocaliser.current = null;
+    }
+  });
+
+  const limite =
+    profils.length >= MAX_PROFILS
+      ? `Vous avez atteint les ${MAX_PROFILS}${INSECABLE}profils au plus.`
+      : total >= MAX_PERSONNES
+        ? `Vous avez atteint les ${MAX_PERSONNES}${INSECABLE}personnes au plus.`
+        : null;
+
+  const ajouter = () => {
+    if (limite) return;
+    const id = prochainIdProfil(state);
+    groupe.ajouterProfil();
+    setOuvert(id);
+    aFocaliser.current = idTitreProfil(id);
+    setAnnonce(`Profil ${profils.length + 1} ajouté. ${nombreEtUnite(total + 1, 'personnes')} au total.`);
+  };
+
+  const retirer = (id: string, rang: number) => {
+    const retire = profils.find((p) => p.id === id);
+    if (!retire) return;
+    const precedent = profils[rang - 2]?.id ?? ID_PROFIL_PRINCIPAL;
+    groupe.retirerProfil(id);
+    if (ouvert === id) setOuvert(precedent);
+    aFocaliser.current = profils.length === 2 ? ID_AJOUT : idTitreProfil(precedent);
+    const reste = total - retire.nombre;
+    setAnnonce(`Profil ${rang} retiré. ${nombreEtUnite(reste, reste > 1 ? 'personnes' : 'personne')} au total.`);
+  };
+
+  const formulaire = (profil: ProfilDuGroupe) => (
+    <FormulaireProfil
+      champs={profil.champs}
+      nombre={profil.nombre}
+      regionEntreprise={state.regionCode}
+      maj={(maj) => groupe.majProfil(profil.id, maj)}
+      inconnues={profil.principal ? reponsesInconnues : (inconnuesProfils[profil.id] ?? AUCUNE_REPONSE)}
+      repondre={(question, valeur) => groupe.repondreProfil(profil.id, question, valeur)}
+      changerProjet={profil.principal ? undefined : (projet) => groupe.changerProjetProfil(profil.id, projet)}
     />
   );
-}
 
-/** Étape 3 : la personne concernée par le projet. Les questions et les champs obligatoires suivent le projet choisi. */
-export function StepSituation({ state, updateState, reponsesInconnues, repondre }: Props) {
-  const projet = state.projetType ?? 'formation_salarie';
-  const statut = STATUT_PAR_PROJET[projet];
-  const entete = ENTETES[statut];
-  const avecSoldeCpf = statut === 'salarie' || statut === 'dirigeant';
+  const boutonAjout = (
+    <div>
+      <Button
+        id={ID_AJOUT}
+        variant="secondary"
+        icone="recrutement"
+        onClick={limite ? undefined : ajouter}
+        aria-disabled={limite != null || undefined}
+        aria-describedby={limite ? 'aide-ajouter-profil' : undefined}
+        className="aria-disabled:cursor-not-allowed aria-disabled:opacity-60"
+      >
+        Ajouter un profil différent
+      </Button>
+      {limite && (
+        <p id="aide-ajouter-profil" className="mt-2 text-sm text-texte-discret">
+          {limite}
+        </p>
+      )}
+    </div>
+  );
+  const zoneAnnonce = (
+    <p role="status" className="sr-only">
+      {annonce}
+    </p>
+  );
+
+  if (profils.length === 1) {
+    const principal = profils[0];
+    const entete = ENTETES[STATUT_PAR_PROJET[principal.champs.projetType ?? 'formation_salarie']];
+    return (
+      <div className="space-y-8">
+        <EnTeteEtape
+          etape="situation"
+          titre={total > 1 ? 'Les personnes formées' : entete.titre}
+          chapeau={total > 1 ? CHAPEAU_GROUPE : entete.chapeau}
+          obligatoires
+        />
+        <CompteurPersonnes
+          label="Nombre de personnes"
+          aide="Indiquez combien de personnes suivent cette formation. Si certaines ont une situation différente, ajoutez ensuite un profil."
+          valeur={principal.nombre}
+          max={MAX_PERSONNES}
+          onChange={(n) => groupe.definirNombre(ID_PROFIL_PRINCIPAL, n)}
+        />
+        <div className="border-t border-filet pt-8">{formulaire(principal)}</div>
+        {boutonAjout}
+        {zoneAnnonce}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
-      <EnTeteEtape etape="situation" titre={entete.titre} chapeau={entete.chapeau} obligatoires />
-
-      <div className="space-y-7">
-        {statut === 'salarie' && (
-          <>
-            <ChoiceGroup label="Type de contrat" required>
-              <div className="grid gap-2 sm:grid-cols-3">
-                {CONTRATS_SALARIE.map(([contrat, libelle]) => (
-                  <ChoiceButton
-                    key={contrat}
-                    label={libelle}
-                    selected={state.contractType === contrat}
-                    onClick={() => updateState({ contractType: contrat })}
-                    compact
-                  />
-                ))}
-              </div>
-            </ChoiceGroup>
-            <NumberField
-              label="Ancienneté dans l'entreprise (en mois)"
-              required={projet === 'reconversion_salarie'}
-              facultatif={projet !== 'reconversion_salarie'}
-              value={state.anciennete_mois}
-              onChange={(anciennete_mois) => updateState({ anciennete_mois })}
-              placeholder="Ex&nbsp;: 24"
-            />
-          </>
-        )}
-
-        {statut === 'demandeur_emploi' && (
-          <>
-            <OuiNonChoix
-              label="Inscrit(e) à France Travail"
-              value={state.inscritFranceTravail}
-              onChange={(inscritFranceTravail) => repondre('inscritFranceTravail', inscritFranceTravail)}
-              required
-            />
-            <RegionDeResidence label="Région de résidence" state={state} updateState={updateState} />
-          </>
-        )}
-
-        {statut === 'alternant' && (
-          <>
-            <ChoiceGroup label="Type de contrat" required>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {(Object.entries(TYPE_ALTERNANCE_LABELS) as [TypeAlternance, string][]).map(([type, libelle]) => (
-                  <ChoiceButton
-                    key={type}
-                    label={libelle}
-                    selected={state.typeAlternance === type}
-                    onClick={() => updateState({ typeAlternance: type, contractType: 'alternance' })}
-                  />
-                ))}
-              </div>
-            </ChoiceGroup>
-            <OuiNonChoix
-              label="Actuellement inscrit(e) à France Travail"
-              value={state.inscritFranceTravail}
-              inconnu={reponsesInconnues.has('inscritFranceTravail')}
-              onChange={(inscritFranceTravail) => repondre('inscritFranceTravail', inscritFranceTravail)}
-              avecInconnu
-            />
-            <RegionDeResidence label="Région de résidence de l'alternant" state={state} updateState={updateState} />
-          </>
-        )}
-
-        {statut === 'dirigeant' && (
-          <>
-            <ChoiceGroup label="Statut du dirigeant" required>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {(Object.entries(STATUT_DIRIGEANT_LABELS) as [StatutDirigeant, string][]).map(([s, libelle]) => (
-                  <ChoiceButton
-                    key={s}
-                    label={libelle}
-                    selected={state.statutDirigeant === s}
-                    onClick={() => updateState({ statutDirigeant: s })}
-                  />
-                ))}
-              </div>
-            </ChoiceGroup>
-            <OuiNonChoix
-              label="Micro-entrepreneur"
-              value={state.microEntrepreneur}
-              inconnu={reponsesInconnues.has('microEntrepreneur')}
-              onChange={(microEntrepreneur) => repondre('microEntrepreneur', microEntrepreneur)}
-              avecInconnu
-            />
-          </>
-        )}
-      </div>
-
-      <div className="space-y-7 border-t border-filet pt-8">
-        <NumberField
-          label={entete.age}
-          required={statut === 'alternant'}
-          facultatif={statut !== 'alternant'}
-          value={state.ageBeneficiaire}
-          onChange={(ageBeneficiaire) => updateState({ ageBeneficiaire })}
-          min={14}
-          max={99}
-          placeholder="Ex&nbsp;: 19"
-        />
-
-        <ChoiceGroup label="Diplôme le plus élevé" facultatif>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {(Object.entries(NIVEAU_DIPLOME_LABELS) as [NiveauDiplome, string][]).map(([niveau, libelle]) => (
-              <ChoiceButton
-                key={niveau}
-                label={libelle}
-                selected={state.niveauDiplome === niveau}
-                // Choix facultatif : un second clic le retire.
-                onClick={() => updateState({ niveauDiplome: state.niveauDiplome === niveau ? null : niveau })}
-                compact
-              />
-            ))}
-          </div>
-        </ChoiceGroup>
-
-        <CheckboxRow
-          label="Reconnaissance de travailleur handicapé (RQTH ou équivalent)"
-          description="Ouvre droit à des aides spécifiques (Agefiph, CPF majoré…)"
-          checked={state.isHandicap}
-          onToggle={(isHandicap) => updateState({ isHandicap })}
-        />
-
-        {avecSoldeCpf && (
-          <NumberField
-            label="Solde CPF (€)"
-            facultatif
-            decimal
-            euros
-            value={state.soldeCpf}
-            onChange={(soldeCpf) => updateState({ soldeCpf })}
-            placeholder="Ex&nbsp;: 1200"
-            helper="Consultable sur moncompteformation.gouv.fr. Sans solde, le CPF est indiqué sans montant."
-          />
-        )}
-      </div>
+      <EnTeteEtape etape="situation" titre="Les personnes formées" chapeau={CHAPEAU_GROUPE} obligatoires />
+      <ul role="list" className="space-y-4">
+        {profils.map((profil, i) => {
+          const rang = i + 1;
+          return (
+            <li key={profil.id}>
+              <CarteProfil
+                profil={profil}
+                rang={rang}
+                resume={libelleDuProfil(profil.champs)}
+                manquants={manquantsDuProfil(profil.champs)}
+                ouvert={ouvert === profil.id}
+                onBasculer={() => setOuvert(ouvert === profil.id ? '' : profil.id)}
+                onNombre={(n) => groupe.definirNombre(profil.id, n)}
+                max={MAX_PERSONNES - (total - profil.nombre)}
+                onRetirer={profil.principal ? undefined : () => retirer(profil.id, rang)}
+              >
+                {formulaire(profil)}
+              </CarteProfil>
+            </li>
+          );
+        })}
+      </ul>
+      {boutonAjout}
+      <p className="text-sm font-semibold text-texte">
+        {nombreEtUnite(total, 'personnes')} · {nombreEtUnite(profils.length, 'profils')}
+      </p>
+      {zoneAnnonce}
     </div>
   );
 }

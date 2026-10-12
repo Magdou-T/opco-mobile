@@ -73,8 +73,10 @@ export function WizardContainer() {
     showResults,
     manquants,
     reponsesInconnues,
+    inconnuesProfils,
     updateState,
     repondre,
+    groupe,
     goNext,
     goPrev,
     goToStep,
@@ -154,9 +156,9 @@ export function WizardContainer() {
           {currentStep.key === 'situation' && (
             <StepSituation
               state={state}
-              updateState={updateState}
               reponsesInconnues={reponsesInconnues}
-              repondre={repondre}
+              inconnuesProfils={inconnuesProfils}
+              groupe={groupe}
             />
           )}
           {currentStep.key === 'formation' && (
