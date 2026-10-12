@@ -56,7 +56,10 @@ export interface BlocResultat {
   profilAides: ProfilAides;
   /** Aides du catalogue évaluées pour UNE personne de ce profil. */
   aides: AideEvaluee[];
-  /** Part de ce profil dans le calcul de l'OPCO (valable pour ses personnes) ; null s'il ne relève pas de ce plan. */
+  /**
+   * Part de ce profil dans le calcul de l'OPCO (valable pour ses personnes) ; null s'il ne relève pas de ce plan. Ses textes
+   * restent ceux du groupe entier (« Coût pour 5 personnes : ... ») : l'écran ne l'affiche jamais, seul le plan de son bloc se lit.
+   */
   funding: FundingResult | null;
   /** Plan du profil, pour toutes ses personnes. */
   plan: PlanFinancement;
@@ -664,7 +667,9 @@ export function notesOpco(projets: readonly WizardState['projetType'][], sansOpc
 /**
  * Détails sous les chiffres du bandeau pour un groupe : « 4 × 2 800 € » sous le coût quand il se divise au centime (sinon
  * « 333,33 € par personne en moyenne » : 3 × 333,33 € ne ferait pas 1 000 €), « 1 706,25 € par personne en moyenne » sous le
- * reste à charge. Rien pour une personne seule ni pour un coût inconnu ; pas de moyenne sans reste à charge.
+ * reste à charge. Rien pour une personne seule ni pour un coût inconnu ; rien non plus pour une moyenne qui s'arrondit à zéro
+ * (0,01 € de reste à charge pour 3 personnes ne s'écrit pas « 0 € par personne en moyenne »), donc pas de moyenne sans reste
+ * à charge.
  */
 export function detailsDuBandeau(
   plan: Pick<PlanFinancement, 'coutFormation' | 'resteACharge'>,
@@ -674,11 +679,12 @@ export function detailsDuBandeau(
   const parPersonne = Math.round((plan.coutFormation / personnes) * 100) / 100;
   const resteMoyen = Math.round((plan.resteACharge / personnes) * 100) / 100;
   const exact = Math.round(parPersonne * personnes * 100) === Math.round(plan.coutFormation * 100);
+  const cout = exact
+    ? `${personnes}${INSECABLE}×${INSECABLE}${formatEuro(parPersonne)}`
+    : `${formatEuro(parPersonne)} par personne en moyenne`;
   return {
-    cout: exact
-      ? `${personnes}${INSECABLE}×${INSECABLE}${formatEuro(parPersonne)}`
-      : `${formatEuro(parPersonne)} par personne en moyenne`,
-    reste: plan.resteACharge > 0 ? `${formatEuro(resteMoyen)} par personne en moyenne` : null,
+    cout: parPersonne > 0 ? cout : null,
+    reste: resteMoyen > 0 ? `${formatEuro(resteMoyen)} par personne en moyenne` : null,
   };
 }
 

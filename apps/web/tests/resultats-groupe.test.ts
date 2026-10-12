@@ -11,6 +11,7 @@ import {
   createInitialWizardState,
   dateDeReference,
   evaluerAides,
+  fusionnerAides,
   getEmbeddedOpcoBySlug,
   profilDepuisWizard,
   profilsDuGroupe,
@@ -25,6 +26,7 @@ import { ajouterProfil, changerProjetDuProfil, definirNombre, etatDepuisPrix, ma
 import { coutsDeFormation } from '../src/lib/parcours';
 import {
   calculer,
+  cartesDuPlan,
   concerneParAide,
   detailsDuBandeau,
   etatEnTete,
@@ -35,7 +37,7 @@ import {
   notesOpco,
   pourPersonnes,
 } from '../src/lib/resultats';
-import { encadreSansFinancement, planFermeDe } from '../src/lib/encadres-resultats';
+import { encadreSansFinancement, planFermeDe, raisonPlanFerme, rappelsAucunFinancement } from '../src/lib/encadres-resultats';
 
 const nb = INSECABLE;
 const DATE = '2026-10-07';
@@ -129,6 +131,53 @@ function groupeAleatoire(hasard: (n: number) => number): WizardState {
   return e;
 }
 
+/**
+ * Un état de groupe aussi varié que ceux du test d'une personne seule (tests/resultats.test.ts, graine 29) : le profil principal
+ * est tiré comme là-bas (projet, OPCO, région, taille, âge, formation, solde CPF, coût, durée), puis 0 à 3 profils supplémentaires de
+ * 1 à 5 personnes, qui ont souvent le projet du profil principal (un groupe réunit le plus souvent des personnes de même statut).
+ */
+function groupeVaste(hasard: (n: number) => number): WizardState {
+  const un = <T,>(l: readonly T[]): T => l[hasard(l.length)];
+  const projet = un(PROJETS);
+  const heures = un([7, 21, 35, 140, 280, 800]);
+  let e = etat({
+    projetType: projet,
+    selectedOpcoSlug: projet === 'formation_dirigeant' && hasard(2) === 0 ? null : un(OPCOS),
+    regionCode: un([null, ...EMBEDDED_PORTAILS.map((p) => p.region)]), // la région peut manquer : alors aucun portail à citer
+    companySize: un(['less_11', '11_49', '50_299', '300_plus'] as const),
+    ageBeneficiaire: un([19, 28, 45, 58]),
+    formationType: un(['non_certifiante', 'qualification', 'certification', 'cqp'] as const),
+    eligibleCpf: un([null, true, false]),
+    organismeQualiopi: un([null, true, false]),
+    contractType: projet === 'alternance' ? 'alternance' : un(['cdi', 'cdd'] as const),
+    typeAlternance: un(['apprentissage', 'professionnalisation'] as const),
+    inscritFranceTravail: un([true, false]),
+    statutDirigeant: un(['artisan', 'commercant', 'profession_liberale', 'assimile_salarie'] as const),
+    microEntrepreneur: un([null, true, false]),
+    soldeCpf: un([null, 0, 800, 2000]),
+    ...coutsDeFormation(un([300, 900, 1400, 3500, 7000]), heures),
+  });
+  e = definirNombre(e, 'principal', 1 + hasard(5));
+  for (let i = hasard(4); i > 0; i--) {
+    e = ajouterProfil(e);
+    const id = e.autresProfils[e.autresProfils.length - 1].id;
+    const projetDuProfil = un([projet, projet, ...PROJETS]);
+    e = changerProjetDuProfil(e, id, projetDuProfil);
+    e = majProfil(e, id, {
+      ageBeneficiaire: un([19, 28, 45, 58]),
+      isHandicap: hasard(3) === 0,
+      contractType: projetDuProfil === 'alternance' ? 'alternance' : un(['cdi', 'cdd'] as const),
+      typeAlternance: un(['apprentissage', 'professionnalisation'] as const),
+      inscritFranceTravail: un([true, false]),
+      statutDirigeant: un(['artisan', 'commercant', 'profession_liberale', 'assimile_salarie'] as const),
+      microEntrepreneur: un([null, true, false]),
+      soldeCpf: un([null, 0, 800, 2000]),
+    });
+    e = definirNombre(e, id, 1 + hasard(5));
+  }
+  return e;
+}
+
 const centimes = (euros: number) => Math.round(euros * 100);
 const plan = (over: Partial<PlanFinancement>): PlanFinancement => ({
   coutFormation: 0,
@@ -151,6 +200,9 @@ describe("une personne : le calcul de l'écran rend ce qu'il rendait avant les g
       assert.deepEqual(apres, ancienCalcul(etat(parcours), DATE), nom);
       assert.equal(groupe.personnes, 1, nom);
       assert.equal(groupe.blocs.length, 1, nom);
+      assert.equal(groupe.personnesPdc, apres.funding ? 1 : 0, nom); // la personne relève du plan de l'OPCO quand le moteur est appelé
+      assert.equal(groupe.blocs[0].funding, apres.funding, nom); // le même objet : la part du seul profil salarié est le résultat entier
+      assert.deepEqual(groupe.blocs[0].aides, apres.aidesEvaluees, nom);
     }
   });
 
@@ -162,6 +214,9 @@ describe("une personne : le calcul de l'écran rend ce qu'il rendait avant les g
       const { groupe, ...apres } = calculer(seul, DATE);
       assert.deepEqual(apres, ancienCalcul(seul, DATE), JSON.stringify(seul));
       assert.equal(groupe.blocs[0].plan, apres.plan);
+      assert.equal(groupe.personnesPdc, apres.funding ? 1 : 0, JSON.stringify(seul));
+      assert.equal(groupe.blocs[0].funding, apres.funding, JSON.stringify(seul));
+      assert.deepEqual(groupe.blocs[0].aides, apres.aidesEvaluees, JSON.stringify(seul));
     }
   });
 });
@@ -179,18 +234,58 @@ describe('un groupe de profils identiques', () => {
     assert.ok(r.plan.financements.every((l) => l.personnes === 4));
   });
 
-  test("sans plafond annuel atteint, le financement de l'OPCO vaut 4 fois celui d'une personne ; sinon il ne le dépasse pas", () => {
-    const pdc = (r: ReturnType<typeof calculer>) => r.plan.financements.find((l) => l.id === 'opco-pdc')!.montant;
-    if (quatre().funding?.budgetCapApplied) assert.ok(pdc(quatre()) <= 4 * pdc(une()) + 0.01);
-    else assert.equal(pdc(quatre()), 4 * pdc(une()));
+  const pdc = (r: ReturnType<typeof calculer>) => r.plan.financements.find((l) => l.id === 'opco-pdc')!.montant;
+  const cpf = (r: ReturnType<typeof calculer>) => r.aidesEvaluees.find((a) => a.id === 'nat-cpf');
+  const ligneCpf = (r: ReturnType<typeof calculer>) => r.plan.financements.find((l) => l.id === 'nat-cpf');
+
+  test("sous le plafond annuel, le financement de l'OPCO vaut exactement 4 fois celui d'une personne", () => {
+    // 35 h à 30 € de l'heure, comme le scénario : le coût de quatre personnes reste sous le plafond annuel (prémisse vérifiée).
+    const parcours = { ...SCENARIOS.akto, ...coutsDeFormation(1050, 35) };
+    const seul = calculer(etat(parcours), DATE);
+    const groupe = calculer(etat({ ...parcours, nombrePersonnes: 4 }), DATE);
+    assert.equal(seul.funding?.budgetCapApplied, false);
+    assert.equal(groupe.funding?.budgetCapApplied, false);
+    assert.equal(centimes(groupe.funding!.totalFunded), 4 * centimes(seul.funding!.totalFunded));
+    assert.equal(centimes(pdc(groupe)), 4 * centimes(pdc(seul)));
+  });
+
+  test("plafond annuel atteint par quatre personnes : le financement de l'OPCO ne dépasse ni ce plafond ni 4 fois celui d'une personne", () => {
+    const seul = une();
+    const groupe = quatre();
+    assert.equal(seul.funding?.budgetCapApplied, false); // une personne reste sous le plafond : 4 fois son financement est celui du groupe sans plafond
+    assert.equal(groupe.funding?.budgetCapApplied, true);
+    const plafond = groupe.funding!.budgetCapAmount!; // le plafond restant, tel que le moteur l'applique
+    assert.ok(pdc(groupe) <= plafond, `${pdc(groupe)} dépasse le plafond ${plafond}`);
+    assert.ok(pdc(groupe) < 4 * pdc(seul), `${pdc(groupe)} n'est pas sous 4 fois ${pdc(seul)}`);
   });
 
   test("une aide du catalogue : son montant par personne est celui d'une personne, le plan le multiplie", () => {
-    const r = quatre();
-    const cpf = r.aidesEvaluees.find((a) => a.id === 'nat-cpf');
-    const seul = une().aidesEvaluees.find((a) => a.id === 'nat-cpf');
-    assert.equal(cpf?.montantEstime, seul?.montantEstime);
-    assert.equal(cpf?.profils, undefined); // un seul profil : aucun champ « profils »
+    // Le CPF se chiffre sur le solde de chaque personne : 800 €. Dans un plan, sa ligne ne dépasse ni son montant, ni le reste à
+    // charge après les financements empilés avant elle, ni le solde restant (construirePlan).
+    const avecSolde = { ...SCENARIOS.akto, soldeCpf: 800 };
+    const seul = calculer(etat(avecSolde), DATE);
+    const groupe = calculer(etat({ ...avecSolde, nombrePersonnes: 4 }), DATE);
+    assert.equal(cpf(seul)?.montantEstime, 800);
+    assert.equal(cpf(groupe)?.montantEstime, 800); // par personne, quel que soit l'effectif
+    assert.equal(cpf(groupe)?.profils, undefined); // un seul profil : aucun champ « profils »
+    // Une personne : l'OPCO couvre à lui seul le coût, le reste à charge est nul, le CPF n'a plus rien à financer : pas de ligne.
+    assert.equal(pdc(seul), seul.plan.coutFormation);
+    assert.equal(ligneCpf(seul), undefined);
+    // Quatre personnes : le CPF prend le montant de quatre personnes (4 × 800 €, comme leur solde), le reste après l'OPCO suffit.
+    const reste = groupe.plan.coutFormation - pdc(groupe);
+    assert.ok(reste >= 4 * 800, `le reste à charge après l'OPCO (${reste} €) plafonnerait la ligne`);
+    assert.deepEqual([ligneCpf(groupe)?.montant, ligneCpf(groupe)?.personnes], [Math.min(4 * 800, reste), 4]);
+  });
+
+  test('sans OPCO, le CPF ouvre le plan : 800 € pour une personne, quatre fois plus pour quatre', () => {
+    const sansOpco = { ...SCENARIOS.akto, selectedOpcoSlug: null, soldeCpf: 800 };
+    const seul = calculer(etat(sansOpco), DATE);
+    const groupe = calculer(etat({ ...sansOpco, nombrePersonnes: 4 }), DATE);
+    assert.equal(cpf(groupe)?.montantEstime, cpf(seul)?.montantEstime);
+    // Une personne : min(800 €, 4 200 € de reste, 800 € de solde) ; quatre : min(3 200 €, 16 800 €, 3 200 €), pour 4 personnes.
+    assert.deepEqual([ligneCpf(seul)?.montant, ligneCpf(seul)?.personnes], [800, undefined]);
+    assert.deepEqual([ligneCpf(groupe)?.montant, ligneCpf(groupe)?.personnes], [3200, 4]);
+    assert.equal(groupe.plan.coutFormation, 4 * seul.plan.coutFormation);
   });
 });
 
@@ -364,22 +459,164 @@ describe('1 000 groupes tirés au hasard (graine 17) : cohérence du plan, des p
   });
 
   test("l'encadré « aucun financement chiffré » ne dit rien de faux sur un groupe", () => {
+    // Les conditions du test d'une personne seule (tests/resultats.test.ts, graine 29), toutes, sur des groupes. Elles s'écrivent sans
+    // la logique de l'encadré : on lit la liste des aides rendue plus bas (groupesAidesVisibles, celle d'AidesList) et les cartes du
+    // plan du groupe (cartesDuPlan), puis on confronte chaque phrase à ce qu'elles montrent. Aucune condition n'est retirée : elles
+    // ne comparent que la présence d'un montant, d'une carte ou d'une aide. Pour un groupe, le montant d'une aide listée est le plus
+    // grand montant PAR PERSONNE des profils concernés (jamais une somme, vérifié plus bas) ; seules les cartes portent des sommes.
     const hasard = generateur(29);
-    let controles = 0;
-    for (let i = 0; i < 600; i++) {
-      const { plan: p, aidesEvaluees, funding, portail } = calculer(groupeAleatoire(hasard), DATE);
+    const vus = new Set<string>();
+    const compte = {
+      sansFinancement: 0,
+      plusieursProfils: 0,
+      sansPortail: 0,
+      aVerifierChiffrees: 0,
+      troisiemeAvecAVerifierChiffrees: 0,
+      servicesSeuls: 0,
+      aucuneAideAMontant: 0,
+    };
+    for (let i = 0; i < 2500; i++) {
+      const e = groupeVaste(hasard);
+      const { plan: p, portail, aidesEvaluees, funding, groupe } = calculer(e, DATE);
       if (etatEnTete(p) !== 'aucun_financement_chiffre') continue;
-      controles++;
-      const { texte, rappels, aidesAVerifier } = encadreSansFinancement(p, aidesEvaluees, portail != null, planFermeDe(funding));
-      const listees = groupesAidesVisibles(aidesEvaluees).flatMap((g) => g.aides);
-      const aVerifier = listees.filter((a) => a.statut === 'a_verifier');
-      if (texte.includes('aucune autre aide à montant')) assert.ok(!listees.some((a) => (a.montantEstime ?? 0) > 0), texte);
-      if (texte.includes('Voici les aides identifiées')) assert.ok(rappels.length > 0, texte);
-      if (texte.includes('à vérifier')) assert.ok(aVerifier.length > 0, texte);
-      if (aidesAVerifier) assert.equal(aidesAVerifier.nombre, aVerifier.length, texte);
-      if (texte.includes('après étude du dossier')) assert.ok(p.nonChiffrees.length > 0 || p.options.some((o) => o.montantEstime == null), texte);
+      compte.sansFinancement++;
+      if (groupe.blocs.length > 1) compte.plusieursProfils++;
+      if (portail == null) compte.sansPortail++;
+      // Comme l'écran : le plan de l'OPCO fermé aux 50 salariés et plus (planFermeDe) ouvre l'encadré par sa raison.
+      const planFerme = planFermeDe(funding);
+      const { texte, rappels, aidesAVerifier, detailOpco } = encadreSansFinancement(p, aidesEvaluees, portail != null, planFerme);
+      const contexte = `${JSON.stringify(e)} : ${texte}`;
+      assert.equal(texte.startsWith(planFerme ? raisonPlanFerme(planFerme) : 'Aucun financement'), true, contexte);
+      assert.equal(detailOpco, planFerme != null, contexte);
+
+      // Ce que la page montre sous le bandeau.
+      const listeesPlusBas = groupesAidesVisibles(aidesEvaluees).flatMap((g) => g.aides);
+      const aVerifier = listeesPlusBas.filter((a) => a.statut === 'a_verifier');
+      const aVerifierChiffrees = aVerifier.filter((a) => (a.montantEstime ?? 0) > 0);
+      const cartes = cartesDuPlan(p);
+      const montantsDesCartes = [
+        ...p.options.map((o) => o.montantEstime ?? 0),
+        ...[...p.aidesEmployeur, ...p.remunerations, ...p.avantagesFiscauxSociaux].map((l) => l.montant),
+      ];
+      const aideAMontant = listeesPlusBas.some((a) => (a.montantEstime ?? 0) > 0) || montantsDesCartes.some((m) => m > 0);
+      if (aVerifierChiffrees.length > 0) compte.aVerifierChiffrees++;
+      // Le montant d'une aide listée pour plusieurs profils est leur plus grand montant par personne : l'encadré n'en lit jamais une somme.
+      for (const a of listeesPlusBas) {
+        if (!a.profils) continue;
+        const montants = a.profils.flatMap((x) => (x.montantEstime == null ? [] : [x.montantEstime]));
+        assert.equal(a.montantEstime, montants.length > 0 ? Math.max(...montants) : null, `${a.id} ${contexte}`);
+      }
+
+      // « aucune autre aide à montant n'a été identifiée » : ni aide listée ni ligne d'une carte n'a de montant.
+      if (texte.includes('aucune autre aide à montant')) {
+        compte.aucuneAideAMontant++;
+        assert.ok(!aideAMontant, contexte);
+      }
+      // « Seuls des services gratuits sont proposés ci-dessous » : toute carte et toute aide listée sont des services gratuits.
+      if (texte.includes('Seuls des services gratuits')) {
+        compte.servicesSeuls++;
+        assert.ok(cartes.length > 0 && cartes.every((c) => c === 'services'), contexte);
+        assert.ok(listeesPlusBas.every((a) => a.categorie === 'service_gratuit'), contexte);
+      }
+      // Des aides « à vérifier » chiffrées sont listées : l'encadré le dit, avec le lien vers la liste et leur nombre.
+      if (aVerifierChiffrees.length > 0) {
+        assert.ok(/aides? «\s?à vérifier\s?»/.test(texte) && texte.includes('montant'), contexte);
+        assert.deepEqual(aidesAVerifier?.nombre, aVerifier.length, contexte);
+        if (rappels.length === 0 && !p.options.some((o) => (o.montantEstime ?? 0) > 0)) compte.troisiemeAvecAVerifierChiffrees++;
+      }
+      // L'encadré ne cite des aides « à vérifier », leur nombre et leurs montants que si la liste les montre.
+      if (texte.includes('à vérifier')) assert.ok(aVerifier.length > 0, contexte);
+      if (aidesAVerifier) assert.equal(aidesAVerifier.nombre, aVerifier.length, contexte);
+      if (texte.includes("Le montant d'une aide")) assert.equal(aVerifierChiffrees.length, 1, contexte);
+      if (texte.includes('Les montants des aides')) assert.ok(aVerifierChiffrees.length >= 2, contexte);
+      if (texte.includes('est listée plus bas') || texte.includes('sont listées plus bas')) assert.equal(aVerifierChiffrees.length, 0, contexte);
+      // « pour cette situation », sans réserve : aucune aide chiffrée n'attend une vérification.
+      if (texte.includes('pour cette situation')) assert.equal(aVerifierChiffrees.length, 0, contexte);
+      // « Voici les aides identifiées » : des cartes d'aides suivent ; « qui ne réduisent pas le prix » : aucune au montant selon dossier.
+      assert.deepEqual(rappels, rappelsAucunFinancement(p), contexte);
+      if (texte.includes('Voici les aides identifiées')) assert.ok(rappels.length > 0, contexte);
+      if (texte.includes('qui ne réduisent pas le prix')) assert.ok(!cartes.includes('non-chiffrees'), contexte);
+      // « après étude du dossier » : une aide ou une option au montant selon dossier est affichée.
+      if (texte.includes('après étude du dossier')) assert.ok(p.nonChiffrees.length > 0 || p.options.some((o) => o.montantEstime == null), contexte);
+      // « les options au choix ont un montant » : une option chiffrée est affichée.
+      if (texte.includes('options au choix ont un montant')) assert.ok(p.options.some((o) => (o.montantEstime ?? 0) > 0), contexte);
+      // Portails « en bas de page » : seulement s'ils existent.
+      if (texte.includes('les portails officiels de la région')) assert.ok(portail != null, contexte);
+      assert.ok(!/ [:;?!]/.test(texte), `espace ordinaire avant une ponctuation haute : ${texte}`);
+      vus.add(texte);
     }
-    assert.ok(controles >= 100, String(controles));
+    assert.ok(compte.sansFinancement >= 500, JSON.stringify(compte));
+    assert.ok(compte.plusieursProfils >= 500 && compte.sansPortail >= 30, JSON.stringify(compte));
+    // Le cas du constat est bien tiré (troisième variante et aides « à vérifier » chiffrées), comme les phrases d'origine.
+    assert.ok(compte.troisiemeAvecAVerifierChiffrees >= 30, JSON.stringify(compte));
+    assert.ok(compte.servicesSeuls >= 10 && compte.aucuneAideAMontant >= 10, JSON.stringify(compte));
+    assert.ok(vus.size >= 8, `seulement ${vus.size} textes distincts : ${[...vus].join(' | ')}`);
+  });
+});
+
+describe("encadré « aucun financement chiffré » : les aides fusionnées d'un groupe, là où les tirages n'atteignent pas", () => {
+  // Le catalogue ne produit aucun état où une aide listée porte un montant sans que sa carte soit un financement ou un rappel, ni où
+  // seuls des services « à vérifier » sont listés sans carte : ni pour une personne ni pour un groupe (la propriété ci-dessus garde ces
+  // conditions écrites). Ces deux cas se lisent donc sur des aides construites, fusionnées comme le fait le calcul du groupe.
+  const [p1, p2] = profilsDuGroupe(definirNombre(ajouterProfil(etat({ projetType: 'formation_salarie' })), 'profil-2', 3));
+  const aide = (id: string, over: Partial<AideEvaluee>): AideEvaluee => ({
+    id,
+    nom: `Aide ${id}`,
+    financeur: 'autre',
+    financeurNom: 'Financeur',
+    categorie: 'cout_formation',
+    description: '',
+    statut: 'eligible',
+    raisons: [],
+    horsPerimetre: false,
+    conditions: [],
+    montantEstime: null,
+    libelleMontant: '',
+    modeMontant: 'forfait',
+    cumulable: true,
+    alternatives: [],
+    noteCumul: null,
+    demarches: [],
+    urlDemarche: null,
+    sources: [],
+    derniereVerification: '2026-10-01',
+    confidence: 'exact',
+    ordreEmpilement: 50,
+    ...over,
+  });
+
+  test('une aide chiffrée pour un seul profil : son montant est un maximum par personne, et il interdit « aucune autre aide à montant »', () => {
+    const avantage = (statut: AideEvaluee['statut'], montantEstime: number | null) =>
+      aide('avantage', { categorie: 'avantage_fiscal_social', statut, montantEstime });
+    const aides = fusionnerAides([
+      { profil: p1, aides: [avantage('non_eligible', null)] },
+      { profil: p2, aides: [avantage('eligible', 300)] },
+    ]);
+    assert.deepEqual(aides[0].profils, [{ profilId: 'profil-2', nombre: 3, statut: 'eligible', montantEstime: 300 }]);
+    assert.equal(aides[0].montantEstime, 300); // par personne ; la carte du plan, elle, porte la somme du groupe
+    const planDuGroupe = plan({
+      coutFormation: 4000,
+      resteACharge: 4000,
+      avantagesFiscauxSociaux: [{ id: 'avantage', nom: 'Aide avantage', financeurNom: 'Financeur', montant: 900, confidence: 'exact', personnes: 3 }],
+    });
+    const { texte } = encadreSansFinancement(planDuGroupe, aides, false);
+    assert.ok(!texte.includes('aucune autre aide à montant'), texte);
+  });
+
+  test('des services seuls : dits quand la carte des services les montre, tus quand le service reste « à vérifier » pour tous les profils', () => {
+    const service = (statut: AideEvaluee['statut']) => aide('cep', { categorie: 'service_gratuit', statut });
+    const aVerifier = fusionnerAides([
+      { profil: p1, aides: [service('a_verifier')] },
+      { profil: p2, aides: [service('a_verifier')] },
+    ]);
+    const sansCarte = encadreSansFinancement(plan({ coutFormation: 4000, resteACharge: 4000 }), aVerifier, false);
+    assert.ok(!sansCarte.texte.includes('Seuls des services gratuits'), sansCarte.texte);
+    const eligible = fusionnerAides([
+      { profil: p1, aides: [service('non_eligible')] },
+      { profil: p2, aides: [service('eligible')] },
+    ]);
+    const avecCarte = encadreSansFinancement(plan({ coutFormation: 4000, resteACharge: 4000, servicesGratuits: [eligible[0]] }), eligible, false);
+    assert.ok(avecCarte.texte.includes('Seuls des services gratuits'), avecCarte.texte);
   });
 });
 
@@ -478,8 +715,11 @@ describe('détails du bandeau, mentions et tableau par profil', () => {
   });
 });
 
-// --- Garanties ajoutées par la preuve par mutation ----------------------------------------------------------------------
-// Chaque test ci-dessous tue au moins un mutant de lib/resultats.ts que les tests précédents laissaient vivre.
+// --- Ce que le calcul d'un groupe garantit, au-delà des cas de base ---------------------------------------------------------
+// Une personne seule rend l'ancien calcul même hors des cas courants. Le moteur de l'OPCO est appelé une fois pour les salariés et
+// chaque profil salarié porte sa part, dans l'ordre. Le coût du groupe se répartit au centime entre les profils. Les financements
+// suivent l'ordre d'empilement des aides. Les détails du bandeau, les mentions et les totaux du tableau restent justes à deux
+// personnes et au centime près.
 
 /** Postes du résultat de l'OPCO qui forment la ligne « plan de développement des compétences » du plan. */
 const POSTES_DE_FORMATION = ['pedagogie', 'hebergement', 'restauration', 'frais_annexes'];
@@ -762,6 +1002,18 @@ describe('détails du bandeau, mentions et tableau par profil : cas limites', ()
     assert.deepEqual(detailsDuBandeau({ coutFormation: Number.NaN, resteACharge: 0 }, 3), { cout: null, reste: null });
   });
 
+  test("detailsDuBandeau : une moyenne qui s'arrondit à zéro ne s'écrit pas, ni pour le reste à charge ni pour le coût", () => {
+    // 0,01 € de reste à charge pour 3 personnes font 0,0033 € par personne, soit 0 € au centime : rien à écrire, jamais « 0 € par personne en moyenne ».
+    assert.deepEqual(detailsDuBandeau({ coutFormation: 300, resteACharge: 0.01 }, 3), { cout: `3${nb}×${nb}${formatEuro(100)}`, reste: null });
+    // De même pour un coût de 0,01 € réparti entre 3 personnes.
+    assert.deepEqual(detailsDuBandeau({ coutFormation: 0.01, resteACharge: 0.01 }, 3), { cout: null, reste: null });
+    // Dès que la moyenne vaut un centime, elle s'écrit : 0,03 € pour 3 personnes font 0,01 € chacune.
+    assert.deepEqual(detailsDuBandeau({ coutFormation: 0.03, resteACharge: 0.03 }, 3), {
+      cout: `3${nb}×${nb}${formatEuro(0.01)}`,
+      reste: `${formatEuro(0.01)} par personne en moyenne`,
+    });
+  });
+
   test('pourPersonnes et mentionOpcoDuGroupe : deux personnes', () => {
     assert.equal(pourPersonnes(2), `pour 2${nb}personnes`);
     assert.equal(mentionOpcoDuGroupe(2, 2), `Calcul pour les 2${nb}personnes du groupe.`);
@@ -797,19 +1049,19 @@ describe('détails du bandeau, mentions et tableau par profil : cas limites', ()
     assert.deepEqual(total, { nombre: 3, cout: 384.51, finance: 384.15, reste: 0.36 });
   });
 
-  test('concerneParAide : un profil inconnu garde son identifiant, deux personnes au pluriel', () => {
-    const libelles = new Map([['principal', 'Profil 1 · Salarié']]);
+  test('concerneParAide : deux personnes au pluriel, avec les libellés des profils du groupe', () => {
+    const e = ajouterProfil(etat({ projetType: 'formation_salarie', contractType: 'cdi', ageBeneficiaire: 35, nombrePersonnes: 2 }));
+    const libelles = libellesDesProfils(profilsDuGroupe(e));
     assert.deepEqual(
-      concerneParAide(
-        {
-          profils: [
-            { profilId: 'principal', nombre: 2, statut: 'eligible', montantEstime: 500 },
-            { profilId: 'profil-9', nombre: 1, statut: 'a_verifier', montantEstime: null },
-          ],
-        },
-        libelles,
-      ),
-      [`Profil 1 · Salarié, 2${nb}personnes${nb}: éligible`, `profil-9, 1${nb}personne${nb}: à vérifier`],
+      concerneParAide({ profils: [{ profilId: 'principal', nombre: 2, statut: 'eligible', montantEstime: 500 }] }, libelles),
+      [`Profil 1 · Salarié en CDI, 35${nb}ans, 2${nb}personnes${nb}: éligible`],
     );
+  });
+
+  test('concerneParAide : un identifiant sans libellé reste lisible', () => {
+    // Entrée construite à la main : la table de libellés ne connaît pas ce profil (le groupe n'en produit pas, ses libellés viennent de ses profils).
+    const [ligne] = concerneParAide({ profils: [{ profilId: 'sans-libelle', nombre: 1, statut: 'a_verifier', montantEstime: null }] }, new Map());
+    assert.ok(ligne.includes('sans-libelle'), ligne);
+    assert.ok(!ligne.includes('undefined'), ligne);
   });
 });
