@@ -10,18 +10,33 @@ import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
 import { texteDonnees, typo } from '@/lib/format';
 import { ID_SECTION_AIDES } from '@/lib/encadres-resultats';
-import { aidesNonEligiblesAffichees, groupesAidesVisibles, siglesDesTitres } from '@/lib/resultats';
+import { aidesNonEligiblesAffichees, concerneAAfficher, groupesAidesVisibles, siglesDesTitres } from '@/lib/resultats';
 import type { GroupeAides } from '@/lib/resultats';
 import { AideCard } from './AideCard';
 import { TEXTE_SOUPLE } from './classes';
 import { PastilleFinanceur } from './Financeur';
+
+/** Aucun profil à nommer : une personne seule ou un seul profil. */
+const AUCUN_LIBELLE: ReadonlyMap<string, string> = new Map();
 
 /**
  * Toutes les aides et tous les financements identifiés (éligibles et à vérifier), groupés par financeur dans l'ordre de
  * la liste évaluée ; les aides non éligibles, repliées et sans montant ; jamais celles d'un autre projet, public, région
  * ou type de formation.
  */
-export function AidesList({ aides, avecPortail }: { aides: readonly AideEvaluee[]; avecPortail: boolean }) {
+export function AidesList({
+  aides,
+  avecPortail,
+  personnes = 1,
+  libelles = AUCUN_LIBELLE,
+}: {
+  aides: readonly AideEvaluee[];
+  avecPortail: boolean;
+  /** Personnes du groupe : au-dessus de 1, le montant d'une aide est dit « par personne ». */
+  personnes?: number;
+  /** Libellé de chaque profil (`libellesDesProfils`) : avec plusieurs profils, une carte précise lesquels elle concerne. */
+  libelles?: ReadonlyMap<string, string>;
+}) {
   const groupes = groupesAidesVisibles(aides);
   const total = groupes.reduce((n, g) => n + g.aides.length, 0);
   const nonEligibles = aidesNonEligiblesAffichees(aides);
@@ -58,6 +73,8 @@ export function AidesList({ aides, avecPortail }: { aides: readonly AideEvaluee[
             groupe={g}
             nomParId={nomParId}
             sigles={sigles}
+            personnes={personnes}
+            libelles={libelles}
             style={delai(i * 60, 360)}
           />
         ))
@@ -71,11 +88,15 @@ function GroupeDuFinanceur({
   groupe,
   nomParId,
   sigles,
+  personnes,
+  libelles,
   style,
 }: {
   groupe: GroupeAides;
   nomParId: ReadonlyMap<string, string>;
   sigles: ReadonlyMap<string, Readonly<Record<string, string>>>;
+  personnes: number;
+  libelles: ReadonlyMap<string, string>;
   style: CSSProperties;
 }) {
   const id = `groupe-${groupe.financeur}`;
@@ -94,7 +115,13 @@ function GroupeDuFinanceur({
       <ul className="mt-4 space-y-4">
         {groupe.aides.map((a) => (
           <li key={a.id}>
-            <AideCard aide={a} nomParId={nomParId} sigles={sigles.get(a.id)} />
+            <AideCard
+              aide={a}
+              nomParId={nomParId}
+              sigles={sigles.get(a.id)}
+              parPersonne={personnes > 1}
+              concerne={concerneAAfficher(a, libelles.size, libelles)}
+            />
           </li>
         ))}
       </ul>

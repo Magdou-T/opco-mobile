@@ -753,3 +753,18 @@ export function concerneParAide(aide: Pick<AideEvaluee, 'profils'>, libelles: Re
       }`,
   );
 }
+
+/**
+ * Lignes du bloc « Concerne » d'une carte d'aide d'un groupe de `nombreDeProfils` profils : vides quand l'aide vaut, au
+ * statut qu'affiche la carte, pour tous les profils (rien à préciser) ; sinon une ligne par profil concerné
+ * (`concerneParAide`).
+ */
+export function concerneAAfficher(
+  aide: Pick<AideEvaluee, 'profils' | 'statut'>,
+  nombreDeProfils: number,
+  libelles: ReadonlyMap<string, string>,
+): string[] {
+  const profils = aide.profils ?? [];
+  const partout = profils.length === nombreDeProfils && profils.every((p) => p.statut === aide.statut);
+  return profils.length === 0 || partout ? [] : concerneParAide(aide, libelles);
+}

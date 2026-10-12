@@ -26,11 +26,17 @@ export function AideCard({
   aide,
   nomParId,
   sigles,
+  parPersonne = false,
+  concerne = [],
 }: {
   aide: AideEvaluee;
   nomParId: ReadonlyMap<string, string>;
   /** Sigles à définir dans le titre (`siglesDesTitres` : une seule carte par écran pour chaque sigle). */
   sigles?: Readonly<Record<string, string>>;
+  /** Le groupe compte plusieurs personnes : le montant de l'aide est dit « par personne ». */
+  parPersonne?: boolean;
+  /** Bloc « Concerne » (`concerneAAfficher`) : un profil par ligne ; vide, pas de bloc. */
+  concerne?: readonly string[];
 }) {
   const [ouvert, setOuvert] = useState(false);
   const montant = montantAffiche(aide);
@@ -60,13 +66,27 @@ export function AideCard({
             </h4>
             <p className="mt-1 text-sm leading-snug text-texte-doux">{typo(aide.financeurNom)}</p>
           </div>
-          {montant && <MontantDeLAide montant={montant} />}
+          {montant && <MontantDeLAide montant={montant} parPersonne={parPersonne} />}
         </div>
 
         {aide.libelleMontant && (
           <p className="mt-4 text-sm leading-relaxed font-medium text-texte">{texte(aide.libelleMontant)}</p>
         )}
         {aide.description && <p className="mt-2 text-sm leading-relaxed text-texte-doux">{texte(aide.description)}</p>}
+
+        {concerne.length > 0 && (
+          <div className="mt-4 rounded-champ border border-filet bg-lin-soft px-4 py-3">
+            <p className="text-sm font-semibold text-texte">Concerne</p>
+            <ul className="mt-1.5 space-y-0.5">
+              {concerne.map((ligne) => (
+                <li key={ligne} className="flex gap-2.5 text-sm leading-relaxed text-texte-doux">
+                  <span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-texte-doux" />
+                  <span className={TEXTE_SOUPLE}>{ligne}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {aide.statut === 'a_verifier' && aide.raisons.length > 0 && (
           <Callout tone="avertissement" titre="Points à confirmer" className="mt-4">
@@ -191,12 +211,13 @@ export function AideCard({
   );
 }
 
-function MontantDeLAide({ montant }: { montant: MontantAffiche }) {
+function MontantDeLAide({ montant, parPersonne }: { montant: MontantAffiche; parPersonne: boolean }) {
   if (montant.genre === 'jusqua') {
     return (
       <p className="shrink-0 sm:text-right">
         <span className="block text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase">jusqu&apos;à</span>
         <span className="amount mt-0.5 block text-2xl text-texte sm:text-[1.75rem]">{formatEuro(montant.montant)}</span>
+        {parPersonne && <span className="mt-0.5 block text-xs font-medium text-texte-discret">par personne</span>}
       </p>
     );
   }

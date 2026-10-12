@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { de, formatEuro, texteDonnees, texteMoteur } from '@/lib/format';
-import { dispositifAffiche, lignesDuDetail, sansMontantEstime } from '@/lib/resultats';
+import { dispositifAffiche, lignesDuDetail, pourPersonnes, sansMontantEstime } from '@/lib/resultats';
 import type { RelaisPlanConventionnel } from '@/lib/resultats';
 import { BadgeEstimation } from './BadgeEstimation';
 import { TEXTE_SOUPLE } from './classes';
@@ -89,7 +89,9 @@ export function FundingBreakdown({ result, relais = null }: Props) {
           </Callout>
         ) : montantConnu ? (
           <div className="mt-5">
-            <p className="text-sm font-semibold text-texte-doux">Total estimé, tous postes</p>
+            <p className="text-sm font-semibold text-texte-doux">
+              Total estimé, tous postes{result.personnes > 1 ? `, ${pourPersonnes(result.personnes)}` : ''}
+            </p>
             <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2">
               <p className="amount text-3xl leading-tight text-turquoise-deep sm:text-4xl">{formatEuro(result.totalFunded)}</p>
               <BadgeEstimation confidence={overallConfidence} opcoName={opcoName} />

@@ -27,6 +27,7 @@ import { coutsDeFormation } from '../src/lib/parcours';
 import {
   calculer,
   cartesDuPlan,
+  concerneAAfficher,
   concerneParAide,
   detailsDuBandeau,
   etatEnTete,
@@ -1063,5 +1064,96 @@ describe('détails du bandeau, mentions et tableau par profil : cas limites', ()
     const [ligne] = concerneParAide({ profils: [{ profilId: 'sans-libelle', nombre: 1, statut: 'a_verifier', montantEstime: null }] }, new Map());
     assert.ok(ligne.includes('sans-libelle'), ligne);
     assert.ok(!ligne.includes('undefined'), ligne);
+  });
+});
+
+describe("bloc « Concerne » d'une carte d'aide (concerneAAfficher)", () => {
+  const libelles = new Map([
+    ['principal', 'Profil 1 · Salarié en CDI'],
+    ['profil-2', 'Profil 2 · Dirigeant artisan'],
+  ]);
+  const vue = (profilId: string, nombre: number, statut: 'eligible' | 'a_verifier') => ({ profilId, nombre, statut, montantEstime: null });
+
+  test('rien sans champ profils (un seul profil), ni quand tous les profils sont concernés au même statut', () => {
+    assert.deepEqual(concerneAAfficher({ statut: 'eligible' }, 1, libelles), []);
+    assert.deepEqual(
+      concerneAAfficher({ statut: 'eligible', profils: [vue('principal', 3, 'eligible'), vue('profil-2', 1, 'eligible')] }, 2, libelles),
+      [],
+    );
+  });
+
+  test("un profil au moins n'est pas concerné : le bloc nomme les profils concernés", () => {
+    assert.deepEqual(concerneAAfficher({ statut: 'eligible', profils: [vue('profil-2', 1, 'eligible')] }, 2, libelles), [
+      `Profil 2 · Dirigeant artisan, 1${nb}personne${nb}: éligible`,
+    ]);
+  });
+
+  test('tous les profils sont concernés mais pas au même statut : le bloc dit le statut de chacun', () => {
+    assert.deepEqual(
+      concerneAAfficher({ statut: 'eligible', profils: [vue('principal', 3, 'eligible'), vue('profil-2', 1, 'a_verifier')] }, 2, libelles),
+      [`Profil 1 · Salarié en CDI, 3${nb}personnes${nb}: éligible`, `Profil 2 · Dirigeant artisan, 1${nb}personne${nb}: à vérifier`],
+    );
+  });
+
+  // Les trois tests suivants s'ajoutent à ceux de la fiche : sans eux, des mutants survivaient (toutes les cartes de la fiche
+  // sont « éligible », et aucune n'a plus de profils concernés que le groupe n'en compte).
+  test("le statut comparé est celui de la carte : une aide « à vérifier » pour tous les profils n'a rien à préciser", () => {
+    assert.deepEqual(
+      concerneAAfficher({ statut: 'a_verifier', profils: [vue('principal', 3, 'a_verifier'), vue('profil-2', 1, 'a_verifier')] }, 2, libelles),
+      [],
+    );
+    // Une carte « éligible » dont aucun profil n'est éligible (le moteur ne produit pas ce cas) : le bloc dit le statut de chacun.
+    assert.deepEqual(
+      concerneAAfficher({ statut: 'eligible', profils: [vue('principal', 3, 'a_verifier'), vue('profil-2', 1, 'a_verifier')] }, 2, libelles),
+      [`Profil 1 · Salarié en CDI, 3${nb}personnes${nb}: à vérifier`, `Profil 2 · Dirigeant artisan, 1${nb}personne${nb}: à vérifier`],
+    );
+  });
+
+  test("plus de profils concernés que le groupe n'en compte (donnée incohérente) : le bloc parle plutôt que de se taire", () => {
+    assert.deepEqual(
+      concerneAAfficher({ statut: 'eligible', profils: [vue('principal', 3, 'eligible'), vue('profil-2', 1, 'eligible')] }, 1, libelles),
+      [`Profil 1 · Salarié en CDI, 3${nb}personnes${nb}: éligible`, `Profil 2 · Dirigeant artisan, 1${nb}personne${nb}: éligible`],
+    );
+  });
+
+  test('données du moteur : le fonds du dirigeant (FAFCEA) nomme son profil ; une personne seule, un seul profil ou des profils identiques : aucun bloc', () => {
+    // Trois salariés et un dirigeant artisan (le groupe de l'étape « groupe mixte »).
+    let mixte = etat({
+      ...SCENARIOS.artisan,
+      selectedOpcoSlug: 'akto',
+      projetType: 'formation_salarie',
+      contractType: 'cdi',
+      statutDirigeant: null,
+      microEntrepreneur: null,
+      ageBeneficiaire: 35,
+      nombrePersonnes: 3,
+    });
+    mixte = ajouterProfil(mixte);
+    mixte = changerProjetDuProfil(mixte, 'profil-2', 'formation_dirigeant');
+    mixte = majProfil(mixte, 'profil-2', { statutDirigeant: 'artisan', microEntrepreneur: false, ageBeneficiaire: 45 });
+    const r = calculer(mixte, DATE);
+    const libellesMixte = libellesDesProfils(r.groupe.blocs.map((b) => b.profil));
+    const faf = r.aidesEvaluees.find((a) => a.id === 'faf-fafcea');
+    assert.ok(faf);
+    assert.deepEqual(concerneAAfficher(faf, libellesMixte.size, libellesMixte), [
+      `Profil 2 · Dirigeant artisan, 45${nb}ans, 1${nb}personne${nb}: éligible`,
+    ]);
+
+    // Les aides d'un seul profil (une personne, ou plusieurs de même profil) n'ont pas de champ `profils` ; deux profils de même
+    // situation concernent les mêmes cartes au même statut : dans les trois cas, aucune carte ne porte de bloc.
+    const identiques = ajouterProfil(etat({ ...SCENARIOS.akto, nombrePersonnes: 2 }));
+    const sansBloc: Record<string, WizardState> = {
+      'une personne': etat({ ...SCENARIOS.akto, nombrePersonnes: 1 }),
+      'quatre personnes, un profil': etat({ ...SCENARIOS.akto, nombrePersonnes: 4 }),
+      'deux profils identiques': majProfil(identiques, 'profil-2', { contractType: 'cdi', ageBeneficiaire: 35 }),
+    };
+    for (const [nom, e] of Object.entries(sansBloc)) {
+      const calcul = calculer(e, DATE);
+      const libellesDuGroupe = libellesDesProfils(calcul.groupe.blocs.map((b) => b.profil));
+      const visibles = calcul.aidesEvaluees.filter((a) => a.statut !== 'non_eligible');
+      assert.ok(visibles.length > 0, nom);
+      const avecBloc = visibles.filter((a) => concerneAAfficher(a, libellesDuGroupe.size, libellesDuGroupe).length > 0);
+      assert.deepEqual(avecBloc.map((a) => a.id), [], nom);
+    }
   });
 });

@@ -8,7 +8,14 @@ import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
 import { formatEuro, texteDonnees, typo } from '@/lib/format';
 import type { FondsEpuises, PlanFerme } from '@/lib/encadres-resultats';
-import { cartesDuPlan, confianceDOption, etatEnTete, financeurDeLigne, libellesDeLigne } from '@/lib/resultats';
+import {
+  cartesDuPlan,
+  confianceDOption,
+  etatEnTete,
+  financeurDeLigne,
+  libellesDeLigne,
+  pourPersonnes,
+} from '@/lib/resultats';
 import type { CartePlan, RelaisPlanConventionnel } from '@/lib/resultats';
 import { BandeauSynthese } from './BandeauSynthese';
 import { PastilleFinanceur } from './Financeur';
@@ -28,6 +35,7 @@ export function PlanFinancementCard({
   relais = null,
   planFerme = null,
   avecPortail = false,
+  personnes = 1,
   apresBandeau,
   onModifierFormation,
 }: {
@@ -44,6 +52,8 @@ export function PlanFinancementCard({
   planFerme?: PlanFerme | null;
   /** Les portails officiels de la région figurent plus bas sur l'écran. */
   avecPortail?: boolean;
+  /** Personnes du groupe : au-dessus de 1, le bandeau détaille par personne et la carte des options dit que ses montants sont ceux du groupe. */
+  personnes?: number;
   /** Note posée juste après le bandeau (par exemple « Aucun OPCO renseigné ») : les chiffres restent en tête. */
   apresBandeau?: ReactNode;
   /** Retour à l'étape Formation, proposé quand le coût n'est pas renseigné. */
@@ -60,6 +70,7 @@ export function PlanFinancementCard({
         relais={relais}
         planFerme={planFerme}
         avecPortail={avecPortail}
+        personnes={personnes}
         onModifierFormation={onModifierFormation}
       />
       {apresBandeau}
@@ -71,6 +82,7 @@ export function PlanFinancementCard({
           aides={aides}
           dispositifs={dispositifs}
           relais={relais}
+          groupe={personnes > 1}
           style={delai(120 + i * 70)}
         />
       ))}
@@ -125,6 +137,7 @@ function CarteDuPlan({
   aides,
   dispositifs,
   relais,
+  groupe,
   style,
 }: {
   carte: CartePlan;
@@ -132,9 +145,13 @@ function CarteDuPlan({
   aides: readonly AideEvaluee[];
   dispositifs: readonly DispositifEligible[];
   relais: RelaisPlanConventionnel | null;
+  /** Le plan est celui d'un groupe de plusieurs personnes. */
+  groupe: boolean;
   style: CSSProperties;
 }) {
   const { titre, icone, aide } = CARTES[carte];
+  // Les options n'ont pas de ligne « pour N personnes » : leur carte dit que ses montants sont ceux de tout le groupe.
+  const aideAffichee = carte === 'options' && groupe ? `${aide} Les montants sont ceux de tout le groupe.` : aide;
   const id = `carte-${carte}`;
   return (
     <section id={id} aria-labelledby={`${id}-titre`} className="apparition" style={style}>
@@ -150,7 +167,7 @@ function CarteDuPlan({
             <h3 id={`${id}-titre`} className="text-lg leading-snug font-bold text-texte">
               {titre}
             </h3>
-            <p className="mt-1 text-sm leading-relaxed text-texte-doux">{typo(aide)}</p>
+            <p className="mt-1 text-sm leading-relaxed text-texte-doux">{typo(aideAffichee)}</p>
           </div>
         </header>
         <ContenuDeCarte carte={carte} plan={plan} aides={aides} dispositifs={dispositifs} relais={relais} />
@@ -220,12 +237,24 @@ function Fiabilite({ confidence }: { confidence: Confidence }) {
   );
 }
 
-/** Nom, financeur et fiabilité d'une ligne chiffrée. */
-function Identite({ nom, financeurNom, confidence }: { nom: string; financeurNom: string; confidence?: Confidence }) {
+/** Nom, financeur, nombre de personnes (plan d'un groupe) et fiabilité d'une ligne chiffrée. */
+function Identite({
+  nom,
+  financeurNom,
+  confidence,
+  personnes,
+}: {
+  nom: string;
+  financeurNom: string;
+  confidence?: Confidence;
+  /** Pour combien de personnes la ligne vaut : renseigné seulement dans le plan d'un groupe. */
+  personnes?: number;
+}) {
   return (
     <div className="min-w-0 flex-1">
       <p className="leading-snug font-semibold text-texte">{typo(nom)}</p>
       <p className="mt-0.5 text-sm leading-snug text-texte-doux">{typo(financeurNom)}</p>
+      {personnes != null && <p className="mt-0.5 text-sm leading-snug text-texte-discret">{pourPersonnes(personnes)}</p>}
       {confidence && <Fiabilite confidence={confidence} />}
     </div>
   );
@@ -273,7 +302,7 @@ function PileDesFinancements({
               />
             )}
             <PastilleFinanceur financeur={financeurDeLigne(l.id, aides)} />
-            <Identite {...libellesDeLigne(l, relais)} confidence={l.confidence} />
+            <Identite {...libellesDeLigne(l, relais)} confidence={l.confidence} personnes={l.personnes} />
             <Montant valeur={l.montant} className="pt-1" />
           </li>
         ))}
@@ -305,7 +334,7 @@ function LignesChiffrees({ lignes, aides }: { lignes: LignePlan[]; aides: readon
       {lignes.map((l) => (
         <li key={l.id} className="flex items-start gap-4 px-5 py-4 break-inside-avoid sm:px-6">
           <PastilleFinanceur financeur={financeurDeLigne(l.id, aides)} taille="petite" className="mt-0.5" />
-          <Identite nom={l.nom} financeurNom={l.financeurNom} confidence={l.confidence} />
+          <Identite nom={l.nom} financeurNom={l.financeurNom} confidence={l.confidence} personnes={l.personnes} />
           <Montant valeur={l.montant} />
         </li>
       ))}

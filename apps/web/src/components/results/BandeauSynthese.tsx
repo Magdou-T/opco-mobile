@@ -14,7 +14,7 @@ import {
   titreFondsEpuises,
 } from '@/lib/encadres-resultats';
 import type { FondsEpuises, PlanFerme } from '@/lib/encadres-resultats';
-import { partFinancee, partsBarre } from '@/lib/resultats';
+import { detailsDuBandeau, partFinancee, partsBarre } from '@/lib/resultats';
 import type { EtatEnTete, PartBarre, RelaisPlanConventionnel } from '@/lib/resultats';
 import { BarreEmpilee } from './BarreEmpilee';
 import { FiletTricolore } from './FiletTricolore';
@@ -33,6 +33,7 @@ export function BandeauSynthese({
   relais,
   planFerme,
   avecPortail,
+  personnes = 1,
   onModifierFormation,
 }: {
   plan: PlanFinancement;
@@ -44,6 +45,8 @@ export function BandeauSynthese({
   planFerme: PlanFerme | null;
   /** Les portails officiels de la région figurent plus bas : l'encadré sans financement chiffré peut y renvoyer. */
   avecPortail: boolean;
+  /** Personnes du groupe : à partir de deux, le coût et le reste à charge portent un détail par personne (`detailsDuBandeau`). */
+  personnes?: number;
   onModifierFormation?: () => void;
 }) {
   // Coût inconnu ou plan chiffré par d'autres financeurs : la raison du plan fermé dans un encadré à part.
@@ -67,7 +70,13 @@ export function BandeauSynthese({
           </>
         )}
         {etat === 'aucun_financement_chiffre' && (
-          <AucunFinancementChiffre plan={plan} aides={aides} avecPortail={avecPortail} planFerme={planFerme} />
+          <AucunFinancementChiffre
+            plan={plan}
+            aides={aides}
+            avecPortail={avecPortail}
+            planFerme={planFerme}
+            personnes={personnes}
+          />
         )}
         {etat === 'plan_chiffre' && (
           <PlanChiffre
@@ -76,6 +85,7 @@ export function BandeauSynthese({
             fondsEpuises={fondsEpuises}
             relais={relais}
             encadreFerme={encadreFerme}
+            personnes={personnes}
           />
         )}
       </div>
@@ -111,11 +121,13 @@ function AucunFinancementChiffre({
   aides,
   avecPortail,
   planFerme,
+  personnes,
 }: {
   plan: PlanFinancement;
   aides: readonly AideEvaluee[];
   avecPortail: boolean;
   planFerme: PlanFerme | null;
+  personnes: number;
 }) {
   const { texte, rappels, aidesAVerifier, detailOpco } = encadreSansFinancement(plan, aides, avecPortail, planFerme);
   const liens = [
@@ -127,7 +139,11 @@ function AucunFinancementChiffre({
   return (
     <div>
       <dl className="grid sm:grid-cols-3">
-        <Chiffre libelle="Coût de la formation" valeur={formatEuro(plan.coutFormation)} />
+        <Chiffre
+          libelle="Coût de la formation"
+          valeur={formatEuro(plan.coutFormation)}
+          detail={detailsDuBandeau(plan, personnes).cout ?? undefined}
+        />
       </dl>
       <Callout tone="info" className="mt-5">
         {texte}
@@ -157,6 +173,7 @@ function PlanChiffre({
   fondsEpuises,
   relais,
   encadreFerme,
+  personnes,
 }: {
   plan: PlanFinancement;
   parts: PartBarre[];
@@ -164,12 +181,18 @@ function PlanChiffre({
   relais: RelaisPlanConventionnel | null;
   /** Raison du plan de l'OPCO fermé, quand d'autres financeurs chiffrent le plan. */
   encadreFerme: ReactNode;
+  personnes: number;
 }) {
   const part = partFinancee(parts);
+  const details = detailsDuBandeau(plan, personnes);
   return (
     <div>
       <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-3">
-        <Chiffre libelle="Coût de la formation" valeur={formatEuro(plan.coutFormation)} />
+        <Chiffre
+          libelle="Coût de la formation"
+          valeur={formatEuro(plan.coutFormation)}
+          detail={details.cout ?? undefined}
+        />
         <Chiffre
           libelle="Financé"
           valeur={<span className="mark">{formatEuro(plan.totalFinance)}</span>}
@@ -178,7 +201,12 @@ function PlanChiffre({
         />
         {/* Aucune phrase de couverture sous un reste nul : c'est une estimation, et la prise en charge peut être refusée
             (fonds épuisés, étude du dossier). Le chiffre suffit. */}
-        <Chiffre libelle="Reste à charge" valeur={formatEuro(plan.resteACharge)} couleur="text-orange-deep" />
+        <Chiffre
+          libelle="Reste à charge"
+          valeur={formatEuro(plan.resteACharge)}
+          detail={details.reste ?? undefined}
+          couleur="text-orange-deep"
+        />
       </dl>
       <BarreEmpilee parts={parts} cout={plan.coutFormation} />
       {fondsEpuises && fondsEpuises.branches.length > 0 && (
