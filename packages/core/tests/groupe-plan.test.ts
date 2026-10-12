@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { evaluerAide } from '../src/aides/evaluer';
 import { construirePlan } from '../src/aides/plan';
 import type { LignePlan, OptionPlan, PlanFinancement } from '../src/aides/plan';
-import type { Aide } from '../src/aides/types';
+import type { Aide, AideEvaluee } from '../src/aides/types';
 import { calculateFunding } from '../src/calculator';
 import { construirePlanDuBloc, fusionnerPlans, repartirFinancement } from '../src/groupe';
 import { etatGroupe, opcoGroupe } from './fixtures';
@@ -501,5 +501,84 @@ describe('fusion des plans des profils', () => {
       const fusion = fusionnerPlans(Array.from({ length: nombre }, () => une), catalogue);
       expect(construirePlanDuBloc(null, catalogue, p, nombre), `effectif ${nombre}`).toEqual(fusion);
     }
+  });
+
+  // Une aide chiffrée pour un profil et sans montant pour un autre (solde CPF connu pour l'un, inconnu pour l'autre) : le plan
+  // fusionné la garde dans sa ligne et ne la liste plus sans montant.
+  const ids = (aides: { id: string }[]) => aides.map((a) => a.id);
+  const LISTES_SANS_MONTANT = ['nonChiffrees', 'servicesGratuits'] as const;
+  /** Un plan dont seule la liste sans montant `liste` est renseignée. */
+  const sans = (liste: (typeof LISTES_SANS_MONTANT)[number], aides: AideEvaluee[]): PlanFinancement => ({ ...plan({}), [liste]: aides });
+
+  it("une aide en ligne pour un profil et sans montant pour un autre n'est plus listée sans montant : financements, aides à l'employeur, rémunérations, avantages, dans les deux ordres", () => {
+    for (const liste of LISTES_DE_LIGNES) {
+      for (const sansMontant of LISTES_SANS_MONTANT) {
+        const chiffre = avec(liste, [ligne('x', 800, { personnes: 2 })]);
+        const inconnu = sans(sansMontant, [aide('x'), aide('nat-autre')]);
+        for (const plans of [[chiffre, inconnu], [inconnu, chiffre]]) {
+          const fusion = fusionnerPlans(plans, ordres);
+          // La ligne reste telle quelle ; seule l'aide sans montant de même identifiant disparaît.
+          expect(fusion[liste].map((l) => [l.id, l.montant, l.personnes]), `${liste} ${sansMontant}`).toEqual([['x', 800, 2]]);
+          expect(ids(fusion[sansMontant]), `${liste} ${sansMontant}`).toEqual(['nat-autre']);
+        }
+      }
+    }
+  });
+
+  it("une aide en option pour un profil, chiffrée ou selon dossier, et sans montant pour un autre n'est plus listée sans montant", () => {
+    for (const montant of [500, null]) {
+      for (const sansMontant of LISTES_SANS_MONTANT) {
+        const enOption = plan({ options: [optionDe('x', montant)] });
+        const inconnu = sans(sansMontant, [aide('x'), aide('nat-autre')]);
+        for (const plans of [[enOption, inconnu], [inconnu, enOption]]) {
+          const fusion = fusionnerPlans(plans, ordres);
+          expect(fusion.options.map((o) => [o.id, o.montantEstime]), `${montant} ${sansMontant}`).toEqual([['x', montant]]);
+          expect(ids(fusion[sansMontant]), `${montant} ${sansMontant}`).toEqual(['nat-autre']);
+        }
+      }
+    }
+  });
+
+  it("la règle se juge sur le plan fusionné : une ligne du troisième plan retire l'aide sans montant des deux premiers", () => {
+    for (const sansMontant of LISTES_SANS_MONTANT) {
+      const inconnu = sans(sansMontant, [aide('x')]);
+      const fusion = fusionnerPlans([inconnu, inconnu, plan({ remunerations: [ligne('x', 300)] })], ordres);
+      expect(ids(fusion[sansMontant]), sansMontant).toEqual([]);
+      expect(fusion.remunerations.map((l) => [l.id, l.montant]), sansMontant).toEqual([['x', 300]]);
+    }
+  });
+
+  it('une aide sans montant dans les deux plans, chiffrée dans aucun, reste listée une fois', () => {
+    for (const sansMontant of LISTES_SANS_MONTANT) {
+      const inconnu = sans(sansMontant, [aide('x')]);
+      expect(ids(fusionnerPlans([inconnu, inconnu], ordres)[sansMontant]), sansMontant).toEqual(['x']);
+    }
+  });
+
+  it("une aide sans montant chez un seul profil, qui n'a de ligne chez aucun, reste listée à côté des lignes des autres aides", () => {
+    for (const sansMontant of LISTES_SANS_MONTANT) {
+      const autres = plan({
+        financements: [ligne('y', 100)],
+        aidesEmployeur: [ligne('e', 200)],
+        remunerations: [ligne('r', 300)],
+        avantagesFiscauxSociaux: [ligne('f', 400)],
+        options: [optionDe('o', 50), optionDe('s', null)],
+      });
+      const inconnu = sans(sansMontant, [aide('x')]);
+      for (const plans of [[autres, inconnu], [inconnu, autres]]) {
+        expect(ids(fusionnerPlans(plans, ordres)[sansMontant]), sansMontant).toEqual(['x']);
+      }
+    }
+  });
+
+  it("un plan seul est rendu tel quel, même s'il liste une aide à la fois dans une ligne et sans montant", () => {
+    // Un plan d'un profil ne le fait jamais (construirePlan range chaque aide une seule fois) : la règle ne vaut que pour une fusion.
+    const seul = plan({ financements: [ligne('x', 10)], options: [optionDe('o', null)], nonChiffrees: [aide('x'), aide('o')], servicesGratuits: [aide('x')] });
+    const avant = JSON.stringify(seul);
+    const fusion = fusionnerPlans([seul], ordres);
+    expect(fusion).toBe(seul);
+    expect(ids(fusion.nonChiffrees)).toEqual(['x', 'o']);
+    expect(ids(fusion.servicesGratuits)).toEqual(['x']);
+    expect(JSON.stringify(seul)).toBe(avant);
   });
 });

@@ -148,7 +148,7 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
     const r = calculateFunding(opcoGroupe(), etatGroupe(), 4);
     expect(poste(r, 'salaires').details).toContain(`Pour 4${NBSP}personnes : 1200.00${NBSP}€ × 4 = 4800.00${NBSP}€`);
     expect(poste(r, 'transport').details).toContain(`Pour 4${NBSP}personnes : 150.00${NBSP}€ × 4 = 600.00${NBSP}€`);
-    expect(poste(r, 'hebergement').details).toContain(`Pour 4${NBSP}personnes : 400.00${NBSP}€ × 4 = 1600.00${NBSP}€`);
+    expect(poste(r, 'hebergement').details).toContain(`Financement pour 4${NBSP}personnes : 400.00${NBSP}€ × 4 = 1600.00${NBSP}€`);
     expect(poste(r, 'restauration').details).toContain(`Pour 4${NBSP}personnes : 75.00${NBSP}€ × 4 = 300.00${NBSP}€`);
     expect(poste(r, 'salaires').note).toBe(`12${NBSP}€/h × 100${NBSP}h × 4${NBSP}personnes`);
     for (const p of ['salaires', 'transport', 'hebergement', 'restauration']) {
@@ -169,10 +169,20 @@ describe('calculateFunding pour n personnes : salaires et frais annexes', () => 
   it("hébergement : le coût d'une personne est suivi de celui du groupe, que la nuit dépasse le plafond ou non", () => {
     const audessus = poste(calculateFunding(opcoGroupe(), etatGroupe(), 4), 'hebergement').details ?? [];
     expect(audessus).toContain(`Coût pour 4${NBSP}personnes : 480.00${NBSP}€ × 4 = 1920.00${NBSP}€`);
+    expect(audessus).toContain(`Financement pour 4${NBSP}personnes : 400.00${NBSP}€ × 4 = 1600.00${NBSP}€`);
     const sous = poste(calculateFunding(opcoGroupe(), etatGroupe({ accommodationCostPerNight: 80 }), 4), 'hebergement');
     expect(sous).toMatchObject({ requestedAmount: 1280, fundedAmount: 1280, remainder: 0 });
     expect(sous.details).toContain(`Coût pour 4${NBSP}personnes : 320.00${NBSP}€ × 4 = 1280.00${NBSP}€`);
-    expect(sous.details).toContain(`Pour 4${NBSP}personnes : 320.00${NBSP}€ × 4 = 1280.00${NBSP}€`);
+    expect(sous.details).toContain(`Financement pour 4${NBSP}personnes : 320.00${NBSP}€ × 4 = 1280.00${NBSP}€`);
+  });
+
+  it("hébergement sous le plafond : les deux lignes du groupe, aux mêmes montants, disent l'une le coût, l'autre le financement", () => {
+    // 80 € la nuit, sous le plafond de 100 € : coût et financement d'une personne valent tous deux 320 € (4 nuits).
+    const details = poste(calculateFunding(opcoGroupe(), etatGroupe({ accommodationCostPerNight: 80 }), 4), 'hebergement').details ?? [];
+    expect(details.filter((d) => d.includes(`320.00${NBSP}€ × 4 = 1280.00${NBSP}€`))).toEqual([
+      `Coût pour 4${NBSP}personnes : 320.00${NBSP}€ × 4 = 1280.00${NBSP}€`,
+      `Financement pour 4${NBSP}personnes : 320.00${NBSP}€ × 4 = 1280.00${NBSP}€`,
+    ]);
   });
 
   it("tout montant d'une personne énoncé dans un détail a sa ligne de groupe, dans chaque poste (spécification 5.2)", () => {

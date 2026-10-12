@@ -406,10 +406,14 @@ describe("situations limites d'un groupe", () => {
 });
 
 describe('groupes tirés au hasard : cohérence du plan et des parts (1 000, graine 17), textes du calcul (300, graine 23), encadré sans financement (2 500, graine 29)', () => {
-  test("les profils s'additionnent en centimes, aucun plan ne dépasse son coût, rien n'est invalide", () => {
+  test("les profils s'additionnent en centimes, aucun plan ne dépasse son coût, aucune aide n'est à la fois en ligne et sans montant, rien n'est invalide", () => {
     const hasard = generateur(17);
     let avecPlusieursProfils = 0;
     let avecPlusieursSalaries = 0;
+    let avecAideEnLigneEtSansMontant = 0;
+    /** Identifiants des aides qui ont une ligne dans un plan : chiffrée, ou option (même selon dossier). */
+    const idsEnLigne = (p: PlanFinancement) =>
+      [...p.financements, ...p.options, ...p.aidesEmployeur, ...p.remunerations, ...p.avantagesFiscauxSociaux].map((l) => l.id);
     for (let i = 0; i < 1000; i++) {
       const e = groupeAleatoire(hasard);
       const r = calculer(e, DATE);
@@ -430,6 +434,16 @@ describe('groupes tirés au hasard : cohérence du plan et des parts (1 000, gra
         const lignes = [...r.plan.financements, ...r.plan.aidesEmployeur, ...r.plan.remunerations, ...r.plan.avantagesFiscauxSociaux];
         assert.ok(lignes.every((l) => l.personnes != null && l.personnes >= 1), contexte);
       }
+      // Disjoints : aucune aide du plan du groupe n'est à la fois une ligne (financements, options, aides à l'employeur,
+      // rémunérations, avantages) et une aide sans montant ou un service gratuit.
+      const enLigne = new Set(idsEnLigne(r.plan));
+      const aussiSansMontant = [...r.plan.nonChiffrees, ...r.plan.servicesGratuits].filter((a) => enLigne.has(a.id));
+      assert.deepEqual(aussiSansMontant.map((a) => a.id), [], contexte);
+      // Les tirages où un profil a en ligne une aide qu'un autre profil n'a que sans montant : la propriété s'y exerce.
+      const enLigneDesProfils = new Set(blocs.flatMap((b) => idsEnLigne(b.plan)));
+      if (blocs.some((b) => [...b.plan.nonChiffrees, ...b.plan.servicesGratuits].some((a) => enLigneDesProfils.has(a.id)))) {
+        avecAideEnLigneEtSansMontant++;
+      }
       // Les parts de l'OPCO s'additionnent au résultat du groupe, poste par poste, au centime.
       const parts = blocs.filter((b) => b.funding);
       if (r.funding && parts.length > 1) {
@@ -443,6 +457,7 @@ describe('groupes tirés au hasard : cohérence du plan et des parts (1 000, gra
     }
     assert.ok(avecPlusieursProfils >= 300, String(avecPlusieursProfils));
     assert.ok(avecPlusieursSalaries >= 60, String(avecPlusieursSalaries));
+    assert.ok(avecAideEnLigneEtSansMontant >= 100, String(avecAideEnLigneEtSansMontant));
   });
 
   test("les textes du calcul d'un groupe, une fois rendus, ne contiennent aucun nombre à point (hors adresses et citations)", () => {
@@ -953,6 +968,29 @@ describe("plan d'un groupe : les financements suivent l'ordre d'empilement des a
     const r = calculer(e, DATE);
     assert.deepEqual(r.plan.financements.map((l) => [l.id, l.montant]), [['faf-fafcea', 735], ['nat-cpf', 800]]);
     assert.deepEqual(r.groupe.blocs.map((b) => b.plan.financements.map((l) => l.id)), [['faf-fafcea'], ['nat-cpf']]);
+  });
+});
+
+describe("plan d'un groupe : une aide chiffrée pour un profil et sans montant pour un autre n'est listée qu'une fois", () => {
+  test("deux profils de salariés AKTO, solde CPF de 800 € pour l'un, inconnu pour l'autre : le CPF est une ligne chiffrée, jamais aussi une aide sans montant", () => {
+    // Profil 1 : deux salariés au solde CPF de 800 € ; profil 2 : un salarié au solde inconnu. 4 200 € de formation par personne.
+    let e = etat({ ...SCENARIOS.akto, soldeCpf: 800, nombrePersonnes: 2 });
+    e = majProfil(ajouterProfil(e), 'profil-2', { contractType: 'cdi', ageBeneficiaire: 35, soldeCpf: null });
+    const r = calculer(e, DATE);
+    // À la main : 3 × 4 200 € = 12 600 € ; l'OPCO prend son plafond annuel, 10 000 € ; le CPF du profil 1 prend 2 × 800 € = 1 600 €.
+    assert.deepEqual(r.plan.financements.map((l) => [l.id, l.montant, l.personnes]), [['opco-pdc', 10000, 3], ['nat-cpf', 1600, 2]]);
+    // Le profil au solde inconnu garde le CPF sans montant dans son propre plan ; le plan du groupe ne le liste plus sans montant.
+    assert.deepEqual(r.groupe.blocs[1].plan.nonChiffrees.map((a) => a.id), ['nat-cpf-abondement-employeur', 'nat-cpf']);
+    assert.deepEqual(r.plan.nonChiffrees.map((a) => a.id), ['nat-cpf-abondement-employeur']);
+    const chiffrees = new Set(r.plan.financements.map((l) => l.id));
+    assert.deepEqual(r.plan.nonChiffrees.filter((a) => chiffrees.has(a.id)).map((a) => a.id), []);
+    // La carte du CPF reste celle d'une aide chiffrée : 800 € par personne au plus, ses deux profils éligibles.
+    const cpf = r.aidesEvaluees.find((a) => a.id === 'nat-cpf');
+    assert.equal(cpf?.montantEstime, 800);
+    assert.deepEqual(cpf?.profils?.map((p) => [p.profilId, p.nombre, p.statut, p.montantEstime]), [
+      ['principal', 2, 'eligible', 800],
+      ['profil-2', 1, 'eligible', null],
+    ]);
   });
 });
 

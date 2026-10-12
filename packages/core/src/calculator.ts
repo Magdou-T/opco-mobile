@@ -608,7 +608,8 @@ function calcAccommodation(opco: OpcoData, state: WizardState, branche: string |
     } else {
       details.push("Votre coût par nuit ne dépasse pas le plafond : l'estimation le retient en entier.");
     }
-    details.push(...detailDeGroupe(n, financeParPersonne, funded));
+    // « Financement pour », comme la pédagogie : sous le plafond, la ligne du coût du groupe porte les mêmes montants.
+    details.push(...detailDeGroupe(n, financeParPersonne, funded, 'Financement pour'));
     return line('hebergement', 'Hébergement', requested, funded, confidence, sourceUrl, `Plafond : ${avecUnite(ceiling, '€/nuit')}`, details);
   }
 

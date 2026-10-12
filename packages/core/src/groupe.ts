@@ -214,7 +214,10 @@ const plusFaible = (a: Confidence, b: Confidence): Confidence => (POIDS_FIABILIT
  * l'`ordreEmpilement` de l'aide de `aides` qui porte le même identifiant (il l'emporte sur la règle suivante, même pour un
  * identifiant qui commence par `opco-`), sinon 10 pour `opco-pdc` et 12 pour un dispositif de l'OPCO (`opco-` suivi de son
  * identifiant), sinon `ORDRE_EMPILEMENT_DEFAUT.autre` (85) pour un identifiant inconnu. Les options s'additionnent (montants
- * connus seulement, nul si aucun profil n'en a) ; les aides sans montant et les services gratuits sont réunis sans doublon.
+ * connus seulement, nul si aucun profil n'en a). Les aides sans montant et les services gratuits sont réunis sans doublon,
+ * puis privés de toute aide qui a une ligne dans le plan fusionné : une ligne chiffrée (financements, aides à l'employeur,
+ * rémunérations, avantages fiscaux et sociaux) ou une option, même selon dossier. Une aide chiffrée pour un profil et sans
+ * montant pour un autre (solde CPF connu pour l'un, inconnu pour l'autre) n'est donc listée qu'une fois, par sa ligne.
  */
 export function fusionnerPlans(
   plans: readonly PlanFinancement[],
@@ -250,25 +253,34 @@ export function fusionnerPlans(
     }
   }
 
-  const uniques = (listes: readonly AideEvaluee[][]): AideEvaluee[] => {
+  const financements = fusionnerLignes(plans.map((p) => p.financements)).sort(
+    (x, y) => ordreDe(x.id) - ordreDe(y.id) || y.montant - x.montant,
+  );
+  const aidesEmployeur = fusionnerLignes(plans.map((p) => p.aidesEmployeur));
+  const remunerations = fusionnerLignes(plans.map((p) => p.remunerations));
+  const avantagesFiscauxSociaux = fusionnerLignes(plans.map((p) => p.avantagesFiscauxSociaux));
+  const optionsFusionnees = [...options.values()];
+  // Identifiants qui ont une ligne dans le plan fusionné : ces aides ne sont plus listées sans montant.
+  const enLigne = new Set(
+    [...financements, ...aidesEmployeur, ...remunerations, ...avantagesFiscauxSociaux, ...optionsFusionnees].map((l) => l.id),
+  );
+  const uniquesSansLigne = (listes: readonly AideEvaluee[][]): AideEvaluee[] => {
     const vues = new Map<string, AideEvaluee>();
     for (const a of listes.flat()) if (!vues.has(a.id)) vues.set(a.id, a);
-    return [...vues.values()];
+    return [...vues.values()].filter((a) => !enLigne.has(a.id));
   };
 
   return {
     coutFormation: somme((p) => p.coutFormation),
-    financements: fusionnerLignes(plans.map((p) => p.financements)).sort(
-      (x, y) => ordreDe(x.id) - ordreDe(y.id) || y.montant - x.montant,
-    ),
+    financements,
     totalFinance: somme((p) => p.totalFinance),
     resteACharge: somme((p) => p.resteACharge),
-    aidesEmployeur: fusionnerLignes(plans.map((p) => p.aidesEmployeur)),
-    remunerations: fusionnerLignes(plans.map((p) => p.remunerations)),
-    avantagesFiscauxSociaux: fusionnerLignes(plans.map((p) => p.avantagesFiscauxSociaux)),
-    options: [...options.values()],
-    nonChiffrees: uniques(plans.map((p) => p.nonChiffrees)),
-    servicesGratuits: uniques(plans.map((p) => p.servicesGratuits)),
+    aidesEmployeur,
+    remunerations,
+    avantagesFiscauxSociaux,
+    options: optionsFusionnees,
+    nonChiffrees: uniquesSansLigne(plans.map((p) => p.nonChiffrees)),
+    servicesGratuits: uniquesSansLigne(plans.map((p) => p.servicesGratuits)),
   };
 }
 
