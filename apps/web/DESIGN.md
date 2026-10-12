@@ -500,7 +500,9 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
 - **Navigation** : `Button` secondary « Retour » (flèche seule sous 640 px, nom gardé) et primary « Suivant ». Tant que
   l'étape est incomplète, « Suivant » reste atteignable au clavier mais porte `aria-disabled`, grisé (texte-discret sur
   lin), et un texte dit ce qui manque (« Pour continuer, indiquez la région et la taille de l'entreprise. »), relié par
-  `aria-describedby`. Sous 1 024 px la barre colle au bas de l'écran (cibles de 44 px) ; au récapitulatif, qui se lit
+  `aria-describedby`. À l'étape Participants, un groupe de plusieurs profils dont l'un n'est pas un dirigeant exige
+  l'OPCO : s'il manque (un salarié ajouté à un groupe de dirigeants, après l'étape Entreprise), le texte dit
+  « l'OPCO (étape 2) ». Sous 1 024 px la barre colle au bas de l'écran (cibles de 44 px) ; au récapitulatif, qui se lit
   avant de calculer, elle reste en pied de carte et ses boutons s'empilent.
 - **Barre collante et focus** (WCAG 2.2, critère 2.4.11 ; crochet `hooks/useReserveBarreCollante.ts`, fonctions pures
   `lib/barreCollante.ts`) : tant que la barre colle, sa hauteur réelle, mesurée par un `ResizeObserver` (phrase d'aide
@@ -538,10 +540,13 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   une saisie refusée (vide, zéro, négatif, décimal, texte) laisse la valeur retenue, que le champ reprend en le
   quittant, et une saisie au-delà de 99 (ou de la place que laissent les autres profils) est ramenée à cette borne
   (`lireEffectif`). Chaque compteur porte sa propre zone `role="status"` (une par compteur, donc une par carte de
-  profil) qui dit le nombre retenu ; la zone d'annonce de l'étape, elle aussi `role="status"`, dit « Profil 2 ajouté.
+  profil) qui dit le nombre retenu et, dans une carte, nomme le profil (« Profil 2 : 4 personnes ») ; l'aide du
+  compteur est reliée au champ de saisie (`aria-describedby`) et ses deux signes, dessinés par des fonds, gardent leur
+  couleur en contraste forcé (`forced-colors:bg-[CanvasText]`) ; la zone d'annonce de l'étape, elle aussi `role="status"`, dit « Profil 2 ajouté.
   4 personnes au total. » ou « Profil 2 retiré. 3 personnes au total. ». Le focus va au titre du profil ajouté puis,
   au retrait, à celui du profil précédent (au bouton d'ajout quand il ne reste qu'un profil). À 6 profils ou
-  99 personnes, le bouton porte `aria-disabled` et une phrase dit la limite. Un profil supplémentaire démarre au statut
+  99 personnes, le bouton porte `aria-disabled` et une phrase dit la limite (« Le groupe compte déjà 6 profils, le
+  maximum. »). Un profil supplémentaire démarre au statut
   du profil principal et sa première question est ce statut ; en changer remet à vide les réponses que le nouveau
   statut ne pose pas (`champsDepuisProjet` ; l'âge, le diplôme et la RQTH sont gardés).
 - **Prix d'un groupe** (étape Formation) : à partir de deux personnes, « Le prix saisi est » propose « Par personne »
@@ -607,7 +612,8 @@ Les six étapes (`components/wizard/`) se composent avec les primitives et les c
   total, « 4 personnes · 2 profils », comme à l'étape Participants) puis une section « Profil N » par profil
   (personnes, statut, réponses) ; un groupe d'un seul profil garde la section « Participants » avec une ligne
   « Personnes » de plus. Dès deux personnes, la section Formation écrit le coût par personne, le coût pour le groupe et
-  le coût horaire par personne.
+  le coût horaire par personne, et la section Frais annexes commence par une ligne « Montants saisis » (« Pour une
+  personne, comptés pour chacune des 4 personnes »).
 - **Limite connue** : un dirigeant « assimilé salarié » dont l'entreprise relève d'un OPCO peut relever du plan de
   développement des compétences de sa branche (Afdas : « dirigeants salariés » ; Uniformation : « dirigeants bénévoles
   dans certaines branches ») ; le projet « Former le dirigeant » n'affiche pourtant ni plafond horaire ni budget OPCO,
@@ -682,7 +688,10 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   personnes du groupe qu'elles concernent. » (une option vaut pour les seuls profils qui l'ont). Les aides du catalogue
   sont fusionnées (`fusionnerAides` : meilleur statut, plus grand montant par personne, « jusqu'à … par personne ») ;
   une carte dont l'aide ne concerne pas tous les profils, ou pas au même statut, porte un bloc « Concerne »
-  (`concerneAAfficher` : « Profil 2 · Dirigeant artisan, 52 ans, 1 personne : éligible »). Tests :
+  (`concerneAAfficher` : « Profil 2 · Dirigeant artisan, 52 ans, 1 personne : éligible »). Une aide qui a une ligne dans
+  le plan du groupe (chiffrée ou option) n'est plus listée parmi les aides sans montant : chiffrée pour un profil et
+  sans montant pour un autre (solde CPF connu pour l'un, inconnu pour l'autre), elle n'apparaît qu'une fois, par sa
+  ligne (« pour 2 personnes »). Tests :
   `tests/resultats-groupe.test.ts` (identité avec l'ancien calcul pour une personne, 1 000 groupes tirés, graine 17).
 - **Détail par profil** (`ParProfil`, `colonnesParProfil`, `lignesParProfil`) : avec plusieurs profils, une section `h2`
   « Détail par profil » suit les cartes du plan. L'état du plan du groupe (`etatEnTete`) en gouverne les colonnes, parce
@@ -787,7 +796,7 @@ décimales, tout autre avec deux, « 1 500,50 € », jugé au centime près), y
   Fiscalité (même titre d'une simulation à l'autre) ; nom propre commun pour Région, Département, fonds d'assurance
   formation, branche et autres (« Région Occitanie », « FAFCEA », « Action Logement »). Carte d'aide : étiquette
   Éligible (turquoise) ou À vérifier (or, texte foncé), montant en gros (« jusqu'à », « Montant selon dossier »,
-  « Aucun montant estimé pour ce profil »), règle de calcul, description, points à confirmer, cumul ; détail dépliable
+  « Aucun montant estimé pour ce profil », « … pour ce groupe » sur la carte d'un groupe de plusieurs personnes), règle de calcul, description, points à confirmer, cumul ; détail dépliable
   (chevron, `aria-expanded`) : conditions, démarches numérotées, « Faire la demande », pages officielles citées (titre
   complet) ; pied : fiabilité, date de vérification, un lien par site source (`sourcesDeLAide` : le catalogue cite
   souvent dix pages d'un même site). Un identifiant technique d'aide cité par le catalogue (« nat-cpf ») devient le
