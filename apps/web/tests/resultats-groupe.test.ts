@@ -1135,8 +1135,9 @@ describe("bloc « Concerne » d'une carte d'aide (concerneAAfficher)", () => {
     );
   });
 
-  // Les trois tests suivants s'ajoutent à ceux de la fiche : sans eux, des mutants survivaient (toutes les cartes de la fiche
-  // sont « éligible », et aucune n'a plus de profils concernés que le groupe n'en compte).
+  // Les trois tests suivants fixent ce que les cas ci-dessus laissent libre : le statut comparé est celui de la carte (une aide
+  // « à vérifier » pour tous ses profils n'a rien à préciser), le nombre de profils concernés se compare à celui du groupe (s'il
+  // le dépasse, le bloc parle plutôt que de se taire), et le bloc se lit sur des aides calculées par le moteur.
   test("le statut comparé est celui de la carte : une aide « à vérifier » pour tous les profils n'a rien à préciser", () => {
     assert.deepEqual(
       concerneAAfficher({ statut: 'a_verifier', profils: [vue('principal', 3, 'a_verifier'), vue('profil-2', 1, 'a_verifier')] }, 2, libelles),

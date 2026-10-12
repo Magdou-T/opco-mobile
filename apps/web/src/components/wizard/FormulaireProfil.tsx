@@ -93,7 +93,7 @@ export function FormulaireProfil({ champs, nombre, regionEntreprise, maj, inconn
       )}
 
       {changerProjet && (
-        <ChoiceGroup label="Statut de ces personnes" required>
+        <ChoiceGroup label={nombre === 1 ? 'Statut de cette personne' : 'Statut de ces personnes'} required>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {(Object.keys(STATUT_DU_PROFIL) as ProjetType[]).map((p) => (
               <ChoiceButton key={p} label={STATUT_DU_PROFIL[p]} selected={projet === p} onClick={() => changerProjet(p)} compact />

@@ -68,13 +68,20 @@ export function manquantsDuProfil(champs: ChampsProfil): string[] {
   return manquants;
 }
 
+/** L'OPCO manque : un profil au moins n'est pas un dirigeant, et aucun OPCO n'est ni choisi ni détecté. */
+const opcoManquant = (state: WizardState): boolean =>
+  opcoRequisPourLeGroupe(state) && !(state.selectedOpcoSlug || state.detectedOpcoSlug);
+
 /**
  * Ce qui manque pour passer à l'étape suivante, dans l'ordre des champs à l'écran (vide : l'étape est complète).
  * Une seule source pour l'activation du bouton « Suivant » et pour le texte qui dit ce qui manque.
  * - Projet : le projet.
  * - Entreprise : l'OPCO (choisi ou détecté ; facultatif tant que tous les profils sont des dirigeants), la région, la taille.
  * - Participants : ce que `manquantsDuProfil` demande à chaque profil ; avec plusieurs profils, chaque manque nomme son
- *   profil (« le type de contrat (profil 2) »), avec un seul les textes restent ceux d'une personne seule.
+ *   profil (« le type de contrat (profil 2) »), avec un seul les textes restent ceux d'une personne seule. Avec plusieurs
+ *   profils, « l'OPCO (étape 2) » s'ajoute, une fois et après les manques des profils, quand un profil ajouté ou changé
+ *   ici le rend requis sans qu'aucun ne soit choisi ni détecté : l'étape Entreprise, déjà passée, ne l'a pas demandé
+ *   (un groupe de dirigeants). Un seul profil a choisi son projet à l'étape 1 : l'étape Entreprise a exigé l'OPCO.
  * - Formation : le type, le mode, la durée et le coût total (durée et coût supérieurs à zéro).
  * - Frais et récapitulatif : rien d'obligatoire.
  */
@@ -85,7 +92,7 @@ export function champsManquants(etape: EtapeSite, state: WizardState): string[] 
       if (state.projetType == null) manquants.push('votre projet');
       break;
     case 'identification':
-      if (opcoRequisPourLeGroupe(state) && !(state.selectedOpcoSlug || state.detectedOpcoSlug)) manquants.push("l'OPCO");
+      if (opcoManquant(state)) manquants.push("l'OPCO");
       if (state.regionCode == null) manquants.push('la région');
       if (state.companySize == null) manquants.push("la taille de l'entreprise");
       break;
@@ -95,6 +102,8 @@ export function champsManquants(etape: EtapeSite, state: WizardState): string[] 
         const manques = manquantsDuProfil(profil.champs);
         manquants.push(...(profils.length > 1 ? manques.map((m) => `${m} (profil ${i + 1})`) : manques));
       });
+      // Après les champs de l'écran : ce manque se règle en revenant à l'étape 2, le texte le dit.
+      if (profils.length > 1 && opcoManquant(state)) manquants.push("l'OPCO (étape 2)");
       break;
     }
     case 'formation':

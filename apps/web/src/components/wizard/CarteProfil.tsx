@@ -82,7 +82,13 @@ export function CarteProfil({
             </p>
           )}
         </div>
-        <CompteurPersonnes label="Personnes de ce profil" valeur={profil.nombre} max={max} onChange={onNombre} />
+        <CompteurPersonnes
+          label="Personnes de ce profil"
+          nom={`Profil ${rang}`}
+          valeur={profil.nombre}
+          max={max}
+          onChange={onNombre}
+        />
       </div>
 
       <div className="flex flex-wrap gap-x-5 border-t border-filet px-4 py-1 sm:px-5">

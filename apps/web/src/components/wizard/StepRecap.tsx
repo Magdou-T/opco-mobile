@@ -175,7 +175,8 @@ function lignesDuProfil(
  * Étape 6 : tout ce qui a été saisi, section par section, avant de lancer la recherche des financements. Une réponse
  * « Je ne sais pas » est écrite telle quelle ; « Non renseigné » reste réservé aux questions sans réponse. Un groupe de
  * plusieurs profils a une section « Participants » (le total) puis une section par profil ; le prix de la formation s'écrit
- * par personne et pour le groupe.
+ * par personne et pour le groupe. Dès deux personnes, la section « Frais annexes » commence par « Montants saisis » : ceux
+ * d'une personne, comptés pour chacune.
  */
 export function StepRecap({ state, onEdit, reponsesInconnues, inconnuesProfils }: Props) {
   const projet = state.projetType ?? 'formation_salarie';
@@ -290,6 +291,10 @@ export function StepRecap({ state, onEdit, reponsesInconnues, inconnuesProfils }
   const joursEstimes = state.durationHours ? Math.ceil(state.durationHours / 7) : 0;
   const avecFrais = state.needsTransport || state.needsAccommodation || state.needsMeals;
   const frais: Ligne[] = [
+    // Un groupe : les frais saisis sont ceux d'une personne, le moteur les compte pour chacune (étape Frais).
+    ...(groupe
+      ? ([['Montants saisis', `Pour une personne, comptés pour chacune des ${avecUnite(personnes, 'personnes')}`]] as Ligne[])
+      : []),
     ...(state.needsTransport
       ? ([
           ['Transport', state.transportMode ? TRANSPORT_LABELS[state.transportMode] : 'Oui'],

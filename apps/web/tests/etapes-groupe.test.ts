@@ -17,6 +17,7 @@ describe("champs manquants d'un groupe (étape Participants)", () => {
   test('plusieurs profils : chaque manque nomme son profil', () => {
     const e = etat({
       contractType: null,
+      selectedOpcoSlug: 'akto',
       autresProfils: [extra('profil-2', { projetType: 'formation_dirigeant' }), extra('profil-3', { projetType: 'alternance' })],
     });
     assert.deepEqual(champsManquants('situation', e), [
@@ -29,8 +30,9 @@ describe("champs manquants d'un groupe (étape Participants)", () => {
 
   test('un profil supplémentaire incomplet empêche de continuer, un profil complet non', () => {
     const complet = extra('profil-2', { contractType: 'cdd' });
-    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi', autresProfils: [complet] })), []);
-    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi', autresProfils: [extra('profil-2')] })), [
+    const avecOpco = { contractType: 'cdi', selectedOpcoSlug: 'akto' } as const;
+    assert.deepEqual(champsManquants('situation', etat({ ...avecOpco, autresProfils: [complet] })), []);
+    assert.deepEqual(champsManquants('situation', etat({ ...avecOpco, autresProfils: [extra('profil-2')] })), [
       'le type de contrat (profil 2)',
     ]);
   });
@@ -116,6 +118,7 @@ describe("champs manquants d'un groupe : numéros de profil, effectifs, OPCO", (
     const complet = (id: string) => extra(id, { contractType: 'cdd' });
     const e = etat({
       contractType: 'cdi',
+      selectedOpcoSlug: 'akto',
       autresProfils: [complet('profil-4'), complet('profil-2'), extra('profil-7'), complet('profil-3'), extra('profil-5')],
     });
     assert.deepEqual(champsManquants('situation', e), ['le type de contrat (profil 4)', 'le type de contrat (profil 6)']);
@@ -136,5 +139,59 @@ describe("champs manquants d'un groupe : numéros de profil, effectifs, OPCO", (
     // Choisi ou détecté, l'OPCO suffit.
     assert.deepEqual(identification({ ...avec('formation_dirigeant', 'alternance'), selectedOpcoSlug: 'akto' }), []);
     assert.deepEqual(identification({ ...avec('formation_dirigeant', 'alternance'), detectedOpcoSlug: 'akto' }), []);
+  });
+});
+
+describe("OPCO à l'étape Participants : un profil ajouté après l'étape Entreprise peut le rendre requis", () => {
+  /** Deux dirigeants complets, sans OPCO : l'étape Entreprise les a laissés passer. */
+  const dirigeants = etat({
+    projetType: 'formation_dirigeant',
+    statutDirigeant: 'artisan',
+    autresProfils: [extra('profil-2', { projetType: 'formation_dirigeant', statutDirigeant: 'commercant' })],
+  });
+  const salarie = (id: string, maj: Parameters<typeof extra>[1] = {}) => extra(id, { projetType: 'formation_salarie', contractType: 'cdi', ...maj });
+  /** Les deux dirigeants, suivis de ces profils. */
+  const avecEnPlus = (...autres: ReturnType<typeof extra>[]): WizardState => ({ ...dirigeants, autresProfils: [...dirigeants.autresProfils, ...autres] });
+
+  test("un groupe de dirigeants sans OPCO : rien ne manque, l'OPCO reste facultatif", () => {
+    assert.deepEqual(champsManquants('situation', dirigeants), []);
+  });
+
+  test("un salarié ajouté au groupe de dirigeants sans OPCO : « l'OPCO (étape 2) » manque, une seule fois, après les manques des profils", () => {
+    assert.deepEqual(champsManquants('situation', avecEnPlus(salarie('profil-3'))), ["l'OPCO (étape 2)"]);
+    // Plusieurs profils qui le demandent (salarié, reconversion, alternance) : le manque reste unique.
+    const plusieurs = avecEnPlus(
+      salarie('profil-3'),
+      salarie('profil-4', { projetType: 'reconversion_salarie', anciennete_mois: 12 }),
+      extra('profil-5', { projetType: 'alternance', typeAlternance: 'apprentissage', ageBeneficiaire: 19 }),
+    );
+    assert.deepEqual(champsManquants('situation', plusieurs), ["l'OPCO (étape 2)"]);
+    // Un profil encore incomplet : ses manques d'abord, dans l'ordre de l'écran, puis l'OPCO, à reprendre à l'étape 2.
+    assert.deepEqual(champsManquants('situation', avecEnPlus(salarie('profil-3', { contractType: null }))), [
+      'le type de contrat (profil 3)',
+      "l'OPCO (étape 2)",
+    ]);
+  });
+
+  test('le même groupe avec un OPCO choisi, puis détecté : plus rien ne manque', () => {
+    const groupe = avecEnPlus(salarie('profil-3'));
+    assert.deepEqual(champsManquants('situation', { ...groupe, selectedOpcoSlug: 'akto' }), []);
+    assert.deepEqual(champsManquants('situation', { ...groupe, detectedOpcoSlug: 'akto' }), []);
+  });
+
+  test("un groupe de salariés sans OPCO : le manque apparaît aussi ; un seul profil garde les textes d'une personne seule", () => {
+    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi', autresProfils: [extra('profil-2', { contractType: 'cdd' })] })), [
+      "l'OPCO (étape 2)",
+    ]);
+    // Un seul profil, d'une ou de quatre personnes : son projet a été choisi à l'étape 1 et l'étape Entreprise a exigé l'OPCO.
+    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi' })), []);
+    assert.deepEqual(champsManquants('situation', etat({ contractType: 'cdi', nombrePersonnes: 4 })), []);
+  });
+
+  test("l'OPCO ne manque qu'aux étapes Entreprise et Participants", () => {
+    const groupe = avecEnPlus(salarie('profil-3'));
+    for (const etape of ['projet', 'formation', 'frais', 'recap'] as const) {
+      assert.equal(champsManquants(etape, groupe).some((m) => m.includes('OPCO')), false, etape);
+    }
   });
 });

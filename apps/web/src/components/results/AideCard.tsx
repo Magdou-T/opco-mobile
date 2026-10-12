@@ -33,7 +33,10 @@ export function AideCard({
   nomParId: ReadonlyMap<string, string>;
   /** Sigles à définir dans le titre (`siglesDesTitres` : une seule carte par écran pour chaque sigle). */
   sigles?: Readonly<Record<string, string>>;
-  /** Le groupe compte plusieurs personnes : le montant de l'aide est dit « par personne ». */
+  /**
+   * Le groupe compte plusieurs personnes : le montant de l'aide est dit « par personne », et une aide à 0 € dit « Aucun
+   * montant estimé pour ce groupe ».
+   */
   parPersonne?: boolean;
   /** Bloc « Concerne » (`concerneAAfficher`) : un profil par ligne ; vide, pas de bloc. */
   concerne?: readonly string[];
@@ -223,7 +226,11 @@ function MontantDeLAide({ montant, parPersonne }: { montant: MontantAffiche; par
   }
   return (
     <p className="shrink-0 text-sm leading-snug font-semibold text-texte-doux sm:max-w-[11rem] sm:text-right">
-      {montant.genre === 'selon_dossier' ? 'Montant selon dossier' : 'Aucun montant estimé pour ce profil'}
+      {montant.genre === 'selon_dossier'
+        ? 'Montant selon dossier'
+        : parPersonne
+          ? 'Aucun montant estimé pour ce groupe'
+          : 'Aucun montant estimé pour ce profil'}
     </p>
   );
 }

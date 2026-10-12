@@ -76,9 +76,9 @@ export function StepSituation({ state, reponsesInconnues, inconnuesProfils, grou
 
   const limite =
     profils.length >= MAX_PROFILS
-      ? `Vous avez atteint les ${MAX_PROFILS}${INSECABLE}profils au plus.`
+      ? `Le groupe compte déjà ${MAX_PROFILS}${INSECABLE}profils, le maximum.`
       : total >= MAX_PERSONNES
-        ? `Vous avez atteint les ${MAX_PERSONNES}${INSECABLE}personnes au plus.`
+        ? `Le groupe compte déjà ${MAX_PERSONNES}${INSECABLE}personnes, le maximum.`
         : null;
 
   const ajouter = () => {
