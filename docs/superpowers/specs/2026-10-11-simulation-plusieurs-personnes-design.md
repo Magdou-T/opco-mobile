@@ -219,7 +219,7 @@ La liste fusionnée est triée comme `evaluerAides` (statut, montant décroissan
 | 3. **Participants** (ex-« Bénéficiaire ») | Les questions actuelles du statut, plus un compteur « Nombre de personnes » (1) et le bouton « Ajouter un profil différent ». | Une carte par profil (statut, compteur, questions, retrait) et le total « 4 personnes · 2 profils ». |
 | 4. Formation | Inchangée. | Bascule « Prix saisi : par personne / pour le groupe » ; le libellé du coût la suit ; une ligne dit le prix de l'autre mode. |
 | 5. Frais | Inchangée. | Aide sous le titre : montants d'une personne, comptés pour chacune. |
-| 6. Récapitulatif | Inchangé (section « Participants » au lieu de « Bénéficiaire »). | Une sous-section par profil ; le prix est écrit par personne et pour le groupe. |
+| 6. Récapitulatif | Inchangé (section « Participants » au lieu de « Bénéficiaire »). | Une sous-section par profil ; le prix est écrit par personne et pour le groupe ; la section Frais annexes commence par une ligne « Montants saisis » (« Pour une personne, comptés pour chacune des 4 personnes »). |
 
 ### 7.2 Étape Participants
 
@@ -230,7 +230,8 @@ La liste fusionnée est triée comme `evaluerAides` (statut, montant décroissan
 - **Solde CPF** : quand un profil compte plusieurs personnes, l'aide du champ dit « Même solde retenu pour chaque personne de ce profil : prenez le plus bas, ou créez un profil par solde. »
 - **Annonces** : une zone `aria-live="polite"` dit « Profil 2 ajouté. 4 personnes au total. » ou « Profil 2 retiré. 3 personnes au total. » ; au retrait, le focus passe au titre du profil précédent.
 - **« Je ne sais pas »** : chaque profil garde ses propres réponses (`reponsesInconnues` par profil).
-- **Champs obligatoires** (`champsManquants`) : chaque profil doit répondre aux questions obligatoires de son statut, comme aujourd'hui. Avec plusieurs profils, chaque manque nomme son profil : « le type de contrat (profil 2) ». Avec un seul profil, les textes d'aujourd'hui.
+- **Champs obligatoires** (`champsManquants`) : chaque profil doit répondre aux questions obligatoires de son statut, comme aujourd'hui. Avec plusieurs profils, chaque manque nomme son profil : « le type de contrat (profil 2) ». Avec un seul profil, les textes d'aujourd'hui. Avec plusieurs profils, « l'OPCO (étape 2) » s'ajoute, une fois et après les manques des profils, quand un profil ajouté ou changé ici rend l'OPCO requis sans qu'aucun ne soit choisi ni détecté (un salarié ajouté à un groupe de dirigeants, après l'étape Entreprise) : « Suivant » reste bloqué et le texte dit de revenir à l'étape 2.
+- **Zones d'annonce des compteurs** : chaque compteur porte sa propre zone `role="status"` qui dit le nombre retenu ; dans une carte de profil elle nomme le profil (« Profil 2 : 4 personnes »).
 
 ### 7.3 Étape Formation
 
@@ -315,6 +316,8 @@ Après construction et service de l'export statique : parcours à une personne i
 | R5 | Poids du lot initial du simulateur et du lot de l'écran de résultats. | Mesure avant et après, selon la méthode du tableau « Vérifications » du README (JavaScript chargé d'emblée par `/simulateur/`, gzip niveau 9 ; lot du catalogue) ; le catalogue d'aides ne rejoint pas le lot initial. |
 | R6 | Écran de résultats plus long pour un groupe de plusieurs profils. | Cartes repliables déjà en place pour les aides ; tableau « Par profil » compact ; vérification à 320 px. |
 | R7 | La formation n'est pas la même pour tous les participants. | Hors périmètre (D2) : une simulation par formation. |
+| R8 | Une aide chiffrée pour un profil et sans montant pour un autre (solde CPF connu pour l'un, inconnu pour l'autre) : l'écran la liste une fois, par sa ligne chiffrée (« pour 2 personnes » face à un groupe de 3) ; rien à l'écran ne dit que le solde manque pour un profil (le bloc « Concerne » ne parle pas quand tous les profils sont éligibles). | Le récapitulatif écrit « Solde CPF : Non renseigné » pour chaque profil ; l'aide du champ conseille un profil par solde. |
+| R9 | Une même aide peut figurer à la fois dans les financements et dans les options (l'empilement glouton ne tranche pas pareil pour deux profils : aide « au choix » qui partage le solde CPF). Rare. | Aucun montant n'est faux : la ligne dit « pour N personnes » et la carte des options dit que ses montants valent pour les personnes qu'elles concernent. |
 
 Aucune décision de conception ne reste ouverte. Seule la régénération des documents de `docs/specifications/` attend l'accord de l'utilisateur (section 11). L'ordre des travaux est celui du plan qui suit cette spécification.
 
