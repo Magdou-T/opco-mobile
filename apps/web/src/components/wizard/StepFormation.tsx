@@ -8,14 +8,17 @@ import {
   TRAINING_TYPE_LABELS,
   getEmbeddedOpcoBySlug,
   moisDepuisSaisie,
+  nombreDePersonnes,
   saisieDepuisMois,
 } from '@opco/core';
 import type { CertificationType, NiveauCertification, TrainingMode, TrainingType, WizardState } from '@opco/core';
 import { Callout } from '@/components/ui/Callout';
 import { Icon } from '@/components/ui/Icon';
 import { ChoiceButton, ChoiceGroup, NumberField, OuiNonChoix, SelectField, TextField } from '@/components/ui/forms';
-import { ouvreBudgetOpco } from '@/lib/entreprise';
+import type { ActionsDuGroupe } from '@/hooks/useWizard';
 import { de, formatEuro } from '@/lib/format';
+import { aideDuPrix, auCentime, ouvreBudgetPourLeGroupe } from '@/lib/groupe';
+import { INSECABLE } from '@/lib/insecable';
 import {
   depassePlafondHoraire,
   erreurDuMoisDeDebut,
@@ -28,10 +31,13 @@ import { EnTeteEtape } from './EnTeteEtape';
 interface Props {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
-  updateFormationCosts: (total: number | null, hours: number | null) => void;
+  /** Prix et durée de la formation ; `pourLeGroupe` : `saisie` est le prix de tout le groupe (à partir de deux personnes). */
+  updateFormationCosts: (saisie: number | null, hours: number | null, pourLeGroupe?: boolean) => void;
   /** Questions auxquelles l'utilisateur a répondu « Je ne sais pas » ou « Ne sait pas » (la valeur reste null). */
   reponsesInconnues: ReadonlySet<QuestionAvecInconnu>;
   repondre: Repondre;
+  /** Bascule entre le prix par personne et le prix du groupe, qui garde le coût réel. */
+  groupe: Pick<ActionsDuGroupe, 'basculerModePrix'>;
 }
 
 const parHeure = (montant: number): string => `${formatEuro(montant)}/h`;
@@ -49,18 +55,41 @@ const OPTIONS_NIVEAU = [
   { valeur: '', libelle: 'Ne sait pas' },
 ];
 
-/** Étape 4 : la formation. Type, mode, durée et coût sont obligatoires ; le reste affine la recherche des aides. */
-export function StepFormation({ state, updateState, updateFormationCosts, reponsesInconnues, repondre }: Props) {
+/**
+ * Étape 4 : la formation. Type, mode, durée et coût sont obligatoires ; le reste affine la recherche des aides. À partir de
+ * deux personnes, le prix se saisit par personne ou pour le groupe (le coût réel est gardé quand on change de mode). Le coût
+ * horaire, le plafond indicatif et l'avertissement de dépassement sont ceux d'UNE personne.
+ */
+export function StepFormation({ state, updateState, updateFormationCosts, reponsesInconnues, repondre, groupe }: Props) {
   // Saisie du mois de début gardée telle quelle : l'état ne reçoit qu'un mois valide (AAAA-MM), sinon null. Comme les
   // autres champs, une saisie refusée (« 13/2026 », « 2027-03 ») devient une erreur quand on quitte le champ.
   const [saisieDebut, setSaisieDebut] = useState(() => saisieDepuisMois(state.dateDebutFormation));
   const [debutQuitte, setDebutQuitte] = useState(false);
   const erreurDebut = debutQuitte ? erreurDuMoisDeDebut(saisieDebut) : null;
 
-  // Plafond horaire indicatif du barème appliqué, pour les projets qui passent par le budget de l'OPCO.
+  // Prix par personne ou pour le groupe. Le nombre de personnes se règle à l'étape Participants, qui démonte celle-ci : il ne
+  // change pas pendant l'étape. À l'ouverture, « pour le groupe » si un prix de groupe est déjà saisi ; une bascule sans prix
+  // saisi n'écrit rien dans l'état, le choix reste donc ici.
+  const personnes = nombreDePersonnes(state);
+  const plusieurs = personnes >= 2;
+  const [groupeChoisi, setGroupeChoisi] = useState(() => state.prixDuGroupe != null);
+  const pourLeGroupe = plusieurs && groupeChoisi;
+  const prixSaisi = pourLeGroupe ? state.prixDuGroupe : state.pedagogyCostTotal;
+  const libellePrix = pourLeGroupe
+    ? 'Coût total HT pour le groupe (€)'
+    : plusieurs
+      ? 'Coût total HT par personne (€)'
+      : 'Coût total HT (€)';
+  const choisirMode = (versGroupe: boolean) => {
+    if (versGroupe === pourLeGroupe) return;
+    setGroupeChoisi(versGroupe);
+    groupe.basculerModePrix(versGroupe);
+  };
+
+  // Plafond horaire indicatif du barème appliqué, pour les projets qui passent par le budget de l'OPCO (un profil au moins).
   const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
   const opco = slug ? getEmbeddedOpcoBySlug(slug) : undefined;
-  const plafond = ouvreBudgetOpco(state.projetType) ? plafondHoraireIndicatif(opco, state) : null;
+  const plafond = ouvreBudgetPourLeGroupe(state) ? plafondHoraireIndicatif(opco, state) : null;
   const coutHoraire = state.pedagogyCostPerHour != null && state.pedagogyCostPerHour > 0 ? state.pedagogyCostPerHour : null;
   const enveloppeEpuisee = plafond === 0;
   const depasse = depassePlafondHoraire(coutHoraire, plafond);
@@ -151,25 +180,38 @@ export function StepFormation({ state, updateState, updateFormationCosts, repons
           </div>
         </ChoiceGroup>
 
+        {plusieurs && (
+          <ChoiceGroup
+            label="Le prix saisi est"
+            aide={`Le groupe compte ${personnes}${INSECABLE}personnes. Passer d'un mode à l'autre convertit le prix, sans le ressaisir.`}
+          >
+            <div className="grid gap-2 sm:grid-cols-2">
+              <ChoiceButton label="Par personne" selected={!pourLeGroupe} onClick={() => choisirMode(false)} compact />
+              <ChoiceButton label="Pour le groupe" selected={pourLeGroupe} onClick={() => choisirMode(true)} compact />
+            </div>
+          </ChoiceGroup>
+        )}
+
         <div className="grid gap-x-5 gap-y-7 sm:grid-cols-2">
           <NumberField
             label="Durée (en heures)"
             required
             value={state.durationHours}
-            onChange={(heures) => updateFormationCosts(state.pedagogyCostTotal, heures)}
+            onChange={(heures) => updateFormationCosts(prixSaisi, heures, pourLeGroupe)}
             min={1}
             placeholder="Ex&nbsp;: 140"
             largeur="pleine"
           />
           <NumberField
-            label="Coût total HT (€)"
+            label={libellePrix}
             required
             decimal
             euros
-            value={state.pedagogyCostTotal}
-            onChange={(total) => updateFormationCosts(total, state.durationHours)}
+            value={auCentime(prixSaisi)}
+            onChange={(saisie) => updateFormationCosts(saisie, state.durationHours, pourLeGroupe)}
             min={1}
             placeholder="Ex&nbsp;: 5600"
+            helper={aideDuPrix(personnes, state.pedagogyCostTotal, pourLeGroupe) ?? undefined}
             largeur="pleine"
           />
         </div>
@@ -180,20 +222,20 @@ export function StepFormation({ state, updateState, updateFormationCosts, repons
               <p className="flex items-center gap-2.5 text-sm text-texte-doux">
                 <Icon name="calculatrice" className="size-5 shrink-0 text-turquoise-deep" />
                 <span>
-                  Coût horaire calculé&nbsp;:{' '}
+                  Coût horaire calculé{plusieurs ? ', par personne' : ''}&nbsp;:{' '}
                   <span className="amount text-lg text-texte">{parHeure(coutHoraire)}</span>
                 </span>
               </p>
               {plafond != null && plafond > 0 && opco && (
                 <p className="text-sm text-texte-doux">
-                  Plafond indicatif {de(opco.name)}&nbsp;:{' '}
+                  Plafond indicatif {de(opco.name)}{plusieurs ? ', par personne' : ''}&nbsp;:{' '}
                   <span className="font-semibold text-texte">{parHeure(plafond)}</span>
                 </p>
               )}
             </div>
             {depasse && opco && plafond != null && (
               <Callout tone="avertissement" titre="Coût horaire au-dessus du plafond indicatif">
-                {`Le coût horaire (${parHeure(coutHoraire)}) dépasse le plafond indicatif ${de(opco.name)} (${parHeure(plafond)}). Le surplus sera à votre charge.`}
+                {`Le coût horaire${plusieurs ? ' par personne' : ''} (${parHeure(coutHoraire)}) dépasse le plafond indicatif ${de(opco.name)} (${parHeure(plafond)}). Le surplus sera à votre charge.`}
               </Callout>
             )}
             {enveloppeEpuisee && opco && (

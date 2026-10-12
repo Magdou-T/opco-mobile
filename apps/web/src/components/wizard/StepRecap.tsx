@@ -7,6 +7,7 @@ import {
   COMPANY_SIZE_LABELS,
   CONTRACT_TYPE_LABELS,
   EMBEDDED_OPCO_LIST,
+  ID_PROFIL_PRINCIPAL,
   NIVEAU_CERTIFICATION_LABELS,
   NIVEAU_DIPLOME_LABELS,
   PROJET_LABELS,
@@ -17,19 +18,23 @@ import {
   TRAINING_TYPE_LABELS,
   TYPE_ALTERNANCE_LABELS,
   getEmbeddedOpcoBySlug,
+  nombreDePersonnes,
+  profilsDuGroupe,
   resolveVarianteBranche,
   saisieDepuisMois,
 } from '@opco/core';
-import type { WizardState } from '@opco/core';
+import type { ChampsProfil, CodeRegion, WizardState } from '@opco/core';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import type { EtapeSite } from '@/lib/etapes';
-import { ouvreBudgetOpco } from '@/lib/entreprise';
 import { formatEuro, nombreEtUnite } from '@/lib/format';
+import { coutDuGroupe, ouvreBudgetPourLeGroupe } from '@/lib/groupe';
+import type { InconnuesParProfil } from '@/lib/groupe';
 import { INSECABLE } from '@/lib/insecable';
 import type { QuestionAvecInconnu } from '@/lib/parcours';
+import { STATUT_DU_PROFIL } from '@/lib/profils';
 import { numeroLisible } from '@/lib/recherche';
 import { EnTeteEtape } from './EnTeteEtape';
 import { ICONES_PROJET, TRANSPORT_LABELS } from './libelles';
@@ -39,6 +44,8 @@ interface Props {
   onEdit: (step: EtapeSite) => void;
   /** Questions auxquelles l'utilisateur a répondu « Je ne sais pas » ou « Ne sait pas » : écrites telles quelles. */
   reponsesInconnues: ReadonlySet<QuestionAvecInconnu>;
+  /** Les mêmes réponses pour chaque profil supplémentaire. */
+  inconnuesProfils: InconnuesParProfil;
 }
 
 /** Ligne du récapitulatif : une valeur nulle s'affiche « Non renseigné ». */
@@ -47,6 +54,14 @@ type Ligne = [libelle: string, valeur: ReactNode | null | undefined];
 /** Nombre et unité liés par une espace insécable (« 35 h », « 1 500 h », « 24 mois ») : `nombreEtUnite`, comme l'en-tête des résultats. */
 const avecUnite = nombreEtUnite;
 const pluriel = (n: number, un: string, plusieurs: string): string => avecUnite(n, n > 1 ? plusieurs : un);
+
+const AUCUNE_REPONSE: ReadonlySet<QuestionAvecInconnu> = new Set();
+
+/** « Oui », « Non » ou « Je ne sais pas » (réponse retenue) ; null quand la question n'a pas de réponse. */
+const reponseOuiNon =
+  (inconnues: ReadonlySet<QuestionAvecInconnu>) =>
+  (question: QuestionAvecInconnu, valeur: boolean | null): string | null =>
+    valeur == null ? (inconnues.has(question) ? 'Je ne sais pas' : null) : valeur ? 'Oui' : 'Non';
 
 /** Section du récapitulatif : en-tête iconifié, bouton « Modifier » qui rouvre l'étape, lignes libellé / valeur. */
 function Section({
@@ -98,17 +113,81 @@ function Section({
 }
 
 /**
- * Étape 6 : tout ce qui a été saisi, section par section, avant de lancer la recherche des financements. Une réponse
- * « Je ne sais pas » est écrite telle quelle ; « Non renseigné » reste réservé aux questions sans réponse.
+ * Réponses d'un profil, ligne par ligne, selon son statut. `inconnues` : les questions auxquelles le profil a répondu « Je
+ * ne sais pas » ; `regionEntreprise` : région de résidence par défaut (celle de l'entreprise, comme le moteur).
  */
-export function StepRecap({ state, onEdit, reponsesInconnues }: Props) {
+function lignesDuProfil(
+  champs: ChampsProfil,
+  inconnues: ReadonlySet<QuestionAvecInconnu>,
+  regionEntreprise: CodeRegion | null,
+): Ligne[] {
+  const statut = STATUT_PAR_PROJET[champs.projetType ?? 'formation_salarie'];
+  const ouiNon = reponseOuiNon(inconnues);
+  const regionResidence: Ligne = [
+    'Région de résidence',
+    champs.regionBeneficiaireCode
+      ? REGIONS[champs.regionBeneficiaireCode]
+      : regionEntreprise
+        ? `${REGIONS[regionEntreprise]} (celle de l'entreprise)`
+        : null,
+  ];
+  const communes: Ligne[] = [
+    ['Âge', champs.ageBeneficiaire != null ? pluriel(champs.ageBeneficiaire, 'an', 'ans') : null],
+    ['Diplôme le plus élevé', champs.niveauDiplome ? NIVEAU_DIPLOME_LABELS[champs.niveauDiplome] : null],
+    ['Reconnaissance de travailleur handicapé', champs.isHandicap ? 'Oui' : 'Non'],
+  ];
+  const soldeCpf: Ligne = ['Solde CPF', champs.soldeCpf != null ? formatEuro(champs.soldeCpf) : null];
+  switch (statut) {
+    case 'salarie':
+      return [
+        [
+          'Contrat',
+          champs.contractType && champs.contractType !== 'alternance' ? CONTRACT_TYPE_LABELS[champs.contractType] : null,
+        ],
+        ['Ancienneté', champs.anciennete_mois != null ? avecUnite(champs.anciennete_mois, 'mois') : null],
+        ...communes,
+        soldeCpf,
+      ];
+    case 'demandeur_emploi':
+      return [
+        ['Inscription à France Travail', ouiNon('inscritFranceTravail', champs.inscritFranceTravail)],
+        regionResidence,
+        ...communes,
+      ];
+    case 'alternant':
+      return [
+        ["Type de contrat d'alternance", champs.typeAlternance ? TYPE_ALTERNANCE_LABELS[champs.typeAlternance] : null],
+        ['Inscription à France Travail', ouiNon('inscritFranceTravail', champs.inscritFranceTravail)],
+        regionResidence,
+        ...communes,
+      ];
+    case 'dirigeant':
+      return [
+        ['Statut du dirigeant', champs.statutDirigeant ? STATUT_DIRIGEANT_LABELS[champs.statutDirigeant] : null],
+        ['Micro-entrepreneur', ouiNon('microEntrepreneur', champs.microEntrepreneur)],
+        ...communes,
+        soldeCpf,
+      ];
+  }
+}
+
+/**
+ * Étape 6 : tout ce qui a été saisi, section par section, avant de lancer la recherche des financements. Une réponse
+ * « Je ne sais pas » est écrite telle quelle ; « Non renseigné » reste réservé aux questions sans réponse. Un groupe de
+ * plusieurs profils a une section « Participants » (le total) puis une section par profil ; le prix de la formation s'écrit
+ * par personne et pour le groupe.
+ */
+export function StepRecap({ state, onEdit, reponsesInconnues, inconnuesProfils }: Props) {
   const projet = state.projetType ?? 'formation_salarie';
-  const statut = STATUT_PAR_PROJET[projet];
-  const ouiNon = (question: QuestionAvecInconnu, valeur: boolean | null): string | null =>
-    valeur == null ? (reponsesInconnues.has(question) ? 'Je ne sais pas' : null) : valeur ? 'Oui' : 'Non';
+  const profils = profilsDuGroupe(state);
+  const personnes = nombreDePersonnes(state);
+  const groupe = personnes > 1;
+  const ouiNon = reponseOuiNon(reponsesInconnues);
   /** Choix d'une liste dont l'option vide se lit « Ne sait pas ». */
   const choix = (question: QuestionAvecInconnu, libelle: string | null): string | null =>
     libelle ?? (reponsesInconnues.has(question) ? 'Ne sait pas' : null);
+  const inconnuesDe = (id: string): ReadonlySet<QuestionAvecInconnu> =>
+    id === ID_PROFIL_PRINCIPAL ? reponsesInconnues : (inconnuesProfils[id] ?? AUCUNE_REPONSE);
 
   // OPCO et barème de branche appliqué par le moteur : choix manuel, sinon variante qui couvre l'IDCC détecté, sinon
   // barème général (la ligne n'existe que pour un OPCO qui a des barèmes par branche).
@@ -137,55 +216,44 @@ export function StepRecap({ state, onEdit, reponsesInconnues }: Props) {
         : null,
     ],
     ['Effectif exact', state.effectif != null ? pluriel(state.effectif, 'salarié', 'salariés') : null],
-    ...(ouvreBudgetOpco(state.projetType)
+    ...(ouvreBudgetPourLeGroupe(state)
       ? ([
           ['Budget déjà consommé', state.budgetDejaConsomme != null ? formatEuro(state.budgetDejaConsomme) : null],
         ] as Ligne[])
       : []),
   ];
 
-  const regionResidence: Ligne = [
-    'Région de résidence',
-    state.regionBeneficiaireCode
-      ? REGIONS[state.regionBeneficiaireCode]
-      : state.regionCode
-        ? `${REGIONS[state.regionCode]} (celle de l'entreprise)`
-        : null,
-  ];
-  const communes: Ligne[] = [
-    ['Âge', state.ageBeneficiaire != null ? pluriel(state.ageBeneficiaire, 'an', 'ans') : null],
-    ['Diplôme le plus élevé', state.niveauDiplome ? NIVEAU_DIPLOME_LABELS[state.niveauDiplome] : null],
-    ['Reconnaissance de travailleur handicapé', state.isHandicap ? 'Oui' : 'Non'],
-  ];
-  const soldeCpf: Ligne = ['Solde CPF', state.soldeCpf != null ? formatEuro(state.soldeCpf) : null];
-  const beneficiaire: Ligne[] =
-    statut === 'salarie'
+  // Une seule personne ou un seul profil : la section « Participants » porte les réponses. Plusieurs profils : le total dans
+  // « Participants », puis une section par profil (nombre de personnes, statut, réponses).
+  const sectionsDesPersonnes: { titre: string; lignes: Ligne[] }[] =
+    profils.length === 1
       ? [
-          ['Contrat', state.contractType && state.contractType !== 'alternance' ? CONTRACT_TYPE_LABELS[state.contractType] : null],
-          ['Ancienneté', state.anciennete_mois != null ? avecUnite(state.anciennete_mois, 'mois') : null],
-          ...communes,
-          soldeCpf,
+          {
+            titre: 'Participants',
+            lignes: [
+              ...(groupe ? ([['Personnes', pluriel(personnes, 'personne', 'personnes')]] as Ligne[]) : []),
+              ...lignesDuProfil(profils[0].champs, inconnuesDe(profils[0].id), state.regionCode),
+            ],
+          },
         ]
-      : statut === 'demandeur_emploi'
-        ? [
-            ['Inscription à France Travail', ouiNon('inscritFranceTravail', state.inscritFranceTravail)],
-            regionResidence,
-            ...communes,
-          ]
-        : statut === 'alternant'
-          ? [
-              ["Type de contrat d'alternance", state.typeAlternance ? TYPE_ALTERNANCE_LABELS[state.typeAlternance] : null],
-              ['Inscription à France Travail', ouiNon('inscritFranceTravail', state.inscritFranceTravail)],
-              regionResidence,
-              ...communes,
-            ]
-          : [
-              ['Statut du dirigeant', state.statutDirigeant ? STATUT_DIRIGEANT_LABELS[state.statutDirigeant] : null],
-              ['Micro-entrepreneur', ouiNon('microEntrepreneur', state.microEntrepreneur)],
-              ...communes,
-              soldeCpf,
-            ];
+      : [
+          {
+            titre: 'Participants',
+            lignes: [
+              ['Personnes', `${pluriel(personnes, 'personne', 'personnes')}, ${pluriel(profils.length, 'profil', 'profils')}`],
+            ],
+          },
+          ...profils.map((p, i) => ({
+            titre: `Profil ${i + 1}`,
+            lignes: [
+              ['Personnes', pluriel(p.nombre, 'personne', 'personnes')],
+              ['Statut', STATUT_DU_PROFIL[p.champs.projetType ?? 'formation_salarie']],
+              ...lignesDuProfil(p.champs, inconnuesDe(p.id), state.regionCode),
+            ] as Ligne[],
+          })),
+        ];
 
+  const coutGroupe = coutDuGroupe(state);
   const formation: Ligne[] = [
     // « Intitulé » : la ligne « Formation » d'une section Formation se lisait comme une formation absente.
     ['Intitulé', state.formationNom],
@@ -204,8 +272,16 @@ export function StepRecap({ state, onEdit, reponsesInconnues }: Props) {
     ['Éligible au CPF', ouiNon('eligibleCpf', state.eligibleCpf)],
     ['Mode', state.trainingMode ? TRAINING_MODE_LABELS[state.trainingMode] : null],
     ['Durée', state.durationHours ? avecUnite(state.durationHours, 'h') : null],
-    ['Coût total HT', state.pedagogyCostTotal ? formatEuro(state.pedagogyCostTotal) : null],
-    ['Coût horaire', state.pedagogyCostPerHour ? `${formatEuro(state.pedagogyCostPerHour)}/h` : null],
+    ...(groupe
+      ? ([
+          ['Coût total HT par personne', state.pedagogyCostTotal ? formatEuro(state.pedagogyCostTotal) : null],
+          ['Coût total HT pour le groupe', coutGroupe ? formatEuro(coutGroupe) : null],
+        ] as Ligne[])
+      : ([['Coût total HT', state.pedagogyCostTotal ? formatEuro(state.pedagogyCostTotal) : null]] as Ligne[])),
+    [
+      groupe ? 'Coût horaire par personne' : 'Coût horaire',
+      state.pedagogyCostPerHour ? `${formatEuro(state.pedagogyCostPerHour)}/h` : null,
+    ],
     ['Début prévu', saisieDepuisMois(state.dateDebutFormation) || null],
     ['Organisme', state.organismeFormation],
     ['Organisme certifié Qualiopi', ouiNon('organismeQualiopi', state.organismeQualiopi)],
@@ -256,7 +332,9 @@ export function StepRecap({ state, onEdit, reponsesInconnues }: Props) {
           lignes={[['Objectif', state.projetType ? PROJET_LABELS[state.projetType].label : null]]}
         />
         <Section titre="Entreprise" icone="batiment" onEdit={() => onEdit('identification')} lignes={entreprise} />
-        <Section titre="Bénéficiaire" icone="personne" onEdit={() => onEdit('situation')} lignes={beneficiaire} />
+        {sectionsDesPersonnes.map((s) => (
+          <Section key={s.titre} titre={s.titre} icone="personne" onEdit={() => onEdit('situation')} lignes={s.lignes} />
+        ))}
         <Section titre="Formation" icone="livre" onEdit={() => onEdit('formation')} lignes={formation} />
         {avecFrais && <Section titre="Frais annexes" icone="euro" onEdit={() => onEdit('frais')} lignes={frais} />}
       </div>

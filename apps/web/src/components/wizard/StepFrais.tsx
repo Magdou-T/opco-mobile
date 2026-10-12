@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { nombreDePersonnes } from '@opco/core';
 import type { TransportMode, WizardState } from '@opco/core';
 import type { IconName } from '@/components/ui/Icon';
 import { CheckboxRow, ChoiceButton, ChoiceGroup, NumberField } from '@/components/ui/forms';
@@ -39,18 +40,29 @@ function BlocFrais({
   );
 }
 
-/** Étape 5 (sautée pour une formation à distance) : frais de déplacement, d'hébergement et de repas, tous facultatifs. */
+const CHAPEAU =
+  'Si la formation oblige à se déplacer, indiquez les frais prévus. Certains OPCO prennent en charge tout ou partie de ces frais.';
+
+/**
+ * Étape 5 (sautée pour une formation à distance) : frais de déplacement, d'hébergement et de repas, tous facultatifs. Pour
+ * plusieurs personnes, les montants saisis sont ceux d'une personne : le moteur les compte pour chacune.
+ */
 export function StepFrais({ state, updateState }: Props) {
   // Jours de formation estimés sur une base de 7 heures par jour, retenus quand le champ reste vide.
   const joursEstimes = state.durationHours ? Math.ceil(state.durationHours / 7) : 0;
   const joursRetenus = joursEstimes > 1 ? 'jours sont retenus' : 'jour est retenu';
+  const personnes = nombreDePersonnes(state);
 
   return (
     <div className="space-y-8">
       <EnTeteEtape
         etape="frais"
         titre="Frais annexes"
-        chapeau="Si la formation oblige à se déplacer, indiquez les frais prévus. Certains OPCO prennent en charge tout ou partie de ces frais."
+        chapeau={
+          personnes > 1
+            ? `${CHAPEAU} Indiquez les montants pour une seule personne${INSECABLE}: ils sont comptés pour chacune des ${personnes}${INSECABLE}personnes.`
+            : CHAPEAU
+        }
       />
 
       <NumberField

@@ -13,10 +13,14 @@ import {
 } from '@opco/core';
 import type { ChampsProfil, ProfilSupplementaire, ProjetType, WizardState } from '@opco/core';
 import { champsManquants, manquantsDuProfil } from '../src/lib/etapes';
+import { formatEuro } from '../src/lib/format';
 import {
+  aideDuPrix,
   ajouterProfil,
+  auCentime,
   basculerModePrix,
   changerProjetDuProfil,
+  coutDuGroupe,
   definirNombre,
   etatDepuisPrix,
   inconnuesApresMaj,
@@ -1807,5 +1811,73 @@ describe('réponses « Je ne sais pas » par profil : même comportement que cel
     }
     const tous = { ajout: true, efface: true, sansEffet: true, creation: true, retrait: true, retraitSansEffet: true };
     assert.deepEqual(vus, tous, 'la suite doit visiter chaque cas');
+  });
+});
+
+describe('prix du groupe : coutDuGroupe et aideDuPrix', () => {
+  const nb = INSECABLE;
+  const avec = (over: Partial<WizardState>): WizardState => ({ ...createInitialWizardState(), ...over });
+
+  test("coutDuGroupe : le prix saisi pour le groupe, sinon le coût d'une personne multiplié par l'effectif, au centime", () => {
+    assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: 933.33, nombrePersonnes: 6 })), 5599.98);
+    assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: 933.3333333333334, nombrePersonnes: 6, prixDuGroupe: 5600 })), 5600);
+    assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: null, nombrePersonnes: 6 })), null);
+    const deuxProfils = definirNombre(ajouterProfil(avec({ pedagogyCostTotal: 1000, nombrePersonnes: 2 })), 'profil-2', 3);
+    assert.equal(coutDuGroupe(deuxProfils), 5000);
+  });
+
+  test("aideDuPrix : le prix de l'autre mode ; rien sous deux personnes, sans prix ou avec un prix invalide", () => {
+    assert.equal(aideDuPrix(6, 933.33, false), `Soit ${formatEuro(5599.98)} pour les 6${nb}personnes.`);
+    assert.equal(aideDuPrix(6, 933.3333333333334, true), `Soit ${formatEuro(933.33)} par personne.`);
+    assert.equal(aideDuPrix(4, 2800, false), `Soit ${formatEuro(11200)} pour les 4${nb}personnes.`);
+    assert.equal(aideDuPrix(1, 2800, false), null);
+    assert.equal(aideDuPrix(4, null, true), null);
+    assert.equal(aideDuPrix(4, 0, false), null);
+    assert.equal(aideDuPrix(4, Number.NaN, true), null);
+  });
+
+  test("auCentime : l'état garde le coût réel, le champ du prix n'affiche que des centimes (aller-retour par personne, groupe, par personne)", () => {
+    const parPersonne = etatDepuisPrix(avec({ nombrePersonnes: 3 }), 800.2, 35, false);
+    const groupe = basculerModePrix(parPersonne, true);
+    assert.equal(groupe.prixDuGroupe, 2400.6);
+    const retour = basculerModePrix(groupe, false);
+    assert.notEqual(retour.pedagogyCostTotal, 800.2); // 800.1999999999999 : le coût réel garde son reste de virgule flottante
+    assert.equal(auCentime(retour.pedagogyCostTotal), 800.2);
+    assert.equal(auCentime(333.3333333333333), 333.33);
+    assert.equal(auCentime(null), null);
+  });
+
+  // Tests ajoutés à ceux de la fiche. La preuve par mutation (rapport de la tâche 14) a montré que les trois tests ci-dessus
+  // laissent vivre la priorité du prix du groupe, le seuil exact de deux personnes et les arrondis vers le bas, vers le haut
+  // ou au millime : les valeurs ci-dessous sont celles où ces arrondis se séparent du centime le plus proche.
+
+  test("coutDuGroupe : le prix saisi pour le groupe l'emporte, même sans coût d'une personne ou avec un coût qui ne correspond plus", () => {
+    assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: null, nombrePersonnes: 6, prixDuGroupe: 5600 })), 5600);
+    assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: 1000, nombrePersonnes: 6, prixDuGroupe: 5600 })), 5600);
+  });
+
+  test("aideDuPrix : l'aide commence exactement à deux personnes, dans les deux modes", () => {
+    assert.equal(aideDuPrix(2, 2800, false), `Soit ${formatEuro(5600)} pour les 2${nb}personnes.`);
+    assert.equal(aideDuPrix(2, 2800, true), `Soit ${formatEuro(2800)} par personne.`);
+  });
+
+  test("le prix du groupe se lit au centime le plus proche, pareil dans le récapitulatif (coutDuGroupe) et dans l'aide (aideDuPrix)", () => {
+    const cas: [personnes: number, coutParPersonne: number, prixDuGroupe: number][] = [
+      [3, 100.1, 300.3], // 100,1 x 3 x 100 = 30029,999999999996 : arrondi vers le bas, 300,29
+      [3, 800.2, 2400.6], // 240060,00000000003 : arrondi vers le haut, 2 400,61
+      [6, 1000 / 11, 545.45], // coût d'une personne pour 1 000 euros et 11 personnes, groupe passé à 6 : 545,4545... ; au millime puis au centime, 545,46
+      [3, 1000.01 / 2, 1500.02], // demi-centime (500,005 x 3) : le nombre exact est 1500,0149999999999, formatEuro seul écrirait 1 500,01
+    ];
+    for (const [personnes, coutParPersonne, prixDuGroupe] of cas) {
+      const contexte = `${personnes} personnes à ${coutParPersonne}`;
+      assert.equal(coutDuGroupe(avec({ pedagogyCostTotal: coutParPersonne, nombrePersonnes: personnes })), prixDuGroupe, contexte);
+      assert.equal(aideDuPrix(personnes, coutParPersonne, false), `Soit ${formatEuro(prixDuGroupe)} pour les ${personnes}${nb}personnes.`, contexte);
+    }
+  });
+
+  test("auCentime : le centime le plus proche, jamais celui d'en dessous (coût réel juste sous le centime)", () => {
+    const neufPersonnes = etatDepuisPrix(avec({ nombrePersonnes: 9 }), 1000.8, 35, true);
+    assert.notEqual(neufPersonnes.pedagogyCostTotal, 111.2); // 111.19999999999999 : le coût réel garde son reste de virgule flottante
+    assert.equal(auCentime(neufPersonnes.pedagogyCostTotal), 111.2); // 11119,999999999998 centimes : tronqué ou arrondi vers le bas, 111,19
   });
 });

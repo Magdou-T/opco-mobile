@@ -39,12 +39,11 @@ import {
   etatDepuisEffectif,
   etatDepuisEntreprise,
   etatSansEntreprise,
-  opcoRequis,
-  ouvreBudgetOpco,
   preselectionParNaf,
   texteDuResolveur,
 } from '@/lib/entreprise';
 import { texteFr } from '@/lib/format';
+import { opcoRequisPourLeGroupe, ouvreBudgetPourLeGroupe } from '@/lib/groupe';
 import { INSECABLE } from '@/lib/insecable';
 import { LIEN_MENTIONS, SOURCE_ENTREPRISES, SOURCE_SUGGESTION_NAF } from '@/lib/mentions';
 import { SIGLES } from '@/lib/sigles';
@@ -664,11 +663,11 @@ export function StepIdentification({ state, updateState }: Props) {
           <div className="space-y-6">
             <ChoiceGroup
               label={
-                opcoRequis(state.projetType)
+                opcoRequisPourLeGroupe(state)
                   ? 'Votre OPCO'
                   : `Votre OPCO (facultatif pour le projet «${INSECABLE}former le dirigeant${INSECABLE}»)`
               }
-              required={opcoRequis(state.projetType)}
+              required={opcoRequisPourLeGroupe(state)}
             >
               <OpcoPicker options={EMBEDDED_OPCO_LIST} selectedSlug={state.selectedOpcoSlug} onSelect={choisirOpco} />
               <div className="mt-2">
@@ -761,9 +760,9 @@ export function StepIdentification({ state, updateState }: Props) {
         />
       </div>
 
-      {(ouvreBudgetOpco(state.projetType) || opco) && (
+      {(ouvreBudgetPourLeGroupe(state) || opco) && (
         <div className="space-y-6 border-t border-filet pt-8">
-          {ouvreBudgetOpco(state.projetType) && (
+          {ouvreBudgetPourLeGroupe(state) && (
             <NumberField
               label="Budget formation déjà consommé cette année auprès de votre OPCO (€)"
               facultatif

@@ -168,11 +168,17 @@ export function WizardContainer() {
               updateFormationCosts={updateFormationCosts}
               reponsesInconnues={reponsesInconnues}
               repondre={repondre}
+              groupe={groupe}
             />
           )}
           {currentStep.key === 'frais' && <StepFrais state={state} updateState={updateState} />}
           {currentStep.key === 'recap' && (
-            <StepRecap state={state} onEdit={goToStep} reponsesInconnues={reponsesInconnues} />
+            <StepRecap
+              state={state}
+              onEdit={goToStep}
+              reponsesInconnues={reponsesInconnues}
+              inconnuesProfils={inconnuesProfils}
+            />
           )}
         </div>
 

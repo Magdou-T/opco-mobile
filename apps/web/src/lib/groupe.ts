@@ -17,6 +17,7 @@ import {
 } from '@opco/core';
 import type { ChampsProfil, ProfilSupplementaire, ProjetType, WizardState } from '@opco/core';
 import { opcoRequis, ouvreBudgetOpco } from './entreprise';
+import { formatEuro, nombreEtUnite } from './format';
 import { champsDepuisProjet, coutsDeFormation, reponsesInconnuesApres } from './parcours';
 import type { QuestionAvecInconnu, QuestionDeProfil } from './parcours';
 
@@ -184,4 +185,37 @@ export function inconnuesSansProfil(avant: InconnuesParProfil, id: string): Inco
   const suite = { ...avant };
   delete suite[id];
   return suite;
+}
+
+// --- Prix de la formation à l'écran ----------------------------------------------------------------------------------
+
+/**
+ * Prix de toute la formation pour le groupe, au centime : celui qui a été saisi pour le groupe, sinon le coût d'une personne
+ * multiplié par l'effectif. Null tant qu'aucun coût n'est saisi.
+ */
+export function coutDuGroupe(
+  etat: Pick<WizardState, 'prixDuGroupe' | 'pedagogyCostTotal' | 'nombrePersonnes' | 'autresProfils'>,
+): number | null {
+  if (etat.prixDuGroupe != null) return etat.prixDuGroupe;
+  if (etat.pedagogyCostTotal == null) return null;
+  return Math.round(etat.pedagogyCostTotal * nombreDePersonnes(etat) * 100) / 100;
+}
+
+/**
+ * Montant arrondi au centime pour le champ du prix. L'état garde le coût réel, non arrondi (le prix du groupe divisé par
+ * l'effectif, 800,1999999999999 € pour 2 400,60 € et 3 personnes) : le champ n'en affiche que les centimes (« 800,2 »)
+ * et n'écrit jamais dans l'état le nombre affiché.
+ */
+export const auCentime = (montant: number | null): number | null => (montant == null ? null : Math.round(montant * 100) / 100);
+
+/**
+ * Aide sous le champ du prix à partir de deux personnes : le prix de l'autre mode. Prix saisi pour le groupe : « Soit
+ * 933,33 € par personne. » ; saisi par personne : « Soit 5 600 € pour les 6 personnes. ». Null sous deux personnes, sans
+ * coût ou avec un coût invalide.
+ */
+export function aideDuPrix(personnes: number, coutParPersonne: number | null, pourLeGroupe: boolean): string | null {
+  if (personnes < 2 || coutParPersonne == null || !(coutParPersonne > 0)) return null;
+  return pourLeGroupe
+    ? `Soit ${formatEuro(coutParPersonne)} par personne.`
+    : `Soit ${formatEuro(Math.round(coutParPersonne * personnes * 100) / 100)} pour les ${nombreEtUnite(personnes, 'personnes')}.`;
 }
