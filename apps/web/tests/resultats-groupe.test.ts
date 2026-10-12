@@ -27,6 +27,7 @@ import { coutsDeFormation } from '../src/lib/parcours';
 import {
   calculer,
   cartesDuPlan,
+  colonnesParProfil,
   concerneAAfficher,
   concerneParAide,
   detailsDuBandeau,
@@ -1155,5 +1156,108 @@ describe("bloc « Concerne » d'une carte d'aide (concerneAAfficher)", () => {
       const avecBloc = visibles.filter((a) => concerneAAfficher(a, libellesDuGroupe.size, libellesDuGroupe).length > 0);
       assert.deepEqual(avecBloc.map((a) => a.id), [], nom);
     }
+  });
+});
+
+describe("détail par profil selon l'état du groupe (colonnesParProfil et chiffre des lignes)", () => {
+  // Une ligne de financement minimale : etatEnTete ne regarde que le coût, le nombre de lignes et le total financé.
+  const ligne = (montant: number) => ({ id: 'opco-pdc', nom: 'Plan de développement des compétences', financeurNom: 'AKTO', montant, confidence: 'exact' as const });
+  const [p1, p2] = profilsDuGroupe(ajouterProfil(etat({ projetType: 'formation_salarie' })));
+  /** Le `chiffre` des deux lignes d'un groupe de deux profils dont les plans sont donnés (dans cet ordre). */
+  const chiffres = (premier: PlanFinancement, second: PlanFinancement) =>
+    lignesParProfil([{ profil: p1, plan: premier }, { profil: p2, plan: second }]).lignes.map((l) => l.chiffre);
+
+  test("colonnesParProfil : aucune sans coût, le coût seul sans financement chiffré, toutes quand le plan l'est", () => {
+    assert.equal(colonnesParProfil('cout_inconnu'), 'aucune');
+    assert.equal(colonnesParProfil('aucun_financement_chiffre'), 'cout');
+    assert.equal(colonnesParProfil('plan_chiffre'), 'toutes');
+  });
+
+  test("chiffre : le plan du profil est chiffré quand etatEnTete le dit, quelle que soit la place du profil dans le groupe", () => {
+    const chiffre = plan({ coutFormation: 1000, financements: [ligne(600)], totalFinance: 600, resteACharge: 400 });
+    const pasChiffres: Record<string, PlanFinancement> = {
+      'coût inconnu': plan({ financements: [ligne(600)], totalFinance: 600 }),
+      'aucune ligne de financement': plan({ coutFormation: 1000, resteACharge: 1000 }),
+      'lignes sans montant': plan({ coutFormation: 1000, financements: [ligne(0)], resteACharge: 1000 }),
+      'financé sans ligne (donnée incohérente)': plan({ coutFormation: 1000, totalFinance: 300, resteACharge: 700 }),
+      'ligne sans financé (donnée incohérente)': plan({ coutFormation: 1000, financements: [ligne(600)], resteACharge: 1000 }),
+    };
+    assert.deepEqual(chiffres(chiffre, chiffre), [true, true]);
+    for (const [nom, pasChiffre] of Object.entries(pasChiffres)) {
+      assert.deepEqual(chiffres(chiffre, pasChiffre), [true, false], nom);
+      assert.deepEqual(chiffres(pasChiffre, chiffre), [false, true], nom);
+      assert.deepEqual(chiffres(pasChiffre, pasChiffre), [false, false], nom);
+    }
+  });
+
+  test("trois salariés AKTO et un apprenti : le plan du groupe est chiffré, la ligne de l'apprenti ne l'est pas, le total est celui du bandeau", () => {
+    let e = etat({ ...SCENARIOS.akto, nombrePersonnes: 3 });
+    e = changerProjetDuProfil(ajouterProfil(e), 'profil-2', 'alternance');
+    e = majProfil(e, 'profil-2', { typeAlternance: 'apprentissage', ageBeneficiaire: 19 });
+    const r = calculer(e, DATE);
+    assert.deepEqual([r.plan.coutFormation, r.plan.totalFinance, r.plan.resteACharge], [16800, 10000, 6800]);
+    assert.equal(etatEnTete(r.plan), 'plan_chiffre');
+    assert.equal(colonnesParProfil(etatEnTete(r.plan)), 'toutes');
+    const { lignes, total } = lignesParProfil(r.groupe.blocs);
+    assert.deepEqual(lignes.map((l) => [l.id, l.nombre, l.cout, l.finance, l.reste, l.chiffre]), [
+      ['principal', 3, 12600, 10000, 2600, true],
+      ['profil-2', 1, 4200, 0, 4200, false],
+    ]);
+    assert.deepEqual(total, { nombre: 4, cout: 16800, finance: 10000, reste: 6800 });
+  });
+
+  test("un dirigeant artisan et un dirigeant assimilé salarié, dans les deux ordres : seule la ligne de l'artisan est chiffrée", () => {
+    const sansFonds = { statutDirigeant: 'assimile_salarie' as const, ageBeneficiaire: 50 };
+    const avecFonds = { statutDirigeant: 'artisan' as const, ageBeneficiaire: 45, microEntrepreneur: false };
+    // L'artisan d'abord, puis l'assimilé salarié.
+    const artisanPuisAssimile = majProfil(ajouterProfil(etat({ ...SCENARIOS.artisan, nombrePersonnes: 1 })), 'profil-2', sansFonds);
+    // L'assimilé salarié d'abord (profil principal), puis l'artisan.
+    const assimilePuisArtisan = majProfil(ajouterProfil(etat({ ...SCENARIOS.artisan, ...sansFonds, nombrePersonnes: 1 })), 'profil-2', avecFonds);
+    const attendu = { nombre: 2, cout: 1800, finance: 735, reste: 1065 };
+    for (const [e, ordre] of [[artisanPuisAssimile, [true, false]], [assimilePuisArtisan, [false, true]]] as const) {
+      const r = calculer(e, DATE);
+      assert.equal(etatEnTete(r.plan), 'plan_chiffre');
+      const { lignes, total } = lignesParProfil(r.groupe.blocs);
+      assert.deepEqual(lignes.map((l) => l.chiffre), ordre);
+      assert.deepEqual(lignes.map((l) => [l.cout, l.finance, l.reste]).sort(), [[900, 0, 900], [900, 735, 165]]);
+      assert.deepEqual(total, attendu);
+    }
+  });
+
+  test("deux dirigeants artisans sans financement chiffré (Qualiopi inconnu) : le groupe est « aucun financement chiffré », aucune ligne n'est chiffrée", () => {
+    let e = etat({ ...SCENARIOS.artisan, organismeQualiopi: null, ...coutsDeFormation(3000, 21), nombrePersonnes: 1 });
+    e = majProfil(ajouterProfil(e), 'profil-2', { statutDirigeant: 'artisan', ageBeneficiaire: 45, microEntrepreneur: false });
+    const r = calculer(e, DATE);
+    assert.deepEqual([r.plan.coutFormation, r.plan.totalFinance, r.plan.resteACharge], [6000, 0, 6000]);
+    assert.equal(etatEnTete(r.plan), 'aucun_financement_chiffre');
+    assert.equal(colonnesParProfil(etatEnTete(r.plan)), 'cout');
+    const { lignes, total } = lignesParProfil(r.groupe.blocs);
+    assert.deepEqual(lignes.map((l) => [l.cout, l.chiffre]), [[3000, false], [3000, false]]);
+    assert.deepEqual(total, { nombre: 2, cout: 6000, finance: 0, reste: 6000 });
+  });
+
+  test("coût inconnu : le groupe est « coût inconnu » (aucune colonne) et aucune ligne n'est chiffrée", () => {
+    const r = calculer(ajouterProfil(etat({ ...SCENARIOS.akto, pedagogyCostTotal: null, pedagogyCostPerHour: null, nombrePersonnes: 2 })), DATE);
+    assert.equal(etatEnTete(r.plan), 'cout_inconnu');
+    assert.equal(colonnesParProfil(etatEnTete(r.plan)), 'aucune');
+    assert.deepEqual(lignesParProfil(r.groupe.blocs).lignes.map((l) => l.chiffre), [false, false]);
+  });
+
+  test("sur des groupes tirés au hasard : le groupe est chiffré si et seulement si une ligne l'est, et le total égale le plan du groupe", () => {
+    const hasard = generateur(15);
+    const etats: Record<string, number> = {};
+    let mixtes = 0;
+    for (let i = 0; i < 150; i++) {
+      const r = calculer(groupeVaste(hasard), DATE);
+      const etatDuGroupe = etatEnTete(r.plan);
+      etats[etatDuGroupe] = (etats[etatDuGroupe] ?? 0) + 1;
+      const { lignes, total } = lignesParProfil(r.groupe.blocs);
+      assert.equal(lignes.some((l) => l.chiffre), etatDuGroupe === 'plan_chiffre', `groupe ${i}`);
+      assert.deepEqual(total, { nombre: r.groupe.personnes, cout: r.plan.coutFormation, finance: r.plan.totalFinance, reste: r.plan.resteACharge }, `groupe ${i}`);
+      if (etatDuGroupe === 'plan_chiffre' && lignes.some((l) => !l.chiffre)) mixtes++;
+    }
+    // L'échantillon exerce les deux états avec des lignes, dont des groupes chiffrés qui comptent une ligne non chiffrée.
+    assert.ok((etats.plan_chiffre ?? 0) > 0 && (etats.aucun_financement_chiffre ?? 0) > 0, JSON.stringify(etats));
+    assert.ok(mixtes > 0, `groupes chiffrés avec une ligne non chiffrée : ${mixtes}`);
   });
 });

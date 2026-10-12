@@ -52,7 +52,7 @@ export function PlanFinancementCard({
   planFerme?: PlanFerme | null;
   /** Les portails officiels de la région figurent plus bas sur l'écran. */
   avecPortail?: boolean;
-  /** Personnes du groupe : au-dessus de 1, le bandeau détaille par personne et la carte des options dit que ses montants sont ceux du groupe. */
+  /** Personnes du groupe : au-dessus de 1, le bandeau détaille par personne et la carte des options dit pour qui valent ses montants. */
   personnes?: number;
   /** Note posée juste après le bandeau (par exemple « Aucun OPCO renseigné ») : les chiffres restent en tête. */
   apresBandeau?: ReactNode;
@@ -150,8 +150,10 @@ function CarteDuPlan({
   style: CSSProperties;
 }) {
   const { titre, icone, aide } = CARTES[carte];
-  // Les options n'ont pas de ligne « pour N personnes » : leur carte dit que ses montants sont ceux de tout le groupe.
-  const aideAffichee = carte === 'options' && groupe ? `${aide} Les montants sont ceux de tout le groupe.` : aide;
+  // Les options n'ont pas de ligne « pour N personnes » : leur carte dit pour qui valent ses montants (la somme sur les seuls
+  // profils qui ont l'option).
+  const aideAffichee =
+    carte === 'options' && groupe ? `${aide} Les montants valent pour les personnes du groupe qu'elles concernent.` : aide;
   const id = `carte-${carte}`;
   return (
     <section id={id} aria-labelledby={`${id}-titre`} className="apparition" style={style}>

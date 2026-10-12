@@ -11,6 +11,7 @@ import { ID_DETAIL_OPCO, fondsEpuisesSurLePlan, planFermeDe } from '@/lib/encadr
 import {
   calculer,
   chapeauDetailOpco,
+  etatEnTete,
   libellesDesProfils,
   mentionOpcoDuGroupe,
   notesOpco,
@@ -57,7 +58,7 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
   // Chapeau du détail de l'OPCO : seulement avec le tableau des postes (jamais quand le plan est fermé), suivi, pour un
   // groupe, de pour qui le calcul est fait.
   const chapeauOpco = funding ? chapeauDetailOpco(funding) : null;
-  const mentionGroupe = mentionOpcoDuGroupe(groupe.personnesPdc, groupe.personnes);
+  const mentionGroupe = chapeauOpco ? mentionOpcoDuGroupe(groupe.personnesPdc, groupe.personnes) : null;
   const chapeauDetail = [chapeauOpco, mentionGroupe].filter((t): t is string => t != null).join(' ');
   // Plan conventionnel de la branche en relais d'un plan de développement des compétences épuisé (AKTO, organismes de
   // formation) ; plan fermé aux 50 salariés et plus. Le bandeau dit l'un et l'autre.
@@ -92,7 +93,7 @@ export function EcranResultats({ state, onEdit, onReset }: ProprietesEcranResult
         />
       </section>
 
-      <ParProfil blocs={groupe.blocs} />
+      <ParProfil blocs={groupe.blocs} etat={etatEnTete(plan)} />
 
       <AidesList aides={aidesEvaluees} avecPortail={portail != null} personnes={groupe.personnes} libelles={libelles} />
 

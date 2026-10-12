@@ -704,7 +704,11 @@ export function mentionOpcoDuGroupe(personnesPdc: number, personnes: number): st
   return `Calcul pour ${qui} du groupe (${nombreEtUnite(personnes, 'personnes')} au total).`;
 }
 
-/** Une ligne du tableau « Détail par profil » : le rang du profil, son libellé, son effectif et ses trois montants. */
+/**
+ * Une ligne du tableau « Détail par profil » : le rang du profil, son libellé, son effectif et ses trois montants. `chiffre` :
+ * le plan de ce profil est chiffré (`etatEnTete` de son plan vaut `plan_chiffre`) ; sinon son financé et son reste à charge
+ * sont des zéros que le bandeau refuse, et l'écran écrit « Non chiffré » à leur place.
+ */
 export interface LigneParProfil {
   id: string;
   rang: number;
@@ -713,9 +717,14 @@ export interface LigneParProfil {
   cout: number;
   finance: number;
   reste: number;
+  chiffre: boolean;
 }
 
-/** Lignes du tableau « Détail par profil » (chiffres du plan de chaque profil, jamais recalculés) et leur total en centimes. */
+/**
+ * Lignes du tableau « Détail par profil » (chiffres du plan de chaque profil, jamais recalculés) et leur total en centimes,
+ * qui est le plan du groupe. `chiffre` juge chaque ligne sur son propre plan, non sur celui du groupe : un groupe au plan
+ * chiffré peut compter un profil sans financement chiffré (un apprenti parmi des salariés).
+ */
 export function lignesParProfil(blocs: readonly Pick<BlocResultat, 'profil' | 'plan'>[]): {
   lignes: LigneParProfil[];
   total: Pick<LigneParProfil, 'nombre' | 'cout' | 'finance' | 'reste'>;
@@ -728,12 +737,33 @@ export function lignesParProfil(blocs: readonly Pick<BlocResultat, 'profil' | 'p
     cout: b.plan.coutFormation,
     finance: b.plan.totalFinance,
     reste: b.plan.resteACharge,
+    chiffre: etatEnTete(b.plan) === 'plan_chiffre',
   }));
   const somme = (champ: 'cout' | 'finance' | 'reste') => lignes.reduce((s, l) => s + Math.round(l[champ] * 100), 0) / 100;
   return {
     lignes,
     total: { nombre: lignes.reduce((s, l) => s + l.nombre, 0), cout: somme('cout'), finance: somme('finance'), reste: somme('reste') },
   };
+}
+
+/** Colonnes montrées par le tableau « Détail par profil » (`colonnesParProfil`). */
+export type ColonnesParProfil = 'aucune' | 'cout' | 'toutes';
+
+/**
+ * Colonnes du tableau « Détail par profil » selon l'état du bandeau du groupe (`etatEnTete` du plan du groupe), pour qu'il ne
+ * montre jamais ce que le bandeau refuse : `cout_inconnu` donne `aucune` (pas de tableau, il n'aurait que des « 0 € »),
+ * `aucun_financement_chiffre` donne `cout` (le coût de chaque profil, jamais « Financé 0 € »), `plan_chiffre` donne `toutes`
+ * (coût, financé et reste à charge).
+ */
+export function colonnesParProfil(etat: EtatEnTete): ColonnesParProfil {
+  switch (etat) {
+    case 'cout_inconnu':
+      return 'aucune';
+    case 'aucun_financement_chiffre':
+      return 'cout';
+    case 'plan_chiffre':
+      return 'toutes';
+  }
 }
 
 /** « Profil 1 · Salarié en CDI, 35 ans » pour chaque profil, par identifiant. */
