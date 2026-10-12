@@ -54,12 +54,12 @@ Les cinq entrées ou situations que la spécification suppose sans que les tâch
 
 ## Écarts avec la spécification
 
-Trois précisions de forme, sans effet sur ce que voit le visiteur, puis un écart qui se voit à l'écran :
+Trois précisions de forme, sans effet sur ce que voit le visiteur, puis un ajout qui se voit à l'écran :
 
 1. `AideEvaluee` reçoit un champ optionnel `profils?: ConcerneParAide[]` au lieu d'un type `AideEvalueeDuGroupe` : même contenu, un type de moins, et les composants de l'écran n'ont aucun type à élargir.
 2. `calculer` utilise le résultat du moteur tel quel quand un seul profil relève de l'OPCO (aucune répartition) : c'est ce qui garantit l'identité avec le calcul actuel.
 3. Les lignes de détail du groupe se lisent « Coût pour 4 personnes : … », « Financement pour 4 personnes : … » et « Pour 4 personnes : … » selon la ligne qu'elles prolongent.
-4. Le résumé d'une carte de profil replié tient en une ligne (`libelleDuProfil` : statut, contrat, âge, RQTH), suivie de « À compléter : … » quand une réponse obligatoire manque, au lieu des puces de la spécification (7.2). Le diplôme et le solde CPF se lisent dans le volet déplié et au récapitulatif. Une phrase en tête du volet d'un profil de plusieurs personnes rappelle que ses réponses valent pour chacune.
+4. Une phrase en tête du volet d'un profil de plusieurs personnes rappelle que ses réponses valent pour chacune (la spécification ne la prévoit pas). Le résumé d'une carte de profil replié suit la spécification (7.2) : des puces (`pucesDuProfil` : contrat, âge, diplôme, RQTH, solde CPF), puis « À compléter : … » quand une réponse obligatoire manque.
 
 ## Structure des fichiers
 
@@ -7888,8 +7888,9 @@ Vérifier l'unicité de chaque ligne d'ancrage avec `grep -n` avant de la rempla
 - **Étape Participants** (`StepSituation`, `CarteProfil`, `FormulaireProfil`, `CompteurPersonnes`) : avec un seul
   profil, l'étape garde l'allure d'une personne seule (les questions de son statut) et ajoute le compteur « Nombre de
   personnes » et le bouton secondaire « Ajouter un profil différent ». Dès qu'il y a plusieurs profils, une `Card` par
-  profil : titre `h3` que le focus atteint par programme (« Profil 2 »), étiquette du statut, résumé d'une ligne
-  (`libelleDuProfil` : « Salarié en CDI, 35 ans »), compteur, puis les questions dans un volet qui se replie sur son
+  profil : titre `h3` que le focus atteint par programme (« Profil 2 »), étiquette du statut, résumé en puces
+  (`pucesDuProfil` : contrat, âge, diplôme, RQTH, solde CPF), compteur (sous le titre sur téléphone : la colonne du
+  titre garde 12 rem), puis les questions dans un volet qui se replie sur son
   résumé (`aria-expanded` ; le volet reste dans la page, `hidden`, et ses champs gardent leur état). Un seul profil est
   déplié à la fois ; replié, un profil dit ce qui lui manque (« À compléter : le type de contrat », `manquantsDuProfil`).
   Le compteur est un champ texte entier de 1 à 99 entre deux boutons ronds de 44 px (« Retirer une personne », « Ajouter
@@ -7923,6 +7924,17 @@ Vérifier l'unicité de chaque ligne d'ancrage avec `grep -n` avant de la rempla
   l'écran de résultats s'y précharge (section 15). Un groupe de plusieurs profils a une section « Participants » (le
   total des personnes et des profils) puis une section « Profil N » par profil (personnes, statut, réponses), et la
   section Formation écrit le coût par personne et pour le groupe.
+```
+
+4. Remplacer les quatre lignes de la puce **Largeurs étroites** (la ligne qui commence par `- **Largeurs étroites** : sous 360 px` et les trois suivantes ; à faire APRÈS l'insertion du point 1, dont l'ancre est cette ligne) par la version qui suit, après avoir relu le seuil dans `RegionPicker` (`components/ui/forms.tsx`) : si le code dit autre chose que 18,5 rem et 296 px, écrire ce que dit le code.
+
+```
+- **Largeurs étroites** : sous 360 px, la grille des modes de transport passe à une colonne et les cartes Entreprise et
+  OPCO posent leur pastille au-dessus du titre ; la liste des régions décide sur la largeur de son conteneur (requête de
+  conteneur, `@min-[18.5rem]` : deux colonnes à partir de 296 px de grille), car celle d'une carte de profil est plus
+  étroite que celle de l'étape Entreprise à la même largeur de fenêtre. Aucun mot n'est coupé (« Guadeloupe »,
+  « Bourgogne- », « Normandie » ou « SFG DEVELOPPEMENT » ne tenaient plus sur leur ligne). `break-words` ne reste
+  qu'en dernier recours, pour un mot plus long que la carte.
 ```
 
 - [ ] **Step 3 : `apps/web/DESIGN.md`, section 15 (écran de résultats)**
