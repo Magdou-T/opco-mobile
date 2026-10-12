@@ -167,7 +167,7 @@ Ouvrir chaque adresse dans une fenêtre de navigation privée, sur le domaine fi
 | Adresse | Attendu |
 |---|---|
 | `/` | L'accueil, avec le logo SFG et les polices Montserrat et Inter. |
-| `/simulateur/` | Les cinq parcours mènent à l'écran « Votre plan de financement » : Former un salarié, Reconversion d'un salarié, Recruter et former un demandeur d'emploi, Recruter en alternance, Former le dirigeant. À l'étape Entreprise, une recherche par SIREN ou par nom renvoie des résultats : le navigateur interroge l'API publique `recherche-entreprises.api.gouv.fr` (il faut une connexion Internet). |
+| `/simulateur/` | Les cinq parcours mènent à l'écran « Votre plan de financement » : Former un salarié, Reconversion d'un salarié, Recruter et former un demandeur d'emploi, Recruter en alternance, Former le dirigeant. Un groupe de plusieurs personnes (étape Participants, avec des profils différents) mène au même écran, qui ajoute le détail par profil. À l'étape Entreprise, une recherche par SIREN ou par nom renvoie des résultats : le navigateur interroge l'API publique `recherche-entreprises.api.gouv.fr` (il faut une connexion Internet). |
 | `/opco/akto/` | La fiche complète d'un OPCO ; la liste est à `/opco/`. |
 | `/former-sans-budget/` | Le guide. |
 | `/contact/` | Le bouton « Ouvrir ma messagerie » ouvre la messagerie du visiteur avec le message prérempli : le site n'envoie rien lui-même. |

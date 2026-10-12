@@ -19,7 +19,7 @@ import type { ChampsProfil, OpcoData, ProjetType, StatutBeneficiaire, TrainingMo
 import { ouvreBudgetOpco } from './entreprise';
 import { INSECABLE } from './insecable';
 
-/** Questions de l'étape « Bénéficiaire » propres à un statut (le contrat d'un alternant découle de son type de contrat). */
+/** Questions de l'étape « Participants » propres à un statut (le contrat d'un alternant découle de son type de contrat). */
 export const QUESTIONS_PAR_STATUT: Record<StatutBeneficiaire, readonly (keyof WizardState)[]> = {
   salarie: ['contractType', 'anciennete_mois', 'soldeCpf'],
   demandeur_emploi: ['inscritFranceTravail', 'regionBeneficiaireCode'],

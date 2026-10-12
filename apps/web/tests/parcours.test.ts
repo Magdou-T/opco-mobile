@@ -343,7 +343,7 @@ describe('audit : aucun champ invisible ne pèse sur le résultat', () => {
   /**
    * Champs de WizardState affichés pour certains projets seulement, relevés dans les étapes (liste écrite ici,
    * indépendamment de lib/parcours.ts) : le budget déjà consommé (étape Entreprise, projets qui ouvrent le budget de
-   * l'OPCO) et les questions propres au statut (étape Bénéficiaire). Les étapes Formation et Frais posent les mêmes
+   * l'OPCO) et les questions propres au statut (étape Participants). Les étapes Formation et Frais posent les mêmes
    * questions à tous les projets ; l'étape Frais disparaît pour une formation à distance (dernier test).
    */
   const VISIBLES_PAR_PROJET: Record<ProjetType, (keyof WizardState)[]> = {
