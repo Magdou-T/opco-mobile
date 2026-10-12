@@ -12,11 +12,17 @@ import {
   EMBEDDED_PORTAILS,
   FINANCEUR_LABELS,
   calculateFunding,
-  construirePlan,
+  construirePlanDuBloc,
   dateDeReference,
+  etatDuProfil,
   evaluerAides,
+  fusionnerAides,
+  fusionnerPlans,
   getEmbeddedOpcoBySlug,
   profilDepuisWizard,
+  profilsDuGroupe,
+  repartirCentimes,
+  repartirFinancement,
   resolveVarianteBranche,
 } from '@opco/core';
 import type {
@@ -29,16 +35,40 @@ import type {
   LignePlan,
   OptionPlan,
   PlanFinancement,
+  ProfilAides,
+  ProfilDuGroupe,
   SourceAide,
   VarianteBranche,
   WizardState,
 } from '@opco/core';
 import { ouvreBudgetOpco } from './entreprise';
-import { formatEuro, horsCitations } from './format';
+import { formatEuro, horsCitations, nombreEtUnite } from './format';
 import { INSECABLE } from './insecable';
+import { libelleDuProfil } from './profils';
 import { SIGLES, citeLeSigle } from './sigles';
 
 // --- Calcul -------------------------------------------------------------------------------------------------------
+
+/** Ce que l'écran sait d'un profil du groupe. */
+export interface BlocResultat {
+  profil: ProfilDuGroupe;
+  /** Profil évalué par le moteur d'aides : celui d'UNE personne de ce profil. */
+  profilAides: ProfilAides;
+  /** Aides du catalogue évaluées pour UNE personne de ce profil. */
+  aides: AideEvaluee[];
+  /** Part de ce profil dans le calcul de l'OPCO (valable pour ses personnes) ; null s'il ne relève pas de ce plan. */
+  funding: FundingResult | null;
+  /** Plan du profil, pour toutes ses personnes. */
+  plan: PlanFinancement;
+}
+
+/** Le groupe vu par l'écran de résultats. */
+export interface ResultatGroupe {
+  personnes: number;
+  /** Personnes qui relèvent du plan de développement des compétences de l'OPCO (les salariés, avec un OPCO connu). */
+  personnesPdc: number;
+  blocs: BlocResultat[];
+}
 
 /**
  * Calcul de l'écran de résultats, dérivation pure de l'état du parcours. `aujourdhui` (AAAA-MM-JJ) est la date du jour,
@@ -49,6 +79,14 @@ import { SIGLES, citeLeSigle } from './sigles';
  *   reconversion : `ouvreBudgetOpco`) ; le dirigeant, l'alternance et le recrutement d'un demandeur d'emploi passent par
  *   les aides, même avec un OPCO connu. Projet non choisi : « former un salarié ».
  * - `variante` : le barème de branche que le moteur applique (`resolveVarianteBranche`, la même règle que lui), ou null.
+ * - Groupe : le moteur de l'OPCO est appelé UNE fois, pour les personnes des profils salariés (le plafond annuel est celui
+ *   de l'entreprise) ; son résultat se répartit entre ces profils en centimes entiers ; chaque profil construit son plan
+ *   (`construirePlanDuBloc`) ; `plan` et `aidesEvaluees` sont les fusions de ceux des profils. `funding` est le calcul de
+ *   l'OPCO du groupe entier. Pour une personne seule, tout est ce que l'écran calculait avant les groupes.
+ * - Coût pédagogique : avec plusieurs profils, le coût du groupe (celui d'une personne multiplié par l'effectif, au centime)
+ *   se répartit entre les profils en centimes entiers (plus grands restes, comme le résultat de l'OPCO), pour que la somme
+ *   des plans des profils soit exactement le prix du groupe (1 000 € pour trois profils d'une personne : 333,34, 333,33 et
+ *   333,33 €, jamais 999,99 €). Les aides se jugent sur le coût réel d'une personne ; seul le plan du profil porte la part.
  */
 export function calculer(state: WizardState, aujourdhui: string) {
   const slug = state.selectedOpcoSlug || state.detectedOpcoSlug;
@@ -56,14 +94,49 @@ export function calculer(state: WizardState, aujourdhui: string) {
   const effectiveState =
     !state.trainingDays && state.durationHours ? { ...state, trainingDays: Math.ceil(state.durationHours / 7) } : state;
   const projet = effectiveState.projetType ?? 'formation_salarie';
-  const avecPdc = opco != null && ouvreBudgetOpco(projet);
-  const funding = avecPdc ? calculateFunding(opco, effectiveState) : null;
+  const profils = profilsDuGroupe(effectiveState);
+  const profilsPdc = profils.filter((p) => opco != null && ouvreBudgetOpco(p.champs.projetType));
+  const personnesPdc = profilsPdc.reduce((somme, p) => somme + p.nombre, 0);
+  const funding = opco && personnesPdc > 0 ? calculateFunding(opco, effectiveState, personnesPdc) : null;
+  // Un seul profil relève du plan : sa part est le résultat entier (aucune répartition).
+  const parts = funding
+    ? profilsPdc.length === 1
+      ? [funding]
+      : repartirFinancement(
+          funding,
+          profilsPdc.map((p) => p.nombre),
+        )
+    : [];
   const variante = opco ? resolveVarianteBranche(opco, effectiveState) : null;
-  const profil = profilDepuisWizard(effectiveState, slug);
-  const aidesEvaluees = evaluerAides(EMBEDDED_AIDES, profil, dateDeReference(effectiveState.dateDebutFormation, aujourdhui));
-  const plan = construirePlan(funding, aidesEvaluees, profil);
+  const dateRef = dateDeReference(effectiveState.dateDebutFormation, aujourdhui);
+  const personnes = profils.reduce((somme, p) => somme + p.nombre, 0);
+  // Plusieurs profils : le coût pédagogique du groupe, réparti en centimes entiers ; un seul profil : rien à répartir.
+  const coutsPedagogiques =
+    profils.length > 1 && effectiveState.pedagogyCostTotal != null
+      ? repartirCentimes(
+          Math.round(effectiveState.pedagogyCostTotal * personnes * 100),
+          profils.map((p) => p.nombre),
+        )
+      : null;
+  const blocs: BlocResultat[] = profils.map((profil, i) => {
+    const profilAides = profilDepuisWizard(etatDuProfil(effectiveState, profil), slug);
+    const aides = evaluerAides(EMBEDDED_AIDES, profilAides, dateRef);
+    const rang = profilsPdc.indexOf(profil);
+    const part = rang >= 0 ? parts[rang] : null;
+    const profilDuPlan = coutsPedagogiques
+      ? { ...profilAides, coutPedagogique: coutsPedagogiques[i] / 100 / profil.nombre }
+      : profilAides;
+    return { profil, profilAides, aides, funding: part, plan: construirePlanDuBloc(part, aides, profilDuPlan, profil.nombre) };
+  });
+  const aidesEvaluees = fusionnerAides(blocs.map((b) => ({ profil: b.profil, aides: b.aides })));
+  const plan = fusionnerPlans(
+    blocs.map((b) => b.plan),
+    aidesEvaluees,
+  );
+  const profil = blocs[0].profilAides;
   const portail = EMBEDDED_PORTAILS.find((p) => p.region === profil.regionEntreprise) ?? null;
-  return { opco, projet, funding, variante, profil, aidesEvaluees, plan, portail };
+  const groupe: ResultatGroupe = { personnes, personnesPdc, blocs };
+  return { opco, projet, funding, variante, profil, aidesEvaluees, plan, portail, groupe };
 }
 
 // --- Relais du plan conventionnel de la branche --------------------------------------------------------------------
@@ -558,4 +631,119 @@ const PREPOSITIONS: Record<string, string> = {
 /** Nom de région précédé de sa préposition : « en Bretagne », « à La Réunion », « dans les Hauts-de-France ». */
 export function enRegion(nom: string): string {
   return PREPOSITIONS[nom] ?? `en ${nom}`;
+}
+
+// --- Groupe de plusieurs personnes --------------------------------------------------------------------------------
+
+export interface NoteOpco {
+  genre: 'dirigeant' | 'sans-opco';
+  titre: string;
+}
+
+/**
+ * Notes posées sous le bandeau quand le plan ne compte pas le plan de développement des compétences de l'OPCO, pour les
+ * projets du groupe (`projets` : celui de chaque profil). Un seul projet distinct : la note d'une personne seule
+ * (`titreNoteOpco`). Plusieurs : chaque note qui s'applique, une fois (« Aucun OPCO renseigné » quand un projet salarié est
+ * sans OPCO, « OPCO non compté pour le dirigeant du groupe » quand il y a un dirigeant).
+ */
+export function notesOpco(projets: readonly WizardState['projetType'][], sansOpco: boolean): NoteOpco[] {
+  const distincts = [...new Set(projets)];
+  if (distincts.length <= 1) {
+    const projet = distincts[0] ?? null;
+    const titre = titreNoteOpco(projet, sansOpco);
+    return titre == null ? [] : [{ genre: projet === 'formation_dirigeant' ? 'dirigeant' : 'sans-opco', titre }];
+  }
+  const notes: NoteOpco[] = [];
+  if (sansOpco && distincts.some((p) => ouvreBudgetOpco(p))) notes.push({ genre: 'sans-opco', titre: 'Aucun OPCO renseigné' });
+  if (distincts.includes('formation_dirigeant')) {
+    notes.push({ genre: 'dirigeant', titre: 'OPCO non compté pour le dirigeant du groupe' });
+  }
+  return notes;
+}
+
+/**
+ * Détails sous les chiffres du bandeau pour un groupe : « 4 × 2 800 € » sous le coût quand il se divise au centime (sinon
+ * « 333,33 € par personne en moyenne » : 3 × 333,33 € ne ferait pas 1 000 €), « 1 706,25 € par personne en moyenne » sous le
+ * reste à charge. Rien pour une personne seule ni pour un coût inconnu ; pas de moyenne sans reste à charge.
+ */
+export function detailsDuBandeau(
+  plan: Pick<PlanFinancement, 'coutFormation' | 'resteACharge'>,
+  personnes: number,
+): { cout: string | null; reste: string | null } {
+  if (personnes < 2 || !(plan.coutFormation > 0)) return { cout: null, reste: null };
+  const parPersonne = Math.round((plan.coutFormation / personnes) * 100) / 100;
+  const resteMoyen = Math.round((plan.resteACharge / personnes) * 100) / 100;
+  const exact = Math.round(parPersonne * personnes * 100) === Math.round(plan.coutFormation * 100);
+  return {
+    cout: exact
+      ? `${personnes}${INSECABLE}×${INSECABLE}${formatEuro(parPersonne)}`
+      : `${formatEuro(parPersonne)} par personne en moyenne`,
+    reste: plan.resteACharge > 0 ? `${formatEuro(resteMoyen)} par personne en moyenne` : null,
+  };
+}
+
+/** « pour 3 personnes » (espace insécable entre le nombre et l'unité) : sous le nom du financeur d'une ligne du plan d'un groupe. */
+export function pourPersonnes(n: number): string {
+  return `pour ${nombreEtUnite(n, n > 1 ? 'personnes' : 'personne')}`;
+}
+
+/**
+ * Mention du détail de l'estimation de l'OPCO pour un groupe : pour qui le calcul est fait. Null pour une personne seule ou
+ * quand aucune personne ne relève de ce plan.
+ */
+export function mentionOpcoDuGroupe(personnesPdc: number, personnes: number): string | null {
+  if (personnes < 2 || personnesPdc < 1) return null;
+  if (personnesPdc === personnes) return `Calcul pour les ${nombreEtUnite(personnes, 'personnes')} du groupe.`;
+  const qui = personnesPdc === 1 ? 'le salarié' : `les ${nombreEtUnite(personnesPdc, 'salariés')}`;
+  return `Calcul pour ${qui} du groupe (${nombreEtUnite(personnes, 'personnes')} au total).`;
+}
+
+/** Une ligne du tableau « Détail par profil » : le rang du profil, son libellé, son effectif et ses trois montants. */
+export interface LigneParProfil {
+  id: string;
+  rang: number;
+  libelle: string;
+  nombre: number;
+  cout: number;
+  finance: number;
+  reste: number;
+}
+
+/** Lignes du tableau « Détail par profil » (chiffres du plan de chaque profil, jamais recalculés) et leur total en centimes. */
+export function lignesParProfil(blocs: readonly Pick<BlocResultat, 'profil' | 'plan'>[]): {
+  lignes: LigneParProfil[];
+  total: Pick<LigneParProfil, 'nombre' | 'cout' | 'finance' | 'reste'>;
+} {
+  const lignes = blocs.map((b, i) => ({
+    id: b.profil.id,
+    rang: i + 1,
+    libelle: libelleDuProfil(b.profil.champs),
+    nombre: b.profil.nombre,
+    cout: b.plan.coutFormation,
+    finance: b.plan.totalFinance,
+    reste: b.plan.resteACharge,
+  }));
+  const somme = (champ: 'cout' | 'finance' | 'reste') => lignes.reduce((s, l) => s + Math.round(l[champ] * 100), 0) / 100;
+  return {
+    lignes,
+    total: { nombre: lignes.reduce((s, l) => s + l.nombre, 0), cout: somme('cout'), finance: somme('finance'), reste: somme('reste') },
+  };
+}
+
+/** « Profil 1 · Salarié en CDI, 35 ans » pour chaque profil, par identifiant. */
+export function libellesDesProfils(profils: readonly ProfilDuGroupe[]): Map<string, string> {
+  return new Map(profils.map((p, i) => [p.id, `Profil ${i + 1} · ${libelleDuProfil(p.champs)}`]));
+}
+
+/**
+ * Lignes du bloc « Concerne » d'une carte d'aide d'un groupe, une par profil éligible ou à vérifier :
+ * « Profil 1 · Salarié en CDI, 35 ans, 3 personnes : éligible ». Vide pour une aide sans `profils`.
+ */
+export function concerneParAide(aide: Pick<AideEvaluee, 'profils'>, libelles: ReadonlyMap<string, string>): string[] {
+  return (aide.profils ?? []).map(
+    (p) =>
+      `${libelles.get(p.profilId) ?? p.profilId}, ${nombreEtUnite(p.nombre, p.nombre > 1 ? 'personnes' : 'personne')}${INSECABLE}: ${
+        p.statut === 'eligible' ? 'éligible' : 'à vérifier'
+      }`,
+  );
 }
