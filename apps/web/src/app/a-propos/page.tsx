@@ -46,7 +46,7 @@ export default function AProposPage() {
       <GuideHero
         fil={FIL}
         revue={REVUE_DES_GUIDES}
-        eyebrow="financementOPCO · SFG Développement"
+        eyebrow="financementopco · SFG Développement"
         title={
           <>
             Méthode et sources&nbsp;: comment nous{' '}
@@ -62,7 +62,7 @@ export default function AProposPage() {
       <GuideBody toc={TOC} etiquette="Sommaire de la page">
         <GuideSection id="editeur" number="01" title="Qui publie le site">
           <p>
-            financementOPCO est édité par <strong>{editeur.denomination}</strong>, société par actions simplifiée
+            financementopco est édité par <strong>{editeur.denomination}</strong>, société par actions simplifiée
             installée à Bezons (Val-d&apos;Oise), SIREN {editeur.siren}. L&apos;équipe accompagne les entreprises dans
             leurs projets de formation : montage des dossiers de financement et formations en bureautique, langues,
             intelligence artificielle, santé et sécurité au travail.

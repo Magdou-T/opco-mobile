@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
-import { Icon } from './Icon';
 import type { IconName } from './Icon';
 
 /**
@@ -28,53 +27,30 @@ export interface CalloutProps {
   children: ReactNode;
 }
 
-const TONS: Record<CalloutTone, { surface: string; pastille: string; icone: IconName; prefixe: string }> = {
-  info: {
-    surface: 'border-filet bg-lin-soft',
-    pastille: 'bg-turquoise-deep text-white',
-    icone: 'info',
-    prefixe: 'Information :',
-  },
-  confirmation: {
-    surface: 'border-turquoise/30 bg-turquoise-soft',
-    pastille: 'bg-turquoise-deep text-white',
-    icone: 'coche',
-    prefixe: 'Confirmation :',
-  },
-  avertissement: {
-    surface: 'border-or/60 bg-or-soft',
-    pastille: 'bg-or text-encre',
-    icone: 'alerte',
-    prefixe: 'Avertissement :',
-  },
-  alerte: {
-    surface: 'border-rouge/25 bg-rouge-soft',
-    pastille: 'bg-rouge text-white',
-    icone: 'alerte',
-    prefixe: 'Alerte :',
-  },
+/* Charte financementopco : pas d'icône dans une pastille colorée ; le ton se lit au trait vertical de gauche (3 px) et
+   au fond, et le préfixe caché le dit aux lecteurs d'écran. `icone` reste accepté pour compatibilité, sans effet. */
+const TONS: Record<CalloutTone, { surface: string; prefixe: string }> = {
+  info: { surface: 'border-prusse bg-white', prefixe: 'Information :' },
+  confirmation: { surface: 'border-ardoise bg-white', prefixe: 'Confirmation :' },
+  avertissement: { surface: 'border-encre bg-surligneur-doux', prefixe: 'Avertissement :' },
+  alerte: { surface: 'border-rouge bg-rouge-soft', prefixe: 'Alerte :' },
 };
 
-export function Callout({ tone = 'info', titre, icone, as: Balise = 'div', className, children }: CalloutProps) {
+export function Callout({ tone = 'info', titre, as: Balise = 'div', className, children }: CalloutProps) {
   const t = TONS[tone];
   const prefixe = <span className="sr-only">{t.prefixe} </span>;
   const aUnTitre = titre !== undefined && titre !== null && titre !== false && titre !== '';
   return (
-    <Balise className={cx('flex gap-3.5 rounded-2xl border p-4 sm:p-5', t.surface, className)}>
-      <span aria-hidden="true" className={cx('mt-px grid size-8 shrink-0 place-items-center rounded-full', t.pastille)}>
-        <Icon name={icone ?? t.icone} className="size-[18px]" strokeWidth={2} />
-      </span>
-      <div className="min-w-0 pt-1">
-        {aUnTitre && (
-          <p className="font-display text-[0.9375rem] leading-snug font-bold text-texte">
-            {prefixe}
-            {titre}
-          </p>
-        )}
-        <div className={cx('text-sm leading-relaxed text-texte-doux', aUnTitre && 'mt-1')}>
-          {!aUnTitre && prefixe}
-          {children}
-        </div>
+    <Balise className={cx('rounded-[3px] border-l-[3px] px-4 py-3.5 sm:px-5 sm:py-4', t.surface, className)}>
+      {aUnTitre && (
+        <p className="text-[0.9375rem] leading-snug font-semibold text-texte">
+          {prefixe}
+          {titre}
+        </p>
+      )}
+      <div className={cx('text-sm leading-relaxed text-texte-doux', aUnTitre && 'mt-1')}>
+        {!aUnTitre && prefixe}
+        {children}
       </div>
     </Balise>
   );

@@ -26,20 +26,20 @@ const TOUTES: [string, DescriptionDePage][] = [
 describe('métadonnées des pages', () => {
   test('accueil : titre complet (le nom du site n’est pas répété), adresse canonique « / », Open Graph et carte Twitter', () => {
     assert.deepEqual(metadonnees(PAGES.accueil), {
-      title: { absolute: 'financementOPCO : trouvez tous les financements de votre formation' },
+      title: { absolute: 'financementopco : trouvez tous les financements de votre formation' },
       description: PAGES.accueil.description,
       alternates: { canonical: '/' },
       openGraph: {
-        title: 'financementOPCO : trouvez tous les financements de votre formation',
+        title: 'financementopco : trouvez tous les financements de votre formation',
         description: PAGES.accueil.description,
         url: '/',
-        siteName: 'financementOPCO',
+        siteName: 'financementopco',
         locale: 'fr_FR',
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
-        title: 'financementOPCO : trouvez tous les financements de votre formation',
+        title: 'financementopco : trouvez tous les financements de votre formation',
         description: PAGES.accueil.description,
       },
     });
@@ -48,10 +48,10 @@ describe('métadonnées des pages', () => {
   test('autre page : le gabarit du site ajoute son nom au titre, dans l’onglet comme dans les aperçus de partage', () => {
     const m = metadonnees(PAGES.contact);
     assert.equal(m.title, 'Nous contacter');
-    assert.equal(GABARIT_DU_TITRE, '%s | financementOPCO');
-    assert.equal(titreAffiche(PAGES.contact), 'Nous contacter | financementOPCO');
+    assert.equal(GABARIT_DU_TITRE, '%s | financementopco');
+    assert.equal(titreAffiche(PAGES.contact), 'Nous contacter | financementopco');
     assert.deepEqual(m.openGraph, {
-      title: 'Nous contacter | financementOPCO',
+      title: 'Nous contacter | financementopco',
       description: PAGES.contact.description,
       url: '/contact/',
       siteName: NOM_DU_SITE,
@@ -85,8 +85,10 @@ describe('métadonnées des pages', () => {
   test('chaque page fixe a son image de partage (fichier opengraph-image.tsx de sa route), les fiches aussi', () => {
     for (const [nom, p] of Object.entries(PAGES)) {
       const dossier = p.chemin === '/' ? '' : p.chemin.slice(1);
-      const fichier = fileURLToPath(new URL(`../src/app/${dossier}opengraph-image.tsx`, import.meta.url));
-      assert.ok(existsSync(fichier), `${nom} : ${fichier}`);
+      // Image générée (opengraph-image.tsx) ou dessinée (opengraph-image.png, l'accueil : image du kit d'identité).
+      const genere = fileURLToPath(new URL(`../src/app/${dossier}opengraph-image.tsx`, import.meta.url));
+      const dessine = fileURLToPath(new URL(`../src/app/${dossier}opengraph-image.png`, import.meta.url));
+      assert.ok(existsSync(genere) || existsSync(dessine), `${nom} : ${genere}`);
     }
     assert.ok(existsSync(fileURLToPath(new URL('../src/app/opco/[slug]/opengraph-image.tsx', import.meta.url))));
   });

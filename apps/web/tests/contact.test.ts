@@ -11,10 +11,10 @@ const objet = (lien: string): string | undefined => /[?&]subject=([^&]*)/.exec(l
 
 describe('lienMailto', () => {
   test('destinataire SFG Développement, objet préfixé, champs facultatifs absents quand ils sont vides', () => {
-    assert.equal(CONTACT_EMAIL, 'contact@sfgdeveloppement.fr');
+    assert.equal(CONTACT_EMAIL, 'contact@financementopco.fr');
     assert.equal(
       lienMailto({ nom: 'Marie Dupont', entreprise: '', email: 'marie@exemple.fr', telephone: '', sujet: 'Autre demande', message: 'Bonjour' }),
-      'mailto:contact@sfgdeveloppement.fr?subject=%5BfinancementOPCO%5D%20Autre%20demande&body=Nom%20%3A%20Marie%20Dupont%0AEmail%20%3A%20marie%40exemple.fr%0A%0ABonjour',
+      'mailto:contact@financementopco.fr?subject=%5Bfinancementopco%5D%20Autre%20demande&body=Nom%20%3A%20Marie%20Dupont%0AEmail%20%3A%20marie%40exemple.fr%0A%0ABonjour',
     );
   });
 
@@ -28,7 +28,7 @@ describe('lienMailto', () => {
         sujet: SUJETS[0],
         message: 'Formation Excel pour 3 salariés & 100% financée ?',
       }),
-      'mailto:contact@sfgdeveloppement.fr?subject=%5BfinancementOPCO%5D%20Estimer%20ou%20monter%20un%20dossier%20de%20financement%20OPCO' +
+      'mailto:contact@financementopco.fr?subject=%5Bfinancementopco%5D%20Estimer%20ou%20monter%20un%20dossier%20de%20financement%20OPCO' +
         '&body=Nom%20%3A%20Marie%20Dupont%0AEntreprise%20%3A%20Boulangerie%20Dupont%0AEmail%20%3A%20marie%40exemple.fr' +
         '%0AT%C3%A9l%C3%A9phone%20%3A%2006%2012%2034%2056%2078%0A%0AFormation%20Excel%20pour%203%20salari%C3%A9s%20%26%20100%25%20financ%C3%A9e%20%3F',
     );
@@ -47,11 +47,11 @@ describe('lienMailto', () => {
   test("l'objet et le corps produits pour chaque sujet sont ceux du formulaire d'origine (7c791cf)", () => {
     // Objets calculés avec lib/contact.ts de 7c791cf, mot pour mot.
     const AVANT = [
-      '%5BfinancementOPCO%5D%20Estimer%20ou%20monter%20un%20dossier%20de%20financement%20OPCO',
-      '%5BfinancementOPCO%5D%20Organiser%20une%20formation%20pour%20mes%20salari%C3%A9s',
-      '%5BfinancementOPCO%5D%20Question%20sur%20mes%20obligations%20(contributions%2C%20entretiens)',
-      '%5BfinancementOPCO%5D%20Signaler%20une%20erreur%20sur%20le%20site',
-      '%5BfinancementOPCO%5D%20Autre%20demande',
+      '%5Bfinancementopco%5D%20Estimer%20ou%20monter%20un%20dossier%20de%20financement%20OPCO',
+      '%5Bfinancementopco%5D%20Organiser%20une%20formation%20pour%20mes%20salari%C3%A9s',
+      '%5Bfinancementopco%5D%20Question%20sur%20mes%20obligations%20(contributions%2C%20entretiens)',
+      '%5Bfinancementopco%5D%20Signaler%20une%20erreur%20sur%20le%20site',
+      '%5Bfinancementopco%5D%20Autre%20demande',
     ];
     const message = { nom: 'Marie Dupont', entreprise: 'Boulangerie Dupont', email: 'marie@exemple.fr', telephone: '06 12 34 56 78', message: 'Bonjour' };
     assert.deepEqual(
@@ -60,7 +60,7 @@ describe('lienMailto', () => {
     );
     assert.equal(
       lienMailto({ ...message, sujet: SUJETS[2] }),
-      'mailto:contact@sfgdeveloppement.fr?subject=%5BfinancementOPCO%5D%20Question%20sur%20mes%20obligations%20(contributions%2C%20entretiens)&body=Nom%20%3A%20Marie%20Dupont%0AEntreprise%20%3A%20Boulangerie%20Dupont%0AEmail%20%3A%20marie%40exemple.fr%0AT%C3%A9l%C3%A9phone%20%3A%2006%2012%2034%2056%2078%0A%0ABonjour',
+      'mailto:contact@financementopco.fr?subject=%5Bfinancementopco%5D%20Question%20sur%20mes%20obligations%20(contributions%2C%20entretiens)&body=Nom%20%3A%20Marie%20Dupont%0AEntreprise%20%3A%20Boulangerie%20Dupont%0AEmail%20%3A%20marie%40exemple.fr%0AT%C3%A9l%C3%A9phone%20%3A%2006%2012%2034%2056%2078%0A%0ABonjour',
     );
   });
 });
@@ -80,10 +80,10 @@ describe('LIBELLES_DES_SUJETS', () => {
     assert.equal(new Set(Object.values(LIBELLES_DES_SUJETS)).size, SUJETS.length);
   });
 
-  test("le libellé n'entre pas dans le message : l'objet reste « [financementOPCO] » suivi du sujet complet", () => {
+  test("le libellé n'entre pas dans le message : l'objet reste « [financementopco] » suivi du sujet complet", () => {
     const message = { nom: 'Marie', entreprise: '', email: 'marie@exemple.fr', telephone: '', message: 'Bonjour' };
     for (const sujet of SUJETS) {
-      assert.equal(decodeURIComponent(objet(lienMailto({ ...message, sujet })) ?? ''), `[financementOPCO] ${sujet}`);
+      assert.equal(decodeURIComponent(objet(lienMailto({ ...message, sujet })) ?? ''), `[financementopco] ${sujet}`);
     }
   });
 });

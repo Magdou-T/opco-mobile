@@ -1,11 +1,11 @@
 import { cx } from '@/lib/cx';
 
 /**
- * Logo SFG Développement suivi du nom du service, « financementOPCO » en Montserrat (OPCO en orange), séparés par un
- * filet vertical. Le fichier du logo (public/logo-sfg.png, 426 x 224) n'est ni redessiné ni recoloré : ses couleurs
- * gardent un contraste suffisant sur l'encre (turquoise 5,55:1, orange 4,98:1), seule la typographie du nom passe en
- * clair sur fond sombre (`fond="sombre"`). La hauteur est fixée, la largeur suit le ratio : le logo ne se déforme pas.
- * Au survol du lien qui l'entoure, un reflet balaie le logo (masqué par le logo lui-même).
+ * Logo financementopco (kit d'identité de novembre 2026, piste « l'attestation ») : feuille, sceau jaune et nom, texte
+ * vectorisé. Fichiers `public/logo-horizontal.svg` (fond clair) et `public/logo-horizontal-fond-sombre.svg` (fond encre :
+ * rubans et « opco » en bleu clair). Jamais recoloré, déformé ni ombré ; zone de protection d'au moins la largeur du sceau
+ * autour du logo ; 140 px de large au minimum (le logo compact en fait 182). La hauteur est fixée, la largeur suit le
+ * rapport du fichier (523 x 103).
  *
  * Un simple <img> aux dimensions explicites : l'export statique ne transforme pas les images (images.unoptimized), et
  * next/image ajouterait son code client à chaque page pour rien.
@@ -13,41 +13,21 @@ import { cx } from '@/lib/cx';
 export interface LogoProps {
   /** Fond sur lequel le logo est posé. */
   fond?: 'clair' | 'sombre';
-  /** Taille : compacte (en-tête sous 1 024 px, 36 px) ou normale (40 px). */
+  /** Taille : compacte (en-tête sous 1 024 px, 36 px de haut) ou normale (44 px). */
   taille?: 'compacte' | 'normale';
   className?: string;
 }
 
-const MASQUE = { maskImage: 'url(/logo-sfg.png)', WebkitMaskImage: 'url(/logo-sfg.png)' } as const;
-
 export function Logo({ fond = 'clair', taille = 'normale', className }: LogoProps) {
-  const sombre = fond === 'sombre';
-  const compacte = taille === 'compacte';
   return (
-    <span className={cx('inline-flex items-center', compacte ? 'gap-2.5' : 'gap-3', className)}>
-      <span className="relative block shrink-0">
-        {/* eslint-disable-next-line @next/next/no-img-element -- export statique sans optimisation d'image (voir ci-dessus) */}
-        <img
-          src="/logo-sfg.png"
-          alt="SFG Développement"
-          width={426}
-          height={224}
-          decoding="async"
-          className={cx('block w-auto', compacte ? 'h-9' : 'h-10')}
-        />
-        <span aria-hidden="true" className="logo-reflet" style={MASQUE} />
-      </span>
-      <span aria-hidden="true" className={cx('w-px self-stretch', sombre ? 'bg-white/25' : 'bg-filet')} />
-      <span
-        className={cx(
-          'font-display leading-none font-bold whitespace-nowrap tracking-[-0.02em]',
-          // Sous 400 px, le nom se resserre avec la largeur (15 px dès 366 px) pour tenir à côté du bouton Menu.
-          compacte ? 'text-[min(0.9375rem,4.1vw)]' : 'text-[1.0625rem]',
-          sombre ? 'text-white' : 'text-texte',
-        )}
-      >
-        financement<span className={sombre ? 'text-orange-clair' : 'text-orange-deep'}>OPCO</span>
-      </span>
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element -- export statique sans optimisation d'image (voir ci-dessus)
+    <img
+      src={fond === 'sombre' ? '/logo-horizontal-fond-sombre.svg' : '/logo-horizontal.svg'}
+      alt="financementopco"
+      width={523}
+      height={103}
+      decoding="async"
+      className={cx('block w-auto', taille === 'compacte' ? 'h-9' : 'h-11', className)}
+    />
   );
 }

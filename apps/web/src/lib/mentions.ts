@@ -68,7 +68,8 @@ export const MENTIONS: MentionsLegales = {
     adresseSiege: '20 avenue Gabriel Péri, 95870 Bezons',
     villeRcs: 'Pontoise',
     tvaIntracommunautaire: 'Exonération de TVA (article 261-4-4° du CGI)',
-    courriel: 'contact@sfgdeveloppement.fr',
+    // Boîte du site, tenue par SFG Développement (identité de novembre 2026) ; les droits RGPD restent ci-dessous.
+    courriel: 'contact@financementopco.fr',
     telephone: ['01', '82', '41', '02', '41'].join(INSECABLE),
   },
   // Aucun nom de personne (choix de l'éditeur, 09/10/2026) : la rubrique désigne le représentant légal. `fonction` vide

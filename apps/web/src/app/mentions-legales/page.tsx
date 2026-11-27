@@ -51,8 +51,8 @@ export default function MentionsLegalesPage() {
     editeur: (
       <>
         <p>
-          Le site financementOPCO est un service de{' '}
-          <Valeur champ={editeur.denomination} libelle={libelles.editeur.denomination} />, qui en est l&apos;éditeur.
+          Le site financementopco est édité par{' '}
+          <Valeur champ={editeur.denomination} libelle={libelles.editeur.denomination} />.
         </p>
         <Informations
           lignes={[
@@ -133,7 +133,8 @@ export default function MentionsLegalesPage() {
         </p>
         <p>
           <strong>Formulaire de contact.</strong>{' '}Le site n&apos;envoie rien&nbsp;: le formulaire ouvre votre messagerie
-          avec un message adressé à SFG Développement, que vous envoyez vous-même. SFG Développement traite les
+          avec un message adressé à contact@financementopco.fr, la boîte de SFG Développement, que vous envoyez
+          vous-même. SFG Développement traite les
           informations de ce message (nom, adresse électronique, entreprise, téléphone, message) pour vous répondre.
         </p>
         <Informations
@@ -207,7 +208,7 @@ export default function MentionsLegalesPage() {
         })}
       />
       <GuideHero
-        eyebrow="SFG Développement · financementOPCO"
+        eyebrow="SFG Développement · financementopco"
         title="Mentions légales et données"
         lead="Qui édite et héberge le site, ce qu'il fait de vos données et d'où viennent ses informations."
       />

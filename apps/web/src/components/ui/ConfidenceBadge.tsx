@@ -13,17 +13,17 @@ interface ConfidenceBadgeProps {
 const CONFIDENCE_CONFIG: Record<Confidence, { label: string; className: string; title: string }> = {
   exact: {
     label: 'Exact',
-    className: 'text-turquoise-deep bg-turquoise-soft',
+    className: 'border-prusse bg-prusse text-white',
     title: 'Montant publié tel quel par le financeur, la source est jointe',
   },
   estimated: {
     label: 'Estimé',
-    className: 'text-rouge bg-rouge-soft',
+    className: 'text-prusse',
     title: 'Montant reconstitué à partir de documents officiels partiels',
   },
   depends_on_branche: {
     label: 'Selon branche',
-    className: 'text-texte-doux bg-lin-soft',
+    className: 'border-dashed text-ardoise',
     title: `Pas de barème unique publié${INSECABLE}: le montant dépend de votre branche ou de votre dossier`,
   },
 };

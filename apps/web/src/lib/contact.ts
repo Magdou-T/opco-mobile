@@ -1,14 +1,14 @@
 // ============================================================
 // Formulaire de contact (/contact/) : composition du message et contrôle des champs obligatoires, en fonctions pures
 // (tests : tests/contact.test.ts). Le formulaire n'envoie rien lui-même : il ouvre la messagerie de l'utilisateur
-// (lien mailto) avec le message prérempli, adressé à SFG Développement. Aucune donnée n'est collectée par le site.
+// (lien mailto) avec le message prérempli, adressé à contact@financementopco.fr (boîte de SFG Développement). Aucune donnée n'est collectée par le site.
 // ============================================================
 
 import { INSECABLE } from './insecable';
 
-export const CONTACT_EMAIL = 'contact@sfgdeveloppement.fr';
+export const CONTACT_EMAIL = 'contact@financementopco.fr';
 
-/** Sujets du formulaire : chacun est repris tel quel dans l'objet du message (« [financementOPCO] sujet »). */
+/** Sujets du formulaire : chacun est repris tel quel dans l'objet du message (« [financementopco] sujet »). */
 export const SUJETS = [
   'Estimer ou monter un dossier de financement OPCO',
   'Organiser une formation pour mes salariés',
@@ -42,7 +42,7 @@ export interface MessageContact {
 }
 
 /**
- * Lien mailto du message : objet « [financementOPCO] sujet », corps « Nom : … », « Entreprise : … » et « Téléphone : … »
+ * Lien mailto du message : objet « [financementopco] sujet », corps « Nom : … », « Entreprise : … » et « Téléphone : … »
  * seulement s'ils sont renseignés, « Email : … », une ligne vide puis le message. Les valeurs sont reprises telles que
  * saisies.
  */
@@ -57,7 +57,7 @@ export function lienMailto(m: MessageContact): string {
   ]
     .filter((ligne) => ligne !== null)
     .join('\n');
-  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`[financementOPCO] ${m.sujet}`)}&body=${encodeURIComponent(corps)}`;
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`[financementopco] ${m.sujet}`)}&body=${encodeURIComponent(corps)}`;
 }
 
 export type ChampObligatoire = 'nom' | 'email' | 'message';

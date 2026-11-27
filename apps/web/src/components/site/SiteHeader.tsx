@@ -15,7 +15,7 @@ import { Icon } from '@/components/ui/Icon';
 export function SiteHeader() {
   return (
     <>
-      <header className="entete-site sticky top-0 z-50 border-b border-filet bg-white print:hidden">
+      <header className="entete-site sticky top-0 z-50 border-b border-filet bg-papier print:hidden">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6 lg:h-[4.5rem] xl:max-w-7xl xl:gap-4">
           {/* La visibilité selon la largeur se règle sur des enveloppes : une classe d'affichage passée au composant
               entrerait en conflit avec son propre `inline-flex`. */}
@@ -58,7 +58,7 @@ export function SiteHeader() {
 
       {/* De 1 024 à 1 279 px, la navigation tient sur une seconde ligne, hors de l'en-tête collant : elle défile avec la
           page et l'en-tête ne garde que 72 px en haut de l'écran. */}
-      <nav aria-label="Navigation principale" className="entete-seconde-ligne hidden border-b border-filet/70 bg-white lg:block xl:hidden print:hidden">
+      <nav aria-label="Navigation principale" className="entete-seconde-ligne hidden border-b border-filet bg-papier lg:block xl:hidden print:hidden">
         <LiensNavigation variante="seconde-ligne" />
       </nav>
     </>

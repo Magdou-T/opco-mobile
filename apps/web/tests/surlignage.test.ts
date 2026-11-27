@@ -1,12 +1,12 @@
-// Surlignage `.mark` (globals.css) : il ne se coupe pas (`white-space: nowrap`, le trait est tiré sous le mot entier).
-// Un surlignage de plusieurs mots est donc posé dans un groupe `.mark-groupe` (bloc en ligne de largeur maximale 100 %),
-// avec sa ponctuation : rendu identique tant qu'il tient sur une ligne, retour à la ligne au lieu d'un texte rogné
-// quand il est plus large (espacement de texte WCAG 1.4.12 à 320 et 375 px : « prise en charge. » de l'accueil sortait
-// de l'écran). Lecture du code source.
+// Surlignage `.mark` (globals.css, charte financementopco) : l'accent typographique des titres, en italique, souligné
+// d'un aplat de surligneur posé par une ombre intérieure. `box-decoration-break: clone` redessine l'aplat sur chaque
+// ligne : un surlignage de plusieurs mots passe à la ligne sans être rogné (espacement de texte WCAG 1.4.12 à 320 et
+// 375 px), sans groupe obligatoire. L'ancien trait en `white-space: nowrap`, qui imposait le groupe `.mark-groupe`, a
+// disparu avec la charte SFG. Un seul montant surligné par écran : `.montant-cle`. Lecture du code source.
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SRC = fileURLToPath(new URL('../src/', import.meta.url));
@@ -20,43 +20,26 @@ function fichiersTsx(dossier: string): string[] {
   });
 }
 
-/** Surlignages écrits en toutes lettres dont le texte contient une espace ordinaire, hors groupe. */
-function surlignagesHorsGroupe(source: string): string[] {
-  const fautes: string[] = [];
-  for (const m of source.matchAll(/<span className="mark">([^<{]*)<\/span>/g)) {
-    if (!m[1].includes(' ')) continue;
-    const avant = source.slice(Math.max(0, m.index - 80), m.index);
-    if (!/<span className="mark-groupe">\s*$/.test(avant)) fautes.push(m[1]);
-  }
-  return fautes;
-}
-
-describe('surlignage de plusieurs mots', () => {
-  test('le détecteur repère un surlignage de plusieurs mots hors groupe, et lui seul', () => {
-    assert.deepEqual(surlignagesHorsGroupe('peut être <span className="mark">prise en charge</span>.'), ['prise en charge']);
-    assert.deepEqual(
-      surlignagesHorsGroupe('<span className="mark-groupe">\n  <span className="mark">prise en charge</span>.\n</span>'),
-      [],
-    );
-    assert.deepEqual(surlignagesHorsGroupe('projet de <span className="mark">formation</span>'), []);
-    assert.deepEqual(surlignagesHorsGroupe('<span className="mark">875&nbsp;€</span>'), []);
+describe('surlignage', () => {
+  test('le surlignage est un italique souligné par une ombre, redessinée sur chaque ligne, sans blocage du retour à la ligne', () => {
+    const regle = /\.mark \{([^}]*)\}/.exec(CSS)?.[1] ?? '';
+    assert.match(regle, /font-style: italic;/);
+    assert.match(regle, /box-shadow: inset 0 -0\.34em 0 var\(--surligneur\);/);
+    assert.match(regle, /box-decoration-break: clone;/);
+    assert.doesNotMatch(regle, /white-space: nowrap/);
   });
 
-  test('chaque surlignage de plusieurs mots des pages est dans un groupe', () => {
-    const fichiers = fichiersTsx(SRC);
-    const fautes = fichiers.flatMap((f) =>
-      surlignagesHorsGroupe(readFileSync(f, 'utf8')).map((t) => `${relative(SRC, f)} : ${t}`),
-    );
-    assert.deepEqual(fautes, []);
-    // Titres concernés : accueil, obligations, comprendre les OPCO, se former sans budget, page 404, puis (revue du
-    // 27/11/2026) quel est mon OPCO et méthode et sources.
-    const groupes = fichiers.reduce((n, f) => n + (readFileSync(f, 'utf8').match(/className="mark-groupe"/g)?.length ?? 0), 0);
-    assert.equal(groupes, 7);
+  test('le montant clé est en DM Mono, surligné ; le surligneur ne colore jamais un texte', () => {
+    const regle = /\.montant-cle \{([^}]*)\}/.exec(CSS)?.[1] ?? '';
+    assert.match(regle, /font-family: var\(--font-mono\);/);
+    assert.match(regle, /var\(--surligneur\)/);
+    for (const f of fichiersTsx(SRC)) {
+      assert.doesNotMatch(readFileSync(f, 'utf8'), /text-surligneur/, f);
+    }
   });
 
-  test('le groupe est un bloc en ligne borné à la largeur de la ligne, où le surlignage peut passer à la ligne', () => {
-    assert.match(CSS, /\.mark \{[^}]*white-space: nowrap;/);
-    assert.match(CSS, /\.mark-groupe \{\s*display: inline-block;\s*max-width: 100%;\s*\}/);
-    assert.match(CSS, /\.mark-groupe \.mark \{\s*white-space: normal;\s*\}/);
+  test("l'accueil n'a qu'un montant surligné (la prise en charge du plan d'exemple)", () => {
+    const accueil = readFileSync(join(SRC, 'app/page.tsx'), 'utf8');
+    assert.equal(accueil.match(/montant-cle/g)?.length, 1);
   });
 });

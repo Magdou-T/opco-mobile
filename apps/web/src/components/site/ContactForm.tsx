@@ -17,7 +17,7 @@ const CHAMP = cx('mt-2', DESSIN_DU_CHAMP, 'min-w-0');
 
 /**
  * Formulaire de contact. Il n'envoie rien lui-même : il ouvre la messagerie de l'utilisateur avec un message prérempli
- * adressé à SFG Développement (lien mailto, `lib/contact.ts`) ; aucune donnée n'est collectée par le site. Les champs
+ * adressé à contact@financementopco.fr (lien mailto, `lib/contact.ts`) ; aucune donnée n'est collectée par le site. Les champs
  * obligatoires (nom, adresse e-mail, message) sont contrôlés avant : erreur affichée quand on quitte le champ, ou pour
  * tous à l'envoi, entre le libellé et le champ (aria-invalid, aria-describedby), focus sur le premier champ à corriger.
  */
@@ -73,7 +73,7 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-label="Écrire à SFG Développement">
+    <form onSubmit={handleSubmit} noValidate aria-label="Écrire à financementopco">
       <div className="grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2">
         <div className="min-w-0">
           <FieldLabel label="Votre nom" required htmlFor="contact-nom" />

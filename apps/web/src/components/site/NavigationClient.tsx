@@ -31,7 +31,7 @@ function estActive(chemin: string, href: string): boolean {
   return c === href || c.startsWith(`${href}/`);
 }
 
-/* Transitions limitées aux couleurs de fond et de texte : l'anneau de focus paraît d'emblée en orange foncé. */
+/* Charte financementopco : liens de texte, page active soulignée d'un trait de 2 px (aucune pilule ni pastille). */
 const VARIANTES = {
   /**
    * Une seule ligne d'en-tête (à partir de 1 280 px) : libellés de 14 px, pilules serrées. Mesuré à 1 280 px avec une
@@ -39,17 +39,17 @@ const VARIANTES = {
    */
   ligne: {
     liste: 'flex items-center gap-0.5',
-    lien: 'inline-flex h-9 items-center gap-1.5 rounded-full px-2 text-sm font-medium whitespace-nowrap transition-[color,background-color]',
+    lien: 'inline-flex h-11 items-center px-2 text-sm whitespace-nowrap underline-offset-[0.45em] transition-[color]',
   },
   /** Seconde ligne, sous l'en-tête collant (1 024 à 1 279 px) : elle défile avec la page. */
   'seconde-ligne': {
     liste: 'mx-auto flex h-12 max-w-6xl items-center gap-1 px-4 sm:px-6 [&>li:first-child]:-ml-3',
-    lien: 'inline-flex h-9 items-center gap-2 rounded-full px-3 text-[0.9375rem] font-medium transition-[color,background-color]',
+    lien: 'inline-flex h-11 items-center px-3 text-[0.9375rem] underline-offset-[0.45em] transition-[color]',
   },
   /** Menu des petits écrans : cibles de 48 px. */
   menu: {
     liste: 'mx-auto max-w-6xl px-4 py-3 sm:px-6',
-    lien: 'flex min-h-12 items-center gap-3 rounded-xl px-3 text-base font-medium transition-[color,background-color]',
+    lien: 'flex min-h-12 items-center gap-3 border-b border-filet px-1 text-base underline-offset-[0.4em] transition-[color]',
   },
 } as const;
 
@@ -75,15 +75,11 @@ export function LiensNavigation({
               aria-current={actif ? 'page' : undefined}
               className={cx(
                 v.lien,
-                actif ? 'bg-lin font-semibold text-texte' : 'text-texte-doux hover:bg-lin-soft hover:text-texte',
+                actif
+                  ? 'font-semibold text-texte underline decoration-prusse decoration-2'
+                  : 'text-texte hover:text-prusse hover:underline hover:decoration-1',
               )}
             >
-              {(actif || menu) && (
-                <span
-                  aria-hidden="true"
-                  className={cx('size-1.5 shrink-0 rounded-full', actif ? 'bg-orange' : 'bg-filet-fort/40')}
-                />
-              )}
               {menu ? <span className="flex-1">{item.label}</span> : item.label}
               {menu && chevron}
             </Link>
@@ -155,7 +151,7 @@ export function MenuMobile({
       <button
         ref={bouton}
         type="button"
-        className="inline-flex size-11 items-center justify-center gap-2 rounded-full border border-filet-fort text-sm font-semibold text-texte transition-[background-color] hover:bg-lin-soft min-[400px]:w-auto min-[400px]:px-4"
+        className="inline-flex size-11 items-center justify-center gap-2 rounded-[3px] border-[1.5px] border-encre text-sm font-semibold text-texte transition-[background-color] hover:bg-papier-fonce min-[400px]:w-auto min-[400px]:px-4"
         onClick={() => setOuvertSur(ouvert ? null : chemin)}
         aria-expanded={ouvert}
         aria-controls="menu-mobile"
@@ -174,7 +170,7 @@ export function MenuMobile({
         aria-label="Navigation principale"
         hidden={!ouvert}
         onClick={surClicDansLeMenu}
-        className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-filet bg-white shadow-flottante"
+        className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-y border-encre bg-papier"
       >
         {children}
       </nav>

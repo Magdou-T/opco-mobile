@@ -96,7 +96,7 @@ export function Sommaire({
               onClick={aller(e.id)}
               aria-current={estActif ? 'location' : undefined}
               className={cx(
-                'flex items-start gap-2.5 rounded-xl px-3 text-sm leading-snug transition-[color,background-color]',
+                'flex items-start gap-2.5 rounded-[3px] px-3 text-sm leading-snug transition-[color,background-color]',
                 replie ? 'min-h-11 items-center py-2' : 'py-2',
                 estActif ? 'bg-lin font-semibold text-texte' : 'text-texte-doux hover:bg-lin-soft hover:text-texte',
               )}
@@ -106,7 +106,7 @@ export function Sommaire({
               ) : (
                 <span
                   aria-hidden="true"
-                  className={cx('mt-[0.45em] size-1.5 shrink-0 rounded-full', estActif ? 'bg-orange' : 'bg-filet-fort/60')}
+                  className={cx('mt-[0.35em] h-3.5 w-0.5 shrink-0', estActif ? 'bg-prusse' : 'bg-transparent')}
                 />
               )}
               <span className="min-w-0 flex-1">{e.libelle}</span>
@@ -116,7 +116,7 @@ export function Sommaire({
                 <>
                   <span
                     aria-hidden="true"
-                    className="shrink-0 rounded-full bg-rouge-soft px-2 text-xs leading-5 font-semibold text-rouge"
+                    className="shrink-0 rounded-[2px] border border-rouge px-1.5 font-mono text-xs leading-5 text-rouge"
                   >
                     {e.compte}
                   </span>
@@ -132,7 +132,7 @@ export function Sommaire({
 
   return (
     <nav aria-label={etiquette} className={cx('print:hidden', className)}>
-      <details ref={bloc} className="group/sommaire rounded-carte border border-filet bg-white shadow-douce lg:hidden">
+      <details ref={bloc} className="group/sommaire rounded-carte border border-filet bg-white lg:hidden">
         <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-carte px-4 py-3 font-semibold text-texte [&::-webkit-details-marker]:hidden">
           <span className="flex items-center gap-2.5">
             <Icon name="menu" className="size-5 text-turquoise-deep" />

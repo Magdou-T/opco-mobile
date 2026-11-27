@@ -26,11 +26,13 @@ export interface CardProps extends HTMLAttributes<HTMLElement> {
 }
 
 const TONS: Record<CardTone, string> = {
-  plain: 'border border-filet bg-white shadow-douce [--focus:var(--orange-deep)]',
-  teintee: 'border border-filet/60 bg-lin-soft [--focus:var(--orange-deep)]',
-  turquoise: 'surface-turquoise shadow-flottante',
-  orange: 'surface-orange shadow-flottante',
-  nuit: 'surface-nuit shadow-flottante',
+  // Charte financementopco : un cadre de filet sur la feuille, sans ombre ni arrondi (3 px) ; les variantes sombres sont
+  // des aplats pleins (bleu de Prusse ou encre).
+  plain: 'border border-filet bg-white [--focus:var(--prusse)]',
+  teintee: 'border border-filet bg-papier-fonce [--focus:var(--prusse)]',
+  turquoise: 'surface-turquoise',
+  orange: 'surface-orange',
+  nuit: 'surface-nuit',
 };
 
 const MARGES: Record<CardPadding, string> = {
@@ -55,9 +57,7 @@ export function Card({
         'relative rounded-carte',
         TONS[tone],
         MARGES[padding],
-        interactive &&
-          'transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-flottante',
-        interactive && tone === 'plain' && 'hover:border-orange/45',
+        interactive && 'transition-[border-color,background-color] duration-150 ease-out hover:border-encre',
         className,
       )}
       {...props}

@@ -17,7 +17,7 @@ const GRAPHE = grapheDePage({
     {
       '@type': 'WebApplication',
       '@id': `${adresseAbsolue(PAGES.simulateur.chemin)}#application`,
-      name: 'Simulateur de financement de formation financementOPCO',
+      name: 'Simulateur de financement de formation financementopco',
       url: adresseAbsolue(PAGES.simulateur.chemin),
       description: PAGES.simulateur.description,
       applicationCategory: 'BusinessApplication',

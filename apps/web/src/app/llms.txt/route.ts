@@ -28,7 +28,7 @@ export function GET() {
   const texte = [
     `# ${NOM_DU_SITE}`,
     '',
-    `> Simulateur gratuit et guides des financements de la formation professionnelle en France : les 11 OPCO et leurs barèmes 2026, le CPF, les aides de l'État, de France Travail, des Régions, de Transitions Pro, de l'Agefiph et du FSE+. Chaque montant cite sa source officielle et sa date de vérification. Site édité par SFG Développement (organisme de formation, Bezons, SIREN 814 739 728).`,
+    `> Simulateur gratuit et guides des financements de la formation professionnelle en France : les 11 OPCO et leurs barèmes 2026, le CPF, les aides de l'État, de France Travail, des Régions, de Transitions Pro, de l'Agefiph et du FSE+. Chaque montant cite sa source officielle et sa date de vérification. Site édité par SFG Développement (organisme de formation certifié Qualiopi, Bezons, SIREN 814 739 728) ; contact : contact@financementopco.fr.`,
     '',
     `Les montants sont indicatifs : seul le financeur (OPCO, Caisse des dépôts, France Travail, Région) décide d'une prise en charge, après étude du dossier. Barèmes des OPCO vérifiés pour la dernière fois le ${dateFr(verification)}.`,
     '',

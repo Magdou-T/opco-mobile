@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 // ============================================================
-// Garde de la charte SFG pour le site : Node seul, sans dependance.
+// Garde de la charte financementopco pour le site : Node seul, sans dependance.
+//
+// Charte du site depuis novembre 2026 : kit d'identite financementopco (piste "l'attestation"). Papier #F4F1E9,
+// papier fonce #EAE5D8, feuille #FBF9F4, filet #CFC8B8, encre #161C27, ardoise #4A5262, bleu de Prusse #1F3B63 (action,
+// liens), surligneur #F1D84B (jamais pour du texte) ; Newsreader (titres), Instrument Sans (texte), DM Mono (montants,
+// sources, reperes). L'ancienne charte SFG (orange, turquoise, or, vert clair ; Montserrat et Inter) est abandonnee pour
+// ce site : la garde en traque les restes. Guide : apps/web/DESIGN.md.
 //
 // Perimetre de `npm run check:charte` : le code du site (apps/web/src, toutes les regles ci-dessous), ses tests
 // (apps/web/tests : tirets et emojis, ecritures comprises) et son guide de design (apps/web/DESIGN.md : tirets et
@@ -14,47 +20,56 @@
 //       verticale), U+FE58, ecrits tels quels ou sous forme d'entite HTML (&mdash; &horbar; &#8212; &#x2014;),
 //       d'echappement JavaScript (\u{2014} et la forme courte a quatre chiffres, suivie ou non d'un chiffre) ou CSS
 //       (\2014, de quatre a six chiffres) ;
-//   (b) les couleurs bleues ou violettes (teinte TSL comprise entre 190 et 320 degres, gris exclus) :
-//       - classes Tailwind de la palette retiree (blue, indigo, violet, purple, fuchsia, sky) et de cyan sur chacun
-//         des 49 utilitaires de couleur de Tailwind 4 (bg, text, border-*, ring, inset-ring, shadow, inset-shadow,
-//         drop-shadow, text-shadow, mask-*-from/to, etc.) et variables --color-blue... ;
+//   (b) les anciennes couleurs de la charte SFG : orange #E84E1B, #C43F13, #A93510, #FDF0EA, #F56A31, turquoise
+//       #5E9F92, #3E6860, #EDF5F2, or #F9B233, #FEF4DE, vert clair #A3D1C8, #E6F2EF :
+//       - toute couleur egale ou tres proche de l'une d'elles (ecart OKLab inferieur a 0,02, environ un ecart
+//         perceptible), sauf si une couleur du kit est plus proche encore : le papier #F4F1E9 n'est qu'a 0,012 de
+//         l'ancien #FDF0EA, il reste permis ;
 //       - fonctions de couleur : rgb(), hsl(), hwb(), lab(), lch(), oklab(), oklch(), color(), separateurs virgule,
-//         espace, barre ou souligne, souligne admis devant (valeurs arbitraires Tailwind : bg-[rgb(59_130_246)],
-//         shadow-[0_0_0_2px_rgb(59_130_246)]) ; les trois composantes de couleur sont lues, l'alpha est ignore meme
-//         calcule (rgb(59 130 246 / var(--a)), calc() et var() imbriques a toute profondeur) ;
-//       - hexadecimal et couleurs nommees CSS (blue, navy, rebeccapurple...) dans un contexte de couleur : declaration
-//         CSS ou objet de style, attribut fill / stroke / color, valeur arbitraire Tailwind [...], argument d'un
-//         degrade ou de color-mix() ; une chaine qui n'est qu'un hexadecimal compte aussi, sauf comme ancre (href,
-//         id, hash, querySelector...), affectee ou comparee (=, ===, !==) : #bad ou #decade dans un lien, ou
-//         location.hash === '#bad', ne sont pas des couleurs ;
-//       - est un gris toute couleur dont la chroma OKLCH est inferieure a 0,01 (moins de la moitie d'un ecart
-//         perceptible) : un gris bleute tres pale comme #F8F9FB n'est pas signale, #F0F8FF (aliceblue) l'est ;
-//   (c) la police mono : font-mono, monospace (font-family, font-[monospace]), IBM Plex ; partout, les familles mono
-//       dont le nom ne designe rien d'autre (SF Mono, Fira Code, JetBrains Mono, Source Code Pro, Cascadia, Lucida
-//       Console, Inconsolata, Iosevka, Monaspace, Anonymous Pro, * Mono) ; dans un contexte de police seulement
-//       (declaration font-family, font ou --font-*, propriete fontFamily, classe font-[...]), celles dont le nom est
-//       aussi un mot courant (Monaco, Menlo, Consolas, Courier, Hack) ; hors commentaires, les balises <code>, <pre>,
-//       <kbd>, <samp>, <tt> que le navigateur rend en mono ;
+//         espace, barre ou souligne, souligne admis devant (valeurs arbitraires Tailwind : bg-[rgb(232_78_27)],
+//         shadow-[0_0_0_2px_rgb(232_78_27)]) ; les trois composantes de couleur sont lues, l'alpha est ignore meme
+//         calcule (rgb(232 78 27 / var(--a)), calc() et var() imbriques a toute profondeur) ;
+//       - hexadecimal et couleurs nommees CSS (linen, oldlace, whitesmoke...) dans un contexte de couleur :
+//         declaration CSS ou objet de style, attribut fill / stroke / color, valeur arbitraire Tailwind [...], argument
+//         d'un degrade ou de color-mix() ; une chaine qui n'est qu'un hexadecimal compte aussi, sauf comme ancre (href,
+//         id, hash, querySelector...), affectee ou comparee (=, ===, !==) : #e84e1b dans un lien, ou
+//         location.hash === '#e84e1b', ne sont pas des couleurs ;
+//       - classes Tailwind de l'ancienne palette (orange, turquoise, or, vert-clair, lin, et leurs variantes -deep,
+//         -soft, -clair, -500...) sur chacun des 49 utilitaires de couleur de Tailwind 4 (bg, text, border-*, ring,
+//         inset-ring, shadow, inset-shadow, drop-shadow, text-shadow, mask-*-from/to, etc.), seulement si le jeton
+//         n'est plus defini dans apps/web/src/app/globals.css (--color-NOM, lu a chaque passage) : un nom historique
+//         qui y reste defini, avec une valeur de la nouvelle charte, est permis ;
+//   (c) toute police hors charte. Sont permises Newsreader, Instrument Sans et DM Mono, les replis Georgia, Arial,
+//       Helvetica, Menlo et ceux du kit (Helvetica Neue, Times New Roman), les familles generiques serif, sans-serif,
+//       monospace, ui-monospace, system-ui et les mots-cles inherit, initial, unset, revert. Toute autre famille
+//       nommee dans un contexte de police est signalee : declaration font-family, font (apres la taille) ou propriete
+//       personnalisee dont le nom contient font (--font-sans, --fo-font-titre), propriete ou attribut fontFamily,
+//       attribut font-family, classe font-[...], repli d'un var(), import de next/font/google. Montserrat, IBM Plex et
+//       les variables --font-montserrat, --font-inter, --font-plex... sont signales partout hors commentaires.
+//       font-mono et les balises <code>, <pre> sont permises (DM Mono porte les montants) ;
 //   (d) les emojis, ecrits tels quels, en entite HTML numerique (&#127881; &#x1F389;), en echappement JavaScript
 //       (\u{1F389}, paire de substitution) ou CSS (\1F389) : tout pictogramme (proprietes Unicode
 //       Extended_Pictographic et Emoji_Presentation, plage U+1F000 a U+1FAFF, selecteur U+FE0F, touche U+20E3), sauf
 //       les signes typographiques toleres sans selecteur U+FE0F : coche U+2713, attention U+26A0, fleche U+2197,
-//       triangles U+25B8 et U+25BE, (c) U+00A9, (r) U+00AE, TM U+2122.
+//       triangles U+25B8 et U+25BE, (c) U+00A9, (r) U+00AE, TM U+2122 ;
+//   (e) les degrades, dans apps/web/src seulement et hors commentaires : linear-gradient(), radial-gradient(),
+//       conic-gradient() et leurs variantes repeating- (prefixe -webkit-, -moz- ou -o- compris), utilitaires Tailwind
+//       bg-linear-*, bg-radial*, bg-conic*, bg-gradient-*.
 //
 // Limites connues : la garde lit le texte source, pas le rendu. Une couleur construite a l'execution (variable,
 // concatenation, valeur venue des donnees), un hexadecimal sans contexte de couleur (commentaire, texte), une couleur
-// encodee dans une image SVG en data URI (%233b82f6), une police mono chargee par un nom inconnu ou dont le nom ambigu
-// est range dans une constante, un emoji en entite nommee (&hearts;), une image ou une icone bleue echappent au
-// controle. A l'inverse, un tiret ou un emoji ecrit dans le code qui le traite (une expression reguliere qui retire le
-// tiret d'une donnee) est signale : le construire par String.fromCharCode(0x2014) ou String.fromCodePoint(). Les
-// donnees de packages/core sont controlees par packages/core/tests/charte-sfg.test.ts.
+// encodee dans une image SVG en data URI (%23e84e1b), une police chargee sous un nom range dans une constante, un
+// degrade SVG (<linearGradient>), un emoji en entite nommee (&hearts;), une image ou une icone aux anciennes couleurs
+// echappent au controle. A l'inverse, un tiret ou un emoji ecrit dans le code qui le traite (une expression reguliere
+// qui retire le tiret d'une donnee) est signale : le construire par String.fromCharCode(0x2014) ou
+// String.fromCodePoint(). Les donnees de packages/core sont controlees par packages/core/tests/charte-sfg.test.ts.
 //
 // Usage : node scripts/check-charte-sfg.mjs [--self-test | --tirets]
 // Code de sortie 1 s'il y a au moins une violation (ou un ecart dans l'autotest), 2 si git ls-files echoue (--tirets).
 // ============================================================
 
 import { execFileSync } from 'node:child_process';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -63,11 +78,8 @@ const DOSSIER = join(RACINE, 'apps', 'web', 'src');
 const EXTENSIONS = new Set(['.ts', '.tsx', '.css']);
 const TESTS_DU_SITE = join(RACINE, 'apps', 'web', 'tests');
 const GUIDE_DU_SITE = join(RACINE, 'apps', 'web', 'DESIGN.md');
-
-const TEINTE_MIN = 190;
-const TEINTE_MAX = 320;
-/** En dessous de cette chroma OKLCH, une couleur est un gris (un ecart perceptible vaut environ 0,02). */
-const CHROMA_GRIS = 0.01;
+/** Feuille globale du site : ses jetons --color-* disent quelles classes de couleur existent. */
+const FEUILLE_GLOBALE = join(DOSSIER, 'app', 'globals.css');
 
 // ------------------------------------------------------------
 // (a) Tiret cadratin et variantes
@@ -90,9 +102,50 @@ const TIRETS_ECRITS = new RegExp(
 );
 
 // ------------------------------------------------------------
-// (b) Bleu et violet
+// (b) Anciennes couleurs de la charte SFG
 // ------------------------------------------------------------
-const FAMILLES_BLEUES = 'blue|indigo|violet|purple|fuchsia|sky|cyan';
+/** Anciennes couleurs de la charte SFG, abandonnees pour ce site : nom du jeton historique et valeur. */
+const ANCIENNES = [
+  ['orange', 'E84E1B'],
+  ['orange-deep', 'C43F13'],
+  ['orange-deeper', 'A93510'],
+  ['orange-soft', 'FDF0EA'],
+  ['orange-clair', 'F56A31'],
+  ['turquoise', '5E9F92'],
+  ['turquoise-deep', '3E6860'],
+  ['turquoise-soft', 'EDF5F2'],
+  ['or', 'F9B233'],
+  ['or-soft', 'FEF4DE'],
+  ['vert-clair', 'A3D1C8'],
+  ['vert-clair-soft', 'E6F2EF'],
+];
+/**
+ * Couleurs du kit financementopco (integration/styles/tokens.css). Une couleur plus proche de l'une d'elles que de
+ * toute ancienne couleur n'est pas signalee : le papier #F4F1E9 est a 0,012 de l'ancien orange doux #FDF0EA.
+ */
+const CHARTE = [
+  ['papier', 'F4F1E9'],
+  ['papier-fonce', 'EAE5D8'],
+  ['feuille', 'FBF9F4'],
+  ['filet', 'CFC8B8'],
+  ['filet-fonce', 'B9B2A2'],
+  ['pointilles', 'A9A293'],
+  ['ombre-feuille', 'E4DED0'],
+  ['encre', '161C27'],
+  ['ardoise', '4A5262'],
+  ['prusse', '1F3B63'],
+  ['prusse-fonce', '172D4C'],
+  ['surligneur', 'F1D84B'],
+  ['bleu-clair', 'B9C8DE'],
+  ['texte-sur-prusse', 'D6DEEA'],
+  ['texte-sur-encre', 'B9BFCA'],
+  ['filet-sur-encre', '2E3647'],
+];
+/** Ecart OKLab en dessous duquel une couleur est l'ancienne (un ecart perceptible vaut environ 0,02). */
+const ECART_MAX = 0.02;
+
+// Familles de l'ancienne palette Tailwind du site ; leurs variantes (-deep, -soft, -clair, -500...) suivent.
+const FAMILLES_ANCIENNES = 'orange|or|turquoise|vert-clair|lin';
 // Les 49 racines d'utilitaires de couleur de Tailwind 4.2 (liste tiree de getClassList()).
 const RACINES_COULEUR = [
   'bg',
@@ -117,15 +170,15 @@ const RACINES_COULEUR = [
   'placeholder',
   'mask-(?:[trblxy]|linear|radial|conic)-(?:from|to)',
 ].join('|');
-const CLASSE_BLEUE = new RegExp(
-  `(?<![\\w-])(?:${RACINES_COULEUR})-(?:${FAMILLES_BLEUES})(?:-\\d{2,3})?(?:\\/[^\\s"'\`]+)?(?![\\w-])`,
+/** Classe de l'ancienne palette ; le groupe 1 est le nom du jeton (orange-deep), sans modificateur d'opacite. */
+const CLASSE_ANCIENNE = new RegExp(
+  `(?<![\\w-])(?:${RACINES_COULEUR})-((?:${FAMILLES_ANCIENNES})(?:-[a-z0-9]+)*)(?:\\/[^\\s"'\`]+)?(?![\\w-])`,
   'g',
 );
-const VARIABLE_BLEUE = new RegExp(`--color-(?:${FAMILLES_BLEUES})(?![a-z])`, 'g');
-// Le souligne separe les mots dans les valeurs arbitraires Tailwind (shadow-[0_0_0_2px_#7c3aed]) : il reste admis autour.
+// Le souligne separe les mots dans les valeurs arbitraires Tailwind (shadow-[0_0_0_2px_#c43f13]) : il reste admis autour.
 const HEX = /(?<![0-9A-Za-z&#-])#([0-9a-fA-F]{3,8})(?![0-9A-Za-z-])/g;
 // Fonctions de couleur : rgb() rgba() hsl() hsla() hwb() lab() lch() oklab() oklch() color(). Le souligne reste admis
-// devant dans une valeur arbitraire Tailwind (shadow-[0_0_0_2px_rgb(59_130_246)], verifie dans analyser()) ; une
+// devant dans une valeur arbitraire Tailwind (shadow-[0_0_0_2px_rgb(232_78_27)], verifie dans analyser()) ; une
 // lettre, un chiffre, un point, un dollar ou un tiret devant en font un identifiant (toRgb(), theme.rgb()). L'argument
 // est lu par argumentDe(), var() et calc() imbriques compris.
 const FONCTION = /(?<![A-Za-z0-9.$-])(rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/gi;
@@ -155,7 +208,8 @@ function argumentDe(texte, debut, fins) {
   return fin === -1 ? null : texte.slice(debut, fin);
 }
 
-// Couleurs nommees CSS (CSS Color 4), avec leur valeur ; seules les bleues ou violettes sont recherchees.
+// Couleurs nommees CSS (CSS Color 4), avec leur valeur ; seules celles qui tombent sur une ancienne couleur sont
+// recherchees.
 const NOMMEES = {
   aliceblue: 'f0f8ff', antiquewhite: 'faebd7', aqua: '00ffff', aquamarine: '7fffd4', azure: 'f0ffff', beige: 'f5f5dc',
   bisque: 'ffe4c4', black: '000000', blanchedalmond: 'ffebcd', blue: '0000ff', blueviolet: '8a2be2', brown: 'a52a2a',
@@ -300,33 +354,18 @@ function hslVersRvb(h, s, l) {
   return [r + m, g + m, b + m].map((v) => Math.round(borner(v, 0, 1) * 255));
 }
 
-/** Chroma OKLCH d'une couleur sRGB 0-255. */
-function chroma(r, g, b) {
+/** Coordonnees OKLab [L, a, b] d'une couleur sRGB 0-255. */
+function versOklab(r, g, b) {
   const [lr, lg, lb] = [r, g, b].map((v) => versLineaire(v / 255));
   const l = Math.cbrt(0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb);
   const m = Math.cbrt(0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb);
   const s = Math.cbrt(0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb);
-  const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
-  const bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
-  return Math.hypot(a, bb);
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  ];
 }
-
-/** Teinte TSL (degres) d'une couleur sRGB 0-255, ou null pour un gris (chroma OKLCH sous le seuil). */
-function teinte(r, g, b) {
-  if (chroma(r, g, b) < CHROMA_GRIS) return null;
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const d = max - min;
-  if (d === 0) return null;
-  let h;
-  if (max === r) h = ((g - b) / d) % 6;
-  else if (max === g) h = (b - r) / d + 2;
-  else h = (r - g) / d + 4;
-  h *= 60;
-  return h < 0 ? h + 360 : h;
-}
-
-const dansLaPlage = (h) => h !== null && h >= TEINTE_MIN && h <= TEINTE_MAX;
 
 function hexVersRvb(hex) {
   const n = hex.length;
@@ -399,52 +438,203 @@ function fonctionVersRvb(nom, args) {
   return rvb && rvb.every(Number.isFinite) ? rvb : null;
 }
 
-const NOMMEES_BLEUES = Object.entries(NOMMEES)
-  .filter(([, hex]) => dansLaPlage(teinte(...hexVersRvb(hex))))
+const REFERENCES = [
+  ...ANCIENNES.map(([nom, hex]) => ({ nom, hex, ancienne: true, lab: versOklab(...hexVersRvb(hex)) })),
+  ...CHARTE.map(([nom, hex]) => ({ nom, hex, ancienne: false, lab: versOklab(...hexVersRvb(hex)) })),
+];
+
+/**
+ * Ancienne couleur la plus proche d'une couleur sRGB 0-255 ({ nom, hex, ecart }), ou null : si l'ecart OKLab atteint
+ * 0,02, ou si une couleur du kit est plus proche encore.
+ */
+export function ancienneProche(rvb) {
+  const [L, a, b] = versOklab(...rvb);
+  let proche = null;
+  let ecart = Infinity;
+  for (const reference of REFERENCES) {
+    const e = Math.hypot(L - reference.lab[0], a - reference.lab[1], b - reference.lab[2]);
+    if (e < ecart) {
+      ecart = e;
+      proche = reference;
+    }
+  }
+  return proche.ancienne && ecart < ECART_MAX ? { nom: proche.nom, hex: proche.hex, ecart } : null;
+}
+
+/** Type d'une violation de couleur : la source lue, puis l'ancienne couleur, exacte ou approchee (ecart a 0,001 pres). */
+function typeDeCouleur(source, proche) {
+  const cible = `${proche.nom} #${proche.hex}`;
+  const ecart = proche.ecart.toFixed(3).replace('.', ',');
+  return `ancienne couleur SFG (${source} : ${proche.ecart < 0.0005 ? cible : `proche de ${cible}, ecart ${ecart}`})`;
+}
+
+const NOMMEES_ANCIENNES = Object.entries(NOMMEES)
+  .filter(([, hex]) => ancienneProche(hexVersRvb(hex)) !== null)
   .map(([nom]) => nom);
-// Le souligne reste admis autour du nom (valeur arbitraire Tailwind : color-mix(in_srgb,blue_60%,white)).
-const NOMMEE = new RegExp(`(?<![0-9A-Za-z\\-/.#$@])(${NOMMEES_BLEUES.join('|')})(?![0-9A-Za-z\\-./(])`, 'gi');
+// Le souligne reste admis autour du nom (valeur arbitraire Tailwind : color-mix(in_srgb,linen_60%,white)).
+const NOMMEE =
+  NOMMEES_ANCIENNES.length > 0
+    ? new RegExp(`(?<![0-9A-Za-z\\-/.#$@])(${NOMMEES_ANCIENNES.join('|')})(?![0-9A-Za-z\\-./(])`, 'gi')
+    : null;
+
+/** Noms des couleurs du theme definies dans une feuille (--color-NOM: ..., hors commentaires et hors `initial`). */
+export function jetonsDe(css) {
+  return new Set([...sansCommentaires(css).matchAll(/--color-([a-z0-9][\w-]*)\s*:(?!\s*initial\b)/gi)].map((m) => m[1].toLowerCase()));
+}
+
+let jetonsDuSite = null;
+/** Jetons de couleur de apps/web/src/app/globals.css, lus une fois par passage (ensemble vide faute de fichier). */
+function jetonsDefinis() {
+  if (jetonsDuSite === null) {
+    try {
+      jetonsDuSite = jetonsDe(readFileSync(FEUILLE_GLOBALE, 'utf8'));
+    } catch {
+      jetonsDuSite = new Set();
+    }
+  }
+  return jetonsDuSite;
+}
 
 // ------------------------------------------------------------
-// (c) Police mono
+// (c) Polices hors charte
 // ------------------------------------------------------------
-// `--font-mono: initial` retire la police mono du theme Tailwind : c'est le contraire d'un emploi, il n'est pas signale.
-const MONO = new RegExp(
-  [
-    '(?<![\\w-])font-mono(?![\\w-])',
-    '--font-mono(?![\\w-])(?!\\s*:\\s*initial\\b)',
-    'IBM[ _]Plex',
-    '(?<![\\w-])Plex(?![\\w])',
-    'plex-mono',
-    '(?<![\\w-])(?:ui-)?monospace(?![\\w-])',
-    // Familles mono dont le nom ne designe rien d'autre : signalees partout (import de next/font compris).
-    'SF ?Mono',
-    'SFMono',
-    'Fira[ _](?:Code|Mono)',
-    'JetBrains[ _]Mono',
-    'Source[ _]Code[ _]Pro',
-    'Cascadia[ _](?:Code|Mono)',
-    'Lucida[ _](?:Console|Sans[ _]Typewriter)',
-    'Inconsolata',
-    'Iosevka',
-    'Monaspace',
-    'Anonymous[ _]Pro',
-    // Andale Mono, DejaVu Sans Mono, Liberation Mono, Roboto Mono, Space Mono... ; souligne admis devant
-    // (font-[Inter,_DejaVu_Sans_Mono]).
-    '(?<![A-Za-z0-9-])[A-Z][A-Za-z]*[ _]Mono(?![\\w-])',
-  ].join('|'),
-  'g',
-);
-// Familles mono dont le nom est aussi un mot courant (Monaco, Menlo Park, courier) : signalees seulement dans un
-// contexte de police, en majuscules ou minuscules.
-const FAMILLE_MONO = /(?<![A-Za-z0-9-])(?:Monaco|Menlo|Consolas|Courier(?:[ _]New)?|Hack)(?![A-Za-z0-9-])/gi;
+const POLICES_PERMISES = new Set([
+  'newsreader',
+  'instrument sans',
+  'dm mono',
+  'georgia',
+  'arial',
+  'helvetica',
+  'menlo',
+  // replis du kit (integration/styles/tokens.css)
+  'helvetica neue',
+  'times new roman',
+  // familles generiques et mots-cles globaux
+  'serif',
+  'sans-serif',
+  'monospace',
+  'ui-monospace',
+  'system-ui',
+  'inherit',
+  'initial',
+  'unset',
+  'revert',
+  'revert-layer',
+]);
 /**
- * Contexte de police, teste sur le texte qui precede le nom : declaration font-family, font ou --font-* (CSS, objet de
- * style, attribut, ctx.font =) dont la valeur n'est pas encore close, ou classe font-[...] encore ouverte.
+ * Propriete ou attribut de police suivi de son separateur : font-family, fontFamily, font (raccourci), propriete
+ * personnalisee dont le nom contient font (--font-sans, --fo-font-titre, --default-font-family).
  */
-const CONTEXTE_POLICE = /(?:^|[^\w-])(?:(?:font-family|fontFamily|font|--font[\w-]*)\s*[:=]\s*\{?[^;:{}<>=]*|font-\[[^\]\s]*)$/;
-// Balises que le navigateur rend en mono ; cherchees hors des commentaires (voir sansCommentaires).
-const BALISE_MONO = /<(?:code|pre|kbd|samp|tt)(?=[\s>/])/g;
+const PROPRIETE_POLICE = /(?<![\w-])(font-family|fontFamily|font|--[\w-]*font[\w-]*)\s*([:=])\s*(\{\s*)?/g;
+/** Proprietes personnalisees de police qui ne portent pas de famille (--font-weight-bold, --font-size...). */
+const AUTRE_QUE_FAMILLE = /weight|size|feature|variation|stretch|kerning|synthesis|smoothing|optical|style/;
+/** Taille dans le raccourci font (12px/1.5, 1.0625rem, large) : les familles la suivent. */
+const TAILLE = /(?:^|\s)(?:\d*\.?\d+(?:px|r?em|pt|pc|%|vw|vh|vmin|vmax|ex|ch|r?lh|cap|q|mm|cm|in)|(?:x{1,3}-)?(?:small|large)|medium|smaller|larger)(?:\s*\/\s*[^\s,]+)?\s+(?=\S)/g;
+/** Classe Tailwind de police a valeur arbitraire : font-[Inter], font-['Courier_New'], font-[family-name:...]. */
+const CLASSE_POLICE = /(?<![\w-])font-\[([^\]\s]+)\]/g;
+const IMPORT_NEXT_FONT = /import\s*\{([^}]*)\}\s*from\s*["']next\/font\/google["']/g;
+/** Noms de l'ancienne charte qui ne designent rien d'autre qu'une police : signales partout hors commentaires. */
+const ANCIENNE_POLICE = /Montserrat|IBM[ _]Plex|(?<![\w-])Plex(?!\w)|--font-(?:montserrat|inter|plex|ibm)(?![a-z])[\w-]*/g;
+
+/** Elements d'une liste separee par des virgules hors parentheses et guillemets, avec leur index dans le texte. */
+function elementsDeListe(liste, base) {
+  const elements = [];
+  let debut = 0;
+  let profondeur = 0;
+  let guillemet = null;
+  const couper = (fin) => {
+    const brut = liste.slice(debut, fin);
+    const texte = brut.trim();
+    if (texte) elements.push({ texte, index: base + debut + brut.length - brut.trimStart().length });
+  };
+  for (let i = 0; i < liste.length; i++) {
+    const c = liste[i];
+    if (guillemet) {
+      if (c === guillemet) guillemet = null;
+    } else if (c === '"' || c === "'") guillemet = c;
+    else if (c === '(') profondeur += 1;
+    else if (c === ')') profondeur -= 1;
+    else if (c === ',' && profondeur === 0) {
+      couper(i);
+      debut = i + 1;
+    }
+  }
+  couper(liste.length);
+  return elements;
+}
+
+/**
+ * Familles hors charte d'une liste font-family ({ index, fin, nom }) ; le repli d'un var() est lu, un element qui
+ * n'est pas un nom de famille (nombre, fonction, expression) est ignore. Le souligne vaut une espace (Tailwind).
+ */
+function famillesHorsCharte(liste, base) {
+  const trouvees = [];
+  for (const { texte, index } of elementsDeListe(liste, base)) {
+    const variable = /^var\(\s*--[\w-]+\s*(,[\s\S]*)?\)$/.exec(texte);
+    if (variable) {
+      if (variable[1]) trouvees.push(...famillesHorsCharte(variable[1].slice(1), index + texte.indexOf(variable[1]) + 1));
+      continue;
+    }
+    const nom = texte.replace(/^["']|["']$/g, '').replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!/^[A-Za-z][A-Za-z0-9 -]*$/.test(nom)) continue;
+    if (!POLICES_PERMISES.has(nom.toLowerCase())) trouvees.push({ index, fin: index + texte.length, nom });
+  }
+  return trouvees;
+}
+
+/** Valeur qui suit un separateur : chaine entre guillemets, ou valeur CSS jusqu'a la fin de la declaration. */
+function valeurApres(texte, p) {
+  const q = texte[p];
+  if (q === '"' || q === "'" || q === '`') {
+    let k = p + 1;
+    while (k < texte.length && texte[k] !== q && (q === '`' || texte[k] !== '\n')) k += texte[k] === '\\' ? 2 : 1;
+    return { valeur: texte.slice(p + 1, k), debut: p + 1, entreGuillemets: true };
+  }
+  const fin = texte.slice(p).search(/[;{}<>\n]/);
+  return { valeur: texte.slice(p, fin === -1 ? texte.length : p + fin), debut: p, entreGuillemets: false };
+}
+
+/** Polices hors charte d'un texte sans commentaires : liste de { index, nom }, sans doublon sur un meme passage. */
+function policesHorsCharte(texte) {
+  const trouvees = [];
+  for (const m of texte.matchAll(PROPRIETE_POLICE)) {
+    const [, propriete, separateur, accolade] = m;
+    if (propriete.startsWith('--') && AUTRE_QUE_FAMILLE.test(propriete)) continue;
+    const { valeur, debut, entreGuillemets } = valeurApres(texte, m.index + m[0].length);
+    // Hors guillemets, seule une declaration CSS porte une liste de familles ; en JavaScript, c'est une expression
+    // (fontFamily: inter.style.fontFamily, const font = Inter({...})).
+    if (!entreGuillemets && (separateur === '=' || accolade || propriete === 'fontFamily')) continue;
+    if (propriete === 'font') {
+      let reste = null;
+      for (const taille of valeur.matchAll(TAILLE)) reste = taille.index + taille[0].length;
+      if (reste !== null) trouvees.push(...famillesHorsCharte(valeur.slice(reste), debut + reste));
+    } else trouvees.push(...famillesHorsCharte(valeur, debut));
+  }
+  for (const m of texte.matchAll(CLASSE_POLICE)) {
+    let contenu = m[1];
+    let debut = m.index + 'font-['.length;
+    const prefixe = /^family-name:/.exec(contenu);
+    if (prefixe) {
+      contenu = contenu.slice(prefixe[0].length);
+      debut += prefixe[0].length;
+    } else if (/^[a-z-]+:/.test(contenu)) continue;
+    trouvees.push(...famillesHorsCharte(contenu, debut));
+  }
+  for (const m of texte.matchAll(IMPORT_NEXT_FONT)) {
+    const debutListe = m.index + m[0].indexOf('{') + 1;
+    for (const nom of m[1].matchAll(/([A-Za-z]\w*)(?:\s+as\s+\w+)?/g)) {
+      const index = debutListe + nom.index;
+      if (!POLICES_PERMISES.has(nom[1].replace(/_/g, ' ').toLowerCase())) trouvees.push({ index, fin: index + nom[1].length, nom: nom[1] });
+    }
+  }
+  for (const m of texte.matchAll(ANCIENNE_POLICE)) trouvees.push({ index: m.index, fin: m.index + m[0].length, nom: m[0] });
+  // Un meme passage releve par deux voies (font-family: Montserrat, import d'IBM_Plex_Mono) n'est signale qu'une fois.
+  const retenues = [];
+  for (const t of trouvees) {
+    if (!retenues.some((r) => t.index < r.fin && r.index < t.fin)) retenues.push(t);
+  }
+  return retenues;
+}
 
 // Le texte dont les commentaires (// et /* */ de JavaScript, /* */ de CSS, {/* */} de JSX) sont remplaces par des
 // espaces : memes index, donc memes lignes et colonnes. Les chaines sont sautees (un // ou un /* dans une chaine
@@ -473,6 +663,13 @@ function sansCommentaires(texte) {
   }
   return sortie.join('');
 }
+
+// ------------------------------------------------------------
+// (e) Degrades
+// ------------------------------------------------------------
+const DEGRADE = /(?<![\w-])(?:-(?:webkit|moz|o)-)?(?:repeating-)?(?:linear|radial|conic)-gradient\(/gi;
+// Utilitaires Tailwind 4 (bg-linear-to-r, bg-radial-[at_25%_25%], bg-conic-180, -bg-linear-45) et 3 (bg-gradient-to-r).
+const DEGRADE_TAILWIND = /(?<![\w-])-?bg-(?:linear|radial|conic|gradient)(?![A-Za-z0-9_])[^\s"'`]*/g;
 
 // ------------------------------------------------------------
 // (d) Emojis
@@ -524,14 +721,18 @@ const codes = (s) => [...s].map((c) => `U+${c.codePointAt(0).toString(16).toUppe
  * - tirets : le balayage --tirets de tout le depot, tirets ecrits tels quels seulement.
  */
 const REGLES = {
-  toutes: { couleurs: true, polices: true, emojis: true, ecritures: true },
-  'tirets-emojis': { couleurs: false, polices: false, emojis: true, ecritures: true },
-  bruts: { couleurs: false, polices: false, emojis: true, ecritures: false },
-  tirets: { couleurs: false, polices: false, emojis: false, ecritures: false },
+  toutes: { couleurs: true, polices: true, degrades: true, emojis: true, ecritures: true },
+  'tirets-emojis': { couleurs: false, polices: false, degrades: false, emojis: true, ecritures: true },
+  bruts: { couleurs: false, polices: false, degrades: false, emojis: true, ecritures: false },
+  tirets: { couleurs: false, polices: false, degrades: false, emojis: false, ecritures: false },
 };
 
-/** Violations d'un texte : liste de { ligne, colonne, type, extrait }, dans l'ordre du texte (`regles` : voir REGLES). */
-export function analyser(texte, regles = 'toutes') {
+/**
+ * Violations d'un texte : liste de { ligne, colonne, type, extrait }, dans l'ordre du texte (`regles` : voir REGLES).
+ * `jetons` : noms des couleurs du theme (par defaut, ceux de apps/web/src/app/globals.css) ; une classe de l'ancienne
+ * palette n'est signalee que si son jeton n'y figure pas.
+ */
+export function analyser(texte, regles = 'toutes', jetons = null) {
   const r = REGLES[regles];
   if (!r) throw new Error(`Regles inconnues : ${regles}`);
   const debuts = [0];
@@ -555,14 +756,15 @@ export function analyser(texte, regles = 'toutes') {
   if (r.ecritures) for (const m of texte.matchAll(TIRETS_ECRITS)) noter('tiret cadratin', m.index, m[0]);
 
   if (r.couleurs) {
-    for (const m of texte.matchAll(CLASSE_BLEUE)) noter('bleu ou violet (classe Tailwind)', m.index, m[0]);
-    for (const m of texte.matchAll(VARIABLE_BLEUE)) noter('bleu ou violet (variable Tailwind)', m.index, m[0]);
+    for (const m of texte.matchAll(CLASSE_ANCIENNE)) {
+      if (!(jetons ?? jetonsDefinis()).has(m[1])) noter('ancienne couleur SFG (classe Tailwind)', m.index, `${m[0]} (jeton ${m[1]} absent de globals.css)`);
+    }
     for (const m of texte.matchAll(HEX)) {
       const rvb = hexVersRvb(m[1]);
       if (!rvb) continue;
-      const h = teinte(...rvb);
-      if (dansLaPlage(h) && enContexteDeCouleur(texte, m.index, m.index + m[0].length, true)) {
-        noter(`bleu ou violet (couleur ${m[0]}, teinte ${Math.round(h)} degres)`, m.index, m[0]);
+      const proche = ancienneProche(rvb);
+      if (proche && enContexteDeCouleur(texte, m.index, m.index + m[0].length, true)) {
+        noter(typeDeCouleur(`couleur ${m[0]}`, proche), m.index, m[0]);
       }
     }
     let fins = null;
@@ -575,25 +777,25 @@ export function analyser(texte, regles = 'toutes') {
       if (args === null) continue;
       const rvb = fonctionVersRvb(m[1], args);
       if (!rvb) continue;
-      const h = teinte(...rvb);
-      const nom = m[1].toLowerCase().replace(/a$/, '').replace(/^hsl$/, 'hsl').replace(/^color$/, 'color()');
-      if (dansLaPlage(h)) noter(`bleu ou violet (${nom}, teinte ${Math.round(h)} degres)`, m.index, `${m[0]}${args})`);
+      const proche = ancienneProche(rvb);
+      const nom = m[1].toLowerCase().replace(/a$/, '').replace(/^color$/, 'color()');
+      if (proche) noter(typeDeCouleur(nom, proche), m.index, `${m[0]}${args})`);
     }
-    for (const m of texte.matchAll(NOMMEE)) {
-      if (!enContexteDeCouleur(texte, m.index, m.index + m[0].length, false)) continue;
-      const h = teinte(...hexVersRvb(NOMMEES[m[1].toLowerCase()]));
-      noter(`bleu ou violet (couleur nommee ${m[1].toLowerCase()}, teinte ${Math.round(h)} degres)`, m.index, m[0]);
+    if (NOMMEE) {
+      for (const m of texte.matchAll(NOMMEE)) {
+        if (!enContexteDeCouleur(texte, m.index, m.index + m[0].length, false)) continue;
+        const nom = m[1].toLowerCase();
+        noter(typeDeCouleur(`couleur nommee ${nom}`, ancienneProche(hexVersRvb(NOMMEES[nom]))), m.index, m[0]);
+      }
     }
   }
 
-  if (r.polices) {
-    for (const m of texte.matchAll(MONO)) noter('police mono', m.index, m[0]);
-    for (const m of texte.matchAll(FAMILLE_MONO)) {
-      if (CONTEXTE_POLICE.test(texte.slice(Math.max(0, m.index - 400), m.index))) noter('police mono', m.index, m[0]);
-    }
-    for (const m of sansCommentaires(texte).matchAll(BALISE_MONO)) {
-      noter('police mono', m.index, `${m[0]}> (rendu en mono par le navigateur)`);
-    }
+  // Polices et degrades se lisent hors commentaires : un commentaire qui cite l'ancienne charte n'est pas du rendu.
+  const sansNotes = r.polices || r.degrades ? sansCommentaires(texte) : null;
+  if (r.polices) for (const p of policesHorsCharte(sansNotes)) noter('police hors charte', p.index, p.nom);
+  if (r.degrades) {
+    for (const m of sansNotes.matchAll(DEGRADE)) noter('degrade', m.index, m[0].slice(0, -1));
+    for (const m of sansNotes.matchAll(DEGRADE_TAILWIND)) noter('degrade', m.index, m[0]);
   }
 
   if (r.emojis) {
@@ -609,6 +811,7 @@ export function analyser(texte, regles = 'toutes') {
 
   return violations.sort((a, b) => a.index - b.index).map(({ index, ...v }) => v);
 }
+
 
 function fichiers(dossier, extensions) {
   const resultat = [];
@@ -660,15 +863,16 @@ function verifierLeSite() {
   const { total, parType } = signaler(liste);
   if (total === 0) {
     console.log(
-      `Charte SFG : aucun probleme dans ${code} fichiers (apps/web/src) et ${liste.length - code} fichiers ` +
+      `Charte financementopco : aucun probleme dans ${code} fichiers (apps/web/src) et ${liste.length - code} fichiers ` +
         '(apps/web/tests et apps/web/DESIGN.md : tirets et emojis).',
     );
     return 0;
   }
   const detail = [...parType].map(([type, n]) => `${type} : ${n}`).join(', ');
-  console.log(`\nCharte SFG : ${total} probleme(s) dans le site (${detail}).`);
+  console.log(`\nCharte financementopco : ${total} probleme(s) dans le site (${detail}).`);
   return 1;
 }
+
 
 // ------------------------------------------------------------
 // Balayage --tirets : tout le depot, tirets cadratins seulement
@@ -703,7 +907,8 @@ function verifierLesTirets() {
     console.log(`Balayage des tirets impossible : git ls-files a echoue (${erreur.message}).`);
     return 2;
   }
-  const lus = suivis.filter(luParLeBalayageDesTirets);
+  // Un fichier suivi mais supprime de la copie de travail (suppression pas encore commitee) n'a plus rien a lire.
+  const lus = suivis.filter((fichier) => luParLeBalayageDesTirets(fichier) && existsSync(join(RACINE, fichier)));
   let total = 0;
   let fautifs = 0;
   const parDossier = new Map();
@@ -730,7 +935,16 @@ function verifierLesTirets() {
 
 function autotest() {
   // Chaque chaine fautive doit produire exactement les types attendus, dans l'ordre ; chaque chaine propre, aucun.
-  // Les cas vont par paires : une violation et son jumeau propre.
+  // Les cas vont par paires : une violation et son jumeau propre. Les jetons de couleur sont fixes ici, pas lus dans
+  // globals.css : ceux de la nouvelle charte seuls (les classes de l'ancienne palette n'existent plus), et plus bas
+  // les memes avec les noms historiques redefinis.
+  const JETONS_NOUVEAUX = new Set(['papier', 'papier-fonce', 'feuille', 'filet', 'filet-fonce', 'encre', 'ardoise', 'prusse', 'prusse-fonce', 'surligneur', 'white', 'black']);
+  const HISTORIQUES = ['orange', 'orange-deep', 'orange-deeper', 'orange-soft', 'orange-clair', 'turquoise', 'turquoise-deep', 'turquoise-soft', 'or', 'or-soft', 'vert-clair', 'vert-clair-soft', 'lin', 'lin-soft'];
+  const JETONS_HISTORIQUES = new Set([...JETONS_NOUVEAUX, ...HISTORIQUES]);
+  const classe = 'ancienne couleur SFG (classe Tailwind)';
+  const couleur = (detail) => `ancienne couleur SFG (${detail})`;
+  const police = 'police hors charte';
+  const degrade = 'degrade';
   const fautifs = [
     // (a) tiret cadratin et ses ecritures
     ['Un dossier \u2014 deux phrases', ['tiret cadratin']],
@@ -756,95 +970,82 @@ function autotest() {
     ['Un titre \u{FE31} vertical', ['tiret cadratin']],
     ['<p>A &#65073; B &#xFE31; C</p>', ['tiret cadratin', 'tiret cadratin']],
     ["const s = 'A \\uFE31 B \\u{fe31} C';", ['tiret cadratin', 'tiret cadratin']],
-    // (b) classes Tailwind, toutes racines de couleur de Tailwind 4
-    ['<p className="text-blue-600">', ['bleu ou violet (classe Tailwind)']],
-    ['className="hover:bg-indigo-50 ring-violet-400/50"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
-    ['className="from-purple-500 to-sky-300"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
-    ['className="md:hover:bg-sky-400/[.35] bg-blue-500!"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
-    ['className="drop-shadow-blue-500 inset-shadow-indigo-400"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
-    ['className="inset-ring-violet-500 text-shadow-purple-500"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
-    ['className="mask-b-from-sky-300 border-bs-blue-500"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (classe Tailwind)']],
-    // cyan : #0e7490 (cyan-700) est signale en hexadecimal (teinte 193 degres), la classe et la variable aussi
-    ['className="text-cyan-700 bg-[var(--color-cyan-500)]"', ['bleu ou violet (classe Tailwind)', 'bleu ou violet (variable Tailwind)']],
-    ['--color-fuchsia: red;', ['bleu ou violet (variable Tailwind)']],
-    // (b) hexadecimal en contexte de couleur
-    ['color: #3B82F6;', ['bleu ou violet (couleur #3B82F6, teinte 217 degres)']],
-    ['shadow-[0_0_0_2px_#7c3aed]', ['bleu ou violet (couleur #7c3aed, teinte 262 degres)']],
-    ['fill="#00f"', ['bleu ou violet (couleur #00f, teinte 240 degres)']],
-    ["style={{ borderColor: '#3b82f6' }}", ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
-    ["const BLEU = '#3b82f6';", ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
-    ["const fond = 'linear-gradient(#fff, #7c3aed)';", ['bleu ou violet (couleur #7c3aed, teinte 262 degres)']],
-    ['color: #F0F8FF;', ['bleu ou violet (couleur #F0F8FF, teinte 208 degres)']],
-    // une comparaison n'exclut que sur une propriete d'ancre (hash, href, id...)
-    ['fill: #bad;', ['bleu ou violet (couleur #bad, teinte 260 degres)']],
-    ["if (couleur === '#3b82f6') teinter();", ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
+    // (b) classes de l'ancienne palette dont le jeton n'est plus defini, toutes racines de couleur de Tailwind 4
+    ['<p className="text-orange-deep">', [classe]],
+    ['className="hover:bg-turquoise-soft ring-or/50"', [classe, classe]],
+    ['className="from-vert-clair to-lin-soft"', [classe, classe]],
+    ['className="md:hover:bg-orange/[.35] bg-orange-deeper!"', [classe, classe]],
+    ['className="drop-shadow-orange-clair inset-shadow-or-soft"', [classe, classe]],
+    ['className="inset-ring-turquoise text-shadow-lin"', [classe, classe]],
+    ['className="mask-b-from-orange border-bs-turquoise-deep"', [classe, classe]],
+    ['className="text-orange-500 bg-vert-clair-soft"', [classe, classe]],
+    // (b) hexadecimal en contexte de couleur : valeur exacte (alpha ignore) ou approchee
+    ['color: #E84E1B;', [couleur('couleur #E84E1B : orange #E84E1B')]],
+    ['shadow-[0_0_0_2px_#c43f13]', [couleur('couleur #c43f13 : orange-deep #C43F13')]],
+    ['fill="#5E9F92"', [couleur('couleur #5E9F92 : turquoise #5E9F92')]],
+    ["style={{ borderColor: '#3e6860' }}", [couleur('couleur #3e6860 : turquoise-deep #3E6860')]],
+    ["const OR = '#F9B233';", [couleur('couleur #F9B233 : or #F9B233')]],
+    ['background: #E84E1B80;', [couleur('couleur #E84E1B80 : orange #E84E1B')]],
+    ['color: #E94F1C;', [couleur('couleur #E94F1C : proche de orange #E84E1B, ecart 0,003')]],
+    ['color: #E0501F;', [couleur('couleur #E0501F : proche de orange #E84E1B, ecart 0,015')]],
+    ['--lin: #e6efec;', [couleur('couleur #e6efec : proche de vert-clair-soft #E6F2EF, ecart 0,008')]],
+    // l'ancien fond des alertes #FBEDEE tombe sur l'ancien orange doux
+    ['outline-color: #fbedee;', [couleur('couleur #fbedee : proche de orange-soft #FDF0EA, ecart 0,011')]],
+    ['fill: #fdf0ea; stroke: #A93510;', [couleur('couleur #fdf0ea : orange-soft #FDF0EA'), couleur('couleur #A93510 : orange-deeper #A93510')]],
+    ["if (couleur === '#e84e1b') teinter();", [couleur('couleur #e84e1b : orange #E84E1B')]],
     // url(#id) designe un element (masque, filtre, degrade SVG) : seul ce qui suit la parenthese fermante reste une
     // couleur ; une fonction autre que new URL( ne fait pas d'une chaine une ancre
-    ['mask-image: url(#bad), linear-gradient(#3b82f6, #fff);', ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
-    ['background: url(x.png) #3b82f6;', ['bleu ou violet (couleur #3b82f6, teinte 217 degres)']],
-    ["const u = URL_BLEUE('#bad');", ['bleu ou violet (couleur #bad, teinte 260 degres)']],
+    ['mask-image: url(#e84e1b), linear-gradient(#c43f13, #fff);', [degrade, couleur('couleur #c43f13 : orange-deep #C43F13')]],
+    ['background: url(x.png) #f56a31;', [couleur('couleur #f56a31 : orange-clair #F56A31')]],
+    ["const u = URL_ORANGE('#e84e1b');", [couleur('couleur #e84e1b : orange #E84E1B')]],
+    ["const fond = 'linear-gradient(#fff, #A3D1C8)';", [degrade, couleur('couleur #A3D1C8 : vert-clair #A3D1C8')]],
     // (b) fonctions de couleur, toutes syntaxes
-    ['background: rgb(124, 58, 237);', ['bleu ou violet (rgb, teinte 262 degres)']],
-    ['color: rgba(14 165 233 / 0.5)', ['bleu ou violet (rgb, teinte 199 degres)']],
-    ['className="bg-[rgb(59_130_246)]"', ['bleu ou violet (rgb, teinte 217 degres)']],
-    ['className="border-[color:rgb(124_58_237)]"', ['bleu ou violet (rgb, teinte 262 degres)']],
-    ['color: hsl(250 80% 50%)', ['bleu ou violet (hsl, teinte 250 degres)']],
-    ['color: hsla(0.75turn, 60%, 40%, 1)', ['bleu ou violet (hsl, teinte 270 degres)']],
-    ['className="text-[hsl(220_90%_56%)]"', ['bleu ou violet (hsl, teinte 220 degres)']],
-    ['color: hwb(240 10% 10%);', ['bleu ou violet (hwb, teinte 240 degres)']],
-    ['color: oklch(0.62 0.19 259);', ['bleu ou violet (oklch, teinte 216 degres)']],
-    ['className="bg-[oklch(62.3%_0.214_259.815)]"', ['bleu ou violet (oklch, teinte 216 degres)']],
-    ['color: oklab(0.55 -0.03 -0.2);', ['bleu ou violet (oklab, teinte 219 degres)']],
-    ['color: lch(50% 60 280);', ['bleu ou violet (lch, teinte 221 degres)']],
-    ['color: lab(40 30 -70);', ['bleu ou violet (lab, teinte 237 degres)']],
-    ['color: color(display-p3 0.2 0.3 0.9);', ['bleu ou violet (color(), teinte 230 degres)']],
+    ['background: rgb(232, 78, 27);', [couleur('rgb : orange #E84E1B')]],
+    ['color: rgba(94 159 146 / 0.5)', [couleur('rgb : turquoise #5E9F92')]],
+    ['className="bg-[rgb(196_63_19)]"', [couleur('rgb : orange-deep #C43F13')]],
+    ['className="border-[color:rgb(169_53_16)]"', [couleur('rgb : orange-deeper #A93510')]],
+    ['color: hsl(15 82% 51%)', [couleur('hsl : proche de orange #E84E1B, ecart 0,003')]],
+    ['color: hsla(0.1111turn, 94%, 59%, 1)', [couleur('hsl : proche de or #F9B233, ecart 0,012')]],
+    ['className="text-[hsl(168_26%_33%)]"', [couleur('hsl : proche de turquoise-deep #3E6860, ecart 0,006')]],
+    ['color: hwb(15 11% 9%);', [couleur('hwb : proche de orange #E84E1B, ecart 0,002')]],
+    ['color: oklch(0.65 0.075 179);', [couleur('oklch : proche de turquoise #5E9F92, ecart 0,007')]],
+    ['color: color(srgb 0.91 0.306 0.106);', [couleur('color() : orange #E84E1B')]],
     // (b) fonction apres un souligne (valeur arbitraire Tailwind), alpha en var() ou calc() imbriques
-    ['shadow-[0_0_0_2px_rgb(59_130_246)]', ['bleu ou violet (rgb, teinte 217 degres)']],
-    ['shadow-[0_8px_30px_rgb(59,130,246,0.5)]', ['bleu ou violet (rgb, teinte 217 degres)']],
-    ['drop-shadow-[0_4px_8px_hsl(220_90%_56%)]', ['bleu ou violet (hsl, teinte 220 degres)']],
-    ['background: rgb(59 130 246 / var(--opacite));', ['bleu ou violet (rgb, teinte 217 degres)']],
-    ['color: hsl(250 80% 50% / calc(1 - var(--x)));', ['bleu ou violet (hsl, teinte 250 degres)']],
-    ['shadow-[0_8px_30px_rgb(30,64,175,0.12)]', ['bleu ou violet (rgb, teinte 226 degres)']],
-    ['shadow-[0_0_0_2px_rgb(124_58_237)]', ['bleu ou violet (rgb, teinte 262 degres)']],
-    ['background: rgb(26 26 126 / var(--opacite));', ['bleu ou violet (rgb, teinte 240 degres)']],
-    ['color: hsl(262 83% 58% / calc(1 - var(--x)));', ['bleu ou violet (hsl, teinte 262 degres)']],
-    // (b) couleurs nommees en contexte de couleur
-    ['color: blue;', ['bleu ou violet (couleur nommee blue, teinte 240 degres)']],
-    ['style={{ color: "purple" }}', ['bleu ou violet (couleur nommee purple, teinte 300 degres)']],
-    ['<rect fill="navy" />', ['bleu ou violet (couleur nommee navy, teinte 240 degres)']],
-    ['className="bg-[blue]"', ['bleu ou violet (couleur nommee blue, teinte 240 degres)']],
-    ['background: rebeccapurple;', ['bleu ou violet (couleur nommee rebeccapurple, teinte 270 degres)']],
-    ['color: color-mix(in srgb, blue 60%, white);', ['bleu ou violet (couleur nommee blue, teinte 240 degres)']],
-    ['className="bg-[color-mix(in_srgb,Indigo_40%,white)]"', ['bleu ou violet (couleur nommee indigo, teinte 275 degres)']],
-    // (c) police mono
-    ['<span className="font-mono">', ['police mono']],
-    ["import { IBM_Plex_Mono } from 'next/font/google';", ['police mono']],
-    ['font-family: "IBM Plex Mono";', ['police mono']],
-    ['font-family: var(--font-plex-mono);', ['police mono']],
-    ['--font-mono: ui-monospace;', ['police mono', 'police mono']],
-    ['font-family: ui-monospace, monospace;', ['police mono', 'police mono']],
-    ['className="font-[monospace]"', ['police mono']],
-    ["style={{ fontFamily: 'Courier New' }}", ['police mono']],
-    ["import { Geist_Mono } from 'next/font/google';", ['police mono']],
-    // familles mono dont le nom est aussi un mot courant : dans un contexte de police (declaration, objet, classe...)
-    ['font-family: Monaco;', ['police mono']],
-    ['font-family: Menlo, consolas, "Courier New";', ['police mono', 'police mono', 'police mono']],
-    ["style={{ fontFamily: 'Monaco' }}", ['police mono']],
-    ["className=\"font-[Monaco] md:font-['Courier_New']\"", ['police mono', 'police mono']],
-    ['ctx.font = "12px Menlo";', ['police mono']],
-    ['<text fontFamily={"Consolas"}>', ['police mono']],
-    ['font: 12px/1.5 Hack; --font-code: Monaco;', ['police mono', 'police mono']],
-    // familles mono sans ambiguite, partout ; souligne admis devant (valeur arbitraire Tailwind)
-    ['font-family: Iosevka, "Anonymous Pro", "Lucida Sans Typewriter", "Monaspace Neon";', ['police mono', 'police mono', 'police mono', 'police mono']],
-    ['className="font-[Inter,_DejaVu_Sans_Mono]"', ['police mono']],
-    ['<code>SIREN</code>', ['police mono']],
-    ['<pre className="x">', ['police mono']],
-    // une balise dans une chaine ou du JSX reel reste signalee, pres d'un commentaire ou d'une adresse comprise
-    ["const html = '<code>SIREN</code>'; // exemple", ['police mono']],
-    ["const s = '// <pre>';", ['police mono']],
-    ['<a href="https://x.fr">lien</a> <kbd>Ctrl</kbd>', ['police mono']],
-    ['<p>Voir https://x.fr et <code>x</code></p>', ['police mono']],
-    ['/* fin */ <pre>', ['police mono']],
+    ['shadow-[0_0_0_2px_rgb(232_78_27)]', [couleur('rgb : orange #E84E1B')]],
+    ['shadow-[0_8px_30px_rgb(232,78,27,0.5)]', [couleur('rgb : orange #E84E1B')]],
+    ['background: rgb(232 78 27 / var(--opacite));', [couleur('rgb : orange #E84E1B')]],
+    ['color: hsl(15 82% 51% / calc(1 - var(--x)));', [couleur('hsl : proche de orange #E84E1B, ecart 0,003')]],
+    // (b) couleurs nommees en contexte de couleur qui tombent sur une ancienne couleur
+    ['background: linen;', [couleur('couleur nommee linen : proche de orange-soft #FDF0EA, ecart 0,007')]],
+    ['style={{ color: "oldlace" }}', [couleur('couleur nommee oldlace : proche de or-soft #FEF4DE, ecart 0,010')]],
+    ['className="bg-[color-mix(in_srgb,Linen_40%,white)]"', [couleur('couleur nommee linen : proche de orange-soft #FDF0EA, ecart 0,007')]],
+    // (c) polices hors charte dans tous les contextes de police
+    ['font-family: Montserrat, sans-serif;', [police]],
+    ['font-family: var(--font-inter), "Segoe UI", system-ui, sans-serif;', [police, police]],
+    ["style={{ fontFamily: 'Inter' }}", [police]],
+    ["import { Inter, Montserrat } from 'next/font/google';", [police, police]],
+    ["import { IBM_Plex_Mono } from 'next/font/google';", [police]],
+    ['font-family: "IBM Plex Mono";', [police]],
+    ['font-family: var(--font-plex-mono);', [police]],
+    ['className="font-[Inter,_Roboto]"', [police, police]],
+    ["className=\"font-['Courier_New'] md:font-[family-name:Lato]\"", [police, police]],
+    ['ctx.font = "12px Roboto";', [police]],
+    ['font: 600 1rem/1.2 Montserrat, sans-serif;', [police]],
+    ['<text fontFamily="Consolas"> <text fontFamily={\'Lato\'}>', [police, police]],
+    ['--font-display: "Playfair Display", serif;', [police]],
+    ["--font-texte: var(--font-instrument, 'Roboto'), Arial;", [police]],
+    ['font-family: -apple-system, BlinkMacSystemFont, Arial;', [police]],
+    ['font: 12px/1.5 Hack; --font-code: Monaco;', [police, police]],
+    ["const polices = [{ name: 'Montserrat', data }];", [police]],
+    // (e) degrades CSS et Tailwind
+    ['background: linear-gradient(90deg, #fff, #000);', [degrade]],
+    ['background: radial-gradient(circle, #161c27, #1f3b63);', [degrade]],
+    ['mask-image: repeating-conic-gradient(#000 0 25%, transparent 0 50%);', [degrade]],
+    ['background-image: -webkit-linear-gradient(top, #fff, #000);', [degrade]],
+    ['className="bg-linear-to-r from-papier to-feuille"', [degrade]],
+    ['className="md:bg-radial-[at_25%_25%] bg-conic-180"', [degrade, degrade]],
+    ['className="bg-gradient-to-r -bg-linear-45 hover:bg-radial"', [degrade, degrade, degrade]],
+    ['className="bg-[linear-gradient(#fff,#000)]"', [degrade]],
     // (d) emojis
     ['Bravo \u{1F389} !', ['emoji']],
     ['Super \u{1F44D}', ['emoji']],
@@ -876,76 +1077,71 @@ function autotest() {
     'content: "\\2013" "\\FE32" "\\2E3C" "\\0201400";',
     // U+FE32, forme verticale du demi-cadratin : admise comme lui
     "Formes verticales du demi-cadratin : \u{FE32} &#65074; &#xFE32; '\\uFE32'",
-    // (b) classes et variables du projet
-    'className="bg-orange-deep text-white hover:bg-orange-deeper"',
-    'className="text-turquoise-deep bg-turquoise-soft border-filet"',
-    'className="bg-navy text-paper ring-cobalt-soft"',
-    'className="mask-b-from-orange drop-shadow-orange/40 inset-ring-filet"',
-    '--navy: var(--encre); --color-navy: var(--navy);',
-    // teal, voisin vert du cyan (teinte inferieure a 190 degres) : ni la classe ni la variable ne sont signalees
-    'className="text-teal-700 bg-[var(--color-teal-500)]"',
-    // (b) hexadecimal : couleurs de la charte, gris, ancres et identifiants
-    '--orange: #E84E1B; --turquoise: #5E9F92; --encre: #0F1E1B; --lin: #E6EFEC;',
-    '--or: #F9B233; --rouge: #BC1723; --vert-clair: #A3D1C8; --texte: #1A1A1A; --blanc: #FFF;',
-    'background: #F8F8F9; border-color: rgb(250, 250, 252); /* gris, chroma d arrondi */',
-    'color: #F8F9FB; /* gris bleute tres pale : chroma OKLCH 0,003 */',
-    '// gris bleute tres pale #F8F9FB',
-    '<a href="#principe">Le principe</a> <a href="#cpf">CPF</a>',
-    '<a href="#bad">ancre</a> <a href="#decade">ancre</a>',
-    "<Link href={'#bad'}>ancre</Link> document.querySelector('#bad'); router.push('#decade');",
-    "const lien = { href: '#bad', label: 'Haut' };",
-    'const id = "#face";',
-    '// IDCC #1486, voir le ticket #123',
-    'a[href="#bad"] { text-decoration: underline; }',
-    "if (location.hash === '#bad') ouvrir();",
-    "if (hash !== '#abc') fermer();",
-    "if (e.target.hash == '#abd' || lien.href != '#bad') suivre();",
+    // (b) classes et variables de la nouvelle charte ; le bleu n'est plus interdit
+    'className="bg-prusse text-white hover:bg-prusse-fonce border-filet"',
+    'className="bg-papier text-encre bg-feuille text-ardoise bg-surligneur bg-papier-fonce"',
+    'className="text-blue-600 bg-indigo-50 ring-violet-400/50 text-teal-700"',
+    'className="bg-[var(--color-orange-deep)]" --orange: var(--prusse); --color-orange: var(--orange);',
+    // classes homonymes qui ne sont pas de l'ancienne palette (stroke-linecap, bg-lineaire, text-ordinal)
+    'className="stroke-linecap-round bg-lineaire text-ordinal outline-offset-2"',
+    // (b) couleurs du kit, dont le papier, a 0,012 de l'ancien orange doux mais plus proche de lui-meme
+    '--fo-papier: #F4F1E9; --fo-papier-fonce: #EAE5D8; --fo-feuille: #FBF9F4; --fo-filet: #CFC8B8;',
+    '--fo-encre: #161C27; --fo-ardoise: #4A5262; --fo-prusse: #1F3B63; --fo-surligneur: #F1D84B; --fo-prusse-fonce: #172D4C;',
+    '--fo-filet-fonce: #B9B2A2; --fo-pointilles: #A9A293; --fo-ombre-feuille: #E4DED0; --fo-bleu-clair: #B9C8DE;',
+    '--fo-texte-sur-prusse: #D6DEEA; --fo-texte-sur-encre: #B9BFCA; --fo-filet-sur-encre: #2E3647;',
+    'background: rgb(244 241 233); color: hsl(220 52% 25%);',
+    // le bleu, le violet, le blanc, le noir, le rouge des alertes et leur nouveau fond #F6E3E1 ; juste au-dela du seuil (ecart 0,021 avec l'orange)
+    'color: #3B82F6; background: rgb(124, 58, 237); fill: navy; color: hsl(250 80% 50%);',
+    'background: #FFFFFF; color: #000; border-color: #BC1723; outline-color: #f6e3e1;',
+    'color: #EE5725;',
+    // (b) ancres et identifiants
+    '<a href="#e84e1b">ancre</a> <a href="#c43f13">ancre</a>',
+    "<Link href={'#e84e1b'}>ancre</Link> document.querySelector('#c43f13'); router.push('#a3d1c8');",
+    "const lien = { href: '#e84e1b', label: 'Haut' };",
+    'const id = "#f9b233";',
+    '// IDCC #1486, voir le ticket #123 ; ancien orange #E84E1B',
+    'a[href="#e84e1b"] { text-decoration: underline; }',
+    "if (location.hash === '#e84e1b') ouvrir();",
+    "if (hash !== '#c43f13') fermer();",
+    "if (e.target.hash == '#e84e1b' || lien.href != '#c43f13') suivre();",
     // reference a un element par url(#id) (CSS ou attribut SVG) et adresse construite par new URL('#id', base)
-    'mask-image: url(#bad); filter: url("#bad"); fill: url( #decade ); clip-path: url(\'#face\');',
-    '<path fill="url(#bad)" /> <rect style={{ mask: \'url(#bad)\' }} />',
-    "const u = new URL('#bad', base); const v = new URL(\"#decade\", location.href);",
-    // (b) fonctions de couleur hors du bleu, gris
-    'color: rgb(232, 78, 27); background: rgba(0, 0, 0, 0.1); color: hsl(15 82% 51%);',
-    'className="bg-[rgb(232_78_27)] text-[hsl(15_82%_51%)]"',
-    'color: hsl(220 0% 50%); /* gris : saturation nulle */',
-    'color: hwb(15 10% 10%); color: hwb(240 60% 40%); /* le second est un gris */',
-    'color: oklch(0.65 0.07 180); background: oklch(0.98 0.003 250);',
-    'color: oklab(0.6 0.1 0.08); color: lch(60% 40 40); color: lab(55 40 40);',
-    'color: color(display-p3 0.9 0.3 0.1); color: rgb(from var(--x) r g b); color: oklch(var(--l) 0.2 260);',
-    'shadow-[0_8px_30px_rgb(0,0,0,0.12)]',
-    'shadow-[0_0_0_2px_rgb(232_78_27)]',
-    'background: rgb(26 26 26 / var(--opacite));',
-    'color: hsl(14 83% 51% / calc(1 - var(--x)));',
-    // fonctions homonymes dans un identifiant (lettre, chiffre, point, dollar ou tiret devant) : pas des couleurs CSS
-    'toRgb(59, 130, 246); theme.rgb(59, 130, 246); $rgb(59, 130, 246); x-rgb(59, 130, 246); a2hsl(220, 90%, 56%);',
+    'mask-image: url(#e84e1b); filter: url("#c43f13"); fill: url( #5e9f92 ); clip-path: url(\'#a3d1c8\');',
+    '<path fill="url(#e84e1b)" /> <rect style={{ mask: \'url(#c43f13)\' }} />',
+    "const u = new URL('#e84e1b', base); const v = new URL(\"#c43f13\", location.href);",
+    // (b) fonctions homonymes dans un identifiant (lettre, chiffre, point, dollar ou tiret devant) : pas des couleurs CSS
+    'toRgb(232, 78, 27); theme.rgb(232, 78, 27); $rgb(232, 78, 27); x-rgb(232, 78, 27); a2hsl(15, 82%, 51%);',
     // un souligne devant ne vaut separateur que dans une valeur arbitraire Tailwind ouverte
-    'const c = to_rgb(59, 130, 246); const d = hex_hsl(220, 90%, 56%);',
-    // (b) couleurs nommees hors contexte ou hors du bleu
-    '<p>Le violet et le bleu ne font plus partie de la charte.</p>',
-    "const tone = 'violet'; const indigo = 2;",
-    'color: orange; background: turquoise; border-color: white;',
-    'background: url(/images/blue.png); /* le nom du fichier n est pas une couleur */',
-    '/* aucun bleu : color: var(--navy) */',
-    // (c)
-    '--font-mono: initial; /* retrait de la police mono du theme */',
-    'Le Plexiglas est complexe ; Monoprix ; un mono-entreprise.',
-    "<p>Un code postal</p> const code = '75001';",
-    '<span className="font-display">',
-    // balises citees en commentaire (JavaScript, CSS, JSX) : de la documentation, pas du rendu
-    '/* un bloc <pre> en commentaire */',
-    'const x = 1; // la balise <code> est proscrite',
-    '{/* <kbd>Ctrl</kbd> */}',
-    '/* sur\n deux lignes : <samp> */ .x { color: red; }',
-    // un nom de famille mono hors d'un contexte de police : un lieu, un mot
-    '<p>Menlo Park, Monaco, Consolas : des noms de lieu ; un Courier, un Hack.</p>',
-    "const lieu = { fontFamily: 'Inter', ville: 'Monaco' };",
-    '<p style={{ fontFamily: "Inter" }}>Menlo Park</p> <text fontFamily="Inter" aria-label="Consolas">',
+    'const c = to_rgb(232, 78, 27); const d = hex_hsl(15, 82%, 51%);',
+    // composante calculee ou syntaxe relative : non lue
+    'color: rgb(from var(--x) r g b); color: oklch(var(--l) 0.2 40);',
+    // (b) couleurs nommees hors contexte ou loin des anciennes couleurs
+    '<p>L orange et le turquoise ne font plus partie de la charte ; du linen.</p>',
+    "const tone = 'orange'; const linen = 2;",
+    'color: orange; background: turquoise; border-color: white; color: navy;',
+    'background: url(/images/linen.png); /* le nom du fichier n est pas une couleur */',
+    // (c) polices du kit, replis permis, mono et balises de code
+    "--fo-font-titre: var(--font-newsreader, 'Newsreader'), Georgia, 'Times New Roman', serif;",
+    "--fo-font-texte: var(--font-instrument, 'Instrument Sans'), 'Helvetica Neue', Arial, sans-serif;",
+    "--fo-font-chiffres: var(--font-dm-mono, 'DM Mono'), ui-monospace, Menlo, monospace;",
+    "import { Newsreader, Instrument_Sans, DM_Mono } from 'next/font/google';",
+    'font-family: Helvetica, system-ui, sans-serif; font: 600 1.0625rem/1 var(--fo-font-texte); font: inherit;',
+    '<span className="font-mono">1 750,00</span> <code>SIREN</code> <pre>x</pre> <kbd>Ctrl</kbd>',
+    '--font-mono: initial; --font-serif: initial; --font-weight-bold: 500; --default-font-feature-settings: normal;',
+    'className="font-[600] font-[var(--font-titre)] font-display font-sans"',
+    "<p>Menlo Park, Monaco ; l'interprofessionnel ; Inter-entreprises</p>",
+    "const lieu = { fontFamily: inter.style.fontFamily, ville: 'Monaco' }; const font = Inter({ subsets: ['latin'] });",
+    '/* ancienne police : font-family: Montserrat, Inter */ // et IBM Plex Mono',
+    "<text fontFamily=\"DM Mono\" font-family='Newsreader'>",
+    'interface P { fontFamily: string; font: string }',
+    // (e) degrade cite en commentaire, classes voisines
+    '/* pas de linear-gradient ni de bg-linear-to-r */',
+    'className="bg-papier-fonce bg-lineaire from-papier"',
     // (d)
     'Une demande complexe, un dossier complexe.',
-    'Signes typographiques tol\u00e9r\u00e9s : \u2713 \u26A0 \u2197 \u25B8 \u25BE',
-    '\u00A9 SFG D\u00e9veloppement, Marque\u00AE, Nom\u2122',
-    'Fl\u00e8ches \u2192 \u2190 \u00b7 puces \u2022',
-    'const lien = `IDCC ${i.idcc} \u00b7 ${i.titre}`;',
+    'Signes typographiques tol\u00E9r\u00E9s : \u2713 \u26A0 \u2197 \u25B8 \u25BE',
+    '\u00A9 SFG D\u00E9veloppement, Marque\u00AE, Nom\u2122',
+    'Fl\u00E8ches \u2192 \u2190 \u00B7 puces \u2022',
+    'const lien = `IDCC ${i.idcc} \u00B7 ${i.titre}`;',
     '&#8217; et &#x2019;',
     // ecritures qui ne donnent pas d'emoji, ou un signe tolere sans selecteur U+FE0F
     "<p>&#169; SFG &#xA9; &#x2713; &#8599; &#x25B8;</p> const e = '\\u00e9'; const f = '\\u{2197}';",
@@ -956,7 +1152,7 @@ function autotest() {
 
   let ecarts = 0;
   for (const [texte, attendus] of fautifs) {
-    const trouves = analyser(texte).map((v) => v.type);
+    const trouves = analyser(texte, 'toutes', JETONS_NOUVEAUX).map((v) => v.type);
     const ok = trouves.length === attendus.length && attendus.every((t, i) => trouves[i] === t);
     if (!ok) {
       ecarts += 1;
@@ -964,31 +1160,51 @@ function autotest() {
     }
   }
   for (const texte of propres) {
-    const trouves = analyser(texte);
+    const trouves = analyser(texte, 'toutes', JETONS_NOUVEAUX);
     if (trouves.length > 0) {
       ecarts += 1;
       console.log(`ECART (faux positif) : ${JSON.stringify(texte)}\n  obtenu : ${JSON.stringify(trouves.map((v) => `${v.type} ${v.extrait}`))}`);
     }
   }
+
+  // Classes de l'ancienne palette selon les jetons definis : un nom historique redefini dans globals.css est permis,
+  // une teinte numerotee (orange-500) n'y est pas definie ; lecture des jetons d'une feuille (commentaires et
+  // `initial` exclus).
+  const parJetons = [
+    ['className="bg-orange-deep text-turquoise-deep bg-lin-soft ring-or/40 from-vert-clair"', JETONS_HISTORIQUES, []],
+    ['className="bg-orange-deep text-turquoise-deep bg-lin-soft ring-or/40 from-vert-clair"', JETONS_NOUVEAUX, [classe, classe, classe, classe, classe]],
+    ['className="bg-orange-500 text-orange-deep"', JETONS_HISTORIQUES, [classe]],
+    ['className="bg-orange-deep"', new Set(), [classe]],
+  ];
+  for (const [texte, jetons, attendus] of parJetons) {
+    const trouves = analyser(texte, 'toutes', jetons).map((v) => v.type);
+    if (trouves.length !== attendus.length || attendus.some((t, i) => trouves[i] !== t)) {
+      ecarts += 1;
+      console.log(`ECART (jetons) : ${JSON.stringify(texte)}\n  attendu : ${JSON.stringify(attendus)}\n  obtenu  : ${JSON.stringify(trouves)}`);
+    }
+  }
+  const lus = [...jetonsDe('@theme { --color-*: initial; --color-papier: #F4F1E9; --color-lin: initial; }\n@theme inline {\n  --color-orange-deep: var(--prusse); /* --color-or: x; */\n}')].sort().join(' ');
+
   // Controles de detail : lignes et colonnes sur un texte de plusieurs lignes (dont une declaration CSS repartie sur
-  // plusieurs lignes), d'emojis decodes et de balises voisines d'un commentaire ; extrait d'une fonction de couleur lu
+  // plusieurs lignes), d'emojis decodes et de polices voisines d'un commentaire ; extrait d'une fonction de couleur lu
   // jusqu'a sa parenthese fermante.
-  const positions = (texte) => analyser(texte).map((v) => `${v.ligne}:${v.colonne}`).join(' ');
-  const extraits = (texte) => analyser(texte).map((v) => v.extrait).join(' ');
+  const positions = (texte) => analyser(texte, 'toutes', JETONS_NOUVEAUX).map((v) => `${v.ligne}:${v.colonne}`).join(' ');
+  const extraits = (texte) => analyser(texte, 'toutes', JETONS_NOUVEAUX).map((v) => v.extrait).join(' ');
   // Duree : chaque fonction de couleur non refermee relisait tout le texte qui la suit (1 000 "rgb(" devant 490 000
   // caracteres : 9 s) ; la recherche des fermantes est lineaire.
   const duree = (texte) => {
     const t0 = performance.now();
-    analyser(texte);
+    analyser(texte, 'toutes', JETONS_NOUVEAUX);
     return performance.now() - t0;
   };
   const enMoinsDe3s = (ms) => (ms < 3000 ? 'moins de 3 s' : `${(ms / 1000).toFixed(1)} s`);
   const controles = [
-    ['positions', positions('ligne propre\r\nfont-mono ici\nfin \u2014 la\n.x {\n  background: linear-gradient(\n    #3b82f6 0%,\n    #fff 100%\n  );\n}'), '2:1 3:5 6:5'],
-    ['extrait', extraits('color: hsl(250 80% 50% / calc(1 - var(--x)));'), 'hsl(250 80% 50% / calc(1 - var(--x)))'],
+    ['positions', positions('ligne propre\r\nfont-family: Inter;\nfin \u2014 la\n.x {\n  background: linear-gradient(\n    #e84e1b 0%,\n    #fff 100%\n  );\n}'), '2:14 3:5 5:15 6:5'],
+    ['extrait', extraits('color: hsl(15 82% 51% / calc(1 - var(--x)));'), 'hsl(15 82% 51% / calc(1 - var(--x)))'],
     ['positions des emojis decodes', positions('ok &#127881;\n  \\u{1F44D} et \\uD83C\\uDF89'), '1:4 2:3 2:16'],
-    ['positions des balises hors commentaire', positions('/* <pre> */ <code>\n// <kbd>\nx <samp>'), '1:13 3:3'],
-    ['extrait apres des fonctions non refermees', extraits('rgb( oklch( color: rgb(124, 58, 237);'), 'rgb(124, 58, 237)'],
+    ['positions des polices hors commentaire', positions('/* font-family: Inter */ font-family: Lato;\n// font: 12px Roboto\nx { font: 1rem Lato }'), '1:39 3:16'],
+    ['extrait apres des fonctions non refermees', extraits('rgb( oklch( color: rgb(232, 78, 27);'), 'rgb(232, 78, 27)'],
+    ['jetons lus dans une feuille', lus, 'orange-deep papier'],
     ['duree (1 000 rgb( non refermes, 490 000 caracteres)', enMoinsDe3s(duree('color: ' + 'rgb('.repeat(1000) + 'x'.repeat(490000))), 'moins de 3 s'],
     ['duree (5 000 oklch( non refermes, 100 000 caracteres)', enMoinsDe3s(duree('oklch('.repeat(5000) + 'a'.repeat(100000))), 'moins de 3 s'],
   ];
@@ -1001,22 +1217,22 @@ function autotest() {
 
   // Regles d'un perimetre : tests du site (tirets et emojis, ecritures comprises), documents et donnees (caracteres
   // ecrits tels quels : un document cite &mdash; ou \u{1F389} sans les afficher), balayage --tirets (tirets ecrits tels
-  // quels, dans tout le depot).
+  // quels, dans tout le depot). Couleurs, polices et degrades ne valent que pour apps/web/src.
   // Caracteres construits par leur code : ce fichier n'en contient aucun tel quel (le balayage --tirets le lit aussi).
   const car = (...points) => String.fromCodePoint(...points);
   const [tiret, barre, demi, fete] = [car(0x2014), car(0x2015), car(0x2013), car(0x1f389)];
   const toleres = car(0x2713, 0x20, 0x26a0, 0x20, 0x2197, 0x20, 0xa9);
   const parRegles = [
-    ["color: #3b82f6; font-family: monospace; const s = 'A \\u2014 B \\u{1F389}';", 'tirets-emojis', ['tiret cadratin', 'emoji']],
-    ['color: #3b82f6; <code>x</code> font-mono ; rien a signaler', 'tirets-emojis', []],
-    [`Bravo ${fete}, un tiret ${tiret} ici ; \`&mdash;\` et \`\\u{1F389}\` cites ; bg-blue-500`, 'bruts', ['emoji', 'tiret cadratin']],
+    ["color: #e84e1b; font-family: Montserrat; const s = 'A \\u2014 B \\u{1F389}';", 'tirets-emojis', ['tiret cadratin', 'emoji']],
+    ['color: #e84e1b; font-family: Montserrat; background: linear-gradient(#fff, #000); bg-orange-500 ; rien a signaler', 'tirets-emojis', []],
+    [`Bravo ${fete}, un tiret ${tiret} ici ; \`&mdash;\` et \`\\u{1F389}\` cites ; bg-orange-500`, 'bruts', ['emoji', 'tiret cadratin']],
     [`Cites : \`&mdash;\`, \`&#8212;\`, \`\\u2014\`, \`\\2014\`, \`&#x1F389;\` ; signes toleres ${toleres}`, 'bruts', []],
-    [`Un tiret ${tiret} ici, l'echappement '\\u2014' et &mdash; non, ${fete} non plus, bg-blue-500`, 'tirets', ['tiret cadratin']],
+    [`Un tiret ${tiret} ici, l'echappement '\\u2014' et &mdash; non, ${fete} non plus, bg-orange-500`, 'tirets', ['tiret cadratin']],
     [`Formes verticales ${car(0xfe31)} et ${car(0xfe58)}, barre ${barre}, demi-cadratin ${demi} admis`, 'tirets', ['tiret cadratin', 'tiret cadratin', 'tiret cadratin']],
     [`Rien a signaler : ${demi} ${toleres} &mdash; \\u2014`, 'tirets', []],
   ];
   for (const [texte, regles, attendus] of parRegles) {
-    const trouves = analyser(texte, regles).map((v) => v.type);
+    const trouves = analyser(texte, regles, JETONS_NOUVEAUX).map((v) => v.type);
     if (trouves.length !== attendus.length || attendus.some((t, i) => trouves[i] !== t)) {
       ecarts += 1;
       console.log(`ECART (regles ${regles}) : ${JSON.stringify(texte)}\n  attendu : ${JSON.stringify(attendus)}\n  obtenu  : ${JSON.stringify(trouves)}`);
@@ -1041,7 +1257,7 @@ function autotest() {
     ['datasets/manifest.json', false],
     ['packages/core/data/aides/nationales.json', false],
     ['packages/core/data/idcc/idcc-opco.json', false],
-    ['apps/web/public/logo-sfg.png', false],
+    ['apps/web/public/logo-horizontal.svg', false],
     ['apps/web/public/.htaccess', false],
     ['.gitignore', false],
   ];
@@ -1052,18 +1268,19 @@ function autotest() {
     }
   }
 
-  const total = fautifs.length + propres.length + controles.length + parRegles.length + selection.length;
+  const total = fautifs.length + propres.length + parJetons.length + controles.length + parRegles.length + selection.length;
   if (ecarts > 0) {
     console.log(`\nAutotest de la garde de charte : ${ecarts} ecart(s) sur ${total} cas.`);
     return 1;
   }
   console.log(
     `Autotest de la garde de charte : ${total} cas, tous conformes (${fautifs.length} violations detectees, ${propres.length} textes propres non signales, ` +
-      `${controles.length} controles de position, d'extrait et de duree exacts, ${parRegles.length} cas de regles par perimetre, ` +
-      `${selection.length} cas de selection des fichiers du balayage --tirets).`,
+      `${parJetons.length} cas de jetons de couleur, ${controles.length} controles de position, d'extrait, de lecture des jetons et de duree exacts, ` +
+      `${parRegles.length} cas de regles par perimetre, ${selection.length} cas de selection des fichiers du balayage --tirets).`,
   );
   return 0;
 }
+
 
 // Execute seulement en ligne de commande : un import (autotest externe, mutants) n'analyse pas le site.
 const lance = process.argv[1] && resolve(process.argv[1]).toLowerCase() === fileURLToPath(import.meta.url).toLowerCase();

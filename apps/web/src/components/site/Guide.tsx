@@ -46,7 +46,7 @@ export function GuideHero({
         <p className="mt-6 max-w-2xl text-chapeau text-texte-doux">{typo(lead)}</p>
         {revue && (
           <p className="mt-6 text-sm text-texte-discret">
-            Rédigé et vérifié par l&apos;équipe SFG Développement · mis à jour le{' '}
+            Rédigé et vérifié par l&apos;équipe financementopco · mis à jour le{' '}
             <time dateTime={revue}>{dateFr(revue)}</time> ·{' '}
             <Link href="/a-propos/" className="lien">
               notre méthode et nos sources
@@ -80,7 +80,7 @@ export function GuideSection({
       <div className="flex items-start gap-4">
         <span
           aria-hidden="true"
-          className="amount mt-0.5 grid size-10 shrink-0 place-items-center rounded-full bg-turquoise text-sm text-texte sm:size-11"
+          className="mt-2 shrink-0 font-mono text-sm text-ardoise sm:mt-3"
         >
           {number}
         </span>

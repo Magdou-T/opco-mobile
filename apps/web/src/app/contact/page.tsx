@@ -3,7 +3,6 @@ import { ContactForm } from '@/components/site/ContactForm';
 import { DonneesStructurees } from '@/components/site/DonneesStructurees';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
-import { Etiquette } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import { CONTACT_EMAIL } from '@/lib/contact';
 import { DOMAINES_DE_FORMATION } from '@/lib/domaines';
@@ -26,7 +25,7 @@ export default function ContactPage() {
       <DonneesStructurees graphe={GRAPHE} />
       <header className="border-b border-filet/70">
         <div className="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 md:pt-14 md:pb-16">
-          <p className="surtitre">Contact · SFG Développement</p>
+          <p className="surtitre">Contact · réponse sous 48&nbsp;h ouvrées</p>
           <h1 className="mt-5 max-w-4xl text-affiche font-bold text-texte">
             Parlons de votre
             <br />
@@ -34,7 +33,7 @@ export default function ContactPage() {
           </h1>
           <p className="mt-6 max-w-2xl text-chapeau text-texte-doux">
             Un doute sur votre OPCO, un dossier de prise en charge à monter, un besoin de formation pour vos
-            équipes&nbsp;: décrivez votre situation, un conseiller SFG Développement vous répond sous 48&nbsp;h ouvrées.
+            équipes&nbsp;: décrivez votre situation, un conseiller formation vous répond sous 48&nbsp;h ouvrées.
           </p>
         </div>
       </header>
@@ -44,22 +43,21 @@ export default function ContactPage() {
           <ContactForm />
         </Card>
 
-        <aside aria-label="SFG Développement" className="min-w-0 space-y-4">
+        <aside aria-label="Formations proposées" className="min-w-0 space-y-4">
           <Card tone="teintee" padding="md">
-            {/* eslint-disable-next-line @next/next/no-img-element -- export statique sans optimisation d'image (voir Logo.tsx) */}
-            <img src="/logo-sfg.png" alt="SFG Développement" width={426} height={224} className="block h-12 w-auto" />
-            <p className="mt-5 text-sm leading-relaxed text-texte-doux">
-              SFG Développement accompagne les entreprises dans leurs projets de formation&nbsp;:
-            </p>
-            <ul className="mt-3 flex flex-wrap gap-2">
+            <p className="font-mono text-xs tracking-[0.06em] text-ardoise uppercase">Formations proposées</p>
+            <ul className="mt-3 border-b border-filet">
               {DOMAINES_DE_FORMATION.map((d) => (
-                <Etiquette key={d.label} as="li" tone={d.tone}>
+                <li key={d.label} className="border-t border-filet py-2 font-display text-lg text-texte">
                   {d.label}
-                </Etiquette>
+                </li>
               ))}
             </ul>
+            <p className="mt-3 text-xs text-texte-discret">
+              Accompagnement assuré par SFG Développement, organisme de formation certifié Qualiopi.
+            </p>
             <div className="mt-6 border-t border-filet pt-4">
-              <p className="text-xs font-semibold tracking-[0.12em] text-texte-discret uppercase">Par e-mail</p>
+              <p className="font-mono text-xs tracking-[0.06em] text-ardoise uppercase">Par e-mail</p>
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
                 className="lien mt-1.5 inline-flex min-h-11 max-w-full items-center gap-2 text-sm break-words lg:min-h-0"

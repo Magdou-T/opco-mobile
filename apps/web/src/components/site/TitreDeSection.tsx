@@ -12,7 +12,7 @@ export function TitreDeSection({ id, titre, chapeau }: { id: string; titre: Reac
       <h2
         id={id}
         tabIndex={-1}
-        className="rounded-md text-[1.75rem] leading-[1.15] font-bold tracking-[-0.025em] break-words text-texte sm:text-[2rem]"
+        className="rounded-[3px] text-[1.875rem] leading-[1.1] font-medium tracking-[-0.015em] break-words text-texte sm:text-[2.25rem]"
       >
         {titre}
       </h2>

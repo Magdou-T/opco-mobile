@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { EMBEDDED_OPCOS } from '@opco/core';
 import { moisAnneeFr, verificationLaPlusRecente } from '@/lib/format';
+import { CONTACT_EMAIL } from '@/lib/contact';
 import { LIEN_MENTIONS } from '@/lib/mentions';
 import { Logo } from '@/components/site/Logo';
 import { Icon } from '@/components/ui/Icon';
@@ -11,7 +13,7 @@ import { Icon } from '@/components/ui/Icon';
  */
 const DERNIERE_VERIFICATION = verificationLaPlusRecente(EMBEDDED_OPCOS);
 const CRITERES = DERNIERE_VERIFICATION
-  ? `Critères 2026 · vérifiés ${moisAnneeFr(DERNIERE_VERIFICATION)}`
+  ? `Critères 2026 · vérifiés en ${moisAnneeFr(DERNIERE_VERIFICATION)}`
   : 'Critères 2026';
 
 const PROFILS = [
@@ -41,99 +43,100 @@ const SOURCES = [
   { href: 'https://www.moncompteformation.gouv.fr', label: 'Mon Compte Formation' },
 ];
 
-/* Transition limitée à la couleur du texte : l'anneau de focus apparaît d'emblée en or, sans fondu depuis le blanc. */
+/* Pied de page encre (charte financementopco) : liens en texte clair sur encre (9,25:1), soulignés au survol ; repères
+   de colonne en DM Mono, bleu clair (10,07:1). */
 const LIEN =
-  'inline-flex min-h-11 items-center gap-1.5 text-white/80 underline-offset-4 transition-[color] hover:text-white hover:underline lg:min-h-0 lg:py-1';
+  'inline-flex min-h-11 items-center gap-1.5 text-texte-sur-encre underline-offset-4 transition-[color] hover:text-white hover:underline lg:min-h-0 lg:py-1';
+
+function Colonne({ titre, children }: { titre: string; children: ReactNode }) {
+  return (
+    <div>
+      <p className="mb-3 border-b border-filet-sur-encre pb-2 font-mono text-xs tracking-[0.06em] text-bleu-clair uppercase">
+        {titre}
+      </p>
+      {children}
+    </div>
+  );
+}
 
 export function SiteFooter() {
   return (
     <footer className="pied-site surface-encre mt-16 print:hidden">
-      {/* Les trois couleurs du slogan de marque, en filet */}
-      <div aria-hidden="true" className="flex h-1">
-        <span className="flex-1 bg-turquoise" />
-        <span className="flex-1 bg-or" />
-        <span className="flex-1 bg-orange" />
-      </div>
-
-      {/* Les deux listes de liens côte à côte dès le téléphone : le pied garde ses cibles de 44 px sans s'étirer sur
-          plus d'un écran. */}
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-4 py-12 sm:px-6 md:py-14 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10">
         <div className="col-span-2 lg:col-span-1">
-          <Link href="/" className="-m-1.5 inline-block rounded-xl p-1.5">
-            <Logo fond="sombre" />
+          <Link href="/" className="-m-1.5 inline-block rounded-[3px] p-1.5">
+            <Logo fond="sombre" taille="compacte" />
           </Link>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/75">
-            Un service SFG Développement. Les montants proviennent des critères publiés par les 11 opérateurs de
-            compétences et sont donnés à titre indicatif&nbsp;: seul votre OPCO confirme une prise en charge, après
-            étude du dossier.
+          <p className="mt-5 max-w-sm text-sm leading-relaxed">
+            Le simulateur des financements de la formation professionnelle, construit à partir des critères publiés par
+            les 11 opérateurs de compétences et les autres financeurs.
           </p>
           <a
-            href="mailto:contact@sfgdeveloppement.fr"
-            className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-vert-clair underline-offset-4 hover:underline"
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="mt-4 inline-flex min-h-11 items-center gap-2 font-mono text-sm text-bleu-clair underline-offset-4 hover:underline"
           >
             <Icon name="courriel" className="size-[18px]" />
-            contact@sfgdeveloppement.fr
+            {CONTACT_EMAIL}
           </a>
         </div>
 
         <nav aria-label="Pages par profil">
-          <p className="surtitre mb-3">Par profil</p>
-          <ul className="text-sm lg:space-y-1.5">
-            {PROFILS.map((p) => (
-              <li key={p.href}>
-                <Link className={LIEN} href={p.href}>
-                  {p.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <Colonne titre="Par profil">
+            <ul className="text-sm lg:space-y-1.5">
+              {PROFILS.map((p) => (
+                <li key={p.href}>
+                  <Link className={LIEN} href={p.href}>
+                    {p.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Colonne>
         </nav>
 
         <nav aria-label="Guides et outils">
-          <p className="surtitre mb-3">Guides et outils</p>
-          <ul className="text-sm lg:space-y-1.5">
-            {GUIDES.map((p) => (
-              <li key={p.href}>
-                <Link className={LIEN} href={p.href}>
-                  {p.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <Colonne titre="Guides et outils">
+            <ul className="text-sm lg:space-y-1.5">
+              {GUIDES.map((p) => (
+                <li key={p.href}>
+                  <Link className={LIEN} href={p.href}>
+                    {p.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Colonne>
         </nav>
 
-        <div>
-          <p className="surtitre mb-3">Sources officielles</p>
+        <Colonne titre="Sources officielles">
           <ul className="text-sm lg:space-y-1.5">
             {SOURCES.map((s) => (
               <li key={s.href}>
                 <a className={LIEN} href={s.href} target="_blank" rel="noopener noreferrer">
                   {s.label}
-                  <Icon name="lien-externe" className="size-3.5 text-white/60" />
+                  <Icon name="lien-externe" className="size-3.5 opacity-70" />
                   <span className="sr-only"> (nouvel onglet)</span>
                 </a>
               </li>
             ))}
           </ul>
-        </div>
+        </Colonne>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-xs text-white/65 sm:px-6 md:flex-row md:items-center md:justify-between">
-          <p>
-            Estimations indicatives, ne constitue ni un conseil juridique ni un engagement de financement.{' '}
+      <div className="border-t border-filet-sur-encre">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-xs sm:px-6 md:flex-row md:items-center md:justify-between">
+          <p className="max-w-3xl leading-relaxed">
+            Estimations indicatives, ne constitue ni un conseil juridique ni un engagement de financement&nbsp;: seul
+            votre OPCO confirme une prise en charge, après étude du dossier. Site édité par SFG Développement ·{' '}
             {/* Lien dans la phrase : souligné, il ne se distingue pas du texte par la seule couleur. */}
             <Link
               href={LIEN_MENTIONS.href}
-              className="font-medium text-white/80 underline underline-offset-4 transition-[color] hover:text-white"
+              className="font-medium text-white underline underline-offset-4 transition-[color] hover:text-bleu-clair"
             >
               {LIEN_MENTIONS.libelle}
             </Link>
           </p>
-          <p className="inline-flex shrink-0 items-center gap-2 font-medium whitespace-nowrap text-white/80">
-            <span aria-hidden="true" className="size-1.5 rounded-full bg-vert-clair" />
-            {CRITERES}
-          </p>
+          <p className="shrink-0 font-mono whitespace-nowrap text-texte-sur-encre">{CRITERES}</p>
         </div>
       </div>
     </footer>

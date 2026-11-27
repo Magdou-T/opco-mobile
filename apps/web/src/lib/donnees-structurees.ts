@@ -82,7 +82,7 @@ export function noeudEditeur(): Noeud {
   };
 }
 
-/** Le site financementOPCO, publié par l'éditeur. */
+/** Le site financementopco, publié par l'éditeur. */
 export function noeudSite(): Noeud {
   return {
     '@type': 'WebSite',

@@ -40,21 +40,25 @@ export type ButtonAsButton = ButtonBase &
   Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'children'> & { href?: undefined };
 export type ButtonProps = ButtonAsLink | ButtonAsButton;
 
+/* Charte financementopco : boutons rectangulaires (angles de 3 px), Instrument Sans 600, cibles de 44 px au moins. */
 const BASE =
-  'group inline-flex items-center justify-center gap-2 rounded-full text-center font-semibold leading-tight transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0';
+  'group inline-flex items-center justify-center gap-2.5 rounded-[3px] text-center font-semibold leading-tight transition-[background-color,border-color,color] duration-150 ease-out disabled:cursor-not-allowed disabled:opacity-50';
 
 const VARIANTES: Record<ButtonVariant, string> = {
-  primary: 'reflet bg-orange-deep text-white shadow-douce hover:bg-orange-deeper disabled:bg-orange-deep',
-  secondary:
-    'border-2 border-turquoise text-turquoise-deep hover:border-turquoise-deep hover:bg-turquoise-soft disabled:bg-transparent',
-  ghost: 'text-orange-deep decoration-2 underline-offset-[0.3em] hover:underline',
-  inverse: 'bg-white text-orange-deep shadow-douce hover:bg-orange-soft disabled:bg-white',
+  // Bleu de Prusse plein (blanc dessus 11,27:1), survol bleu fonce.
+  primary: 'bg-prusse text-white hover:bg-prusse-fonce disabled:bg-prusse',
+  // Bouton encre plein (« Décrire mon projet » du kit).
+  secondary: 'bg-encre text-white hover:bg-nuit disabled:bg-encre',
+  // Lien souligne, sans fond.
+  ghost: 'text-prusse underline decoration-1 underline-offset-[0.3em] hover:text-encre hover:decoration-2',
+  // Sur fond bleu de Prusse : bouton surligneur, texte encre (11,93:1).
+  inverse: 'bg-surligneur text-encre hover:bg-white disabled:bg-surligneur',
 };
 
 const TAILLES: Record<ButtonSize, string> = {
-  sm: 'min-h-9 px-4 text-sm',
+  sm: 'min-h-11 px-4 text-sm',
   md: 'min-h-11 px-5 text-[0.9375rem]',
-  lg: 'min-h-12 px-7 text-base',
+  lg: 'min-h-[3.25rem] px-6 text-[1.0625rem]',
 };
 
 const TAILLES_GHOST: Record<ButtonSize, string> = {

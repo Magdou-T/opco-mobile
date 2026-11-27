@@ -25,31 +25,15 @@ export interface EtiquetteProps {
   children: ReactNode;
 }
 
+/* Charte financementopco : étiquette rectangulaire (angles de 2 px), DM Mono en capitales, cadre de 1,5 px ; aucune
+   pastille de couleur. Les tons historiques gardent leur nom et prennent les couleurs de la charte. */
 const DOUCE: Record<EtiquetteTone, string> = {
-  neutre: 'border-filet bg-lin-soft text-texte-doux',
-  orange: 'border-orange/25 bg-orange-soft text-orange-deep',
-  turquoise: 'border-turquoise/30 bg-turquoise-soft text-turquoise-deep',
-  or: 'border-or/50 bg-or-soft text-texte',
-  rouge: 'border-rouge/25 bg-rouge-soft text-rouge',
-  'vert-clair': 'border-vert-clair/70 bg-vert-clair-soft text-texte',
-};
-
-const POINT: Record<EtiquetteTone, string> = {
-  neutre: 'bg-texte-discret',
-  orange: 'bg-orange',
-  turquoise: 'bg-turquoise',
-  or: 'bg-or',
-  rouge: 'bg-rouge',
-  'vert-clair': 'bg-vert-clair',
-};
-
-const POINT_SOMBRE: Record<EtiquetteTone, string> = {
-  neutre: 'bg-white/70',
-  orange: 'bg-orange-clair',
-  turquoise: 'bg-vert-clair',
-  or: 'bg-or',
-  rouge: 'bg-rouge ring-1 ring-white/50',
-  'vert-clair': 'bg-vert-clair',
+  neutre: 'border-filet-fort text-texte-doux',
+  orange: 'border-prusse bg-prusse text-white',
+  turquoise: 'border-prusse text-prusse',
+  or: 'border-encre bg-surligneur text-encre',
+  rouge: 'border-rouge text-rouge',
+  'vert-clair': 'border-dashed border-ardoise text-ardoise',
 };
 
 export function Etiquette({
@@ -66,26 +50,15 @@ export function Etiquette({
     <Balise
       style={style}
       className={cx(
-        'inline-flex items-center rounded-full border font-semibold',
-        // Pilule flottante (liste de domaines qui passe à la ligne) : son texte passe aussi à la ligne s'il est plus
-        // large que la liste (espacement de texte à 320 px), au lieu d'élargir la page.
-        flottante
-          ? 'max-w-full gap-2 py-1.5 pr-3.5 pl-2.5 text-sm'
-          : 'gap-1.5 py-0.5 pr-2.5 pl-2 text-xs leading-5 whitespace-nowrap',
-        flottante && 'border-transparent bg-white text-encre shadow-etiquette',
-        !flottante && surFondSombre && 'border-white/25 bg-encre/25 text-white',
+        'inline-flex items-center rounded-[2px] border-[1.5px] font-mono font-medium tracking-[0.06em] uppercase',
+        // Étiquette d'une liste qui passe à la ligne : son texte passe aussi à la ligne s'il est plus large que la liste.
+        flottante ? 'max-w-full px-2.5 py-1 text-xs' : 'px-2 py-px text-[0.6875rem] leading-5 whitespace-nowrap',
+        flottante && 'border-filet bg-white text-encre',
+        !flottante && surFondSombre && 'border-white/40 text-white',
         !flottante && !surFondSombre && DOUCE[tone],
         className,
       )}
     >
-      <span
-        aria-hidden="true"
-        className={cx(
-          'shrink-0 rounded-full',
-          flottante ? 'size-2.5' : 'size-[7px]',
-          surFondSombre && !flottante ? POINT_SOMBRE[tone] : POINT[tone],
-        )}
-      />
       {children}
     </Balise>
   );

@@ -14,7 +14,7 @@ import { dateFr, de } from './format';
 /** Adresse du site en production, sans barre finale : base des adresses canoniques et du plan du site. */
 export const ADRESSE_DU_SITE = 'https://www.financementopco.fr';
 
-export const NOM_DU_SITE = 'financementOPCO';
+export const NOM_DU_SITE = 'financementopco';
 
 /** Gabarit des titres : le nom du site suit le titre de la page (sauf `titreComplet`). */
 export const GABARIT_DU_TITRE = `%s | ${NOM_DU_SITE}`;
@@ -26,7 +26,7 @@ export interface DescriptionDePage {
   description: string;
   /** Chemin de la page, barre finale comprise (« / », « /opco/akto/ »). */
   chemin: string;
-  /** Titre affiché tel quel, sans « | financementOPCO » (l'accueil, dont le titre porte déjà le nom du site). */
+  /** Titre affiché tel quel, sans « | financementopco » (l'accueil, dont le titre porte déjà le nom du site). */
   titreComplet?: boolean;
   /** Guide daté : date de sa dernière mise à jour (AAAA-MM-JJ). L'aperçu de partage devient un article daté. */
   modifieLe?: string;
@@ -63,7 +63,7 @@ export const REVUE_DES_GUIDES = '2026-11-27';
 /** Pages fixes du site. */
 export const PAGES = {
   accueil: {
-    titre: 'financementOPCO : trouvez tous les financements de votre formation',
+    titre: 'financementopco : trouvez tous les financements de votre formation',
     titreComplet: true,
     description:
       'Simulateur gratuit des financements de votre formation : OPCO, CPF, Région, France Travail, Agefiph, Europe. Montants indicatifs et sources officielles.',
@@ -154,20 +154,20 @@ export const PAGES = {
   aPropos: {
     titre: 'Méthode et sources : comment nous vérifions',
     description:
-      "Qui publie financementOPCO, d'où viennent les barèmes et les aides, comment chaque montant est vérifié et daté, et comment signaler une erreur.",
+      "Qui publie financementopco, d'où viennent les barèmes et les aides, comment chaque montant est vérifié et daté, et comment signaler une erreur.",
     chemin: '/a-propos/',
     modifieLe: REVUE_DES_GUIDES,
   },
   contact: {
     titre: 'Nous contacter',
     description:
-      'Une question sur le financement de votre formation, un projet à monter avec votre OPCO ? Écrivez à SFG Développement : réponse sous 48 h ouvrées.',
+      'Une question sur le financement de votre formation ou un dossier OPCO à monter ? Écrivez à contact@financementopco.fr : réponse sous 48 h ouvrées.',
     chemin: '/contact/',
   },
   mentions: {
     titre: 'Mentions légales et données',
     description:
-      "Éditeur, directeur de la publication, hébergeur, données personnelles, sources et licences du site financementOPCO, un service de SFG Développement.",
+      "Éditeur, directeur de la publication, hébergeur, données personnelles, sources et licences du site financementopco, édité par SFG Développement.",
     chemin: '/mentions-legales/',
   },
 } as const satisfies Record<string, DescriptionDePage>;

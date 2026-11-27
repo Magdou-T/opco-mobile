@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/Button';
 
 export const metadata: Metadata = {
   title: 'Page introuvable',
-  description: "Cette adresse ne correspond à aucune page du site financementOPCO.",
+  description: "Cette adresse ne correspond à aucune page du site financementopco.",
 };
 
 /**
