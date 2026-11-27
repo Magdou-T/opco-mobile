@@ -38,6 +38,9 @@ Options -Indexes
   ForceType image/png
 </FilesMatch>
 
+# Manifeste de l'application (icônes, couleur du thème) : son type officiel, au lieu de text/plain.
+AddType application/manifest+json .webmanifest
+
 # Page 404 personnalisée
 ErrorDocument 404 /404.html
 
