@@ -185,8 +185,8 @@ export default function MentionsLegalesPage() {
           Les barèmes des OPCO et les aides reprennent des sources publiques&nbsp;: chaque montant cite sa source
           officielle et sa date de vérification.
         </li>
-        <li>Les polices Montserrat et Inter sont distribuées sous licence SIL Open Font License 1.1.</li>
-        <li>Le logo et la marque SFG Développement sont la propriété de SFG Développement.</li>
+        <li>Les polices Newsreader, Instrument Sans et DM Mono sont distribuées sous licence SIL Open Font License 1.1.</li>
+        <li>Le logo et la marque financementopco sont la propriété de SFG Développement.</li>
       </ul>
     ),
     limites: (

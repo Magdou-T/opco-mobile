@@ -174,7 +174,7 @@ export function OuiNonChoix({
               aria-pressed={choisi}
               onClick={() => onChange(o.valeur)}
               className={cx(
-                'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-4 text-sm font-semibold transition-[color,background-color] lg:min-h-10',
+                'inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[3px] px-4 text-sm font-semibold transition-[color,background-color] lg:min-h-10',
                 choisi ? 'bg-orange-deep text-white' : 'text-texte-doux hover:bg-lin-soft hover:text-texte',
               )}
             >
@@ -376,7 +376,6 @@ export function CheckboxRow({
   description,
   checked,
   onToggle,
-  icone,
 }: {
   label: ReactNode;
   description?: ReactNode;
@@ -402,17 +401,6 @@ export function CheckboxRow({
         onChange={(e) => onToggle(e.target.checked)}
         className="mt-0.5 size-5 shrink-0 cursor-pointer"
       />
-      {icone && (
-        <span
-          aria-hidden="true"
-          className={cx(
-            'grid size-9 shrink-0 place-items-center rounded-xl',
-            checked ? 'bg-white text-orange-deep' : 'bg-turquoise-soft text-turquoise-deep',
-          )}
-        >
-          <Icon name={icone} className="size-5" />
-        </span>
-      )}
       <span className="min-w-0 self-center">
         <span className="block text-sm leading-snug font-semibold text-texte">{label}</span>
         {description && <span className="mt-1 block text-[0.8125rem] leading-snug text-texte-doux">{description}</span>}
@@ -512,7 +500,7 @@ export function ChampRegion({
           <button
             type="button"
             onClick={() => setOuvert(true)}
-            className="lien inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm"
+            className="lien inline-flex min-h-11 items-center gap-1.5 rounded-[3px] px-3 text-sm"
           >
             <Icon name="crayon" className="size-4" />
             Modifier<span className="sr-only"> la région</span>

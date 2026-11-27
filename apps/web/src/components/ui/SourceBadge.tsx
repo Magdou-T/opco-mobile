@@ -15,7 +15,7 @@ export function SourceBadge({ url, label = 'Source' }: SourceBadgeProps) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 rounded-full border border-filet bg-white px-2 py-0.5 text-xs font-medium text-orange-deep transition-[color,background-color,border-color] hover:border-orange-deep hover:bg-orange-soft"
+      className="inline-flex items-center gap-1 rounded-[2px] border border-filet bg-white px-2 py-0.5 text-xs font-medium text-orange-deep transition-[color,background-color,border-color] hover:border-orange-deep hover:bg-orange-soft"
       title={`Voir la source officielle : ${url}`}
     >
       <Icon name="lien-externe" className="size-3" strokeWidth={2} />

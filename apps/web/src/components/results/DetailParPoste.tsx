@@ -107,7 +107,7 @@ export function DetailParPoste({
                           aria-expanded={ouverte}
                           aria-controls={idDetail}
                           aria-label={`Calcul détaillé${INSECABLE}: ${line.label}`}
-                          className="-my-1 -ml-1.5 grid size-7 shrink-0 place-items-center rounded-full text-texte-discret hover:text-orange-deep print:hidden"
+                          className="-my-1 -ml-1.5 grid size-7 shrink-0 place-items-center rounded-[3px] text-texte-discret hover:text-orange-deep print:hidden"
                         >
                           <Icon
                             name="chevron"

@@ -132,14 +132,6 @@ function BoutonLien({
  */
 const ENTETE_DE_CARTE = 'flex flex-col items-start gap-3 min-[360px]:flex-row min-[360px]:gap-4';
 
-/** Pastille d'icône d'une carte (DESIGN.md, section 6). */
-function Pastille({ icone }: { icone: IconName }) {
-  return (
-    <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-2xl bg-turquoise-soft text-turquoise-deep">
-      <Icon name={icone} className="size-[22px]" />
-    </span>
-  );
-}
 
 /** Ce que la recherche a établi sur l'entreprise choisie. */
 function CarteEntreprise({ state, titreRef }: { state: WizardState; titreRef: Ref<HTMLHeadingElement> }) {
@@ -154,7 +146,6 @@ function CarteEntreprise({ state, titreRef }: { state: WizardState; titreRef: Re
   return (
     <Card padding="md">
       <div className={ENTETE_DE_CARTE}>
-        <Pastille icone="batiment" />
         <div className="min-w-0 flex-1">
           <p className="marginalia">Entreprise identifiée</p>
           <h3
@@ -219,7 +210,6 @@ function CarteOpco({
   return (
     <Card padding="md" className="space-y-4">
       <div className={ENTETE_DE_CARTE}>
-        <Pastille icone="bouclier" />
         <div className="min-w-0 flex-1">
           <p className="marginalia">Votre OPCO</p>
           <h3
@@ -403,12 +393,6 @@ function ResultatsDeRecherche({
                 onClick={() => onChoisir(entreprise)}
                 className="group flex w-full items-start gap-3 px-4 py-3.5 text-left transition-[background-color] hover:bg-lin-soft focus-visible:bg-lin-soft focus-visible:outline-offset-[-3px]"
               >
-                <span
-                  aria-hidden="true"
-                  className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-turquoise-soft text-turquoise-deep"
-                >
-                  <Icon name="batiment" className="size-[18px]" />
-                </span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-semibold break-words text-texte">{entreprise.nom}</span>
                   <span className="mt-0.5 block text-sm text-texte-doux">

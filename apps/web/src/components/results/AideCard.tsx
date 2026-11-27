@@ -120,7 +120,7 @@ export function AideCard({
               aria-expanded={ouvert}
               aria-controls={idDetail}
               onClick={() => setOuvert((v) => !v)}
-              className="mt-4 -ml-1 inline-flex min-h-11 items-center gap-2 rounded-full px-1 text-sm font-semibold text-orange-deep underline-offset-4 hover:underline lg:min-h-9 print:hidden"
+              className="mt-4 -ml-1 inline-flex min-h-11 items-center gap-2 rounded-[3px] px-1 text-sm font-semibold text-orange-deep underline-offset-4 hover:underline lg:min-h-9 print:hidden"
             >
               <Icon
                 name="chevron"
@@ -151,7 +151,7 @@ export function AideCard({
                       <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-texte-doux">
                         <span
                           aria-hidden="true"
-                          className="mt-px grid size-6 shrink-0 place-items-center rounded-full bg-turquoise font-display text-xs font-bold text-texte"
+                          className="mt-px w-6 shrink-0 font-mono text-sm text-ardoise"
                         >
                           {i + 1}
                         </span>

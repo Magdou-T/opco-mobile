@@ -110,7 +110,7 @@ export function ChargementResultats() {
           <FiletTricolore />
           <div className="p-5 sm:p-8">
             <p role="status" className="flex items-center gap-2.5 text-sm font-medium text-texte-doux">
-              <span aria-hidden="true" className="size-2 animate-pulse rounded-full bg-orange" />
+              <span aria-hidden="true" className="size-2 animate-pulse bg-prusse" />
               Calcul en cours…
             </p>
             <div aria-hidden="true" className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -118,7 +118,7 @@ export function ChargementResultats() {
                 <div key={i} className="h-[4.5rem] animate-pulse rounded-2xl bg-lin-soft" />
               ))}
             </div>
-            <div aria-hidden="true" className="mt-7 h-4 animate-pulse rounded-full bg-lin-soft" />
+            <div aria-hidden="true" className="mt-7 h-4 animate-pulse rounded-[2px] bg-papier-fonce" />
             <div aria-hidden="true" className="mt-4 h-10 w-2/3 animate-pulse rounded-xl bg-lin-soft" />
           </div>
         </div>

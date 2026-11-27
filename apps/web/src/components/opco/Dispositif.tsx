@@ -89,7 +89,7 @@ export function CarteDispositif({ d, sigles }: { d: DispositifComplementaire; si
               <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-texte-doux">
                 <span
                   aria-hidden="true"
-                  className="mt-px grid size-6 shrink-0 place-items-center rounded-full bg-turquoise font-display text-xs font-bold text-texte"
+                  className="mt-px w-6 shrink-0 font-mono text-sm text-ardoise"
                 >
                   {i + 1}
                 </span>

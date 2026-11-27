@@ -2,7 +2,6 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { AideEvaluee, Confidence, DispositifEligible, LignePlan, OptionPlan, PlanFinancement } from '@opco/core';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
-import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import { delai } from '@/lib/apparition';
 import { cx } from '@/lib/cx';
@@ -149,7 +148,7 @@ function CarteDuPlan({
   groupe: boolean;
   style: CSSProperties;
 }) {
-  const { titre, icone, aide } = CARTES[carte];
+  const { titre, aide } = CARTES[carte];
   // Les options n'ont pas de ligne « pour N personnes » : leur carte dit pour qui valent ses montants (la somme sur les seuls
   // profils qui ont l'option).
   const aideAffichee =
@@ -159,12 +158,6 @@ function CarteDuPlan({
     <section id={id} aria-labelledby={`${id}-titre`} className="apparition" style={style}>
       <Card padding="none">
         <header className="flex items-start gap-4 px-5 pt-5 pb-4 sm:px-6 sm:pt-6">
-          <span
-            aria-hidden="true"
-            className="grid size-11 shrink-0 place-items-center rounded-2xl bg-turquoise-soft text-turquoise-deep"
-          >
-            <Icon name={icone} className="size-[22px]" />
-          </span>
           <div className="min-w-0 pt-0.5">
             <h3 id={`${id}-titre`} className="text-lg leading-snug font-bold text-texte">
               {titre}
@@ -311,11 +304,9 @@ function PileDesFinancements({
       </ol>
       {plusieurs && (
         <div className="flex items-center gap-4 break-inside-avoid">
-          <span
-            aria-hidden="true"
-            className="grid size-10 shrink-0 place-items-center rounded-full border-2 border-turquoise-deep bg-white text-turquoise-deep ring-4 ring-white"
-          >
-            <Icon name="coche" className="size-5" strokeWidth={2} />
+          {/* Fin du fil du plan : un carré encre, sans icône (charte financementopco). */}
+          <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center">
+            <span className="size-3 bg-encre" />
           </span>
           <div className="min-w-0 flex-1">
             <p className="leading-snug font-semibold text-texte">Total financé</p>

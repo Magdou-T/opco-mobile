@@ -2,16 +2,16 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 
 /**
- * Carte du site (rayon 20 px).
- * - plain : fond blanc, filet teinté, ombre douce ; le cas courant.
- * - teintee : fond lin très clair, sans ombre ; un encart calme dans une page blanche.
- * - turquoise, orange, nuit : dégradés de marque calibrés pour le texte blanc (4,5:1 au point le plus clair), focus
- *   adapté ; réservés aux zones d'accent courtes (récapitulatif, appel à l'action), jamais derrière un long texte.
+ * Carte du site (charte financementopco : angles de 3 px, aucune ombre).
+ * - plain : la feuille dans un cadre de filet ; le cas courant.
+ * - teintee : papier foncé dans un cadre de filet ; un encart calme.
+ * - orange, turquoise (noms historiques) : aplat bleu de Prusse ; nuit : aplat encre. Texte clair, focus surligneur ;
+ *   réservés aux zones d'accent courtes, jamais derrière un long texte.
  *
- * Carte cliquable : `interactive` (soulèvement au survol) et, à l'intérieur, un lien portant la classe `lien-etendu`
- * dont le nom est le titre de la carte : toute la carte devient cliquable sans imbriquer de contenu dans le lien.
- * L'anneau de focus entoure une carte claire ; dans une carte en dégradé, il se dessine à l'intérieur (globals.css).
- * Une carte claire remet la couleur de focus à l'orange foncé, même posée sur une surface sombre.
+ * Carte cliquable : `interactive` et, à l'intérieur, un lien portant la classe `lien-etendu` dont le nom est le titre de
+ * la carte : toute la carte devient cliquable sans imbriquer de contenu dans le lien. L'anneau de focus entoure une
+ * carte claire ; dans un aplat, il se dessine à l'intérieur du bord (globals.css). Une carte claire remet la couleur de
+ * focus au bleu de Prusse, même posée sur une surface sombre.
  * Voir apps/web/DESIGN.md (Primitives).
  */
 export type CardTone = 'plain' | 'teintee' | 'turquoise' | 'orange' | 'nuit';

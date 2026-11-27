@@ -65,7 +65,7 @@ export function CarteBranche({
       <summary className="grid cursor-pointer list-none grid-cols-[auto_minmax(0,1fr)] gap-x-3 rounded-carte p-4 transition-[background-color] group-open/branche:rounded-b-none hover:bg-lin-soft focus-visible:outline-offset-[-3px] sm:gap-x-4 sm:p-5 print:grid-cols-1 [&::-webkit-details-marker]:hidden">
         <span
           aria-hidden="true"
-          className="row-span-2 mt-0.5 grid size-8 place-items-center rounded-full bg-turquoise-soft text-turquoise-deep print:hidden"
+          className="row-span-2 mt-0.5 grid size-8 place-items-center text-prusse print:hidden"
         >
           <Icon name="chevron" className="size-4 transition-transform duration-200 group-open/branche:rotate-90" strokeWidth={2} />
         </span>

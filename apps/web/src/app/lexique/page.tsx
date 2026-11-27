@@ -529,7 +529,7 @@ export default function LexiquePage() {
               <li key={g.lettre}>
                 <a
                   href={`#lettre-${g.lettre.toLowerCase()}`}
-                  className="grid size-11 place-items-center rounded-full border border-filet bg-white font-display text-base font-bold text-texte shadow-douce transition-[border-color,color] duration-200 hover:border-orange/45 hover:text-orange-deep"
+                  className="grid size-11 place-items-center rounded-[3px] border border-filet bg-white font-display text-base font-medium text-texte transition-[border-color,color] duration-200 hover:border-encre hover:text-prusse"
                 >
                   {g.lettre}
                 </a>

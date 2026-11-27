@@ -1,63 +1,48 @@
 import type { Financeur } from '@opco/core';
-import { Icon } from '@/components/ui/Icon';
-import type { IconName } from '@/components/ui/Icon';
 import { cx } from '@/lib/cx';
 import { familleCouleur } from '@/lib/resultats';
 import type { FamilleCouleur } from '@/lib/resultats';
 
 /**
- * Couleur de chaque famille de financeurs (DESIGN.md, section 15) : fond de la pastille, du segment de la barre empilée
- * et de la pastille de légende ; `encre` est la couleur de l'icône posée dessus. Les couples icône / fond dépassent 3:1
- * (icône) : #1A1A1A sur turquoise 5,68:1, sur or 9,48:1, sur vert clair 10,37:1, sur orange 4,59:1 ; blanc sur
- * turquoise foncé 6,26:1, sur nuit 19,14:1, sur filet fort 3,54:1.
+ * Couleur de chaque famille de financeurs (DESIGN.md, section 15), charte financementopco : segment de la barre empilée
+ * et carré de légende des lignes du plan. Sept teintes distinctes de la palette : bleu de Prusse (OPCO), surligneur
+ * (CPF), bleu clair (Région), ardoise (État et France Travail), filet foncé (fonds des non-salariés), encre (Europe),
+ * filet (autres). Chaque segment porte un bord encre à 45 % (BORD_SEGMENT) : les teintes claires restent visibles sur
+ * la feuille. `encre` reste la couleur d'un texte posé dessus (contraste AA : blanc sur prusse 10,71:1, sur ardoise
+ * 7,46:1, sur encre 16,23:1 ; encre sur surligneur 11,93:1, sur bleu clair 10,07:1, sur filet foncé 8,09:1, sur filet
+ * 10,25:1).
  */
 export const COULEURS_FAMILLE: Record<FamilleCouleur, { fond: string; encre: string }> = {
-  opco: { fond: 'bg-turquoise', encre: 'text-texte' },
-  faf: { fond: 'bg-turquoise-deep', encre: 'text-white' },
-  cpf: { fond: 'bg-or', encre: 'text-texte' },
-  region: { fond: 'bg-vert-clair', encre: 'text-texte' },
-  etat: { fond: 'bg-orange', encre: 'text-texte' },
-  europe: { fond: 'bg-nuit', encre: 'text-white' },
-  autre: { fond: 'bg-filet-fort', encre: 'text-white' },
+  opco: { fond: 'bg-prusse', encre: 'text-white' },
+  faf: { fond: 'bg-filet-fonce', encre: 'text-texte' },
+  cpf: { fond: 'bg-surligneur', encre: 'text-texte' },
+  region: { fond: 'bg-bleu-clair', encre: 'text-texte' },
+  etat: { fond: 'bg-ardoise', encre: 'text-white' },
+  europe: { fond: 'bg-encre', encre: 'text-white' },
+  autre: { fond: 'bg-filet', encre: 'text-texte' },
 };
 
-/** Icône de chaque financeur, reprise des familles de l'accueil (« Ce que le simulateur recherche »). */
-const ICONE_FINANCEUR: Record<Financeur, IconName> = {
-  opco: 'batiment',
-  branche: 'batiment',
-  faf: 'mallette',
-  cpf: 'euro',
-  region: 'repere',
-  departement: 'repere',
-  etat: 'document',
-  france_travail: 'document',
-  europe: 'globe',
-  transitions_pro: 'fleche',
-  agefiph: 'personne',
-  fiscal: 'calculatrice',
-  autre: 'info',
-};
 
 /**
- * Bord d'un segment ou d'une pastille de légende : encre à 35 % sur la couleur de la famille, pour que les teintes claires
- * (or, vert clair) restent visibles sur blanc (bord à 3,71:1 et 3,41:1 contre 1,84:1 et 1,68:1 sans lui).
+ * Bord d'un segment ou d'une pastille de légende : encre à 45 % sur la couleur de la famille, pour que les teintes claires
+ * restent visibles sur la feuille (WCAG 1.4.11) : bord du surligneur 3,66:1, du filet 4,03:1, du bleu clair 4,07:1, contre
+ * 1,36:1, 1,58:1 et 1,50:1 sans lui. À 35 %, le bord du surligneur tombait à 2,85:1.
  */
-export const BORD_SEGMENT = 'shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--encre)_35%,transparent)]';
+export const BORD_SEGMENT = 'shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--encre)_45%,transparent)]';
 
 /**
- * Reste à charge : rayures orange foncé de 2 px sur blanc (5,16:1 contre le blanc qui les sépare et qui entoure la
- * barre ; l'orange doux d'avant, à 1,12:1, ne se voyait pas), bord orange foncé plein, comme le chiffre « Reste à
- * charge » ; jamais une couleur de financeur ni un aplat (l'orange plein est celui de l'État et de France Travail).
+ * Reste à charge : la feuille dans un cadre encre en pointillés (le vocabulaire « selon branche » du kit), jamais une
+ * couleur de financeur ni un aplat ; aucun dégradé (charte financementopco).
  */
-export const SEGMENT_RESTE =
-  'bg-[repeating-linear-gradient(135deg,var(--orange-deep)_0_2px,var(--papier)_2px_6px)] shadow-[inset_0_0_0_1px_var(--orange-deep)]';
+export const SEGMENT_RESTE = 'border border-dashed border-encre bg-white';
 
 /** Garde les couleurs de la barre et des pastilles à l'impression (fonds omis par défaut par les navigateurs). */
 export const COULEURS_IMPRIMEES = '[print-color-adjust:exact] [-webkit-print-color-adjust:exact]';
 
 /**
- * Pastille ronde d'un financeur : couleur de sa famille et icône. Décorative : le nom du financeur est toujours écrit à
- * côté. Cerclée de blanc, elle se détache du fil qui relie les lignes du plan.
+ * Repère d'un financeur dans les lignes du plan : un carré de la couleur de sa famille (clé de la barre empilée), sans
+ * icône (charte financementopco : aucune icône décorative dans une pastille). Décoratif : le nom du financeur est
+ * toujours écrit à côté. La boîte garde la largeur de l'ancienne pastille (40 ou 32 px) : le fil du plan reste aligné.
  */
 export function PastilleFinanceur({
   financeur,
@@ -65,24 +50,17 @@ export function PastilleFinanceur({
   className,
 }: {
   financeur: Financeur;
-  /** normale : 40 px (lignes du plan) ; petite : 32 px (en-têtes de groupe, lignes secondaires). */
+  /** normale : boîte de 40 px (lignes du plan) ; petite : 32 px (en-têtes de groupe, lignes secondaires). */
   taille?: 'normale' | 'petite';
   className?: string;
 }) {
-  const { fond, encre } = COULEURS_FAMILLE[familleCouleur(financeur)];
+  const { fond } = COULEURS_FAMILLE[familleCouleur(financeur)];
   return (
     <span
       aria-hidden="true"
-      className={cx(
-        'grid shrink-0 place-items-center rounded-full ring-4 ring-white',
-        taille === 'normale' ? 'size-10' : 'size-8',
-        fond,
-        encre,
-        COULEURS_IMPRIMEES,
-        className,
-      )}
+      className={cx('grid shrink-0 place-items-center', taille === 'normale' ? 'size-10' : 'size-8', className)}
     >
-      <Icon name={ICONE_FINANCEUR[financeur]} className={taille === 'normale' ? 'size-5' : 'size-4'} />
+      <span className={cx(taille === 'normale' ? 'size-3.5' : 'size-3', fond, BORD_SEGMENT, COULEURS_IMPRIMEES)} />
     </span>
   );
 }

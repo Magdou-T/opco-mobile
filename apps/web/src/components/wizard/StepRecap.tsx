@@ -26,7 +26,6 @@ import {
 import type { ChampsProfil, CodeRegion, WizardState } from '@opco/core';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 import type { EtapeSite } from '@/lib/etapes';
 import { formatEuro, nombreEtUnite } from '@/lib/format';
@@ -66,7 +65,6 @@ const reponseOuiNon =
 /** Section du récapitulatif : en-tête iconifié, bouton « Modifier » qui rouvre l'étape, lignes libellé / valeur. */
 function Section({
   titre,
-  icone,
   onEdit,
   lignes,
 }: {
@@ -80,12 +78,6 @@ function Section({
     <Card as="section" aria-labelledby={id} padding="none">
       <div className="flex items-center justify-between gap-4 border-b border-filet px-4 py-3 sm:px-6">
         <div className="flex min-w-0 items-center gap-3">
-          <span
-            aria-hidden="true"
-            className="grid size-9 shrink-0 place-items-center rounded-xl bg-turquoise-soft text-turquoise-deep"
-          >
-            <Icon name={icone} className="size-[18px]" />
-          </span>
           <h3 id={id} className="text-lg leading-snug font-bold tracking-[-0.01em] text-texte">
             {titre}
           </h3>

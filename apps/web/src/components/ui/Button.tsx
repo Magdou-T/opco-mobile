@@ -5,17 +5,15 @@ import { Icon } from './Icon';
 import type { IconName } from './Icon';
 
 /**
- * Bouton du site, en pilule. Rend un <button> (sans `href`), un lien Next (`href` interne : « /… » ou « #… ») ou un
- * <a> (adresse externe, ouverte dans un nouvel onglet et annoncée comme telle ; mailto: et tel:).
+ * Bouton du site, rectangulaire (angles de 3 px). Rend un <button> (sans `href`), un lien Next (`href` interne : « /… »
+ * ou « #… ») ou un <a> (adresse externe, ouverte dans un nouvel onglet et annoncée comme telle ; mailto: et tel:).
  *
- * - primary : orange foncé plein, texte blanc (5,16:1), balayage au survol ; l'action principale d'un écran.
- * - secondary : contour 2 px du turquoise de marque (3,07:1 sur blanc), libellé turquoise foncé (6,26:1) ; le contour
- *   fonce au survol. L'action d'accompagnement. Sur une bande lin-soft, le contour tombe à 2,84:1 : le libellé suffit
- *   à identifier le bouton (WCAG 1.4.11 n'exige pas son contour), mais préférer le fond blanc.
- * - ghost : lien d'action sans fond, orange foncé ; pour une suite de lecture (« Toutes les fiches »).
- * - inverse : pilule blanche, texte orange foncé ; sur une surface orange, turquoise ou nuit.
+ * - primary : bleu de Prusse plein, texte feuille (10,71:1), bleu foncé au survol ; l'action principale d'un écran.
+ * - secondary : encre plein, texte feuille (16,23:1) ; l'action d'accompagnement (« Décrire mon projet »).
+ * - ghost : lien d'action souligné, bleu de Prusse ; pour une suite de lecture (« Toutes les fiches »).
+ * - inverse : surligneur, texte encre (11,93:1) ; sur la bande bleu de Prusse.
  *
- * Tailles : sm (36 px, réservée aux zones denses sur grand écran), md (44 px, défaut), lg (48 px).
+ * Tailles : sm et md (44 px), lg (52 px).
  * Voir apps/web/DESIGN.md (Primitives).
  */
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'inverse';

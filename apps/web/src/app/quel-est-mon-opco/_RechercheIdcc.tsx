@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { normaliserRecherche } from '@/lib/normaliser';
 
 /**
@@ -17,10 +17,12 @@ export function RechercheIdcc({ idTableau, total }: { idTableau: string; total: 
   // Texte normalisé de chaque ligne, calculé à la première recherche (le tableau ne change pas).
   const textes = useRef<Map<HTMLTableRowElement, string> | null>(null);
 
-  useEffect(() => {
+  /** Filtre le tableau à chaque saisie (gestionnaire d'événement : aucune mise à jour d'état dans un effet). */
+  function filtrer(valeur: string) {
+    setRequete(valeur);
     const tableau = document.getElementById(idTableau);
     if (!tableau) return;
-    const mots = normaliserRecherche(requete).split(' ').filter(Boolean);
+    const mots = normaliserRecherche(valeur).split(' ').filter(Boolean);
     if (mots.length > 0 && textes.current === null) {
       textes.current = new Map(
         [...tableau.querySelectorAll<HTMLTableRowElement>('tbody tr')].map((l) => [l, normaliserRecherche(l.textContent ?? '')]),
@@ -37,7 +39,7 @@ export function RechercheIdcc({ idTableau, total }: { idTableau: string; total: 
       if (correspond) visibles += 1;
     });
     setTrouvees(mots.length > 0 ? visibles : null);
-  }, [requete, idTableau]);
+  }
 
   return (
     <div className="max-w-xl">
@@ -54,8 +56,8 @@ export function RechercheIdcc({ idTableau, total }: { idTableau: string; total: 
         autoComplete="off"
         aria-describedby={`${id}-aide ${id}-resultat`}
         value={requete}
-        onChange={(e) => setRequete(e.target.value)}
-        className="mt-2 h-12 w-full rounded-xl border border-filet-fort bg-white px-4 text-base text-texte focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-deep"
+        onChange={(e) => filtrer(e.target.value)}
+        className="mt-2 h-12 w-full rounded-[3px] border-[1.5px] border-encre bg-white px-4 font-mono text-base text-texte focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-prusse"
       />
       <p id={`${id}-resultat`} aria-live="polite" className="mt-2 min-h-5 text-sm text-texte-doux">
         {trouvees === null

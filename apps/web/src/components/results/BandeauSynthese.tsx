@@ -154,7 +154,7 @@ function AucunFinancementChiffre({
             <li key={l.cle}>
               <a
                 href={l.href}
-                className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-orange/30 bg-orange-soft px-4 text-sm font-semibold text-orange-deep transition-[border-color] hover:border-orange-deep lg:min-h-9"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-[3px] border border-filet-fort bg-white px-4 text-sm font-semibold text-prusse transition-[border-color] hover:border-prusse lg:min-h-9"
               >
                 {l.libelle}
                 <Icon name="chevron" className="size-4 rotate-90" />

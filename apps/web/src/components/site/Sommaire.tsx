@@ -21,7 +21,7 @@ function nombreDAlertes(n: number): string {
  * Sommaire d'une page longue (fiches OPCO, guides) : une seule navigation, nommée par `etiquette`.
  * - Sous 1 024 px : liste repliée dans un bloc « Sommaire » (`<details>`), en tête du contenu.
  * - À partir de 1 024 px : colonne collante sous l'en-tête (`.sommaire-collant`), la section à l'écran signalée
- *   (pilule lin et point orange, `aria-current="location"`).
+ *   (trait bleu de Prusse de 2 px, `aria-current="location"`).
  * Un lien suit l'ancre comme d'habitude (défilement natif, `scroll-padding-top` compte l'en-tête) ; le bloc replié se
  * referme, puis le focus passe au titre de la section (rendu focalisable par programme s'il ne l'est pas) : la lecture
  * au clavier ou au lecteur d'écran reprend là. Seule l'interaction justifie le code client : les liens sont rendus

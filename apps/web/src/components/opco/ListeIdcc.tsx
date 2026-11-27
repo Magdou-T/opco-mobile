@@ -10,7 +10,7 @@ export function ListeIdcc({ codes }: { codes: readonly string[] }) {
   if (!idccRepliees(codes)) return <>IDCC {codes.join(', ')}</>;
   return (
     <details className="group/idcc">
-      <summary className="-ml-1 inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-full px-1 font-semibold text-orange-deep underline-offset-4 hover:underline md:min-h-9 [&::-webkit-details-marker]:hidden">
+      <summary className="-ml-1 inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 rounded-[3px] px-1 font-semibold text-orange-deep underline-offset-4 hover:underline md:min-h-9 [&::-webkit-details-marker]:hidden">
         <Icon name="chevron" className="size-4 shrink-0 transition-transform duration-200 group-open/idcc:rotate-90" strokeWidth={2} />
         {codes.length}&nbsp;conventions collectives
       </summary>

@@ -24,21 +24,20 @@ const LIBELLES: Record<Statut, string> = {
 };
 
 /**
- * Jalon d'une étape (décoratif : le nom de l'étape et son état sont dans le texte). Faite : disque turquoise de marque
- * cerclé de turquoise foncé (5,80:1 sur lin-soft ; le turquoise seul n'y fait que 2,84:1), coche encre (5,68:1). En
- * cours : disque orange foncé, numéro blanc (5,16:1), halo orangé. À venir : disque blanc au contour filet-fort
- * (3,28:1 sur lin-soft), numéro texte-discret (5,35:1). Sans objet : même dessin, contour en tirets. Le jalon est
- * entouré de la couleur du fond, qui coupe le rail (blanc sous 640 px, lin-soft au-delà).
+ * Jalon d'une étape (décoratif : le nom de l'étape et son état sont dans le texte), carré aux angles de 3 px (charte
+ * financementopco). Faite : filet foncé cerclé d'ardoise, coche encre. En cours : bleu de Prusse plein, numéro blanc
+ * (10,71:1). À venir : feuille au contour filet-fort (3,74:1 sur papier foncé), numéro texte discret. Sans objet : même
+ * dessin, contour en tirets. Le jalon est entouré de la couleur du fond, qui coupe le rail.
  */
 function Jalon({ statut, numero }: { statut: Statut; numero: number }) {
   return (
     <span
       aria-hidden="true"
       className={cx(
-        'amount grid size-7 shrink-0 place-items-center rounded-full text-xs ring-4 ring-white transition-colors duration-200 sm:size-9 sm:text-sm sm:ring-lin-soft',
+        'amount grid size-7 shrink-0 place-items-center rounded-[3px] text-xs ring-4 ring-white transition-colors duration-200 sm:size-9 sm:text-sm sm:ring-lin-soft',
         statut === 'faite' &&
           'border-2 border-turquoise-deep bg-turquoise text-texte group-hover:bg-turquoise-deep group-hover:text-white',
-        statut === 'courante' && 'bg-orange-deep text-white shadow-etiquette',
+        statut === 'courante' && 'bg-prusse text-white',
         statut === 'a-venir' && 'border-2 border-filet-fort bg-white text-texte-discret',
         statut === 'sautee' && 'border-2 border-dashed border-filet-fort bg-white text-texte-discret',
       )}
@@ -69,14 +68,14 @@ export function ProgressBar({
   return (
     <nav aria-label="Étapes du simulateur">
       <div className="relative">
-        {/* Rail, du centre du premier jalon au centre du dernier ; la part parcourue en turquoise de marque. */}
+        {/* Rail, du centre du premier jalon au centre du dernier ; la part parcourue en bleu de Prusse. */}
         <div
           aria-hidden="true"
-          className="absolute top-3 h-1 rounded-full bg-filet sm:top-4"
+          className="absolute top-3 h-1 bg-filet sm:top-4"
           style={{ left: `${50 / total}%`, right: `${50 / total}%` }}
         >
           <div
-            className="h-full rounded-full bg-turquoise transition-[width] duration-500 ease-out"
+            className="h-full bg-prusse transition-[width] duration-500 ease-out"
             style={{ width: `${avancement}%` }}
           />
         </div>
@@ -131,7 +130,7 @@ export function ProgressBar({
         </ol>
       </div>
       <p aria-hidden="true" className="mt-2 flex items-center gap-2 text-sm sm:hidden">
-        <span className="size-1.5 rounded-full bg-orange" />
+        <span className="size-2 bg-prusse" />
         <span className="font-semibold text-texte">{ETAPES[currentStepIndex].label}</span>
       </p>
     </nav>

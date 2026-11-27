@@ -13,12 +13,6 @@ export function PortailsRegionaux({ portail }: { portail: PortailRegional }) {
     <section aria-labelledby="titre-portails" className="apparition">
       <Card tone="teintee" padding="lg" className="break-inside-avoid">
         <div className="flex items-start gap-4">
-          <span
-            aria-hidden="true"
-            className="grid size-11 shrink-0 place-items-center rounded-2xl bg-turquoise-soft text-turquoise-deep"
-          >
-            <Icon name="repere" className="size-[22px]" />
-          </span>
           <div className="min-w-0 pt-0.5">
             <h2 id="titre-portails" className="text-xl leading-tight font-bold tracking-[-0.02em] text-texte sm:text-2xl">
               Pour aller plus loin {enRegion(portail.nom_region)}

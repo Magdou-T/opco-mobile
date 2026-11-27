@@ -2,13 +2,12 @@ import type { CSSProperties, ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 
 /**
- * Étiquette en pilule avec point de couleur (le motif des étapes de l'animation de marque). Le texte porte le sens,
- * le point ne fait que l'appuyer : il reste décoratif.
+ * Étiquette rectangulaire (charte financementopco) : DM Mono en capitales, cadre de 1,5 px, angles de 2 px, sans
+ * pastille. Le texte porte le sens.
  *
- * - variante « douce » (défaut) : fond teinté, texte foncé de la même famille (tous les couples ≥ 4,5:1).
- * - variante « flottante » : pilule blanche à ombre orangée, posée sur un aplat de couleur (décor des zones d'accent).
- * - `surFondSombre` : pilule assombrie (encre à 25 %) à texte blanc, pour les surfaces nuit, turquoise ou orange :
- *   6,70:1 au moins sur le point le plus clair de chaque dégradé (un voile blanc à 10 % tombait à 4,02:1).
+ * - variante « douce » (défaut) : couleurs du ton (tableau DOUCE ci-dessous, tous les couples au-dessus de 4,5:1).
+ * - variante « flottante » : la feuille dans un cadre de filet ; dans une liste étroite, son texte passe à la ligne.
+ * - `surFondSombre` : cadre blanc à 40 %, texte blanc, pour les aplats bleu de Prusse et encre.
  *
  * `as` : `span` (défaut) ou `li` dans une liste ; `style` sert aux délais d'apparition (`--delai`).
  * Voir apps/web/DESIGN.md (Primitives).

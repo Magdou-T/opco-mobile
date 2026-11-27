@@ -17,7 +17,6 @@ import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { Etiquette } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
-import type { IconName } from '@/components/ui/Icon';
 import { SourceBadge } from '@/components/ui/SourceBadge';
 import {
   ABREVIATIONS_PAR_OPCO,
@@ -27,7 +26,7 @@ import {
   resumeDesAlertes,
   sectionsDeLaFiche,
 } from '@/lib/fiche';
-import type { CarteTexteLibre, IdSection } from '@/lib/fiche';
+import type { IdSection } from '@/lib/fiche';
 import { CUMUL_ORDRE, dateFr, de, typo } from '@/lib/format';
 import { grapheDePage } from '@/lib/donnees-structurees';
 import { descriptionDeFiche, metadonnees } from '@/lib/metadonnees';
@@ -75,14 +74,6 @@ function grapheDeFiche(opco: NonNullable<ReturnType<typeof getEmbeddedOpcoBySlug
     },
   });
 }
-
-/** Pastille d'icône des cartes « Alternance, CPF et VAE ». */
-const ICONES_ALTERNANCE: Record<CarteTexteLibre['cle'], IconName> = {
-  apprentissage: 'diplome',
-  professionnalisation: 'mallette',
-  cpf: 'euro',
-  vae: 'document',
-};
 
 /** Classes d'une section de la fiche : filet de section ponctué d'orange, au-dessus du titre. */
 const SECTION = 'rule-double pt-6';
@@ -203,7 +194,7 @@ export default async function OpcoFichePage({
                 {resumeDesAlertes(alertes).map((t) => (
                   <li
                     key={t.type}
-                    className="rounded-full border border-rouge/25 bg-white px-2.5 text-xs leading-6 font-semibold text-rouge"
+                    className="rounded-[2px] border border-rouge bg-white px-2.5 text-xs leading-6 font-semibold text-rouge"
                   >
                     {t.libelle}
                     {t.nombre > 1 && <> ({t.nombre})</>}
@@ -326,12 +317,6 @@ export default async function OpcoFichePage({
                 {cartesAlternance(opco).map((c) => (
                   <Card as="li" key={c.cle} padding="md" className="min-w-0 break-inside-avoid [overflow-wrap:anywhere]">
                     <div className="flex items-center gap-3">
-                      <span
-                        aria-hidden="true"
-                        className="grid size-10 shrink-0 place-items-center rounded-2xl bg-turquoise-soft text-turquoise-deep"
-                      >
-                        <Icon name={ICONES_ALTERNANCE[c.cle]} className="size-5" />
-                      </span>
                       <h3 className="text-lg leading-snug font-bold text-texte">{c.titre}</h3>
                     </div>
                     <div className="mt-3 space-y-2 text-sm leading-relaxed text-texte-doux">
