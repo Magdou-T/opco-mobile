@@ -10,7 +10,7 @@
  * Date de référence du jeu de données embarqué (AAAA-MM-JJ) : celle de sa dernière revue. Aucune date de vérification ne
  * peut la dépasser de plus d'un jour : quand les données sont revues à une date postérieure, avancez cette constante.
  */
-export const DATE_REFERENCE_DONNEES = '2026-10-08';
+export const DATE_REFERENCE_DONNEES = '2026-11-27';
 
 /** La date de référence du jeu de données, à minuit UTC. */
 export const dateDeReference = (): Date => new Date(`${DATE_REFERENCE_DONNEES}T00:00:00Z`);

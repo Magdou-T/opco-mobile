@@ -15,61 +15,61 @@
     "Mesures d'urgence de branche (entreprises en graves difficultés économiques)"
   ],
   "types_formations_source": "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
-  "types_formations_note": "Transitions Industrie est clos (date limite d'engagement 31/12/2024, de paiement 30/06/2026) et le FSE+ 2025 portait sur des formations réalisées au plus tard le 31/12/2025. « Ce dispositif est entré en vigueur le 1er février 2026. Il remplace la Pro-A et les Transitions collectives (Transco). » (vérifié le 2026-10-05)",
+  "types_formations_note": "Transitions Industrie est clos (date limite d'engagement 31/12/2024, de paiement 30/06/2026) et le FSE+ 2025 portait sur des formations réalisées au plus tard le 31/12/2025. « Ce dispositif est entré en vigueur le 1er février 2026. Il remplace la Pro-A et les Transitions collectives (Transco). » (vérifié le 2026-11-27)",
   "cout_horaire_inter": {
     "value": 30,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "Pas de distinction inter/intra : plafond horaire selon la nature de la formation (30 €/h formations métiers, 20 €/h formation réglementaire dont CSE, 15 €/h langues). Valeur 30 €/h = plafond maximal, à ramener à 20 €/h ou 15 €/h selon le cas. Règle commune aux 30 branches d'OPCO 2i, entreprises de moins de 50 salariés. « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-10-05)"
+    "note": "Pas de distinction inter/intra : plafond horaire selon la nature de la formation (30 €/h formations métiers, 20 €/h formation réglementaire dont CSE, 15 €/h langues). Valeur 30 €/h = plafond maximal, à ramener à 20 €/h ou 15 €/h selon le cas. Règle commune aux branches d'OPCO 2i, entreprises de moins de 50 salariés. « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-11-27)"
   },
   "cout_horaire_intra": {
     "value": 30,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "Même plafond inter et intra (aucune distinction publiée) ; dépend de la nature de la formation. « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-10-05)"
+    "note": "Même plafond inter et intra (aucune distinction publiée) ; dépend de la nature de la formation. « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-11-27)"
   },
   "cout_horaire_metier": {
     "value": 30,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "30 €/h pour les formations métiers (CQP, certifications) ; formations réglementaires et habilitations : 20 €/h. Estimation : le simulateur applique 30 €/h aux CQP, certifications et habilitations, alors que les habilitations relèvent de la « formation réglementaire » plafonnée à 20 €/h. « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-10-05)"
+    "note": "30 €/h pour les formations métiers (CQP, certifications) ; formations réglementaires et habilitations : 20 €/h. Estimation : le simulateur applique 30 €/h aux CQP, certifications et habilitations, alors que les habilitations relèvent de la « formation réglementaire » plafonnée à 20 €/h. « – 15 €/h maximum pour les langues – 20 €/h maximum pour la formation réglementaire (dont formations des membres du CSE) – 30 €/h maximum pour les formations métiers » (vérifié le 2026-11-27)"
   },
   "prise_en_charge_salaires": {
     "value": null,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "La règle PDC 2026 (CA du 18/12/2025) ne vise que les coûts pédagogiques : aucune prise en charge de la rémunération n'y est publiée, alors que la règle 2021 la prévoyait (« pour toutes les entreprises de moins de 50 salariés, la prise en charge de la rémunération est établie dans la limite du SMIC brut (10,25 €/heure) », https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/). Une prise en charge reste possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-10-05)"
+    "note": "La règle PDC 2026 (CA du 18/12/2025) ne vise que les coûts pédagogiques : aucune prise en charge de la rémunération n'y est publiée, alors que la règle 2021 la prévoyait (« pour toutes les entreprises de moins de 50 salariés, la prise en charge de la rémunération est établie dans la limite du SMIC brut (10,25 €/heure) », https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/). Une prise en charge reste possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-11-27)"
   },
   "prise_en_charge_salaires_mode": "selon_accord",
   "frais_transport": {
     "value": null,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "La règle PDC 2026 ne vise que les coûts pédagogiques ; aucun barème de frais annexes n'est publié pour les entreprises de moins de 50 salariés. Prise en charge possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture : « Type de frais mobilisables : Coûts pédagogiques Rémunération Transport Hébergement Repas », https://www.opco2i.fr/regles/conventionnel-2/). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-10-05)"
+    "note": "La règle PDC 2026 ne vise que les coûts pédagogiques ; aucun barème de frais annexes n'est publié pour les entreprises de moins de 50 salariés. Prise en charge possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture : « Type de frais mobilisables : Coûts pédagogiques Rémunération Transport Hébergement Repas », https://www.opco2i.fr/regles/conventionnel-2/). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-11-27)"
   },
   "frais_hebergement": {
     "value": null,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "La règle PDC 2026 ne vise que les coûts pédagogiques ; aucun barème de frais annexes n'est publié pour les entreprises de moins de 50 salariés. Prise en charge possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture : « Type de frais mobilisables : Coûts pédagogiques Rémunération Transport Hébergement Repas », https://www.opco2i.fr/regles/conventionnel-2/). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-10-05)"
+    "note": "La règle PDC 2026 ne vise que les coûts pédagogiques ; aucun barème de frais annexes n'est publié pour les entreprises de moins de 50 salariés. Prise en charge possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture : « Type de frais mobilisables : Coûts pédagogiques Rémunération Transport Hébergement Repas », https://www.opco2i.fr/regles/conventionnel-2/). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-11-27)"
   },
   "frais_restauration": {
     "value": null,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "La règle PDC 2026 ne vise que les coûts pédagogiques ; aucun barème de frais annexes n'est publié pour les entreprises de moins de 50 salariés. Prise en charge possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture : « Type de frais mobilisables : Coûts pédagogiques Rémunération Transport Hébergement Repas », https://www.opco2i.fr/regles/conventionnel-2/). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-10-05)"
+    "note": "La règle PDC 2026 ne vise que les coûts pédagogiques ; aucun barème de frais annexes n'est publié pour les entreprises de moins de 50 salariés. Prise en charge possible sur fonds conventionnels de certaines branches (ex. Jeux, jouets et puériculture : « Type de frais mobilisables : Coûts pédagogiques Rémunération Transport Hébergement Repas », https://www.opco2i.fr/regles/conventionnel-2/). « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-11-27)"
   },
   "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "estimated",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "Pas de forfait en pourcentage : le plafond annuel ne vise que les coûts pédagogiques. « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-10-05)"
+    "note": "Pas de forfait en pourcentage : le plafond annuel ne vise que les coûts pédagogiques. « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-11-27)"
   },
   "budget_annuel_max": {
     "value": 4800,
     "confidence": "exact",
     "source_url": "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
-    "note": "Plafond annuel par entreprise de moins de 50 salariés, coûts pédagogiques uniquement (6 000 € de 2021 à 2025). Ne s'applique pas aux entreprises de 50 salariés et plus (pas de fonds mutualisés). « Le Conseil d’administration a décidé en date du 18 décembre 2025, des conditions de financement des projets d’entreprise éligibles au plan de développement des compétences (entreprise de moins de 50 salariés). Ces conditions sont applicables à compter du 1er janvier 2026. » « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-10-05)"
+    "note": "Plafond annuel par entreprise de moins de 50 salariés, coûts pédagogiques uniquement (6 000 € de 2021 à 2025). Ne s'applique pas aux entreprises de 50 salariés et plus (pas de fonds mutualisés). « Le Conseil d’administration a décidé en date du 18 décembre 2025, des conditions de financement des projets d’entreprise éligibles au plan de développement des compétences (entreprise de moins de 50 salariés). Ces conditions sont applicables à compter du 1er janvier 2026. » « Coûts pédagogiques plafonnés à 4 800 € par an et par entreprise (dans la limite des fonds disponibles) » (vérifié le 2026-11-27)"
   },
   "budget_annuel_portee": "pedagogie",
   "budget_annuel_description": "4 800 € par an et par entreprise de moins de 50 salariés, coûts pédagogiques uniquement, dans la limite des fonds disponibles (décision du CA du 18/12/2025, applicable depuis le 01/01/2026). Plafonds horaires : 30 €/h formations métiers, 20 €/h formation réglementaire (dont CSE), 15 €/h langues. 50 salariés et plus : pas de fonds mutualisés.",
@@ -115,7 +115,7 @@
   "duree_min_formation": null,
   "processus_approbation": "Demande de prise en charge à saisir sur Mon Compte 2i (portail.opco2i.fr) avant le démarrage de l'action, dans la limite des fonds disponibles et du plafond annuel de 4 800 €.",
   "delai_validation": "Délai non publié pour le plan de développement des compétences : déposer la demande avant le démarrage de l'action (période de reconversion : décision de l'OPCO sous 20 jours après réception du dossier, art. R6324-2).",
-  "mode_paiement": "Paiement direct de l'organisme par OPCO 2i (subrogation, notamment via 2i Actions clés en main pour les moins de 50 salariés) ou remboursement de l'entreprise. Réforme TVA des OPCO au 1er octobre 2026 : OPCO 2i annonce maintenir la délégation de paiement, modalités détaillées par les conseillers.",
+  "mode_paiement": "Paiement direct de l'organisme par OPCO 2i (subrogation, notamment via 2i Actions clés en main pour les moins de 50 salariés) ou remboursement de l'entreprise. Réforme TVA des OPCO (engagements nouveaux à compter du 01/10/2026) : l'entreprise peut toujours confier à OPCO 2i le paiement de l'organisme de formation lorsque le dispositif le permet ; pour les versements volontaires, elle verse une avance de fonds incluant la TVA et les frais de gestion, OPCO 2i règle l'organisme TTC et lui adresse une facture récapitulative acquittée qui fait apparaître la TVA (page « TVA et formation professionnelle : vos droits restent inchangés » du 21/10/2026).",
   "alternance_apprentissage": "Niveaux de prise en charge (NPEC) par certification : nouveaux montants pour les contrats d'apprentissage conclus à compter du 1er septembre 2026 (décret n° 2026-832 du 29 août 2026 et référentiel France compétences).",
   "alternance_professionnalisation": "Forfaits horaires fixés par chaque branche (ex. chimie : 19 €/h certification cœur de métier, 18 €/h interindustrielle, 10 €/h transverse ; plasturgie : 8 à 23 €/h). Règles par branche sur opco2i.fr.",
   "cpf_abondement": true,
@@ -124,9 +124,9 @@
   "vae_details": "La VAE peut être inscrite au plan de développement des compétences et être mobilisée dans le cadre d'une période de reconversion ; règles de financement par branche (dispositif VAE sur opco2i.fr).",
   "limite_dossiers_an": "Pas de nombre de dossiers publié : plafond de 4 800 € de coûts pédagogiques par an et par entreprise de moins de 50 salariés, dans la limite des fonds disponibles.",
   "specificites": "Règle PDC 2026 commune aux branches d'OPCO 2i (CA du 18/12/2025) : 4 800 €/an de coûts pédagogiques, 30 €/h métiers, 20 €/h réglementaire (dont CSE), 15 €/h langues ; pas de prise en charge publiée des salaires ni des frais annexes sur fonds mutualisés | Frais de gestion de 3 ou 4 % sur les versements volontaires | Mesures d'urgence de branche (100 % à 25 % des coûts pédagogiques selon la taille, entreprises en graves difficultés) | Période de reconversion : 5 000 € par période dans la plupart des branches, 9,15 €/h à défaut | Réforme TVA au 1er octobre 2026 : délégation de paiement maintenue selon OPCO 2i | Transitions Industrie et FSE+ 2025 clos",
-  "points_cles_maximisation": "Déposer la demande tôt dans l'année (plafond annuel de 4 800 € et fonds limités) | Privilégier les formations métiers (30 €/h) et ajuster le coût horaire aux plafonds (20 €/h réglementaire, 15 €/h langues) | Utiliser le catalogue 2i Actions clés en main (prix négociés, paiement direct) | Vérifier l'éligibilité aux mesures d'urgence de la branche ou au FTJ (Normandie, Hauts-de-France, Auvergne-Rhône-Alpes) | Projet de reconversion : période de reconversion (5 000 € par période dans la plupart des branches)",
-  "derniere_mise_a_jour": "2026-10-05",
-  "derniere_verification": "2026-10-05",
+  "points_cles_maximisation": "Déposer la demande tôt dans l'année (plafond annuel de 4 800 € et fonds limités) | Privilégier les formations métiers (30 €/h) et ajuster le coût horaire aux plafonds (20 €/h réglementaire, 15 €/h langues) | Utiliser le catalogue 2i Actions clés en main (prix négociés, paiement direct) | Vérifier l'éligibilité aux mesures d'urgence de la branche ou au FTJ (Bouches-du-Rhône, Normandie, Hauts-de-France, Auvergne-Rhône-Alpes) | Projet de reconversion : période de reconversion (5 000 € par période dans la plupart des branches)",
+  "derniere_mise_a_jour": "2026-11-27",
+  "derniere_verification": "2026-11-27",
   "sources_principales": [
     "https://www.opco2i.fr/regles/prise-en-charge-a-compter-du-1er-janvier-2021/",
     "https://www.opco2i.fr/formation-et-financement/plan-developpement-competences-entreprises-50-salaries/",
@@ -136,6 +136,7 @@
     "https://www.opco2i.fr/formation-et-financement/subventions/ftj-fonds-de-transition-juste/",
     "https://www.opco2i.fr/services-solutions/2i-actions-cles-en-main/",
     "https://www.opco2i.fr/financement-et-reforme-fiscale-de-la-formation-professionnelle-continue-opco-2i-en-route-pour-le-maintien-de-ses-services-aux-entreprises/",
+    "https://www.opco2i.fr/tva-et-formation-professionnelle-vos-droits-restent-inchanges/",
     "https://www.opco2i.fr/wp-content/uploads/2026/09/opco2i-communique-de-presse-opco2i-accelere-la-transformation-de-son-accompagnement.pdf",
     "https://www.opco2i.fr/mentions-legales/"
   ],
@@ -152,7 +153,7 @@
         "Entreprise (d'accueil en cas de reconversion externe) relevant d'OPCO 2i",
         "Formation de 150 à 450 heures sur 12 mois maximum (jusqu'à 2 100 heures sur 36 mois par accord), sans durée minimale pour CléA",
         "Accord écrit employeur-salarié (Cerfa) ; reconversion externe uniquement si un accord d'entreprise ou de branche existe",
-        "Frais annexes et écart de rémunération seulement si un accord le prévoit et s'ils sont financés par versements volontaires ou fonds conventionnels",
+        "Frais annexes et écart de rémunération seulement si un accord le prévoit et s'ils sont financés par versements volontaires ou fonds conventionnels ; si l'accord ne fixe pas les modalités, le conseil d'administration d'OPCO 2i prend en charge l'écart de rémunération à 70 % et les frais annexes à 100 %",
         "Montant selon la branche : 5 000 € par période dans la plupart des branches, 9,15 €/h si les actions portent uniquement sur CléA ou à défaut de décision de branche"
       ],
       "demarches": "Transmettre à OPCO 2i, au plus tard 30 jours avant le début, l'accord écrit (Cerfa période de reconversion), la convention de formation et, en externe, le contrat de travail avec l'entreprise d'accueil.",
@@ -187,9 +188,9 @@
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": null,
-      "description": "Cofinancement européen de 50 à 70 % des coûts pédagogiques (frais de certification et d'évaluation inclus) pour les entreprises des secteurs les plus émetteurs et leurs sous-traitants. En octobre 2026, périodes encore ouvertes : Normandie (jusqu'au 31/12/2027), Hauts-de-France (jusqu'au 30/06/2027), Auvergne-Rhône-Alpes (jusqu'au 31/12/2028).",
+      "description": "Cofinancement européen de 50 à 70 % des coûts pédagogiques (frais de certification et d'évaluation inclus) pour les entreprises des secteurs les plus émetteurs et leurs sous-traitants. En novembre 2026, périodes encore ouvertes : Provence-Alpes-Côte d'Azur (Bouches-du-Rhône, du 01/05/2026 au 31/12/2028), Normandie (jusqu'au 31/12/2027), Hauts-de-France (jusqu'au 30/06/2027), Auvergne-Rhône-Alpes (jusqu'au 31/12/2028) ; Grand Est (14/03/2026) et Pays de la Loire (31/12/2025) sont clos.",
       "conditions": [
-        "Entreprise de toute taille relevant d'OPCO 2i, située dans un territoire FTJ encore ouvert (Normandie : vallées de la Seine et de la Bresle ; Hauts-de-France : Nord et Pas-de-Calais ; Auvergne-Rhône-Alpes : territoire Rhône-Isère)",
+        "Entreprise de toute taille relevant d'OPCO 2i, située dans un territoire FTJ encore ouvert (Provence-Alpes-Côte d'Azur : département des Bouches-du-Rhône ; Normandie : vallées de la Seine et de la Bresle ; Hauts-de-France : Nord et Pas-de-Calais ; Auvergne-Rhône-Alpes : territoire Rhône-Isère)",
         "Codes NAF 19, 20, 23, 24 ou 35 (centrales à charbon uniquement), ou sous-traitant de ces entreprises",
         "Formations hors obligation générale de sécurité et hors formations internes",
         "Demande adressée à la direction régionale avant le démarrage de la formation"
@@ -197,6 +198,7 @@
       "demarches": "Contacter le conseiller formation OPCO 2i de la région et déposer la demande avant le démarrage de la formation.",
       "tailles_eligibles": null,
       "publics": "Salariés des entreprises éligibles habitant dans un territoire FTJ",
+      "note": "Extraits de la page FTJ d'OPCO 2i : « PACA : département des Bouches-du-Rhône. » ; « PACA 01/05/2026 31/12/2028 2 499 997,50€ » ; « Grand Est 15/05/2023 14/03/2026 » ; « Pays de la Loire 01/09/2023 31/12/2025 ». Taux de la plaquette FTJ (https://www.opco2i.fr/wp-content/uploads/2023/12/opco2i-ftj.pdf) : « Le Fonds de Transition Juste finance les formations de vos salariés à hauteur de 50 à 70% des coûts pédagogiques (y compris les frais de certification et évaluation). » (vérifié le 2026-11-27)",
       "confidence": "estimated",
       "source_url": "https://www.opco2i.fr/formation-et-financement/subventions/ftj-fonds-de-transition-juste/"
     },

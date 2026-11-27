@@ -949,9 +949,14 @@ describe('corrections des barèmes (tâche 8c)', () => {
     expect(note).toContain('y compris TVA');
   });
 
-  it('les fichiers modifiés ont été revérifiés le 2026-10-06', () => {
-    for (const slug of ['akto', 'ocapiat', 'opco-ep', 'opco-sante', 'opcommerce', 'uniformation']) {
-      expect(par(slug).derniere_verification, slug).toBe('2026-10-06');
+  it('revue du 2026-11-27 : les fiches revérifiées portent cette date ; celles dont le site était indisponible gardent la leur', () => {
+    for (const slug of ['afdas', 'akto', 'constructys', 'ocapiat', 'opco-ep', 'opco-sante', 'opco2i', 'uniformation']) {
+      expect(par(slug).derniere_verification, slug).toBe('2026-11-27');
     }
+    // Sites de L'Opcommerce (incident de sécurité) et d'OPCO Mobilités hors ligne le 27/11/2026 ; grilles par branche
+    // d'ATLAS non consultables sans formulaire : dates de la revue d'octobre conservées.
+    expect(par('opcommerce').derniere_verification).toBe('2026-10-06');
+    expect(par('opco-mobilites').derniere_verification).toBe('2026-10-06');
+    expect(par('atlas').derniere_verification).toBe('2026-10-05');
   });
 });

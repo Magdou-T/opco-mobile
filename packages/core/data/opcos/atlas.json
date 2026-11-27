@@ -143,7 +143,7 @@
   "vae_details": "Coût réel plafonné à 3 000 € HT par parcours (3 500 € HT pour les certifications de branche des bureaux d'études).",
   "limite_dossiers_an": "Dans la limite du plafond annuel de la branche et des fonds disponibles (critères susceptibles d'évoluer en cours d'année)",
   "specificites": "Critères propres à chacune des 14 branches, consultables après sélection de la branche sur opco-atlas.fr | campusAtlas : formations clés en main à 100 % dans la limite de crédits annuels | Plan IA-tlas : modules IA à 100 % pour les moins de 50 salariés (dossiers jusqu'au 15/12/2026) | FSE+ : 50 % des coûts pédagogiques (demandes jusqu'au 15/12/2027) | Réforme TVA au 1er octobre 2026 : subrogation limitée",
-  "points_cles_maximisation": "Utiliser d'abord les crédits campusAtlas (100 % des coûts pédagogiques) | Moins de 50 salariés : modules IA-tlas à 100 % jusqu'au 15 décembre 2026 | Bureaux d'études : bonus transition écologique et parcours stratégique TPE/PME (80 %) en plus du PDC | FSE+ : 50 % des coûts pédagogiques avec un versement volontaire | Déposer sur myAtlas avant le démarrage",
+  "points_cles_maximisation": "Utiliser d'abord les crédits campusAtlas (100 % des coûts pédagogiques) | Moins de 50 salariés : modules IA-tlas à 100 % jusqu'au 15 décembre 2026 | Bureaux d'études : bonus transition écologique et parcours stratégique TPE/PME (80 %) en plus du PDC | FSE+ : 50 % des coûts pédagogiques avec un versement volontaire (70 % pour les bureaux d'études, avec 20 % financés par la branche) | Déposer sur myAtlas avant le démarrage",
   "sources": [
     "https://www.opco-atlas.fr/criteres-financement",
     "https://www.opco-atlas.fr/entreprise/plan-dev-competences.html",
@@ -206,7 +206,7 @@
       "montant_max": null,
       "unite": null,
       "pourcentage_couts": 50,
-      "description": "Le FSE+ finance 50 % des coûts pédagogiques de formations liées aux transitions numérique, écologique et démographique, au management de projet ou à la diversité ; le reste (50 %, TVA et 4 % de frais de gestion) est couvert par un versement volontaire de l'entreprise ou par les fonds conventionnels de la branche. Plafond FSE+ : 500 000 € par entreprise.",
+      "description": "Le FSE+ finance 50 % des coûts pédagogiques de formations liées aux transitions numérique, écologique et démographique ou à la diversité et l'inclusion ; le reste (TVA comprise, plus 4 % de frais de gestion) est couvert par un versement volontaire de l'entreprise. Bureaux d'études et courtage d'assurances : la branche finance 20 % des coûts pédagogiques en plus des 50 % du FSE+. Plafond FSE+ : 500 000 € par entreprise.",
       "conditions": [
         "Entreprise relevant d'une branche Atlas, sous réserve de fonds disponibles",
         "Formation en présence continue d'un formateur, d'au moins 3,5 heures (formations internes et à distance exclues), achevée avant le 31 décembre 2027",
@@ -218,7 +218,7 @@
       "publics": null,
       "confidence": "exact",
       "source_url": "https://www.opco-atlas.fr/entreprise/beneficier-fse.html",
-      "note": "« Le FSE+ prend en charge 50 % des coûts pédagogiques. » ; « Le montant pris en charge au titre du FSE+ ne peut dépasser 500 000€ pour une même entreprise. » ; « La demande doit être déposée avant le début de la formation et au plus tard le 15 décembre 2027. » ; « Les frais de rémunération et frais annexes ne sont pas éligibles. » (vérifié le 2026-10-05)"
+      "note": "« Le FSE+ prend en charge 50 % des coûts pédagogiques. » ; « Le montant pris en charge au titre du FSE+ ne peut dépasser 500 000€ pour une même entreprise. » ; « La demande doit être déposée avant le début de la formation et au plus tard le 15 décembre 2027. » ; « Les frais de rémunération et frais annexes ne sont pas éligibles. » ; « Pour les branches professionnelles Bureaux d'études techniques ingénieurs et conseils et courtage d'assurances et de réassurances, un financement supplémentaire sur les coûts pédagogiques : » ; « 20% financés par la branche » ; « Transition démographique : management transgénérationnel, transmission des compétences… » ; « Diversité et Inclusion : recrutement inclusif, prévention des discriminations… » La thématique management et ingénierie de projet, qui figurait sur la page en juillet 2026, n'est plus dans la liste des formations éligibles. (vérifié le 2026-11-27)"
     },
     {
       "id": "bonus-transition-ecologique-betic",
@@ -460,7 +460,7 @@
       "idcc": [],
       "source_url": "https://www.opco-atlas.fr/criteres-financement",
       "extrait": "Activez vos recommandations ou connectez-vous à myAtlas pour découvrir vos critères de financements",
-      "verifie_le": "2026-10-05"
+      "verifie_le": "2026-11-27"
     },
     {
       "type": "evolution_en_cours_annee",
@@ -476,7 +476,7 @@
       "idcc": [],
       "source_url": "https://www.opco-atlas.fr/actualites/reforme-de-la-tva-ce-qui-change-pour-le-financement-de-vos-formations.html",
       "extrait": "ce mécanisme de subrogation de paiement ne pourra plus être appliqué, sauf exception.",
-      "verifie_le": "2026-10-05"
+      "verifie_le": "2026-11-27"
     },
     {
       "type": "echeance",
@@ -484,7 +484,7 @@
       "idcc": [],
       "source_url": "https://www.opco-atlas.fr/entreprise/actions-collectives-campus-atlas.html",
       "extrait": "Réception des dossiers : du 1er juillet au 15 décembre 2026",
-      "verifie_le": "2026-10-05"
+      "verifie_le": "2026-11-27"
     }
   ]
 }

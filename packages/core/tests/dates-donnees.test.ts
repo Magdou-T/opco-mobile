@@ -2,7 +2,7 @@
 // Aucun test de `npm test` ne dépend du jour où il s'exécute. Les contrôles de dates des données comparent les dates de
 // vérification à la date de référence du jeu de données (dates-donnees.ts) ; seul fraicheur.test.ts les compare à la date
 // du jour : il est exclu de `npm test` (vitest.config.ts) et lancé par `npm run test:fraicheur` (workflow hebdomadaire).
-// Sans cette séparation, l'intégration continue passerait au rouge le 1er octobre 2027 sans aucune modification du code.
+// Sans cette séparation, l'intégration continue passerait au rouge le 1er novembre 2027 sans aucune modification du code.
 // ============================================================
 
 import { readdirSync, readFileSync } from 'node:fs';
@@ -40,9 +40,9 @@ describe('date de référence du jeu de données', () => {
     expect(controlerFraicheur(ENTREES, dateDeReference())).toEqual([]);
   });
 
-  it("un an après la date de référence (1er octobre 2027), le contrôle de fraîcheur signale les données : `npm run test:fraicheur` échouerait ce jour-là, pas `npm test`", () => {
-    const enOctobre2027 = new Date('2027-10-01T00:00:00Z');
-    const perimees = controlerFraicheur(ENTREES, enOctobre2027);
+  it("un an après la date de référence (1er novembre 2027), le contrôle de fraîcheur signale les données : `npm run test:fraicheur` échouerait ce jour-là, pas `npm test`", () => {
+    const enNovembre2027 = new Date('2027-11-01T00:00:00Z');
+    const perimees = controlerFraicheur(ENTREES, enNovembre2027);
     expect(perimees.length).toBeGreaterThan(100);
     expect(perimees).toContain(`nat-cpf : dernière vérification le ${EMBEDDED_AIDES.find((a) => a.id === 'nat-cpf')!.derniere_verification} (12 mois)`);
     // Les contrôles de `npm test` comparent à la date de référence : le jour de l'exécution n'y change rien.

@@ -41,7 +41,7 @@
         "Formation sur le temps de travail : autorisation de l'employeur demandée au moins 60 jours avant (120 jours si plus de 6 mois) ; réponse sous 30 jours. Hors temps de travail : aucune autorisation.",
         "Demandeur d'emploi : CPF non alimenté pendant le chômage ; abondements possibles (France Travail, Région).",
         "Travailleur indépendant : droits alimentés seulement s'il est à jour de sa contribution à la formation professionnelle.",
-        "Demandes validées depuis le 2 octobre 2026 : le projet de loi de finances pour 2027 prévoit un complément de participation pouvant atteindre 200 €, à régler en 2027 (sauf secteurs prioritaires, VAE ou cofinancement d'au moins 150 €). Mesure non encore adoptée."
+        "Demandes validées depuis le 2 octobre 2026 : le projet de loi de finances pour 2027 prévoit un complément de participation, que Mon Compte Formation annonce pouvant atteindre 200 €, à régler en 2027 (sauf secteurs prioritaires, VAE ou cofinancement d'au moins 150 €). Mesure non adoptée au 27 novembre 2026 : texte rejeté par l'Assemblée nationale le 4 novembre 2026, transmis au Sénat le 19 novembre 2026."
       ],
       "montant": {
         "mode": "solde_cpf",
@@ -155,9 +155,19 @@
           "url": "https://of.moncompteformation.gouv.fr/espace-public/loi-de-finances-2026-les-evolutions-concernant-le-cpf",
           "titre": "Loi de finances 2026 : les évolutions concernant le CPF - Mon Compte Formation (organismes)",
           "extrait": "Concernant les certifications inscrites au Répertoire Spécifique, les titulaires peuvent mobiliser au maximum 1 500 € de leurs droits CPF."
+        },
+        {
+          "url": "https://www.assemblee-nationale.fr/dyn/17/dossiers/PLF_2027",
+          "titre": "Projet de loi de finances pour 2027 - Dossier législatif - Assemblée nationale",
+          "extrait": "Projet de loi de finances rejeté par l'Assemblée nationale, pour 2027 le 4 novembre 2026, T.A. n° 362"
+        },
+        {
+          "url": "https://www.senat.fr/dossier-legislatif/pjlf2027.html",
+          "titre": "Budget 2027 - Dossier législatif - Sénat",
+          "extrait": "Texte n° 155 (2026-2027) transmis au Sénat le 19 novembre 2026"
         }
       ],
-      "derniere_verification": "2026-10-08",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -487,7 +497,7 @@
           "extrait": "Smic mensuel 1 867,02 €"
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -744,7 +754,7 @@
           "extrait": "L'Opco dispose de 20 jours calendaires à compter de la date de réception du dossier complet pour se prononcer sur la prise en charge."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": "2026-02-01",
         "fin": null
@@ -892,7 +902,7 @@
         "Salarié de droit privé (CDI, CDD, intérimaire, intermittent) ; pour les CDD, intermittents et intérimaires, demande dans les 12 mois suivant le dernier contrat (règle affichée notamment en Centre-Val de Loire).",
         "Justifier de l'inscription dans un parcours VAE : engagement réciproque avec l'accompagnateur, ou preuve de transmission du dossier au certificateur en l'absence d'accompagnement.",
         "Demande refusable si le parcours ne relève pas des priorités de la Transitions Pro ou si toutes les demandes ne peuvent être financées.",
-        "Réouverture progressive des demandes dans le réseau (page nationale consultée le 06/10/2026 : objectif de réouverture globale au 1er octobre 2026, non encore confirmé ; déjà rouverte notamment en Hauts-de-France depuis le 18 septembre 2026 et en Centre-Val de Loire) : vérifier l'ouverture auprès de la Transitions Pro de sa région.",
+        "Réouverture progressive des demandes dans le réseau (page nationale relue le 27/11/2026 : elle affiche toujours un objectif de réouverture globale au 1er octobre 2026, sans le confirmer ; déjà rouverte notamment en Hauts-de-France depuis le 18 septembre 2026 et en Centre-Val de Loire) : vérifier l'ouverture auprès de la Transitions Pro de sa région.",
         "Sans mobilisation du CPF, une convention est signée entre le candidat, le financeur et l'organisme après la recevabilité."
       ],
       "montant": {
@@ -961,7 +971,7 @@
           "extrait": "Le financement peut atteindre 2 000 € maximum, selon la situation du candidat, les éventuels autres cofinancements mobilisés, les priorités de prise en charge et le budget disponible."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": "2026-07-30",
         "fin": null
@@ -1012,7 +1022,7 @@
         "Seules les heures d'accompagnement réalisées par le prestataire sont finançables par le CPF.",
         "Participation forfaitaire de 150 € via le CPF, sauf abondement de l'employeur, mobilisation du C2P ou abondement AT-MP.",
         "Sur le temps de travail : accord préalable de l'employeur (réponse sous 30 jours) ; hors temps de travail : l'employeur n'a pas à être informé.",
-        "Demandes validées depuis le 2 octobre 2026 : Mon Compte Formation indique que la participation de base serait due même par un demandeur d'emploi (mesure du PLF 2027 non encore adoptée)."
+        "Demandes validées depuis le 2 octobre 2026 : Mon Compte Formation indique que la participation de base serait due même par un demandeur d'emploi (mesure du projet de loi de finances pour 2027, non adoptée au 27 novembre 2026)."
       ],
       "montant": {
         "mode": "solde_cpf",
@@ -1070,7 +1080,7 @@
           "extrait": "Vous réalisez un bilan de compétences : vous devez vous acquitter du montant de PFO de base, même en tant que demandeur d’emploi."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -1433,7 +1443,7 @@
           "extrait": "Sur le portail Sylaé, l’employeur peut se connecter à son compte pour y consulter ses avis de paiement, modifier ses coordonnées bancaires, etc."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -1681,7 +1691,7 @@
           "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": "2026-03-08",
         "fin": "2026-12-31"
@@ -1792,7 +1802,7 @@
           "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": "2026-03-08",
         "fin": "2026-12-31"
@@ -1944,7 +1954,7 @@
           "extrait": "Le versement de l'aide est automatique, mensuel, avant le paiement du salaire."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": "2026-03-08",
         "fin": "2026-12-31"
@@ -2027,7 +2037,7 @@
           "extrait": "Le premier versement d’un montant de 1 000 € pour chacune des aides, est effectué à l’issue du 3ème mois d’exécution du contrat de professionnalisation à durée déterminée ou de l’action de professionnalisation du contrat à durée indéterminée."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -2103,7 +2113,7 @@
           "extrait": "Le montant de l'aide est fixé à 2 000 €."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -2291,7 +2301,7 @@
           "extrait": "Au plus tard, dans les 5 jours ouvrables suivant le début du contrat d’apprentissage, vous devez transmettre le contrat accompagné du dossier complet à votre opérateur de compétences (Opco)."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -2782,7 +2792,7 @@
           "extrait": "Depuis la loi pour le plein emploi du 18 décembre 2023, l'AFPR (Action de Formation Préalable au Recrutement) a été fusionnée avec la POEI."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -2859,7 +2869,7 @@
           "extrait": "La POEC est financée conjointement par France Travail et les OPCO. Elle est gratuite pour le chercheur d'emploi."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -2926,7 +2936,7 @@
           "extrait": "au demandeur d'emploi inscrit(e) à France Travail, indemnisé(e) ou non."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -3116,7 +3126,7 @@
           "extrait": "La durée de versement de la RFFT couvre nécessairement la durée de la formation. Elle ne peut, en revanche, excéder 3 ans pour une même formation (1095 jours versés)."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null
@@ -3940,7 +3950,7 @@
         "qualiopi_requis": true
       },
       "conditions": [
-        "L'OPCO de l'entreprise doit avoir une opération FSE+ ouverte aux demandes : l'appel à projets national 2026-2027, réservé aux OPCO, est clos depuis le 08/06/2026 ; au 06/10/2026, parmi les OPCO consultables, seul Atlas affiche une opération ouverte (demande avant le début de la formation et au plus tard le 15/12/2027) ; thèmes, taux et plafonds sont fixés par chaque OPCO",
+        "L'OPCO de l'entreprise doit avoir une opération FSE+ ouverte aux demandes : l'appel à projets national 2026-2027, réservé aux OPCO, est clos depuis le 08/06/2026 ; au 27/11/2026, Atlas (demande avant le début de la formation et au plus tard le 15/12/2027), AKTO (actions réalisées du 01/12/2026 au 31/12/2027) et OPCO EP (actions terminées au 31/12/2027, dossier déposé au plus tard le 05/11/2027) affichent une opération 2026-2027 ; pour les autres OPCO, se renseigner auprès du conseiller ; thèmes, taux et plafonds sont fixés par chaque OPCO",
         "Demande à déposer auprès de l'OPCO avant le début de la formation (effet incitatif exigé)",
         "Formation réalisée par un organisme certifié Qualiopi",
         "Le reste à charge est couvert par un versement volontaire de l'entreprise ou par des fonds conventionnels de branche",
@@ -4006,9 +4016,19 @@
           "url": "https://www.opco-atlas.fr/entreprise/beneficier-fse.html",
           "titre": "Opco Atlas – FSE+ : former vos salariés grâce à l'appui du Fonds Social Européen",
           "extrait": "Le dispositif FSE+ est renouvelé en 2026, il est le principal levier financier de l’Union européenne pour améliorer les compétences et anticiper les mutations économiques."
+        },
+        {
+          "url": "https://www.akto.fr/beneficier-dune-aide-du-fse-en-2026-2027-comment-faire/",
+          "titre": "AKTO – Bénéficier d'une aide du FSE en 2026-2027 : comment faire ?",
+          "extrait": "Les actions doivent être réalisées entre le 1er décembre 2026 et le 31 décembre 2027 inclus."
+        },
+        {
+          "url": "https://www.opcoep.fr/fonds-social-europeen",
+          "titre": "OPCO EP – Fonds social européen (FSE+)",
+          "extrait": "Les actions devront être terminées au 31/12/2027."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": "2026-04-01",
         "fin": "2027-12-31"
@@ -4217,7 +4237,7 @@
           "extrait": "Son montant forfaitaire est fixé à 4€/h."
         }
       ],
-      "derniere_verification": "2026-10-06",
+      "derniere_verification": "2026-11-27",
       "validite": {
         "debut": null,
         "fin": null

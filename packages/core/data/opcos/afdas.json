@@ -94,7 +94,7 @@
   "vae_possible": true,
   "vae_details": "VAE et bilan de compétences pris en charge dans le plafond annuel du PDC (1 100 € / 1 800 € HT, 40 €/h). Certaines branches financent la VAE hors plafond, jusqu'à 3 000 € par parcours (audiovisuel, hôtellerie de plein air, loisirs, organismes de tourisme).",
   "limite_dossiers_an": "Dans la limite du plafond annuel (1 100 € ou 1 800 € HT) et des fonds disponibles",
-  "specificites": "Barème unique 40 € HT/h/stagiaire et plafonds 2026 abaissés (1 100 € / 1 800 € HT) | Coûts pédagogiques uniquement : salaires et frais annexes non financés (sauf DROM) | 13 branches ont un plan conventionnel qui prend le relais du plafond légal | Fonds dédiés aux intermittents, artistes-auteurs et journalistes pigistes | Réforme TVA au 1er octobre 2026 : subrogation limitée aux dossiers 100 % PDC moins de 50 salariés",
+  "specificites": "Barème unique 40 € HT/h/stagiaire et plafonds 2026 abaissés (1 100 € / 1 800 € HT) | Coûts pédagogiques uniquement : salaires et frais annexes non financés (sauf DROM) | 13 branches ont un plan conventionnel qui prend le relais du plafond légal | Fonds dédiés aux intermittents (budget de fin 2026 épuisé sauf formations sécurité ; demandes 2027 pour les formations débutant à partir du 18 janvier 2027), artistes-auteurs et journalistes pigistes | Réforme TVA au 1er octobre 2026 : subrogation limitée aux dossiers 100 % PDC moins de 50 salariés",
   "points_cles_maximisation": "Mobiliser d'abord le plafond légal (1 100 € / 1 800 € HT) puis le plan conventionnel de votre branche | Déposer sur MyA avant le démarrage | Vérifier les actions que votre branche finance hors plafond (VHSS, transition écologique, certifications de branche, VAE) | DROM : frais annexes financés hors plafond",
   "plafonds_par_taille": [
     {
@@ -154,10 +154,11 @@
       "montant_max": null,
       "unite": "par_dossier",
       "pourcentage_couts": null,
-      "description": "Financement demandé par l'intermittent lui-même (hors budget de l'entreprise) : 40 € à 80 € HT/h selon le type de formation, plafonné de 1 600 € à 5 000 € HT par formation ; CQP de branche : 54 €/h, plafond 15 000 €.",
+      "description": "Financement demandé par l'intermittent lui-même (hors budget de l'entreprise) : 40 € à 80 € HT/h selon le type de formation, plafonné de 1 600 € à 5 000 € HT par formation ; CQP de branche : 54 €/h, plafond 15 000 €. Fin 2026 : budget des quatre derniers mois épuisé ; pour les formations qui débutent du 26 octobre au 31 décembre 2026, l'Afdas ne prend plus en charge directement que les formations relevant de la sécurité. Les demandes 2027 portent sur les formations qui débutent à partir du 18 janvier 2027.",
       "conditions": [
         "Justifier d'au moins 48 jours/cachets (artistes interprètes, musiciens, metteurs en scène, réalisateurs), 88 (techniciens du spectacle vivant) ou 130 (techniciens du cinéma et de l'audiovisuel) en CDDU sur les 2 dernières années",
         "Respecter le délai de carence entre deux formations : 12, 18 ou 24 mois selon la durée de la dernière formation",
+        "Formation débutant du 26 octobre au 31 décembre 2026 : prise en charge directe réservée aux formations relevant de la sécurité (budget de fin 2026 épuisé)",
         "Dans la limite des fonds disponibles"
       ],
       "demarches": "L'intermittent dépose sa demande dans son espace MyA (profil particulier) avant le début de la formation.",
@@ -165,7 +166,7 @@
       "publics": "Intermittents du spectacle et de l'audiovisuel",
       "confidence": "exact",
       "source_url": "https://www.afdas.com/particulier/connaitre-les-dispositifs-et-les-modalites-dacces-a-la-formation/intermittents-du-spectacle-et-de-laudiovisuel/quels-financements.html",
-      "note": "« Technique matériel* Technique Spectacle Vivant, Audiovisuel, Coiffure, Maquillage, Costume, Décor. 80 € /h 5 000 € » ; « Transverses Gestion, communication, PAO 40 € 1 600 € » (vérifié le 2026-10-05)"
+      "note": "« Technique matériel* Technique Spectacle Vivant, Audiovisuel, Coiffure, Maquillage, Costume, Décor. 80 € /h 5 000 € » ; « Transverses Gestion, communication, PAO 40 € 1 600 € » (vérifié le 2026-10-05 ; barème relu le 2026-11-27). Fin 2026, page « Intermittents du spectacle et de l’audiovisuel » (https://www.afdas.com/particulier/connaitre-les-dispositifs-et-les-modalites-dacces-a-la-formation/intermittents-du-spectacle-et-de-laudiovisuel.html) : « Le budget de formation prévu pour les quatre derniers mois de 2026 est épuisé. Pour les formations qui débutent du 26 octobre au 31 décembre 2026, la prise en charge directe par l’Afdas est réservée aux formations relevant de la sécurité. » ; « L’Afdas examinera les demandes pour les formations qui débutent à partir du 18 janvier 2027, sous réserve que vous transmettiez votre dossier dans les délais prévus. » (vérifié le 2026-11-27)"
     },
     {
       "id": "subventions-cofinancements",
@@ -507,5 +508,15 @@
       ]
     }
   ],
-  "derniere_verification": "2026-10-05"
+  "derniere_verification": "2026-11-27",
+  "alertes": [
+    {
+      "type": "acces_restreint",
+      "branche": "Intermittents du spectacle et de l'audiovisuel (demandes de formation des intermittents)",
+      "idcc": [],
+      "source_url": "https://www.afdas.com/particulier/connaitre-les-dispositifs-et-les-modalites-dacces-a-la-formation/intermittents-du-spectacle-et-de-laudiovisuel.html",
+      "extrait": "Le budget de formation prévu pour les quatre derniers mois de 2026 est épuisé. Pour les formations qui débutent du 26 octobre au 31 décembre 2026, la prise en charge directe par l’Afdas est réservée aux formations relevant de la sécurité. (…) L’Afdas examinera les demandes pour les formations qui débutent à partir du 18 janvier 2027, sous réserve que vous transmettiez votre dossier dans les délais prévus.",
+      "verifie_le": "2026-11-27"
+    }
+  ]
 }

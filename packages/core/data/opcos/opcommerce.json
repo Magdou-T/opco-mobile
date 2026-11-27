@@ -124,7 +124,7 @@
   "priorite_tpe_pme": true,
   "duree_min_formation": null,
   "processus_approbation": "Demande de prise en charge à saisir sur le portail Web Services Entreprises (entreprise.lopcommerce.com) avant le début de la formation ; une demande reçue plus d'un mois avant le début donne lieu à un accusé de réception et à une réponse avant le démarrage.",
-  "delai_validation": "Réponse avant le démarrage si la demande est reçue plus d'un mois avant le début de la formation (en fonction du niveau de consommation des fonds) ; demandes déposées après le 30 novembre 2026 traitées seulement en cas de réabondement des enveloppes (conseil d'administration de décembre 2026).",
+  "delai_validation": "Réponse avant le démarrage si la demande est reçue plus d'un mois avant le début de la formation (en fonction du niveau de consommation des fonds). Date limite de dépôt des demandes 2026 (plan de développement des compétences, période de reconversion, exercice de la fonction tutorale, formation des tuteurs et maîtres d'apprentissage), initialement fixée au 30 novembre 2026 : reportée à une date encore à définir, à la suite d'un incident de sécurité qui rend les services en ligne de l'Opcommerce indisponibles (annonce relevée le 27/11/2026). Les contrats en alternance ne sont pas concernés par cette échéance.",
   "mode_paiement": "Depuis le 1er octobre 2026 (réforme TVA des OPCO) : subrogation maintenue pour les coûts pédagogiques du plan des moins de 50 salariés (hors formations cofinancées) et pour l'apprentissage ; supprimée pour les contrats de professionnalisation, les périodes de reconversion, les actions cofinancées et les entreprises de plus de 50 salariés (l'entreprise paie l'organisme puis demande le remboursement, versé sous 30 jours). Salaires et frais annexes : remboursement à l'entreprise.",
   "alternance_apprentissage": "Niveaux de prise en charge (NPEC) fixés par les branches et publiés par France compétences ; entreprises sans convention collective : niveaux fixés par arrêté (valeurs d'amorçage si la certification n'est pas référencée). Formation du maître d'apprentissage : 15 €/h dans la limite de 24 h (barème par défaut).",
   "alternance_professionnalisation": "Barème par défaut (Section paritaire Commerce) : 9,15 €/h tous publics, 15 €/h publics spécifiques ; exercice de la fonction tutorale 180 € (345 € publics spécifiques) pendant 1 mois ; formation du tuteur 15 €/h dans la limite de 24 h. Forfaits différents selon la branche.",
@@ -132,9 +132,9 @@
   "cpf_details": "Abondement CPF possible selon les règles de la branche ; en période de reconversion, mobilisation du CPF par le salarié (50 % des droits en interne, sans limite en externe).",
   "vae_possible": true,
   "vae_details": "VAE (accompagnement, formation et frais de jury) finançable notamment dans le cadre de la période de reconversion (barème par défaut 9,15 €/h, 450 h maximum) ; règles propres à chaque branche.",
-  "limite_dossiers_an": "Compétences+ : dans la limite du budget annuel de la branche ; Click&Form : 1 à 5 inscriptions par an selon la branche ; demandes à déposer avant le 30 novembre 2026 pour un démarrage en 2026 (règles prudentielles).",
-  "specificites": "20 branches aux critères propres, révisables en cours d'année (nombreuses mises à jour de mai à septembre 2026) | Budget Compétences+ global incluant salaires et frais annexes selon la branche | Règles prudentielles : demandes avant le 30 novembre 2026 inclus, au-delà selon réabondements décidés en décembre 2026 | Réforme TVA au 1er octobre 2026 : subrogation maintenue pour le PDC des moins de 50 salariés (coûts pédagogiques), supprimée pour professionnalisation, reconversion, cofinancements et plus de 50 salariés | Pas d'adresse e-mail générique nationale publiée : contacts par délégation régionale",
-  "points_cles_maximisation": "Vérifier la grille 2026 de sa branche (budget de 1 000 € à 6 000 € selon branche et taille) | Utiliser le quota Click&Form de la branche (100 % des coûts pédagogiques dans plusieurs branches) | Déposer la demande plus d'un mois avant la formation et avant le 30 novembre 2026 | Réseaux d'enseignes : se renseigner sur les fonds réservés groupes | Reconversion : période de reconversion (9,15 €/h par défaut)",
+  "limite_dossiers_an": "Compétences+ : dans la limite du budget annuel de la branche ; Click&Form : 1 à 5 inscriptions par an selon la branche ; date limite de dépôt des demandes 2026, initialement fixée au 30 novembre 2026, reportée à une date encore à définir (incident de sécurité, services en ligne indisponibles au 27/11/2026).",
+  "specificites": "20 branches aux critères propres, révisables en cours d'année (nombreuses mises à jour de mai à septembre 2026) | Budget Compétences+ global incluant salaires et frais annexes selon la branche | Incident de sécurité (annonce relevée le 27/11/2026) : site, portail des demandes et Click&Form indisponibles ; date limite de dépôt des demandes 2026 (initialement le 30 novembre 2026) et fermeture de Click&Form (initialement le 25 novembre 2026) reportées à une date encore à définir, alternance non concernée | Réforme TVA au 1er octobre 2026 : subrogation maintenue pour le PDC des moins de 50 salariés (coûts pédagogiques), supprimée pour professionnalisation, reconversion, cofinancements et plus de 50 salariés | Pas d'adresse e-mail générique nationale publiée : contacts par délégation régionale",
+  "points_cles_maximisation": "Vérifier la grille 2026 de sa branche (budget de 1 000 € à 6 000 € selon branche et taille) | Utiliser le quota Click&Form de la branche (100 % des coûts pédagogiques dans plusieurs branches) | Déposer la demande plus d'un mois avant la formation et avant la date limite 2026 (initialement le 30 novembre 2026, reportée à une date encore à définir) | Réseaux d'enseignes : se renseigner sur les fonds réservés groupes | Reconversion : période de reconversion (9,15 €/h par défaut)",
   "derniere_verification": "2026-10-06",
   "dispositifs_complementaires": [
     {
@@ -149,7 +149,8 @@
         "Formation choisie dans le catalogue Click&Form",
         "Quota d'inscriptions par an fixé par la branche (1 à 5 selon les grilles publiées en octobre 2026)",
         "Prise en charge à 100 % uniquement dans les branches qui la prévoient ; sinon imputation sur le budget Compétences+",
-        "Dans la limite des fonds disponibles"
+        "Dans la limite des fonds disponibles",
+        "Portail indisponible au 27/11/2026 (incident de sécurité) ; fermeture du portail, initialement fixée au 25 novembre 2026, reportée à une date encore à définir"
       ],
       "demarches": "Choisir la formation sur clickandform.lopcommerce.com et s'inscrire en ligne avec les identifiants de l'entreprise.",
       "tailles_eligibles": [
@@ -646,6 +647,32 @@
           "description": "300 salariés et plus : pas de fonds mutualisés Compétences+."
         }
       ]
+    }
+  ],
+  "alertes": [
+    {
+      "type": "acces_restreint",
+      "branche": "Toutes branches : services en ligne indisponibles",
+      "idcc": [],
+      "source_url": "https://maintenance.lopcommerce.com/index-incident-securite.html",
+      "extrait": "L’Opcommerce doit faire face à un incident de sécurité affectant son système d’information et entraînant l’indisponibilité de ses services en ligne.",
+      "verifie_le": "2026-11-27"
+    },
+    {
+      "type": "echeance",
+      "branche": "Toutes branches : date limite de dépôt des demandes 2026",
+      "idcc": [],
+      "source_url": "https://maintenance.lopcommerce.com/index-incident-securite.html",
+      "extrait": "Afin de ne pas pénaliser les entreprises, la date limite de dépôt des dossiers de formation*, initialement fixée au 30 novembre 2026, va être reportée à une date ultérieure qui reste encore à définir. Quatre dispositifs sont concernés par ce report : Plan de développement des compétences, Période de reconversion, Exercice de la fonction tutorale (EFT), Formation des tuteurs et maîtres d’apprentissage.",
+      "verifie_le": "2026-11-27"
+    },
+    {
+      "type": "echeance",
+      "branche": "Click&Form : fermeture du portail reportée",
+      "idcc": [],
+      "source_url": "https://maintenance.lopcommerce.com/index-incident-securite.html",
+      "extrait": "Concernant le portail Click&Form, sa fermeture, initialement fixée au 25 novembre 2026, va également être différée à une date qui reste encore à définir.",
+      "verifie_le": "2026-11-27"
     }
   ]
 }

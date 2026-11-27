@@ -17,63 +17,63 @@
     "Fonds conventionnels de branche et compte investissement formation adhérent (CIFA)"
   ],
   "types_formations_source": "https://www.opco-sante.fr/employeur/financer-vos-formations/les-regles-de-prise-en-charge/",
-  "note_generale": "OPCO Santé couvre le secteur sanitaire, social et médico-social privé à but non lucratif (SSSMS), l'hospitalisation privée et le thermalisme (HP) et les services de prévention et de santé au travail interentreprises (SPSTI). Pour les entreprises de moins de 50 salariés, l'aide TPME 2026 prend en charge 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC et les frais annexes dans la limite globale de 2 500 € par an (règle identique dans les quatre synthèses de prise en charge de juin 2026). L'ancienne aide de 6 000 € plafonnée à 30 €/h n'est plus en vigueur. Au-delà, les financements relèvent des fonds conventionnels de branche (dont les fonds mutualisés de branche du SSSMS) et du CIFA alimenté par les versements volontaires.",
+  "note_generale": "OPCO Santé couvre le secteur sanitaire, social et médico-social privé à but non lucratif (SSSMS), l'hospitalisation privée et le thermalisme (HP) et les services de prévention et de santé au travail interentreprises (SPSTI). Pour les entreprises de moins de 50 salariés, l'aide TPME 2026 prend en charge 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC et les frais annexes dans la limite globale de 2 500 € par an (règle identique dans les quatre synthèses de prise en charge, mises à jour d'avril à juin 2026). L'ancienne aide de 6 000 € plafonnée à 30 €/h n'est plus en vigueur. Au-delà, les financements relèvent des fonds conventionnels de branche (dont les fonds mutualisés de branche du SSSMS) et du CIFA alimenté par les versements volontaires.",
   "note_generale_source": "https://www.opco-sante.fr/employeur/tpme-evolution/",
   "cout_horaire_inter": {
     "value": null,
     "confidence": "exact",
-    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf",
-    "note": "Aide TPME 2026 (moins de 50 salariés) : 100 % des coûts pédagogiques sans plafond horaire publié, dans la limite globale de 2 500 € par an tous frais confondus. Actions collectives du catalogue : coûts pédagogiques dans la limite de 1 200 € par jour. Extrait : « Pour 2026, prise en charge de 100 % des coûts pédagogiques, des rémunérations à hauteur d’un SMIC et des frais annexes dans la limite de 2 500 € par an. » (vérifié le 2026-10-05)."
+    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf",
+    "note": "Aide TPME 2026 (moins de 50 salariés) : 100 % des coûts pédagogiques sans plafond horaire publié, dans la limite globale de 2 500 € par an tous frais confondus. Actions collectives du catalogue : coûts pédagogiques dans la limite de 1 200 € par jour. Extrait : « Pour 2026, prise en charge de 100 % des coûts pédagogiques, des rémunérations à hauteur d’un SMIC et des frais annexes dans la limite de 2 500 € par an. » (vérifié le 2026-11-27)."
   },
   "cout_horaire_intra": {
     "value": null,
     "confidence": "exact",
-    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf",
-    "note": "Même règle que pour l'inter : pas de plafond horaire, plafond annuel global de 2 500 € (moins de 50 salariés). Extrait : « Pour 2026, prise en charge de 100 % des coûts pédagogiques, des rémunérations à hauteur d’un SMIC et des frais annexes dans la limite de 2 500 € par an. » (vérifié le 2026-10-05)."
+    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf",
+    "note": "Même règle que pour l'inter : pas de plafond horaire, plafond annuel global de 2 500 € (moins de 50 salariés). Extrait : « Pour 2026, prise en charge de 100 % des coûts pédagogiques, des rémunérations à hauteur d’un SMIC et des frais annexes dans la limite de 2 500 € par an. » (vérifié le 2026-11-27)."
   },
   "cout_horaire_metier": {
     "value": null,
     "confidence": "exact",
     "source_url": "https://www.opco-sante.fr/app/uploads/2025/07/opco0289_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
-    "note": "Pas de plafond horaire sur l'aide TPME. Pour le SSSMS, les fonds mutualisés de branche (toutes tailles, sous conditions et au prorata du taux de cotisation) financent les formations certifiantes à 14 € de l'heure (niveaux 3 à 5) et 18 € de l'heure (niveaux 6 et 7), et la professionnalisation individuelle à 30 € de l'heure. Extrait : « les frais pédagogiques plafonnés à 14 € de l’heure pour les formations de niveau visé 3 à 5 et à 18 € de l’heure pour les niveaux visés 6 et 7 » (vérifié le 2026-10-05)."
+    "note": "Pas de plafond horaire sur l'aide TPME. Pour le SSSMS, les fonds mutualisés de branche (toutes tailles, sous conditions et au prorata du taux de cotisation) financent les formations certifiantes à 14 € de l'heure (niveaux 3 à 5) et 18 € de l'heure (niveaux 6 et 7), et la professionnalisation individuelle à 30 € de l'heure. Extrait : « les frais pédagogiques plafonnés à 14 € de l’heure pour les formations de niveau visé 3 à 5 et à 18 € de l’heure pour les niveaux visés 6 et 7 » (vérifié le 2026-11-27)."
   },
   "prise_en_charge_salaires": {
     "value": 12.31,
     "confidence": "exact",
     "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2300",
-    "note": "Aide TPME (moins de 50 salariés) : rémunération du salarié en formation prise en charge à hauteur du SMIC, dans la limite globale de 2 500 € par an ; non applicable aux 50 salariés et plus (fonds conventionnels ou CIFA). Valeur horaire = SMIC brut en vigueur (12,31 €, page service-public.gouv.fr vérifiée le 01/06/2026, arrêté du 22 mai 2026 relatif au relèvement du SMIC) : la valeur suit le SMIC horaire et doit être mise à jour à chaque revalorisation. La source de cette valeur est la page du SMIC ; la règle de prise en charge de la rémunération à hauteur du SMIC est publiée par OPCO Santé sur https://www.opco-sante.fr/employeur/tpme-evolution/. Extraits : « Elle prend en charge 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC ainsi que les frais annexes, dans la limite de 2 500 € par an et dans la limite des fonds disponibles. » ; « Smic horaire 12,31 € » (vérifié le 2026-10-05)."
+    "note": "Aide TPME (moins de 50 salariés) : rémunération du salarié en formation prise en charge à hauteur du SMIC, dans la limite globale de 2 500 € par an ; non applicable aux 50 salariés et plus (fonds conventionnels ou CIFA). Valeur horaire = SMIC brut en vigueur (12,31 €, page service-public.gouv.fr vérifiée le 01/06/2026, arrêté du 22 mai 2026 relatif au relèvement du SMIC) : la valeur suit le SMIC horaire et doit être mise à jour à chaque revalorisation. La source de cette valeur est la page du SMIC ; la règle de prise en charge de la rémunération à hauteur du SMIC est publiée par OPCO Santé sur https://www.opco-sante.fr/employeur/tpme-evolution/. Extraits : « Elle prend en charge 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC ainsi que les frais annexes, dans la limite de 2 500 € par an et dans la limite des fonds disponibles. » ; « Smic horaire 12,31 € » (vérifié le 2026-11-27)."
   },
   "prise_en_charge_salaires_mode": "euro_par_heure",
   "frais_transport": {
     "value": null,
     "confidence": "exact",
-    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf",
-    "note": "Remboursement des frais réels justifiés, avec accord préalable : transports en commun en priorité (train 2e classe, autobus) ; voiture au taux kilométrique conventionnel de l'établissement, limité à 7 CV, péages et parkings sur justificatifs. Pas de forfait journalier. Inclus dans le plafond de 2 500 € par an (moins de 50 salariés). Extrait : « En cas d’utilisation de la voiture, le remboursement s’effectue sur la base des taux kilométriques conventionnels en vigueur dans l’établissement et limité à 7 CV. » (vérifié le 2026-10-05)."
+    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf",
+    "note": "Remboursement des frais réels justifiés, avec accord préalable : transports en commun en priorité (train 2e classe, autobus) ; voiture au taux kilométrique conventionnel de l'établissement, limité à 7 CV, péages et parkings sur justificatifs. Pas de forfait journalier. Inclus dans le plafond de 2 500 € par an (moins de 50 salariés). Extrait : « En cas d’utilisation de la voiture, le remboursement s’effectue sur la base des taux kilométriques conventionnels en vigueur dans l’établissement et limité à 7 CV. » (vérifié le 2026-11-27)."
   },
   "frais_hebergement": {
     "value": 150,
     "confidence": "exact",
-    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf",
-    "note": "150 € par nuit petit déjeuner inclus ; 170 € si le stage a lieu à Paris (75), dans les Hauts-de-Seine (92), la Seine-Saint-Denis (93) ou le Val-de-Marne (94). Remboursement sur facture, inclus dans le plafond de 2 500 € par an (moins de 50 salariés). Extrait : « si le lieu de stage se situe dans un autre département, à l’étranger (UE ou hors UE) : 150 €. » (vérifié le 2026-10-05)."
+    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf",
+    "note": "150 € par nuit petit déjeuner inclus ; 170 € si le stage a lieu à Paris (75), dans les Hauts-de-Seine (92), la Seine-Saint-Denis (93) ou le Val-de-Marne (94). Remboursement sur facture, inclus dans le plafond de 2 500 € par an (moins de 50 salariés). Extrait : « si le lieu de stage se situe dans un autre département, à l’étranger (UE ou hors UE) : 150 €. » (vérifié le 2026-11-27)."
   },
   "frais_restauration": {
     "value": 22,
     "confidence": "exact",
-    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf",
-    "note": "22 € par repas, sur facture, inclus dans le plafond de 2 500 € par an (moins de 50 salariés). Extrait : « plafond pour 1 repas : 22 € » (vérifié le 2026-10-05)."
+    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf",
+    "note": "22 € par repas, sur facture, inclus dans le plafond de 2 500 € par an (moins de 50 salariés). Extrait : « plafond pour 1 repas : 22 € » (vérifié le 2026-11-27)."
   },
   "frais_restauration_unite": "repas",
   "frais_annexes_pourcentage": {
     "value": null,
     "confidence": "exact",
-    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf",
-    "note": "Pas de forfait en pourcentage : frais réels plafonnés (nuitée 150 ou 170 €, repas 22 €), toute allocation forfaitaire étant exclue. Extrait : « Ces remboursements sont limités aux plafonds définis chaque année par le conseil d’administration. Toute indemnisation sous forme d’allocation forfaitaire est exclue. » (vérifié le 2026-10-05)."
+    "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf",
+    "note": "Pas de forfait en pourcentage : frais réels plafonnés (nuitée 150 ou 170 €, repas 22 €), toute allocation forfaitaire étant exclue. Extrait : « Ces remboursements sont limités aux plafonds définis chaque année par le conseil d’administration. Toute indemnisation sous forme d’allocation forfaitaire est exclue. » (vérifié le 2026-11-27)."
   },
   "budget_annuel_max": {
     "value": 2500,
     "confidence": "exact",
     "source_url": "https://www.opco-sante.fr/employeur/tpme-evolution/",
-    "note": "Plafond annuel global par entreprise de moins de 50 salariés (aide TPME, contribution légale), couvrant coûts pédagogiques, rémunérations et frais annexes ; identique pour les secteurs SSSMS, HP, SPSTI et hors convention collective. Remplace l'aide de 6 000 € plafonnée à 30 €/h encore affichée sur une ancienne page non mise à jour. Extrait : « Elle prend en charge 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC ainsi que les frais annexes, dans la limite de 2 500 € par an et dans la limite des fonds disponibles. » (vérifié le 2026-10-05)."
+    "note": "Plafond annuel global par entreprise de moins de 50 salariés (aide TPME, contribution légale), couvrant coûts pédagogiques, rémunérations et frais annexes ; identique pour les secteurs SSSMS, HP, SPSTI et hors convention collective. Remplace l'aide de 6 000 € plafonnée à 30 €/h encore affichée sur une ancienne page non mise à jour. Extrait : « Elle prend en charge 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC ainsi que les frais annexes, dans la limite de 2 500 € par an et dans la limite des fonds disponibles. » (vérifié le 2026-11-27)."
   },
   "budget_annuel_portee": "global",
   "budget_annuel_description": "Aide TPME 2026 (moins de 50 salariés) : 2 500 € par an et par entreprise, couvrant 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC et les frais annexes, dans la limite des fonds disponibles. 50 salariés et plus : fonds conventionnels de branche et CIFA (versements volontaires).",
@@ -122,7 +122,7 @@
   "delai_validation": "Aucun délai de réponse publié ; dépôt au moins 2 mois avant le début de la formation pour une garantie de réponse avant le départ (CGG 2026).",
   "mode_paiement": "Remboursement à l'adhérent après la formation, sur certificat de réalisation ; la demande de remboursement doit parvenir dans les 6 mois suivant la fin de la formation, sinon la prise en charge est annulée. Pour les adhérents à contribution volontaire, les remboursements sont conditionnés au versement de l'acompte CIFA appelé le 15 septembre.",
   "alternance_apprentissage": {
-    "description": "Niveaux de prise en charge France compétences (NPEC). Participation obligatoire de l'employeur de 750 € pour les diplômes de niveau 6 et plus ; majoration jusqu'à 4 000 € pour un apprenti reconnu handicapé ; frais annexes supportés par le CFA : repas 3 €, nuitée 6 €, premier équipement 500 € maximum selon la synthèse de juin 2026 (le décret n° 2026-679 applicable depuis le 30/07/2026 limite cette aide à 300 € pour le niveau 5 et la supprime pour les niveaux 6 et 7) ; référent mobilité 500 € par contrat avec mobilité internationale.",
+    "description": "Niveaux de prise en charge France compétences (NPEC). Participation obligatoire de l'employeur de 750 € pour les diplômes de niveau 6 et plus ; majoration jusqu'à 4 000 € pour un apprenti reconnu handicapé ; frais annexes supportés par le CFA : repas 3 €, nuitée 6 €, premier équipement 500 € maximum selon les synthèses de mai et juin 2026 (le décret n° 2026-679 applicable depuis le 30/07/2026 limite cette aide à 300 € pour le niveau 5 et la supprime pour les niveaux 6 et 7) ; référent mobilité 500 € par contrat avec mobilité internationale.",
     "source_url": "https://www.opco-sante.fr/app/uploads/2025/07/opco0289_synthese-des-prise-en-charge-sssms_pdf_site.pdf"
   },
   "alternance_professionnalisation": {
@@ -130,7 +130,7 @@
     "source_url": "https://www.opco-sante.fr/app/uploads/2025/07/opco0289_synthese-des-prise-en-charge-sssms_pdf_site.pdf"
   },
   "periode_reconversion_2026": {
-    "description": "Période de reconversion (150 à 450 h sur 12 mois maximum) : 9,15 € par heure dans la limite de 5 000 € (SSSMS, HP) ; SPSTI : coût réel dans la limite de 5 000 €, VAE et CléA 70 €/h dans la limite de 3 000 €.",
+    "description": "Période de reconversion (150 à 450 h sur 12 mois maximum, jusqu'à 2 100 h sur 36 mois par accord), selon la synthèse du secteur : SSSMS et entreprises hors convention collective, 9,15 € par heure dans la limite de 5 000 € ; HP, coût réel dans la limite de 8 000 € pour le DEI, 4 000 € pour le DEAS et 3 000 € pour les autres qualifications ; SPSTI, coût réel dans la limite de 5 000 € ; HP et SPSTI, VAE et CléA à 70 €/h dans la limite de 3 000 €. Synthèse HP de juin 2026 : https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf ; synthèse SPSTI de juin 2026 : https://www.opco-sante.fr/app/uploads/2025/08/opco0344_synthese-des-prise-en-charge-spsti_pdf_site.pdf. Extraits : « Les employeurs relevant de l’OPCO Santé bénéficient d’une prise en charge à hauteur de 9,15 € par heure, dans la limite de 5 000 €. » (SSSMS) ; « La période de reconversion est financée à hauteur du coût réel et dans la limite de : » ; « 8000 € pour le DEI » ; « 4000 € pour le DEAS » ; « 3000 € pour les autres qualifications » (HP) ; « Du coût réel et dans un plafond maximum de 5000€, pour l’ensemble des entreprises relevant du périmètre de l’OPCO Santé. » (SPSTI) (vérifié le 2026-11-27).",
     "source_url": "https://www.opco-sante.fr/app/uploads/2025/07/opco0289_synthese-des-prise-en-charge-sssms_pdf_site.pdf"
   },
   "cpf_abondement": true,
@@ -147,20 +147,20 @@
   "limite_dossiers_note": "Pas de limite de dossiers publiée : dans la limite de 2 500 € par an (aide TPME) et des fonds disponibles.",
   "specificites": "Aide TPME 2026 : 2 500 € par an et par structure de moins de 50 salariés, couvrant 100 % des coûts pédagogiques, les rémunérations à hauteur du SMIC et les frais annexes | Frais annexes au réel : nuitée 150 € (170 € à Paris et petite couronne), repas 22 € | Actions collectives du catalogue : 1 200 €/jour | SSSMS : fonds mutualisés de branche (0,3465 % de la masse salariale), prise en charge au prorata du taux de cotisation | HP et SPSTI : fonds conventionnels sur axes prioritaires | Remboursement à demander dans les 6 mois suivant la fin de la formation",
   "points_cles_maximisation": "Le plafond de 2 500 € par an est vite atteint : prioriser les formations et inclure la rémunération (SMIC) et les frais annexes dans la demande | Privilégier les formations collectives clés en main du catalogue TPME | Déposer sur Webservices au moins 2 mois avant | 50 salariés et plus : mobiliser les fonds conventionnels de branche et le CIFA | Transmettre le plan de développement prévisionnel au conseiller avant le 28 février",
-  "derniere_mise_a_jour": "2026-10-05",
+  "derniere_mise_a_jour": "2026-11-27",
   "sources_consultees": [
     "https://www.opco-sante.fr/employeur/tpme-evolution/",
     "https://www.opco-sante.fr/employeur/financer-vos-formations/les-regles-de-prise-en-charge/",
     "https://www.opco-sante.fr/app/uploads/2025/07/opco0289_synthese-des-prise-en-charge-sssms_pdf_site.pdf",
-    "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf",
-    "https://www.opco-sante.fr/app/uploads/2025/08/opco0291_synthese-des-prise-en-charge-spsti_pdf_site.pdf",
+    "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf",
+    "https://www.opco-sante.fr/app/uploads/2025/08/opco0344_synthese-des-prise-en-charge-spsti_pdf_site.pdf",
     "https://www.opco-sante.fr/app/uploads/2025/08/opco0292_synthese-des-prise-en-charge-hors-branche_pdf_site.pdf",
     "https://www.opco-sante.fr/app/uploads/2026/01/opco0237_conditions-generales-de-gestion-hors-branches-2026_pdf_site.pdf",
     "https://www.opco-sante.fr/employeur/les-dispositifs-de-formation/plan-de-developpement-des-competences-pdc/",
     "https://www.opco-sante.fr/employeur/notre-offres-de-services/on-monte-en-competences/",
     "https://www.service-public.gouv.fr/particuliers/vosdroits/F2300"
   ],
-  "derniere_verification": "2026-10-06",
+  "derniere_verification": "2026-11-27",
   "note_variantes": "Pas de variante de branche : les quatre synthèses de prise en charge (SSSMS, HP, SPSTI, hors CC) appliquent la même aide TPME aux moins de 50 salariés ; les différences portent sur les fonds conventionnels et le CIFA, qui ne se ramènent pas à un barème horaire (voir dispositifs complémentaires).",
   "dispositifs_complementaires": [
     {
@@ -184,7 +184,7 @@
       "publics": null,
       "confidence": "exact",
       "source_url": "https://www.opco-sante.fr/employeur/tpme-evolution/",
-      "note": "« ces formations sont prises en charge à 100% par l’OPCO Santé. » (vérifié le 2026-10-06)"
+      "note": "« ces formations sont prises en charge à 100% par l’OPCO Santé. » (vérifié le 2026-11-27)"
     },
     {
       "id": "fmb-sssms",
@@ -222,7 +222,7 @@
       "tailles_eligibles": null,
       "publics": null,
       "confidence": "depends_on_branche",
-      "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0291_synthese-des-prise-en-charge-spsti_pdf_site.pdf"
+      "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0344_synthese-des-prise-en-charge-spsti_pdf_site.pdf"
     },
     {
       "id": "fonds-conventionnels-hp",
@@ -240,7 +240,7 @@
       "tailles_eligibles": null,
       "publics": null,
       "confidence": "depends_on_branche",
-      "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0290_synthese-des-prise-en-charge-hp_pdf_site.pdf"
+      "source_url": "https://www.opco-sante.fr/app/uploads/2025/08/opco0343_synthese-des-prise-en-charge-hp_pdf_site.pdf"
     }
   ]
 }

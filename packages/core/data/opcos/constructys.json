@@ -712,7 +712,7 @@
       ]
     }
   ],
-  "derniere_verification": "2026-10-05",
+  "derniere_verification": "2026-11-27",
   "alertes": [
     {
       "type": "changement_criteres",
@@ -797,7 +797,7 @@
       ],
       "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
       "extrait": "le Conseil d’administration a décidé de réduire le plafond horaire de financement de 24 € à 19 € pour toutes les demandes de financement reçues à partir du 1er juin 2026. (…) Cette décision s’applique aux entreprises du Bâtiment de 11 à moins de 300 salariés.",
-      "verifie_le": "2026-10-05"
+      "verifie_le": "2026-11-27"
     },
     {
       "type": "changement_criteres",
@@ -811,7 +811,7 @@
       ],
       "source_url": "https://www.constructys.fr/conditions-de-prise-en-charge-2/",
       "extrait": "le Conseil d’administration a validé une prise en charge des coûts pédagogiques au réel plafonné à 19 € par heure, quelle que soit la taille de l’entreprise.",
-      "verifie_le": "2026-10-05"
+      "verifie_le": "2026-11-27"
     },
     {
       "type": "changement_paiement",
@@ -819,7 +819,7 @@
       "idcc": [],
       "source_url": "https://www.constructys.fr/reforme-tva-paiement-des-formations-un-dispositif-transitoire-mis-en-place-a-compter-du-1er-octobre/",
       "extrait": "Tout d’abord, à compter du 1er octobre et jusqu’au 31 décembre 2026, un premier dispositif, transitoire, sans subrogation de paiement, sera mis en place. (…) Le remboursement est effectué sur la base du montant net de taxe, et non plus sur le montant TTC.",
-      "verifie_le": "2026-10-05"
+      "verifie_le": "2026-11-27"
     },
     {
       "type": "dispositif_non_confirme",
@@ -827,7 +827,7 @@
       "idcc": [],
       "source_url": "https://www.constructys.fr/fse-2025-point-detape-sur-la-mobilisation-des-fonds/",
       "extrait": "La mobilisation a été massive et la quasi-totalité des fonds dédiés en 2025 est engagée.",
-      "verifie_le": "2026-10-05"
+      "verifie_le": "2026-11-27"
     }
   ]
 }
