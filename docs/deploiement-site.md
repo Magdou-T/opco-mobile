@@ -30,7 +30,9 @@ Le `.htaccess` règle l'encodage (UTF-8), interdit la liste des dossiers (`Optio
 - le HTML et les fichiers `.txt` reçoivent `max-age=0` : le navigateur peut les garder, mais redemande au serveur à chaque visite s'ils ont changé (ce n'est pas une interdiction de mise en cache comme `no-store`). Les `.txt` sont surtout les fichiers de navigation de Next (`index.txt`, `__next.*.txt`), qui changent à chaque build : une copie gardée d'un dépôt précédent ne correspondrait plus aux pages en ligne. `robots.txt` suit la même règle ;
 - `sitemap.xml` est gardé une heure, `favicon.ico` et les images SVG un mois, les scripts, feuilles de style et polices un an, car leurs noms changent quand leur contenu change.
 
-Il ne contient aucune réécriture ni redirection : la redirection vers HTTPS se règle chez l'hébergeur (§ 5), celle entre `www` et le domaine nu est une décision à prendre (§ 3).
+Depuis la revue du 27/11/2026, il redirige aussi de façon permanente (301) le domaine nu `financementopco.fr` vers `https://www.financementopco.fr` et une adresse en `/index.html` vers son dossier, envoie des en-têtes de sécurité (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security` sans sous-domaines, `Content-Security-Policy` limitée à `frame-ancestors` pour le mode intégré), garde un an les ressources à empreinte et sert les images de partage `opengraph-image` (sans extension) comme des PNG. La redirection vers HTTPS reste réglée chez l'hébergeur (§ 5) : une règle sur `%{HTTPS}` bouclerait derrière le CDN d'Hostinger.
+
+Après `next build`, le script `apps/web/scripts/aplatir-prechargements.mjs` (lancé par `npm run build`) copie les fichiers de préchargement de Next sous le nom que le navigateur demande (voir § 8).
 
 Le site doit être servi à la racine d'un nom de domaine ou d'un sous-domaine, pas dans un sous-dossier : ses liens commencent par `/` et la page 404 est cherchée à `/404.html`.
 
@@ -58,9 +60,9 @@ Ne publiez pas tant que la page affiche une information à compléter. Une fois 
 
 ### Choisir le nom de domaine du site
 
-L'adresse du site est fixée par la constante `ADRESSE_DU_SITE` de `apps/web/src/lib/metadonnees.ts` (ligne 12) : `https://www.financementopco.fr`. Elle donne l'adresse canonique de chaque page, celle des aperçus de partage, celles du plan du site et l'adresse du plan que `robots.txt` annonce : aucune autre constante ne répète le nom de domaine dans le code du site. Rien ne redirige le domaine nu (`financementopco.fr`) vers `www`.
+L'adresse du site est fixée par la constante `ADRESSE_DU_SITE` de `apps/web/src/lib/metadonnees.ts` (ligne 12) : `https://www.financementopco.fr`. Elle donne l'adresse canonique de chaque page, celle des aperçus de partage, celles du plan du site et l'adresse du plan que `robots.txt` annonce. Le `.htaccess` répète le nom pour rediriger le domaine nu vers `www` (option a ci-dessous, retenue le 27/11/2026) : à changer avec la constante si le nom change.
 
-Vérifié le 08/10/2026 : `financementopco.fr` n'est pas enregistré (registre de l'AFNIC) et aucun des deux noms ne répond dans le DNS public. Le domaine est donc à réserver, ou un autre à choisir, avant la publication.
+Situation au 27/11/2026 : `financementopco.fr` est enregistré, sa zone DNS est chez Hostinger, et le site y est en ligne depuis octobre 2026 ; les deux noms (avec et sans `www`) servaient les mêmes pages en 200 avant la redirection.
 
 C'est une décision de l'utilisateur, entre deux options :
 
@@ -186,16 +188,17 @@ Refaire les étapes 3 à 8 et 10 du § 5 avec l'archive précédente : `financem
 
 ## 8. Limites connues
 
-- **Préchargement des pages.** Next précharge les pages liées en demandant des fichiers `__next.<segment>.__PAGE__.txt?_rsc=...` (par exemple `/simulateur/__next.simulateur.__PAGE__.txt`). L'export de Next 16.2.1 écrit ces fichiers dans des dossiers (`simulateur/__next.simulateur/__PAGE__.txt`), pas sous ce nom : l'hébergement répond 404. Chaque lien préchargé laisse une erreur « Failed to load resource » dans la console, sans conséquence sur la navigation : le clic charge la page par `index.txt`. Constaté sur un serveur qui imite Apache (archive extraite, navigateur Chromium) ; à confirmer sur l'hébergement réel avec la liste de contrôle.
+- **Préchargement des pages (corrigé le 27/11/2026).** Next précharge les pages liées en demandant des fichiers `__next.<segment>.__PAGE__.txt?_rsc=...` (par exemple `/opco/akto/__next.opco.$d$slug.__PAGE__.txt`), alors que l'export de Next 16.2.1 les écrit dans des dossiers (`opco/akto/__next.opco/$d$slug/__PAGE__.txt`). Constaté sur le site en ligne : deux 404 par lien préchargé, et la navigation retombait sur un chargement complet de la page. Le script `apps/web/scripts/aplatir-prechargements.mjs`, lancé après `next build`, ajoute la copie de chaque fichier sous le nom à points ; il ne supprime ni ne modifie rien. À retirer quand une version de Next écrira les deux noms elle-même.
 - **Safari et iOS non testés.** Les essais ont eu lieu dans un navigateur Chromium. À vérifier sur un iPhone après le dépôt : la barre de navigation collante du simulateur et le menu mobile.
 - **Écran de résultats chargé à la demande.** L'écran de résultats et le catalogue d'aides forment un lot JavaScript d'environ 800 Ko (150 Ko compressés), téléchargé quand l'écran s'affiche et non avec la page. Si la connexion tombe à ce moment, l'écran propose de recharger la page et les réponses sont à saisir de nouveau : le site ne conserve aucune réponse, par choix. Un visiteur qui avait ouvert le simulateur avant un nouveau dépôt peut voir le même écran, car le nom d'un fichier change quand son contenu change et l'ancien n'existe plus.
 - **Données figées au build.** Voir le § 2.
-- **Pistes.** Le `.htaccess` n'envoie aucun en-tête de sécurité (`X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`) : un site statique sans cookie ni compte s'en passe pour cette publication. À ajouter dans une prochaine version, puis à vérifier sur l'hébergement réel : le serveur de test local ne lit pas le `.htaccess`.
+- **En-têtes de sécurité et redirections.** Ajoutés le 27/11/2026 dans le `.htaccess` (§ 1) : à vérifier sur l'hébergement réel après chaque dépôt (`curl -I`), le serveur de test local ne lisant pas le `.htaccess`.
+- **Signaler les pages aux moteurs.** Après un dépôt : `node apps/web/scripts/indexnow.mjs` signale les adresses du plan du site à IndexNow (Bing et moteurs associés), avec la clé publiée à la racine (`public/<clé>.txt`) ; la Search Console de Google (propriété de domaine `financementopco.fr`, validée par un enregistrement TXT de la zone DNS, à ne pas supprimer) relit le plan du site d'elle-même.
 
 ## 9. Ce qui reste à faire de votre côté
 
 - Compléter la page légale, puis reconstruire (§ 3).
-- Réserver le nom de domaine et choisir entre `www` et le domaine nu (§ 3).
+- Nom de domaine : réservé, `www` retenu (§ 3).
 - Construire l'archive (fichiers seuls, comme celle de juillet) et la contrôler (§ 4).
 - Sauvegarder, déposer, extraire et vérifier sur Hostinger ; certificat SSL et Forcer HTTPS ; purge du gestionnaire de cache (§ 5).
 - Dérouler la liste de contrôle en navigation privée, sur un téléphone Android et sur un iPhone (§ 6).
