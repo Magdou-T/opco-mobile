@@ -39,7 +39,7 @@ const QUESTIONS: QuestionReponse[] = [
   {
     question: "Demandeur d'emploi : faut-il payer les 150 € de reste à charge du CPF ?",
     reponse:
-      "Non. Depuis avril 2026, la participation obligatoire au CPF est de 150 € pour les salariés, mais le Code du travail précise qu'elle n'est pas due par les demandeurs d'emploi. Si un reste à charge s'affiche malgré tout, signalez-le à votre conseiller France Travail pour qu'il vérifie votre situation avant de valider l'inscription.",
+      "Non, pas aujourd'hui : le Code du travail précise que la participation de 150 € n'est pas due par les demandeurs d'emploi. Attention pour les formations validées depuis le 2 octobre 2026 : si le projet de loi de finances 2027 est adopté, une participation de base pourrait être réclamée en 2027, sauf formation d'un secteur prioritaire ou cofinancée.",
   },
   {
     question: 'AIF de France Travail : quelles conditions ?',
@@ -126,6 +126,20 @@ export default function DemandeursEmploiPage() {
             Compte Formation vous réclame malgré tout ces 150 €, signalez-le à votre conseiller
             France Travail avant de valider l&apos;inscription&nbsp;: il vérifiera votre situation.
           </p>
+          <Callout tone="warn" title="Formations validées depuis le 2 octobre 2026">
+            Selon Mon Compte Formation, si le projet de loi de finances pour 2027 est adopté, un demandeur
+            d&apos;emploi pourra devoir la participation de base pour une formation validée depuis le 2 octobre
+            2026, sauf si elle relève d&apos;un secteur prioritaire ou si elle est cofinancée ; le bilan de
+            compétences serait concerné dans tous les cas. Le texte n&apos;est pas adopté au 27 novembre 2026.
+            Détail et montants dans notre{' '}
+            <Link href="/cpf/" className="lien">
+              guide du CPF
+            </Link>
+            .{' '}
+            <Source href="https://www.moncompteformation.gouv.fr/espace-public/evolution-des-regles-dutilisation-du-cpf-compter-du-2-octobre-2026">
+              moncompteformation.gouv.fr
+            </Source>
+          </Callout>
           <p>
             Pour compléter un solde insuffisant, France Travail s&apos;appuie notamment sur
             l&apos;aide individuelle à la formation, présentée ci-dessous. Droits acquis chaque
@@ -146,7 +160,7 @@ export default function DemandeursEmploiPage() {
             </Source>
             {' · '}
             <Source href="https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006072050/LEGISCTA000018498278/">
-              décret n° 2026-234 (participation de 150 €)
+              Code du travail (participation de 150 €)
             </Source>
             {' · '}
             <Source href="https://entreprendre.service-public.gouv.fr/actualites/A18873">
@@ -346,8 +360,8 @@ export default function DemandeursEmploiPage() {
 
         <GuideSection id="cas-particuliers" number="06" title="Handicap, CSP, permis : les cas particuliers">
           <p>
-            En situation de handicap, votre CPF est crédité de 800 € par an, dans la limite de
-            8 000 €, et l&apos;Agefiph peut financer les aménagements de formation nécessaires. En
+            En situation de handicap, votre CPF est crédité de 800 € par année de travail salarié,
+            dans la limite de 8 000 €, et l&apos;Agefiph peut financer les aménagements de formation nécessaires. En
             contrat de sécurisation professionnelle (CSP), le reclassement peut passer
             par une formation financée notamment par l&apos;AIF. L&apos;aide au permis B de France
             Travail, elle, est supprimée depuis le 1er avril 2026.
@@ -373,6 +387,10 @@ export default function DemandeursEmploiPage() {
           <p className="text-sm text-texte-discret">
             Sources :{' '}
             <Source href="https://www.agefiph.fr/centre-aide/se-former">Agefiph, se former</Source>
+            {' · '}
+            <Source href="https://www.moncompteformation.gouv.fr/espace-public/les-personnes-en-situation-de-handicap">
+              Mon Compte Formation, handicap
+            </Source>
             {' · '}
             <Source href="https://www.agefiph.fr/aides-financieres/aide-au-parcours-vers-lemploi-des-personnes-en-situation-de-handicap">
               Agefiph, aide au parcours vers l&apos;emploi
