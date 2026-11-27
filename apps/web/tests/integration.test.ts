@@ -56,7 +56,8 @@ describe('mode intégré : câblage dans le site', () => {
   test('le gabarit pose le script dans l’en-tête du document, avant l’affichage, et tolère l’attribut ajouté', () => {
     const gabarit = source('../src/app/layout.tsx');
     assert.match(gabarit, /import \{ SCRIPT_DETECTION_INTEGRATION \} from "@\/lib\/integration"/);
-    assert.match(gabarit, /<head>\s*<script dangerouslySetInnerHTML=\{\{ __html: SCRIPT_DETECTION_INTEGRATION \}\} \/>\s*<\/head>/);
+    // Le script est le premier enfant de <head> (avant l'affichage) ; les données structurées du site le suivent.
+    assert.match(gabarit, /<head>\s*<script dangerouslySetInnerHTML=\{\{ __html: SCRIPT_DETECTION_INTEGRATION \}\} \/>/);
     assert.match(gabarit, /<html lang="fr"[^>]*suppressHydrationWarning/);
   });
 

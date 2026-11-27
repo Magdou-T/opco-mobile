@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
 import { GuideBody, GuideHero, GuideSection, Source } from '@/components/site/Guide';
+import { grapheDePage } from '@/lib/donnees-structurees';
 import { Callout } from '@/components/ui/Callout';
 import {
   LIBELLES_DES_CHAMPS,
@@ -196,6 +198,14 @@ export default function MentionsLegalesPage() {
 
   return (
     <main>
+      <DonneesStructurees
+        graphe={grapheDePage({
+          chemin: PAGES.mentions.chemin,
+          titre: PAGES.mentions.titre,
+          description: PAGES.mentions.description,
+          nomCourt: 'Mentions légales',
+        })}
+      />
       <GuideHero
         eyebrow="SFG Développement · financementOPCO"
         title="Mentions légales et données"

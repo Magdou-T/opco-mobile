@@ -9,7 +9,9 @@ import {
   GuideCta,
 } from '@/components/site/Guide';
 import { Etiquette } from '@/components/ui/Etiquette';
-import { PAGES, metadonnees } from '@/lib/metadonnees';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
+import { grapheDePage } from '@/lib/donnees-structurees';
+import { PAGES, REVUE_DES_GUIDES, metadonnees } from '@/lib/metadonnees';
 
 /* Tableau des financements : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft) ; sous 640 px,
    une carte par ligne, l'en-tête de colonne repris devant chaque cellule. */
@@ -20,6 +22,20 @@ const CELLULE =
   'px-4 py-3.5 leading-relaxed text-texte-doux sm:px-5 max-sm:mt-2 max-sm:block max-sm:p-0 max-sm:before:block max-sm:before:text-xs max-sm:before:font-semibold max-sm:before:tracking-[0.12em] max-sm:before:text-texte-discret max-sm:before:uppercase max-sm:before:content-[attr(data-label)]';
 
 export const metadata: Metadata = metadonnees(PAGES.comprendre);
+
+/** Fil d'Ariane du guide : il fait partie des guides de la page Employeurs. */
+const FIL = { page: 'Comprendre les OPCO', intermediaires: [{ nom: 'Employeurs', chemin: '/employeurs/' }] };
+
+const GRAPHE = grapheDePage({
+  chemin: PAGES.comprendre.chemin,
+  titre: PAGES.comprendre.titre,
+  description: PAGES.comprendre.description,
+  type: 'Article',
+  nomCourt: FIL.page,
+  intermediaires: FIL.intermediaires,
+  modifieLe: REVUE_DES_GUIDES,
+  publieLe: '2026-10-13',
+});
 
 const TOC = [
   { id: 'role', label: 'Le rôle des OPCO' },
@@ -32,8 +48,11 @@ const TOC = [
 export default function ComprendreLesOpcoPage() {
   return (
     <main>
+      <DonneesStructurees graphe={GRAPHE} />
       <GuideHero
-        eyebrow="Guide nº 1 · mis à jour octobre 2026"
+        fil={FIL}
+        revue={REVUE_DES_GUIDES}
+        eyebrow="Guide nº 1 · employeurs"
         title={
           <>
             Les OPCO, mode d&apos;emploi&nbsp;:<br />
@@ -132,7 +151,7 @@ export default function ComprendreLesOpcoPage() {
                 <tr className={LIGNE}>
                   <th scope="row" className={TITRE_LIGNE}>Contrat d&apos;apprentissage</th>
                   <td data-label="Pour qui" className={CELLULE}>Toutes tailles</td>
-                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Coût de formation du CFA au niveau «&nbsp;NPEC&nbsp;» fixé par la branche (révision 2026 de France compétences : valeur de référence plafonnée à 11 000 € pour les niveaux 5 à 7, modulable jusqu&apos;à 20 % en plus ou en moins par la branche, sans descendre sous 4 000 €)</td>
+                  <td data-label="Ce qui est pris en charge" className={CELLULE}>Coût de formation du CFA au niveau «&nbsp;NPEC&nbsp;» fixé par la branche (révision 2026 de France compétences : valeur de référence plafonnée à 11 000 € pour les niveaux 5 à 7, modulable jusqu&apos;à 30 % en plus ou en moins par la branche, sans descendre sous 4 000 € ; nouveaux niveaux pour les contrats conclus depuis le 1er septembre 2026, décret n° 2026-832 du 29 août 2026)</td>
                 </tr>
                 <tr className={LIGNE}>
                   <th scope="row" className={TITRE_LIGNE}>Contrat de professionnalisation</th>
@@ -154,8 +173,8 @@ export default function ComprendreLesOpcoPage() {
           </div>
           <Callout tone="warn" title="Apprentissage : 750 € à la charge de l'employeur depuis juillet 2025">
             Pour tout contrat d&apos;apprentissage visant un diplôme de niveau 6 ou 7 (Bac+3 et
-            plus), l&apos;employeur verse une participation obligatoire de 750 € par contrat,
-            déduite du montant versé au CFA (décret n° 2025-585 du 27 juin 2025).{' '}
+            plus), l&apos;employeur verse une participation obligatoire de 750 € par contrat, quelle
+            que soit sa durée, facturée par le CFA (décret n° 2025-585 du 27 juin 2025).{' '}
             <Source href="https://entreprendre.service-public.gouv.fr/actualites/A18329">
               service-public.gouv.fr
             </Source>
@@ -171,7 +190,8 @@ export default function ComprendreLesOpcoPage() {
             légale est un impôt affecté, pas une cagnotte récupérable.
           </p>
           <p>
-            L&apos;écart est réel : pour 2024, France compétences mesure un reste à charge moyen de{' '}
+            L&apos;écart est réel : pour 2024, France compétences mesure, à partir des versements
+            volontaires des entreprises à leur OPCO, un reste à charge moyen de{' '}
             <strong className="amount">38 %</strong>{' '}du coût d&apos;une formation soutenue par les OPCO, contre{' '}
             <strong className="amount">67 %</strong>{' '}dans les entreprises de plus de 50 salariés.{' '}
             <Source href="https://www.francecompetences.fr/fiche-ruf/le-soutien-au-plan-de-developpement-des-competences-des-entreprises/">

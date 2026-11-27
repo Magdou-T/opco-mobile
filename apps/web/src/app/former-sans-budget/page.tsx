@@ -12,9 +12,25 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { typo } from '@/lib/format';
 import { INSECABLE } from '@/lib/insecable';
-import { PAGES, metadonnees } from '@/lib/metadonnees';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
+import { grapheDePage } from '@/lib/donnees-structurees';
+import { PAGES, REVUE_DES_GUIDES, metadonnees } from '@/lib/metadonnees';
 
 export const metadata: Metadata = metadonnees(PAGES.formerSansBudget);
+
+/** Fil d'Ariane du guide : il fait partie des guides de la page Employeurs. */
+const FIL = { page: 'Se former sans budget', intermediaires: [{ nom: 'Employeurs', chemin: '/employeurs/' }] };
+
+const GRAPHE = grapheDePage({
+  chemin: PAGES.formerSansBudget.chemin,
+  titre: PAGES.formerSansBudget.titre,
+  description: PAGES.formerSansBudget.description,
+  type: 'Article',
+  nomCourt: FIL.page,
+  intermediaires: FIL.intermediaires,
+  modifieLe: REVUE_DES_GUIDES,
+  publieLe: '2026-10-13',
+});
 
 const TOC = [
   { id: 'principe', label: 'Le principe' },
@@ -74,8 +90,11 @@ const ACTIONS_COLLECTIVES = [
 export default function FormerSansBudgetPage() {
   return (
     <main>
+      <DonneesStructurees graphe={GRAPHE} />
       <GuideHero
-        eyebrow="Guide nº 3 · dispositifs vérifiés octobre 2026"
+        fil={FIL}
+        revue={REVUE_DES_GUIDES}
+        eyebrow="Guide nº 3 · employeurs"
         title={
           <>
             Se former{' '}
@@ -102,7 +121,8 @@ export default function FormerSansBudgetPage() {
           <p>
             Les coûts pédagogiques sont réglés directement par l&apos;OPCO (souvent à 100 %),
             l&apos;entreprise n&apos;avance rien (la réforme de la TVA des OPCO du 1er octobre 2026
-            limite la subrogation de paiement selon l&apos;OPCO : voir sa fiche), et{' '}
+            limite la subrogation de paiement selon l&apos;OPCO : voir sa fiche ; OPCO Santé et
+            Uniformation, restés exonérés de TVA, ne sont pas concernés), et{' '}
             <strong>son enveloppe annuelle reste intacte</strong>{' '}pour d&apos;autres projets,
             selon l&apos;OPCO et la branche. Les places sont limitées par des quotas et par les
             fonds disponibles, les catalogues s&apos;épuisent en cours d&apos;année.
@@ -155,11 +175,13 @@ export default function FormerSansBudgetPage() {
               <strong>Participation forfaitaire</strong> : depuis le 2 avril 2026, le salarié paie
               150 € sur chaque formation CPF,{' '}
               <strong>sauf si l&apos;employeur cofinance la formation par un abondement</strong>.
-              Le projet de loi de finances 2027, présenté le 1er octobre 2026 et non adopté au
-              6 octobre 2026, prévoit un complément pouvant atteindre 200 € pour les formations
-              validées depuis le 2 octobre 2026. Les secteurs prioritaires et la plupart des
-              formations cofinancées par un tiers à hauteur d&apos;au moins 150 € en seraient
-              exonérés.
+              Pour les formations validées depuis le 2 octobre 2026, le projet de loi de finances
+              pour 2027 (article 89) prévoit un complément de participation ; Mon Compte Formation
+              annonce un montant pouvant atteindre 200 €, à régler en 2027. Ce texte n&apos;est pas
+              adopté au 27 novembre 2026 : rejeté par l&apos;Assemblée nationale le 4 novembre, il
+              est en discussion au Sénat depuis le 19 novembre. Les secteurs prioritaires et la
+              plupart des formations cofinancées par un tiers à hauteur d&apos;au moins 150 € en
+              seraient exonérés.
             </li>
             <li>
               <strong>Abondements employeur</strong> : versés via le portail des financeurs
@@ -201,7 +223,7 @@ export default function FormerSansBudgetPage() {
             Condition préalable : votre OPCO doit avoir une opération FSE+ ouverte aux demandes.
             L&apos;appel à projets national 2026-2027, réservé aux OPCO, est clos depuis le 8 juin
             2026, et chaque OPCO fixe ses thèmes, ses taux et ses plafonds. État des lieux au
-            6 octobre 2026, à confirmer auprès de votre conseiller :
+            27 novembre 2026, à confirmer auprès de votre conseiller :
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
@@ -211,11 +233,19 @@ export default function FormerSansBudgetPage() {
               début de la formation et au plus tard le 15 décembre 2027.
             </li>
             <li>
-              <Link href="/opco/akto/" className="lien">AKTO</Link>,{' '}
-              <Link href="/opco/opco-ep/" className="lien">OPCO EP</Link> et{' '}
-              <Link href="/opco/ocapiat/" className="lien">OCAPIAT</Link>{' '}:
-              dispositifs 2025-2026 clos (dépôts jusqu&apos;au 6 avril 2026 chez OPCO EP, jusqu&apos;au
-              13 mars 2026 chez OCAPIAT).
+              <Link href="/opco/akto/" className="lien">AKTO</Link>{' '}: opération FSE+ 2026-2027
+              annoncée le 19 novembre 2026, jusqu&apos;à 50 %, entreprises de toutes tailles, pour
+              des actions réalisées entre le 1er décembre 2026 et le 31 décembre 2027 ; contacter le
+              conseiller avant tout dépôt.
+            </li>
+            <li>
+              <Link href="/opco/opco-ep/" className="lien">OPCO EP</Link>{' '}: opération FSE+
+              2026-2027, 50 % des coûts de formation, actions terminées au 31 décembre 2027, dossier
+              déposé au plus tard le 5 novembre 2027.
+            </li>
+            <li>
+              <Link href="/opco/ocapiat/" className="lien">OCAPIAT</Link>{' '}: dispositif 2025-2026
+              clos (dépôts jusqu&apos;au 13 mars 2026), aucune opération 2026-2027 affichée.
             </li>
             <li>
               <Link href="/opco/opco2i/" className="lien">OPCO 2i</Link>,{' '}
@@ -240,7 +270,7 @@ export default function FormerSansBudgetPage() {
             {' · '}
             <Source href="https://www.opco-atlas.fr/entreprise/beneficier-fse.html">ATLAS</Source>
             {' · '}
-            <Source href="https://www.akto.fr/beneficier-dune-aide-du-fse-en-2025-comment-faire/">AKTO</Source>
+            <Source href="https://www.akto.fr/beneficier-dune-aide-du-fse-en-2026-2027-comment-faire/">AKTO</Source>
             {' · '}
             <Source href="https://www.opcoep.fr/fonds-social-europeen">OPCO EP</Source>
             {' · '}
@@ -285,7 +315,8 @@ export default function FormerSansBudgetPage() {
               <strong>Le projet de transition professionnelle (PTP)</strong>{' '}: à
               l&apos;initiative du salarié, financé par les associations{' '}
               <strong>Transitions Pro</strong>{' '}régionales (pas par l&apos;OPCO), rémunération
-              maintenue à 100 % jusqu&apos;à 2 SMIC. Aucun impact sur le budget formation de
+              maintenue à 100 % jusqu&apos;à 2 Smic, à 90 % au-delà, puis à 60 % après un an ou
+              1 200 heures. Aucun impact sur le budget formation de
               l&apos;entreprise.{' '}
               <Source href="https://www.transitionspro.fr/nos-dispositifs/projet-de-transition-professionnelle/">
                 transitionspro.fr
@@ -294,6 +325,10 @@ export default function FormerSansBudgetPage() {
               <Source href="https://code.travail.gouv.fr/code-du-travail/d6323-18-4">
                 art. D.6323-18-4
               </Source>
+              {' · '}
+              <Source href="https://www.service-public.gouv.fr/particuliers/vosdroits/F14018">
+                service-public.gouv.fr (rémunération)
+              </Source>
             </li>
           </ul>
         </GuideSection>
@@ -301,9 +336,9 @@ export default function FormerSansBudgetPage() {
         <GuideSection id="disparus" number="06" title="Ce qui n'existe plus en 2026">
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong>FNE-Formation</strong>{' '}: plus de nouveaux financements, les derniers
-              accords devaient être conclus fin 2024 et le dispositif n&apos;a pas été doté
-              depuis. Méfiez-vous des pages qui le présentent encore comme actif.
+              <strong>FNE-Formation</strong>{' '}: aucun nouveau conventionnement depuis 2025 ; les
+              crédits prévus pour 2027 ne servent qu&apos;à payer les conventions déjà signées.
+              Méfiez-vous des pages qui le présentent encore comme actif.
             </li>
             <li>
               <strong>Pro-A</strong>{' '}et <strong>Transitions collectives</strong> : absorbées par

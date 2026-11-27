@@ -1,18 +1,29 @@
 import type { Metadata } from 'next';
 import { ContactForm } from '@/components/site/ContactForm';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
 import { Callout } from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { Etiquette } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import { CONTACT_EMAIL } from '@/lib/contact';
 import { DOMAINES_DE_FORMATION } from '@/lib/domaines';
+import { grapheDePage } from '@/lib/donnees-structurees';
 import { PAGES, metadonnees } from '@/lib/metadonnees';
 
 export const metadata: Metadata = metadonnees(PAGES.contact);
 
+const GRAPHE = grapheDePage({
+  chemin: PAGES.contact.chemin,
+  titre: PAGES.contact.titre,
+  description: PAGES.contact.description,
+  type: 'ContactPage',
+  nomCourt: 'Contact',
+});
+
 export default function ContactPage() {
   return (
     <main>
+      <DonneesStructurees graphe={GRAPHE} />
       <header className="border-b border-filet/70">
         <div className="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 md:pt-14 md:pb-16">
           <p className="surtitre">Contact · SFG Développement</p>

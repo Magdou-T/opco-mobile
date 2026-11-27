@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { EMBEDDED_OPCOS } from '@opco/core';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Etiquette } from '@/components/ui/Etiquette';
 import { Icon } from '@/components/ui/Icon';
 import { extrait } from '@/lib/extrait';
 import { trierParNom } from '@/lib/fiche';
-import { dateFr, typo } from '@/lib/format';
+import { adresseAbsolue, grapheDePage } from '@/lib/donnees-structurees';
+import { dateFr, typo, verificationLaPlusRecente } from '@/lib/format';
 import { PAGES, metadonnees } from '@/lib/metadonnees';
 
 export const metadata: Metadata = metadonnees(PAGES.opco);
@@ -18,9 +20,34 @@ const secteurs = (texte: string): string => typo(extrait(texte, 110));
 /** Les OPCO dans l'ordre alphabétique (article élidé ignoré : L'Opcommerce se range à O). */
 const OPCOS = trierParNom(EMBEDDED_OPCOS);
 
+/** Le répertoire : une page de collection et la liste ordonnée des 11 fiches. */
+const GRAPHE = grapheDePage({
+  chemin: PAGES.opco.chemin,
+  titre: PAGES.opco.titre,
+  description: PAGES.opco.description,
+  type: 'CollectionPage',
+  nomCourt: 'Les 11 OPCO',
+  modifieLe: verificationLaPlusRecente(EMBEDDED_OPCOS) || undefined,
+  autres: [
+    {
+      '@type': 'ItemList',
+      '@id': `${adresseAbsolue(PAGES.opco.chemin)}#liste`,
+      name: 'Les 11 opérateurs de compétences (OPCO)',
+      numberOfItems: OPCOS.length,
+      itemListElement: OPCOS.map((o, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: o.name,
+        url: adresseAbsolue(`/opco/${o.slug}/`),
+      })),
+    },
+  ],
+});
+
 export default function OpcoIndexPage() {
   return (
     <main>
+      <DonneesStructurees graphe={GRAPHE} />
       <header className="border-b border-filet/70">
         <div className="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 md:pt-14 md:pb-16">
           <p className="surtitre">Le répertoire · critères 2026</p>
@@ -28,7 +55,7 @@ export default function OpcoIndexPage() {
             Les {OPCOS.length} <span className="mark">opérateurs</span> de compétences
           </h1>
           <p className="mt-5 max-w-2xl text-chapeau text-texte-doux">
-            Chaque entreprise relève d&apos;un seul OPCO, déterminé par sa convention collective (code IDCC). Chaque fiche
+            En règle générale, une entreprise relève d&apos;un seul OPCO, celui de sa convention collective (code IDCC). Chaque fiche
             rassemble les barèmes publiés, leur source officielle et les dispositifs complémentaires&nbsp;: certains
             s&apos;ajoutent à votre budget, d&apos;autres ont leur propre enveloppe ou remplacent le plan de développement
             des compétences.

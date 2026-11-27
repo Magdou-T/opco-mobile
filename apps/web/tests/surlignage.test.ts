@@ -48,9 +48,10 @@ describe('surlignage de plusieurs mots', () => {
       surlignagesHorsGroupe(readFileSync(f, 'utf8')).map((t) => `${relative(SRC, f)} : ${t}`),
     );
     assert.deepEqual(fautes, []);
-    // Les cinq titres concernés : accueil, obligations, comprendre les OPCO, se former sans budget, page 404.
+    // Titres concernés : accueil, obligations, comprendre les OPCO, se former sans budget, page 404, puis (revue du
+    // 27/11/2026) quel est mon OPCO et méthode et sources.
     const groupes = fichiers.reduce((n, f) => n + (readFileSync(f, 'utf8').match(/className="mark-groupe"/g)?.length ?? 0), 0);
-    assert.equal(groupes, 5);
+    assert.equal(groupes, 7);
   });
 
   test('le groupe est un bloc en ligne borné à la largeur de la ligne, où le surlignage peut passer à la ligne', () => {

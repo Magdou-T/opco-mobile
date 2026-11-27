@@ -9,7 +9,9 @@ import {
   GuideCta,
 } from '@/components/site/Guide';
 import { cx } from '@/lib/cx';
-import { PAGES, metadonnees } from '@/lib/metadonnees';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
+import { grapheDePage } from '@/lib/donnees-structurees';
+import { PAGES, REVUE_DES_GUIDES, metadonnees } from '@/lib/metadonnees';
 
 /* Tableau des taux : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft), contribution en
    titre de ligne, taux en chiffres clés Montserrat tabulaires. Retrait intérieur de 14 px sous 360 px : à 320 px, le
@@ -19,6 +21,20 @@ const CONTRIBUTION = 'px-3.5 py-3.5 text-left leading-snug font-medium text-text
 const TAUX = 'amount px-3.5 py-3.5 text-right text-base whitespace-nowrap text-texte min-[360px]:px-4 sm:px-5';
 
 export const metadata: Metadata = metadonnees(PAGES.obligations);
+
+/** Fil d'Ariane du guide : il fait partie des guides de la page Employeurs. */
+const FIL = { page: 'Obligations des entreprises', intermediaires: [{ nom: 'Employeurs', chemin: '/employeurs/' }] };
+
+const GRAPHE = grapheDePage({
+  chemin: PAGES.obligations.chemin,
+  titre: PAGES.obligations.titre,
+  description: PAGES.obligations.description,
+  type: 'Article',
+  nomCourt: FIL.page,
+  intermediaires: FIL.intermediaires,
+  modifieLe: REVUE_DES_GUIDES,
+  publieLe: '2026-10-13',
+});
 
 const TOC = [
   { id: 'contributions', label: 'Ce que votre entreprise verse' },
@@ -31,8 +47,11 @@ const TOC = [
 export default function ObligationsPage() {
   return (
     <main>
+      <DonneesStructurees graphe={GRAPHE} />
       <GuideHero
-        eyebrow="Guide nº 2 · taux vérifiés octobre 2026"
+        fil={FIL}
+        revue={REVUE_DES_GUIDES}
+        eyebrow="Guide nº 2 · employeurs"
         title={
           <>
             Votre entreprise paie déjà.
@@ -153,7 +172,7 @@ export default function ObligationsPage() {
             qu&apos;aucun accord d&apos;entreprise ou de branche ne lie sur la périodicité des
             entretiens appliquent directement les nouvelles règles depuis le 26 octobre 2025.
             Les accords existants devaient être révisés : le nouvel article L.6315-1
-            s&apos;applique à eux à compter du <strong>1er octobre 2026</strong>.
+            s&apos;applique à eux depuis le <strong>1er octobre 2026</strong>.
           </Callout>
           <ul className="list-disc space-y-2 pl-5">
             <li>Premier entretien <strong>dans l&apos;année suivant l&apos;embauche</strong> ;</li>
@@ -184,15 +203,19 @@ export default function ObligationsPage() {
           <p>
             Dans les entreprises de <strong>50 salariés et plus</strong>, si un salarié
             n&apos;a pas bénéficié des entretiens obligatoires <strong>et</strong>{' '}d&apos;au
-            moins une formation non obligatoire sur la période de référence, l&apos;employeur
+            moins une formation non obligatoire au cours des 8 dernières années, l&apos;employeur
             doit verser un <strong>abondement correctif de <span className="amount mark">3 000 €</span></strong>{' '}sur son CPF, via la
             Caisse des dépôts.
           </p>
           <p>
-            La Cour de cassation a confirmé le 21 janvier 2026 que les deux conditions de
-            l&apos;article L.6323-13 sont <strong>cumulatives</strong>{' '}: l&apos;absence
-            d&apos;entretiens seule ne déclenche pas l&apos;abondement, mais l&apos;employeur qui
-            n&apos;organise pas les entretiens obligatoires peut être sanctionné.
+            La Cour de cassation a confirmé que les deux conditions de l&apos;article L.6323-13
+            sont <strong>cumulatives</strong>{' '}: l&apos;absence d&apos;entretiens seule ne déclenche
+            pas l&apos;abondement (Cass. soc., 21 janvier 2026, n° 24-12.972, arrêt rendu sur
+            l&apos;ancienne période de six ans). L&apos;arrêt ne se prononce pas sur d&apos;autres
+            sanctions de l&apos;employeur.{' '}
+            <Source href="https://www.legifrance.gouv.fr/juri/id/JURITEXT000053402962">
+              Légifrance
+            </Source>
           </p>
           <p className="text-sm text-texte-discret">
             Sources :{' '}

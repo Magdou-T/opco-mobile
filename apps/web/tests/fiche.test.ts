@@ -439,7 +439,7 @@ describe('restePrecision', () => {
     const reste = restePrecision(deuxI);
     assert.ok(reste.startsWith('(« pour toutes les entreprises de moins de 50 salariés'), reste);
     assert.ok(reste.includes('https://www.opco2i.fr/plan-de-developpement-des-competences-la-prise-en-charge-evolue/).'), reste);
-    assert.ok(reste.endsWith('(vérifié le 05/10/2026)'), reste);
+    assert.ok(reste.endsWith('(vérifié le 27/11/2026)'), reste);
     assert.ok(!reste.includes('La règle PDC 2026'), reste);
 
     // La règle d'ATLAS cite sa page : le résumé est l'extrait cité, la phrase de provenance reste.
@@ -672,9 +672,11 @@ describe('alertes', () => {
     assert.deepEqual(
       resumeDesAlertes(opco('akto').alertes ?? []).map((t) => [t.libelle, t.nombre]),
       [
-        ['Fonds épuisés', 10],
+        // Revue du 27/11/2026 : enveloppe de la restauration rapide épuisée, date limite de dépôt 2026 au 20/11.
+        ['Fonds épuisés', 11],
         ['Dispositif terminé', 1],
         ['Modalités de paiement modifiées', 1],
+        ['Échéance', 1],
       ],
     );
   });
@@ -692,7 +694,7 @@ describe('alertes', () => {
     assert.deepEqual(parBranche, {
       hcr: 0,
       proprete: 0,
-      'restauration-rapide': 0,
+      'restauration-rapide': 1,
       'prevention-securite': 0,
       'organismes-de-formation': 1,
       'akto-pdc-2026-epuise': 7,
@@ -711,7 +713,7 @@ describe('plan de la fiche', () => {
       { id: 'bareme', libelle: 'Barème général' },
       { id: 'tailles', libelle: "Selon la taille de l'entreprise" },
       { id: 'branches', libelle: 'Barèmes par branche' },
-      { id: 'alertes', libelle: 'Alertes', compte: 12 },
+      { id: 'alertes', libelle: 'Alertes', compte: 14 },
       { id: 'dispositifs', libelle: 'Financements complémentaires' },
       { id: 'alternance', libelle: 'Alternance, CPF et VAE' },
       { id: 'pratique', libelle: 'En pratique' },

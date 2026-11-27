@@ -14,13 +14,24 @@ const CRITERES = DERNIERE_VERIFICATION
   ? `Critères 2026 · vérifiés ${moisAnneeFr(DERNIERE_VERIFICATION)}`
   : 'Critères 2026';
 
-const PAGES = [
+const PROFILS = [
+  { href: '/employeurs', label: 'Employeurs' },
+  { href: '/salaries', label: 'Salariés' },
+  { href: '/demandeurs-emploi', label: "Demandeurs d'emploi" },
+  { href: '/cpf', label: 'Compte personnel de formation' },
+  { href: '/a-propos', label: 'Méthode et sources' },
+  { href: '/contact', label: 'Nous contacter' },
+];
+
+const GUIDES = [
   { href: '/simulateur', label: 'Simulateur de financement' },
+  { href: '/quel-est-mon-opco', label: 'Quel est mon OPCO ?' },
   { href: '/comprendre-les-opco', label: 'Comprendre les OPCO' },
   { href: '/obligations', label: 'Obligations des entreprises' },
   { href: '/former-sans-budget', label: 'Se former sans budget' },
+  { href: '/alternance', label: 'Alternance' },
   { href: '/opco', label: 'Fiches des 11 OPCO' },
-  { href: '/contact', label: 'Nous contacter' },
+  { href: '/lexique', label: 'Lexique' },
 ];
 
 const SOURCES = [
@@ -46,7 +57,7 @@ export function SiteFooter() {
 
       {/* Les deux listes de liens côte à côte dès le téléphone : le pied garde ses cibles de 44 px sans s'étirer sur
           plus d'un écran. */}
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-4 py-12 sm:px-6 md:py-14 lg:grid-cols-[1.5fr_1fr_1fr] lg:gap-10">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-4 py-12 sm:px-6 md:py-14 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10">
         <div className="col-span-2 lg:col-span-1">
           <Link href="/" className="-m-1.5 inline-block rounded-xl p-1.5">
             <Logo fond="sombre" />
@@ -65,10 +76,23 @@ export function SiteFooter() {
           </a>
         </div>
 
-        <nav aria-label="Pages du site">
-          <p className="surtitre mb-3">Naviguer</p>
+        <nav aria-label="Pages par profil">
+          <p className="surtitre mb-3">Par profil</p>
           <ul className="text-sm lg:space-y-1.5">
-            {PAGES.map((p) => (
+            {PROFILS.map((p) => (
+              <li key={p.href}>
+                <Link className={LIEN} href={p.href}>
+                  {p.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label="Guides et outils">
+          <p className="surtitre mb-3">Guides et outils</p>
+          <ul className="text-sm lg:space-y-1.5">
+            {GUIDES.map((p) => (
               <li key={p.href}>
                 <Link className={LIEN} href={p.href}>
                   {p.label}

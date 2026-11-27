@@ -1,4 +1,8 @@
 import type { ReactNode } from 'react';
+import Link from 'next/link';
+import { FilDAriane } from '@/components/site/FilDAriane';
+import type { Etape } from '@/lib/donnees-structurees';
+import { dateFr } from '@/lib/format';
 import { BandeAppel } from '@/components/site/BandeAppel';
 import { Sommaire } from '@/components/site/Sommaire';
 import { TitreDeSection } from '@/components/site/TitreDeSection';
@@ -11,13 +15,44 @@ import { typoDesEnfants } from '@/lib/typographie';
    des pages, vérifiés contre leurs sources (W7) : ces composants ne fixent que la mise en page. Voir DESIGN.md,
    section 16. */
 
-export function GuideHero({ eyebrow, title, lead }: { eyebrow: string; title: ReactNode; lead: string }) {
+/**
+ * En-tête d'un guide. `fil` : fil d'Ariane visible au-dessus du surtitre (les données structurées de la page décrivent
+ * le même chemin). `revue` : date de la dernière vérification du guide (AAAA-MM-JJ), annoncée avec son auteur et le lien
+ * vers la méthode : qui écrit, quand, comment (signaux de confiance que lisent aussi les moteurs).
+ */
+export function GuideHero({
+  eyebrow,
+  title,
+  lead,
+  fil,
+  revue,
+}: {
+  eyebrow: string;
+  title: ReactNode;
+  lead: string;
+  fil?: { page: string; intermediaires?: readonly Etape[] };
+  revue?: string;
+}) {
   return (
     <header className="border-b border-filet/70">
-      <div className="mx-auto max-w-6xl px-4 pt-10 pb-12 sm:px-6 md:pt-14 md:pb-16">
+      <div className={`mx-auto max-w-6xl px-4 pb-12 sm:px-6 md:pb-16 ${fil ? 'pt-6 md:pt-8' : 'pt-10 md:pt-14'}`}>
+        {fil && (
+          <div className="mb-8">
+            <FilDAriane page={fil.page} intermediaires={fil.intermediaires} />
+          </div>
+        )}
         <p className="surtitre">{eyebrow}</p>
         <h1 className="mt-5 max-w-4xl text-affiche font-bold text-texte">{typoDesEnfants(title)}</h1>
         <p className="mt-6 max-w-2xl text-chapeau text-texte-doux">{typo(lead)}</p>
+        {revue && (
+          <p className="mt-6 text-sm text-texte-discret">
+            Rédigé et vérifié par l&apos;équipe SFG Développement · mis à jour le{' '}
+            <time dateTime={revue}>{dateFr(revue)}</time> ·{' '}
+            <Link href="/a-propos/" className="lien">
+              notre méthode et nos sources
+            </Link>
+          </p>
+        )}
       </div>
     </header>
   );

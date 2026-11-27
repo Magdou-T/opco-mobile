@@ -3,6 +3,8 @@ import { Montserrat, Inter } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { DonneesStructurees } from "@/components/site/DonneesStructurees";
+import { grapheDuSite } from "@/lib/donnees-structurees";
 import { SCRIPT_DETECTION_INTEGRATION } from "@/lib/integration";
 import { ADRESSE_DU_SITE, GABARIT_DU_TITRE, PAGES } from "@/lib/metadonnees";
 
@@ -43,6 +45,8 @@ export default function RootLayout({
     <html lang="fr" className={`${montserrat.variable} ${inter.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_DETECTION_INTEGRATION }} />
+        {/* Éditeur et site (Schema.org) : chaque page y renvoie par leur @id (lib/donnees-structurees.ts). */}
+        <DonneesStructurees graphe={grapheDuSite()} />
       </head>
       <body className="flex min-h-full flex-col bg-papier text-texte">
         <a

@@ -30,7 +30,7 @@ export interface MentionsLegales {
     nom: Champ;
     fonction: Champ;
   };
-  /** Hébergeur du site (indice à vérifier dans le tableau de bord de l'hébergement : Hostinger International Ltd, Chypre). */
+  /** Hébergeur du site : l'entité qui sert réellement les pages (en-têtes HTTP « platform: hostinger », DNS Hostinger). */
   hebergeur: {
     denomination: Champ;
     adresse: Champ;
@@ -50,10 +50,14 @@ export interface MentionsLegales {
 /** Les informations publiées. Le contrôleur remplace chaque `null` par l'information fournie par l'éditeur. */
 // Valeurs de l'éditeur reprises de ses propres pages publiques (conditions générales de vente et politique de
 // confidentialité de sfgdeveloppement.fr, relues le 09/10/2026) : capital, greffe, téléphone, exonération de TVA,
-// coordonnées pour exercer ses droits, durée de conservation, absence de délégué. L'hébergeur est celui du sous-domaine
-// qui porte l'application (OVHcloud, comme le site WordPress) : identité et adresse de la notice officielle d'OVH
-// (ovhcloud.com/fr/terms-and-conditions/), qui ne donne pas de numéro de téléphone. Ce qui n'est écrit nulle part (directeur
-// de la publication, téléphone de l'hébergeur) reste à `null`, donc « à compléter » sur la page.
+// coordonnées pour exercer ses droits, durée de conservation, absence de délégué. Hébergeur : le site financementopco.fr
+// est servi par Hostinger (relevé du 27/11/2026 : en-têtes HTTP « platform: hostinger », serveurs DNS de Hostinger), et non
+// par OVHcloud comme l'indiquait la version d'octobre, écrite pour un sous-domaine de sfgdeveloppement.fr. Pour un client
+// établi dans l'Union européenne, l'entité contractante est HOSTINGER INTERNATIONAL LIMITED (conditions d'utilisation de
+// Hostinger révisées le 29/09/2026, hostinger.com/legal/universal-terms-of-service-agreement : « Any other country not
+// listed above (including EU countries), then the contracting entity will be HOSTINGER INTERNATIONAL LIMITED »). Hostinger
+// ne publie aucun numéro de téléphone (assistance par messagerie instantanée, hostinger.com/fr/contact) : la ligne le dit
+// plutôt que d'en reprendre un d'un annuaire ; l'éditeur la remplace s'il obtient un numéro par son contrat.
 export const MENTIONS: MentionsLegales = {
   editeur: {
     denomination: 'SFG Développement',
@@ -74,9 +78,10 @@ export const MENTIONS: MentionsLegales = {
     fonction: '',
   },
   hebergeur: {
-    denomination: 'OVH SAS (OVHcloud)',
-    adresse: '2 rue Kellermann, 59100 Roubaix',
-    telephone: null,
+    denomination: 'Hostinger International Limited, société de droit chypriote',
+    adresse: '61 Lordou Vironos Street, 6023 Larnaca, Chypre',
+    telephone:
+      "Aucun numéro publié par l'hébergeur : assistance en ligne sur hostinger.com/fr/contact",
   },
   donnees: {
     baseLegaleContact: "Intérêt légitime de répondre à votre demande (article 6, paragraphe 1, point f, du RGPD)",

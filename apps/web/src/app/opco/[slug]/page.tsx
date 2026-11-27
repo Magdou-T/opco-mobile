@@ -8,6 +8,7 @@ import { CarteDispositif, LegendeCumul } from '@/components/opco/Dispositif';
 import { OuvertureDesDetails } from '@/components/opco/OuvertureDesDetails';
 import { ListeTailles } from '@/components/opco/Tailles';
 import { TexteDonnees } from '@/components/opco/TexteDonnees';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
 import { Sommaire } from '@/components/site/Sommaire';
 import { TitreDeSection } from '@/components/site/TitreDeSection';
 import { AlertesOpco } from '@/components/ui/AlertesOpco';
@@ -28,6 +29,7 @@ import {
 } from '@/lib/fiche';
 import type { CarteTexteLibre, IdSection } from '@/lib/fiche';
 import { CUMUL_ORDRE, dateFr, de, typo } from '@/lib/format';
+import { grapheDePage } from '@/lib/donnees-structurees';
 import { descriptionDeFiche, metadonnees } from '@/lib/metadonnees';
 
 export function generateStaticParams() {
@@ -43,6 +45,35 @@ export async function generateMetadata({
   const opco = getEmbeddedOpcoBySlug(slug);
   if (!opco) return {};
   return metadonnees(descriptionDeFiche(opco));
+}
+
+/**
+ * Données structurées d'une fiche : la page (datée de la vérification des barèmes), son fil d'Ariane et l'OPCO dont elle
+ * parle, avec l'adresse de son site officiel (origine de la page de financement citée par les données).
+ */
+function grapheDeFiche(opco: NonNullable<ReturnType<typeof getEmbeddedOpcoBySlug>>) {
+  const page = descriptionDeFiche(opco);
+  let siteOfficiel: string | undefined;
+  try {
+    siteOfficiel = opco.url_finance_page ? `${new URL(opco.url_finance_page).origin}/` : undefined;
+  } catch {
+    siteOfficiel = undefined;
+  }
+  return grapheDePage({
+    chemin: page.chemin,
+    titre: page.titre,
+    description: page.description,
+    nomCourt: opco.name,
+    intermediaires: [{ nom: 'Les 11 OPCO', chemin: '/opco/' }],
+    modifieLe: opco.derniere_verification ?? undefined,
+    sujet: {
+      '@type': 'Organization',
+      name: opco.name,
+      description: opco.nom_complet,
+      ...(siteOfficiel ? { url: siteOfficiel } : {}),
+      knowsAbout: opco.secteurs,
+    },
+  });
 }
 
 /** Pastille d'icône des cartes « Alternance, CPF et VAE ». */
@@ -95,6 +126,7 @@ export default async function OpcoFichePage({
 
   return (
     <main>
+      <DonneesStructurees graphe={grapheDeFiche(opco)} />
       <OuvertureDesDetails />
 
       {/* ================= EN-TÊTE ================= */}

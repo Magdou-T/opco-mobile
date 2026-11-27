@@ -12,11 +12,15 @@ import { cx } from '@/lib/cx';
  * passés ici tout faits : leur code ne part pas dans le navigateur.
  */
 
+/* Une entrée par public (employeurs, salariés, demandeurs d'emploi, titulaires d'un CPF) : chacun trouve sa page en un
+   clic ; les guides thématiques (OPCO, obligations, former sans budget, alternance) partent de la page Employeurs et du
+   pied de page. Libellés plus courts que les précédents (68 caractères au lieu de 76) : la ligne de 1 280 px tient. */
 const NAVIGATION = [
   { href: '/simulateur', label: 'Simulateur' },
-  { href: '/comprendre-les-opco', label: 'Comprendre les OPCO' },
-  { href: '/obligations', label: 'Obligations' },
-  { href: '/former-sans-budget', label: 'Former sans budget' },
+  { href: '/employeurs', label: 'Employeurs' },
+  { href: '/salaries', label: 'Salariés' },
+  { href: '/demandeurs-emploi', label: "Demandeurs d'emploi" },
+  { href: '/cpf', label: 'CPF' },
   { href: '/opco', label: 'Les 11 OPCO' },
   { href: '/contact', label: 'Contact' },
 ];

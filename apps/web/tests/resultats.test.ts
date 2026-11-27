@@ -647,7 +647,8 @@ describe('sources d’une aide', () => {
       for (const s of sites) assert.ok(pages.some((p) => p.url === s.url), `${a.id} : ${s.url}`);
     }
     assert.ok(pagesRetirees > 100, `seulement ${pagesRetirees} doublons retirés`);
-    assert.ok(sitesMax <= 6, `jusqu'à ${sitesMax} sites pour une aide`);
+    // Le cofinancement FSE+ cite le site national et ceux des OPCO qui ouvrent une opération (7 sites au 27/11/2026).
+    assert.ok(sitesMax <= 7, `jusqu'à ${sitesMax} sites pour une aide`);
   });
 });
 

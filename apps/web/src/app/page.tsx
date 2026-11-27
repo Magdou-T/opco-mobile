@@ -9,6 +9,10 @@ import { extrait } from '@/lib/extrait';
 import { typo } from '@/lib/format';
 import { PAGES, metadonnees } from '@/lib/metadonnees';
 import { BandeAppel } from '@/components/site/BandeAppel';
+import { DonneesStructurees } from '@/components/site/DonneesStructurees';
+import { QuestionsFrequentes } from '@/components/site/QuestionsFrequentes';
+import { grapheDePage } from '@/lib/donnees-structurees';
+import type { QuestionReponse } from '@/lib/donnees-structurees';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ConfidenceBadge } from '@/components/ui/ConfidenceBadge';
@@ -208,9 +212,83 @@ function ApercuPlan() {
   );
 }
 
+/* ============================================================
+   Une entrée par public : chacun trouve en un clic la page qui part de sa situation.
+   ============================================================ */
+
+const PROFILS: { href: string; icone: IconName; titre: string; texte: string }[] = [
+  {
+    href: '/employeurs/',
+    icone: 'batiment',
+    titre: 'Vous êtes employeur',
+    texte: "Former vos salariés, recruter en alternance, vos obligations : ce que finance l'OPCO selon votre taille.",
+  },
+  {
+    href: '/salaries/',
+    icone: 'personne',
+    titre: 'Vous êtes salarié',
+    texte: 'Plan de formation, CPF, reconversion, VAE, bilan de compétences : les financements à votre portée.',
+  },
+  {
+    href: '/demandeurs-emploi/',
+    icone: 'recrutement',
+    titre: 'Vous cherchez un emploi',
+    texte: 'CPF, aide de France Travail, formations de la Région, embauche avec formation préalable.',
+  },
+  {
+    href: '/cpf/',
+    icone: 'euro',
+    titre: 'Vous utilisez votre CPF',
+    texte: 'Vos droits, le reste à charge, les abondements et les pièges à éviter avant de valider un dossier.',
+  },
+];
+
+/* Questions fréquentes de l'accueil : affichées telles quelles et reprises dans les données structurées. */
+const QUESTIONS: QuestionReponse[] = [
+  {
+    question: "Qu'est-ce qu'un OPCO ?",
+    reponse:
+      "Un opérateur de compétences (OPCO) est un organisme agréé par l'État qui finance l'alternance, la reconversion des salariés et, pour les entreprises de moins de 50 salariés, le plan de développement des compétences. Il en existe 11, chacun pour un ensemble de branches professionnelles.",
+  },
+  {
+    question: 'Comment savoir quel est mon OPCO ?',
+    reponse:
+      "Votre OPCO dépend de la convention collective appliquée par l'entreprise, identifiée par son code IDCC, souvent indiqué sur le bulletin de paie. Le simulateur le retrouve à partir du nom ou du SIREN de l'entreprise ; la page « Quel est mon OPCO ? » détaille la méthode.",
+  },
+  {
+    question: 'Qui peut utiliser financementOPCO ?',
+    reponse:
+      "Les employeurs qui forment ou recrutent, les salariés qui préparent une formation ou une reconversion, les demandeurs d'emploi et les dirigeants non salariés. Le simulateur part de votre situation et recherche les financements qui s'y appliquent.",
+  },
+  {
+    question: 'Les montants affichés sont-ils garantis ?',
+    reponse:
+      "Non. Ce sont des estimations établies à partir des critères publiés par chaque financeur, avec leur source et leur date de vérification. Seul le financeur (OPCO, Caisse des dépôts, France Travail, Région) décide de la prise en charge, après étude du dossier.",
+  },
+  {
+    question: 'Une entreprise de 50 salariés ou plus peut-elle être financée par son OPCO ?',
+    reponse:
+      "Pas sur les fonds mutualisés du plan de développement des compétences, réservés aux entreprises de moins de 50 salariés. Restent l'alternance, la période de reconversion, les contributions conventionnelles de la branche, les versements volontaires et, selon l'OPCO, des actions collectives ou un cofinancement FSE+.",
+  },
+  {
+    question: 'Le simulateur est-il gratuit ?',
+    reponse:
+      "Oui, sans inscription. Le calcul se fait dans votre navigateur : aucune réponse n'est conservée et le site ne dépose aucun cookie.",
+  },
+];
+
+const GRAPHE = grapheDePage({
+  chemin: PAGES.accueil.chemin,
+  titre: PAGES.accueil.titre,
+  description: PAGES.accueil.description,
+  nomCourt: 'Accueil',
+  questions: QUESTIONS,
+});
+
 export default function Home() {
   return (
     <main>
+      <DonneesStructurees graphe={GRAPHE} />
       {/* ================= HERO ================= */}
       <section className="overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 pt-10 pb-8 sm:px-6 sm:pt-14 lg:pt-16 lg:pb-10">
@@ -248,6 +326,44 @@ export default function Home() {
           </div>
 
           <ApercuPlan />
+        </div>
+      </section>
+
+      {/* ================= PAR PROFIL ================= */}
+      <section aria-labelledby="titre-profils" className="border-t border-filet/70">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-20">
+          <SectionTitle
+            id="titre-profils"
+            surtitre="Par profil"
+            titre="Partez de votre situation"
+            chapeau="Les financements ne sont pas les mêmes pour un employeur, un salarié ou une personne qui cherche un emploi. Chaque page dit qui paie quoi, à quelles conditions, avec les sources."
+          />
+          <ul className="mt-10 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+            {PROFILS.map((p) => (
+              <Card as="li" key={p.href} interactive padding="none" className="group">
+                <div className="flex gap-4 p-4 sm:flex-col sm:gap-0 sm:p-6">
+                  <span
+                    aria-hidden="true"
+                    className="grid size-11 shrink-0 place-items-center rounded-2xl bg-turquoise-soft text-turquoise-deep"
+                  >
+                    <Icon name={p.icone} className="size-[22px]" />
+                  </span>
+                  <div className="pr-6 sm:mt-4 sm:pr-0">
+                    <h3 className="text-base leading-snug font-bold tracking-[-0.01em] text-texte sm:text-[1.0625rem]">
+                      <Link href={p.href} className="lien-etendu">
+                        {p.titre}
+                      </Link>
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-texte-doux sm:mt-1.5">{typo(p.texte)}</p>
+                  </div>
+                </div>
+                <Icon
+                  name="fleche"
+                  className="absolute top-4 right-4 size-5 text-orange-deep transition-transform duration-200 group-hover:translate-x-0.5 sm:top-6 sm:right-6"
+                />
+              </Card>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -358,7 +474,7 @@ export default function Home() {
               id="titre-opco"
               surtitre="Le répertoire"
               titre={`Les ${EMBEDDED_OPCOS.length} opérateurs de compétences`}
-              chapeau="Chaque entreprise relève d'un seul OPCO, déterminé par sa convention collective. Chaque fiche rassemble les barèmes publiés, leur source et les dispositifs complémentaires."
+              chapeau="En règle générale, une entreprise relève d'un seul OPCO, celui de la convention collective qu'elle applique. Chaque fiche rassemble les barèmes publiés, leur source et les dispositifs complémentaires."
             />
             <div className="hidden sm:block">
               <Button href="/opco" variant="ghost" fleche>
@@ -398,12 +514,13 @@ export default function Home() {
             <Card tone="teintee" interactive padding="none" className="group">
               <div className="p-4 sm:p-5">
                 <p className="pr-8 font-display text-base leading-snug font-bold tracking-[-0.01em] text-texte sm:text-[1.0625rem]">
-                  <Link href="/simulateur" className="lien-etendu">
+                  <Link href="/quel-est-mon-opco/" className="lien-etendu">
                     Vous ne connaissez pas votre OPCO
                   </Link>
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-texte-doux sm:mt-1.5">
-                  Le simulateur le retrouve à partir du nom ou du SIREN de l&apos;entreprise.
+                  Retrouvez-le par l&apos;IDCC de votre convention collective, ou par le nom ou le SIREN de
+                  l&apos;entreprise dans le simulateur.
                 </p>
               </div>
               <Icon
@@ -422,6 +539,11 @@ export default function Home() {
 
       {/* ================= APPEL À L'ACTION ================= */}
       <BandeAppel id="titre-appel" titre="Cinq minutes pour chiffrer votre projet" libelle="Trouver mes financements" />
+
+      {/* ================= QUESTIONS FRÉQUENTES ================= */}
+      <div className="mx-auto max-w-6xl px-4 pt-16 sm:px-6 md:pt-20">
+        <QuestionsFrequentes questions={QUESTIONS} />
+      </div>
 
       {/* ================= CONTACT ================= */}
       <section aria-labelledby="titre-contact">
