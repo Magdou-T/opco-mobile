@@ -1,4 +1,4 @@
-// Étape 3 — Formation souhaitée.
+// Étape 3 : formation souhaitée.
 // Port RN de opco-funding/src/components/wizard/StepFormation.tsx.
 
 import { Text, View } from 'react-native';

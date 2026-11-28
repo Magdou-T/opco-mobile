@@ -1,0 +1,2659 @@
+{
+  "meta": {
+    "perimetre": "Aides des conseils régionaux liées à la formation professionnelle ouvertes en 2026 : Nouvelle-Aquitaine (75), Occitanie (76), Auvergne-Rhône-Alpes (84)",
+    "date_verification": "2026-10-06",
+    "auteur": "agent regions-3",
+    "nb_aides": 30
+  },
+  "aides": [
+    {
+      "id": "r75-programme-regional-formation",
+      "nom": "Programme régional de formation (PRF) et habilitations de service public",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations pré-qualifiantes et qualifiantes achetées par la Région pour les personnes en recherche d'emploi. Les coûts pédagogiques sont pris en charge par la Région et le stagiaire peut être rémunéré s'il n'est pas indemnisé par France Travail.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être en recherche d'emploi (jeunes et adultes prioritaires)",
+        "La formation doit faire partie de l'offre financée par la Région (catalogue CMaFormation)",
+        "Places limitées : la Région a supprimé plusieurs milliers de places de formation en 2026, vérifier qu'une session est ouverte"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération possible pendant la formation (voir r75-remuneration-stagiaires) si la personne n'est pas indemnisée par France Travail."
+      },
+      "demarches": [
+        "Rechercher une formation financée par la Région sur CMaFormation (cmaformation-na.fr)",
+        "Candidater en ligne ou se faire accompagner par un conseiller (ERIP, France Travail, Mission locale, Cap emploi)",
+        "À l'entrée en formation, constituer avec l'organisme de formation le dossier de rémunération et de protection sociale"
+      ],
+      "url_demarche": "https://www.cmaformation-na.fr/",
+      "sources": [
+        {
+          "url": "https://entreprises.nouvelle-aquitaine.fr/guides-pratiques-de-lentreprise/je-me-forme-pour-trouver-un-emploi",
+          "titre": "Je me forme pour trouver un emploi - Portail Entreprises Région Nouvelle-Aquitaine",
+          "extrait": "Le programme régional de formation (PRF) recouvre toutes les formations financées par la Région Nouvelle-Aquitaine destinées à tous les publics en recherche d'emploi. Sont prioritaires : les demandeurs d’emploi jeunes et adultes."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/economie-et-emploi/service-public-regional-de-la-formation-professionnelle",
+          "titre": "Service Public Régional de la Formation professionnelle - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "La Région Nouvelle-Aquitaine prend en charge les coûts pédagogiques de votre formation et participe à vos frais d'hébergement et de restauration."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/2026.712.SP_deliberation_RI-Remu_AI_Fonds_0.pdf",
+          "titre": "Délibération 2026.712.SP du 15 juin 2026 (rectifiée) - Sécurisation des parcours de formation",
+          "extrait": "Face à cela, la Région a dû se résoudre, à contre -courant de l’évolution des besoins et des attentes, à supprimer plusieurs milliers de places de formation."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/2026.712.SP_deliberation_RI-Remu_AI_Fonds_0.pdf",
+          "titre": "Délibération 2026.712.SP du 15 juin 2026 (rectifiée) - Sécurisation des parcours de formation",
+          "extrait": "Séance Plénière du lundi 15 juin 2026"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-remuneration-stagiaires",
+      "nom": "Rémunération et protection sociale des stagiaires de la formation professionnelle",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle et protection sociale versées par la Région aux personnes en recherche d'emploi non indemnisées qui suivent une formation agréée par la Région, avec des indemnités de transport/hébergement et une prime monoparentale.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "beneficiaire",
+        "duree_min_heures": 150
+      },
+      "conditions": [
+        "Être retenu sur une formation accordée par décision du Conseil régional (formation agréée à la rémunération)",
+        "Parcours de formation d'au moins 150 heures, stages en entreprise compris",
+        "Ne pas être indemnisé par France Travail (régime d'assurance chômage)",
+        "Versement mensuel selon la présence effective en formation",
+        "Barème en vigueur au 1er août 2026 : la bonification des barèmes sur les habilitations de service public est supprimée pour les nouveaux entrants"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 775.65,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Barème mensuel (temps plein) au 1er août 2026 : 775,65 € à partir de 26 ans (et avant 26 ans en cas d'activité salariée antérieure suffisante ou de situation familiale particulière) ; indemnité forfaitaire transport/hébergement de 40 € à 200 € par mois selon la distance ; prime monoparentale de 100 € par mois",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 775.65,
+            "plafond": 2188.27,
+            "libelle": "Travailleur handicapé : 100 % du salaire antérieur si activité antérieure suffisante (plancher 775,65 €, plafond 2 188,27 €), sinon 775,65 €"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 351.47,
+            "libelle": "16-17 ans : 351,47 € par mois"
+          },
+          {
+            "criteres": {
+              "age_min": 18,
+              "age_max": 25
+            },
+            "valeur": 566.17,
+            "libelle": "18-25 ans : 566,17 € par mois (775,65 € si activité salariée antérieure suffisante ou situation familiale particulière)"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Régime public de rémunération exclusif du régime conventionnel (ARE/AREF de France Travail). Non cumulable avec la bourse sanitaire et sociale (r75-bourse-sanitaire-social)."
+      },
+      "demarches": [
+        "S'adresser à l'organisme de formation : il constitue le dossier de rémunération et de protection sociale dès l'entrée en formation (logiciel ROMEO)",
+        "Fournir les justificatifs demandés (situation France Travail, activité antérieure, situation familiale, RQTH le cas échéant)",
+        "L'organisme transmet chaque mois les états de présence ; la rémunération est versée mensuellement"
+      ],
+      "url_demarche": "https://les-aides.nouvelle-aquitaine.fr/economie-et-emploi/remuneration-et-protection-sociale-des-stagiaires-de-la-formation-professionnelle",
+      "sources": [
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/Tableau_bareme.pdf",
+          "titre": "Barèmes de rémunération en vigueur à compter du 1er août 2026 - Région Nouvelle-Aquitaine",
+          "extrait": "BARÈMES DE RÉMUNÉRATION en vigueur à compter du 1er août 2026"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/Tableau_bareme.pdf",
+          "titre": "Barèmes de rémunération en vigueur à compter du 1er août 2026 - Région Nouvelle-Aquitaine",
+          "extrait": "Personnes en recherche d’emploi n’appartenant pas aux catégories ci-dessus et âgés de : • De 16 à 17 ans • De 18 à 25 ans • De 26 ans ou plus 351,47 € 566,17 € 775,65 €"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/Tableau_bareme.pdf",
+          "titre": "Barèmes de rémunération en vigueur à compter du 1er août 2026 - Région Nouvelle-Aquitaine",
+          "extrait": "100% du salaire antérieur Plancher = 775,65 € Plafond = 2 188,27 €"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/Reglement_remuneration_et_protection_sociale_des_stagiaires_0.pdf",
+          "titre": "Règlement d'intervention rémunération et protection sociale des stagiaires (2026) - Région Nouvelle-Aquitaine",
+          "extrait": "Une bonification forfaitaire mensuelle de 100 € est attribuée à chaque stagiaire rémunéré par la Région justifiant, à l’entrée en formation, d’une situation de parent isolé avec au moins un enfant à charge"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/Reglement_remuneration_et_protection_sociale_des_stagiaires_0.pdf",
+          "titre": "Règlement d'intervention rémunération et protection sociale des stagiaires (2026) - Région Nouvelle-Aquitaine",
+          "extrait": "Distance domicile - lieu de formation Indemnité forfaitaire mensuelle Transport seul Transport-Hébergement < 10 kms / 50 € De 10 à 29 kms 40 € 70 € De 30 à 49 kms 60 € 100 € De 50 à 99 kms 100 € 150 € 100 kms et plus 150 € 200 €"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/economie-et-emploi/remuneration-et-protection-sociale-des-stagiaires-de-la-formation-professionnelle",
+          "titre": "Rémunération et protection sociale des stagiaires de la formation professionnelle - Guide des aides",
+          "extrait": "Être retenu sur une formation accordée par décision du Conseil Régional Nouvelle-Aquitaine. Entrer sur un parcours de formation d'une durée minimale totale de 150 heures (intégrant les stages en entreprise). Être en recherche d’emploi non indemnisées par France Travail."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/2026.712.SP_deliberation_RI-Remu_AI_Fonds_0.pdf",
+          "titre": "Délibération 2026.712.SP du 15 juin 2026 (rectifiée) - Sécurisation des parcours de formation",
+          "extrait": "L a seule modification porte sur l’arrêt de la bonification des barèmes de rémunération pour les stagiaires entrants sur les habilitations de services publics régionales à compter du 1er aout 2026."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-bourse-sanitaire-social",
+      "nom": "Bourse d'études sur critères sociaux (formations sociales, paramédicales et de santé)",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Bourse annuelle sur critères sociaux versée par la Région aux élèves et étudiants des formations sociales, paramédicales et de santé dans un institut agréé en Nouvelle-Aquitaine, y compris aux demandeurs d'emploi non indemnisés.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être inscrit dans un institut de formation sociale, paramédicale ou de santé agréé par la Région Nouvelle-Aquitaine (pas de condition d'âge ni de résidence)",
+        "Ne pas être indemnisé par France Travail ni rémunéré au titre de la formation professionnelle",
+        "Exclus : salariés en formation prise en charge par l'employeur, un OPCO ou un congé de transition professionnelle, contrats en alternance",
+        "Ressources personnelles ou familiales inférieures aux plafonds (critères sociaux)",
+        "Formations démarrant au second semestre 2026 : demande du 4 juin au 26 novembre 2026"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Bourse annuelle sur critères sociaux de 1 454 € (échelon 0 bis) à 6 335 € (échelon 7), selon les ressources et les points de charge"
+      },
+      "cumul": {
+        "cumulable": false,
+        "alternatives": [
+          "r75-remuneration-stagiaires"
+        ],
+        "note": "Non cumulable avec une allocation chômage ni avec la rémunération de stagiaire versée par la Région."
+      },
+      "demarches": [
+        "Vérifier son éligibilité dans le règlement et le simulateur du Guide des aides",
+        "Créer un compte et déposer la demande en ligne sur le Guide des aides (à partir du 4 juin pour le 2e semestre)",
+        "Joindre les justificatifs de ressources ; notification définitive après confirmation de l'entrée en formation"
+      ],
+      "url_demarche": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/bourses-detudes-sur-criteres-sociaux-etudiants-en-formations-sociales-paramedicales-et-de-sante-0",
+      "sources": [
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/bourses-detudes-sur-criteres-sociaux-etudiants-en-formations-sociales-paramedicales-et-de-sante-0",
+          "titre": "Bourses d'études sur critères sociaux (formations sociales, paramédicales et de santé) - Guide des aides",
+          "extrait": "Pour les formations démarrant au second semestre 2026, vous pourrez déposer votre demande de bourse du 4 juin au 26 novembre 2026"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/bourses-detudes-sur-criteres-sociaux-etudiants-en-formations-sociales-paramedicales-et-de-sante-0",
+          "titre": "Bourses d'études sur critères sociaux (formations sociales, paramédicales et de santé) - Guide des aides",
+          "extrait": "Les salariés et demandeurs d'emploi bénéficiant des dispositifs qui leur sont ouverts dans le droit commun et financés selon les cas par les Opérateurs de Compétences (OPCO), les employeurs ou au titre de la rémunération des stagiaires de la formation professionnelle"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/Tableau_estimation_bourse_0.pdf",
+          "titre": "Tableau d'estimation des bourses - Région Nouvelle-Aquitaine",
+          "extrait": "Echelon 0 bis = 1 454 €"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/Tableau_estimation_bourse_0.pdf",
+          "titre": "Tableau d'estimation des bourses - Région Nouvelle-Aquitaine",
+          "extrait": "7ème échelon = 6 335 €"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-afest-former-pour-recruter",
+      "nom": "Former pour recruter : Actions de Formation En Situation de Travail (AFEST)",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Subvention régionale aux projets d'AFEST portés par un organisme de formation avec une ou plusieurs entreprises pour former en situation de travail des personnes en recherche d'emploi en vue de leur recrutement.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "Projet porté par un organisme de formation certifié Qualiopi (ou une SIAE pour l'AFEST intégration) en partenariat avec une ou plusieurs entreprises situées en Nouvelle-Aquitaine",
+        "Public : personnes en recherche d'emploi résidant en Nouvelle-Aquitaine (projet professionnel validé, sortants du PRF, reconversion, fin de parcours SIAE)",
+        "Former au préalable les formateurs internes de l'entreprise à la méthodologie AFEST",
+        "AFEST intégration dans l'entreprise : 150 à 250 heures",
+        "Le projet ne peut pas démarrer avant la décision de la Commission permanente"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 70 % des dépenses éligibles (ingénierie, formation des formateurs internes, coûts pédagogiques), la Région pouvant financer tout ou partie de l'aide demandée"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Le cofinancement public total ne peut pas dépasser 70 % de la dépense éligible. Les apprenants ont le statut de stagiaire de la formation professionnelle (rémunération possible)."
+      },
+      "demarches": [
+        "Prendre contact avec la Région (Pôle Formation Emploi, AFEST@nouvelle-aquitaine.fr) avant le dépôt",
+        "Déposer le dossier de candidature et le volet budgétaire par courrier recommandé et par courriel (dépôt possible toute l'année)",
+        "Attendre le vote de la Commission permanente avant de démarrer l'action"
+      ],
+      "url_demarche": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/actions-de-formation-en-situation-de-travail-afest",
+      "sources": [
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/actions-de-formation-en-situation-de-travail-afest",
+          "titre": "Actions de Formation En Situation de Travail - AFEST - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Dépôt du dossier possible tout au long de l'année"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/actions-de-formation-en-situation-de-travail-afest",
+          "titre": "Actions de Formation En Situation de Travail - AFEST - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Le co-financement total des fonds publics ne peut excéder 70% de la dépense éligible."
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Le taux maximum d’intensité de l’aide régionale est de 70% de la dépense éligible."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/notice_AFEST.pdf",
+          "titre": "Notice « Former pour recruter : AFEST » - Région Nouvelle-Aquitaine",
+          "extrait": "La Région pourra choisir de financer tout ou partie de l’aide demandée ; elle tiendra informée le porteur de projet dans ce cas."
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Durée minimum : 150h - Durée maximum : 250h"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-aiei-formation",
+      "nom": "AIEI Formation - Accompagnement individuel aux entreprises industrielles",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Subvention régionale aux plans de développement des compétences des salariés des entreprises industrielles ou de service à l'industrie : prise en charge d'une partie des coûts pédagogiques des formations internes ou externes.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_max": 499,
+        "duree_min_heures": 7
+      },
+      "conditions": [
+        "Entreprise de production ou de transformation relevant de l'industrie, ou de service à l'industrie, de moins de 500 salariés (dérogation possible pour certaines ETI)",
+        "Salariés néo-aquitains, prioritairement de premiers niveaux de qualification",
+        "Actions d'au moins 7 heures ; organisme externe certifié Qualiopi ; formations internes éligibles",
+        "Exclues : formation syndicale, information, développement personnel, sécurité au travail réglementaire, questions de société",
+        "Consultation du CSE à justifier ; 3 aides consécutives maximum ; charte d'engagement éco-socio-conditionnalité"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Taux maximum des coûts pédagogiques selon la catégorie d'entreprise : petites entreprises 60 % (plafond 40 000 €), moyennes entreprises 50 % (plafond 50 000 €), entreprises de taille intermédiaire 40 % (plafond 60 000 €) ; coûts pédagogiques retenus dans la limite de 50 € de l'heure par stagiaire, sauf formations à la transition écologique, certifiantes ou qualifiantes"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Statut à confirmer : le règlement d'intervention s'applique depuis le 31 mai 2026 (3 600 000 € d'autorisations d'engagement au budget primitif 2026), mais la fiche correspondante du Guide des aides n'est plus en ligne. Vérifier auprès de la Région les modalités de dépôt."
+      },
+      "demarches": [
+        "Contacter la Région Nouvelle-Aquitaine (Pôle Formation Emploi) avant le démarrage des formations",
+        "Déposer le dossier avec le plan de formation, les devis et l'avis du CSE",
+        "Instruction puis vote de la subvention en Commission permanente"
+      ],
+      "url_demarche": "https://entreprises.nouvelle-aquitaine.fr/que-fait-la-region-pour-les-entreprises/formation-et-emploi/formation-des-salaries",
+      "statut": "a_confirmer",
+      "sources": [
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Catégories d’entreprises Taux maximum d’intervention sur l’assiette éligible Plafonds de subventions Petites entreprises 60 % 40 000 € Moyennes entreprises 50 % 50 000 € Entreprises de Taille Intermédiaire 40 % 60 000 €"
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Les entreprises de production et de transformation relevant de l’industrie ou de service à l’industrie de moins de 500 salariés (effectifs consolidés au niveau du groupe en ETP)."
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Les coûts pédagogiques sont plafonnés à 50€ de l’heure/stagiaire, à l’exception des formations à la Transition Ecologique et Energétique (NeoTerra), des formations certifiantes et qualifiantes (validation totale ou partielle)."
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "D’une durée inférieure à 7H"
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "La durée maximale d’accompagnement est fixée à 3 aides consécutives."
+        },
+        {
+          "url": "https://pro.cap-metiers.fr/orientations-regionales/entreprises-la-region-fait-evoluer-ses-aides-pour-lemploi-les-competences-et-le-developpement-economique/",
+          "titre": "Entreprises : les aides régionales emploi-compétences évoluent - Cap Métiers Nouvelle-Aquitaine",
+          "extrait": "Celui-ci s’appliquera à compter du 31 mai 2026"
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/document-details?nodeRef=workspace://SpacesStore/dff2c733-e2ad-4f68-88c0-fb428e873168",
+          "titre": "Délibération 2026.212.SP du 2 avril 2026 - Conseil régional de Nouvelle-Aquitaine",
+          "extrait": "3 600 000€ d’Autorisations d’Engagement sont inscrites au Budget primitif 2026 pour soutenir le volet développement des compétences en entreprise."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-aiei-ingefor",
+      "nom": "AIEI IngeFor - Ingénierie de formation interne (entreprises industrielles)",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Aide à la phase d'ingénierie préalable à une formation interne (parcours d'intégration, transmission des savoir-faire), mobilisable uniquement avec une AIEI Formation.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_max": 499
+      },
+      "conditions": [
+        "Entreprise industrielle ou de service à l'industrie de moins de 500 salariés (dérogation possible pour certaines ETI)",
+        "Dépenses d'ingénierie interne : salaires chargés au prorata du temps passé",
+        "Uniquement en complément d'une demande d'AIEI Formation"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 50,
+        "base": null,
+        "plafond": 4000,
+        "duree_max_mois": null,
+        "libelle": "50 % des dépenses d'ingénierie interne, plafonné à 6 000 € (moins de 250 salariés) ou 4 000 € (250 salariés et plus)",
+        "majorations": [
+          {
+            "criteres": {
+              "effectif_max": 249
+            },
+            "pourcentage": 50,
+            "plafond": 6000,
+            "libelle": "Moins de 250 salariés : plafond 6 000 €"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Statut à confirmer : le règlement d'intervention s'applique depuis le 31 mai 2026 (3 600 000 € d'autorisations d'engagement au budget primitif 2026), mais la fiche correspondante du Guide des aides n'est plus en ligne. Vérifier auprès de la Région les modalités de dépôt."
+      },
+      "demarches": [
+        "Contacter la Région Nouvelle-Aquitaine (Pôle Formation Emploi)",
+        "Déposer la demande en même temps que la demande d'AIEI Formation"
+      ],
+      "url_demarche": "https://entreprises.nouvelle-aquitaine.fr/que-fait-la-region-pour-les-entreprises/formation-et-emploi/formation-des-salaries",
+      "statut": "a_confirmer",
+      "sources": [
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "L’aide sera plafonnée à 6 000 € pour les entreprises de moins de 250 salariés (en ETP) et à 4 000 € pour les entreprises de plus de 250 salariés (en ETP)."
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Le taux maximal d’intervention retenu ne saurait excéder 50 % de la dépense éligible."
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Les entreprises de production et de transformation relevant de l’industrie ou de service à l’industrie de moins de 500 salariés (effectifs consolidés au niveau du groupe en ETP)."
+        },
+        {
+          "url": "https://pro.cap-metiers.fr/orientations-regionales/entreprises-la-region-fait-evoluer-ses-aides-pour-lemploi-les-competences-et-le-developpement-economique/",
+          "titre": "Entreprises : les aides régionales emploi-compétences évoluent - Cap Métiers Nouvelle-Aquitaine",
+          "extrait": "Celui-ci s’appliquera à compter du 31 mai 2026"
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/document-details?nodeRef=workspace://SpacesStore/dff2c733-e2ad-4f68-88c0-fb428e873168",
+          "titre": "Délibération 2026.212.SP du 2 avril 2026 - Conseil régional de Nouvelle-Aquitaine",
+          "extrait": "3 600 000€ d’Autorisations d’Engagement sont inscrites au Budget primitif 2026 pour soutenir le volet développement des compétences en entreprise."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-aiei-structuration-rh-rse",
+      "nom": "AIEI Structuration RH/RSE - Diagnostic RH des entreprises industrielles",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "aide_employeur",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Cofinancement d'une prestation externe de diagnostic RH (qualité de vie au travail, RSE, marque employeur) en amont d'un plan de formation, mobilisable uniquement avec une AIEI Formation.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_max": 249
+      },
+      "conditions": [
+        "Prioritairement entreprise industrielle ou de service à l'industrie de moins de 250 salariés",
+        "Prestation externe de conseil, 5 jours maximum",
+        "Uniquement en complément d'une demande d'AIEI Formation"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 50,
+        "base": null,
+        "plafond": 2500,
+        "duree_max_mois": null,
+        "libelle": "50 % de la prestation externe, plafonné à 2 500 € par entreprise (5 jours maximum)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Statut à confirmer : le règlement d'intervention s'applique depuis le 31 mai 2026 (3 600 000 € d'autorisations d'engagement au budget primitif 2026), mais la fiche correspondante du Guide des aides n'est plus en ligne. Vérifier auprès de la Région les modalités de dépôt."
+      },
+      "demarches": [
+        "Contacter la Région Nouvelle-Aquitaine (Pôle Formation Emploi)",
+        "Déposer la demande avec la demande d'AIEI Formation"
+      ],
+      "url_demarche": "https://entreprises.nouvelle-aquitaine.fr/que-fait-la-region-pour-les-entreprises/formation-et-emploi/formation-des-salaries",
+      "statut": "a_confirmer",
+      "sources": [
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "Le taux maximal d’intervention retenu ne saurait excéder 50 % des dépenses éligibles. L’aide sera plafonnée à 2 500 € par entreprise pour un maximum de 5 jours de prestations."
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/site/delibration/document-details?nodeRef=workspace://SpacesStore/09e93596-caa8-4b87-b2d9-88bd61cbb229",
+          "titre": "Règlement d'intervention des aides régionales en faveur du développement des compétences et de l'emploi avec les entreprises (annexe délib. 2026.212.SP)",
+          "extrait": "de service à l’industrie de moins de 250 salariés (effectifs consolidés au niveau du groupe en ETP)"
+        },
+        {
+          "url": "https://pro.cap-metiers.fr/orientations-regionales/entreprises-la-region-fait-evoluer-ses-aides-pour-lemploi-les-competences-et-le-developpement-economique/",
+          "titre": "Entreprises : les aides régionales emploi-compétences évoluent - Cap Métiers Nouvelle-Aquitaine",
+          "extrait": "Celui-ci s’appliquera à compter du 31 mai 2026"
+        },
+        {
+          "url": "https://deliberations.nouvelle-aquitaine.fr/share/page/document-details?nodeRef=workspace://SpacesStore/dff2c733-e2ad-4f68-88c0-fb428e873168",
+          "titre": "Délibération 2026.212.SP du 2 avril 2026 - Conseil régional de Nouvelle-Aquitaine",
+          "extrait": "3 600 000€ d’Autorisations d’Engagement sont inscrites au Budget primitif 2026 pour soutenir le volet développement des compétences en entreprise."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-permis-b",
+      "nom": "Aide au passage du permis de conduire B",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "alternant",
+        "demandeur_emploi"
+      ],
+      "description": "Aide régionale au financement du permis B pour les jeunes de niveau bac ou infra-bac en insertion professionnelle, dont les jeunes diplômés poursuivant en apprentissage et les stagiaires de la formation professionnelle.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 17,
+        "age_max": 25,
+        "niveaux_diplome": [
+          "sans_diplome",
+          "cap_bep",
+          "bac"
+        ]
+      },
+      "conditions": [
+        "Revenu par part fiscale inférieur à 15 000 € (moins de 12 001 € pour les jeunes diplômés qui poursuivent en apprentissage)",
+        "Être soit diplômé de la filière professionnelle ou agricole en Nouvelle-Aquitaine depuis moins de 12 mois et en insertion (y compris en contrat d'apprentissage), soit suivi par France Travail, une Mission locale ou Cap emploi (formation financée par la Région ou parcours d'insertion)",
+        "Les jeunes en cours de contrat d'apprentissage ne sont éligibles que s'ils ont obtenu un diplôme lors de la précédente session",
+        "Code de la route obligatoire au dépôt pour la tranche de revenus la plus élevée",
+        "Campagne 2026-2027 ouverte depuis le 7 septembre 2026"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "1 200 €, 800 € ou 400 € selon le revenu par part fiscale ; 700 € ou 300 € pour les diplômés en apprentissage ; avance de 400 € puis solde sur justificatifs"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Lire le règlement et la liste des pièces justificatives sur le Guide des aides",
+        "Créer un compte et déposer le dossier en ligne",
+        "Après accord : avance versée, solde sur facture de l'auto-école et attestation du code (18 mois maximum)"
+      ],
+      "url_demarche": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+      "sources": [
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Avoir entre 17 et 25 ans révolus ; Avoir un diplôme de niveau Bac ou inférieur ;"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Tranche 1 : Revenu par part fiscale inférieur à 9 700 € Aide d’un montant de 1 200 € ; Si vous êtes diplômé(e) en apprentissage : 700 € ;"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Tranche 2 : Revenu entre 9 701 € et 12 000 € Aide d’un montant de 800 € ; Pour les apprentis : 300 € ;"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Tranche 3 : Revenu entre 12 001 € et 15 000 € Aide d’un montant de 400 € ;"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "NB : les jeunes en cours de contrat d'apprentissage ne sont éligibles que s'ils ont obtenu un diplôme lors de la précédente session."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Vous pouvez faire votre demande à compter du 7 septembre 2026 , sur la campagne 2026-2027"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "La demande doit être faite dans les 12 mois après l’obtention du diplôme."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/aide-au-passage-du-permis-de-conduire-b",
+          "titre": "Permis B : une aide financière de la Région pour les jeunes - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "18 mois maximum pour fournir ces justificatifs."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-stages-etranger-infra-bac",
+      "nom": "Stages à l'étranger infra bac (apprentis)",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Bourse régionale pour un stage professionnel d'au moins deux semaines à l'étranger réalisé par un apprenti (jusqu'au niveau 4) inscrit dans un CFA ou un établissement de Nouvelle-Aquitaine.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_max": 30,
+        "niveau_certification_max": 4
+      },
+      "conditions": [
+        "Être inscrit dans un établissement ou CFA de Nouvelle-Aquitaine, formation infra-bac jusqu'au niveau 4",
+        "Avoir moins de 31 ans au début du stage",
+        "Stage d'au moins 2 semaines consécutives hors de France, dans une seule structure, avec convention de stage",
+        "Le financement de l'OPCO reste prioritaire pour les apprentis ; pas d'autre aide de la Région pour le même stage",
+        "Demande créée avant le début du stage"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 80 € par semaine complète de stage, plus un bonus de 20 € maximum par semaine pour les apprentis, dans la limite de l'enveloppe annuelle"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumul possible avec Erasmus+ pour un apprenti sans financement OPCO pour le même stage."
+      },
+      "demarches": [
+        "Créer la demande sur « Mes démarches en Nouvelle-Aquitaine » avant le début du stage",
+        "Faire co-instruire la demande par l'établissement de formation",
+        "Envoyer l'attestation de fin de stage au plus tard 2 mois après la fin du stage"
+      ],
+      "url_demarche": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/stages-letranger-infra-bac",
+      "sources": [
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/stages-letranger-infra-bac",
+          "titre": "Stages à l'étranger infra bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Une aide forfaitaire au séjour de 80 € maximum par semaine complète de stage (une semaine est réputée complète lorsqu'elle comporte au minimum trois jours ouvrés), Un bonus de 20 € maximum par semaine pour les apprenants ayant un statut de boursier, les apprentis et les stagiaires de la formation pr"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/stages-letranger-infra-bac",
+          "titre": "Stages à l'étranger infra bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Vous devez avoir moins de 31 ans à la date du début de stage."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/stages-letranger-infra-bac",
+          "titre": "Stages à l'étranger infra bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Le financement OPCO lorsqu'il est possible reste la priorité pour les apprentis"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/stages-letranger-infra-bac",
+          "titre": "Stages à l'étranger infra bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Le stage doit durer au minimum 2 semaines consécutives."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/amenagement-du-territoire/stages-letranger-infra-bac",
+          "titre": "Stages à l'étranger infra bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "(Infra Bac jusqu’au niveau 4 inclus)"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r75-stages-etranger-post-bac",
+      "nom": "Stages à l'étranger post bac (apprentis)",
+      "financeur": "region",
+      "financeur_nom": "Région Nouvelle-Aquitaine",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Bourse régionale à la semaine pour un stage professionnel d'au moins deux semaines à l'étranger réalisé par un apprenti du supérieur (jusqu'au master) inscrit en Nouvelle-Aquitaine.",
+      "criteres": {
+        "regions": [
+          "75"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_max": 30,
+        "niveau_certification_min": 5,
+        "niveau_certification_max": 7
+      },
+      "conditions": [
+        "Être inscrit dans un établissement de Nouvelle-Aquitaine préparant un diplôme enregistré au RNCP",
+        "Avoir moins de 31 ans au début de la mobilité",
+        "Revenu fiscal de référence pondéré inférieur à 50 000 € (30 000 € pour le bonus inclusion)",
+        "Pas d'autre aide de la Région, d'aide à la mobilité internationale ou d'aide Erasmus+ pour le même stage"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "80 € maximum par semaine (100 € avec le bonus inclusion) ; boursiers : 100 € (110 € avec le bonus inclusion) ; enveloppe globale de 3 600 € (non boursiers) ou 4 500 € (boursiers) pour tout le parcours"
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Non cumulable avec une autre aide de la Région, une aide à la mobilité internationale ou Erasmus+ pour le même stage."
+      },
+      "demarches": [
+        "Créer la demande en ligne avant le départ en stage",
+        "Fournir le justificatif de transport et l'attestation d'arrivée pour le versement de 80 %",
+        "Demander le solde au plus tard 2 mois après la fin du stage"
+      ],
+      "url_demarche": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/stages-letranger-post-bac",
+      "sources": [
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/stages-letranger-post-bac",
+          "titre": "Stages à l'étranger post bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "pour les non boursiers : une aide de 80 € maximum par semaine une aide de 100 € maximum par semaine (bonus inclusion)"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/stages-letranger-post-bac",
+          "titre": "Stages à l'étranger post bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "pour les boursiers : une aide de 100 € maximum par semaine une aide de 110 € maximum par semaine (bonus inclusion)"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/stages-letranger-post-bac",
+          "titre": "Stages à l'étranger post bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Le montant de cette enveloppe globale régionale est fixé à 3 600 € maximum pour les non boursiers et 4 500 € maximum pour les boursiers"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/stages-letranger-post-bac",
+          "titre": "Stages à l'étranger post bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Le bénéficiaire doit être âgé de moins de 31 ans à la date du début de sa mobilité."
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/stages-letranger-post-bac",
+          "titre": "Stages à l'étranger post bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "Le plafond des revenus est fixé à 50 000€ (revenu fiscal de référence, pondéré par les points de charge - cf. point 2 du Règlement régional stages à l'étranger post bac à télécharger en bas de page), , il est fixé à 30 000€ maximum"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/jeunesse/stages-letranger-post-bac",
+          "titre": "Stages à l'étranger post bac - Guide des aides Nouvelle-Aquitaine",
+          "extrait": "jusqu’au niveau Master2 inclus"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-programme-regional-formation",
+      "nom": "Programme régional de formation (Parcours qualifiants, Compétences Plus, Projet Pro...)",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations pré-qualifiantes et qualifiantes financées par la Région Occitanie pour les demandeurs d'emploi (Parcours qualifiants, Compétences Plus, Projet Pro, LECTIO, E2C, écoles régionales du numérique, FORPRO SUP). Elles ouvrent droit à la rémunération de la Région et aux aides de levée des freins.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi",
+        "La formation doit figurer dans l'offre financée par la Région (catalogue Me former en Occitanie)",
+        "Places limitées, sélection par l'organisme de formation"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Ouvre droit à la rémunération régionale (r76-remuneration-stagiaires) et aux aides de levée des freins (garde d'enfants, hébergement)."
+      },
+      "demarches": [
+        "Rechercher une formation sur Me former en Occitanie (meformerenregion.fr) ou auprès d'une Maison de l'Orientation / Maison de ma Région",
+        "Se faire orienter par un conseiller (France Travail, Mission locale, Cap emploi) et candidater auprès de l'organisme de formation",
+        "Numéro gratuit de la Région : 0800 00 70 70"
+      ],
+      "url_demarche": "https://www.meformerenregion.fr/",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/-La-formation-professionnelle-",
+          "titre": "La formation professionnelle - Région Occitanie",
+          "extrait": "Dans le cadre de son Plan Régional de Formation (PRF), la Région Occitanie s’est engagée dans la construction d’un programme de formation en direction des demandeurs d’emploi, unique, lisible, et harmonisé à l’échelle du territoire régional."
+        },
+        {
+          "url": "https://www.laregion.fr/-La-formation-professionnelle-",
+          "titre": "La formation professionnelle - Région Occitanie",
+          "extrait": "Plus de 20 000 places de formation chaque année pour les demandeurs d’emploi inscrit à Pôle Emploi . Les formations sont certifiantes ou professionnalisantes. Ces dispositifs ouvrent droit à la rémunération de la Région"
+        },
+        {
+          "url": "https://www.laregion.fr/-La-formation-professionnelle-",
+          "titre": "La formation professionnelle - Région Occitanie",
+          "extrait": "Le site donne accès à un catalogue de formations"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération mensuelle versée par la Région aux demandeurs d'emploi non indemnisés suivant une formation agréée et financée par la Région, avec une indemnité forfaitaire de transport et une indemnité d'hébergement.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 16
+      },
+      "conditions": [
+        "Ne pas être indemnisé par France Travail",
+        "Suivre une formation agréée et financée par la Région",
+        "Toutes les places n'ouvrent pas droit à rémunération (quotas : niveau III 100 %, niveau IV 70 %, niveaux V à VII 25 %)",
+        "Indemnité transport si la rémunération est inférieure ou égale à 775,65 € et la distance domicile-formation supérieure à 15 km"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 775.65,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Barème mensuel temps plein (guide 2026) : 775,65 € à partir de 26 ans (et avant 26 ans en cas d'activité antérieure suffisante ou de situation familiale particulière) ; indemnité transport de 33 € à 90 € par mois selon la distance",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 775.65,
+            "plafond": 2188.27,
+            "libelle": "Travailleur handicapé avec activité antérieure : de 775,65 € à 2 188,27 € selon le salaire antérieur (775,65 € sinon)"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 240,
+            "libelle": "Moins de 18 ans : 240 € par mois"
+          },
+          {
+            "criteres": {
+              "age_min": 18,
+              "age_max": 25
+            },
+            "valeur": 566.17,
+            "libelle": "18-25 ans : 566,17 € par mois (775,65 € si activité antérieure suffisante ou situation familiale particulière)"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Non cumulable avec l'ARE ou la RFF versées par France Travail ; cumul possible sous conditions avec le RSA ou l'AAH ; l'ASS est suspendue. Non cumulable avec la bourse sanitaire et sociale (r76-bourse-sanitaire-social)."
+      },
+      "demarches": [
+        "Réunir les pièces du dossier entre la réunion d'information collective et l'entrée en formation",
+        "L'organisme de formation saisit le dossier et l'adresse à l'ASP",
+        "Suivi des paiements sur remu.laregion.fr ; informations au 0 800 00 70 70"
+      ],
+      "url_demarche": "https://www.laregion.fr/Remuneration-des-stagiaires-de-la-formation-professionnelle",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/Remuneration-des-stagiaires-de-la-formation-professionnelle",
+          "titre": "Rémunération des stagiaires de la formation professionnelle - Région Occitanie",
+          "extrait": "De 240 € à 775,65 € selon les cas."
+        },
+        {
+          "url": "https://www.laregion.fr/Remuneration-des-stagiaires-de-la-formation-professionnelle",
+          "titre": "Rémunération des stagiaires de la formation professionnelle - Région Occitanie",
+          "extrait": "Ne pas être indemnisé par France Travail Être Agé.e de plus de 16 ans Suivre une formation agréée et financée par la Région."
+        },
+        {
+          "url": "https://www.laregion.fr/IMG/pdf/a/2/0/guide_pratique_de_la_re_mune_ration_des_stagiaires_de_la_formation_profess.pdf",
+          "titre": "Guide pratique de la rémunération des stagiaires - Édition 2026 - Région Occitanie",
+          "extrait": "Travailleurs non-salariés et personnes en recherche d’emploi âgées de moins de 18 ans à la date de leur entrée en stage 240 € 1,58 € Travailleurs non-salariés et personnes en recherche d’emploi âgées entre 18 et 25 ans à la date de leur entrée en stage 566,17 € 3,73 €"
+        },
+        {
+          "url": "https://www.laregion.fr/IMG/pdf/a/2/0/guide_pratique_de_la_re_mune_ration_des_stagiaires_de_la_formation_profess.pdf",
+          "titre": "Guide pratique de la rémunération des stagiaires - Édition 2026 - Région Occitanie",
+          "extrait": "Calcul établi en fonction du salaire antérieur de 775,65 € à 2188,27 €"
+        },
+        {
+          "url": "https://www.laregion.fr/IMG/pdf/a/2/0/guide_pratique_de_la_re_mune_ration_des_stagiaires_de_la_formation_profess.pdf",
+          "titre": "Guide pratique de la rémunération des stagiaires - Édition 2026 - Région Occitanie",
+          "extrait": "De 16 à 44 km 33 € 4,20 € 37,20 € De 45 à 74 km 56 € 25,41 € 81,41 € Plus de 75 km 90 € 0 90 €"
+        },
+        {
+          "url": "https://www.laregion.fr/IMG/pdf/a/2/0/guide_pratique_de_la_re_mune_ration_des_stagiaires_de_la_formation_profess.pdf",
+          "titre": "Guide pratique de la rémunération des stagiaires - Édition 2026 - Région Occitanie",
+          "extrait": "(**) Quotas : niveau III 100%, niveau IV 70%, niveau V, VI et VII : 25%"
+        },
+        {
+          "url": "https://www.laregion.fr/IMG/pdf/a/2/0/guide_pratique_de_la_re_mune_ration_des_stagiaires_de_la_formation_profess.pdf",
+          "titre": "Guide pratique de la rémunération des stagiaires - Édition 2026 - Région Occitanie",
+          "extrait": "Travailleurs non-salariés et personnes en recherche d’emploi âgées de 26 ans ou plus à la date de leur entrée en stage 775,65 € 5,11 €"
+        },
+        {
+          "url": "https://www.laregion.fr/IMG/pdf/a/2/0/guide_pratique_de_la_re_mune_ration_des_stagiaires_de_la_formation_profess.pdf",
+          "titre": "Guide pratique de la rémunération des stagiaires - Édition 2026 - Région Occitanie",
+          "extrait": "RÉMUNÉRATION DES STAGIAIRES DE LA FORMATION PROFESSIONNELLE ÉDITION 2026"
+        },
+        {
+          "url": "https://www.laregion.fr/IMG/pdf/a/2/0/guide_pratique_de_la_re_mune_ration_des_stagiaires_de_la_formation_profess.pdf",
+          "titre": "Guide pratique de la rémunération des stagiaires - Édition 2026 - Région Occitanie",
+          "extrait": "Une indemnité forfaitaire mensuelle est versée dès lors que vous percevez une rémunération régionale inférieure ou égale à 775,65 € et que la distance à parcourir entre votre domicile et votre lieu habituel de formation est supérieure à 15 km."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-aide-garde-enfants",
+      "nom": "Aide à la garde d'enfants (stagiaires de la formation professionnelle)",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide forfaitaire de la Région pour les parents d'enfants de moins de 10 ans qui entrent dans une formation du programme régional ou du secteur sanitaire et social.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être parent d'au moins un enfant à charge de moins de 10 ans",
+        "Être inscrit et suivre un parcours de formation du PRF Occitanie ou du secteur sanitaire et social"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 250,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Aide forfaitaire de 250 € versée dès l'entrée en formation, quel que soit le nombre d'enfants éligibles"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Prendre contact avec l'organisme de formation pour monter le dossier",
+        "Déposer le dossier (livret de famille, pièce d'identité, RIB) dans le logiciel dédié",
+        "Contact : remuneration@laregion.fr"
+      ],
+      "url_demarche": "https://www.laregion.fr/Aide-a-la-Garde-d-Enfants",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/Aide-a-la-Garde-d-Enfants",
+          "titre": "Aide à la Garde d'Enfants - Région Occitanie",
+          "extrait": "Stagiaires de la formation professionnelle Aide forfaitaire de 250 € versée dès l’entrée en stage quel que soit le nombre d’enfants éligibles"
+        },
+        {
+          "url": "https://www.laregion.fr/Aide-a-la-Garde-d-Enfants",
+          "titre": "Aide à la Garde d'Enfants - Région Occitanie",
+          "extrait": "Être parent avec au moins un enfant à charge Être inscrit et suivre un parcours de formation du PRF Occitanie ou du secteur sanitaire et social"
+        },
+        {
+          "url": "https://www.laregion.fr/Aide-a-la-Garde-d-Enfants",
+          "titre": "Aide à la Garde d'Enfants - Région Occitanie",
+          "extrait": "L’Aide à la Garde d’Enfant(s) est octroyée pour les enfants de moins de 10 ans."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-hebergement-afpa",
+      "nom": "Hébergement en centre AFPA Occitanie",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région finance la gratuité de l'hébergement dans les centres AFPA conventionnés pour les demandeurs d'emploi suivant une formation du programme régional, quel que soit leur organisme de formation.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être stagiaire de la formation professionnelle sur un parcours financé par le Plan régional de formation",
+        "Critères : éloignement d'au moins 25 km entre domicile et lieu de formation, revenus et situation personnelle, durée de la formation, places disponibles"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Hébergement entièrement financé par la Région pendant toute la durée de la formation, selon les places disponibles"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Demander à l'organisme de formation de transmettre sa candidature au centre AFPA, ou se présenter au centre AFPA",
+        "Contact : servicenouvelleschances@laregion.fr"
+      ],
+      "url_demarche": "https://www.laregion.fr/Hebergement-en-centre-AFPA-Occitanie",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/Hebergement-en-centre-AFPA-Occitanie",
+          "titre": "Hébergement en centre AFPA Occitanie - Région Occitanie",
+          "extrait": "La Région finance pour les demandeurs d’emploi accédant à une formation dans le cadre du Plan Régional de Formation : la gratuité de leur hébergement dans les centres AFPA"
+        },
+        {
+          "url": "https://www.laregion.fr/Hebergement-en-centre-AFPA-Occitanie",
+          "titre": "Hébergement en centre AFPA Occitanie - Région Occitanie",
+          "extrait": "L’éloignement du domicile : 25 km entre le lieu de domicile et le lieu de formation"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-revenu-ecologique-jeunes",
+      "nom": "Revenu Écologique Jeunes (REJ)",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Aide mensuelle de la Région, sous condition de ressources, pour les jeunes demandeurs d'emploi de 18 à 29 ans qui suivent une formation du programme régional labellisée « Revenu Écologique Jeunes » vers un métier vert (ou un accompagnement à la création d'entreprise).",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 18,
+        "age_max": 29,
+        "inscrit_france_travail": true
+      },
+      "conditions": [
+        "Avoir entre 18 et 29 ans, ni en emploi, ni en formation, ni en études au dépôt du dossier",
+        "Être demandeur d'emploi inscrit en Occitanie",
+        "Être inscrit dans une formation du programme régional labellisée « Revenu Écologique Jeunes » (ou avoir signé un contrat d'accompagnement à la création-reprise d'entreprise favorisant la transition écologique)",
+        "Dossier validé par l'organisme de formation ou l'accompagnateur référent"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Complément mensuel calculé selon les ressources : jusqu'à 689 € (18-20 ans), 849 € (21-25 ans) ou 1 000 € (26-29 ans), pendant la formation et un mois après"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec la rémunération de stagiaire, l'ARE ou l'ASS, qui sont déduites pour le calcul du complément."
+      },
+      "demarches": [
+        "Se faire orienter vers une formation labellisée (Maisons de l'Orientation, Maisons de ma Région, France Travail, Mission locale ; 0800 00 70 70)",
+        "Déposer le dossier REJ avec l'organisme de formation ou l'accompagnateur à la création"
+      ],
+      "url_demarche": "https://www.laregion.fr/Revenu-ecologique-Jeunes",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/Revenu-ecologique-Jeunes",
+          "titre": "Revenu Écologique Jeunes - Région Occitanie",
+          "extrait": "Pour les jeunes de 18 à 20 ans : Le montant mensuel du REJ alloué prendra en compte les ressources du jeune bénéficiaire, et sera calculé, pour chaque jeune, pour constituer une aide complémentaire permettant d’atteindre 689€ mensuels."
+        },
+        {
+          "url": "https://www.laregion.fr/Revenu-ecologique-Jeunes",
+          "titre": "Revenu Écologique Jeunes - Région Occitanie",
+          "extrait": "l’aide ne pourra pas excéder 849 €."
+        },
+        {
+          "url": "https://www.laregion.fr/Revenu-ecologique-Jeunes",
+          "titre": "Revenu Écologique Jeunes - Région Occitanie",
+          "extrait": "Avoir entre 18 et 29 ans Ni en emploi, ni en formation, ni en études, ni en service civique au moment du dépôt de dossier REJ,"
+        },
+        {
+          "url": "https://dora.inclusion.gouv.fr/services/region-occitanie-revenu-ecologique-je",
+          "titre": "Revenu Ecologique Jeunes - Région Occitanie (fiche DORA, actualisée le 27 mars 2026)",
+          "extrait": "689 € pour les jeunes âgés entre 18 et 20 ans - 849 € pour les jeunes âgés entre 21 et 25 ans - 1 000 € pour les jeunes âgés entre 26 et 29 ans révolus"
+        },
+        {
+          "url": "https://dora.inclusion.gouv.fr/services/region-occitanie-revenu-ecologique-je",
+          "titre": "Revenu Ecologique Jeunes - Région Occitanie (fiche DORA, actualisée le 27 mars 2026)",
+          "extrait": "Actualisé le 27 mars 2026"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-bourse-sanitaire-social",
+      "nom": "Bourses d'études sanitaires et sociales",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Bourse annuelle sur critères sociaux pour les apprenants des formations paramédicales, de sage-femme et du travail social dans un centre autorisé ou agréé par la Région Occitanie, y compris les demandeurs d'emploi non indemnisés.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être inscrit dans une formation sanitaire ou sociale éligible d'un centre autorisé ou agréé par la Région Occitanie (pas de condition de résidence ni d'âge)",
+        "Ne pas percevoir d'aide de France Travail pendant la formation (sauf ASS) ni de rémunération de stagiaire",
+        "Exclus : contrats aidés ou en alternance, salariés en formation financée par l'employeur, un OPCO ou Transitions Pro",
+        "Rentrée de septembre 2026 : dépôt du 1er juin au 31 octobre 2026 pour la 1re année ; rentrée à partir de janvier 2027 : du 1er décembre 2026 au 15 mars 2027"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Bourse annuelle selon l'échelon : de 1 454 € à 6 335 € (formations post-bac) ou de 1 525 € à 4 370 € (formations de niveau 3 et 4), avec exonération des droits d'inscription"
+      },
+      "cumul": {
+        "cumulable": false,
+        "alternatives": [
+          "r76-remuneration-stagiaires"
+        ],
+        "note": "Non cumulable avec les allocations de France Travail (hors ASS) ni avec la rémunération de stagiaire."
+      },
+      "demarches": [
+        "Déposer la demande en ligne sur le site régional des bourses dans les délais",
+        "Déposer les pièces justificatives (ressources, points de charge)"
+      ],
+      "url_demarche": "https://www.laregion.fr/bourses-etudes-sanitaires-sociales",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/bourses-etudes-sanitaires-sociales",
+          "titre": "Bourses d'Etudes Sanitaires et Sociales - Région Occitanie",
+          "extrait": "Échelons Montants 0 bis 1 454 € 1 2 163 € 2 3 071 € 3 3 828 € 4 4 587 € 5 5 212 € 6 5 506 € 7 6 335 €"
+        },
+        {
+          "url": "https://www.laregion.fr/bourses-etudes-sanitaires-sociales",
+          "titre": "Bourses d'Etudes Sanitaires et Sociales - Région Occitanie",
+          "extrait": "Échelons Montants 0 Exonération 1 1 525 € 2 2 298 € 3 2 935 € 4 3 590 € 5 4 122 € 6 4 370€"
+        },
+        {
+          "url": "https://www.laregion.fr/bourses-etudes-sanitaires-sociales",
+          "titre": "Bourses d'Etudes Sanitaires et Sociales - Région Occitanie",
+          "extrait": "Pour les apprenants et apprenantes en 1ère année , il sera ouvert du 1er juin au 31 octobre 2026"
+        },
+        {
+          "url": "https://www.laregion.fr/bourses-etudes-sanitaires-sociales",
+          "titre": "Bourses d'Etudes Sanitaires et Sociales - Région Occitanie",
+          "extrait": "La bourse est destinée aux personnes relevant de la formation initiale et de la formation continue des demandeurs d’emploi non indemnisés par France Travail à l’exception des bénéficiaires de l’Allocation de Solidarité Spécifique"
+        },
+        {
+          "url": "https://www.laregion.fr/bourses-etudes-sanitaires-sociales",
+          "titre": "Bourses d'Etudes Sanitaires et Sociales - Région Occitanie",
+          "extrait": "Rentrée à compter de janvier 2027 : Le site de dépôt des demandes de bourses sera ouvert du 1er décembre 2026 au 15 mars 2027"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-innov-emploi-recrutement",
+      "nom": "Innov'Emploi Recrutement - Formation sur mesure préalable à l'embauche",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "La Région finance une formation sur mesure (classique ou AFEST), portée par un organisme de formation, pour répondre au besoin de recrutement d'une ou plusieurs entreprises qui s'engagent à embaucher les demandeurs d'emploi formés.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "entreprise",
+        "duree_min_heures": 40
+      },
+      "conditions": [
+        "Au moins 4 demandeurs d'emploi identifiés",
+        "Engagement d'embauche de l'entreprise sur un contrat d'au moins 6 mois (ou saisonnier d'au moins 4 mois)",
+        "Formation de moins de 12 mois, plus de 20 heures par semaine, 40 heures minimum (200 heures pour une AFEST)",
+        "Formation non mobilisable dans le programme régional de formation",
+        "Entreprise non IAE ayant un établissement en Occitanie ; dépôt par l'organisme de formation"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Frais pédagogiques financés par la Région et versés à l'organisme de formation, dans la limite de 15 000 € par parcours et par stagiaire, si le projet est retenu"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération et protection sociale des stagiaires possibles si le parcours dépasse 200 heures."
+      },
+      "demarches": [
+        "L'entreprise identifie son besoin et choisit un organisme de formation",
+        "L'organisme de formation dépose la demande sur la plateforme Mes Aides en Ligne avec la lettre d'intention d'embauche",
+        "Contact : innovemploi@laregion.fr"
+      ],
+      "url_demarche": "https://www.laregion.fr/INNOV-EMPLOI-Volet-recrutement",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/INNOV-EMPLOI-Volet-recrutement",
+          "titre": "INNOV'EMPLOI - Volet recrutement - Région Occitanie",
+          "extrait": "Elle est plafonnée à 15 000 € par parcours de formation / stagiaire."
+        },
+        {
+          "url": "https://www.laregion.fr/competencesRH-entreprises",
+          "titre": "Compétences RH : l'offre de services Ressources Humaines aux entreprises - Région Occitanie",
+          "extrait": "Subvention à 100% des frais pédagogiques, plafonnée à 15 000 € par parcours de formation par stagiaire (au-delà, un co-financement sera nécessaire)"
+        },
+        {
+          "url": "https://www.laregion.fr/INNOV-EMPLOI-Volet-recrutement",
+          "titre": "INNOV'EMPLOI - Volet recrutement - Région Occitanie",
+          "extrait": "Un minimum de 4 demandeurs d’emploi devra être identifié pour bénéficier du dispositif. Un courrier d’intention d’embauche sur un contrat d’une durée de 6 mois minimum sera exigé de la part des entreprises à l’initiative de ce projet."
+        },
+        {
+          "url": "https://www.laregion.fr/INNOV-EMPLOI-Volet-recrutement",
+          "titre": "INNOV'EMPLOI - Volet recrutement - Région Occitanie",
+          "extrait": "se déroulant sur une période inférieure à 12 mois d’une durée hebdomadaire supérieure à 20 heures proposant des parcours individuels de : 40h minimum pour les formations classiques 200h minimum pour les AFEST"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-contrat-rh-conseil",
+      "nom": "Contrat RH-conseil",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "aide_employeur",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Cofinancement d'une prestation externe de conseil RH (GPEC, plan de développement des compétences, qualité de vie au travail, fidélisation, recrutement inclusif) pour les entreprises de 5 à 250 salariés.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_min": 5,
+        "effectif_max": 250
+      },
+      "conditions": [
+        "Entreprise de plus d'un an (premier bilan comptable) implantée en Occitanie ; associations si plus de 50 % de recettes commerciales",
+        "Secteurs éligibles fixés par le règlement",
+        "Demande déposée avant le démarrage de l'action",
+        "Une aide par entreprise et par an, 3 ans entre deux demandes"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 50,
+        "base": null,
+        "plafond": 20000,
+        "duree_max_mois": null,
+        "libelle": "50 % de la prestation de conseil, plafonné à 20 000 € (forfait journalier plafonné à 1 200 €)"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Statut à confirmer : la page de la Région présente le dispositif comme ouvert, mais la fiche Hub Entreprendre indique une date de fin déjà dépassée. Vérifier l'ouverture des dépôts auprès de competences.RH@laregion.fr."
+      },
+      "demarches": [
+        "Contacter competences.RH@laregion.fr",
+        "Déposer la demande sur la plateforme Mes Aides en Ligne avant le démarrage de la prestation"
+      ],
+      "url_demarche": "https://www.laregion.fr/contrat-RH",
+      "statut": "a_confirmer",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/contrat-RH",
+          "titre": "Contrat RH-conseil - Région Occitanie",
+          "extrait": "Financement Région 50% du montant de l’action, plafonnée à 20 000 € (forfait journalier plafonné à 1 200 €)"
+        },
+        {
+          "url": "https://www.laregion.fr/contrat-RH",
+          "titre": "Contrat RH-conseil - Région Occitanie",
+          "extrait": "Les entreprises de plus d’un an (disposant d’un 1er bilan comptable au moment de la demande), à partir de 5 salariés jusqu’à 250 salariés."
+        },
+        {
+          "url": "https://www.laregion.fr/contrat-RH",
+          "titre": "Contrat RH-conseil - Région Occitanie",
+          "extrait": "Une seule aide sera accordée par entreprise par an avec un délai de 3 ans entre chaque demande de subvention."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "confidence": "exact"
+    },
+    {
+      "id": "r76-pass-rh",
+      "nom": "Pass RH - Pré-diagnostic ressources humaines",
+      "financeur": "region",
+      "financeur_nom": "Région Occitanie",
+      "categorie": "service_gratuit",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Pré-diagnostic RH de trois demi-journées réalisé par un prestataire référencé et entièrement financé par la Région, avec un plan d'action et un suivi à 4 mois.",
+      "criteres": {
+        "regions": [
+          "76"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_min": 5,
+        "effectif_max": 49
+      },
+      "conditions": [
+        "Entreprises, groupements d'employeurs et associations employeuses d'au moins 5 salariés et de moins de 50 salariés, situés en Occitanie",
+        "Secteurs éligibles : industrie, numérique, industries culturelles et créatives, bâtiment, agroalimentaire, agriculture, sanitaire et social, transports ; commerce de proximité, artisanat et tourisme dans les communes de moins de 5 000 habitants",
+        "Être à jour de ses cotisations sociales et fiscales ; entreprises en difficulté exclues"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Prestation de trois demi-journées prise en charge par la Région"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Statut à confirmer : la page de la Région présente le dispositif comme ouvert, mais la fiche Hub Entreprendre indique une date de fin déjà dépassée. Vérifier l'ouverture des dépôts auprès de competences.RH@laregion.fr."
+      },
+      "demarches": [
+        "Télécharger et compléter le dossier de demande Pass RH",
+        "L'envoyer à competences.RH@laregion.fr"
+      ],
+      "url_demarche": "https://www.laregion.fr/Pass-RH",
+      "statut": "a_confirmer",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/Pass-RH",
+          "titre": "Pass RH - Région Occitanie",
+          "extrait": "Entreprises, groupements d’entreprises, groupements d’employeurs, associations employeuses, d’au moins 5 salariés et de moins de 50 salariés."
+        },
+        {
+          "url": "https://www.laregion.fr/Pass-RH",
+          "titre": "Pass RH - Région Occitanie",
+          "extrait": "Prise en charge à 100% de la prestation par la Région (réalisée par un prestataire sélectionné par la Région)."
+        },
+        {
+          "url": "https://www.laregion.fr/Pass-RH",
+          "titre": "Pass RH - Région Occitanie",
+          "extrait": "Trois demi-journées d’accompagnement effectuées par un prestataire référencé par la Région"
+        },
+        {
+          "url": "https://www.laregion.fr/Pass-RH",
+          "titre": "Pass RH - Région Occitanie",
+          "extrait": "Commerce de proximité, artisanat et tourisme dans les communes de moins de 5000 habitants."
+        },
+        {
+          "url": "https://www.laregion.fr/Pass-RH",
+          "titre": "Pass RH - Région Occitanie",
+          "extrait": "SUIVI : Un suivi à 4 mois des projets."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-programme-regional-formation",
+      "nom": "Formations financées par la Région pour les demandeurs d'emploi (programme régional)",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formations achetées par la Région dans les secteurs qui recrutent, gratuites pour les demandeurs d'emploi et pouvant être rémunérées selon leur statut.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être demandeur d'emploi (jeune ou adulte)",
+        "La formation doit figurer dans l'offre financée par la Région (catalogue Ma Formation Mon Emploi)",
+        "Depuis le 07/10/2026, la candidature ne se fait plus directement dans l'application : passer par l'organisme de formation ou un conseiller du Service public régional de l'orientation"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Formation gratuite si elle figure au programme régional"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Rémunération régionale possible pendant la formation (voir r84-remuneration-stagiaires) si la personne n'est pas indemnisée par France Travail."
+      },
+      "demarches": [
+        "Rechercher une formation sur Ma Formation Mon Emploi (maformation.auvergnerhonealpes.fr)",
+        "Candidater auprès de l'organisme de formation ou via un conseiller (France Travail, Mission locale, Cap emploi)"
+      ],
+      "url_demarche": "https://maformation.auvergnerhonealpes.fr/",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/particuliers/emploi-formation",
+          "titre": "Me former, accéder à un emploi - Région Auvergne-Rhône-Alpes",
+          "extrait": "Recherchez, trouvez et candidatez en ligne à une offre de formation proposée et financée par la Région en Auvergne-Rhône-Alpes, dans les secteurs qui recrutent."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/particuliers/emploi-formation",
+          "titre": "Me former, accéder à un emploi - Région Auvergne-Rhône-Alpes",
+          "extrait": "Ces formations sont gratuites et selon votre statut, elles peuvent même être rémunérées."
+        },
+        {
+          "url": "https://maformation.auvergnerhonealpes.fr/",
+          "titre": "MA FORMATION MON EMPLOI - Candidature en formation - Région Auvergne-Rhône-Alpes",
+          "extrait": "A partir du 07/10/2026, il ne sera plus possible de candidater directement via l’application « Ma Formation Mon Emploi »."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-remuneration-stagiaires",
+      "nom": "Rémunération des stagiaires de la formation professionnelle (régime public Région)",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Rémunération et protection sociale versées par la Région aux personnes en recherche d'emploi non indemnisées par l'assurance chômage qui suivent une formation agréée par la Région, avec des indemnités de transport et d'hébergement selon le règlement.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Ne plus relever du régime d'assurance chômage (non indemnisé ARE/AREF ; bénéficiaires du RSA ou de l'ASS concernés)",
+        "Suivre une formation agréée à la rémunération par la Région (agrément sélectif)",
+        "Droit d'option possible pour les personnes RQTH ou BOETH",
+        "Indemnités de transport et d'hébergement selon la distance, définies par le règlement de la rémunération"
+      ],
+      "montant": {
+        "mode": "par_mois",
+        "valeur": 775.65,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Barème au 1er avril 2026 : 775,65 € par mois à partir de 26 ans (et avant 26 ans avec 6 mois d'activité salariée sur 12 mois ou situation familiale particulière)",
+        "majorations": [
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": 775.65,
+            "plafond": 2188.27,
+            "libelle": "Travailleur handicapé avec activité antérieure : entre 775,65 € et 2 188,27 € selon le salaire antérieur (775,65 € sinon)"
+          },
+          {
+            "criteres": {
+              "age_max": 17
+            },
+            "valeur": 226.48,
+            "libelle": "Moins de 18 ans : 226,48 € par mois"
+          },
+          {
+            "criteres": {
+              "age_min": 18,
+              "age_max": 25
+            },
+            "valeur": 566.17,
+            "libelle": "18-25 ans : 566,17 € par mois (775,65 € avec activité salariée antérieure suffisante)"
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Exclusif de l'ARE/AREF (régime conventionnel). Non cumulable avec la bourse santé-social (r84-bourse-sante-social)."
+      },
+      "demarches": [
+        "L'organisme de formation ouvre le dossier de rémunération sur la plateforme dématérialisée de la Région",
+        "Le stagiaire accède à son espace personnel (remunerationstagiaires.auvergnerhonealpes.fr)",
+        "Assistance : assistance.remustagiaires@auvergnerhonealpes.fr"
+      ],
+      "url_demarche": "https://www.via-competences.fr/formation/politiques-et-principes-de-la-formation-professionnelle/financement-et-remuneration/focus-region",
+      "confidence": "estimated",
+      "sources": [
+        {
+          "url": "https://www.via-competences.fr/sites/default/files/medias/file/2026/01/2026_REGLEMENT_R%C3%A9mun%C3%A9ration%20des%20stagiaires%20de%20la%20formation%20professionnelle_REGION_0.pdf",
+          "titre": "Règlement de rémunération des stagiaires de la formation professionnelle Auvergne-Rhône-Alpes (vote CP du 19/12/2025)",
+          "extrait": "les bénéficiaires du régime public de rémunération pris en charge par la Région sont les personnes en recherche d’emploi qui ne relèvent plus du régime d'assurance chômage"
+        },
+        {
+          "url": "https://www.via-competences.fr/formation/politiques-et-principes-de-la-formation-professionnelle/financement-et-remuneration/focus-region",
+          "titre": "Focus Région (rémunération des stagiaires) - Via Compétences",
+          "extrait": "Lire le Règlement de la rémunération approuvé le 19 décembre 2025."
+        },
+        {
+          "url": "https://www.via-competences.fr/sites/default/files/medias/file/2026/04/Bar%C3%A8me%20r%C3%A9mun%C3%A9ration%202026.pdf",
+          "titre": "Barème de rémunération - stagiaire de formation professionnelle au 1er avril 2026 - Via Compétences",
+          "extrait": "BAREME DE REMUNERATION – STAGIAIRE DE FORMATION PROFESSIONNELLE - Au 1er Avril 2026"
+        },
+        {
+          "url": "https://www.via-competences.fr/sites/default/files/medias/file/2026/04/Bar%C3%A8me%20r%C3%A9mun%C3%A9ration%202026.pdf",
+          "titre": "Barème de rémunération - stagiaire de formation professionnelle au 1er avril 2026 - Via Compétences",
+          "extrait": "Jeune de 16 à 18 ans 226.48 € Jeune de plus de 18 ans à 25 ans 566.17 € Jeunes de moins de 26 ans justifiant de 6 mois d'activité salariée sur une période de 12 mois consécutifs ou 12 mois / 24 mois 775.65 €"
+        },
+        {
+          "url": "https://www.via-competences.fr/sites/default/files/medias/file/2026/04/Bar%C3%A8me%20r%C3%A9mun%C3%A9ration%202026.pdf",
+          "titre": "Barème de rémunération - stagiaire de formation professionnelle au 1er avril 2026 - Via Compétences",
+          "extrait": "Entre 775.65 € et 2188.27 € (en fonction du salaire antérieur brut)"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif"
+    },
+    {
+      "id": "r84-formations-individuelles",
+      "nom": "Financement de formations individuelles (conducteur de bus scolaire, métiers d'art)",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Prise en charge par la Région des frais de formation d'une formation individuelle, désormais limitée aux formations de conducteur de bus scolaire et aux formations aux métiers d'art, pour des personnes sans emploi résidant en Auvergne-Rhône-Alpes.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Résider en Auvergne-Rhône-Alpes et être sans emploi (inscrit ou non à France Travail)",
+        "Formation de conducteur de bus scolaire (réservée aux retraités et aux agriculteurs) ou formation aux métiers d'art",
+        "Formation de 12 mois consécutifs maximum",
+        "Dossier déposé par le conseiller prescripteur au moins 4 semaines avant l'entrée en formation",
+        "Pas de financement régional de formation dans les 2 ans précédents ; le CPF ne peut pas être mobilisé dans ce dispositif"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Frais de formation pris en charge en tout ou partie par la Région et versés à l'organisme de formation ; frais annexes possiblement à la charge du stagiaire"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Statut de stagiaire de la formation professionnelle : maintien des allocations chômage ou rémunération régionale."
+      },
+      "demarches": [
+        "Rencontrer son conseiller (France Travail, Mission locale, CIDFF, Cap emploi) pour valider le projet",
+        "Le conseiller dépose la demande dans l'outil Ma Formation Mon Emploi (MFME) au moins 4 semaines avant l'entrée",
+        "Ne pas démarrer la formation avant la réponse de la Région"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/obtenir-le-financement-de-ma-formation-individuelle",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-le-financement-de-ma-formation-individuelle",
+          "titre": "Obtenir le financement de ma formation individuelle - Région Auvergne-Rhône-Alpes",
+          "extrait": "les formations de conducteur de bus scolaireles formations aux métiers d’artSi la demande est accordée, le financement sera versé directement à l'organisme de formation."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-le-financement-de-ma-formation-individuelle",
+          "titre": "Obtenir le financement de ma formation individuelle - Région Auvergne-Rhône-Alpes",
+          "extrait": "Pour la formation de conducteur de bus scolaire sont concernés uniquement les retraités et les agriculteurs."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-le-financement-de-ma-formation-individuelle",
+          "titre": "Obtenir le financement de ma formation individuelle - Région Auvergne-Rhône-Alpes",
+          "extrait": "Les financements de formations individuelles sont octroyés pour des formations de 12 mois consécutifs maximum."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-le-financement-de-ma-formation-individuelle",
+          "titre": "Obtenir le financement de ma formation individuelle - Région Auvergne-Rhône-Alpes",
+          "extrait": "Le délai minimum est de 4 semaines avant la date prévue d’entrée en formation sous réserve que le dossier soit complet."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-le-financement-de-ma-formation-individuelle",
+          "titre": "Obtenir le financement de ma formation individuelle - Région Auvergne-Rhône-Alpes",
+          "extrait": "ne peuvent pas obtenir un financement au titre des formations individuelles dans les 2 ans qui suivent la fin de la formation financée."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-pacte-region-emploi",
+      "nom": "Pacte Région pour l'emploi (formation avant embauche)",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Formation sur mesure préalable au recrutement, organisée par un organisme de formation choisi par l'employeur et financée en majeure partie par la Région, qui rémunère aussi les stagiaires non indemnisés.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "Convention de coopération entre la Région et l'employeur",
+        "Formation d'un an maximum alternant théorie et stage pratique, à moins d'une heure de trajet de l'entreprise",
+        "Recrutement à l'issue en CDI, CDD ou intérim d'au moins 6 mois, contrat saisonnier d'au moins 3 mois ou alternance (24 h minimum par semaine)",
+        "Seuil de 5 recrutements portés par un ou plusieurs employeurs (information 2025)",
+        "Formations individuelles non concernées"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 80 % du coût de la formation pris en charge par la Région ; rémunération des stagiaires par la Région sauf indemnisation par France Travail"
+      },
+      "cumul": {
+        "cumulable": false,
+        "alternatives": [
+          "r84-pacte-region-emploi-apres-embauche"
+        ],
+        "note": "Ne peut pas être suivi d'un Pacte Région pour l'Emploi après embauche pour les mêmes salariés."
+      },
+      "demarches": [
+        "Contacter la Direction de la formation et de l'orientation (pacteregionpourlemploi@auvergnerhonealpes.fr) et choisir un organisme de formation",
+        "L'organisme de formation dépose le dossier ; l'employeur signe la convention",
+        "Vote en Commission permanente, formation, puis recrutement des personnes formées"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/recruter-du-personnel-forme-avec-le-pacte-region-pour-lemploi-pour-repondre-aux-besoins-de",
+      "confidence": "estimated",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/recruter-du-personnel-forme-avec-le-pacte-region-pour-lemploi-pour-repondre-aux-besoins-de",
+          "titre": "Recruter du personnel formé avec le Pacte Région pour l'emploi - Région Auvergne-Rhône-Alpes",
+          "extrait": "La Région peut prendre en charge jusqu’à 80% du coût de la formation. Nous rémunérons le stagiaire sauf en cas d'indemnisation par France Travail."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/recruter-du-personnel-forme-avec-le-pacte-region-pour-lemploi-pour-repondre-aux-besoins-de",
+          "titre": "Recruter du personnel formé avec le Pacte Région pour l'emploi - Région Auvergne-Rhône-Alpes",
+          "extrait": "Le recrutement effectué à l’issue de la formation doit se faire en CDI, en CDD ou en intérim de 6 mois minimum, en contrat saisonnier de 3 mois minimum ou en contrat en alternance à temps complet ou à temps partiel (24h minimum par semaine)."
+        },
+        {
+          "url": "https://nostalentsnosemplois.auvergnerhonealpes.fr/le-pacte-region-pour-lemploi-une-solution-de-formation-pour-les-entreprises-qui-recrutent/",
+          "titre": "Le pacte Région pour l'emploi : une solution de formation pour les entreprises qui recrutent - Nos talents nos emplois (Région AURA)",
+          "extrait": "Le seuil pour déclencher le dispositif est de 5 recrutements sur des contrats CDI, des contrats en alternance 12 mois, des CDD de 6 mois minimum (ou des contrats saisonniers 3 mois sous conditions) portés par un ou plusieurs employeurs."
+        },
+        {
+          "url": "https://nostalentsnosemplois.auvergnerhonealpes.fr/le-pacte-region-pour-lemploi-une-solution-de-formation-pour-les-entreprises-qui-recrutent/",
+          "titre": "Le pacte Région pour l'emploi : une solution de formation pour les entreprises qui recrutent - Nos talents nos emplois (Région AURA)",
+          "extrait": "5 mai 2025"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif"
+    },
+    {
+      "id": "r84-pacte-region-emploi-apres-embauche",
+      "nom": "Pacte Région pour l'Emploi après embauche - Former des demandeurs d'emploi nouvellement recrutés",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "salarie"
+      ],
+      "description": "Subvention horaire à l'entreprise qui forme, en interne ou par un prestataire, des demandeurs d'emploi peu qualifiés qu'elle vient de recruter en CDI sur des postes de premier niveau dans les secteurs en tension.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "entreprise",
+        "effectif_max": 299,
+        "contrats": [
+          "cdi"
+        ],
+        "duree_min_heures": 40,
+        "duree_max_heures": 400
+      },
+      "conditions": [
+        "Entreprise privée de moins de 300 salariés (hôtellerie-restauration, numérique, industrie, BTP, agriculture, transports, santé et services à la personne, sports, montagne, tourisme)",
+        "Au moins 5 recrutements de demandeurs d'emploi en CDI d'au moins 24 h par semaine, sur des postes d'ouvriers ou d'employés",
+        "Formation de 40 à 400 heures par salarié, dans les 5 mois suivant l'embauche ; tuteur interne identifié",
+        "Dépenses éligibles à partir de la réception du dossier, sous réserve du vote de la Région",
+        "Non cumulable avec un autre dispositif régional de formation (Pacte avant embauche, formation individuelle, aide régionale à la formation des salariés)"
+      ],
+      "montant": {
+        "mode": "par_heure",
+        "valeur": 5,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 5 € par heure de formation et par salarié recruté (40 à 400 heures par salarié), versé au prorata des heures réalisées"
+      },
+      "cumul": {
+        "cumulable": false,
+        "alternatives": [
+          "r84-pacte-region-emploi",
+          "r84-formations-individuelles"
+        ],
+        "note": "Non cumulable avec un autre dispositif régional de soutien à la formation."
+      },
+      "demarches": [
+        "Déposer le dossier sur le Portail des aides de la Région (aides.auvergnerhonealpes.fr) avant les recrutements et formations",
+        "Instruction par la Direction de la formation et de l'orientation puis vote en Commission permanente",
+        "Transmettre les certificats de réalisation pour le versement (solde dans les 18 mois suivant le vote)"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/former-des-demandeurs-demploi-nouvellement-recrutes",
+      "validite": {
+        "debut": null,
+        "fin": "2026-12-31"
+      },
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/media/8587/download?inline",
+          "titre": "Appel à projets 2026 Pacte Région pour l'Emploi Après Embauche (règlement) - Région Auvergne-Rhône-Alpes",
+          "extrait": "Cet appel à projets est ouvert jusqu’au 31 décembre 2026."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/media/8587/download?inline",
+          "titre": "Appel à projets 2026 Pacte Région pour l'Emploi Après Embauche (règlement) - Région Auvergne-Rhône-Alpes",
+          "extrait": "Le financement régional pourra être porté à un maximum de 5 € de l’heure stagiaire et sera versé au prorata des heures effectivement réalisées."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/media/8587/download?inline",
+          "titre": "Appel à projets 2026 Pacte Région pour l'Emploi Après Embauche (règlement) - Région Auvergne-Rhône-Alpes",
+          "extrait": "dans la limite de 400 h de formation par salarié recruté. La durée minimum de formation pour pouvoir mobiliser le dispositif est fixée un plancher de 40H de formation par salarié recruté."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/former-des-demandeurs-demploi-nouvellement-recrutes",
+          "titre": "Former des demandeurs d'emploi nouvellement recrutés - Région Auvergne-Rhône-Alpes",
+          "extrait": "Les entreprises concernées sont celles du secteur privé de la région, ou ayant une implantation en Auvergne Rhône-Alpes, de moins de 300 salariés."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/media/8587/download?inline",
+          "titre": "Appel à projets 2026 Pacte Région pour l'Emploi Après Embauche (règlement) - Région Auvergne-Rhône-Alpes",
+          "extrait": "Pour être éligibles, les recrutements doivent se faire en contrat à durée indéterminée (CDI). Le temps de travail hebdomadaire de ces contrats CDI ne peut être en dessous de 24h."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-pack-relocalisation-formation",
+      "nom": "Région Industrie - Pack relocalisation : former les salariés",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "aide_employeur",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Aide aux parcours de formation interne liés à un projet d'implantation, de relocalisation ou de développement accompagné dans le cadre du « Pack Relocalisation ».",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "TPE, PME, ETI ou grande entreprise située en Auvergne-Rhône-Alpes",
+        "Projet d'implantation, de relocalisation ou de développement accompagné dans le cadre du Pack Relocalisation",
+        "Dépôt de la demande conditionné à l'avis positif de la Région sur une fiche projet entreprise préalable",
+        "Vote en Commission permanente"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "50 % des salaires et charges des salariés formés et des formateurs internes pendant le temps de formation ; au cas par cas, coût d'un prestataire pour des formations spécifiques"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Compléter la fiche projet entreprise et l'envoyer à formationreloc@auvergnerhonealpes.fr",
+        "En cas d'avis favorable, déposer la demande d'aide",
+        "Instruction puis vote en Commission permanente"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/region-industrie-pack-relocalisation-former-les-salaries",
+      "confidence": "estimated",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/region-industrie-pack-relocalisation-former-les-salaries",
+          "titre": "[Pack relocalisation] Former les salariés - Région Auvergne-Rhône-Alpes",
+          "extrait": "Nous pouvons prendre en charge  : 50% des salaires et charges des salariés formés et des formateurs salariés internes pendant le temps de formationpour certaines formations spécifiques, au cas par cas, la Région pourra financer le coût d’intervention d’un prestataire."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/region-industrie-pack-relocalisation-former-les-salaries",
+          "titre": "[Pack relocalisation] Former les salariés - Région Auvergne-Rhône-Alpes",
+          "extrait": "Tout dépôt de demande sur cette aide est conditionné à l’avis positif de la Région à la suite du dépôt préalable d’une fiche projet entreprise."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif"
+    },
+    {
+      "id": "r84-accompagnement-rh-industrie",
+      "nom": "Région Industrie - Être accompagné dans ma fonction RH",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "service_gratuit",
+      "projets": [
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Accompagnement individuel par un expert RH (recrutement, formation et compétences, ingénierie de formation, management, QVCT/RSE) entièrement pris en charge par la Région et le FSE pour les TPE et PME industrielles.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "entreprise"
+      },
+      "conditions": [
+        "TPE ou PME industrielle ou de service à l'industrie implantée en Auvergne-Rhône-Alpes",
+        "En principe 5 salariés minimum (ou start-up à forte croissance)",
+        "Respect du plafond d'aides de minimis",
+        "Dépôt jusqu'au 16/03/2029"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Coût de la prestation de conseil RH pris en charge en intégralité, jusqu'à 9 jours (briques de 3 jours)"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Remplir le formulaire d'éligibilité en ligne (plateforme Ambition PME), le signer et le renvoyer",
+        "Contact : strategierh@auvergnerhonealpes.fr"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/region-industrie-etre-accompagne-dans-ma-fonction-rh",
+      "validite": {
+        "debut": null,
+        "fin": "2029-03-16"
+      },
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/region-industrie-etre-accompagne-dans-ma-fonction-rh",
+          "titre": "[Région Industrie] Etre accompagné dans ma fonction RH - Région Auvergne-Rhône-Alpes",
+          "extrait": "Date limite du dépôt : 16/03/2029"
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/region-industrie-etre-accompagne-dans-ma-fonction-rh",
+          "titre": "[Région Industrie] Etre accompagné dans ma fonction RH - Région Auvergne-Rhône-Alpes",
+          "extrait": "Nous pouvons prendre en charge lintégralité des coûts de prestation pour des conseils en ressources humaines et une mise en œuvre opérationnelle des solutions en face à face dans l’entreprise, jusqu’à 9 jours maximum (briques de 3 jours)."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/region-industrie-etre-accompagne-dans-ma-fonction-rh",
+          "titre": "[Région Industrie] Etre accompagné dans ma fonction RH - Région Auvergne-Rhône-Alpes",
+          "extrait": "comptant en principe 5 salariés minimum et/ou les start-up à forte croissancerespect du plafond d’aides publiques (De minimis)."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-prime-formation-merite",
+      "nom": "Prime Formation + Mérite",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Prime de la Région pour les anciens stagiaires d'une formation financée par la Région dans l'industrie ou l'énergie qui trouvent un emploi dans le domaine de leur formation.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Avoir suivi une formation financée par la Région Auvergne-Rhône-Alpes dans l'industrie ou l'énergie",
+        "Contrat de travail correspondant à la formation, situé en Auvergne-Rhône-Alpes, signé dans les 3 mois suivant la sortie de formation, d'une durée d'au moins 6 mois",
+        "Demande dans les 9 mois suivant la sortie de formation"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 1000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Prime unique de 1 000 €"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Déposer la demande en ligne avec l'attestation de sortie de formation et le ou les contrats de travail",
+        "Vote en Commission permanente puis versement unique"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/beneficier-de-la-prime-formation-merite",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/beneficier-de-la-prime-formation-merite",
+          "titre": "Bénéficier de la prime formation + mérite - Région Auvergne-Rhône-Alpes",
+          "extrait": "Le montant de la prime est de 1 000 €."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/beneficier-de-la-prime-formation-merite",
+          "titre": "Bénéficier de la prime formation + mérite - Région Auvergne-Rhône-Alpes",
+          "extrait": "dans les 3 mois suivant votre sortie de formation,d'une durée prévisionnelle ou réelle supérieure ou égale à 6 mois,Attention : votre demande doit être déposée dans un délai de 9 mois à compter de votre sortie de formation."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-bourse-sante-social",
+      "nom": "Bourse pour suivre une formation dans le secteur santé-social",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Bourse annuelle sur critères sociaux, versée mensuellement, pour les personnes sans emploi inscrites dans une formation sanitaire ou sociale d'un établissement agréé par la Région en Auvergne-Rhône-Alpes.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être sans emploi et inscrit dans un établissement de formation santé-social habilité par la Région en Auvergne-Rhône-Alpes (aucune condition d'âge)",
+        "Exclus : salariés, demandeurs d'emploi indemnisés, contrats d'apprentissage ou de professionnalisation, stagiaires rémunérés",
+        "Entrée en formation entre le 1er juillet et le 15 septembre : demande avant le 31 octobre ; entrée après le 15 septembre : dans les 2 mois"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Bourse annuelle de 1 454 € à 6 335 € selon les plafonds de ressources"
+      },
+      "cumul": {
+        "cumulable": false,
+        "alternatives": [
+          "r84-remuneration-stagiaires"
+        ],
+        "note": "Non cumulable avec l'ARE, l'AREF ou la RFF ; cumulable avec le RSA et l'ASS."
+      },
+      "demarches": [
+        "Obtenir le code d'accès auprès du secrétariat de l'établissement de formation",
+        "Faire une simulation puis déposer la demande sur le portail des bourses de la Région",
+        "Contact : aidesfss@auvergnerhonealpes.fr"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/obtenir-une-bourse-pour-suivre-une-formation-dans-le-secteur-sante-social",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-une-bourse-pour-suivre-une-formation-dans-le-secteur-sante-social",
+          "titre": "Obtenir une bourse pour suivre une formation dans le secteur santé-social - Région Auvergne-Rhône-Alpes",
+          "extrait": "d'un montant annuel variable entre 1 454 € à 6 335 € en fonction de plafonds de ressources."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-une-bourse-pour-suivre-une-formation-dans-le-secteur-sante-social",
+          "titre": "Obtenir une bourse pour suivre une formation dans le secteur santé-social - Région Auvergne-Rhône-Alpes",
+          "extrait": "Cette aide s'adresse à toute personne sans emploi, inscrite dans un établissement de formation situé en Auvergne-Rhône-Alpes et agréé par la Région"
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-une-bourse-pour-suivre-une-formation-dans-le-secteur-sante-social",
+          "titre": "Obtenir une bourse pour suivre une formation dans le secteur santé-social - Région Auvergne-Rhône-Alpes",
+          "extrait": "Vous entrez en formation entre le 1er juillet et le 15 septembre, vous avez jusqu’au 31 octobre pour déposer votre demande."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/obtenir-une-bourse-pour-suivre-une-formation-dans-le-secteur-sante-social",
+          "titre": "Obtenir une bourse pour suivre une formation dans le secteur santé-social - Région Auvergne-Rhône-Alpes",
+          "extrait": "Vous entrez en formation après le 15 septembre, vous avez 2 mois après l'entrée en formation pour déposer votre demande."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-permis-b",
+      "nom": "Aide au financement du permis de conduire B (jeunes de 17 ans)",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide unique de la Région pour les jeunes de 17 ans résidant en Auvergne-Rhône-Alpes en cours de formation au permis B dans une auto-école de la région, apprentis compris.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "beneficiaire",
+        "age_min": 17,
+        "age_max": 17
+      },
+      "conditions": [
+        "Avoir 17 ans et résider en Auvergne-Rhône-Alpes",
+        "Être en cours de formation au permis B dans une auto-école de la région",
+        "Demande en ligne avant le 18e anniversaire ; un seul dossier par personne",
+        "Sans condition de ressources"
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 150,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Aide unique de 150 €"
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec l'avantage permis du Pass'Région jeunes, qui exclut toutefois les apprentis."
+      },
+      "demarches": [
+        "Créer un compte sur le portail des aides de la Région",
+        "Déposer en ligne les 5 justificatifs (identité, domicile, attestation de l'auto-école, RIB, autorisation parentale)"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/financer-ma-formation-au-permis-de-conduire-b",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/financer-ma-formation-au-permis-de-conduire-b",
+          "titre": "Financer ma formation au permis de conduire B - Région Auvergne-Rhône-Alpes",
+          "extrait": "Le montant de l’aide unique est de 150 €."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/financer-ma-formation-au-permis-de-conduire-b",
+          "titre": "Financer ma formation au permis de conduire B - Région Auvergne-Rhône-Alpes",
+          "extrait": "Cette aide s’adresse à tous les jeunes âgés de 17 ans, en cours de formation au permis de conduire B (apprentissage classique, apprentissage anticipé, conduite accompagnée) au moment du dépôt de la demande et résidant en Auvergne-Rhône-Alpes."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/financer-ma-formation-au-permis-de-conduire-b",
+          "titre": "Financer ma formation au permis de conduire B - Région Auvergne-Rhône-Alpes",
+          "extrait": "La demande devra être déposée, uniquement en ligne, avant le 18ème anniversaire du jeune."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "r84-mobilite-internationale-apprentis-superieur",
+      "nom": "Bourse Région Mobilité Internationale (étudiants et apprentis du supérieur)",
+      "financeur": "region",
+      "financeur_nom": "Région Auvergne-Rhône-Alpes",
+      "categorie": "cout_formation",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Bourse régionale pour une mobilité d'études ou de stage à l'étranger de 4 à 26 semaines, ouverte aux apprentis du supérieur inscrits dans un établissement d'enseignement supérieur d'Auvergne-Rhône-Alpes.",
+      "criteres": {
+        "regions": [
+          "84"
+        ],
+        "perimetre_region": "beneficiaire"
+      },
+      "conditions": [
+        "Être apprenti du supérieur inscrit dans un établissement d'enseignement supérieur d'Auvergne-Rhône-Alpes disposant d'un quota de bourses",
+        "BTS exclus",
+        "Mobilité de 4 à 26 semaines",
+        "Bourse attribuée dans la limite des crédits alloués aux établissements"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "95 € par semaine de mobilité (4 à 26 semaines), plus une aide sur critères sociaux de 80 à 530 € et 530 € en cas de handicap reconnu, dans la limite des quotas des établissements"
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Préparer le projet et le dossier avec le service des relations internationales de son établissement",
+        "Déposer la demande de bourse ; acompte de 75 % sur justificatif de présence, solde après le rapport de fin de séjour"
+      ],
+      "url_demarche": "https://www.auvergnerhonealpes.fr/aides/me-former-letranger-avec-la-bourse-region-mobilite-internationale-etudiants",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/me-former-letranger-avec-la-bourse-region-mobilite-internationale-etudiants",
+          "titre": "Bourse Région Mobilité Internationale Etudiants - Région Auvergne-Rhône-Alpes",
+          "extrait": "Nous pouvons attribuer une aide financière sous forme de bourse pour un montant de 95 € par semaine pour une mobilité de 4 à 26 semaines."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/me-former-letranger-avec-la-bourse-region-mobilite-internationale-etudiants",
+          "titre": "Bourse Région Mobilité Internationale Etudiants - Région Auvergne-Rhône-Alpes",
+          "extrait": "Cette aide s'adresse aux étudiants et aux apprentis du supérieur inscrits dans un établissement d'enseignement supérieur d'Auvergne-Rhône-Alpes."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/me-former-letranger-avec-la-bourse-region-mobilite-internationale-etudiants",
+          "titre": "Bourse Région Mobilité Internationale Etudiants - Région Auvergne-Rhône-Alpes",
+          "extrait": "Cette bourse n'est pas un droit, elle est attribuée dans la limite des crédits alloués par la Région aux établissements éligibles."
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/me-former-letranger-avec-la-bourse-region-mobilite-internationale-etudiants",
+          "titre": "Bourse Région Mobilité Internationale Etudiants - Région Auvergne-Rhône-Alpes",
+          "extrait": "Une aide complémentaire forfaitaire peut être attribuée sur critères sociaux pour un montant de 80 à 530 €, selon l'échelon de la bourse."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    }
+  ],
+  "portails": [
+    {
+      "region": "75",
+      "nom_region": "Nouvelle-Aquitaine",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Guide des aides de la Région - Formation professionnelle",
+          "url": "https://les-aides.nouvelle-aquitaine.fr/formation-professionnelle",
+          "type": "region"
+        },
+        {
+          "titre": "Je me forme pour trouver un emploi (portail Entreprises de la Région)",
+          "url": "https://entreprises.nouvelle-aquitaine.fr/guides-pratiques-de-lentreprise/je-me-forme-pour-trouver-un-emploi",
+          "type": "region"
+        },
+        {
+          "titre": "Cap Métiers - Les dispositifs de financement de la formation",
+          "url": "https://pro.cap-metiers.fr/financement-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "CMaFormation - catalogue des formations en Nouvelle-Aquitaine (Cap Métiers)",
+          "url": "https://www.cmaformation-na.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Nouvelle-Aquitaine",
+          "url": "https://www.transitionspro-na.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Nouvelle-Aquitaine",
+          "url": "https://www.francetravail.org/regions/nouvelle-aquitaine/",
+          "type": "france_travail"
+        }
+      ]
+    },
+    {
+      "region": "76",
+      "nom_region": "Occitanie",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Occitanie - La formation professionnelle",
+          "url": "https://www.laregion.fr/-La-formation-professionnelle-",
+          "type": "region"
+        },
+        {
+          "titre": "Région Occitanie - Les aides et accompagnements (formation)",
+          "url": "https://www.laregion.fr/-Les-aides-et-accompagnements-",
+          "type": "region"
+        },
+        {
+          "titre": "Carif-Oref Occitanie - Dispositifs et politiques publiques",
+          "url": "https://www.cariforefoccitanie.fr/orientation-et-parcours-des-publics/dispositifs-et-politiques-publiques/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Carif-Oref Occitanie - Trouver une formation",
+          "url": "https://www.cariforefoccitanie.fr/orientation-et-parcours-des-publics/trouver-une-formation/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Occitanie",
+          "url": "https://www.transitionspro-occitanie.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Occitanie",
+          "url": "https://www.francetravail.org/regions/occitanie/",
+          "type": "france_travail"
+        }
+      ]
+    },
+    {
+      "region": "84",
+      "nom_region": "Auvergne-Rhône-Alpes",
+      "derniere_verification": "2026-10-06",
+      "liens": [
+        {
+          "titre": "Région Auvergne-Rhône-Alpes - Me former, accéder à un emploi",
+          "url": "https://www.auvergnerhonealpes.fr/particuliers/emploi-formation",
+          "type": "region"
+        },
+        {
+          "titre": "Ma Formation Mon Emploi - formations financées par la Région",
+          "url": "https://maformation.auvergnerhonealpes.fr/",
+          "type": "region"
+        },
+        {
+          "titre": "Via Compétences - Financement et rémunération",
+          "url": "https://www.via-competences.fr/formation/politiques-et-principes-de-la-formation-professionnelle/financement-et-remuneration",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Côté Formations - catalogue des formations en Auvergne-Rhône-Alpes (Via Compétences)",
+          "url": "https://www.coteformations.fr/",
+          "type": "carif_oref"
+        },
+        {
+          "titre": "Transitions Pro Auvergne-Rhône-Alpes",
+          "url": "https://www.transitionspro-ara.fr/",
+          "type": "transitions_pro"
+        },
+        {
+          "titre": "France Travail Auvergne-Rhône-Alpes",
+          "url": "https://www.francetravail.org/regions/auvergne-rhone-alpes/",
+          "type": "france_travail"
+        }
+      ]
+    }
+  ],
+  "exclues": [
+    {
+      "nom": "AIR - Aide individuelle régionale à la formation (Nouvelle-Aquitaine)",
+      "raison": "Aide suspendue pour raisons budgétaires (avertissement Cap Métiers mis à jour en août-septembre 2026) ; la fiche du Guide des aides de la Région n'est plus en ligne (404). Le règlement 2026 avait par ailleurs abaissé le plafond à 4 000 € par année de formation.",
+      "sources": [
+        {
+          "url": "https://pro.cap-metiers.fr/info_juridique/aide-individuelle-regionale-a-la-formation-air/",
+          "titre": "AIR : Aide individuelle régionale à la formation - Cap Métiers (fiche J.6)",
+          "extrait": "Avertissement : pour des raisons budgétaires, cette aide est actuellement suspendue"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/2026.712.SP_deliberation_RI-Remu_AI_Fonds_0.pdf",
+          "titre": "Délibération 2026.712.SP du 15 juin 2026 (rectifiée) - Sécurisation des parcours de formation",
+          "extrait": "Le montant maximal financée par la Région est abaissé à 4 000 € au lieu de 5 000 €."
+        }
+      ]
+    },
+    {
+      "nom": "Aide individuelle régionale à la VAE (Nouvelle-Aquitaine)",
+      "raison": "Aide suspendue pour raisons budgétaires selon le Carif-Oref Cap Métiers.",
+      "sources": [
+        {
+          "url": "https://pro.cap-metiers.fr/info_juridique/vae-aide-individuelle-a-laccompagnement-de-la-region/",
+          "titre": "Aide individuelle régionale à la VAE - Cap Métiers (fiche M.3)",
+          "extrait": "Avertissement : pour des raisons budgétaires, cette aide est actuellement suspendue"
+        }
+      ]
+    },
+    {
+      "nom": "Aide individuelle régionale aux certifications CléA (Nouvelle-Aquitaine)",
+      "raison": "Aide suspendue pour raisons budgétaires selon le Carif-Oref Cap Métiers.",
+      "sources": [
+        {
+          "url": "https://pro.cap-metiers.fr/info_juridique/aide-individuelle-a-la-certification-clea/",
+          "titre": "Aide individuelle régionale aux certifications CléA - Cap Métiers (fiche G.7)",
+          "extrait": "Avertissement : pour des raisons budgétaires, cette aide est actuellement suspendue"
+        }
+      ]
+    },
+    {
+      "nom": "Fonds social formation (Nouvelle-Aquitaine)",
+      "raison": "Aide suspendue pour raisons budgétaires ; depuis le 1er septembre 2026 elle est en outre recentrée sur les stagiaires de la formation professionnelle et les apprenants du sanitaire et social (apprentis exclus) et plafonnée à 1 000 € par année de formation.",
+      "sources": [
+        {
+          "url": "https://pro.cap-metiers.fr/info_juridique/fonds-social-formation/",
+          "titre": "Fonds social formation - Cap Métiers (fiche J.2)",
+          "extrait": "Avertissement : pour des raisons budgétaires, cette aide est actuellement suspendue"
+        },
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/2026.712.SP_deliberation_RI-Remu_AI_Fonds_0.pdf",
+          "titre": "Délibération 2026.712.SP du 15 juin 2026 (rectifiée) - Sécurisation des parcours de formation",
+          "extrait": "Les demandes sont plafonnées à hauteur de 1 000 € par année de formation au lieu de 1000€ par année calendaire"
+        }
+      ]
+    },
+    {
+      "nom": "Fonds d'aide à la mobilité vers l'emploi - FAME (Nouvelle-Aquitaine)",
+      "raison": "Dispositif supprimé au 1er juillet 2026 par la délibération 2026.712.SP.",
+      "sources": [
+        {
+          "url": "https://les-aides.nouvelle-aquitaine.fr/system/files/specific_pj_files/2026.712.SP_deliberation_RI-Remu_AI_Fonds_0.pdf",
+          "titre": "Délibération 2026.712.SP du 15 juin 2026 (rectifiée) - Sécurisation des parcours de formation",
+          "extrait": "Fonds d’aide à la mobilité vers l’emploi est supprimé, au regard de la faible sollicitation de cette aide qui ne trouve pas son public (une dizaine de demandes en 2025). Cette suppression entrera en vigueur le 1 er juillet 2026."
+        }
+      ]
+    },
+    {
+      "nom": "Appel à projets « Accompagner les transitions et les métiers de demain » 2026 (Occitanie, formation des salariés avec les OPCO)",
+      "raison": "Candidatures closes : date limite de dépôt fixée au 23 juillet 2026 (entreprises de moins de 250 salariés).",
+      "sources": [
+        {
+          "url": "https://www.laregion.fr/Appel-a-projets-Accompagner-les-transitions-et-les-metiers-de-demain-47882",
+          "titre": "Appel à projets - Accompagner les transitions et les métiers de demain - Région Occitanie",
+          "extrait": "Date limite de dépôt des dossiers 23 juillet 2026"
+        },
+        {
+          "url": "https://www.laregion.fr/Appel-a-projets-Accompagner-les-transitions-et-les-metiers-de-demain-47882",
+          "titre": "Appel à projets - Accompagner les transitions et les métiers de demain - Région Occitanie",
+          "extrait": "Entreprises de moins de 250 salariés"
+        }
+      ]
+    },
+    {
+      "nom": "Financer l'équipement professionnel des apprentis (Auvergne-Rhône-Alpes, aide versée aux CFA)",
+      "raison": "Date limite de dépôt des demandes des CFA/OFA fixée au 05/10/2026 : plus de nouvelles demandes au 6 octobre 2026. Les apprentis entrés en 1re année bénéficient de l'équipement via leur CFA si celui-ci a déposé.",
+      "sources": [
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/financer-lequipement-professionnel-des-apprentis",
+          "titre": "Financer l'équipement professionnel des apprentis - Région Auvergne-Rhône-Alpes",
+          "extrait": "Date limite du dépôt : 05/10/2026"
+        },
+        {
+          "url": "https://www.auvergnerhonealpes.fr/aides/financer-lequipement-professionnel-des-apprentis",
+          "titre": "Financer l'équipement professionnel des apprentis - Région Auvergne-Rhône-Alpes",
+          "extrait": "Cette aide s'adresse aux centres de formation d'apprentis (CFA) ou aux organismes de formation par apprentissage (OFA) situés en Auvergne-Rhône-Alpes et partenaires du Pass'Région."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Convention retenue pour les aides aux demandeurs d'emploi : projets = recrutement_demandeur_emploi et reconversion_salarie, beneficiaires = demandeur_emploi (le schéma n'a pas de type de projet « demandeur d'emploi qui se forme seul »).",
+    "Portails : les pages régionales de l'Agefiph (agefiph.fr/nouvelle-aquitaine, /occitanie, /auvergne-rhone-alpes) n'ont pas pu être vérifiées le 2026-10-06 (agefiph.fr en maintenance, HTTP 503 puis connexion refusée). Elles ne figurent donc pas dans les liens ; à ajouter après vérification.",
+    "Auvergne-Rhône-Alpes : www.auvergnerhonealpes.fr est protégé par un écran anti-robot JavaScript (« shield ») ; curl et WebFetch ne reçoivent qu'une page vide. Les pages ont été lues dans un navigateur ; leurs extraits sont conservés dans tmp-r3/aura-b-*.txt. Les liens fonctionnent normalement dans un navigateur.",
+    "Occitanie : le catalogue meformerenregion.fr (url_demarche de r76-programme-regional-formation) ne répondait pas depuis notre poste le 2026-10-06 (délai dépassé) ; la page d'accueil a été chargée une fois via le proxy r.jina.ai (HTTP 200). Lien de repli vérifié : https://www.cariforefoccitanie.fr/orientation-et-parcours-des-publics/trouver-une-formation/",
+    "Nouvelle-Aquitaine : forte réduction de l'offre en 2026. Délibération 2026.712.SP (15 juin 2026, rectifiée en septembre) : plusieurs milliers de places de formation supprimées, fin de la bonification des barèmes de rémunération sur les habilitations de service public pour les entrants à partir du 1er août 2026, suppression du FAME au 1er juillet 2026. AIR, aide VAE, aide CléA et fonds social formation sont signalés suspendus par Cap Métiers.",
+    "Nouvelle-Aquitaine : les aides AIEI (Formation, IngeFor, Structuration RH/RSE) sont prévues par le règlement d'intervention adopté le 2 avril 2026 (applicable depuis le 31 mai 2026), mais la fiche « Accompagnement de l'entreprise sur la formation des salariés » du Guide des aides n'est plus publiée (404) : statut a_confirmer. Pour l'AIEI Formation, le montant reste non_chiffre car le règlement fixe les taux par catégorie (petite / moyenne entreprise / ETI) sans seuils d'effectif explicites ; si l'intégrateur applique la définition européenne (moins de 50 / moins de 250 salariés), les taux sont 60 % (40 000 €), 50 % (50 000 €), 40 % (60 000 €).",
+    "Nouvelle-Aquitaine, non retenues : Optim'emploi GEIQ (aide de la Région versée aux GEIQ qui embauchent des sortants du PRF), projets collectifs inter-entreprises (portés par branches, OPCO, clusters), stages professionnels à l'étranger des jeunes demandeurs d'emploi (mobilité, pas un financement de formation), consortium Erasmus+ apprentis (fonds européens), aides BAFA/BAFD/BNSSA, accompagnement à la création « Entreprendre, la Région à vos côtés » (conseil). L'équipement professionnel de rentrée exclut les apprentis.",
+    "Occitanie : Contrat RH-conseil et Pass RH sont présentés comme actifs sur laregion.fr (pages mises à jour en 2026) mais leurs fiches Hub Entreprendre indiquent une date de fin au 31/12/2025 : statut a_confirmer. Contrat RH-recrutement (50 % d'une prestation de recrutement, plafond 20 000 €) non retenu car il ne finance pas de formation.",
+    "Occitanie : aucune aide régionale propre aux apprentis trouvée pour 2026 (premier équipement professionnel et ordinateur loRdi réservés aux lycéens/voie scolaire ; Mouv'Occitanie vise les étudiants ; consortiums Erasmus+ = fonds européens).",
+    "Auvergne-Rhône-Alpes : le financement des formations individuelles est désormais limité aux formations de conducteur de bus scolaire (retraités et agriculteurs) et aux métiers d'art. Depuis le 07/10/2026, plus de candidature directe dans Ma Formation Mon Emploi. La page « Accélérer le retour à l'emploi » renvoie « Accès refusé » (contenu inconnu, non retenue).",
+    "Auvergne-Rhône-Alpes : barème 2026 de rémunération issu du document Via Compétences au 1er avril 2026 (le document indique « 16 à 18 ans » pour 226,48 € ; on applique les tranches du règlement régional : 16-17 ans / 18-25 ans). Les indemnités de transport/hébergement du règlement (barème valable jusqu'au 31/03/2026) ne sont pas chiffrées.",
+    "Auvergne-Rhône-Alpes, non retenues : Pass'Région jeunes (avantage permis « hors apprentis », premier équipement réservé aux lycéens), BRMI Lycéens (apprentis non éligibles), Recruter autrement / Trouver un emploi durable / Contrat Région Emploi (aide au recrutement, pas de financement de formation), bilan de positionnement artisanat (20 €, orientation), plateforme Form'Toit (service d'aide au logement), Campus Région du numérique (portail de ressources), accompagnement « Structurer son projet » des créateurs (conseil).",
+    "Le quota de recherches web de la session a été épuisé en cours de travail : les pages ont été trouvées via les plans de site (sitemaps) et la navigation des sites officiels."
+  ]
+}

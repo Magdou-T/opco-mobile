@@ -6,6 +6,7 @@
   "description": "Pipeline auto-correctif des montants de financement OPCO : scrape -> extract (IA) -> verify -> correct -> validate -> publish",
   "scripts": {
     "build-sources": "node scripts/build-sources.mjs",
+    "check-sources": "node --import tsx src/check-sources.ts",
     "dry-run": "node --import tsx src/run.ts --dry-run",
     "live": "node --import tsx src/run.ts --live",
     "typecheck": "tsc --noEmit",

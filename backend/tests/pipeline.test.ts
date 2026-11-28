@@ -1,26 +1,27 @@
 // ============================================================
-// Tests unitaires du pipeline : verify / correct / validate / publish.
-// Aucun réseau, aucune IA — tout est déterministe.
+// Tests unitaires du pipeline : verify / correct / validate / publish, et cibles des mutations du dry-run.
+// Aucun réseau, aucune IA : tout est déterministe.
 // ============================================================
 
 import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { EMBEDDED_OPCOS, getEmbeddedOpcoBySlug } from '@opco/core';
+import { EMBEDDED_OPCOS, calculateFunding, createInitialWizardState, getEmbeddedOpcoBySlug } from '@opco/core';
 import type { OpcoData } from '@opco/core';
 import { diffOpco } from '../src/verify';
 import { applyCorrections } from '../src/correct';
 import { validatePipeline, runFundingScenarios } from '../src/validate';
 import { publishDataset, verifyPublishedSha } from '../src/publish';
 import { simulateExtractionFromCurrent } from '../src/extract';
+import { choisirCiblesDryRun } from '../src/dry-run';
 import { parseRobots, htmlToText } from '../src/scrape';
 import { deepClone, sha256Hex, downgradeConfidence } from '../src/util';
 import type { ExtractionResult } from '../src/types';
 
 // Fixture découplée des données réelles : on part d'un OPCO embarqué mais on
 // ÉPINGLE les valeurs que les tests supposent (les données vivantes évoluent
-// au fil des vérifications de sources — les tests unitaires, eux, doivent
+// au fil des vérifications de sources ; les tests unitaires, eux, doivent
 // rester déterministes).
 const atlas = (): OpcoData => {
   const o = deepClone(getEmbeddedOpcoBySlug('atlas')!);
@@ -29,6 +30,21 @@ const atlas = (): OpcoData => {
   o.frais_transport = { value: null, confidence: 'depends_on_branche', source_url: 'https://example.test/criteres' };
   o.budget_annuel_max = { value: 8000, confidence: 'depends_on_branche', source_url: 'https://example.test/criteres' };
   if (o.plafonds_par_taille?.[0]) o.plafonds_par_taille[0].budget_annuel_max = 8000;
+  return o;
+};
+
+// Les données réelles n'ont plus de tailles en double (le schéma v4 les
+// interdit) : on fabrique le cas pour tester l'appariement par occurrence
+// de diffOpco / applyCorrections. Le tableau est entièrement synthétique : il
+// ne dépend pas du contenu des données de Constructys, réécrites au fil des
+// vérifications de sources.
+const constructysAvecDoublon = (): OpcoData => {
+  const o = deepClone(getEmbeddedOpcoBySlug('constructys')!);
+  o.plafonds_par_taille = [
+    { taille: 'less_11', cout_horaire_max: 24, budget_annuel_max: 3500, quota_horaire_max: null, description: 'Bâtiment <11 (fixture)' },
+    { taille: 'less_11', cout_horaire_max: 24, budget_annuel_max: 4000, quota_horaire_max: null, description: 'Travaux publics <11 (fixture)' },
+    { taille: '11_49', cout_horaire_max: 19, budget_annuel_max: 6000, quota_horaire_max: null, description: 'Bâtiment 11-49 (fixture)' },
+  ];
   return o;
 };
 
@@ -76,6 +92,32 @@ describe('verify.diffOpco', () => {
     expect(d.oldValue).toBe(25);
   });
 
+  it('valeur extraite null alors que le montant publié existe -> not_found (jamais modified), valeur conservée', () => {
+    const opco = atlas(); // cout_horaire_inter = 25
+    const ext = identityExtraction(opco);
+    ext.fields.find((f) => f.field === 'cout_horaire_inter')!.value = null;
+    const diff = diffOpco(opco, ext);
+    const d = diff.diffs.find((x) => x.field === 'cout_horaire_inter')!;
+    expect(d.status).toBe('not_found');
+    expect(d.oldValue).toBe(25);
+    expect(d.newValue).toBeNull();
+    // Classé modified, le montant serait effacé par applyCorrections.
+    const { opco: out } = applyCorrections(opco, diff, { now: new Date(2026, 5, 10) });
+    expect(out.cout_horaire_inter.value).toBe(25);
+  });
+
+  it('plafond extrait null alors que le plafond publié existe -> not_found (jamais modified)', () => {
+    const opco = atlas();
+    opco.plafonds_par_taille = [
+      { taille: 'less_11', cout_horaire_max: 20, budget_annuel_max: 8000, quota_horaire_max: null, description: 'Moins de 11 (fixture)' },
+    ];
+    const ext = identityExtraction(opco);
+    ext.plafonds_par_taille[0].budget_annuel_max = null;
+    const d = diffOpco(opco, ext).diffs.find((x) => x.field === 'plafonds_par_taille[0:less_11].budget_annuel_max')!;
+    expect(d.status).toBe('not_found');
+    expect(d.oldValue).toBe(8000);
+  });
+
   it('compare les plafonds_par_taille (clé indexée)', () => {
     const opco = atlas();
     const ext = identityExtraction(opco);
@@ -87,20 +129,20 @@ describe('verify.diffOpco', () => {
     expect(d.newValue).toBe(9000);
   });
 
-  it('tailles dupliquées (Constructys) : appariement par occurrence -> tout unchanged', () => {
-    const constructys = deepClone(getEmbeddedOpcoBySlug('constructys')!);
+  it('tailles dupliquées : appariement par occurrence -> tout unchanged', () => {
+    const constructys = constructysAvecDoublon();
     const diff = diffOpco(constructys, identityExtraction(constructys));
     expect(diff.diffs.every((d) => d.status === 'unchanged')).toBe(true);
   });
 
   it('tailles dupliquées : une modification ne touche que la bonne occurrence', () => {
-    const constructys = deepClone(getEmbeddedOpcoBySlug('constructys')!);
+    const constructys = constructysAvecDoublon();
     const ext = identityExtraction(constructys);
-    // Deux entrées less_11 (bâtiment idx 0, travaux publics idx 1) : on modifie la 2e.
+    // Deux entrées less_11 (idx 0 et idx 1, fixture) : on modifie la 2e.
     const less11 = ext.plafonds_par_taille.filter((p) => p.taille === 'less_11');
     expect(less11.length).toBeGreaterThan(1);
-    const oldTp = less11[1].budget_annuel_max!;
-    less11[1].budget_annuel_max = oldTp + 100;
+    const ancienBudget = less11[1].budget_annuel_max!;
+    less11[1].budget_annuel_max = ancienBudget + 100;
 
     const diff = diffOpco(constructys, ext);
     const modified = diff.diffs.filter((d) => d.status !== 'unchanged');
@@ -109,7 +151,7 @@ describe('verify.diffOpco', () => {
 
     const { opco: out } = applyCorrections(constructys, diff, { now: new Date(2026, 5, 10) });
     expect(out.plafonds_par_taille![0].budget_annuel_max).toBe(constructys.plafonds_par_taille![0].budget_annuel_max); // intact
-    expect(out.plafonds_par_taille![1].budget_annuel_max).toBe(oldTp + 100); // bonne occurrence corrigée
+    expect(out.plafonds_par_taille![1].budget_annuel_max).toBe(ancienBudget + 100); // bonne occurrence corrigée
   });
 });
 
@@ -174,9 +216,12 @@ describe('correct.applyCorrections', () => {
 // --- VALIDATE -----------------------------------------------------------------
 
 describe('validate.validatePipeline', () => {
+  // Version qui serait publiée après datasets/manifest.json (version 3).
+  const version = 4;
+
   it('dataset embarqué inchangé -> ok, aucun needsReview', () => {
     const current = deepClone(EMBEDDED_OPCOS);
-    const report = validatePipeline({ current, corrected: deepClone(current) });
+    const report = validatePipeline({ current, corrected: deepClone(current), version });
     expect(report.ok).toBe(true);
     expect(report.issues).toHaveLength(0);
     expect(report.needsReview).toHaveLength(0);
@@ -191,7 +236,7 @@ describe('validate.validatePipeline', () => {
     const a = corrected.find((o) => o.slug === 'atlas')!;
     a.budget_annuel_max.value = 16000; // 8000 -> 16000 = +100 %
 
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 50 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
     expect(report.ok).toBe(true); // pas une erreur : changement mis de côté
     const review = report.needsReview.find((r) => r.slug === 'atlas' && r.field === 'budget_annuel_max');
     expect(review).toBeDefined();
@@ -205,16 +250,48 @@ describe('validate.validatePipeline', () => {
     current.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 25;
     const corrected = deepClone(current);
     corrected.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 28; // +12 %
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 50 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
     expect(report.needsReview).toHaveLength(0);
     expect(report.opcos.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value).toBe(28);
+  });
+
+  it('variation exactement égale au seuil -> auto-publiée (le seuil est inclus)', () => {
+    const current = deepClone(EMBEDDED_OPCOS);
+    current.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 20;
+    const corrected = deepClone(current);
+    corrected.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 30; // 20 -> 30 = +50 % exactement
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
+    expect(report.issues).toEqual([]);
+    expect(report.needsReview).toHaveLength(0);
+    expect(report.opcos.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value).toBe(30);
+  });
+
+  it('plafond par taille hors seuil -> needsReview et ancienne valeur ramenée ; au seuil exact -> publié', () => {
+    const current = deepClone(EMBEDDED_OPCOS);
+    current.find((o) => o.slug === 'atlas')!.plafonds_par_taille = [
+      { taille: 'less_11', cout_horaire_max: 20, budget_annuel_max: 8000, quota_horaire_max: null, description: 'Moins de 11 (fixture)' },
+      { taille: '11_49', cout_horaire_max: 20, budget_annuel_max: 8000, quota_horaire_max: null, description: '11 à 49 (fixture)' },
+    ];
+    const corrected = deepClone(current);
+    const plafonds = corrected.find((o) => o.slug === 'atlas')!.plafonds_par_taille!;
+    plafonds[0].budget_annuel_max = 16000; // +100 % : hors seuil
+    plafonds[1].budget_annuel_max = 12000; // +50 % exactement : dans le seuil
+
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
+    expect(report.issues).toEqual([]);
+    expect(report.needsReview).toEqual([
+      expect.objectContaining({ slug: 'atlas', field: 'plafonds_par_taille[0:less_11].budget_annuel_max', oldValue: 8000, newValue: 16000 }),
+    ]);
+    const publies = report.opcos.find((o) => o.slug === 'atlas')!.plafonds_par_taille!;
+    expect(publies[0].budget_annuel_max).toBe(8000); // ancienne valeur ramenée
+    expect(publies[1].budget_annuel_max).toBe(12000); // variation au seuil : publiée
   });
 
   it('nouveau montant sans référence (null -> valeur) -> needsReview, pas auto-publié', () => {
     const current = deepClone(EMBEDDED_OPCOS);
     const corrected = deepClone(current);
     corrected.find((o) => o.slug === 'atlas')!.frais_transport.value = 12;
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 50 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 50, version });
     expect(report.needsReview.some((r) => r.field === 'frais_transport')).toBe(true);
     expect(report.opcos.find((o) => o.slug === 'atlas')!.frais_transport.value).toBeNull();
   });
@@ -226,14 +303,72 @@ describe('validate.validatePipeline', () => {
     // 250 €/h > borne 200 de sanityCheckOpco mais variation sous seuil impossible…
     // -> on force avec un seuil élevé pour atteindre le sanity check.
     corrected.find((o) => o.slug === 'atlas')!.cout_horaire_inter.value = 250;
-    const report = validatePipeline({ current, corrected, maxDeltaPct: 10_000 });
+    const report = validatePipeline({ current, corrected, maxDeltaPct: 10_000, version });
     expect(report.ok).toBe(false);
     expect(report.issues.some((i) => i.includes('cout_horaire_inter'))).toBe(true);
+  });
+
+  it('dataset de 10 OPCO -> rejeté par validateDataset (11 OPCO exigés)', () => {
+    const current = deepClone(EMBEDDED_OPCOS).slice(0, 10);
+    const report = validatePipeline({ current, corrected: deepClone(current), version });
+    expect(report.ok).toBe(false);
+    expect(report.issues).toContainEqual(expect.stringContaining('Dataset incomplet : 10 OPCO, minimum attendu 11'));
+  });
+
+  it('valide le dataset avec la version qui sera publiée, et non une version écrite en dur', () => {
+    const current = deepClone(EMBEDDED_OPCOS);
+    expect(validatePipeline({ current, corrected: deepClone(current), version }).issues).toEqual([]);
+    // Une version impossible (0) est refusée : preuve que la version transmise est bien celle que l'on valide.
+    const report = validatePipeline({ current, corrected: deepClone(current), version: 0 });
+    expect(report.ok).toBe(false);
+    expect(report.issues).toEqual([expect.stringMatching(/^validateDataset a rejeté le dataset : [\s\S]*"version"/)]);
   });
 
   it('scénarios calculateFunding : aucun ne lève, totaux plausibles', () => {
     const issues: string[] = [];
     runFundingScenarios(deepClone(EMBEDDED_OPCOS), issues);
+    expect(issues).toEqual([]);
+  });
+
+  it('scénarios : un total négatif (plafond horaire négatif dans les données) est signalé', () => {
+    const opcos = deepClone(EMBEDDED_OPCOS);
+    for (const o of opcos) {
+      o.cout_horaire_inter.value = -10;
+      for (const p of o.plafonds_par_taille ?? []) p.cout_horaire_max = -10;
+    }
+    const issues: string[] = [];
+    runFundingScenarios(opcos, issues);
+    expect(issues.length).toBeGreaterThan(0);
+    expect(issues.every((i) => i.includes('total négatif'))).toBe(true);
+  });
+
+  it("scénarios : un total nul (budget annuel publié à 0) n'est pas une anomalie", () => {
+    const opcos = deepClone(EMBEDDED_OPCOS);
+    for (const o of opcos) {
+      o.budget_annuel_max.value = 0;
+      o.budget_annuel_portee = 'global';
+      for (const p of o.plafonds_par_taille ?? []) p.budget_annuel_max = 0;
+    }
+    // Prémisse : avec un budget à 0, la prise en charge calculée est bien nulle.
+    const akto = opcos.find((o) => o.slug === 'akto')!;
+    const etat = {
+      ...createInitialWizardState(),
+      opcoKnown: true,
+      selectedOpcoSlug: akto.slug,
+      contractType: 'cdi' as const,
+      companySize: '11_49' as const,
+      formationNom: 'Total nul',
+      formationType: 'qualification' as const,
+      durationHours: 35,
+      pedagogyCostPerHour: 30,
+      pedagogyCostTotal: 30 * 35,
+      trainingMode: 'presentiel' as const,
+      trainingDays: 5,
+    };
+    expect(calculateFunding(akto, etat).totalFunded).toBe(0);
+
+    const issues: string[] = [];
+    runFundingScenarios(opcos, issues);
     expect(issues).toEqual([]);
   });
 });
@@ -293,5 +428,64 @@ describe('scrape helpers', () => {
     expect(text).toContain('Plafond : 25 €/h');
     expect(text).not.toContain('menu');
     expect(text).not.toContain('x()');
+  });
+});
+
+// --- DRY-RUN (cibles des mutations contrôlées) ----------------------------------------
+
+describe('dry-run.choisirCiblesDryRun', () => {
+  // Trois OPCO embarqués aux montants épinglés : le choix ne dépend que de l'ordre des OPCO et des valeurs renseignées.
+  const troisOpco = (): OpcoData[] => {
+    const [a, b, c] = deepClone(EMBEDDED_OPCOS).slice(0, 3);
+    a.cout_horaire_inter.value = null;
+    a.budget_annuel_max.value = null;
+    b.cout_horaire_inter.value = 30;
+    b.budget_annuel_max.value = null;
+    c.cout_horaire_inter.value = 25;
+    c.budget_annuel_max.value = 4000;
+    return [a, b, c];
+  };
+
+  it("vise le premier OPCO dont la valeur est renseignée, dans l'ordre des données", () => {
+    const opcos = troisOpco();
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: opcos[1].slug, doublement: opcos[2].slug });
+  });
+
+  it('le premier OPCO est visé quand il a les deux valeurs (aucun OPCO sauté)', () => {
+    const opcos = troisOpco();
+    opcos[0].cout_horaire_inter.value = 20;
+    opcos[0].budget_annuel_max.value = 2000;
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: opcos[0].slug, doublement: opcos[0].slug });
+  });
+
+  it('un montant à 0 n’est pas une cible : la hausse de 12 % et le doublement ne le changent pas', () => {
+    const opcos = troisOpco();
+    opcos[0].cout_horaire_inter.value = 0;
+    opcos[0].budget_annuel_max.value = 0;
+    // Les valeurs à 0 du premier OPCO sont ignorées : les cibles restent celles des suivants.
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: opcos[1].slug, doublement: opcos[2].slug });
+    // Seuls des montants à 0 : aucune cible.
+    for (const o of opcos) {
+      o.cout_horaire_inter.value = 0;
+      o.budget_annuel_max.value = 0;
+    }
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: null, doublement: null });
+  });
+
+  it('aucune valeur renseignée -> aucune cible', () => {
+    const opcos = troisOpco();
+    for (const o of opcos) {
+      o.cout_horaire_inter.value = null;
+      o.budget_annuel_max.value = null;
+    }
+    expect(choisirCiblesDryRun(opcos)).toEqual({ hausse: null, doublement: null });
+  });
+
+  it('données embarquées : chaque cible a un montant, que le dry-run augmente de 12 % ou double', () => {
+    // Sans montant, la mutation ne change rien et le dry-run ne traverse plus le garde-fou de variation (atlas, écrit en
+    // dur jusqu'en octobre 2026, avait perdu ses deux valeurs).
+    const { hausse, doublement } = choisirCiblesDryRun(EMBEDDED_OPCOS);
+    expect(EMBEDDED_OPCOS.find((o) => o.slug === hausse)?.cout_horaire_inter.value).toBeGreaterThan(0);
+    expect(EMBEDDED_OPCOS.find((o) => o.slug === doublement)?.budget_annuel_max.value).toBeGreaterThan(0);
   });
 });

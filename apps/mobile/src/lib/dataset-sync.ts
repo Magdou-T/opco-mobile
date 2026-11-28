@@ -153,7 +153,7 @@ export async function syncDataset(baseUrl: string = DATASET_BASE_URL): Promise<S
       status: 'network-error',
       message:
         'Impossible de récupérer le manifest des mises à jour. ' +
-        'Vérifiez votre connexion — les données actuelles restent utilisées.',
+        'Vérifiez votre connexion. Les données actuelles restent utilisées.',
       activeVersion: active.version,
     };
   }

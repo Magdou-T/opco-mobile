@@ -1,5 +1,5 @@
 // ============================================================
-// EXTRACT — extraction IA des montants depuis le texte des pages.
+// EXTRACT : extraction IA des montants depuis le texte des pages.
 //
 // - GATÉ derrière ANTHROPIC_API_KEY : sans clé, extractAmounts() lève.
 // - Sortie STRICTEMENT structurée (structured outputs + schéma Zod),
@@ -9,9 +9,9 @@
 //   depends_on_branche si le site renvoie à un accord de branche,
 //   NE JAMAIS inventer de montant.
 //
-// Modèles (configurables par env, IDs actuels issus de la skill claude-api) :
-//   EXTRACT_MODEL (défaut claude-haiku-4-5)  — extraction structurée
-//   VERIFY_MODEL  (défaut claude-opus-4-8)   — raisonnement sur les écarts
+// Modèles (configurables par env ; identifiants confirmés avec la skill claude-api le 07/10/2026) :
+//   EXTRACT_MODEL (défaut claude-haiku-4-5) : extraction structurée
+//   VERIFY_MODEL  (défaut claude-opus-5-5)  : raisonnement sur les écarts
 // ============================================================
 
 import Anthropic from '@anthropic-ai/sdk';
@@ -21,7 +21,7 @@ import { z } from 'zod/v4';
 import { NUMERIC_FIELDS, type ExtractionResult, type ScrapeResult } from './types';
 
 export const DEFAULT_EXTRACT_MODEL = 'claude-haiku-4-5';
-export const DEFAULT_VERIFY_MODEL = 'claude-opus-4-8';
+export const DEFAULT_VERIFY_MODEL = 'claude-opus-5-5';
 
 export function getExtractModel(): string {
   return process.env.EXTRACT_MODEL || DEFAULT_EXTRACT_MODEL;
@@ -74,7 +74,7 @@ export const ExtractionSchema = z.object({
 const SYSTEM_PROMPT = `Tu es un extracteur de données de financement de la formation professionnelle (OPCO français).
 On te donne le texte brut de pages officielles d'un OPCO. Tu dois en extraire les montants de prise en charge.
 
-RÈGLES ABSOLUES — toute violation rend la sortie inutilisable :
+RÈGLES ABSOLUES (toute violation rend la sortie inutilisable) :
 1. Ne renvoie QUE des montants réellement présents dans le texte fourni. N'utilise JAMAIS tes connaissances générales sur les OPCO.
 2. Pour CHAQUE montant, cite dans "quote" la phrase EXACTE du texte qui le contient (copie littérale, pas de paraphrase).
 3. Si le texte renvoie à un accord de branche ("selon votre branche", "voir accord de branche", "critères de votre branche"…), renvoie le champ avec value=null et confidence="depends_on_branche", en citant la phrase.
@@ -139,7 +139,7 @@ export async function extractAmounts(slug: string, scraped: ScrapeResult): Promi
 /**
  * Extraction simulée pour le dry-run : identité depuis le dataset courant
  * (aucun appel réseau ni IA). Les valeurs renvoyées sont exactement celles
- * du dataset — donc aucun montant inventé.
+ * du dataset : aucun montant inventé.
  */
 export function simulateExtractionFromCurrent(opco: {
   slug: string;

@@ -1,0 +1,69 @@
+# Site financementOPCO : configuration Apache pour l'hébergement mutualisé (Hostinger).
+# Next.js copie ce fichier tel quel à la racine de l'export statique (apps/web/out/.htaccess).
+# La redirection vers HTTPS reste réglée par l'hébergeur (« Forcer HTTPS ») : une règle sur %{HTTPS} ici bouclerait
+# derrière le CDN d'Hostinger, qui parle au serveur en HTTP. Voir docs/deploiement-site.md.
+
+AddDefaultCharset UTF-8
+Options -Indexes
+
+# Adresse canonique : https://www.financementopco.fr (ADRESSE_DU_SITE, lib/metadonnees.ts). Le domaine nu servait les
+# mêmes pages en 200 (relevé du 27/11/2026) : il est redirigé de façon permanente, chemin conservé.
+# Une adresse en /index.html est redirigée vers son dossier (même page, une seule adresse). THE_REQUEST ne lit que la
+# requête du navigateur : la page d'index servie en interne pour « / » ne déclenche pas la règle.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^financementopco\.fr$ [NC]
+  RewriteRule ^(.*)$ https://www.financementopco.fr/$1 [L,R=301]
+  RewriteCond %{THE_REQUEST} \s/+((?:[^\s?]*/)?)index\.html[\s?] [NC]
+  RewriteRule ^ /%1 [L,R=301]
+</IfModule>
+
+# En-têtes de sécurité. frame-ancestors : le site peut s'afficher dans un cadre de sfgdeveloppement.fr (mode intégré,
+# docs/integration-wordpress.md), d'aucun autre site. HSTS sans includeSubDomains : il ne touche que ce nom.
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set Content-Security-Policy "upgrade-insecure-requests; frame-ancestors 'self' https://sfgdeveloppement.fr https://*.sfgdeveloppement.fr"
+  # Ressources à empreinte de Next.js (_next/static : le nom change à chaque build) : cache d'un an, sans revalidation.
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# Images de partage générées par Next.js (opengraph-image, sans extension) : servies comme des PNG, sinon les réseaux
+# sociaux les refusent.
+<FilesMatch "^(opengraph-image|twitter-image)$">
+  ForceType image/png
+</FilesMatch>
+
+# Manifeste de l'application (icônes, couleur du thème) : son type officiel, au lieu de text/plain.
+AddType application/manifest+json .webmanifest
+
+# Page 404 personnalisée
+ErrorDocument 404 /404.html
+
+# Cache long pour les ressources à empreinte de Next.js
+# (text/javascript et application/javascript : le type annoncé dépend de la version du serveur)
+# favicon.ico : image/x-icon, le type que le mime.types d'Apache et celui de LiteSpeed associent à .ico ;
+# le type enregistré à l'IANA, image/vnd.microsoft.icon, n'y est associé à aucune extension (relu le 08/10/2026).
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  # Fichiers .txt de navigation de Next.js (index.txt, __next.*.txt), liés au build : revalidés comme le HTML.
+  ExpiresByType text/plain "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType image/png "access plus 1 week"
+</IfModule>
+
+# Compression (text/plain : fichiers .txt de préchargement de Next.js)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>

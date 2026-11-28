@@ -1,0 +1,1412 @@
+{
+  "meta": {
+    "perimetre": "National – droits individuels et reconversion : CPF (dont abondement employeur), PTP, démission-reconversion, période de reconversion, VAE, bilan de compétences, CléA, CEP, C2P/PUR",
+    "date_verification": "2026-10-05",
+    "auteur": "agent nat-1",
+    "nb_aides": 12
+  },
+  "aides": [
+    {
+      "id": "nat-cpf",
+      "nom": "Compte personnel de formation (CPF)",
+      "financeur": "cpf",
+      "financeur_nom": "Caisse des Dépôts – Mon Compte Formation",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie",
+        "recrutement_demandeur_emploi",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi",
+        "dirigeant"
+      ],
+      "description": "Compte en euros attaché à la personne (salarié, demandeur d'emploi, travailleur indépendant) qui finance une formation éligible choisie par son titulaire sur Mon Compte Formation. Le titulaire acquitte une participation forfaitaire de 150 € sauf exonération.",
+      "criteres": {
+        "eligible_cpf": true
+      },
+      "conditions": [
+        "Formation éligible au CPF (certification RNCP ou du répertoire spécifique, bloc de compétences, VAE, bilan de compétences, permis de conduire sous conditions).",
+        "Participation forfaitaire obligatoire de 150 € pour les demandes depuis le 2 avril 2026, sauf demandeur d'emploi, abondement de l'employeur ou de l'OPCO, mobilisation du C2P ou abondement AT-MP ; l'employeur ou l'OPCO peut la rembourser.",
+        "Depuis le 26 février 2026, droits mobilisables plafonnés à 1 500 € pour une certification du répertoire spécifique (sauf CléA), 1 600 € pour un bilan de compétences et 900 € pour un permis du groupe léger.",
+        "Permis A1, A2, B1, B ou BE : réservé aux demandeurs d'emploi inscrits à France Travail ou aux titulaires bénéficiant d'un cofinancement d'au moins 100 € (depuis le 21 février 2026).",
+        "Formation à la création ou reprise d'entreprise : elle doit aboutir à une certification.",
+        "Droits non mobilisables pour une certification déjà obtenue (sauf langues) ni, en cas d'absence injustifiée aux épreuves, pour payer l'organisme (loi du 25 juin 2026).",
+        "Formation sur le temps de travail : autorisation de l'employeur demandée au moins 60 jours avant (120 jours si plus de 6 mois) ; réponse sous 30 jours. Hors temps de travail : aucune autorisation.",
+        "Demandeur d'emploi : CPF non alimenté pendant le chômage ; abondements possibles (France Travail, Région).",
+        "Travailleur indépendant : droits alimentés seulement s'il est à jour de sa contribution à la formation professionnelle.",
+        "Demandes validées depuis le 2 octobre 2026 : le projet de loi de finances pour 2027 prévoit un complément de participation pouvant atteindre 200 €, à régler en 2027 (sauf secteurs prioritaires, VAE ou cofinancement d'au moins 150 €). Mesure non encore adoptée."
+      ],
+      "montant": {
+        "mode": "solde_cpf",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 5000,
+        "duree_max_mois": null,
+        "libelle": "Solde des droits CPF du titulaire : 500 € par an (au moins à mi-temps), dans la limite de 5 000 € hors dotations, diminué de la participation forfaitaire de 150 € sauf exonération. Plafonds d'utilisation : 1 500 € (répertoire spécifique hors CléA), 1 600 € (bilan de compétences), 900 € (permis du groupe léger).",
+        "majorations": [
+          {
+            "criteres": {
+              "niveaux_diplome": [
+                "sans_diplome"
+              ]
+            },
+            "valeur": null,
+            "pourcentage": null,
+            "plafond": 8000,
+            "libelle": "Salarié sans qualification de niveau CAP/BEP (niveau 3) : 800 € par an, plafond de 8 000 €."
+          },
+          {
+            "criteres": {
+              "rqth": true
+            },
+            "valeur": null,
+            "pourcentage": null,
+            "plafond": 8000,
+            "libelle": "Travailleur reconnu handicapé (au moins à mi-temps) : 800 € par an, plafond de 8 000 €."
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les abondements (employeur, OPCO, Région, France Travail, Agefiph...). Les aides nat-bilan-competences, nat-vae et nat-clea mobilisent ce même solde : ne pas additionner. Dans un PTP, la Transitions Pro mobilise en priorité les droits CPF."
+      },
+      "demarches": [
+        "Consulter ses droits sur moncompteformation.gouv.fr ou l'application Mon Compte Formation.",
+        "Choisir une formation éligible et vérifier le reste à payer (participation de 150 € incluse).",
+        "Si la formation a lieu sur le temps de travail, demander l'autorisation de l'employeur au moins 60 jours avant (120 jours si plus de 6 mois).",
+        "Si les droits sont insuffisants, solliciter un abondement (employeur, OPCO, Région, France Travail) avant de valider.",
+        "Valider la commande et régler le reste à payer avant l'entrée en formation."
+      ],
+      "url_demarche": "https://www.moncompteformation.gouv.fr/",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F10705",
+          "titre": "Compte personnel de formation (CPF) d'un salarié du secteur privé - Service Public",
+          "extrait": "Si vous êtes à temps plein, ou au moins à mi-temps, l'alimentation de votre compte se fait à hauteur de 500 € par année de travail jusqu'à atteindre 5 000 € maximum."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F10705",
+          "titre": "Compte personnel de formation (CPF) d'un salarié du secteur privé - Service Public",
+          "extrait": "L'alimentation du compte est de 800 € par année de travail jusqu'à atteindre 8 000 maximum si vous n'avez pas un niveau de qualification aboutissant à un des diplômes ou titres suivants : Diplôme de CAP/BEP"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F10705",
+          "titre": "Compte personnel de formation (CPF) d'un salarié du secteur privé - Service Public",
+          "extrait": "Travailleur reconnu handicapé Si vous travaillez au moins à mi-temps, l'alimentation du compte est de 800 € par année de travail jusqu'à atteindre 8 000 maximum."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/actualites/A17364",
+          "titre": "CPF : la participation forfaitaire obligatoire augmente - Service Public",
+          "extrait": "Un décret du 30 mars 2026 relève son montant à 150 €. Cette hausse s’applique pour toute demande de souscription à une action de formation éligible au CPF intervenant à compter du 2 avril 2026."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/actualites/A17364",
+          "titre": "CPF : la participation forfaitaire obligatoire augmente - Service Public",
+          "extrait": "Cependant, elle ne s’applique pas dans certains cas : si vous êtes demandeur d'emploi ; lorsque votre formation fait l’objet d’un abondement de la part de votre employeur ; lorsque vous souhaitez mobiliser tout ou partie des points de votre compte professionnel de prévention (C2P) ;"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/actualites/A18831",
+          "titre": "Quelles évolutions en 2026 pour l’utilisation du CPF ? - Service Public",
+          "extrait": "L’article 203 de la loi de finances pour 2026 a instauré des plafonds d’utilisation du CPF. Le décret d’application, en vigueur depuis le 26 février 2026, fixe les seuils suivants : 1 500 € pour les certifications et habilitations enregistrées dans le répertoire spécifique"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/actualites/A17164",
+          "titre": "Dans quels cas le permis de conduire peut-il encore être pris en charge par le CPF ? - Service Public",
+          "extrait": "vous devez obligatoirement : être un demandeur d’emploi inscrit à France Travail ; ou bénéficier par ailleurs du financement d’un tiers à hauteur d’au moins 100 € pour préparer ce type de permis de conduire"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12382",
+          "titre": "CPF d'un demandeur d'emploi inscrit à France Travail - Service Public",
+          "extrait": "Les formations à l'acquisition de compétences pour créer ou reprendre une entreprise doivent aboutir à une certification pour que le CPF puisse être utillisé."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12382",
+          "titre": "CPF d'un demandeur d'emploi inscrit à France Travail - Service Public",
+          "extrait": "Votre CPF n'est pas alimenté pendant votre période de chômage."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F10705",
+          "titre": "Compte personnel de formation (CPF) d'un salarié du secteur privé - Service Public",
+          "extrait": "Vous devez demander à votre employeur son autorisation au moins : 60 jours calendaires avant le début de la formation si celle-ci a une durée inférieure à 6 mois Ou 120 jours calendaires avant le début de la formation si celle-ci a une durée supérieure à 6 mois."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/travailleur-non-salarie-0",
+          "titre": "Mes droits formation (CPF) - travailleur non salarié - Mon Compte Formation",
+          "extrait": "Pour que vos droits à formation soient alimentés, vous devez être à jour de votre contribution à la formation professionnelle."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/travailleur-non-salarie-0",
+          "titre": "Mes droits formation (CPF) - travailleur non salarié - Mon Compte Formation",
+          "extrait": "Pour une année entière d’activité, votre compte est alimenté à hauteur de 500€ maximum par an dans la limite d’un plafond total de 5000€."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000051184759",
+          "titre": "Article L6323-6 - Code du travail - Légifrance (version en vigueur depuis le 27 juin 2026)",
+          "extrait": "Le titulaire du compte personnel de formation ne peut mobiliser les droits inscrits sur son compte pour financer une action de formation sanctionnée par une certification ou la validation d'un bloc de compétences mentionnée au premier alinéa du présent I qui a été précédemment obtenue ou validée"
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/evolution-des-regles-dutilisation-du-cpf-compter-du-2-octobre-2026",
+          "titre": "Évolution des règles d'utilisation du CPF à compter du 2 octobre 2026 - Mon Compte Formation",
+          "extrait": "En confirmant son achat, le titulaire s’engage à régler, le cas échéant, en 2027, un complément pouvant atteindre 200 €."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-cpf-abondement-employeur",
+      "nom": "Abondement de l'employeur sur le CPF (dotation volontaire)",
+      "financeur": "cpf",
+      "financeur_nom": "Caisse des Dépôts – Mon Compte Formation (dotation de l'employeur via l'EDEF)",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "L'employeur peut verser une dotation sur le CPF de son salarié pour cofinancer une formation. Lorsque la formation fait l'objet d'un abondement de l'employeur, le salarié est exonéré de la participation forfaitaire de 150 €.",
+      "criteres": {
+        "eligible_cpf": true
+      },
+      "conditions": [
+        "Salarié titulaire d'un CPF ; formation éligible au CPF.",
+        "Exonération de la participation forfaitaire dès que la formation fait l'objet d'un abondement de l'employeur : l'article L6323-7 du Code du travail ne fixe pas de montant minimum.",
+        "Dotation versée via l'Espace des employeurs et des financeurs (EDEF) avec un accès Net-entreprises ; paiement par virement dans les 90 jours ; dotation créditée à réception.",
+        "La dotation est utilisée en priorité lors de l'achat ; elle peut être fléchée vers une certification. Les dotations ne sont pas plafonnées.",
+        "Les abondements volontaires sont exclus de l'assiette des prélèvements sociaux.",
+        "Demandes validées depuis le 2 octobre 2026 : le complément de participation envisagé par le PLF 2027 ne s'appliquerait pas aux formations cofinancées d'au moins 150 € ; un abondement inférieur pourrait ne pas suffire à l'éviter (mesure non encore adoptée).",
+        "À défaut d'abondement, l'employeur ou l'OPCO peut rembourser au salarié les 150 € payés."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 150,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Évite au salarié la participation forfaitaire de 150 € (montant 2026) : les droits CPF et la dotation peuvent couvrir tout le coût. Le montant de la dotation est libre et non plafonné."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Levier associé à nat-cpf (le solde CPF du salarié reste mobilisé)."
+      },
+      "demarches": [
+        "Le salarié sélectionne la formation sur Mon Compte Formation, choisit de demander à son entreprise de l'aider à financer la formation et télécharge le PDF du dossier, sans l'envoyer à l'organisme.",
+        "Il transmet ce document à l'employeur pour échanger sur le projet.",
+        "L'employeur se connecte à l'EDEF (financeurs.moncompteformation.gouv.fr) avec ses accès Net-entreprises et attribue une dotation volontaire (bénéficiaire, montant, certification visée, date de fin de validité).",
+        "L'employeur paie par virement avec les références fournies, dans un délai de 90 jours.",
+        "Une fois la dotation versée, le salarié finalise son inscription : la dotation est déduite en priorité."
+      ],
+      "url_demarche": "https://financeurs.moncompteformation.gouv.fr/espace-public/",
+      "sources": [
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000046873599",
+          "titre": "Article L6323-7 - Code du travail - Légifrance",
+          "extrait": "La participation n'est due ni par les demandeurs d'emploi ni par les titulaires de compte lorsque la formation fait l'objet d'un abondement prévu au 2° du II du même article L. 6323-4."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000049488983",
+          "titre": "Article R6323 - Code du travail - Légifrance (version en vigueur depuis le 2 avril 2026)",
+          "extrait": "La participation mentionnée au I de l'article L. 6323-4 est fixée, pour l'année 2026, à la somme forfaitaire de cent cinquante euros."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F10705",
+          "titre": "Compte personnel de formation (CPF) d'un salarié du secteur privé - Service Public",
+          "extrait": "Si vous bénéficiez d'un abondement de votre employeur, vous n'êtes pas concerné par l'obligation de contribuer à hauteur de 150 € au financement de la formation."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/une-participation-financiere-obligatoire-pour-mobiliser-vos-droits-cpf",
+          "titre": "Une participation financière obligatoire pour mobiliser vos droits CPF - Mon Compte Formation",
+          "extrait": "Des exceptions sont cependant prévues pour : Les demandeurs d’emploi, Les titulaires qui bénéficient d’un financement de la part de leur employeur, pour les financements versés à compter du 1er janvier 2023,"
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/dotation-volontaire-employeur",
+          "titre": "Je veux construire un projet de formation avec mon employeur et autres financeurs - Mon Compte Formation",
+          "extrait": "Votre employeur peut alors vous attribuer une dotation volontaire en ligne sur financeurs.moncompteformation.gouv.fr. Une fois la dotation versée, finalisez votre inscription."
+        },
+        {
+          "url": "https://financeurs.moncompteformation.gouv.fr/espace-public/formez-vos-salaries-pour-repondre-aux-besoins-de-votre-entreprise",
+          "titre": "Formez vos salariés pour répondre aux besoins de votre entreprise - Mon Compte Formation (financeurs)",
+          "extrait": "Effectuez votre paiement : Le paiement se fait par virement bancaire à partir des références fournies en ligne dans un délai de 90 jours."
+        },
+        {
+          "url": "https://financeurs.moncompteformation.gouv.fr/espace-public/aide/les-dotations-sont-elles-plafonnees",
+          "titre": "Les dotations sont-elles plafonnées ? - Mon Compte Formation (financeurs)",
+          "extrait": "Contrairement aux droits acquis au titre d’une activité professionnelle, les dotations ne sont pas plafonnées."
+        },
+        {
+          "url": "https://financeurs.moncompteformation.gouv.fr/espace-public/aide/les-abondements-cpf-sont-ils-soumis-aux-cotisations-sociales",
+          "titre": "Les abondements CPF sont-ils soumis aux cotisations sociales ? - Mon Compte Formation (financeurs)",
+          "extrait": "Il en va de même des abondements volontaires réalisés dans les conditions prévues par le code du travail."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/evolution-des-regles-dutilisation-du-cpf-compter-du-2-octobre-2026",
+          "titre": "Évolution des règles d'utilisation du CPF à compter du 2 octobre 2026 - Mon Compte Formation",
+          "extrait": "À la plupart des projets de formation cofinancés par un tiers (employeur, région, branche professionnelle et OPCO, France Travail...), en sachant que ce co-financement doit être a minima de 150 euros."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/une-participation-financiere-obligatoire-pour-mobiliser-vos-droits-cpf",
+          "titre": "Une participation financière obligatoire pour mobiliser vos droits CPF - Mon Compte Formation",
+          "extrait": "il n’y a que votre employeur ou votre OPCO qui pourront prendre en charge cette participation financière obligatoire : cela signifie que vous pourrez leur demander un remboursement de ces 150 €"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-ptp",
+      "nom": "Projet de transition professionnelle (PTP) – prise en charge de la formation",
+      "financeur": "transitions_pro",
+      "financeur_nom": "Transitions Pro (commission paritaire interprofessionnelle régionale)",
+      "categorie": "cout_formation",
+      "projets": [
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Congé permettant à un salarié de suivre une formation certifiante pour changer de métier. La Transitions Pro de la région finance les frais pédagogiques et de validation et les frais annexes, ainsi que la rémunération (voir nat-ptp-remuneration), en mobilisant en priorité les droits CPF du salarié.",
+      "criteres": {
+        "contrats": [
+          "cdi",
+          "cdd",
+          "interim"
+        ],
+        "certifications": [
+          "rncp",
+          "rs"
+        ],
+        "eligible_cpf": true,
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "CDI : au moins 2 ans d'activité salariée, consécutifs ou non, dont 1 an dans la même entreprise.",
+        "CDD : au moins 2 ans d'activité salariée au cours des 5 dernières années, dont 4 mois en CDD au cours des 12 derniers mois ; demande déposée avant la fin du CDD, formation débutant au plus tard 6 mois après.",
+        "Intérimaire : 1 600 heures au cours des 18 derniers mois, dont 600 heures dans l'entreprise de travail temporaire.",
+        "Pas de condition d'ancienneté notamment pour les bénéficiaires de l'obligation d'emploi (RQTH...) et certains salariés licenciés pour motif économique ou pour inaptitude.",
+        "Formation certifiante (RNCP ou répertoire spécifique) dispensée par un organisme certifié Qualiopi, précédée d'un positionnement préalable obligatoire et gratuit.",
+        "Projet jugé pertinent par la commission paritaire (cohérence, parcours de formation, perspectives d'emploi) et inscrit dans ses priorités de financement : l'accord n'est pas automatique.",
+        "Salariés exposés à des risques ergonomiques : PTP finançable sur les fonds spécifiques du FIPU."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Frais pédagogiques et de validation et frais annexes (transport, repas, hébergement) pris en charge selon les plafonds et priorités de la Transitions Pro régionale, après mobilisation prioritaire des droits CPF du salarié."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-periode-reconversion",
+          "nat-demission-reconversion"
+        ],
+        "note": "Se cumule avec nat-ptp-remuneration (même dispositif). Les droits CPF sont mobilisés en priorité par la Transitions Pro. PTP, période de reconversion et démission-reconversion sont des voies distinctes."
+      },
+      "demarches": [
+        "Construire le projet, si besoin avec un conseiller en évolution professionnelle (gratuit, voir nat-cep).",
+        "Réaliser le positionnement préalable auprès de l'organisme de formation choisi.",
+        "Demander par écrit l'autorisation d'absence à l'employeur au plus tard 120 jours avant (formation à temps plein de 6 mois ou plus) ou 60 jours avant (moins de 6 mois ou temps partiel) ; réponse sous 30 jours, report possible jusqu'à 9 mois.",
+        "Déposer la demande de prise en charge en ligne sur le site de la Transitions Pro de sa région (résidence ou travail), avant le début de la formation et selon son calendrier.",
+        "Attendre la décision de la commission paritaire."
+      ],
+      "url_demarche": "https://www.transitionspro.fr/contacts-en-region/",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F14018",
+          "titre": "Projet de transition professionnelle (PTP) - Service Public",
+          "extrait": "Le salarié doit justifier d'une activité salariée d'au moins 2 ans consécutifs ou non, dont 1 an dans la même entreprise, quelle que soit la nature des contrats successifs."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F14018",
+          "titre": "Projet de transition professionnelle (PTP) - Service Public",
+          "extrait": "Le salarié doit justifier d'une activité salariée d'au moins 2 ans consécutifs ou non, quelle que soit la nature des contrats successifs, au cours des 5 dernières années dont 4 mois en CDD au cours des 12 derniers mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F3024",
+          "titre": "Un intérimaire a-t-il droit à un congé pour un projet de transition professionnelle ? - Service Public",
+          "extrait": "Une ancienneté de 1 600 heures en tant qu'intérimaire au cours des 18 derniers mois Parmi ces 1 600 heures, 600 doivent avoir été effectuées dans l'entreprise de travail temporaire"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F14018",
+          "titre": "Projet de transition professionnelle (PTP) - Service Public",
+          "extrait": "Si elle s'effectue en 1 fois à temps plein, la demande doit être formulée au plus tard 120 jours calendaires avant le début de la formation."
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/projet-de-transition-professionnelle/",
+          "titre": "Projet de Transition Professionnelle - Transitions Pro",
+          "extrait": "Le financement d’un PTP est accordé sous deux conditions : être reconnu pertinent par la commission paritaire selon trois critères réglementaires, et s’inscrire dans les priorités de financement (niveau de qualification, taille de l’entreprise, viser un métier qui recrute …)."
+        },
+        {
+          "url": "https://www.transitionspro.fr/blog/financer-reconversion/qui-finance-la-reconversion-professionnelle/comment-transitions-pro-finance-la-reconversion-des-salaries/",
+          "titre": "Comment Transitions Pro finance la reconversion des salariés ? - Transitions Pro",
+          "extrait": "votre formation doit être inscrite au Répertoire national des certifications professionnelles (RNCP) ou au Répertoire spécifique (RS), l’organisme de formation choisi doit être certifié Qualiopi"
+        },
+        {
+          "url": "https://www.transitionspro-idf.fr/decouvrez-nos-dispositifs/importance-du-positionnement-prealable-pour-votre-dossier/",
+          "titre": "L’importance du positionnement préalable pour votre dossier - Transitions Pro Île-de-France",
+          "extrait": "Le code du travail exige la réalisation d’un positionnement préalable avant de faire une demande de prise en charge d’un projet de transition professionnelle."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038007650",
+          "titre": "Article R6323-14-4 - Code du travail - Légifrance",
+          "extrait": "La commission paritaire interprofessionnelle régionale mobilise prioritairement les droits inscrits sur le compte personnel de formation du salarié ayant fait l'objet d'une décision de prise en charge de son projet de transition professionnelle."
+        },
+        {
+          "url": "https://www.transitionspro.fr/actualites/fipu-reconversion-bilan-dune-premiere-annee-reussie-en-matiere-de-prevention-de-lusure-au-travail/",
+          "titre": "FIPU – Reconversion : bilan d’une première année réussie - Transitions Pro",
+          "extrait": "le réseau des 18 associations Transitions Pro, coordonné par Certif Pro, accompagne les salariés sur l’ensemble du territoire via le financement de leur Projet de Transitions Professionnelle (PTP) financé via des fonds spécifiques."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "estimated",
+      "liens_par_region": {
+        "84": "https://www.transitionspro-ara.fr/",
+        "27": "https://www.transitionspro-bfc.fr/",
+        "53": "https://www.transitionspro-bretagne.fr/",
+        "24": "https://www.transitionspro-cvl.fr/",
+        "94": "https://www.transitionspro-corsica.fr/",
+        "44": "https://www.transitionspro-grandest.fr/",
+        "32": "https://www.transitionspro-hdf.fr/",
+        "11": "https://www.transitionspro-idf.fr/",
+        "28": "https://www.transitionspro-normandie.fr/",
+        "75": "https://www.transitionspro-na.fr/",
+        "76": "https://www.transitionspro-occitanie.fr/",
+        "52": "https://www.transitionspro-pdl.fr/",
+        "93": "https://www.transitionspro-paca.fr/",
+        "01": "https://www.transitionspro-guadeloupe.fr/",
+        "02": "https://www.transitionspro-martinique.fr/",
+        "03": "https://www.transitionspro-guyane.fr/",
+        "04": "https://www.transitionspro-reunion.fr/",
+        "06": "https://www.transitionspro-mayotte.fr/"
+      }
+    },
+    {
+      "id": "nat-ptp-remuneration",
+      "nom": "Projet de transition professionnelle (PTP) – maintien de la rémunération",
+      "financeur": "transitions_pro",
+      "financeur_nom": "Transitions Pro (commission paritaire interprofessionnelle régionale)",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Pendant un PTP suivi sur le temps de travail, le salarié perçoit une rémunération calculée sur son salaire moyen de référence, financée par la Transitions Pro (avancée par l'employeur pour un CDI, puis remboursée).",
+      "criteres": {
+        "contrats": [
+          "cdi",
+          "cdd",
+          "interim"
+        ]
+      },
+      "conditions": [
+        "Mêmes conditions d'éligibilité et même décision de prise en charge que nat-ptp.",
+        "Salaire moyen de référence calculé sur les 12 mois précédant la formation (CDI) ou sur les 4 derniers mois de CDD.",
+        "CDI : salaire maintenu par l'employeur puis remboursé par Transitions Pro ; CDD ou intermittent : rémunération versée directement par Transitions Pro.",
+        "Temps de formation assimilé à du temps de travail (congés payés, protection sociale maintenus)."
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 100,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "100 % du salaire moyen de référence s'il est inférieur ou égal à 2 Smic (3 734,04 €) ; au-delà, 90 % la 1re année ou les 1 200 premières heures, puis 60 %, sans pouvoir descendre sous 2 Smic."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-periode-reconversion",
+          "nat-demission-reconversion"
+        ],
+        "note": "Composante rémunération du PTP, cumulable avec nat-ptp."
+      },
+      "demarches": [
+        "Demande unique de prise en charge avec nat-ptp sur le site de la Transitions Pro régionale.",
+        "Pour un CDI, l'employeur maintient le salaire pendant le congé et se fait rembourser par la Transitions Pro."
+      ],
+      "url_demarche": "https://www.transitionspro.fr/contacts-en-region/",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F14018",
+          "titre": "Projet de transition professionnelle (PTP) - Service Public",
+          "extrait": "Lorsque le salaire moyen de référence du salarié est inférieur ou égal à 3 734,04 €, la rémunération perçue au titre du PTP est égale à 100 % du salaire moyen de référence."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F14018",
+          "titre": "Projet de transition professionnelle (PTP) - Service Public",
+          "extrait": "Si le salaire moyen de référence (SR) du salarié est supérieur à 3 734,04 €, la rémunération est égale à : 90 % du SR pour la 1re année de formation ou pour les premières 1 200 heures de formation,"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F14018",
+          "titre": "Projet de transition professionnelle (PTP) - Service Public",
+          "extrait": "60 % du SR pour les années suivantes ou à partir de la 1201e heure."
+        },
+        {
+          "url": "https://www.transitionspro.fr/blog/financer-reconversion/ce-qui-est-finance/quest-ce-qui-est-finance-par-le-ptp/",
+          "titre": "Qu’est-ce qui est financé par le PTP ? - Transitions Pro",
+          "extrait": "la rémunération perçue ne peut être inférieure à un montant égal à 2 fois le SMIC."
+        },
+        {
+          "url": "https://www.transitionspro.fr/blog/financer-reconversion/qui-finance-la-reconversion-professionnelle/comment-transitions-pro-finance-la-reconversion-des-salaries/",
+          "titre": "Comment Transitions Pro finance la reconversion des salariés ? - Transitions Pro",
+          "extrait": "Si vous êtes en CDI, le maintien de votre salaire pendant votre congé sera assuré par votre employeur, ce dernier sera ensuite remboursé par Transitions Pro. En CDD ou intermittent, vous serez directement payé par Transitions Pro."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2300",
+          "titre": "Salaire minimum interprofessionnel de croissance (Smic) - Service Public",
+          "extrait": "Smic mensuel 1 867,02 €"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact",
+      "liens_par_region": {
+        "84": "https://www.transitionspro-ara.fr/",
+        "27": "https://www.transitionspro-bfc.fr/",
+        "53": "https://www.transitionspro-bretagne.fr/",
+        "24": "https://www.transitionspro-cvl.fr/",
+        "94": "https://www.transitionspro-corsica.fr/",
+        "44": "https://www.transitionspro-grandest.fr/",
+        "32": "https://www.transitionspro-hdf.fr/",
+        "11": "https://www.transitionspro-idf.fr/",
+        "28": "https://www.transitionspro-normandie.fr/",
+        "75": "https://www.transitionspro-na.fr/",
+        "76": "https://www.transitionspro-occitanie.fr/",
+        "52": "https://www.transitionspro-pdl.fr/",
+        "93": "https://www.transitionspro-paca.fr/",
+        "01": "https://www.transitionspro-guadeloupe.fr/",
+        "02": "https://www.transitionspro-martinique.fr/",
+        "03": "https://www.transitionspro-guyane.fr/",
+        "04": "https://www.transitionspro-reunion.fr/",
+        "06": "https://www.transitionspro-mayotte.fr/"
+      }
+    },
+    {
+      "id": "nat-demission-reconversion",
+      "nom": "Démission pour reconversion (dispositif démissionnaire)",
+      "financeur": "france_travail",
+      "financeur_nom": "France Travail (allocation chômage), après validation du projet par Transitions Pro",
+      "categorie": "remuneration_beneficiaire",
+      "projets": [
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Un salarié en CDI qui démissionne pour suivre une formation de reconversion ou créer/reprendre une entreprise peut percevoir l'allocation d'aide au retour à l'emploi (ARE) si son projet est reconnu réel et sérieux par la Transitions Pro. Le coût de la formation n'est pas financé par ce dispositif.",
+      "criteres": {
+        "contrats": [
+          "cdi"
+        ]
+      },
+      "conditions": [
+        "Être salarié en CDI de droit privé au moment de la démission (temps complet ou partiel).",
+        "Justifier d'au moins 1 300 jours travaillés continus au cours des 60 derniers mois, chez un ou plusieurs employeurs (1 825 jours à Mayotte).",
+        "Avoir sollicité un conseil en évolution professionnelle avant la démission (France Travail et missions locales exclus).",
+        "Projet (formation, création ou reprise d'entreprise) reconnu réel et sérieux par la commission paritaire Transitions Pro ; démissionner avant cette validation fait perdre le droit à l'allocation.",
+        "S'inscrire à France Travail et demander l'allocation dans les 6 mois suivant la validation ; France Travail contrôle la mise en œuvre du projet dans les 6 mois (sinon radiation de 4 mois).",
+        "Formation à financer par ailleurs (CPF notamment).",
+        "Non ouvert aux agents publics ni aux salariés ayant majoritairement travaillé pour des employeurs publics en auto-assurance chômage."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Allocation d'aide au retour à l'emploi (ARE) calculée selon les droits de chacun, dans les mêmes conditions que pour tout demandeur d'emploi ; pas de montant forfaitaire."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-ptp",
+          "nat-ptp-remuneration",
+          "nat-periode-reconversion"
+        ],
+        "note": "Voie distincte du PTP et de la période de reconversion (le salarié quitte son emploi). La formation peut être financée par le CPF (nat-cpf)."
+      },
+      "demarches": [
+        "Prendre rendez-vous avec un conseiller en évolution professionnelle (mon-cep.org) avant toute démission et construire le projet.",
+        "Vérifier son éligibilité sur demission-reconversion.gouv.fr.",
+        "Déposer le dossier auprès de la Transitions Pro de sa région et attendre l'attestation du caractère réel et sérieux.",
+        "Démissionner, s'inscrire à France Travail et demander l'ARE dans les 6 mois suivant l'attestation.",
+        "Mettre en œuvre le projet ; France Travail vérifie les démarches dans les 6 mois."
+      ],
+      "url_demarche": "https://www.demission-reconversion.gouv.fr/",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F34991/5",
+          "titre": "Un salarié peut-il percevoir l'allocation chômage en cas de démission ? - Service Public",
+          "extrait": "Être salarié en CDI de droit privé au moment de votre démission Justifier d'au moins 1 300 jours travaillés dans les 60 derniers mois (soit 5 ans) Avoir un projet de reconversion professionnelle bien préparé et reconnu comme étant réel et sérieux."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F34991/5",
+          "titre": "Un salarié peut-il percevoir l'allocation chômage en cas de démission ? - Service Public",
+          "extrait": "Si vous démissionnez avant que votre projet ne soit validé par l'ATpro, vous ne pourrez pas bénéficier de l'allocation chômage. Vous devez vous inscrire comme demandeur d'emploi dans les 6 mois qui suivent la validation de votre projet."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/mes-droits-aux-aides-et-allocati/allocations-et-aides--les-repons/reconversion-professionnelle-et.html",
+          "titre": "Reconversion professionnelle et allocations chômage : bien préparer votre projet avant de démissionner - France Travail",
+          "extrait": "Préalablement à la démission, vous devez mobiliser un conseil en évolution professionnelle (CEP)."
+        },
+        {
+          "url": "https://www.francetravail.fr/candidat/mes-droits-aux-aides-et-allocati/allocations-et-aides--les-repons/reconversion-professionnelle-et.html",
+          "titre": "Reconversion professionnelle et allocations chômage : bien préparer votre projet avant de démissionner - France Travail",
+          "extrait": "Vous serez indemnisé comme n’importe quel demandeur d’emploi, au titre de l’ARE (Allocation d’aide au retour à l’emploi) dans les mêmes conditions"
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/demission-reconversion/",
+          "titre": "Démission-reconversion - Transitions Pro",
+          "extrait": "Si la commission de Transitions Pro est convaincue par votre projet, elle vous délivre une attestation favorable. Vous disposez alors d’un délai de 6 mois, à partir de la date de délivrance de votre attestation, pour donner votre démission à votre entreprise, vous inscrire à France Travail"
+        },
+        {
+          "url": "https://www.unedic.org/la-reglementation/fiches-thematiques/demission-pour-poursuivre-un-projet-professionnel",
+          "titre": "Démission pour poursuivre un projet professionnel - Unédic (mise à jour le 5 octobre 2026)",
+          "extrait": "1300 jours travaillés (1825 jours à Mayotte) continus au cours des 60 mois (5 ans) qui précèdent la démission."
+        },
+        {
+          "url": "https://www.unedic.org/la-reglementation/fiches-thematiques/demission-pour-poursuivre-un-projet-professionnel",
+          "titre": "Démission pour poursuivre un projet professionnel - Unédic (mise à jour le 5 octobre 2026)",
+          "extrait": "l’Apec ou les Cap emploi par exemple. (France Travail et les missions locales sont exclus du dispositif)."
+        },
+        {
+          "url": "https://www.transitionspro.fr/blog/financer-reconversion/qui-finance-la-reconversion-professionnelle/comment-transitions-pro-finance-la-reconversion-des-salaries/",
+          "titre": "Comment Transitions Pro finance la reconversion des salariés ? - Transitions Pro",
+          "extrait": "À noter que dans le cas d’un souhait de formation, Transitions Pro ne prend pas en charge son financement. Il faudra alors vous tourner vers d’autres solutions, par exemple l’utilisation de votre Compte Personnel de Formation (CPF)."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact",
+      "liens_par_region": {
+        "84": "https://www.transitionspro-ara.fr/",
+        "27": "https://www.transitionspro-bfc.fr/",
+        "53": "https://www.transitionspro-bretagne.fr/",
+        "24": "https://www.transitionspro-cvl.fr/",
+        "94": "https://www.transitionspro-corsica.fr/",
+        "44": "https://www.transitionspro-grandest.fr/",
+        "32": "https://www.transitionspro-hdf.fr/",
+        "11": "https://www.transitionspro-idf.fr/",
+        "28": "https://www.transitionspro-normandie.fr/",
+        "75": "https://www.transitionspro-na.fr/",
+        "76": "https://www.transitionspro-occitanie.fr/",
+        "52": "https://www.transitionspro-pdl.fr/",
+        "93": "https://www.transitionspro-paca.fr/",
+        "01": "https://www.transitionspro-guadeloupe.fr/",
+        "02": "https://www.transitionspro-martinique.fr/",
+        "03": "https://www.transitionspro-guyane.fr/",
+        "04": "https://www.transitionspro-reunion.fr/",
+        "06": "https://www.transitionspro-mayotte.fr/"
+      }
+    },
+    {
+      "id": "nat-periode-reconversion",
+      "nom": "Période de reconversion (interne ou externe)",
+      "financeur": "opco",
+      "financeur_nom": "Opérateur de compétences (OPCO) de l'employeur",
+      "categorie": "cout_formation",
+      "projets": [
+        "reconversion_salarie",
+        "formation_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Dispositif en vigueur depuis le 1er février 2026, qui remplace Pro-A et Transitions collectives : un salarié acquiert une certification RNCP, un CQP, des blocs de compétences ou CléA en vue d'une mobilité interne ou externe. L'OPCO prend en charge les frais pédagogiques sur la base d'un forfait horaire.",
+      "criteres": {
+        "certifications": [
+          "rncp",
+          "cqp"
+        ],
+        "duree_min_heures": 150,
+        "duree_max_heures": 2100
+      },
+      "conditions": [
+        "Tout salarié du secteur privé, sans condition d'âge, d'expérience ou de niveau de qualification ; accord écrit entre salarié et employeur (Cerfa 17613*01).",
+        "Durée de 12 mois maximum ; formation de 150 à 450 heures, ou jusqu'à 2 100 heures sur 36 mois maximum si un accord d'entreprise ou de branche le prévoit (CléA non concerné par ces durées).",
+        "Interne : contrat et rémunération maintenus. Externe : contrat suspendu, CDI ou CDD d'au moins 6 mois avec l'entreprise d'accueil, période d'essai et retour possible dans l'entreprise d'origine.",
+        "Le salarié peut mobiliser son CPF avec son accord ; l'organisme de formation ne peut pas lui réclamer de contribution.",
+        "Le forfait horaire dépend de la branche ; un accord collectif peut prévoir des modalités spécifiques (durée, certifications, publics prioritaires)."
+      ],
+      "montant": {
+        "mode": "par_heure",
+        "valeur": 9.15,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Forfait horaire fixé par la branche professionnelle ; à défaut, 9,15 € par heure de formation (frais pédagogiques). Montant moyen de 5 000 € par période et par OPCO (repère budgétaire, pas un plafond individuel)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-ptp",
+          "nat-ptp-remuneration",
+          "nat-demission-reconversion"
+        ],
+        "note": "Le CPF du salarié peut compléter le financement avec son accord (nat-cpf)."
+      },
+      "demarches": [
+        "Définir le projet avec le salarié et signer l'accord écrit (Cerfa 17613*01) en 3 exemplaires.",
+        "L'employeur adresse le dossier complet à son OPCO au plus tard 30 jours calendaires avant le début de la période.",
+        "L'OPCO se prononce dans les 20 jours calendaires suivant la réception du dossier complet.",
+        "En cas d'interruption avant le terme, l'employeur en informe l'OPCO dans les 30 jours."
+      ],
+      "url_demarche": "https://www.service-public.gouv.fr/particuliers/vosdroits/R75681",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/actualites/A18798",
+          "titre": "Un nouveau dispositif pour faciliter la reconversion des salariés - Entreprendre Service Public",
+          "extrait": "Suite à la loi du 24 octobre 2025 facilitant le recrutement des salariés expérimentés, le nouveau dispositif de la « période de reconversion » est entré en vigueur le 1er février 2026."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/actualites/A18798",
+          "titre": "Un nouveau dispositif pour faciliter la reconversion des salariés - Entreprendre Service Public",
+          "extrait": "qu’à défaut de fixation par les branches professionnelles, le montant forfaitaire de prise en charge est fixé à 9,15 € par heure ; que le montant moyen de prise en charge est fixé à 5 000 €."
+        },
+        {
+          "url": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053422626",
+          "titre": "Décret n° 2026-40 du 28 janvier 2026 relatif au financement de la période de reconversion - Légifrance",
+          "extrait": "A défaut de fixation par les branches professionnelles du montant forfaitaire de prise en charge des périodes de reconversion, en application du deuxième alinéa de l'article R. 6332-89, ce montant est fixé à 9,15 euros par heure."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/actualites/A18798",
+          "titre": "Un nouveau dispositif pour faciliter la reconversion des salariés - Entreprendre Service Public",
+          "extrait": "Ce nouveau dispositif est ouvert à l’ensemble des salariés souhaitant bénéficier d’une mobilité, contrairement à la Pro-A qui était seulement réservée aux salariés en CDI."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F13516",
+          "titre": "Reconversion : promotion par alternance (Pro-A) ou période de reconversion - Service Public",
+          "extrait": "La période de reconversion ne peut pas être supérieure à 12 mois (un an). La durée des actions de formation est comprise entre 150 et 450 heures."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F13516",
+          "titre": "Reconversion : promotion par alternance (Pro-A) ou période de reconversion - Service Public",
+          "extrait": "Cependant, un accord d’entreprise ou de branche peut prévoir jusqu’à 2 100 heures de formation sur une période ne pouvant pas être supérieure à 36 mois (3 ans)."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F13516",
+          "titre": "Reconversion : promotion par alternance (Pro-A) ou période de reconversion - Service Public",
+          "extrait": "Les coûts de la formation sont pris en charge par l’Opco à la demande de l’employeur. Si vous le souhaitez, vous pouvez mobiliser votre CPF. L’organisme de formation ne peut pas vous réclamer une contribution financière."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F13516",
+          "titre": "Reconversion : promotion par alternance (Pro-A) ou période de reconversion - Service Public",
+          "extrait": "Par un contrat à durée indéterminée (CDI) Ou par un contrat à durée déterminée (CDD) d’au moins 6 mois."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/R75681",
+          "titre": "Période de reconversion professionnelle interne ou externe (Cerfa 17613*01) - Service Public",
+          "extrait": "L’employeur doit adresser le dossier complet à l’Opco dont il relève au plus tard dans les 30 jours calendaires qui précèdent le début de l’exécution de la période de reconversion."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/R75681",
+          "titre": "Période de reconversion professionnelle interne ou externe (Cerfa 17613*01) - Service Public",
+          "extrait": "L'Opco dispose de 20 jours calendaires à compter de la date de réception du dossier complet pour se prononcer sur la prise en charge."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-02-01",
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "nat-vae",
+      "nom": "Validation des acquis de l'expérience (VAE) – parcours France VAE financé par le CPF",
+      "financeur": "cpf",
+      "financeur_nom": "Caisse des Dépôts – Mon Compte Formation",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi",
+        "dirigeant"
+      ],
+      "description": "La VAE permet d'obtenir tout ou partie d'une certification professionnelle par la reconnaissance de l'expérience ; la candidature se fait sur France VAE. L'accompagnement peut être financé par le CPF et des abondements (employeur, OPCO, Région, Transitions Pro, France Travail pour un demandeur d'emploi) ; l'employeur peut aussi la financer dans son plan de développement des compétences. L'aide spécifique à la VAE de France Travail est supprimée depuis le 8 mai 2026.",
+      "criteres": {
+        "certifications": [
+          "rncp"
+        ]
+      },
+      "conditions": [
+        "Certification disponible sur France VAE ; sinon, démarche directe auprès du certificateur.",
+        "Accompagnateur référencé sur France VAE et Mon Compte Formation, dans le respect du décret n° 2025-663 du 18 juillet 2025.",
+        "Participation forfaitaire de 150 € via le CPF, sauf abondement de l'employeur.",
+        "Candidat sans accompagnement : les frais de jury ne sont pas finançables par le CPF.",
+        "Salarié : congé VAE de 48 heures par session d'évaluation avec maintien de la rémunération, demandé par écrit au plus tard 30 jours avant.",
+        "La VAE n'est pas concernée par le complément de participation envisagé pour les demandes validées depuis le 2 octobre 2026.",
+        "L'aide spécifique à la VAE de France Travail pour les demandeurs d'emploi est supprimée : aucune demande effectuée à compter du 8 mai 2026 n'est prise en compte (délibération n° 2026-18 du 30 avril 2026). Un demandeur d'emploi finance sa VAE par son CPF et d'éventuels abondements."
+      ],
+      "montant": {
+        "mode": "solde_cpf",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Accompagnement VAE (dossier de faisabilité, dossier de validation, actes formatifs complémentaires, frais de jury s'ils figurent au devis, entretien post-jury) finançable par le solde CPF ; participation de 150 € sauf abondement de l'employeur."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-cpf"
+        ],
+        "note": "Mobilise le même solde CPF que nat-cpf (ne pas additionner). Cumulable avec le forfait Transitions Pro (nat-vae-transitions-pro)."
+      },
+      "demarches": [
+        "Rechercher la certification et créer son compte candidat sur vae.gouv.fr.",
+        "Choisir un accompagnateur, qui transmet son offre publiée sur Mon Compte Formation.",
+        "Créer le dossier sur Mon Compte Formation, demander un devis puis valider la demande de financement (droits CPF et éventuels abondements).",
+        "Transmettre le dossier de faisabilité puis le dossier de validation au certificateur et se présenter devant le jury."
+      ],
+      "url_demarche": "https://vae.gouv.fr/",
+      "sources": [
+        {
+          "url": "https://vae.gouv.fr/savoir-plus/articles/financer-son-accompagnement-vae/",
+          "titre": "Comment financer son parcours de VAE ? - France VAE",
+          "extrait": "France VAE ne gère pas le financement. Le candidat peut mobiliser : Ses droits au Compte Personnel de Formation (CPF) Des abondements éventuels selon sa situation : Son employeur L’OPCO La Région France Travail (s’il est demandeur d’emploi)"
+        },
+        {
+          "url": "https://vae.gouv.fr/savoir-plus/articles/financer-son-accompagnement-vae/",
+          "titre": "Comment financer son parcours de VAE ? - France VAE",
+          "extrait": "Vous pouvez mobiliser votre Compte Personnel de Formation (CPF) pour financer votre accompagnement VAE, à condition que votre parcours et l’organisme accompagnateur choisi respectent les règles définies par le décret n° 2025-663 du 18 juillet 2025"
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2401",
+          "titre": "Validation des acquis de l'expérience (VAE) - Service Public",
+          "extrait": "Vous devez participer au financement à hauteur de 150 €. Si vous bénéficiez d’un abondement de votre employeur, vous n’êtes pas concerné par cette obligation."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2401",
+          "titre": "Validation des acquis de l'expérience (VAE) - Service Public",
+          "extrait": "Ce congé est d'une durée de 48 heures par session d'évaluation."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2401",
+          "titre": "Validation des acquis de l'expérience (VAE) - Service Public",
+          "extrait": "Vous adressez à votre employeur une demande écrite d'autorisation d'absence au titre du congé VAE au plus tard 30 jours avant le début des actions de VAE."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/evolution-des-regles-dutilisation-du-cpf-compter-du-2-octobre-2026",
+          "titre": "Évolution des règles d'utilisation du CPF à compter du 2 octobre 2026 - Mon Compte Formation",
+          "extrait": "Vous réalisez une VAE : cette démarche n’est pas concernée par les évolutions prévues par la mesure"
+        },
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2026-18-du-30-avril-2026-bo-n-2026-27.html?type=dossiers/2026/bo-n-2026-27-du-5-mai-2026",
+          "titre": "Délibération n° 2026-18 du 30 avril 2026 – Suppression de l'aide à la validation des acquis de l'expérience (VAE) - Bulletin officiel de France Travail",
+          "extrait": "L’aide à la validation des acquis de l’expérience est supprimée."
+        },
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2026-18-du-30-avril-2026-bo-n-2026-27.html?type=dossiers/2026/bo-n-2026-27-du-5-mai-2026",
+          "titre": "Délibération n° 2026-18 du 30 avril 2026 – Suppression de l'aide à la validation des acquis de l'expérience (VAE) - Bulletin officiel de France Travail",
+          "extrait": "La délibération entre en vigueur le 8 mai 2026. Aucune demande d’aide effectuée à compter de cette date ne sera prise en compte."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-vae-transitions-pro",
+      "nom": "Financement de la VAE par Transitions Pro (forfait)",
+      "financeur": "transitions_pro",
+      "financeur_nom": "Transitions Pro (commission paritaire interprofessionnelle régionale)",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Depuis le 30 juillet 2026, les Transitions Pro peuvent financer le parcours VAE des salariés de droit privé sur la base d'un forfait de 2 000 € au maximum, avec ou sans mobilisation du CPF.",
+      "criteres": {
+        "contrats": [
+          "cdi",
+          "cdd",
+          "interim"
+        ],
+        "certifications": [
+          "rncp"
+        ]
+      },
+      "conditions": [
+        "Salarié de droit privé (CDI, CDD, intérimaire, intermittent) ; pour les CDD, intermittents et intérimaires, demande dans les 12 mois suivant le dernier contrat (règle affichée notamment en Centre-Val de Loire).",
+        "Justifier de l'inscription dans un parcours VAE : engagement réciproque avec l'accompagnateur, ou preuve de transmission du dossier au certificateur en l'absence d'accompagnement.",
+        "Demande refusable si le parcours ne relève pas des priorités de la Transitions Pro ou si toutes les demandes ne peuvent être financées.",
+        "Réouverture progressive des demandes dans le réseau (page nationale consultée le 06/10/2026 : objectif de réouverture globale au 1er octobre 2026, non encore confirmé ; déjà rouverte notamment en Hauts-de-France depuis le 18 septembre 2026 et en Centre-Val de Loire) : vérifier l'ouverture auprès de la Transitions Pro de sa région.",
+        "Sans mobilisation du CPF, une convention est signée entre le candidat, le financeur et l'organisme après la recevabilité."
+      ],
+      "montant": {
+        "mode": "forfait",
+        "valeur": 2000,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 2000,
+        "duree_max_mois": null,
+        "libelle": "Forfait de 2 000 € au plus (décret n° 2026-678 du 27 juillet 2026 ; Transitions Pro : « à hauteur de 2 000 euros maximum ») couvrant recevabilité, accompagnement, formations obligatoires ou complémentaires, session d'évaluation (jury) et frais de transport, repas et hébergement. Prise en charge non automatique : refus possible si le parcours ne relève pas des priorités de la Transitions Pro ou si toutes les demandes ne peuvent être financées."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Le CPF peut être mobilisé ou non en complément (nat-vae)."
+      },
+      "demarches": [
+        "Créer son espace personnel sur le site de la Transitions Pro de sa région.",
+        "Remplir la demande de financement VAE avec l'organisme accompagnateur choisi et joindre le justificatif d'inscription dans le parcours.",
+        "Attendre la décision de prise en charge."
+      ],
+      "url_demarche": "https://www.transitionspro.fr/contacts-en-region/",
+      "sources": [
+        {
+          "url": "https://vae.gouv.fr/savoir-plus/articles/financer-son-accompagnement-vae/",
+          "titre": "Comment financer son parcours de VAE ? - France VAE",
+          "extrait": "Depuis le 30 juillet 2026, le décret n° 2026-678 du 27 juillet 2026 prévoit un financement sur la base d’un montant forfaitaire de 2000 €."
+        },
+        {
+          "url": "https://vae.gouv.fr/savoir-plus/articles/financer-son-accompagnement-vae/",
+          "titre": "Comment financer son parcours de VAE ? - France VAE",
+          "extrait": "Ce financement peut concerner : les frais d’examen de la recevabilité ; les frais d’accompagnement personnalisé ; les frais des formations obligatoires ou complémentaires recommandées par le ministère ou l’organisme certificateur après l’analyse de la recevabilité ;"
+        },
+        {
+          "url": "https://vae.gouv.fr/savoir-plus/articles/financer-son-accompagnement-vae/",
+          "titre": "Comment financer son parcours de VAE ? - France VAE",
+          "extrait": "L’association Transitions Pro peut refuser la demande si le parcours de VAE ne relève pas de ses priorités d’intervention en matière de formation professionnelle ou si elle ne peut pas satisfaire simultanément toutes les demandes de financement."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2401",
+          "titre": "Validation des acquis de l'expérience (VAE) - Service Public",
+          "extrait": "Une association Transitions Pro également appelée commission paritaire interprofessionnelle régionale peut financer la VAE sur la base d'un montant forfaitaire de 2 000 €. Vous pouvez, ou non, mobiliser votre compte personnel de formation (CPF)."
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/vae-validation-acquis-experience/",
+          "titre": "Validation des acquis de l’expérience - Transitions Pro",
+          "extrait": "L’ensemble du réseau est actuellement en train de rouvrir la possibilité de déposer une demande de prise en charge VAE avec un objectif d’une réouverture globale pour le 1er octobre 2026."
+        },
+        {
+          "url": "https://www.transitionspro-hdf.fr/transitions-pro-hauts-de-france-reprend-le-cofinancement-de-la-vae/",
+          "titre": "Transitions Pro Hauts-de-France reprend le cofinancement de la VAE",
+          "extrait": "À compter du 18 septembre 2026, Transitions Pro Hauts-de-France reprend le cofinancement de la Validation des Acquis de l’Expérience (VAE) pour les salariés du secteur privé"
+        },
+        {
+          "url": "https://www.transitionspro-cvl.fr/votre-vae-financee-par-transitions-pro-cvl/",
+          "titre": "Votre VAE financée par Transitions Pro CVL",
+          "extrait": "Toutefois, pour les CDD, intermittents et intérimaires, la demande de financement doit intervenir dans les 12 mois suivant le dernier contrat de travail."
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/vae-validation-acquis-experience/",
+          "titre": "Validation des acquis de l’expérience - Transitions Pro",
+          "extrait": "Transitions Pro peut financer de façon forfaitaire (à hauteur de 2 000 euros maximum) l’accompagnement par votre organisme certificateur durant les trois étapes clés de votre parcours VAE"
+        },
+        {
+          "url": "https://www.transitionspro-hdf.fr/transitions-pro-hauts-de-france-reprend-le-cofinancement-de-la-vae/",
+          "titre": "Transitions Pro Hauts-de-France reprend le cofinancement de la VAE",
+          "extrait": "Le financement peut atteindre 2 000 € maximum, selon la situation du candidat, les éventuels autres cofinancements mobilisés, les priorités de prise en charge et le budget disponible."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": "2026-07-30",
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact",
+      "liens_par_region": {
+        "84": "https://www.transitionspro-ara.fr/",
+        "27": "https://www.transitionspro-bfc.fr/",
+        "53": "https://www.transitionspro-bretagne.fr/",
+        "24": "https://www.transitionspro-cvl.fr/",
+        "94": "https://www.transitionspro-corsica.fr/",
+        "44": "https://www.transitionspro-grandest.fr/",
+        "32": "https://www.transitionspro-hdf.fr/",
+        "11": "https://www.transitionspro-idf.fr/",
+        "28": "https://www.transitionspro-normandie.fr/",
+        "75": "https://www.transitionspro-na.fr/",
+        "76": "https://www.transitionspro-occitanie.fr/",
+        "52": "https://www.transitionspro-pdl.fr/",
+        "93": "https://www.transitionspro-paca.fr/",
+        "01": "https://www.transitionspro-guadeloupe.fr/",
+        "02": "https://www.transitionspro-martinique.fr/",
+        "03": "https://www.transitionspro-guyane.fr/",
+        "04": "https://www.transitionspro-reunion.fr/",
+        "06": "https://www.transitionspro-mayotte.fr/"
+      }
+    },
+    {
+      "id": "nat-bilan-competences",
+      "nom": "Bilan de compétences financé par le CPF",
+      "financeur": "cpf",
+      "financeur_nom": "Caisse des Dépôts – Mon Compte Formation",
+      "categorie": "cout_formation",
+      "projets": [
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi"
+      ],
+      "description": "Prestation de 24 heures maximum pour analyser ses compétences et définir un projet professionnel. Finançable par le CPF dans la limite de 1 600 € ; à l'initiative de l'employeur (plan de développement des compétences), le coût est à la charge de l'employeur.",
+      "criteres": {
+        "eligible_cpf": true,
+        "duree_max_heures": 24
+      },
+      "conditions": [
+        "Ne pas avoir bénéficié d'un bilan de compétences financé (CPF, État, Région, France Travail, OPCO, fonds d'assurance formation...) au cours des 5 dernières années.",
+        "Seules les heures d'accompagnement réalisées par le prestataire sont finançables par le CPF.",
+        "Participation forfaitaire de 150 € via le CPF, sauf abondement de l'employeur, mobilisation du C2P ou abondement AT-MP.",
+        "Sur le temps de travail : accord préalable de l'employeur (réponse sous 30 jours) ; hors temps de travail : l'employeur n'a pas à être informé.",
+        "Demandes validées depuis le 2 octobre 2026 : Mon Compte Formation indique que la participation de base serait due même par un demandeur d'emploi (mesure du PLF 2027 non encore adoptée)."
+      ],
+      "montant": {
+        "mode": "solde_cpf",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 1600,
+        "duree_max_mois": null,
+        "libelle": "Solde CPF mobilisable dans la limite de 1 600 € pour le bilan, participation forfaitaire de 150 € en sus sauf exonération. Dans le plan de développement des compétences, coût pris en charge par l'employeur."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-cpf"
+        ],
+        "note": "Mobilise le même solde CPF que nat-cpf, dans la limite de 1 600 €."
+      },
+      "demarches": [
+        "Choisir un prestataire de bilan de compétences sur moncompteformation.gouv.fr (entretien préalable conseillé).",
+        "Si le bilan a lieu en tout ou partie sur le temps de travail, demander l'accord de l'employeur.",
+        "Valider la commande et régler la participation de 150 € en l'absence d'exonération."
+      ],
+      "url_demarche": "https://www.moncompteformation.gouv.fr/",
+      "sources": [
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/tout-savoir-sur-le-bilan-de-competences",
+          "titre": "Tout savoir sur le bilan de compétences - Mon Compte Formation",
+          "extrait": "Le financement du bilan de compétences est plafonné à 1 600 €."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/tout-savoir-sur-le-bilan-de-competences",
+          "titre": "Tout savoir sur le bilan de compétences - Mon Compte Formation",
+          "extrait": "vous devez ne pas avoir bénéficié d’un bilan de compétences financé par un organisme public ou privé (CPF, État, Région, France Travail, OPCO, fonds d’assurance formation…) au cours des cinq dernières années."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F3087",
+          "titre": "Bilan de compétences d'un salarié du secteur privé - Service Public",
+          "extrait": "La durée du bilan de compétences est de 24 heures maximum."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F3087",
+          "titre": "Bilan de compétences d'un salarié du secteur privé - Service Public",
+          "extrait": "Le coût du bilan de compétences est à la charge de votre employeur."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/tout-savoir-sur-le-bilan-de-competences",
+          "titre": "Tout savoir sur le bilan de compétences - Mon Compte Formation",
+          "extrait": "Une participation forfaitaire de 150 € peut être demandée, sauf si votre employeur ou votre OPCO abonde votre projet de formation."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/evolution-des-regles-dutilisation-du-cpf-compter-du-2-octobre-2026",
+          "titre": "Évolution des règles d'utilisation du CPF à compter du 2 octobre 2026 - Mon Compte Formation",
+          "extrait": "Vous réalisez un bilan de compétences : vous devez vous acquitter du montant de PFO de base, même en tant que demandeur d’emploi."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-clea",
+      "nom": "Certificat CléA (socle de connaissances et de compétences professionnelles)",
+      "financeur": "cpf",
+      "financeur_nom": "Caisse des Dépôts – Mon Compte Formation",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie",
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi"
+      ],
+      "description": "Certification interprofessionnelle des savoirs de base destinée aux salariés et demandeurs d'emploi peu qualifiés. L'évaluation et les formations complémentaires sont finançables par le CPF sans plafond d'utilisation, par l'employeur (plan de développement des compétences), dans une période de reconversion ou, pour les demandeurs d'emploi, par France Travail.",
+      "criteres": {},
+      "conditions": [
+        "Être salarié ou demandeur d'emploi, sans autre condition.",
+        "Évaluation préalable par un organisme évaluateur, formations complémentaires si nécessaire, puis jury paritaire.",
+        "Le plafond CPF de 1 500 € des certifications du répertoire spécifique ne s'applique pas à CléA.",
+        "Participation forfaitaire de 150 € en cas de mobilisation du CPF, sauf exonération (demandeur d'emploi, abondement de l'employeur...)."
+      ],
+      "montant": {
+        "mode": "solde_cpf",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Évaluation et formations CléA finançables par le solde CPF sans plafond d'utilisation ; également par le plan de développement des compétences, la période de reconversion ou France Travail."
+      },
+      "cumul": {
+        "cumulable": true,
+        "alternatives": [
+          "nat-cpf"
+        ],
+        "note": "Mobilise le même solde CPF que nat-cpf lorsqu'il est utilisé ; peut aussi être financé dans nat-periode-reconversion."
+      },
+      "demarches": [
+        "Contacter un organisme évaluateur CléA de sa région ou de sa branche (certificat-clea.fr).",
+        "Réaliser l'évaluation préalable puis, si besoin, les formations complémentaires (CPF, employeur/OPCO ou France Travail).",
+        "Présentation du dossier au jury de certification."
+      ],
+      "url_demarche": "https://www.certificat-clea.fr/",
+      "sources": [
+        {
+          "url": "https://of.moncompteformation.gouv.fr/espace-public/loi-de-finances-2026-les-evolutions-concernant-le-cpf",
+          "titre": "Loi de finances 2026 : les évolutions concernant le CPF - Mon Compte Formation (organismes)",
+          "extrait": "Seule exception : la certification CléA (socle de connaissances et de compétences professionnelles). Ils peuvent mobiliser leur CPF, sans plafond d’utilisation, pour suivre une formation qui prépare à l’obtention de cette certification."
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/tout-savoir-sur-la-certification-clea",
+          "titre": "Tout savoir sur la Certification CléA - Mon Compte Formation",
+          "extrait": "Il suffit simplement être salarié ou demandeur d’emploi, sans aucune autre condition"
+        },
+        {
+          "url": "https://www.moncompteformation.gouv.fr/espace-public/tout-savoir-sur-la-certification-clea",
+          "titre": "Tout savoir sur la Certification CléA - Mon Compte Formation",
+          "extrait": "La certification CléA peut être obtenue via tous les dispositifs de la formation professionnelle."
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/certificat-clea/",
+          "titre": "Certificat CléA - Transitions Pro",
+          "extrait": "Si vous êtes salarié, vous pouvez solliciter votre employeur dans le cadre du plan de développement des compétences, mobiliser votre Compte personnel de formation (CPF) ou d’autres dispositifs de formation professionnelle."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F13516",
+          "titre": "Reconversion : promotion par alternance (Pro-A) ou période de reconversion - Service Public",
+          "extrait": "La période de reconversion peut aussi vous permettre l’acquisition de Cléa dont l’objectif est de prouver que vous maîtrisez les savoirs de base."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-cep",
+      "nom": "Conseil en évolution professionnelle (CEP)",
+      "financeur": "etat",
+      "financeur_nom": "France compétences (salariés, indépendants) ; France Travail, Apec, Missions locales, Cap emploi (demandeurs d'emploi, cadres, jeunes, personnes handicapées)",
+      "categorie": "service_gratuit",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie",
+        "recrutement_demandeur_emploi",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi",
+        "dirigeant"
+      ],
+      "description": "Service gratuit, personnalisé et confidentiel pour faire le point sur sa situation, construire un projet d'évolution professionnelle et identifier les financements mobilisables.",
+      "criteres": {},
+      "conditions": [
+        "Ouvert aux salariés, agents publics, indépendants, demandeurs d'emploi, personnes handicapées et jeunes sans qualification.",
+        "Salariés et indépendants : opérateurs régionaux habilités par France compétences (18 opérateurs) ; demandeurs d'emploi, cadres, jeunes et personnes handicapées : France Travail, Apec, Missions locales, Cap emploi.",
+        "Le salarié peut y recourir sans l'accord de son employeur, en principe hors temps de travail sauf accord collectif.",
+        "Étape obligatoire avant une démission-reconversion et pour le dispositif Prévention Usure-Reconversion."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Service gratuit (entretien, conseil, accompagnement, aide au plan de financement)."
+      },
+      "cumul": {
+        "cumulable": true
+      },
+      "demarches": [
+        "Trouver son opérateur selon sa situation et son lieu de résidence sur mon-cep.org.",
+        "Prendre rendez-vous : accueil individualisé puis, si besoin, accompagnement personnalisé."
+      ],
+      "url_demarche": "https://mon-cep.org/",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F32457",
+          "titre": "Conseil en évolution professionnelle (CEP) - Service Public",
+          "extrait": "La prestation du CEP (entretien, conseil et accompagnement) est gratuite."
+        },
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F32457",
+          "titre": "Conseil en évolution professionnelle (CEP) - Service Public",
+          "extrait": "Un salarié peut, de sa propre initiative et sans demander l'accord à son employeur, bénéficier d'un CEP en prenant rendez-vous avec un conseiller."
+        },
+        {
+          "url": "https://www.francecompetences.fr/reguler-le-marche/mon-cep/",
+          "titre": "Conseil en évolution professionnelle - France compétences",
+          "extrait": "Pour les demandeurs d’emploi, les cadres, les jeunes, les personnes dont le handicap est un frein à l’évolution professionnelle, le service CEP est dispensé par les opérateurs du service public de l’emploi"
+        },
+        {
+          "url": "https://www.francecompetences.fr/reguler-le-marche/mon-cep/",
+          "titre": "Conseil en évolution professionnelle - France compétences",
+          "extrait": "18 opérateurs sont ainsi habilités par France compétences dans le cadre d’un marché public pour une période de 4 ans, sur l’ensemble du territoire français, à délivrer ce service auprès des salariés et indépendants."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-c2p-reconversion",
+      "nom": "Prévention Usure-Reconversion (PUR) – mobilisation des points du compte professionnel de prévention",
+      "financeur": "transitions_pro",
+      "financeur_nom": "Transitions Pro (points du compte professionnel de prévention)",
+      "categorie": "cout_formation",
+      "projets": [
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Les salariés du privé titulaires d'un compte professionnel de prévention (C2P) peuvent mobiliser leurs points pour financer une reconversion vers un métier non exposé : formation certifiante, bilan de compétences ou VAE, avec maintien du salaire et du contrat.",
+      "criteres": {},
+      "conditions": [
+        "Salarié du secteur privé titulaire d'un C2P (travail de nuit, en équipes successives alternantes, répétitif, bruit, températures extrêmes, milieu hyperbare) disposant d'un crédit de points suffisant.",
+        "Accompagnement obligatoire par un conseiller en évolution professionnelle.",
+        "Si les conditions sont remplies, la demande ne peut pas être refusée par Transitions Pro.",
+        "Bilan de compétences ou VAE à réaliser avant toute action de formation ; bilan hors temps de travail.",
+        "En cas de points insuffisants, cofinancements possibles (CPF, Transitions Pro...)."
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "1 point C2P = 500 € de financement d'une action de reconversion (coûts pédagogiques, frais de mobilité, rémunération pendant le congé de reconversion) ; montant total selon les points mobilisés."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Complément possible par le CPF (nat-cpf) ou un PTP (nat-ptp) en cas de points insuffisants."
+      },
+      "demarches": [
+        "Faire le point avec un conseiller en évolution professionnelle (mon-cep.org).",
+        "Déposer la demande auprès de la Transitions Pro de sa région, qui l'instruit et la soumet à la commission paritaire."
+      ],
+      "url_demarche": "https://www.transitionspro.fr/contacts-en-region/",
+      "sources": [
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/prevention-usure-reconversion/",
+          "titre": "Prévention Usure-Reconversion - Transitions Pro",
+          "extrait": "Le dispositif Prévention Usure-Reconversion permet aux salariés du secteur privé, possédant un Compte professionnel de prévention, de mobiliser leurs points C2P dans le but de financer des actions menant vers une reconversion professionnelle"
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/prevention-usure-reconversion/",
+          "titre": "Prévention Usure-Reconversion - Transitions Pro",
+          "extrait": "Ainsi, 1 point C2P correspond à 500 euros de financement d’une action de reconversion."
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/prevention-usure-reconversion/",
+          "titre": "Prévention Usure-Reconversion - Transitions Pro",
+          "extrait": "Quelle que soit l’action de reconversion envisagée, vous devez obligatoirement vous faire accompagner par le Conseiller en Évolution Professionnelle (CEP)."
+        },
+        {
+          "url": "https://www.transitionspro.fr/nos-dispositifs/prevention-usure-reconversion/",
+          "titre": "Prévention Usure-Reconversion - Transitions Pro",
+          "extrait": "alors vous êtes éligible au dispositif Prévention Usure-Reconversion. Cela signifie que votre demande ne peut être refusée par Transitions Pro."
+        },
+        {
+          "url": "https://www.compteprofessionnelprevention.fr/reconversion.html",
+          "titre": "Financer un projet de reconversion professionnelle - Compte professionnel de prévention",
+          "extrait": "Chaque point a une valeur de 500 €."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact",
+      "liens_par_region": {
+        "84": "https://www.transitionspro-ara.fr/",
+        "27": "https://www.transitionspro-bfc.fr/",
+        "53": "https://www.transitionspro-bretagne.fr/",
+        "24": "https://www.transitionspro-cvl.fr/",
+        "94": "https://www.transitionspro-corsica.fr/",
+        "44": "https://www.transitionspro-grandest.fr/",
+        "32": "https://www.transitionspro-hdf.fr/",
+        "11": "https://www.transitionspro-idf.fr/",
+        "28": "https://www.transitionspro-normandie.fr/",
+        "75": "https://www.transitionspro-na.fr/",
+        "76": "https://www.transitionspro-occitanie.fr/",
+        "52": "https://www.transitionspro-pdl.fr/",
+        "93": "https://www.transitionspro-paca.fr/",
+        "01": "https://www.transitionspro-guadeloupe.fr/",
+        "02": "https://www.transitionspro-martinique.fr/",
+        "03": "https://www.transitionspro-guyane.fr/",
+        "04": "https://www.transitionspro-reunion.fr/",
+        "06": "https://www.transitionspro-mayotte.fr/"
+      }
+    }
+  ],
+  "portails": [],
+  "exclues": [
+    {
+      "nom": "Reconversion ou promotion par alternance (Pro-A)",
+      "raison": "Plus aucune Pro-A ne peut être conclue depuis le 1er janvier 2026 ; remplacée par la période de reconversion (nat-periode-reconversion). Seuls les avenants signés avant 2026 continuent.",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F13516",
+          "titre": "Reconversion : promotion par alternance (Pro-A) ou période de reconversion - Service Public",
+          "extrait": "il n’est plus possible de conclure de Pro-A. Cependant, elle continue à s’appliquer si l’avenant au contrat de travail a été signé avant le 1er janvier 2026."
+        },
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/actualites/A18798",
+          "titre": "Un nouveau dispositif pour faciliter la reconversion des salariés - Entreprendre Service Public",
+          "extrait": "La « période de reconversion » remplace les 2 précédents dispositifs : la reconversion ou promotion par alternance dite Pro-A ; les transitions collectives dites Transco."
+        }
+      ]
+    },
+    {
+      "nom": "Transitions collectives (Transco)",
+      "raison": "Remplacé par la période de reconversion entrée en vigueur le 1er février 2026.",
+      "sources": [
+        {
+          "url": "https://entreprendre.service-public.gouv.fr/actualites/A18798",
+          "titre": "Un nouveau dispositif pour faciliter la reconversion des salariés - Entreprendre Service Public",
+          "extrait": "La « période de reconversion » remplace les 2 précédents dispositifs : la reconversion ou promotion par alternance dite Pro-A ; les transitions collectives dites Transco."
+        }
+      ]
+    },
+    {
+      "nom": "FNE-Formation",
+      "raison": "Suspendu en 2025 et non rétabli en 2026 : aucun nouvel engagement, seuls des restes à payer des conventions antérieures.",
+      "sources": [
+        {
+          "url": "https://www.assemblee-nationale.fr/dyn/dyn/contenu/visualisation/1089989/file/7-Jaune2026_Formation_Professionnelle.pdf",
+          "titre": "Annexe au projet de loi de finances pour 2026 – Formation professionnelle (jaune budgétaire)",
+          "extrait": "Le dispositif FNE-Formation a été suspendu au titre de l’exercice 2025. Par ailleurs, il n’est pas prévu de rétablir le FNE-Formation en 2026."
+        },
+        {
+          "url": "https://www.assemblee-nationale.fr/dyn/dyn/contenu/visualisation/1089989/file/7-Jaune2026_Formation_Professionnelle.pdf",
+          "titre": "Annexe au projet de loi de finances pour 2026 – Formation professionnelle (jaune budgétaire)",
+          "extrait": "Le dispositif n’a pas fait l’objet de conventionnement en 2025. De même, le PLF 2026 ne prévoit aucun nouvel engagement en 2026 mais 16,88 M€ en crédits de paiement au titre des restes à payer des conventions FNE-Formation."
+        }
+      ]
+    },
+    {
+      "nom": "Aide de l'État de 500 € au permis B des apprentis",
+      "raison": "Supprimée par la loi de finances pour 2026, à compter du 21 février 2026 (hors périmètre de ce lot, signalée pour l'intégrateur).",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/actualites/A18840",
+          "titre": "L'aide au permis de conduire pour les apprentis est supprimée - Service Public",
+          "extrait": "Cette aide forfaitaire de 500 € n’est désormais plus attribuée. Sa suppression figure dans la loi de finances pour 2026, publiée au Journal officiel le 20 février 2026. La mesure est entrée en vigueur le 21 février 2026."
+        }
+      ]
+    },
+    {
+      "nom": "Aide au permis B de France Travail",
+      "raison": "Supprimée depuis le 1er avril 2026 (hors périmètre de ce lot, signalée pour l'intégrateur).",
+      "sources": [
+        {
+          "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1719",
+          "titre": "Peut-on encore bénéficier de l’aide au permis de conduire B attribuée par France Travail ? - Service Public",
+          "extrait": "Non, l’aide au permis B France Travail est supprimée depuis le 1er avril 2026."
+        }
+      ]
+    },
+    {
+      "nom": "Aide à la VAE de France Travail (demandeurs d'emploi)",
+      "raison": "Supprimée par la délibération n° 2026-18 du 30 avril 2026 du conseil d'administration de France Travail : aucune demande effectuée à compter du 8 mai 2026 n'est prise en compte (vérifié le 2026-10-06). Un demandeur d'emploi finance sa VAE par son CPF (voir nat-vae) et d'éventuels abondements.",
+      "sources": [
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2026-18-du-30-avril-2026-bo-n-2026-27.html?type=dossiers/2026/bo-n-2026-27-du-5-mai-2026",
+          "titre": "Délibération n° 2026-18 du 30 avril 2026 – Suppression de l'aide à la validation des acquis de l'expérience (VAE) - Bulletin officiel de France Travail",
+          "extrait": "L’aide à la validation des acquis de l’expérience est supprimée."
+        },
+        {
+          "url": "https://bo.francetravail.org/bulletinsofficiels/deliberation-n-2026-18-du-30-avril-2026-bo-n-2026-27.html?type=dossiers/2026/bo-n-2026-27-du-5-mai-2026",
+          "titre": "Délibération n° 2026-18 du 30 avril 2026 – Suppression de l'aide à la validation des acquis de l'expérience (VAE) - Bulletin officiel de France Travail",
+          "extrait": "La délibération entre en vigueur le 8 mai 2026. Aucune demande d’aide effectuée à compter de cette date ne sera prise en compte."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Mesure en cours : pour les demandes CPF validées depuis le 2 octobre 2026, Mon Compte Formation annonce, au titre du projet de loi de finances pour 2027, un complément de participation pouvant atteindre 200 € à régler en 2027 (exonérations : secteurs prioritaires dont la liste sera fixée par arrêté en 2027, cofinancement d'au moins 150 €, VAE, ESAT ; demandeurs d'emploi soumis à la participation de base hors secteur prioritaire ou cofinancement ; bilan de compétences soumis à la participation de base même pour les demandeurs d'emploi). Non encore voté : à revoir après adoption de la LFI 2027.",
+    "Date d'application des 150 € : le décret n° 2026-234 vise les demandes de souscription postérieures à son entrée en vigueur (2 avril 2026 selon Service Public) ; Mon Compte Formation indique « depuis le 1er avril 2026 » et Entreprendre Service Public « depuis le 6 avril 2026 ». Montant au 1er janvier 2026 : 103,20 €.",
+    "Abondement employeur : l'article L6323-7 exonère de la participation dès que la formation fait l'objet d'un abondement de l'employeur, sans montant minimum ; mais le seuil de cofinancement de 150 € annoncé pour le PLF 2027 et le seuil de 100 € exigé pour le permis du groupe léger sont des conditions distinctes.",
+    "PTP : les plafonds de prise en charge des frais pédagogiques (18 000 € HT, 27,45 €/h HT) et les restes à charge de 5 % / 10 % au-delà de 2 Smic figurent dans un article national Transitions Pro de 2024 ; non repris car non confirmés pour 2026 et propres à chaque région. En 2024, 56 % des dossiers PTP déposés ont été financés (jaune budgétaire PLF 2026).",
+    "Démission-reconversion : la page nationale Transitions Pro indique que le dispositif « permet de suivre une formation entièrement prise en charge », alors qu'un autre article Transitions Pro précise que Transitions Pro ne finance pas la formation dans ce cadre ; l'aide est donc modélisée comme l'ARE seule, la formation relevant du CPF ou d'autres financeurs.",
+    "Période de reconversion : la notice Cerfa 52422#01 (travail-emploi.gouv.fr) n'a pas pu être lue (vérification anti-robot). Les modalités de prise en charge de la rémunération et des frais annexes par l'OPCO (décret n° 2026-40, art. D6332-91) n'ont été obtenues qu'en résumé et ne sont donc pas chiffrées.",
+    "Extraits Légifrance (L6323-6, L6323-7, R6323, R6323-14-4, décret n° 2026-40) et compteprofessionnelprevention.fr obtenus via WebFetch (Légifrance bloque le téléchargement direct) ; tous les autres extraits ont été vérifiés mot pour mot dans les pages téléchargées.",
+    "Liens Transitions Pro : les 18 sites régionaux répondent (HTTP 200) ; le site PACA affiche d'abord une page de sécurité automatique puis se charge normalement dans un navigateur.",
+    "La loi n° 2026-534 du 25 juin 2026 (lutte contre les fraudes) interdit d'utiliser le CPF pour une certification déjà obtenue (sauf langues) et pour payer l'organisme en cas d'absence injustifiée aux épreuves.",
+    "Sources hors liste explicite du protocole mais officielles, utilisées en complément : unedic.org (gestionnaire de l'assurance chômage), francecompetences.fr, certificat-clea.fr (certificateur CléA), compteprofessionnelprevention.fr (Assurance Maladie), assemblee-nationale.fr (jaune budgétaire du Gouvernement).",
+    "Vérification indépendante du 2026-10-06 (tâche 16) : 49 URL distinctes rouvertes, 97 extraits sur 97 retrouvés sur les pages (Légifrance : extraits lus via WebFetch, curl étant bloqué par Cloudflare). Nombres confirmés par des sources officielles. Corrections : nat-vae (aide VAE de France Travail supprimée le 08/05/2026 : description, condition et source ajoutées, aide ajoutée aux exclues) ; nat-vae-transitions-pro (2 000 € précisé comme maximum, prise en charge non automatique, réouverture régionale en cours). Sites bloqués le 06/10/2026 : legifrance.gouv.fr (Cloudflare) et transitionspro-paca.fr (pare-feu anti-robot). Rapport : verification-nat-1-droits-reconversion.md."
+  ]
+}

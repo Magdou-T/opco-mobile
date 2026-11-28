@@ -1,5 +1,5 @@
 // ============================================================
-// VALIDATE — garde-fous OBLIGATOIRES avant publication.
+// VALIDATE : garde-fous OBLIGATOIRES avant publication.
 //
 // 1. Schéma : chaque OPCO via OpcoDataSchema.parse (de @opco/core).
 // 2. Bornes : sanityCheckOpco (de @opco/core).
@@ -30,11 +30,13 @@ export function getMaxDeltaPct(): number {
 }
 
 export interface ValidateInput {
-  /** Dataset courant (avant corrections) — référence pour le seuil de variation. */
+  /** Dataset courant (avant corrections) : référence pour le seuil de variation. */
   current: OpcoData[];
   /** Dataset corrigé candidat à la publication. */
   corrected: OpcoData[];
   maxDeltaPct?: number;
+  /** Version qui sera publiée (readCurrentVersion(datasetsDir) + 1) : validée avec le reste du dataset. */
+  version: number;
 }
 
 // --- Seuil de variation ------------------------------------------------------
@@ -73,7 +75,7 @@ function applyDeltaGuard(
       // Pas de base de comparaison : prudence, revue humaine.
       reason = 'Nouveau montant sans valeur de référence (ancienne valeur null)';
     } else if (oldV != null && newV == null) {
-      // Ne devrait pas arriver (correct ne supprime jamais) — ceinture+bretelles.
+      // Ne devrait pas arriver (correct ne supprime jamais) : ceinture et bretelles.
       reason = "Suppression de montant détectée (interdite par les règles de correction)";
     }
 
@@ -84,8 +86,8 @@ function applyDeltaGuard(
     }
   }
 
-  // Plafonds par taille (nombres nus) — appariés par INDEX, car certaines
-  // tailles sont dupliquées (ex. Constructys : deux entrées less_11).
+  // Plafonds par taille (nombres nus), appariés par INDEX : un dataset publié
+  // peut avoir des tailles en double (Constructys, versions 1 à 3 : deux entrées less_11).
   (current.plafonds_par_taille ?? []).forEach((oldPlafond, idx) => {
     const newPlafond = (safe.plafonds_par_taille ?? [])[idx];
     if (!newPlafond || newPlafond.taille !== oldPlafond.taille) return;
@@ -237,7 +239,7 @@ export function validatePipeline(input: ValidateInput): ValidationReport {
   for (const opco of safeOpcos) {
     const parsed = OpcoDataSchema.safeParse(opco);
     if (!parsed.success) {
-      issues.push(`${opco.slug}: schéma invalide — ${parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join(' ; ')}`);
+      issues.push(`${opco.slug}: schéma invalide (${parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join(' ; ')})`);
       continue;
     }
     for (const problem of sanityCheckOpco(parsed.data)) {
@@ -248,7 +250,7 @@ export function validatePipeline(input: ValidateInput): ValidationReport {
   // 4) Non-régression : dataset complet (11 OPCO) + scénarios de calcul.
   try {
     validateDataset(
-      { version: 1, generatedAt: new Date().toISOString(), opcos: safeOpcos },
+      { version: input.version, generatedAt: new Date().toISOString(), opcos: safeOpcos },
       { minOpcoCount: 11 },
     );
   } catch (err) {

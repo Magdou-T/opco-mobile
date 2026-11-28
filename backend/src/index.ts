@@ -1,5 +1,5 @@
 // ============================================================
-// @opco/backend — pipeline auto-correctif des montants OPCO.
+// @opco/backend : pipeline auto-correctif des montants OPCO.
 // SCRAPE -> EXTRACT (IA) -> VERIFY -> CORRECT -> VALIDATE -> PUBLISH
 // Point d'entrée CLI : src/run.ts
 // ============================================================

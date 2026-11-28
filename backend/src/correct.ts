@@ -1,5 +1,5 @@
 // ============================================================
-// CORRECT — application des corrections selon les règles de la SPEC :
+// CORRECT : application des corrections selon les règles de la SPEC.
 //
 // 1. Valeur confirmée par la source -> met à jour `value`,
 //    `confidence='exact'`, rafraîchit `source_url` + `note` (avec date).
@@ -41,7 +41,7 @@ function applyToSourcedValue(
         const old = sv.confidence;
         sv.confidence = 'exact';
         if (diff.source_url) sv.source_url = diff.source_url;
-        sv.note = `Confirmé le ${date} — « ${diff.quote ?? ''} »`;
+        sv.note = `Confirmé le ${date} : « ${diff.quote ?? ''} »`;
         log({
           field: diff.field,
           action: 'confirmed',
@@ -60,7 +60,7 @@ function applyToSourcedValue(
       sv.value = diff.newValue;
       sv.confidence = 'exact';
       if (diff.source_url) sv.source_url = diff.source_url;
-      sv.note = `Mis à jour le ${date} (ancienne valeur : ${old ?? 'aucune'}) — « ${diff.quote ?? ''} »`;
+      sv.note = `Mis à jour le ${date} (ancienne valeur : ${old ?? 'aucune'}) : « ${diff.quote ?? ''} »`;
       log({
         field: diff.field,
         action: diff.status === 'new' ? 'added' : 'updated',
@@ -77,7 +77,7 @@ function applyToSourcedValue(
       // Valeur NON retrouvée -> on NE SUPPRIME PAS, on rétrograde la confiance.
       const oldConfidence = sv.confidence;
       const next = downgradeConfidence(oldConfidence);
-      sv.note = `Non confirmé au ${date} — valeur conservée (${sv.value ?? 'aucune'}).`;
+      sv.note = `Non confirmé au ${date} : valeur conservée (${sv.value ?? 'aucune'}).`;
       if (next !== oldConfidence) {
         sv.confidence = next;
         log({

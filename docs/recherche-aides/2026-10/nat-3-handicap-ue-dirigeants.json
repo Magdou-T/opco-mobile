@@ -1,0 +1,1405 @@
+{
+  "meta": {
+    "perimetre": "Aides nationales : Agefiph (handicap), Union européenne (FSE+) et formation des dirigeants non salariés (FAF AGEFICE, FAFCEA, FIF PL, VIVÉA, FAF PM ; crédit d'impôt formation des dirigeants)",
+    "date_verification": "2026-10-06",
+    "auteur": "agent nat-3",
+    "nb_aides": 12
+  },
+  "aides": [
+    {
+      "id": "nat-agefiph-embauche-apprentissage",
+      "nom": "Aide à l'embauche en contrat d'apprentissage d'une personne en situation de handicap",
+      "financeur": "agefiph",
+      "financeur_nom": "Agefiph",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide versée par l'Agefiph à l'employeur privé qui recrute en contrat d'apprentissage une personne bénéficiaire de l'obligation d'emploi. Son montant dépend de la durée du contrat.",
+      "criteres": {
+        "rqth": true,
+        "types_alternance": [
+          "apprentissage"
+        ]
+      },
+      "conditions": [
+        "La personne doit être bénéficiaire de l'obligation d'emploi (RQTH, pension d'invalidité, etc.) ou avoir déposé une demande de reconnaissance",
+        "Contrat d'apprentissage d'au moins 6 mois",
+        "Durée hebdomadaire de travail d'au moins 24 heures (10 heures minimum en cas de dérogation légale ou conventionnelle)",
+        "Employeur de droit privé, exerçant en France et à jour de ses obligations sociales (cotisations et contribution OETH)",
+        "Demande possible au plus tard 6 mois après le début de l'action ; il est conseillé de déposer la demande avant d'engager les frais",
+        "Aide prolongeable en cas de redoublement ou de mention complémentaire, renouvelable pour une qualification de niveau supérieur"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "De 500 € (contrat de 6 mois) à 3 000 € (CDI), proratisé selon la durée du contrat : 900 € pour 12 mois, 1 700 € pour 24 mois, 2 500 € pour 36 mois (barème Agefiph janvier 2026)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les aides de droit commun (dont l'aide de l'État à l'embauche d'apprentis) et les autres aides de l'Agefiph."
+      },
+      "demarches": [
+        "Réunir le justificatif de bénéficiaire de l'obligation d'emploi de l'apprenti (ou la preuve de la demande en cours), la copie du contrat d'apprentissage (Cerfa) signé et un RIB professionnel.",
+        "Déposer la demande en ligne sur le service de dépôt des demandes d'aides de l'Agefiph (profil employeur), au plus tard 6 mois après le début du contrat.",
+        "En cas de difficulté, contacter la délégation régionale Agefiph ou le 0800 11 10 09."
+      ],
+      "url_demarche": "https://www.agefiph.fr/aides-handicap/depot-demande",
+      "liens_par_region": {
+        "84": "https://www.agefiph.fr/auvergne-rhone-alpes",
+        "27": "https://www.agefiph.fr/bourgogne-franche-comte",
+        "53": "https://www.agefiph.fr/bretagne",
+        "24": "https://www.agefiph.fr/centre-val-de-loire",
+        "94": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "44": "https://www.agefiph.fr/grand-est",
+        "32": "https://www.agefiph.fr/hauts-de-france",
+        "11": "https://www.agefiph.fr/ile-de-france",
+        "28": "https://www.agefiph.fr/normandie-saint-pierre-et-miquelon",
+        "75": "https://www.agefiph.fr/nouvelle-aquitaine",
+        "76": "https://www.agefiph.fr/occitanie",
+        "52": "https://www.agefiph.fr/pays-de-la-loire",
+        "93": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "01": "https://www.agefiph.fr/antilles-guyane",
+        "02": "https://www.agefiph.fr/antilles-guyane",
+        "03": "https://www.agefiph.fr/antilles-guyane",
+        "04": "https://www.agefiph.fr/la-reunion-mayotte",
+        "06": "https://www.agefiph.fr/la-reunion-mayotte"
+      },
+      "sources": [
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Tout employeur d’une personne en situation de handicap dès lors que le contrat d’apprentissage est d’une durée minimum de 6 mois et que la durée hebdomadaire de travail est au moins égale à 24 heures."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "DÉTAIL DES AIDES AUX EMPLOYEURS (En fonction de la durée du contrat) DURÉE DU CONTRAT CONTRAT D’APPRENTISSAGE CONTRAT DE PROFESSIONNALISATION 6 mois 500 € 500 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "12 mois 900 € 1 200 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "24 mois 1 700 € 2 600 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "36 mois 2 500 € – CDI 3 000 € 3 000 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Si la durée est inférieure à 24 heures en raison d’une dérogation légale ou conventionnelle, la durée minimum est fixée à 10 heures minimales hebdomadaires."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Nos conseillers sont disponibles pour vous renseigner sur l'état d'avancée de votre demande d'aide au 0800 11 10 09."
+        },
+        {
+          "url": "https://www.agefiph.fr/aides-financieres/aide-lembauche-en-contrat-dapprentissage-dune-personne-en-situation-de-handicap",
+          "titre": "Agefiph – Aide à l'embauche en contrat d'apprentissage d'une personne en situation de handicap",
+          "extrait": "Le montant de l'aide financière est fixé en fonction de la durée du contrat d'apprentissage : le montant minimum est de 500€ pour un contrat de 6 mois et le montant maximum de 3000€ pour un contrat à durée indéterminé (CDI)."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Les aides de l'Agefiph peuvent être sollicitées de façon rétroactive, sans dépasser un délai de 6 mois entre le démarrage de l’action et le dépôt de la demande."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-agefiph-embauche-professionnalisation",
+      "nom": "Aide à l'embauche en contrat de professionnalisation d'une personne en situation de handicap",
+      "financeur": "agefiph",
+      "financeur_nom": "Agefiph",
+      "categorie": "aide_employeur",
+      "projets": [
+        "alternance"
+      ],
+      "beneficiaires": [
+        "alternant"
+      ],
+      "description": "Aide versée par l'Agefiph à l'employeur privé qui recrute en contrat de professionnalisation une personne bénéficiaire de l'obligation d'emploi. Son montant dépend de la durée du contrat.",
+      "criteres": {
+        "rqth": true,
+        "types_alternance": [
+          "professionnalisation"
+        ]
+      },
+      "conditions": [
+        "La personne doit être bénéficiaire de l'obligation d'emploi (RQTH, pension d'invalidité, etc.) ou avoir déposé une demande de reconnaissance",
+        "Contrat de professionnalisation d'au moins 6 mois",
+        "Durée hebdomadaire de travail d'au moins 24 heures (10 heures minimum en cas de dérogation légale ou conventionnelle)",
+        "Employeur de droit privé, exerçant en France et à jour de ses obligations sociales (cotisations et contribution OETH)",
+        "Demande possible au plus tard 6 mois après le début de l'action ; il est conseillé de déposer la demande avant d'engager les frais",
+        "Aide prolongeable en cas de redoublement ou de mention complémentaire, renouvelable pour une qualification de niveau supérieur"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "De 500 € (contrat de 6 mois) à 3 000 € (CDI), proratisé selon la durée du contrat : 1 200 € pour 12 mois, 2 600 € pour 24 mois (barème Agefiph janvier 2026)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les aides de droit commun et les autres aides de l'Agefiph."
+      },
+      "demarches": [
+        "Réunir le justificatif de bénéficiaire de l'obligation d'emploi du salarié (ou la preuve de la demande en cours), la copie du contrat signé et un RIB professionnel.",
+        "Déposer la demande en ligne sur le service de dépôt des demandes d'aides de l'Agefiph (profil employeur), au plus tard 6 mois après le début du contrat.",
+        "En cas de difficulté, contacter la délégation régionale Agefiph ou le 0800 11 10 09."
+      ],
+      "url_demarche": "https://www.agefiph.fr/aides-handicap/depot-demande",
+      "liens_par_region": {
+        "84": "https://www.agefiph.fr/auvergne-rhone-alpes",
+        "27": "https://www.agefiph.fr/bourgogne-franche-comte",
+        "53": "https://www.agefiph.fr/bretagne",
+        "24": "https://www.agefiph.fr/centre-val-de-loire",
+        "94": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "44": "https://www.agefiph.fr/grand-est",
+        "32": "https://www.agefiph.fr/hauts-de-france",
+        "11": "https://www.agefiph.fr/ile-de-france",
+        "28": "https://www.agefiph.fr/normandie-saint-pierre-et-miquelon",
+        "75": "https://www.agefiph.fr/nouvelle-aquitaine",
+        "76": "https://www.agefiph.fr/occitanie",
+        "52": "https://www.agefiph.fr/pays-de-la-loire",
+        "93": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "01": "https://www.agefiph.fr/antilles-guyane",
+        "02": "https://www.agefiph.fr/antilles-guyane",
+        "03": "https://www.agefiph.fr/antilles-guyane",
+        "04": "https://www.agefiph.fr/la-reunion-mayotte",
+        "06": "https://www.agefiph.fr/la-reunion-mayotte"
+      },
+      "sources": [
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Tout employeur d’une personne en situation de handicap dès lors que le contrat de professionnalisation signé est d’une durée minimum de 6 mois et que la durée hebdomadaire de travail est au moins égale à 24 heures."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "DÉTAIL DES AIDES AUX EMPLOYEURS (En fonction de la durée du contrat) DURÉE DU CONTRAT CONTRAT D’APPRENTISSAGE CONTRAT DE PROFESSIONNALISATION 6 mois 500 € 500 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "12 mois 900 € 1 200 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "24 mois 1 700 € 2 600 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "CDI 3 000 € 3 000 €"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Si la durée est inférieure à 24 heures en raison d’une dérogation légale ou conventionnelle, la durée plancher est fixée à 10 heures minimales hebdomadaires."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Nos conseillers sont disponibles pour vous renseigner sur l'état d'avancée de votre demande d'aide au 0800 11 10 09."
+        },
+        {
+          "url": "https://www.agefiph.fr/aides-financieres/aide-lembauche-en-contrat-de-professionnalisation-dune-personne-en-situation-de",
+          "titre": "Agefiph – Aide à l'embauche en contrat de professionnalisation d'une personne en situation de handicap",
+          "extrait": "Le montant de l'aide financière est fixé en fonction de la durée du contrat de professionnalisation : le montant minimum est de 500€ pour un contrat de 6 mois et le montant maximum de 3000 € pour un contrat à durée indéterminé (CDI)."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Les aides de l'Agefiph peuvent être sollicitées de façon rétroactive, sans dépasser un délai de 6 mois entre le démarrage de l’action et le dépôt de la demande."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-agefiph-accueil-integration-evolution",
+      "nom": "Aide à l'accueil, à l'intégration et à l'évolution professionnelle des personnes en situation de handicap",
+      "financeur": "agefiph",
+      "financeur_nom": "Agefiph",
+      "categorie": "aide_employeur",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "formation_salarie",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "salarie"
+      ],
+      "description": "Aide à l'employeur, sur la base d'un plan d'action, pour l'intégration d'un salarié handicapé nouvellement recruté ou son évolution vers un nouveau poste : sensibilisation ou formation au handicap du collectif de travail, accompagnement du manager, tutorat ou coaching du salarié.",
+      "criteres": {
+        "rqth": true,
+        "contrats": [
+          "cdi",
+          "cdd"
+        ]
+      },
+      "conditions": [
+        "La personne doit être bénéficiaire de l'obligation d'emploi (RQTH, pension d'invalidité, etc.) ou avoir déposé une demande de reconnaissance",
+        "CDI ou CDD de 6 mois et plus, d'au moins 24 heures par semaine (10 heures minimum en cas de dérogation légale ou conventionnelle)",
+        "Aide prescrite par un conseiller France Travail, Cap emploi, Mission locale, Comète ou par l'Agefiph",
+        "Mobilisable avant le recrutement et dans les 9 mois qui suivent la prise de poste",
+        "Les entreprises adaptées (EA) et les structures d'insertion par l'activité économique (IAE) ne sont pas éligibles",
+        "L'aide complète, sans le remplacer, le processus interne d'accueil et les actions prévues par l'employeur (GEPP)"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 3 150 €, selon le plan d'action présenté par l'employeur."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les aides de droit commun et les autres aides de l'Agefiph."
+      },
+      "demarches": [
+        "Préparer un plan d'action d'accueil ou d'évolution (actions de sensibilisation ou de formation, accompagnement du manager, tutorat).",
+        "Solliciter le conseiller France Travail, Cap emploi, Mission locale ou Comète qui accompagne la personne, ou l'Agefiph : c'est lui qui dépose la demande en ligne.",
+        "Fournir le titre de bénéficiaire de l'obligation d'emploi, une attestation d'emploi et un RIB professionnel."
+      ],
+      "url_demarche": "https://www.agefiph.fr/aides-financieres/aide-laccueil-lintegration-et-levolution-professionnelle-des-personnes-en-situation",
+      "liens_par_region": {
+        "84": "https://www.agefiph.fr/auvergne-rhone-alpes",
+        "27": "https://www.agefiph.fr/bourgogne-franche-comte",
+        "53": "https://www.agefiph.fr/bretagne",
+        "24": "https://www.agefiph.fr/centre-val-de-loire",
+        "94": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "44": "https://www.agefiph.fr/grand-est",
+        "32": "https://www.agefiph.fr/hauts-de-france",
+        "11": "https://www.agefiph.fr/ile-de-france",
+        "28": "https://www.agefiph.fr/normandie-saint-pierre-et-miquelon",
+        "75": "https://www.agefiph.fr/nouvelle-aquitaine",
+        "76": "https://www.agefiph.fr/occitanie",
+        "52": "https://www.agefiph.fr/pays-de-la-loire",
+        "93": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "01": "https://www.agefiph.fr/antilles-guyane",
+        "02": "https://www.agefiph.fr/antilles-guyane",
+        "03": "https://www.agefiph.fr/antilles-guyane",
+        "04": "https://www.agefiph.fr/la-reunion-mayotte",
+        "06": "https://www.agefiph.fr/la-reunion-mayotte"
+      },
+      "sources": [
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Tout employeur d’une personne en situation de handicap en CDI ou CDD de six mois et plus et dont la durée hebdomadaire de travail est au moins égales à 24 heures."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Le montant maximum de l’aide est de 3 150 €."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Si la durée est inférieure à 24 heures en raison d’une dérogation légale ou conventionnelle, la durée minimum est fixée à 10 heures minimales hebdomadaires."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Peuvent ainsi être pris en charge les frais liés à : → un programme de sensibilisation et/ou de formation au handicap du collectif de travail ; → l’accompagnement du manager à la prise en compte du handicap ;"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "L’aide peut être mobilisée en amont du recrutement (préparation à l’intégration) et durant le contrat (dans les 9 mois qui suivent la prise de poste)."
+        },
+        {
+          "url": "https://www.agefiph.fr/aides-financieres/aide-laccueil-lintegration-et-levolution-professionnelle-des-personnes-en-situation",
+          "titre": "Agefiph – Aide à l'accueil, à l'intégration et à l'évolution professionnelle des personnes en situation de handicap",
+          "extrait": "La demande est faite par le conseiller France Travail, Cap emploi, Mission locale ou le conseiller Comete qui accompagne la personne en situation de handicap."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-agefiph-adaptation-situations-formation",
+      "nom": "Aide à l'adaptation des situations de formation",
+      "financeur": "agefiph",
+      "financeur_nom": "Agefiph",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie",
+        "recrutement_demandeur_emploi",
+        "alternance",
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "salarie",
+        "demandeur_emploi",
+        "alternant",
+        "dirigeant"
+      ],
+      "description": "Aide versée à l'organisme de formation, au CFA ou au prestataire de bilan de compétences ou de VAE pour financer les adaptations nécessaires au parcours d'un apprenant handicapé (adaptation des supports, sensibilisation du groupe, temps de remédiation, preneur de notes…), en stricte compensation du handicap.",
+      "criteres": {
+        "rqth": true,
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "La personne doit être bénéficiaire de l'obligation d'emploi (RQTH, pension d'invalidité, etc.) ou avoir déposé une demande de reconnaissance",
+        "La demande est faite par le référent handicap de l'organisme de formation ou du CFA (hors ESRP et ESPO)",
+        "L'organisme fournit son certificat Qualiopi et une évaluation des besoins de l'apprenant",
+        "Financement des seuls surcoûts liés au handicap, au-delà des obligations d'accessibilité de l'organisme et des autres aides mobilisables",
+        "Les aménagements d'examen relèvent du certificateur et ne sont pas financés"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Montant évalué au cas par cas, limité aux surcoûts d'adaptation liés au handicap (sur devis ou facture)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Intervient en complément des financements de droit commun de la formation et des autres appuis de l'Agefiph."
+      },
+      "demarches": [
+        "Signaler le besoin d'adaptation au référent handicap de l'organisme de formation ou du CFA, si possible avant l'entrée en formation.",
+        "Le référent handicap analyse les besoins (appui possible de la Ressource Handicap Formation de l'Agefiph) et dépose la demande en ligne auprès de l'Agefiph avec le devis des adaptations."
+      ],
+      "url_demarche": "https://www.agefiph.fr/aides-financieres/aide-ladaptation-des-situations-de-formation",
+      "liens_par_region": {
+        "84": "https://www.agefiph.fr/auvergne-rhone-alpes",
+        "27": "https://www.agefiph.fr/bourgogne-franche-comte",
+        "53": "https://www.agefiph.fr/bretagne",
+        "24": "https://www.agefiph.fr/centre-val-de-loire",
+        "94": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "44": "https://www.agefiph.fr/grand-est",
+        "32": "https://www.agefiph.fr/hauts-de-france",
+        "11": "https://www.agefiph.fr/ile-de-france",
+        "28": "https://www.agefiph.fr/normandie-saint-pierre-et-miquelon",
+        "75": "https://www.agefiph.fr/nouvelle-aquitaine",
+        "76": "https://www.agefiph.fr/occitanie",
+        "52": "https://www.agefiph.fr/pays-de-la-loire",
+        "93": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "01": "https://www.agefiph.fr/antilles-guyane",
+        "02": "https://www.agefiph.fr/antilles-guyane",
+        "03": "https://www.agefiph.fr/antilles-guyane",
+        "04": "https://www.agefiph.fr/la-reunion-mayotte",
+        "06": "https://www.agefiph.fr/la-reunion-mayotte"
+      },
+      "sources": [
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Cette aide a pour objectif de financer les adaptions nécessaire à la sécurisation du parcours de formation de l'apprenant en situation de handicap."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Les organismes prestataires d’actions concourant au développement des compétences : • Les organismes de formation (hors ESRP et ESPO). • Les Centres de formation par l’apprentissage (CFA). • Les prestataires de bilans de compétences et de validation des acquis d’expérience (VAE)."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Le montant de l’aide est évalué après analyse de chaque situation dans une logique de stricte compensation du handicap, au-delà"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "→ Le certificat QUALIOPI."
+        },
+        {
+          "url": "https://www.agefiph.fr/aides-financieres/aide-ladaptation-des-situations-de-formation",
+          "titre": "Agefiph – Aide à l'adaptation des situations de formation",
+          "extrait": "La demande est faite par le référent handicap de l'organisme de formation. La Ressource Handicap Formation peut vous aider dans vos démarches."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "nat-agefiph-parcours-vers-emploi",
+      "nom": "Aide au parcours vers l'emploi des personnes en situation de handicap",
+      "financeur": "agefiph",
+      "financeur_nom": "Agefiph",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi",
+        "alternance"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi",
+        "alternant",
+        "salarie"
+      ],
+      "description": "Aide à la personne handicapée en situation de précarité pour couvrir les frais liés à son parcours vers l'emploi, par exemple les déplacements pour se rendre en formation, l'hébergement, la restauration ou des vêtements nécessaires à l'emploi.",
+      "criteres": {
+        "rqth": true
+      },
+      "conditions": [
+        "La personne doit être bénéficiaire de l'obligation d'emploi (RQTH, pension d'invalidité, etc.) ou avoir déposé une demande de reconnaissance",
+        "Être en démarche active d'insertion et en difficulté financière (demandeur d'emploi, alternant, salarié nouvellement embauché, stagiaire de la formation professionnelle…)",
+        "Aide prescrite par un conseiller France Travail, Cap emploi ou Mission locale, après diagnostic",
+        "Pour une entrée en formation ou une embauche, l'aide peut être sollicitée au cours du 1er mois",
+        "Ne finance pas l'achat d'ordinateur, de tablette ou de téléphone"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Frais réels, dans la limite de 530 € (renouvelable dans la limite de 530 € sur 12 mois)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Cumulable avec les aides de droit commun et les autres aides de l'Agefiph."
+      },
+      "demarches": [
+        "En parler à son conseiller France Travail, Cap emploi ou Mission locale, qui évalue le besoin.",
+        "Le conseiller dépose la demande en ligne auprès de l'Agefiph avec les devis ou justificatifs des dépenses."
+      ],
+      "url_demarche": "https://www.agefiph.fr/aides-financieres/aide-au-parcours-vers-lemploi-des-personnes-en-situation-de-handicap",
+      "liens_par_region": {
+        "84": "https://www.agefiph.fr/auvergne-rhone-alpes",
+        "27": "https://www.agefiph.fr/bourgogne-franche-comte",
+        "53": "https://www.agefiph.fr/bretagne",
+        "24": "https://www.agefiph.fr/centre-val-de-loire",
+        "94": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "44": "https://www.agefiph.fr/grand-est",
+        "32": "https://www.agefiph.fr/hauts-de-france",
+        "11": "https://www.agefiph.fr/ile-de-france",
+        "28": "https://www.agefiph.fr/normandie-saint-pierre-et-miquelon",
+        "75": "https://www.agefiph.fr/nouvelle-aquitaine",
+        "76": "https://www.agefiph.fr/occitanie",
+        "52": "https://www.agefiph.fr/pays-de-la-loire",
+        "93": "https://www.agefiph.fr/provence-alpes-cote-dazur-et-corse",
+        "01": "https://www.agefiph.fr/antilles-guyane",
+        "02": "https://www.agefiph.fr/antilles-guyane",
+        "03": "https://www.agefiph.fr/antilles-guyane",
+        "04": "https://www.agefiph.fr/la-reunion-mayotte",
+        "06": "https://www.agefiph.fr/la-reunion-mayotte"
+      },
+      "sources": [
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Toute personne en situation de handicap engagée dans une démarche d’insertion professionnelle quel que soit son statut (demandeur d’emploi, alternant, salarié de droit privé nouvellement embauché, stagiaire de la formation professionnelle,"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Le montant de l’aide est apprécié au cas par cas, en fonction des frais réels engagés. Le montant maximum de l’aide est de 530 €."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "L’aide est destinée à couvrir les frais à engager dans le cadre du parcours vers l’emploi : déplacements, frais vestimentaires, hébergement, restauration, …"
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "Les personnes rentrant en formation ou nouvellement embauchées sont suceptibles de bénéficier de l’aide au cours du 1er mois."
+        },
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "L'aide peut être renouvelée dans la limite de 530€ sur 12 mois"
+        },
+        {
+          "url": "https://www.agefiph.fr/aides-financieres/aide-au-parcours-vers-lemploi-des-personnes-en-situation-de-handicap",
+          "titre": "Agefiph – Aide au parcours vers l'emploi des personnes en situation de handicap",
+          "extrait": "Les personnes en situation de handicap engagées dans un parcours vers l'emploi et qui sont confrontées à de graves difficultés financières."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "ue-fse-plus-formation-salaries-opco",
+      "nom": "FSE+ – Cofinancement de la formation des salariés via les OPCO (programme national « Emploi, inclusion, jeunesse et compétences »)",
+      "financeur": "europe",
+      "financeur_nom": "Union européenne – FSE+ (programme national géré par la DGEFP)",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_salarie",
+        "reconversion_salarie"
+      ],
+      "beneficiaires": [
+        "salarie"
+      ],
+      "description": "Le Fonds social européen plus cofinance, par l'intermédiaire des opérateurs de compétences (OPCO), des actions de formation des salariés : coûts pédagogiques et, selon l'OPCO, rémunérations pendant la formation, en priorité sur les transitions écologique, numérique et démographique, la reconversion et les salariés les moins qualifiés. L'entreprise passe par son OPCO, lorsque celui-ci a une opération FSE+ ouverte.",
+      "criteres": {
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "L'OPCO de l'entreprise doit avoir une opération FSE+ en cours (appel à projets national 2026-2027 réservé aux OPCO) ; thèmes, taux et plafonds sont fixés par chaque OPCO",
+        "Demande à déposer auprès de l'OPCO avant le début de la formation (effet incitatif exigé)",
+        "Formation réalisée par un organisme certifié Qualiopi",
+        "Le reste à charge est couvert par un versement volontaire de l'entreprise ou par des fonds conventionnels de branche",
+        "Dans la limite des fonds disponibles"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Jusqu'à 50 % du coût éligible (coûts pédagogiques et, selon l'OPCO, rémunérations des salariés en formation) ; taux, plafonds et thèmes fixés par chaque OPCO."
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Aucune autre aide publique ne peut financer les mêmes dépenses ; le complément est apporté par versement volontaire de l'entreprise ou par des fonds conventionnels."
+      },
+      "demarches": [
+        "Demander à son conseiller OPCO si une opération FSE+ est ouverte et si la formation entre dans les thèmes éligibles.",
+        "Constituer la demande de subvention FSE+ avec l'OPCO (devis non signé, programme, liste des salariés, données sur les participants demandées par le FSE+).",
+        "Déposer la demande avant le début de la formation, puis signer la convention de formation seulement après l'accord de l'OPCO.",
+        "Après la formation, transmettre les justificatifs de réalisation (émargements, factures) à l'OPCO."
+      ],
+      "url_demarche": null,
+      "sources": [
+        {
+          "url": "https://fse.gouv.fr/sites/default/files/projects_pdf/20260604_Investir_dans_les_comp%C3%A9tences_pour_accompagner_les_mutations_%C3%A9conomiques_global.pdf",
+          "titre": "Programme national FSE+ – Appel à projets NATIAGD2000 « Investir dans les compétences pour accompagner les mutations économiques »",
+          "extrait": "Cet appel à projets vise à cofinancer des actions de formation des salariés prises en charge par les OPCO pour la période 2026-2027. Il ouvre la possibilité d’une prolongation du cofinancement FSE+ jusqu’au 31 décembre 2028 par voie d’avenant"
+        },
+        {
+          "url": "https://fse.gouv.fr/sites/default/files/projects_pdf/20260604_Investir_dans_les_comp%C3%A9tences_pour_accompagner_les_mutations_%C3%A9conomiques_global.pdf",
+          "titre": "Programme national FSE+ – Appel à projets NATIAGD2000 « Investir dans les compétences pour accompagner les mutations économiques »",
+          "extrait": "Le taux maximum d’intervention FSE+ est fixé à 50 % du coût total éligible de l’opération."
+        },
+        {
+          "url": "https://fse.gouv.fr/sites/default/files/projects_pdf/20260604_Investir_dans_les_comp%C3%A9tences_pour_accompagner_les_mutations_%C3%A9conomiques_global.pdf",
+          "titre": "Programme national FSE+ – Appel à projets NATIAGD2000 « Investir dans les compétences pour accompagner les mutations économiques »",
+          "extrait": "En contrepartie du FSE+, les OPCO pourront uniquement mobiliser des fonds au titre de leur autofinancement issus de contributions conventionnelles ou de versements volontaires des entreprises"
+        },
+        {
+          "url": "https://fse.gouv.fr/sites/default/files/projects_pdf/20260604_Investir_dans_les_comp%C3%A9tences_pour_accompagner_les_mutations_%C3%A9conomiques_global.pdf",
+          "titre": "Programme national FSE+ – Appel à projets NATIAGD2000 « Investir dans les compétences pour accompagner les mutations économiques »",
+          "extrait": "Au sein du poste de dépenses de participants, seront cofinancées les dépenses de formations (coûts pédagogiques) ainsi que les rémunérations des salariés pendant la formation."
+        },
+        {
+          "url": "https://fse.gouv.fr/sites/default/files/projects_pdf/20260604_Investir_dans_les_comp%C3%A9tences_pour_accompagner_les_mutations_%C3%A9conomiques_global.pdf",
+          "titre": "Programme national FSE+ – Appel à projets NATIAGD2000 « Investir dans les compétences pour accompagner les mutations économiques »",
+          "extrait": "L’ensemble des formations est externalisé auprès d’organismes de formation détenteurs de la certification Qualiopi"
+        },
+        {
+          "url": "https://fse.gouv.fr/les-appels-a-projets/investir-dans-les-competences-pour-accompagner-les-mutations-economiques-0",
+          "titre": "fse.gouv.fr – Appel à projets « Investir dans les compétences pour accompagner les mutations économiques » (2026)",
+          "extrait": "Montant total 95 000 000,00 € Date de lancement 01/04/2026 Date limite de dépôt 08/06/2026"
+        },
+        {
+          "url": "https://fse.gouv.fr/sites/default/files/projects_pdf/20260604_Investir_dans_les_comp%C3%A9tences_pour_accompagner_les_mutations_%C3%A9conomiques_global.pdf",
+          "titre": "Programme national FSE+ – Appel à projets NATIAGD2000 « Investir dans les compétences pour accompagner les mutations économiques »",
+          "extrait": "La durée de réalisation initiale de l’opération pourra s’étendre de la date de dépôt de la demande de subvention au le 31 décembre 2027 pour une durée minimale de 12 mois."
+        },
+        {
+          "url": "https://www.opco-atlas.fr/entreprise/beneficier-fse.html",
+          "titre": "Opco Atlas – FSE+ : former vos salariés grâce à l'appui du Fonds Social Européen",
+          "extrait": "Le dispositif FSE+ est renouvelé en 2026, il est le principal levier financier de l’Union européenne pour améliorer les compétences et anticiper les mutations économiques."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": "2026-04-01",
+        "fin": "2027-12-31"
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "ue-fse-plus-programmes-regionaux",
+      "nom": "FSE+ – Formations des demandeurs d'emploi cofinancées par les programmes régionaux FEDER-FSE+ 2021-2027",
+      "financeur": "europe",
+      "financeur_nom": "Union européenne – FSE+ (programmes régionaux gérés par les Régions)",
+      "categorie": "cout_formation",
+      "projets": [
+        "recrutement_demandeur_emploi"
+      ],
+      "beneficiaires": [
+        "demandeur_emploi"
+      ],
+      "description": "Les Régions sont autorités de gestion des programmes régionaux FEDER-FSE+, dont relève la formation des demandeurs d'emploi. Le FSE+ cofinance ainsi une partie de l'offre de formation financée par la Région : il n'y a pas de demande séparée à faire, l'accès se fait par l'offre de formation régionale.",
+      "criteres": {},
+      "conditions": [
+        "La formation doit faire partie de l'offre de formation financée par la Région",
+        "Conditions d'accès (public, prescription, rémunération) fixées par chaque Région"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Pas de montant propre : cofinancement européen intégré au financement régional de la formation, selon les règles de la Région."
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Ne s'ajoute pas aux aides régionales à la formation des demandeurs d'emploi : il en fait partie."
+      },
+      "demarches": [
+        "Consulter l'offre de formation de sa Région (site de la Région ou du Carif-Oref).",
+        "S'adresser à son conseiller France Travail, Mission locale ou Cap emploi pour l'orientation et l'inscription."
+      ],
+      "url_demarche": null,
+      "sources": [
+        {
+          "url": "https://fse.gouv.fr/quest-ce-que-le-fse",
+          "titre": "fse.gouv.fr – Qu'est-ce que le FSE+ ?",
+          "extrait": "Les Régions (ou collectivité unique en Corse, Guyane et Martinique) sont autorités de gestion de programmes régionaux FEDER-FSE+ dont les volets FSE+ représentent 2,1 milliards d’euros."
+        },
+        {
+          "url": "https://fse.gouv.fr/quest-ce-que-le-fse",
+          "titre": "fse.gouv.fr – Qu'est-ce que le FSE+ ?",
+          "extrait": "Les domaines d’actions suivants relèvent des programmes régionaux : la formation des demandeurs d’emploi, l’appui à la création d’entreprise, le soutien à l’économie sociale et solidaire, l’orientation tout au long de la vie (sauf à Mayotte et Saint-Martin) ;"
+        },
+        {
+          "url": "https://fse.gouv.fr/programmes-nationaux/le-programme-national-fse",
+          "titre": "fse.gouv.fr – Le programme national FSE+",
+          "extrait": "Le programme national FSE+ n’intervient qu’en cofinancement."
+        },
+        {
+          "url": "https://fse.gouv.fr/quest-ce-que-le-fse",
+          "titre": "fse.gouv.fr – Qu'est-ce que le FSE+ ?",
+          "extrait": "La programmation actuelle couvre 2021-2027."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "faf-agefice",
+      "nom": "AGEFICE – Financement de la formation des dirigeants non salariés du commerce, de l'industrie et des services",
+      "financeur": "faf",
+      "financeur_nom": "AGEFICE",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "dirigeant"
+      ],
+      "description": "Le fonds d'assurance formation AGEFICE rembourse au dirigeant non salarié (et à son conjoint collaborateur ou associé) les coûts pédagogiques de ses formations, dans la limite d'un taux horaire et d'une enveloppe annuelle qui dépendent de sa contribution à la formation professionnelle (CFP).",
+      "criteres": {
+        "statuts_dirigeant": [
+          "commercant"
+        ],
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "Dirigeant travailleur non salarié du commerce, de l'industrie ou des services inscrit à l'Urssaf (gérant majoritaire de SARL, associé unique d'EURL, associé de SNC, entrepreneur individuel, auto-entrepreneur) ou son conjoint collaborateur ou associé",
+        "Être à jour de la CFP (montant strictement supérieur à 0 €) : l'attestation de contribution à la formation professionnelle délivrée par l'Urssaf doit désigner l'AGEFICE",
+        "Exclus : dirigeants assimilés salariés (présidents de SAS/SASU, gérants minoritaires ou égalitaires de SARL…), professions libérales, artisans inscrits au répertoire des métiers",
+        "Organisme de formation déclaré (NDA) et certifié Qualiopi ; formation professionnalisante d'au moins 3 heures, 25 participants au plus par session",
+        "Formations financées avec le CPF exclues, même pour le reste à charge",
+        "Dirigeants nouvellement immatriculés : uniquement certaines formations obligatoires avant installation (buralistes, permis d'exploitation, diffuseurs de presse, auto-écoles)"
+      ],
+      "montant": {
+        "mode": "par_heure",
+        "valeur": 42,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 3000,
+        "duree_max_mois": null,
+        "libelle": "Barème 2026 : coûts pédagogiques HT remboursés dans la limite de 42 €/h en présentiel (35 €/h en distanciel synchrone, 20 €/h en distanciel asynchrone) et d'une enveloppe annuelle de 3 000 € si la CFP versée est d'au moins 7 € (jusqu'à 5 000 € pour un diplôme national ou un titre RNCP) ; 600 € par an si la CFP est inférieure à 7 €. Indemnités forfaitaires possibles en plus : perte de ressources jusqu'à 8 €/h (modulée selon la CFP) et frais annexes 4 €/h en présentiel hors de l'entreprise.",
+        "majorations": [
+          {
+            "criteres": {
+              "certifications": [
+                "rncp",
+                "diplome"
+              ]
+            },
+            "plafond": 5000,
+            "libelle": "42 €/h en présentiel, dans la limite de 5 000 € par an (formation menant à un diplôme national ou à un titre RNCP, CFP d'au moins 7 €)."
+          }
+        ]
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Non cumulable avec le CPF pour une même formation (les actions financées avec des droits CPF sont exclues)."
+      },
+      "demarches": [
+        "Télécharger sur son compte Urssaf l'attestation de contribution à la formation professionnelle et vérifier que l'AGEFICE y figure comme fonds d'assurance formation.",
+        "Choisir la formation et obtenir le programme et la convention (ou le devis) de l'organisme certifié Qualiopi.",
+        "Déposer la demande avec l'aide d'un Point d'accueil AGEFICE, entre 4 mois et 15 jours calendaires avant le début de la formation.",
+        "Après la formation, transmettre au Point d'accueil l'attestation d'assiduité et de règlement et les justificatifs pour obtenir le remboursement."
+      ],
+      "url_demarche": "https://communication-agefice.fr/trouver-un-point-daccueil/",
+      "sources": [
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Pour l’année 2026, chaque ressortissant, à jour de son versement de la contribution à la formation professionnelle (CFP) pour un montant strictement supérieur à 0€ bénéficie d’une enveloppe annuelle individuelle qui peut aller, sous conditions, jusqu’à :"
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Cotisant ≥ 7€ (y compris conjoint-collaborateur) Plafond annuel par cotisant 3000€ Sous condition de CFP >= 7€"
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Plafond pouvant aller jusqu’à 5000€ pour les formations débouchant sur un diplôme national ou un titre homologué enregistré au RNCP"
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Cotisant < 7€ (y compris conjoint-collaborateur) Plafond annuel par cotisant 600€ Sous condition de CFP > 0€"
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Distanciel asynchrone (bénéficiant d’un suivi logiciel des temps de connexion en temps réel avec horaire, durée et adresse IP ainsi que d’une assistance technique et pédagogique appropriée et avérée) 42€/h 35€/h 20€/h"
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Son montant forfaitaire est fixé à 8€/h modulé en fonction du montant de la CFP versé"
+        },
+        {
+          "url": "https://communication-agefice.fr/les-ressortissants-de-lagefice/",
+          "titre": "AGEFICE – Les ressortissants de l'AGEFICE",
+          "extrait": "Sont concernés, par le dispositif de l’AGEFICE, les Dirigeants travailleurs non-salariés inscrits à l’URSSAF ou à la Sécurité Sociale des Indépendants et appartenant aux secteurs du Commerce, de l’Industrie et des Services"
+        },
+        {
+          "url": "https://communication-agefice.fr/les-etapes-clefs-2026/",
+          "titre": "AGEFICE – Les étapes clefs 2026",
+          "extrait": "Celle-ci doit impérativement être transmise au siège de l’AGEFICE ( * ) au plus tôt 4 mois maximums et au moins 15 jours calendaires avant le démarrage de l’action de formation."
+        },
+        {
+          "url": "https://communication-agefice.fr/les-etapes-clefs-2026/",
+          "titre": "AGEFICE – Les étapes clefs 2026",
+          "extrait": "En contrôlant sur son attestation de contribution à la formation professionnelle (CFP) que l’AGEFICE est bien son fonds d’assurance formation (FAF) compétent ."
+        },
+        {
+          "url": "https://communication-agefice.fr/les-criteres-de-financement-2026/",
+          "titre": "AGEFICE – Les critères de financement 2026",
+          "extrait": "Les actions entreprises avec mobilisation des droits CPF (même en cas de reste à charge)."
+        },
+        {
+          "url": "https://communication-agefice.fr/les-criteres-de-financement-2026/",
+          "titre": "AGEFICE – Les critères de financement 2026",
+          "extrait": "Les formations dont la durée est inférieure à 3 heures"
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Les formations collectives, qu’elles soient en présentiel ou en distanciel, ne doivent pas compter plus de 25 participants en simultané pour être éligibles à un financement de l’AGEFICE."
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "L’indemnisation forfaitaire des frais annexes Elle s’applique à l’ensemble des formations dispensées en présentiel suivies en dehors de l’entreprise."
+        },
+        {
+          "url": "https://communication-agefice.fr/plafonds-financiers-annee-2026/",
+          "titre": "AGEFICE – Les plafonds financiers pour l’année 2026",
+          "extrait": "Son montant forfaitaire est fixé à 4€/h."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "faf-fafcea",
+      "nom": "FAFCEA – Financement de la formation des chefs d'entreprise artisanale",
+      "financeur": "faf",
+      "financeur_nom": "FAFCEA",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "dirigeant"
+      ],
+      "description": "Le fonds d'assurance formation des chefs d'entreprise artisanale finance les formations des chefs d'entreprise artisanale non salariés, de leurs conjoints collaborateurs ou associés et auxiliaires familiaux, selon des coûts horaires et durées maximum fixés par secteur (alimentation, bâtiment, fabrication et services).",
+      "criteres": {
+        "statuts_dirigeant": [
+          "artisan"
+        ],
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "Chef d'entreprise non salarié exerçant une activité artisanale (code NAFA), conjoint collaborateur ou associé, ou auxiliaire familial",
+        "Être à jour de la contribution à la formation professionnelle versée à l'Urssaf (attestation de l'année en cours ou, à défaut, de l'année précédente)",
+        "Organisme de formation certifié Qualiopi (obligatoire depuis le 1er juillet 2026)",
+        "Dossier complet reçu par le FAFCEA au plus tôt 3 mois avant et au plus tard le jour du début de la formation",
+        "Entreprises dont la CFP est inférieure ou égale à 85 € : 600 € maximum par an et par entreprise pour les formations débutant à partir du 1er septembre 2026 (hors parcours individualisés et formations FEEBAT)",
+        "VAE, bilan de compétences et formations certifiantes RNCP : prise en charge seulement en cas de refus du CPF"
+      ],
+      "montant": {
+        "mode": "par_heure",
+        "valeur": 35,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 3500,
+        "duree_max_mois": null,
+        "libelle": "Critères 2026 : formations techniques jusqu'à 35 €/h HT dans le bâtiment et dans la fabrication et les services (60 €/h dans l'alimentation), dans la limite de 100 h par stagiaire et par an (54 h dans l'alimentation), soit 3 500 € au plus ; formations transverses et de gestion spécifique métiers : 25 €/h ; autres modalités : 15 €/h. Si la CFP est inférieure ou égale à 85 € : 600 € maximum par an et par entreprise. Frais annexes : jusqu'à 200 € par stage."
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Pour la VAE, le bilan de compétences et les formations RNCP, le FAFCEA n'intervient qu'en cas de refus de prise en charge par le CPF."
+      },
+      "demarches": [
+        "Vérifier que l'activité relève du FAFCEA (code NAFA) et réunir l'extrait d'inscription au registre national des entreprises de moins d'un an et l'attestation Urssaf de versement de la contribution à la formation.",
+        "Déposer le dossier complet (formulaire de demande, programme détaillé) dans l'espace entreprise du FAFCEA, au plus tôt 3 mois avant et au plus tard le jour du début de la formation.",
+        "Après la formation et le paiement de l'organisme, envoyer dans les 2 mois la facture acquittée et l'attestation de présence pour obtenir le remboursement, versé à l'entreprise."
+      ],
+      "url_demarche": "https://www.fafcea.com/je-depose-ma-demande/",
+      "sources": [
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
+          "extrait": "CRITERES DE PRISE EN CHARGE 2026 SECTEUR SERVICES ET FABRICATION Validés par le Conseil d’Administration du 31/07/2026 AVEC UNE Contribution Formation Professionnelle (CFP) > à 85€ AVEC UNE CFP < ou = à 85€"
+        },
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
+          "extrait": "Durée maximale (par stagiaire et par an) Coût horaire maximum (Hors TVA - non financée) Présentiel et distanciel (avec formateur) Autres modalités (cf. Annexe) Technique 100h 35 € 15 € Prise en charge dans la limite de 600€ par an et par entreprise"
+        },
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
+          "extrait": "Transverse* et gestion spécifique métiers (*tout stage auquel des artisans de différentes professions peuvent assister et/ou toute action de formation dont le programme présente un contenu tous publics) 25 €"
+        },
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-ALIM-1-Sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Alimentation (1er septembre 2026)",
+          "extrait": "Technique 54H 60 € 15 €"
+        },
+        {
+          "url": "https://www.fafcea.com/actualites/evolution-criteres-prise-en-charge-formation-2026/",
+          "titre": "FAFCEA – Évolution des critères de prise en charge (31 juillet 2026)",
+          "extrait": "Pour les formations à compter du 1er septembre 2026*, la prise en charge des actions de formation est désormais fixée à 600 € maximum par an et par entreprise."
+        },
+        {
+          "url": "https://www.fafcea.com/wp-content/uploads/2026/07/Criteres-SF-1-sept-2026.pdf",
+          "titre": "FAFCEA – Critères de prise en charge 2026, secteur Services et Fabrication (1er septembre 2026)",
+          "extrait": "PRISE EN CHARGE DES FRAIS ANNEXES A HAUTEUR DE 200€ PAR STAGE (transport, hébergement, restauration)."
+        },
+        {
+          "url": "https://www.fafcea.com/je-depose-ma-demande/",
+          "titre": "FAFCEA – Je consulte la procédure et dépose ma demande",
+          "extrait": "Mon dossier complet parvient au FAFCEA en un seul envoi, 3 mois maximum avant et jusqu’au jour de début de formation ."
+        },
+        {
+          "url": "https://www.fafcea.com/je-depose-ma-demande/",
+          "titre": "FAFCEA – Je consulte la procédure et dépose ma demande",
+          "extrait": "Mon attestation URSSAF de versement de la contribution à la formation de l’année en cours ou à défaut de l’année N-1"
+        },
+        {
+          "url": "https://www.fafcea.com/je-depose-ma-demande/",
+          "titre": "FAFCEA – Je consulte la procédure et dépose ma demande",
+          "extrait": "Mon Extrait d’inscription au registre national des entreprises datant de moins d’un an au jour de début de la formation"
+        },
+        {
+          "url": "https://www.fafcea.com/je-depose-ma-demande/",
+          "titre": "FAFCEA – Je consulte la procédure et dépose ma demande",
+          "extrait": "deux mois au plus tard après la fin de l’action, je demande au FAFCEA le versement de sa participation financière"
+        },
+        {
+          "url": "https://www.fafcea.com/je-cotise-quels-sont-mes-droits/",
+          "titre": "FAFCEA – Je cotise, quels sont mes droits ?",
+          "extrait": "Le FAFCEA concerne spécifiquement : Les chefs d’entreprise non salariés exerçant une activité artisanale ; Les conjoints collaborateurs ou associés ; Les auxiliaires familiaux."
+        },
+        {
+          "url": "https://www.fafcea.com/",
+          "titre": "FAFCEA – Accueil (actualités)",
+          "extrait": "À compter du 1er juillet 2026, seuls les organismes de formation certifiés QUALIOPI pourront bénéficier des financements du FAFCEA."
+        }
+      ],
+      "derniere_verification": "2026-10-05",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "faf-fifpl",
+      "nom": "FIF PL – Financement de la formation des professionnels libéraux",
+      "financeur": "faf",
+      "financeur_nom": "FIF PL",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "dirigeant"
+      ],
+      "description": "Le Fonds interprofessionnel de formation des professionnels libéraux rembourse le coût des formations des professionnels libéraux (hors médecins) et micro-entrepreneurs qui lui versent leur contribution, dans la limite de plafonds journaliers et annuels fixés chaque année pour chaque profession (consultables par code NAF).",
+      "criteres": {
+        "statuts_dirigeant": [
+          "profession_liberale"
+        ],
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "Professionnel libéral ou micro-entrepreneur installé et en exercice, à jour de ses cotisations Urssaf (les médecins relèvent du FAF PM)",
+        "L'attestation de versement Urssaf doit désigner le FIF PL et indiquer la contribution due au titre de l'activité 2025",
+        "Micro-entrepreneur : pas de prise en charge si le chiffre d'affaires est nul pendant 12 mois consécutifs",
+        "Formation entrant dans les thèmes de la profession, dispensée par un organisme certifié Qualiopi, d'au moins une demi-journée (3 h)",
+        "Demande déposée idéalement avant le début de la formation, ou au plus tard dans les 10 jours calendaires suivant celui-ci",
+        "Exclus : formations financées par le CPF, bilans de compétences et reconversions, frais annexes (transport, repas, hébergement)",
+        "Plafonds de votre profession : https://fifpl.fr/criteres-de-prise-en-charge/"
+      ],
+      "montant": {
+        "mode": "non_chiffre",
+        "valeur": null,
+        "pourcentage": null,
+        "base": null,
+        "plafond": null,
+        "duree_max_mois": null,
+        "libelle": "Critères 2026 : coût réel pris en charge dans la limite des plafonds de la profession ; pour la plupart des professions 300 € par jour (150 € la demi-journée) et 900 € par an ; 350 € par jour et 1 050 € par an pour certaines (agents commerciaux, conseil en systèmes informatiques, édition de logiciels, interprètes-traducteurs…). Formations longues (une prise en charge tous les 3 ans, sur fonds spécifiques) : 2 000 € de 70 à 89 h, 2 500 € de 90 à 109 h, 3 000 € à partir de 110 h. E-learning : 50 % des plafonds ; micro-entrepreneurs : 20 % à 100 % des plafonds selon la CFP versée."
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Les formations liées au CPF sont exclues des prises en charge du FIF PL."
+      },
+      "demarches": [
+        "Vérifier les critères et plafonds de sa profession sur fifpl.fr à partir du code NAF figurant sur l'attestation Urssaf.",
+        "Créer son compte sur l'espace adhérent du FIF PL (avec son SIRET d'indépendant) et saisir la demande en ligne avec le programme et le devis, avant le début de la formation ou au plus tard dans les 10 jours suivant.",
+        "Après la formation, déposer en ligne l'attestation de présence et de règlement remplie par l'organisme pour être remboursé."
+      ],
+      "url_demarche": "https://fifpl.fr/professions-liberales/ma-prise-en-charge-en-3-etapes/",
+      "sources": [
+        {
+          "url": "https://fifpl.fr/professions-liberales/suis-je-eligible/",
+          "titre": "FIF PL – Suis-je éligible ?",
+          "extrait": "Vous êtes un professionnel libéral ou un micro-entrepreneur installé et en exercice, à jour de vos cotisations URSSAF ? Vous êtes alors éligible au financement de votre formation par le FIF PL."
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/suis-je-eligible/",
+          "titre": "FIF PL – Suis-je éligible ?",
+          "extrait": "Afin de disposer d’une estimation de votre prise en charge, votre demande devra être déposée idéalement avant le démarrage de votre formation ou dans les 10 jours calendaires suivant celui-ci."
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/suis-je-eligible/",
+          "titre": "FIF PL – Suis-je éligible ?",
+          "extrait": "Pour bénéficier d’une prise en charge en 2026, votre attestation de versement URSSAF doit indiquer le montant de votre versement relatif à la contribution au Fonds d’assurance formation (FAF) dû au titre de votre activité de l’année 2025."
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/suis-je-eligible/",
+          "titre": "FIF PL – Suis-je éligible ?",
+          "extrait": "Par ailleurs, un micro-entrepreneur dont le chiffre d’affaires est de 0 € sur une durée de 12 mois consécutifs ne peut pas bénéficier de la prise en charge de ses dépenses de formation."
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/quest-ce-qui-peut-etre-pris-en-charge/",
+          "titre": "FIF PL – Qu'est-ce qui peut être pris en charge ?",
+          "extrait": "Le FIF PL prend en charge le coût de la formation dans la limite du plafond journalier et annuel de votre profession. Les formations en e-learning sont prises en charge à hauteur de 50% du plafond journalier et annuel de votre profession."
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2025/12/Criteres-Avocats-6910ZA-2026-modifies-1er-juillet-2026-1.pdf",
+          "titre": "FIF PL – Critères de prise en charge 2026, Avocats (6910 Z)",
+          "extrait": "Prise en charge au coût réel plafonnée à 300 € par jour (ou 150 € pour une demi-journée de formation), limitée à 900 € par an et par professionnel"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2025/12/Agents-Commerciaux-tous-les-codes-46-2026.pdf",
+          "titre": "FIF PL – Critères de prise en charge 2026, Agents commerciaux, mandataires et autres intermédiaires du commerce",
+          "extrait": "Prise en charge au coût réel plafonnée à 350 € par jour, limitée à 1 050 € par an et par professionnel"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2025/12/Conseil-en-systemes-informatiques-6202A-2026.pdf",
+          "titre": "FIF PL – Critères de prise en charge 2026, Conseils en systèmes informatiques (6202 A)",
+          "extrait": "Prise en charge annuelle par professionnel plafonnée à 1 050 €"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2025/12/Editions-de-logiciels-5821Z-5829A-5829B-5829C-2026.pdf",
+          "titre": "FIF PL – Critères de prise en charge 2026, Édition de logiciels",
+          "extrait": "Prise en charge annuelle par professionnel plafonnée à 1 050 €"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2025/12/Interpretes-Traducteurs-7430Z-2026.pdf",
+          "titre": "FIF PL – Critères de prise en charge 2026, Interprètes traducteurs (7430 Z)",
+          "extrait": "Prise en charge annuelle par professionnel plafonnée à 1 050 €"
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/quest-ce-qui-peut-etre-pris-en-charge/",
+          "titre": "FIF PL – Qu'est-ce qui peut être pris en charge ?",
+          "extrait": "A noter que sont éligibles les formations d’une journée (durée minimale de 6 heures) ou d’une demi-journée (durée minimale 3 heures)."
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2025/12/Activites-Comptables-6920Z-2026.pdf",
+          "titre": "FIF PL – Critères de prise en charge 2026, Activités comptables (6920 Z)",
+          "extrait": "Une prise en charge tous les 3 ans Entre 70 heures et 89 heures de formation Prise en charge plafonnée à 2 000 € par professionnel"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2025/12/Activites-Comptables-6920Z-2026.pdf",
+          "titre": "FIF PL – Critères de prise en charge 2026, Activités comptables (6920 Z)",
+          "extrait": "Entre 90 heures et 109 heures de formation Prise en charge plafonnée à 2 500 € par professionnel A partir de 110 heures de formation Prise en charge plafonnée à 3 000 € par professionnel"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2026/03/Plafonds-de-prise-en-charge-micro-entrepreneurs-2026-e1774275229215.png",
+          "titre": "FIF PL – Plafonds 2026 des micro-entrepreneurs proportionnels à leur cotisation CFP (tableau image)",
+          "extrait": "PLAFONDS 2026 DES MICRO-ENTREPRENEURS PROPORTIONNELS A LEUR COTISATION CFP Validés au Conseil de Gestion du 20 novembre 2025 et modifiés au Bureau du 18 mars 2026"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2026/03/Plafonds-de-prise-en-charge-micro-entrepreneurs-2026-e1774275229215.png",
+          "titre": "FIF PL – Plafonds 2026 des micro-entrepreneurs proportionnels à leur cotisation CFP (tableau image)",
+          "extrait": "De 1 € à 20 € Prise en charge plafonnée à 20 % des critères journaliers de la profession et limitée à 20 % des critères annuels de ladite profession"
+        },
+        {
+          "url": "https://fifpl.fr/wp-content/uploads/2026/03/Plafonds-de-prise-en-charge-micro-entrepreneurs-2026-e1774275229215.png",
+          "titre": "FIF PL – Plafonds 2026 des micro-entrepreneurs proportionnels à leur cotisation CFP (tableau image)",
+          "extrait": "≥ à 81 € Prise en charge plafonnée à 100 % des critères journaliers de la profession et limitée à 100 % des critères annuels de ladite profession"
+        },
+        {
+          "url": "https://fifpl.fr/professions-liberales/quest-ce-qui-peut-etre-pris-en-charge/",
+          "titre": "FIF PL – Qu'est-ce qui peut être pris en charge ?",
+          "extrait": "Je m’assure que l’organisme de formation est certifié Qualiopi. Dans le cas contraire, ma demande de financement ne pourra pas aboutir."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "depends_on_branche"
+    },
+    {
+      "id": "faf-vivea",
+      "nom": "VIVÉA – Financement de la formation des chefs d'entreprise agricole",
+      "financeur": "faf",
+      "financeur_nom": "VIVÉA",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "dirigeant"
+      ],
+      "description": "Le fonds d'assurance formation VIVÉA finance les formations des actifs non salariés agricoles contributeurs, selon un taux par heure stagiaire fixé par domaine, dans la limite de 2 000 € par personne et par an ; la prise en charge est versée directement à l'organisme de formation.",
+      "criteres": {
+        "statuts_dirigeant": [
+          "exploitant_agricole"
+        ],
+        "qualiopi_requis": true
+      },
+      "conditions": [
+        "Chef d'exploitation ou d'entreprise agricole non salarié (y compris travaux agricoles et forestiers, paysage, secteur du cheval), conjoint collaborateur, aide familial ou cotisant de solidarité relevant du régime agricole",
+        "Être à jour de la contribution formation payée à la MSA (année N-1 ou échéancier) ; les nouveaux installés sont réputés à jour l'année de leur installation et la suivante, sur attestation MSA",
+        "Organisme de formation certifié Qualiopi, qui dépose la demande sur l'extranet VIVÉA",
+        "Le stagiaire doit donner son consentement électronique dans les délais",
+        "Crédit annuel de janvier à décembre, non reportable ; dans la limite des fonds disponibles"
+      ],
+      "montant": {
+        "mode": "par_heure",
+        "valeur": 25,
+        "pourcentage": null,
+        "base": null,
+        "plafond": 2000,
+        "duree_max_mois": null,
+        "libelle": "25 €/heure stagiaire pour la plupart des domaines (gestion, commercialisation, environnement, productions, GRH, numérique…), 26 € si l'organisme est certifié Qualicert ; 20 €/h pour comptabilité, informatique, langues, entretien-maintenance et formations certifiantes agricoles ; 16 €/h pour le Certiphyto ; bilan de compétences : forfait de 2 070 € ; dans la limite de 2 000 € par personne et par an (départs en formation depuis le 5 juin 2026)."
+      },
+      "cumul": {
+        "cumulable": true,
+        "note": "Une partie du coût peut rester à la charge du stagiaire, facturée par l'organisme de formation."
+      },
+      "demarches": [
+        "Choisir une formation (catalogue sur vivea.fr) et contacter l'organisme qui la dispense : c'est lui qui fait la demande de financement à VIVÉA.",
+        "Valider son inscription et donner son consentement électronique (extranet VIVÉA) dans les délais indiqués.",
+        "Régler à l'organisme l'éventuel reste à charge ; VIVÉA paie directement l'organisme (subrogation)."
+      ],
+      "url_demarche": "https://vivea.fr/chef-dentreprise-agricole/nos-criteres-de-prise-en-charge/",
+      "sources": [
+        {
+          "url": "https://vivea.fr/chef-dentreprise-agricole/nos-criteres-de-prise-en-charge/",
+          "titre": "VIVÉA – Nos critères de prise en charge des formations",
+          "extrait": "Chaque agriculteur, contributeur VIVÉA, dispose au maximum de 2 000 € de prise en charge par an pour se former"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/03/VIVEA_-Conditions-generales-03102026.pdf",
+          "titre": "VIVÉA – Conditions générales 2026",
+          "extrait": "En 2026, chaque stagiaire dispose d’un droit à financement de formation d’un montant de 2 000 euros par personne et non reportable sur l’année suivante."
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/05/Regles-de-financement-de-VIVEA-2026-valide-CA-avril-2026.pdf",
+          "titre": "VIVÉA – Règles de financement par heure stagiaire 2026",
+          "extrait": "Règles de financement par heure stagiaire - 2026 Formations individuelles et collectives Applicable pour les départs en formation à compter du 5 juin 2026"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/05/Regles-de-financement-de-VIVEA-2026-valide-CA-avril-2026.pdf",
+          "titre": "VIVÉA – Règles de financement par heure stagiaire 2026",
+          "extrait": "Conforter la position Gestion analyse économique P1 25 € 26 €"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/05/Regles-de-financement-de-VIVEA-2026-valide-CA-avril-2026.pdf",
+          "titre": "VIVÉA – Règles de financement par heure stagiaire 2026",
+          "extrait": "Comptabilité Informatique - bureautique P6 Améliorer sa technicité Entretien - Maintenance 20 € 21 €"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/05/Regles-de-financement-de-VIVEA-2026-valide-CA-avril-2026.pdf",
+          "titre": "VIVÉA – Règles de financement par heure stagiaire 2026",
+          "extrait": "OF avec certification Qualicert +1€"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/05/Regles-de-financement-de-VIVEA-2026-valide-CA-avril-2026.pdf",
+          "titre": "VIVÉA – Règles de financement par heure stagiaire 2026",
+          "extrait": "Formations Formations diplômantes délivrant la capacité agricole certifiantes secteur Liste des diplômes conférant la capacité professionnelle 20 € 21 €"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/05/Regles-de-financement-de-VIVEA-2026-valide-CA-avril-2026.pdf",
+          "titre": "VIVÉA – Règles de financement par heure stagiaire 2026",
+          "extrait": "Certiphytos P7 16 €"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/05/Regles-de-financement-de-VIVEA-2026-valide-CA-avril-2026.pdf",
+          "titre": "VIVÉA – Règles de financement par heure stagiaire 2026",
+          "extrait": "Bilan de compétences Forfait : 2 070€"
+        },
+        {
+          "url": "https://vivea.fr/chef-dentreprise-agricole/nos-criteres-de-prise-en-charge/",
+          "titre": "VIVÉA – Nos critères de prise en charge des formations",
+          "extrait": "Etre à jour de la contribution VIVÉA (du paiement de la contribution formation auprès de la MSA sur l’année N-1 ou à jour de l’échéancier de paiement mis en place avec la MSA)."
+        },
+        {
+          "url": "https://vivea.fr/chef-dentreprise-agricole/nos-criteres-de-prise-en-charge/",
+          "titre": "VIVÉA – Nos critères de prise en charge des formations",
+          "extrait": "Les nouveaux installés sont considérés comme des contributeurs à jour de leur contribution au cours de l’année de leur installation et de la suivante, sous réserve de fournir à VIVÉA une attestation de la MSA ."
+        },
+        {
+          "url": "https://vivea.fr/chef-dentreprise-agricole/nos-criteres-de-prise-en-charge/",
+          "titre": "VIVÉA – Nos critères de prise en charge des formations",
+          "extrait": "Pour vous éviter d’avoir à avancer l’argent, VIVÉA pratique le principe de subrogation : la prise en charge de votre formation est directement versée à l’organisme de formation."
+        },
+        {
+          "url": "https://vivea.fr/chef-dentreprise-agricole/nos-contributeurs/",
+          "titre": "VIVÉA – Nos contributeurs",
+          "extrait": "Vous êtes contributeur VIVÉA dès lors que vous êtes un chef d’entreprise agricole non-salarié, aide familial ou conjoint collaborateur"
+        },
+        {
+          "url": "https://vivea.fr/wp-content/uploads/2026/03/VIVEA_-Conditions-generales-03102026.pdf",
+          "titre": "VIVÉA – Conditions générales 2026",
+          "extrait": "Disposer à minima de la certification Qualiopi"
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    },
+    {
+      "id": "faf-fafpm",
+      "nom": "FAF PM – Financement de la formation des médecins libéraux",
+      "financeur": "faf",
+      "financeur_nom": "FAF PM",
+      "categorie": "cout_formation",
+      "projets": [
+        "formation_dirigeant"
+      ],
+      "beneficiaires": [
+        "dirigeant"
+      ],
+      "description": "Le fonds d'assurance formation de la profession médicale finance la formation des médecins libéraux installés ou remplaçants qui versent la CFP, et de leurs conjoints collaborateurs : remboursement individuel des frais pédagogiques, ou prise en charge directe des formations collectives des organismes habilités.",
+      "criteres": {
+        "statuts_dirigeant": [
+          "profession_liberale"
+        ],
+        "naf_prefixes": [
+          "86.21",
+          "86.22"
+        ]
+      },
+      "conditions": [
+        "Médecin libéral installé ou remplaçant à jour de la CFP (attestation Urssaf de l'année de la demande, au titre de l'année précédente)",
+        "Formation en lien direct avec l'exercice de la médecine libérale ; organisme certifié Qualiopi (hors congrès professionnels)",
+        "Prise en charge individuelle exclue pour les formations diplômantes ou certifiantes (DU, DIU, capacités…), les programmes enregistrés à l'ANDPC et les actions proposées par les organismes habilités par le FAF PM",
+        "Demande de remboursement à déposer dans les 30 jours suivant la fin de la formation ou du congrès",
+        "Non pris en charge : transport, restauration, hébergement et perte de ressources"
+      ],
+      "montant": {
+        "mode": "pourcentage",
+        "valeur": null,
+        "pourcentage": 100,
+        "base": "cout_pedagogique",
+        "plafond": 400,
+        "duree_max_mois": null,
+        "libelle": "Formation suivie à titre individuel : remboursement des frais pédagogiques jusqu'à 400 € (formations terminées à partir du 31 mars 2026 ; 300 € auparavant). Formations collectives des organismes habilités par le FAF PM : prise en charge versée directement à l'organisme, dans la limite de 6 400 € par médecin pour 2026."
+      },
+      "cumul": {
+        "cumulable": false,
+        "note": "Les formations diplômantes relèvent du CPF et les programmes DPC de l'ANDPC ; ils ne sont pas pris en charge à titre individuel par le FAF PM."
+      },
+      "demarches": [
+        "Suivre la formation et régler l'organisme (convention, bon de commande ou devis signé).",
+        "Dans les 30 jours suivant la fin, déposer la demande sur l'espace extranet Médecins du FAF PM avec l'attestation CFP, le certificat de réalisation, la facture acquittée, le programme et un RIB.",
+        "Pour les formations collectives, s'inscrire auprès d'un organisme habilité par le FAF PM, qui demande lui-même la prise en charge."
+      ],
+      "url_demarche": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
+      "sources": [
+        {
+          "url": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
+          "titre": "FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026",
+          "extrait": "Pour les formations réalisées en 2026 , les frais pris en charge sont de 300 euros maximum A COMPTER DU 31 MARS 2026 (date de fin de formation) la prise en charge passera à 400 euros maximum pour les actions de formation comme pour les congrès professionnels."
+        },
+        {
+          "url": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
+          "titre": "FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026",
+          "extrait": "Pour obtenir la prise en charge des frais de fonctionnement , une demande complétée de l’ensemble des pièces requises doit être transmise, par le médecin libéral , dans un délai de 30 jours suivant le terme de l’action de formation ou du congrès professionnel"
+        },
+        {
+          "url": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
+          "titre": "FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026",
+          "extrait": "Attestation de versement de la contribution à la formation professionnelle délivrée par l’URSSAF dans l’année de la demande (N), au titre de l’exercice de l’année précédente (N-1)"
+        },
+        {
+          "url": "https://www.fafpm.org/medecins-liberaux/actions-de-formations-financees-a-titre-individuel/",
+          "titre": "FAF PM – Actions de formations financées à titre individuel – Règles de prise en charge 2026",
+          "extrait": "Depuis le 1 ER JANVIER 2025 , l’action de formation doit être organisée par un organisme de formation détenteur de la certification QUALIOPI (HORS CONGRÈS PROFESSIONNELS)."
+        },
+        {
+          "url": "https://www.fafpm.org/evolution-du-plafond-pecc-par-participant/",
+          "titre": "FAF PM – Évolution du plafond PECC par participant",
+          "extrait": "Le montant du plafond par participant, applicable rétroactivement à compter du 01 er janvier 2026, sera désormais d’un montant de 6400 euros soit l’équivalent de 8 jours de formations."
+        },
+        {
+          "url": "https://www.fafpm.org/",
+          "titre": "FAF PM – Accueil",
+          "extrait": "est habilité depuis le 17 mars 1993 pour la gestion des contributions à la formation professionnelle (CFP) des médecins libéraux installés et remplaçants et leurs conjoints collaborateurs ."
+        }
+      ],
+      "derniere_verification": "2026-10-06",
+      "validite": {
+        "debut": null,
+        "fin": null
+      },
+      "statut": "actif",
+      "confidence": "exact"
+    }
+  ],
+  "portails": [],
+  "exclues": [
+    {
+      "nom": "Crédit d'impôt pour dépenses de formation des dirigeants (CGI, art. 244 quater M)",
+      "raison": "Ne s'applique plus depuis le 1er janvier 2025 et a été supprimé par la loi n° 2026-103 du 19 février 2026 de finances pour 2026 : aucune entrée fis-credit-impot-formation-dirigeant n'est créée (le SMIC horaire 2026 n'a donc pas été retenu).",
+      "sources": [
+        {
+          "url": "https://bofip.impots.gouv.fr/bofip/4766-PGP.html/identifiant%3DBOI-BIC-RICI-10-20260506",
+          "titre": "BOFiP – BOI-BIC-RICI-10-20260506 – BIC – Réductions et crédits d’impôt – Crédits d’impôt",
+          "extrait": "le crédit d’impôt pour dépenses de formation des dirigeants ( CGI, art. 244 quater M ), ne trouvant plus à s’appliquer depuis le 1 er janvier 2025, a été supprimé par le 16° du I de l’ article 17 de la loi n° 2026-103 du 19 février 2026 de finances pour 2026 ."
+        }
+      ]
+    },
+    {
+      "nom": "Crédit d'impôt en faveur de l'apprentissage (CGI, art. 244 quater G)",
+      "raison": "Supprimé pour les périodes d'imposition et exercices ouverts à compter du 1er janvier 2019.",
+      "sources": [
+        {
+          "url": "https://bofip.impots.gouv.fr/bofip/4766-PGP.html/identifiant%3DBOI-BIC-RICI-10-20260506",
+          "titre": "BOFiP – BOI-BIC-RICI-10-20260506 – BIC – Réductions et crédits d’impôt – Crédits d’impôt",
+          "extrait": "le crédit d’impôt en faveur de l’apprentissage ( CGI, art. 244 quater G ) a été supprimé par l’ article 27 de la loi n° 2018-771 du 5 septembre 2018 pour la liberté de choisir son avenir professionnel pour les périodes d’imposition et exercices ouverts à compter du 1 er janvier 2019."
+        }
+      ]
+    },
+    {
+      "nom": "Agefiph – Majoration des aides à l'embauche en alternance (jusqu'à 4 000 € en apprentissage et 5 000 € en professionnalisation)",
+      "raison": "Mesure temporaire réservée aux contrats conclus jusqu'au 31 décembre 2021 ; le barème actuel plafonne les deux aides à 3 000 €.",
+      "sources": [
+        {
+          "url": "https://www.agefiph.fr/actualites-handicap/majoration-des-aides-agefiph-pour-le-recrutement-dalternants",
+          "titre": "Agefiph – Majoration des aides Agefiph pour le recrutement d'alternants",
+          "extrait": "L’aide est ouverte pour les contrats conclus à partir du 11 mai et jusqu’au 31 décembre 2021 (date mise à jour le 1er mars 2021)."
+        }
+      ]
+    },
+    {
+      "nom": "Agefiph – Aide individuelle au financement d'une formation (cofinancement du coût pédagogique pour une personne handicapée)",
+      "raison": "Aucune aide de ce type ne figure dans l'offre de services et d'aides financières de l'Agefiph de janvier 2026 ni parmi les 13 aides financières listées sur agefiph.fr au 05/10/2026 : pour se former, l'Agefiph propose seulement des aides de compensation (technique, humaine, déplacements, prothèses auditives), l'aide à l'adaptation des situations de formation (versée à l'organisme) et l'aide au parcours vers l'emploi.",
+      "sources": [
+        {
+          "url": "https://www.agefiph.fr/media/9453/download",
+          "titre": "L'offre de services et d'aides financières de l'Agefiph – Janvier 2026",
+          "extrait": "DES SOLUTIONS POUR VOUS FORMER Aides financières → Aide technique à la compensation du handicap → Aide humaine à la compensation du handicap → Aide aux déplacements en compensation du handicap → Aide prothèse auditive"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "OETH (note, pas une aide) : les dépenses de formation ne réduisent pas directement la contribution, mais les « dépenses déductibles » incluent les prestations d'accompagnement des travailleurs handicapés, par exemple les actions de sensibilisation et de formation des salariés pour favoriser la prise de poste et le maintien en emploi des bénéficiaires de l'obligation d'emploi, ainsi que les dépenses de maintien dans l'emploi et de reconversion professionnelle de travailleurs handicapés par des moyens compensatoires. Déduction plafonnée à 10 % de la contribution brute avant déductions ; non applicable en cas d'accord agréé (décret n° 2025-1294 du 24/12/2025). Source : https://www.urssaf.fr/accueil/employeur/cotisations/liste-cotisations/contribution-annuelle-oeth.html – extraits : « les dépenses relatives aux prestations d’accompagnement des travailleurs handicapés (exemple : actions de sensibilisation et de formation des salariés réalisées pour favoriser la prise de poste et le maintien en emploi des bénéficiaires de l’obligation d’emploi). » ; « Les dépenses déductibles peuvent être déduites dans la limite de 10 % de la contribution brute avant déductions. »",
+    "CPF des travailleurs indépendants : même alimentation que les salariés (500 € par an, plafond 5 000 €), donc pas d'entrée nat-cpf-independants. Source service-public.fr F10705 (vérifié le 27 juin 2026) : « Travailleur indépendant L'alimentation du compte se fait à hauteur de 500 € par année de travail jusqu'à atteindre 5 000 € maximum. » Même page : « Travailleur reconnu handicapé Si vous travaillez au moins à mi-temps, l'alimentation du compte est de 800 € par année de travail jusqu'à atteindre 8 000 maximum » (utile pour les profils RQTH ; à traiter avec l'entrée CPF nationale).",
+    "Crédit d'impôt formation des dirigeants : supprimé (voir exclues, BOFiP BOI-BIC-RICI-10-20260506). Aucun autre avantage fiscal ou social national lié directement au coût de la formation n'a été identifié pour 2026 (item 8 sans objet ; la déductibilité générale des charges est hors périmètre).",
+    "Erasmus+ : pas d'entrée pour la mobilité des personnels de l'éducation des adultes et de l'enseignement professionnel ; elle est portée par des organismes d'éducation et de formation (et non par les entreprises en tant que telles) et la mobilité des apprentis est traitée par un autre agent.",
+    "APPELS FSE+ DES OPCO (à intégrer aux données OPCO) – OUVERT : Opco Atlas, « FSE+ : former vos salariés grâce à l'appui du Fonds Social Européen », dispositif renouvelé en 2026 pour toutes les entreprises des branches Atlas (sous réserve de fonds) : 50 % des coûts pédagogiques, les 50 % restants, la TVA et des frais de gestion de 4 % du versement volontaire étant couverts par un versement volontaire de l'entreprise (ou des fonds conventionnels de branche) ; plafond FSE+ de 500 000 € par entreprise ; thèmes : transition numérique, écologique, démographique, management et conduite de projet, diversité et inclusion ; formations internes et formations à distance de type e-learning, MOOC ou mixte exclues, présence continue d'un formateur exigée, 3,5 h minimum ; demande avant le début de la formation et au plus tard le 15/12/2027 ; formations achevées avant le 31/12/2027 ; subrogation obligatoire. URL : https://www.opco-atlas.fr/entreprise/beneficier-fse.html",
+    "Opco Atlas – cofinancement FSE+ FTJ (Fonds pour une transition juste) en Auvergne-Rhône-Alpes : parcours de formation et rémunération associée pour les entreprises prestataires ou fournisseurs des secteurs NAF 19, 20, 23 et 24, établissements ou sièges en Isère et dans le Rhône (webinaire DREETS ARA / Atlas du 19 juin 2026) ; taux et date limite non publiés sur la page consultée. URL : https://www.opco-atlas.fr/agenda/tous-savoir-sur-le-dispositif-de-cofinancement-fse-ftj-juin-2026.html",
+    "OPCO FSE+ FERMÉS ou non confirmés au 05-06/10/2026 : AKTO (dépôts clos depuis le 1er juillet 2026, actions jusqu'au 30/11/2026 ; https://www.akto.fr/beneficier-dune-aide-du-fse-en-2025-comment-faire/) ; OCAPIAT (dossiers jusqu'au 13/03/2026, actions jusqu'au 30/04/2026 ; https://www.ocapiat.fr/fse-une-aide-financiere-pour-former-vos-salaries/) ; OPCO EP (dépôt au plus tard le 06/04/2026, actions terminées au 30/04/2026 ; https://www.opcoep.fr/fonds-social-europeen) ; Afdas (« Les fonds alloués au FSE+ sont épuisés », mise à jour du 20 mars 2026) ; OPCO 2i (FSE+ 2025, actions du 07/02/2025 au 31/12/2025) ; OPCO Santé (formations 2025) ; Constructys (page « FSE + 2025 », enveloppe 2025, statut 2026 non confirmé) ; Uniformation et L'Opcommerce (pas d'opération FSE+ 2026 identifiée, recherche non exhaustive) ; OPCO Mobilités (page « Bénéficier du Fonds Social Européen + (FSE +) - 2026 » existante mais site injoignable les 05 et 06/10/2026, non vérifié). D'autres OPCO lauréats de l'appel national 2026 (dépôts clos le 08/06/2026) peuvent ouvrir une opération 2026-2027 : à revérifier.",
+    "OPCO EP en Normandie : action FSE+ régionale (appel DREETS Normandie du 8 avril 2024) de développement des compétences des salariés face aux mutations numériques et écologiques, du 1er janvier 2025 au 31 décembre 2026 ; conditions d'accès non détaillées sur la page https://www.opcoep.fr/fonds-social-europeen",
+    "Appels à projets FSE+ des DREETS/DEETS ouverts (pour des structures porteuses de projets, pas pour une demande individuelle) : Martinique « Accompagnement des mutations économiques et formation des actifs » jusqu'au 01/12/2026 (hors plans de formation des salariés portés par les OPCO) ; Nouvelle-Aquitaine « Accompagnement des entreprises et des salariés à la transition écologique » du 05/10/2026 au 17/12/2026 (les OPCO n'y sont éligibles que pour l'ingénierie, la POEC ou la GPEC). Liste : https://fse.gouv.fr/les-appels-a-projets",
+    "Agefiph : non retenues car ce sont des aides de compensation générales et non des financements de formation, bien que mobilisables pendant une formation : aide technique (5 250 € maximum), aide humaine (4 200 € maximum), aide aux déplacements (12 000 € par 12 mois), prothèses auditives, ainsi que l'aide liée à la RLH. Le site agefiph.fr était en maintenance le 06/10/2026 au matin ; les pages utilisées ont été consultées le 05/10/2026. liens_par_region : pages des délégations régionales listées sur https://www.agefiph.fr/lagefiph-en-region (Antilles-Guyane pour 01/02/03, La Réunion-Mayotte pour 04/06, PACA et Corse pour 93/94).",
+    "AGEFICE : le site officiel est communication-agefice.fr (www.agefice.fr redirige vers ce domaine). La demande doit obligatoirement passer par un Point d'accueil AGEFICE (PTA).",
+    "Artisans : selon l'AGEFICE, les formations « gestion et développement des entreprises » des artisans relèvent des conseils de la formation des chambres de métiers et de l'artisanat de région (CMAR/CRMA), le FAFCEA finançant surtout les formations « métiers » ; ces conseils de la formation fixent leurs règles régionalement et n'ont pas fait l'objet d'une entrée.",
+    "FIF PL : montant laissé en non_chiffre car la prise en charge est le minimum entre le coût réel, un plafond journalier et un plafond annuel propres à chaque profession. Relevé exhaustif des 151 codes NAF du FIF PL (89 grilles PDF 2026 téléchargées le 06/10/2026) : plafond annuel de 900 € pour 108 codes, 1 050 € pour 39 codes (agents commerciaux et centrales d'achats NAF 46.1, édition de logiciels 58.2, programmation et conseil informatique 62.0, traitement de données, banques de données, études de marché, ingénierie et études techniques, économistes de la construction, enquêtes et sécurité, interprètes-traducteurs, agents généraux d'assurance, experts agricoles et fonciers, biologistes, pharmaciens, graphologues), 750 € pour les sages-femmes, 600 € pour les mandataires judiciaires à la protection des majeurs, 360 € pour les diététiciens. Formations longues (70 h et plus) : 2 000/2 500/3 000 € dans quasiment toutes les grilles.",
+    "FAF PM : la page « Frais de fonctionnement » (formations collectives) indique encore un plafond annuel de 4 000 € par médecin depuis le 1er janvier 2026, mais le Conseil de gestion du 2 septembre 2026 l'a porté à 6 400 € (rétroactif au 1er janvier 2026) ; c'est ce dernier montant qui est repris. naf_prefixes au format du code NAF SIRENE (« 86.21 » médecins généralistes, « 86.22 » médecins spécialistes).",
+    "Modélisation des FAF : en mode par_heure (AGEFICE 42 €/h, FAFCEA 35 €/h, VIVÉA 25 €/h), la prise en charge réelle ne peut pas dépasser le coût HT de la formation ; il est conseillé de plafonner l'estimation au coût pédagogique saisi. Le plafond FAFCEA de 3 500 € est calculé (100 h × 35 €) et ne vaut pas pour les entreprises dont la CFP est inférieure ou égale à 85 € (600 € par an).",
+    "Dates : vérifications réalisées les 5 et 6 octobre 2026 (derniere_verification propre à chaque entrée)."
+  ]
+}

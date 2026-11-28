@@ -1,4 +1,4 @@
-// Étape 4 — Frais annexes.
+// Étape 4 : frais annexes.
 // Port RN de opco-funding/src/components/wizard/StepFrais.tsx.
 
 import { Text, View } from 'react-native';

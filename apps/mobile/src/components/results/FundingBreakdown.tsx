@@ -80,7 +80,7 @@ function DispositifCard({ dispositif }: { dispositif: DispositifEligible }) {
       {dispositif.cumul === 'alternatif' ? (
         <View className="mb-3 rounded-lg bg-purple-50 px-3 py-2">
           <Text className="text-xs text-purple-700">
-            Non cumulable avec l'estimation ci-dessus — option alternative.
+            Non cumulable avec l'estimation ci-dessus (option alternative).
           </Text>
         </View>
       ) : null}
@@ -256,7 +256,7 @@ export function FundingBreakdown({ result }: Props) {
                 <View>
                   <Text className="text-xs uppercase text-gray-400">Reste</Text>
                   <Text className="text-sm text-gray-600">
-                    {line.remainder > 0 ? formatEuro(line.remainder) : '—'}
+                    {line.remainder > 0 ? formatEuro(line.remainder) : 'Aucun'}
                   </Text>
                 </View>
               </View>
@@ -300,7 +300,7 @@ export function FundingBreakdown({ result }: Props) {
             <View>
               <Text className="text-xs uppercase text-gray-400">Reste</Text>
               <Text className="text-sm font-semibold text-gray-900">
-                {result.totalRemainder > 0 ? formatEuro(result.totalRemainder) : '—'}
+                {result.totalRemainder > 0 ? formatEuro(result.totalRemainder) : 'Aucun'}
               </Text>
             </View>
           </View>

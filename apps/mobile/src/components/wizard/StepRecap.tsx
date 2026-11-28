@@ -1,4 +1,4 @@
-// Étape 5 — Récapitulatif avant calcul.
+// Étape 5 : récapitulatif avant calcul.
 // Port RN de opco-funding/src/components/wizard/StepRecap.tsx.
 
 import type { ReactNode } from 'react';
@@ -48,7 +48,7 @@ function Item({ label, value }: { label: string; value: string | null | undefine
     <View className="flex-row items-start justify-between gap-4">
       <Text className="text-sm text-gray-500">{label}</Text>
       <Text className="flex-1 text-right text-sm font-medium text-gray-900">
-        {value || '—'}
+        {value || 'Non renseigné'}
       </Text>
     </View>
   );

@@ -1,7 +1,7 @@
 import type { OpcoData, WizardState } from '../src/types';
 import { createInitialWizardState } from '../src/types';
 
-const sourced = (value: number | null) => ({
+export const sourced = (value: number | null) => ({
   value,
   confidence: 'exact' as const,
   source_url: 'https://example.opco.fr/criteres',
@@ -64,4 +64,34 @@ export function makeFormationState(over: Partial<WizardState> = {}): WizardState
     pedagogyCostPerHour: 30,
     ...over,
   };
+}
+
+/** OPCO de test pour les groupes : plafond horaire 40 €/h, salaires 12 €/h, transport 30 €/jour, nuit 100 €, repas 20 €, sans plafond annuel. */
+export function opcoGroupe(over: Partial<OpcoData> = {}): OpcoData {
+  return makeOpco({
+    cout_horaire_inter: sourced(40),
+    prise_en_charge_salaires: sourced(12),
+    prise_en_charge_salaires_mode: 'euro_par_heure',
+    frais_transport: sourced(30),
+    frais_hebergement: sourced(100),
+    frais_restauration: sourced(20),
+    ...over,
+  });
+}
+
+/** Formation d'UNE personne : 100 h à 5 000 € (50 €/h, au-dessus du plafond), avec déplacement, hébergement et repas. */
+export function etatGroupe(over: Partial<WizardState> = {}): WizardState {
+  return makeFormationState({
+    durationHours: 100,
+    pedagogyCostTotal: 5000,
+    pedagogyCostPerHour: 50,
+    needsTransport: true,
+    trainingDays: 5,
+    needsAccommodation: true,
+    accommodationNights: 4,
+    accommodationCostPerNight: 120,
+    needsMeals: true,
+    mealCostPerDay: 15,
+    ...over,
+  });
 }

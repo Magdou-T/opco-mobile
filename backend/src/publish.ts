@@ -1,12 +1,12 @@
 // ============================================================
-// PUBLISH — écrit le dataset versionné au format EXACT du seed
+// PUBLISH : écrit le dataset versionné au format EXACT du seed
 // (datasets/v1.json, latest.json, manifest.json) :
 //
 //   v<N>.json / latest.json = { version, generatedAt(ISO), opcos: [...] }
 //   manifest.json           = { version, generatedAt, sha256, opcoCount, changelog }
 //
 // Le sha256 correspond au contenu d'OCTETS EXACT de latest.json
-// (relu depuis le disque après écriture — c'est ce que l'app vérifie).
+// (relu depuis le disque après écriture : c'est ce que l'app vérifie).
 //
 // En dry-run, outDir = datasets/_drafts pour ne JAMAIS écraser le seed.
 // ============================================================
