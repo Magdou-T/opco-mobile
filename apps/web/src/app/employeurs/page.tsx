@@ -17,6 +17,7 @@ import { trierParNom } from '@/lib/fiche';
 import { grapheDePage } from '@/lib/donnees-structurees';
 import type { QuestionReponse } from '@/lib/donnees-structurees';
 import { PAGES, REVUE_DES_GUIDES, metadonnees } from '@/lib/metadonnees';
+import { FORMATION_OBLIGATOIRE_ENTREPRISE } from '@/lib/sites-lies';
 
 /* Page d'entrée des employeurs : ce que l'OPCO finance selon la taille, puis les guides détaillés. Faits tirés des
    dossiers vérifiés du 27/11/2026 et des guides du site (taux de la contribution formation, règle des 50 salariés,
@@ -386,7 +387,12 @@ export default function EmployeursPage() {
             <Link href="/lexique/" className="lien">
               lexique
             </Link>
-            .
+            . Pour savoir ce que la réglementation impose à vos salariés avant de chercher un
+            financement, consultez{' '}
+            <a href={FORMATION_OBLIGATOIRE_ENTREPRISE} className="lien">
+              les formations obligatoires de votre entreprise
+            </a>
+            , sur le référentiel du même éditeur.
           </p>
           {/* Enveloppe : les cartes prennent toute la largeur de la colonne (un `ul` direct serait mesuré à 34 rem). */}
           <div>
