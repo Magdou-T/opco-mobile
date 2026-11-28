@@ -12,6 +12,7 @@ import { cx } from '@/lib/cx';
 import { DonneesStructurees } from '@/components/site/DonneesStructurees';
 import { grapheDePage } from '@/lib/donnees-structurees';
 import { PAGES, REVUE_DES_GUIDES, metadonnees } from '@/lib/metadonnees';
+import { FORMATION_OBLIGATOIRE } from '@/lib/sites-lies';
 
 /* Tableau des taux : en-tête Inter 600 en petites majuscules (texte discret, 4,95:1 sur lin-soft), contribution en
    titre de ligne, taux en chiffres clés Montserrat tabulaires. Retrait intérieur de 14 px sous 360 px : à 320 px, le
@@ -153,9 +154,12 @@ export default function ObligationsPage() {
             Indépendamment des versements, l&apos;employeur a une obligation légale
             (art. L.6321-1 du Code du travail) d&apos;assurer{' '}
             <strong>l&apos;adaptation des salariés à leur poste de travail</strong>{' '}et de{' '}
-            <strong>veiller au maintien de leur capacité à occuper un emploi</strong>. Les
-            formations obligatoires (sécurité, habilitations réglementaires…) se déroulent sur
-            le temps de travail et sont rémunérées comme tel.
+            <strong>veiller au maintien de leur capacité à occuper un emploi</strong>. Les{' '}
+            <a href={FORMATION_OBLIGATOIRE} className="lien">
+              formations obligatoires de votre métier
+            </a>{' '}
+            (sécurité, habilitations réglementaires…) se déroulent sur le temps de travail et sont
+            rémunérées comme tel.
           </p>
           <p>
             Le <strong>plan de développement des compétences</strong>{' '}n&apos;est pas un document

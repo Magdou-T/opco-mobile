@@ -12,6 +12,7 @@ import { extrait } from '@/lib/extrait';
 import { trierParNom } from '@/lib/fiche';
 import { typo } from '@/lib/format';
 import { PAGES, metadonnees } from '@/lib/metadonnees';
+import { SFG_DEVELOPPEMENT } from '@/lib/sites-lies';
 import { BandeAppel } from '@/components/site/BandeAppel';
 import { DonneesStructurees } from '@/components/site/DonneesStructurees';
 import { QuestionsFrequentes } from '@/components/site/QuestionsFrequentes';
@@ -499,7 +500,11 @@ export default function Home() {
               ))}
             </ul>
             <p className="mt-4 text-xs text-texte-discret">
-              Accompagnement assuré par SFG Développement, organisme de formation certifié Qualiopi.
+              Accompagnement assuré par{' '}
+              <a href={SFG_DEVELOPPEMENT} className="lien">
+                SFG Développement
+              </a>
+              , organisme de formation certifié Qualiopi.
             </p>
           </div>
         </div>
